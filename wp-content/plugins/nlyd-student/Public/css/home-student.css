@@ -1,0 +1,151 @@
+.search-zoo{
+    margin-top: 4.5px;
+}
+.pt-10{
+    padding-top: 10px;
+}
+
+.top-nav-btn{
+    text-align: center;
+    display: inline-block;
+    margin-right:calc(25% - 50px) ;
+}
+.top-nav-btn:last-child{
+    margin-right: 0;
+}
+.top-nav-btn a{
+    position: relative;
+    display: inline-block;
+    margin: auto;
+    width: 37px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    color: RGBA(38, 38, 38, 0.6);
+    font-size: 0.16rem;
+}
+.top-nav-btn.active a{
+    color: #68AAFE;
+}
+.top-nav-btn.active a:after{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    width: 100%;
+    height: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-bottom-color: #fff;
+    box-sizing: border-box;
+    pointer-events: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid #4394F9;
+}
+.swiper-content{
+    /* height: 204px; */
+}
+
+
+.entrance{
+    display: flex;
+}
+.entrance-wrap{
+    flex: 1;
+    text-align: center;
+}
+.entrance .entrance-wrap:first-child{
+    text-align: left;
+}
+.entrance .entrance-wrap:last-child{
+    text-align: right;
+}
+.index-btn{
+    display: inline-block;
+    padding: 18px 0;
+}
+.img-btn,.entrance-name{
+    float: left;
+    height: 40px;
+}
+.entrance-name{
+    line-height: 40px;
+    font-size: 0.14rem;
+    text-indent: 0.03rem;
+    color: RGBA(38, 38, 38, 0.6)
+}
+.img-btn{
+    width: 40px;
+    
+}
+
+
+.nl-ad{
+    /* height: 112px; */
+}
+.nl-ad-row{
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.nl-ad-row .img-box{
+    border-radius: 6px;
+}
+.nl-ad-row:first-child{
+    margin-top: 0;
+}
+.head-info{
+    background: #fff;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.head-info span{
+    color: RGBA(38, 38, 38, 0.6); 
+    font-size: 0.14rem;
+}
+.head-info span:first-child{
+    color: #68AAFE;
+   
+}
+.foot-info{
+    padding-top: 10px;
+}
+.nl-ad-tips,.nl-ad-detail,.nl-ad-name{
+    padding-left: 14px;
+    margin-bottom: 5px;
+}
+p.nl-ad-name{
+    color: #262626;
+    font-size: 0.14rem;
+    height: 24px;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+p.nl-ad-tips{
+    color: #FB8E8E;
+    font-size: 0.12rem;
+}
+.nl-ad-detail{
+    color: RGBA(38, 38, 38, 0.6);
+    margin-bottom: 0;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    overflow:hidden;
+    -webkit-line-break:auto;
+    -webkit-box-orient:vertical;
+    word-wrap: break-word;
+}
+@media screen and (min-width: 992px){
+    .mui-bar{
+        background: #fff;
+    }
+}
+@media screen and (max-width: 991px){
+    
+}
+

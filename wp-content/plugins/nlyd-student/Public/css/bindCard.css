@@ -1,0 +1,29 @@
+.nl-page-form .form-input-label{
+    text-align: left;
+    width: 84px;
+}
+.nl-page-form input.show-value, .nl-page-form div.show-value {
+    float: left;
+    display: block;
+    width: -webkit-calc(100% - 94px); 
+    width: calc(100% - 94px);
+    height: 55px;
+    line-height: 55px;
+    border: none;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    padding-left: 10px;
+    background: #fff;
+    color: rgba(116, 116, 116, 1);
+}
+.nl-page-form input.show-value{
+    width: -webkit-calc(100% - 84px); 
+    width:calc(100% - 84px);
+    padding-left: 10px;
+}
+.nl-icon{
+    position: absolute;
+    left: 96px;
+    color: rgba(116, 116, 116, 1);
+}

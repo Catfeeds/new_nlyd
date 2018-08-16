@@ -1,0 +1,189 @@
+
+.content .nl-table td,.content table.nl-table{
+    border-color:rgba(245, 245, 245, 1);
+}
+.content table.nl-table{
+    border-bottom: none;
+    position: relative;
+    margin-top: 20px;
+}
+
+.player-img{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(236, 236, 236, 1);
+    border-radius: 50%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.player-img img{
+    width: 100%;
+    height: auto;
+    margin :auto;
+}
+
+.content .nl-table td{
+    color: rgba(175, 173, 173, 1);
+    /* font-size: 12px; */
+    text-align: center;
+}
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+.nl-match{
+    float: left;
+    width:100%;
+    position: relative;
+    background: #fff;
+    margin-bottom: 10px;
+}
+.nl-match-metal{
+    position: absolute;
+    width: 30px;
+    height: 19px;
+    top: 0;
+    /* left: 17px; */
+    right:0;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+    color: #fff;
+    /* font-size: 10px; */
+    text-align: center;
+    line-height: 19px;
+    border-bottom-right-radius:6px;
+    border-bottom-left-radius:6px;
+    overflow: hidden;
+}
+.nl-match-people{
+    position: absolute;
+    top: 0;
+    right: 2px;
+    color: rgba(104, 170, 254, 1);
+}
+.nl-match-header,.nl-match-body{
+    /* padding: 0 17px; */
+    padding: 0;
+}
+.nl-match-header{
+    /* margin-top: 24px; */
+    position: relative;
+    margin-top: 17px;
+}
+.noMargin{
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.nl-match-name{
+    font-size: 0.16rem;
+    color: #4394F9;
+    text-align: left;
+}
+.nl-match-type{
+    margin-left: 11px;
+    color: #68AAFE;
+}
+.nl-match-type.orange{
+    color: #FB8E8E;
+}
+.nl-match-body{
+    /* padding-bottom: 15px; */
+}
+.nl-match-label{
+    float: left;
+    font-size:  0.14rem;
+    color: RGBA(38, 38, 38, 0.6);
+    width: 70px;
+}
+
+p.long-name{
+    font-size: 0.12rem;
+    color: RGBA(38, 38, 38, 0.5);
+    margin-bottom: 0;
+    padding-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nl-match-info{
+    float: left;
+    width: -webkit-calc(100% - 70px);
+    width: calc(100% - 70px);
+    display: flex;
+    font-size:  0.14rem;
+    color: #262626;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.one-item{
+    flex: 1;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nl-match-footer{
+  height:43px;
+}
+.nl-match-button{
+    display: block;
+    border-top:1px solid #EEEEEE;
+    height: 43px;
+    text-align: center;
+    line-height: 43px;
+    font-size: 0.14rem;
+    color: #4394F9;
+    float: left;
+    cursor: pointer;
+}
+.nl-match-button.two{
+    width: -webkit-calc(50% - 0.5px);
+    width: calc(50% - 0.5px);
+}
+.nl-match-button.one{
+    width: 100%;
+}
+.nl-match-button.two:first-child{
+    border-right:1px solid #EEEEEE;
+}
+.lineH{
+    line-height: 0;
+}
+a.nl-see-link{
+    color: RGBA(104, 170, 254, 1)
+    /* font-size: 12px; */
+}
+.finish{
+    color: #4394F9;
+}
+
+.layui-flow-more{
+    bottom: -25px;
+}
+.nl-badge{
+    position: relative;
+    display: inline-block;
+    /* font-size: 12px; */
+    width: 20px;
+    height: 20px;
+    left: 2%;
+    line-height: 20px;
+    text-align: center;
+    background: -webkit-linear-gradient(#4394F9,#68a9fe);
+    background: -o-linear-gradient(#4394F9,#68a9fe);
+    background: -moz-linear-gradient(#4394F9,#68a9fe);
+    background: linear-gradient(#4394F9,#68a9fe);
+    color: #fff;
+    border-radius: 50%;
+}
+@media screen and (max-width: 991px){
+    #page{
+        padding-bottom: 100px;
+    }
+}

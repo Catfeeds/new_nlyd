@@ -1,0 +1,230 @@
+.system-list{
+    display: block;
+    height: 130px;
+    width: 100%;
+}
+.system-list.small{
+    height:80px ;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+.system-course{
+    background:url(../image/system/course.png) 0 0 no-repeat;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/course.png");
+}
+.system-teacher{
+    background: url(../image/system/teacher.png) 0px 0 no-repeat;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/teacher.png");
+}
+.system-match{
+    background: url(../image/system/match.png) 0px 0 no-repeat;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/match.png");
+}
+.system-test{
+    background: url(../image/system/test.png) 0px 0 no-repeat;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/test.png");
+}
+
+.item-wrapper{
+    position: relative;
+    width: 70%;
+    margin: auto;
+    height: 100%;
+}
+.left-icon,.center-detail{
+    float: left;
+}
+.left-icon{
+    width: 55px;
+    height: 100%;
+}
+.left-font{
+    float: left;
+    width: 55px;
+    height: 100%;
+    line-height: 80px;
+    text-align: left;
+    color:RGBA(38, 38, 38, 0.8);
+    font-size: 0.36rem;
+}
+.system-teacher .left-icon{
+    background: url(../image/system/teachers.png) center center no-repeat ;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/teachers.png");
+}
+.system-match .left-icon{
+    background: url(../image/system/match-icon-big.png) center center no-repeat ;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/match-icon-big.png");
+}
+.system-course .left-icon{
+    background: url(../image/system/course-icon-big.png) center center no-repeat ;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/course-icon-big.png");
+}
+.system-test .left-icon{
+    background: url(../image/system/test-icon-big.png) center center no-repeat ;
+    background-size: contain;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="../image/system/test-icon-big.png");
+}
+.center-detail{
+    height: 100%;
+    width: -webkit-calc(100% - 55px);
+    width: calc(100% - 55px);
+    text-align: center;
+}
+.system-font{
+    display: inline-block;
+    margin: auto;
+    color: #fff;
+    font-size: 0.16rem;
+    margin-top: 41px;
+    text-align: left;
+}
+.small .system-font{
+    margin-top: 16px;
+    margin-left: 0;
+    float: left;
+    color: RGBA(38, 38, 38, 1);
+    font-size: 0.14rem;
+}
+.system-font p{
+    margin-bottom: 0;
+}
+.system-font p:last-child{
+    font-weight: bold;
+}
+.coach-detail .right-icon{
+    line-height: 80px;
+    color: RGBA(104, 170, 254, 0.8);
+}
+.right-icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    line-height: 130px;
+    color: #fff;
+}
+.small .right-icon{
+    line-height: 80px;
+    color: RGBA(38, 38, 38, 1);
+}
+
+
+
+
+
+
+.mui-bar.system-list{
+    width: auto;
+    padding: 0;
+}
+.mui-bar.system-list .nl-goback{
+    height: 100%;
+    line-height: 130px;
+    /* color: RGBA(38, 38, 38, 1); */
+    color: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+}
+.mui-bar.system-list .system-font p{
+    text-align: center;
+}
+.mui-bar.system-list .system-font p:first-child{
+    margin-bottom: 10px;
+    /* color: RGBA(38, 38, 38, 0.8); */
+    font-size: 0.18rem;
+}
+.mui-bar.system-list .system-font p:last-child{
+    font-size: 0.17rem;
+}
+.mui-bar.system-list .center-detail{
+width: 100%;
+}
+p.content-p{
+    margin-bottom: 0;
+    font-size: 0.14rem;
+    text-indent: 0.28rem;
+    color: RGBA(38, 38, 38, 0.6)
+}
+.contentP-wrapper{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+.layui-flow-more{
+    bottom: -25px;
+}
+.light-c{
+    color: RGBA(116, 116, 116, 0.6)
+}
+
+
+
+.content .nl-table td,.content table.nl-table{
+    border-color:transparent;
+}
+.content table.nl-table{
+    border-bottom: none;
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 87px;
+}
+.content table.nl-table tr td{
+    color: RGBA(38, 38, 38, 0.6);
+    flex: 1;
+    font-size: 0.13rem;
+    text-align: center;
+    padding:5px 0px;
+}
+.content table.nl-table tr td span{
+    display: block;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.content table.nl-table tr:nth-child(odd){
+    background: RGBA(246, 250, 255, 1);
+}
+.content table.nl-table tr:first-child td{
+    color: RGBA(38, 38, 38, 1);
+    font-size: 0.14rem;
+}
+.player-img{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(236, 236, 236, 1);
+    border-radius: 50%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+.content .nl-table td.nl-blue-font{
+    color: rgba(67, 148, 249, 1);
+}
+@media screen and (min-width: 992px){
+    .nl-border {
+        padding-top: 0;
+    }
+    .mui-bar{
+        overflow: visible;
+    }
+}
+@media screen and (max-width: 991px){
+
+}

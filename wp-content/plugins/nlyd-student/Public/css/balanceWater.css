@@ -1,0 +1,17 @@
+.nl-page-form .form-input-row{
+    display: flex;
+}
+.form-input-row div{
+    flex: 1;
+    text-align: left;
+    color: rgba(116, 116, 116, 1);
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.form-input-row div:first-child{
+    flex: 2;
+}
+.form-input-row div:last-child{
+    text-align: right;
+}

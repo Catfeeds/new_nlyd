@@ -1,0 +1,28 @@
+#accordion {
+    background: #fff;
+}
+.ui-accordion-header {
+    padding: 13px;  margin: 1px;  border-bottom: 5px solid #eee;
+}
+.ui-accordion-content p {
+    margin: 0;padding: 10px;color: #302B2B;
+}
+.ui-accordion-content p span {
+    width: 500px; display: inline-block;position: relative; padding: 5px 0;
+}
+.ui-accordion-content p b {
+    font-weight: normal; margin-left: 30px;
+}
+.ui-accordion-content p input {
+    position: absolute;left: 0;
+}
+.delect-role{
+    font-size: 22px;cursor: pointer;padding-left: 5px;width: 20px;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+}
+.ui-helper-reset{
+    border-bottom: 10px solid #f1f1f1;
+}
+

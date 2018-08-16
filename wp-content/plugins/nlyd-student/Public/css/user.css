@@ -1,0 +1,302 @@
+.wrapper_content{
+    width: 350px;
+    min-height: 645px;
+    position: relative;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%,0%);
+    padding: 0 40px 0 40px;
+   
+    
+    /* box-shadow: 0 4px 10px 0 rgba(0,0,0,0.12), 4px 0 10px 0 rgba(164,164,164,0.50);
+    border-radius: 2px;
+    border: 1px solid #c6c6c6; */
+}
+
+
+.titleLanguage{
+    padding-top: 15px;
+    text-align: right
+}
+.box-logo{
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+}
+.logoImg{
+    width: 100%;
+    height: auto;
+    margin :auto;
+}
+.box-logo-name{
+    margin: auto;
+    width: 190px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+.layui-tab-content{
+    padding: 10px 0;
+}
+.content ul{
+    margin: 0;
+    padding: 0;
+}
+
+.layui-tab-title{
+    position: relative;
+    border: 1px solid #e2e3e2;
+    height: 45px;
+    width: -webkit-calc(100% - 2px);; 
+    width: calc(100% - 2px);
+    margin-bottom: 15px!important;
+    border-radius: 25px;
+    overflow: hidden;
+}
+.nl-transform{
+    border-radius:22.5px 0 0 22.5px;
+    top: 0;
+    width: 50%;
+    height: 45px;
+    line-height: 45px;
+    left: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    position: absolute;
+    font-size: 0.14rem;
+    text-align: center;
+    font-weight: 500;
+    text-transform: uppercase;
+    -webkit-font-smoothing: subpixel-antialiased;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+    transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
+    transform: translate3d(0px, 0px, 0px);
+}
+.layui-form-item{
+    margin-bottom:0;
+}
+/* .layui-tab-brief>.layui-tab-title .layui-this{
+    color: #fff;
+    border:none;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+} */
+/* .layui-tab-brief>.layui-tab-title .layui-this i{
+    color: #fff;
+} */
+.layui-tab-title li{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0.14rem;
+    color:#747474;
+    height: 45px;
+    width: 50%;
+    line-height: 45px;
+    padding: 0;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    position: relative;
+    min-width: 65px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.layui-tab-title li i{
+    color: #4394f9;
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    border-bottom:none;
+}
+.layui-input:focus{
+    border:1px solid #60a5fc!important;
+}
+.layui-input{
+    height: 45px;
+    text-indent: 10px;
+    border-radius: 25px!important;
+    color: #b8bcbe;
+    padding: 0 15px!important;
+    line-height: normal; /* for non-ie */  
+    line-height:45px;
+}
+input::-webkit-input-placeholder {
+    color:#b8bcbe;
+    font-size:14px;
+    line-height: normal; /* for non-ie */ 
+    line-height:45px;
+}
+input:-moz-placeholder {
+color:#b8bcbe;
+font-size:14px;
+line-height: normal; /* for non-ie */ 
+line-height:45px;
+}
+input::-moz-placeholder {
+color:#b8bcbe;
+font-size:14px;
+line-height: normal; /* for non-ie */ 
+line-height:45px;
+}
+input:-ms-input-placeholder {
+color:#b8bcbe;
+font-size:14px;
+line-height: normal; /* for non-ie */ 
+line-height:45px;
+}
+.layui-btn{
+    height: 45px;
+    line-height: 45px;
+    border-radius: 25px!important;
+}
+.layui-form-item{
+    position: relative;
+}
+.layui-form-item .layui-input-inline{
+    width: 100%;
+}
+
+/* .inputIcon{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 45px;
+    width: 45px;
+    line-height: 45px;
+    text-align: center;
+    z-index: 10;
+} */
+
+
+.submitBtn{
+    width: 100%;
+}
+
+.getCodeBtn{
+    position: absolute;
+    top: 0;
+    right: 20px;
+    background: transparent;
+    height: 45px;
+    line-height: 45px;
+    padding: 0;
+}
+.login-type{
+    width: 100%;
+    display:flex;
+    display:-webkit-flex;
+    flex-wrap:nowrap;
+    flex-direction:row;
+    justify-content:center;  
+}
+.login-type-wrapper{
+    flex:1 1 auto;
+}
+.login-type-logo{
+    text-align: center;
+}
+.login-type-logo i{
+    font-size: 0.28rem;
+}
+.login-type-name{
+    text-align: center;
+}
+.row-margin{
+    margin-bottom: 15px;
+}
+
+.nl-agreement{
+    margin-top: 15px;
+    text-align: center;
+    margin-bottom: 45px;
+    overflow: hidden;
+    font-size: 0.13rem;
+}
+.nl-agreement .login-by{
+    float: left;
+}
+input[type=text].layui-input,
+input[type=password].layui-input,
+input[type=tel].layui-input{
+    border:1px solid #e2e3e2;
+    background: #fff;
+    line-height: 45px;
+    line-height: normal;
+    padding: 0 15px!important;
+}
+
+.display-hide{
+    display: none;
+}
+.display-show{
+    display: block;
+}
+.display-inline{
+    display: inline;
+}
+.login-by{
+    cursor: pointer;
+}
+.userAgreement-content{
+    height: 300px;
+    padding: 20px 0;
+}
+.head-tips{
+    font-size: 0.16rem;
+    color: #4394f9;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.content-p{
+    font-size: 0.13rem;
+}
+.content-p.indent{
+    text-indent: 0.26rem;
+}
+.content-title{
+    font-size: 0.16rem;
+    color: #4394f9;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+@media screen and (min-width: 992px){
+    #main{
+        background: transparent url('./image/login-bg.png') no-repeat center center;
+    }
+}
+@media screen and (max-width: 991px){
+    
+    .wrapper_content {
+        width: 75%;
+        padding: 0;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: inherit;
+        height: 100%;
+        box-shadow: none;
+        border: none;
+        min-height: 645px;
+        margin: auto;
+    }
+    #content,#main .wf-wrap, .page-title .wf-wra{
+        padding: 0!important;
+    }
+    .wf-container, .wf-container-main{
+        margin: 0!important;
+    }
+    .layui-form-item .layui-input-inline{
+        left: 0;
+    }
+    #page{
+        top: 0;
+    }
+}

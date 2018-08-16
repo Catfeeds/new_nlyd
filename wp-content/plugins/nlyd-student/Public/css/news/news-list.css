@@ -1,0 +1,41 @@
+.nl-ad-row{
+    display: block;
+    overflow: hidden;
+}
+.nl-ad-row:first-child{
+    margin-top: 0;
+}
+
+.foot-info{
+    padding-top: 10px;
+}
+.foot-info .img-box{
+    /* height: 100px; */
+}
+.nl-ad-row p{
+    padding-left: 14px;
+    margin-bottom: 5px;
+}
+p.nl-ad-name{
+    color: #262626;
+    font-size: 0.14rem;
+    height: 24px;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+p.nl-ad-tips{
+    color: #FB8E8E;
+    font-size: 0.12rem;
+}
+p.nl-ad-detail{
+    color: RGBA(38, 38, 38, 0.6);
+    font-size: 0.12rem;
+    line-height: 16px;
+    margin-bottom: 0;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    overflow:hidden;
+    -webkit-line-break:auto;
+    -webkit-box-orient:vertical;
+}

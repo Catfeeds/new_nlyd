@@ -1,0 +1,186 @@
+
+.nl-blue-font{
+    color: rgba(67, 148, 249, 1);
+}
+.nl-grey-font{
+    color: rgba(116, 116, 116, 1);
+}
+.teamDetail-row{
+    position: relative;
+    margin-bottom: 11px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    overflow: hidden;
+}
+.layui-row .teamDetail-row:last-child{
+    margin-bottom: 0;
+}
+.nl-team-name{
+    color: rgba(67, 148, 249, 1);
+    font-size: 0.16rem;
+}
+.nl-team-step{
+    color: rgba(251, 142, 142, 1);
+}
+.teamDetail-row.have-metal{
+    padding-top: 35px;
+}
+.teamDetail-row p{
+    margin-bottom: 0;
+    color: rgba(116, 116, 116, 1);
+    text-indent: 0.24rem;
+    width: -webkit-calc(100% - 30px);
+    width: calc(100% - 30px);
+}
+
+.teamDetail-metal{
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: -webkit-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: -o-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: -moz-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    color: #fff;
+    /* font-size: 12px; */
+    border-radius: 0 0 4px 4px;
+}
+
+ 
+.teamDetail-infoRow{
+    width: 100%;
+    overflow: hidden;
+}
+.nl-team-btn{
+    display: block;
+    float: right;
+    width: 25%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    font-size: 0.12rem;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(#fc8989,#ff6a6a);
+    background: -o-linear-gradient(#fc8989,#ff6a6a);
+    background: -moz-linear-gradient(#fc8989,#ff6a6a);
+    background: linear-gradient(#fc8989,#ff6a6a);
+}
+.teamDetail-top{
+    padding-top: 10px;
+    color: rgba(196, 196, 196, 1);
+}
+.content .nl-table td,.content table.nl-table{
+    border-color:transparent;
+}
+.content table.nl-table{
+    border-bottom: none;
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 87px;
+    width: -webkit-calc(100% - 30px);
+    width: calc(100% - 30px);
+}
+
+.player-img{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(236, 236, 236, 1);
+    border-radius: 50%;
+    overflow: hidden;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+.player-img img{
+    width: 100%;
+    height: auto;
+    margin :auto;
+}
+
+.content .nl-table td{
+    color: rgba(175, 173, 173, 1);
+    /* font-size: 12px; */
+    text-align: center;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    padding:5px 0px;
+}
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+.content .nl-table td.nl-blue-font{
+    color: rgba(67, 148, 249, 1);
+}
+.layui-flow-more{
+    bottom: -25px;
+}
+
+
+.content ul.layui-tab-title{
+    margin: 0;
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after {
+    border-bottom: none;
+}
+.layui-tab-title{
+    width: 100%;
+    height: 42px;
+    overflow: visible;
+    border-bottom: none;
+}
+
+.layui-tab-brief>.layui-tab-title .layui-this{
+    color: #fff;
+    border: 1px solid rgba(104, 170, 254, 1);
+    background: -webkit-linear-gradient(#4394F9,#68AAFE);
+    background: -o-linear-gradient(#4394F9,#68AAFE);
+    background: -moz-linear-gradient(#4394F9,#68AAFE);
+    background: linear-gradient(#4394F9,#68AAFE);
+    color: #fff;
+    
+    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
+}
+.layui-tab-title li{
+    display: inline-block;
+    vertical-align: middle;
+    color:rgba(116, 116, 116, 1);
+    height: 40px;
+    margin-left: 12px;
+    width: -webkit-calc(100%/3 - 10px);
+    width: calc(100%/3 - 10px);
+    line-height: 40px;
+    padding: 0;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+    position: relative;
+    min-width: 65px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid rgba(116, 116, 116, 1);
+    border-radius: 6px;
+    font-size: 0.16rem;
+}
+.layui-tab-title li:first-child{
+    margin-left: 0;
+}
+.layui-tab-title li i{
+    color: #4394f9;
+}
+
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.layui-tab{
+    margin-top: 0;
+}

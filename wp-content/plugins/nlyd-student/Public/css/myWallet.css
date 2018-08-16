@@ -1,0 +1,80 @@
+
+.wallet-title{
+    display: flex;
+    height: 80px;
+    line-height: 80px;
+    background: #4b98f9;
+    border-radius: 5px;
+    font-size: 0.14rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 6px;
+    margin-bottom: 10px;
+}
+.wallet-flex{
+    flex: 1;
+    text-align: center;
+    color: #fff;
+}
+.wallet-row{
+    border-radius: 5px;
+    display: block;
+    background: #fff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.wallet-row-title{
+    font-size: 0.16rem;
+    overflow: hidden;
+}
+.wallet-row-title i.iconfont{
+    font-size: 0.2rem
+}
+.wallet-btn a{
+    margin-left: 10px;
+}
+.row-detail{
+    display: flex;
+    height: 25px;
+    line-height: 25px;
+}
+.row-detail span{
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.row-detail span:first-child{
+    text-align: left;
+    flex: 2;
+}
+.row-detail span:last-child{
+    text-align: right;
+}
+.dot{
+    display: flex;
+    margin-top: 20px;
+    height: 15px;
+    width: 55%;
+    background: -webkit-linear-gradient(90deg,#4394F9, #fff);
+    background: -o-linear-gradient(90deg,#4394F9, #fff);
+    background: -moz-linear-gradient(90deg,#4394F9, #fff);
+    background: linear-gradient(90deg,#4394F9, #fff);
+}
+.dot div{
+    flex: 1;
+}
+.w{
+    background: #fff;
+}
+.t{
+    background: transparent;
+}
+.card-info{
+    font-size: 0.13rem;
+    height: 100px;
+    line-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

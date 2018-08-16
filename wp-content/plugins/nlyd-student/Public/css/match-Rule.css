@@ -1,0 +1,60 @@
+.dot{
+    display: flex;
+    height: 15px;
+    width: -webkit-calc(100% - 65px); 
+    width: calc(100% - 65px);
+    float: left;
+    margin-top: 5.5px;
+    background: -webkit-linear-gradient(90deg,#4394F9, #fff);
+    background: -o-linear-gradient(90deg,#4394F9, #fff);
+    background: -moz-linear-gradient(90deg,#4394F9, #fff);
+    background: linear-gradient(90deg,#4394F9, #fff);
+}
+.dot div{
+    flex: 1;
+}
+.w{
+    background: #fff;
+}
+.t{
+    background: transparent;
+}
+.rule-row{
+    position: relative;
+    padding-left: 35px;
+    margin-top: 20px;
+}
+.rule-number{
+    position: absolute;
+    font-weight: bold;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    line-height: 25px;
+    text-align: center;
+    color: #fff;
+    background: -webkit-linear-gradient(#4394F9, #68AAFE);
+    background: -o-linear-gradient(#4394F9, #68AAFE);
+    background: -moz-linear-gradient(#4394F9, #68AAFE);
+    background: linear-gradient(#4394F9, #68AAFE);
+    font-size: 0.14rem;
+}
+.rule-title{
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+}
+.rule-name{
+    font-size: 0.14rem;
+    width: 65px;
+    float: left;
+}
+.rule-content{
+    padding-top: 10px;
+}
+p.rule-item{
+    margin-bottom: 0;
+    font-size: 0.13rem;
+}

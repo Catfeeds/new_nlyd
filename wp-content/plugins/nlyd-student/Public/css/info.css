@@ -1,0 +1,47 @@
+.nl-goPage{
+    display: block;
+    width: 44px;
+    height: 44px;
+    text-align: left;
+    line-height: 44px;
+    color: #007aff;
+}
+.goLeftShow{
+    left: 0;
+    display: block;
+}
+.mui-bar{
+    display: none;
+}
+.mui-bar.main{
+    display: block;
+}
+.mui-bar.headerShow{
+    display: block;
+}
+@media screen and (min-width: 992px){  
+    .nl-goPage{
+        position: absolute;
+        height: 60px;
+        line-height: 60px;
+        color: #fff;
+        z-index: 99;
+    }
+}
+@media screen and (max-width: 991px){  
+    .nl-border{
+        position: initial;
+        /* margin-top: -40px; */
+    }
+}
+p.accept-address{
+line-height: 27px;
+margin-bottom: 0;
+width: 90%;
+}
+.form-input-row.address-row{
+    height: auto;
+}
+.nl-page-form .form-input-row.address-row div.nl-input{
+    height: auto;
+}

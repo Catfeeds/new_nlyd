@@ -1,0 +1,241 @@
+
+.nl-blue-font{
+    color: rgba(67, 148, 249, 1);
+}
+.nl-grey-font{
+    color: rgba(116, 116, 116, 1);
+}
+
+.nl-coach-name{
+    color: rgba(67, 148, 249, 1);
+    font-size: 0.18rem;
+}
+.coachDetail-row.have-metal{
+    padding-top: 35px;
+}
+.coachDetail-row p{
+    margin-bottom: 0;
+    color: rgba(116, 116, 116, 1);
+}
+
+.coachDetail-metal{
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: 50px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: -webkit-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: -o-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: -moz-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    background: linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
+    color: #fff;
+    /* font-size: 12px; */
+    border-radius: 0 0 4px 4px;
+}
+.coachDetail-headImg{
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid rgba(67, 148, 249, 0.2);
+    box-shadow: rgba(196, 196, 196, 0.16) 0 3px 6px;
+}
+.coachDetail-headImg{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid rgba(67, 148, 249, 0.2);
+    box-shadow: rgba(196, 196, 196, 0.16) 0 3px 6px;
+}
+.coachDetail-headImg img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.coachDetail-coachInfo{
+    float: left;
+    width: -webkit-calc(100% - 65px); 
+    width: calc(100% - 65px);
+    padding-left: 13px;
+}   
+.coachDetail-infoRow{
+    overflow: hidden;
+    width: 100%;
+}
+.coach-type{
+    float: left;
+    width: -webkit-calc(100% / 3 - 8px); 
+    width: calc(100% / 3 - 8px);
+    height: 17px;
+    line-height: 17px;
+    text-align: center;
+    border-radius: 2px;
+    margin-right: 9px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    color: #AFAFAF;
+    border: 1px solid #AFAFAF;
+}
+.coach-type:last-child{
+    margin-right: 0;
+}
+.orange{
+    color: #FF6464;
+    border: 1px solid #FF6464;
+}
+.blue{
+    color: #4394F9;
+    border: 1px solid #5DA3FC;
+}
+
+.coachDetail-top{
+    position: absolute;
+    width: -webkit-calc(100% - 95px); 
+    width: calc(100% - 95px);
+    right: 30px;
+    top: 3px;
+    line-height: 16px;
+}
+.content .nl-table td,.content table.nl-table{
+    border-color:transparent;
+}
+.content table.nl-table{
+    border-bottom: none;
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 87px;
+}
+
+.player-img{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(236, 236, 236, 1);
+    border-radius: 50%;
+    margin: auto
+}
+.player-img img{
+    width: 100%;
+    height: 100%;
+}
+
+.content .nl-table td{
+    color: rgba(175, 173, 173, 1);
+    /* font-size: 12px; */
+    text-align: center;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    padding:5px 0px;
+}
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+.content .nl-table td.nl-blue-font{
+    color: rgba(67, 148, 249, 1);
+}
+
+.course-zoo{
+    width: 100%;
+    height: 106px;
+    overflow: hidden;
+}
+.course-window{
+    position: relative;
+    width: 100%;
+    height: 123px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.course-wrapper{
+    position: absolute;
+    width: 0;
+    left: 0;
+    top: 0;
+    height: 108px;
+}
+.course{
+    float: left;
+    width: 170px;
+    display: block;
+    border: 1px solid rgba(207, 222, 255, 1);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 6px;
+    border-radius: 5px;
+    margin-right: 14px; 
+    background-color: #fff;
+}
+.course-wrapper .course:last-child{
+    margin-right: 0;
+}
+.course-body{
+    height: 76px;
+    text-align: center;
+}
+.course-footer{
+    height: 28px;
+    text-align: center;
+    line-height: 28px;
+    background: -webkit-linear-gradient(90deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.8));
+    background: -o-linear-gradient(90deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.8));
+    background: -moz-linear-gradient(90deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.8));
+    background: linear-gradient(90deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.8));
+    border-radius: 0 0 5px 5px;
+    color: #fff;
+    font-size: 0.14rem;
+}
+.course-footer.disabled{
+    background: -webkit-linear-gradient(90deg,rgba(191, 190, 190, 1),rgba(191, 190, 190, 1));
+    background: -o-linear-gradient(90deg,rgba(191, 190, 190, 1),rgba(191, 190, 190, 1));
+    background: -moz-linear-gradient(90deg,rgba(191, 190, 190, 1),rgba(191, 190, 190, 1));
+    background: linear-gradient(90deg,rgba(191, 190, 190, 1),rgba(191, 190, 190, 1));
+    color: rgba(116, 116, 116, 1);
+}
+.course-name{
+    padding-top: 17px;
+    font-size: 0.14rem;
+    color: rgba(99, 147, 255, 1);
+}
+.course-address{
+    color: rgba(116, 116, 116, 1);
+}
+.layui-flow-more{
+    bottom: -25px;
+}
+@media screen and (min-width: 992px){
+    #content{
+        background:#fff;
+    }
+    .coachDetail-row{
+        position: relative;
+        margin-bottom: 11px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        background-color: #fff;
+        overflow: hidden;
+        border: 1px solid #f2f2f2;
+        border-radius: 5px;
+    }
+    .have-abtn{
+        padding-bottom: 180px;
+    }
+    .course-zoo{
+        /* overflow: visible; */
+    }
+}
+@media screen and (max-width: 991px){
+    #content{
+        background:#eee;
+    }
+    .coachDetail-row{
+        position: relative;
+        margin-bottom: 11px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        background-color: #fff;
+        overflow: hidden;
+    }
+}
