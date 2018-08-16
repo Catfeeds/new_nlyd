@@ -1,0 +1,1602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e60e5c82-12c8-404e-b743-36e7c17071ea" name="默认" comment="比赛">
+      <change afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/recentMatch.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/record.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wp-includes/library/RewriteRule.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-config.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-download.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-download.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-alipay.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-coachList.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-info.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-match.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-matchList.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-messages.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-news.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-news.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-order.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-orders.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-pay.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-team.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-wxpay.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-home.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-home.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-login.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/address.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/address.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/cropper/cropper.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/cropper/cropper.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/home-student.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/home-student.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/matchList.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/matchList.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/matching-reading.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/matching-reading.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/order-list.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/order-list.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/shop.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/shop.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/swiper/swiper-4.3.3.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/css/swiper/swiper-4.3.3.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/layui/lay/modules/flow.js" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/layui/lay/modules/flow.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/dist/soshm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/dist/soshm.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/douban.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/qq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/qzone.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/renren.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/tieba.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/tqq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/weibo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/weixin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/weixin_sharetip.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/weixin_timeline.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/img/yixin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/js/base64.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/js/device.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/js/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/js/sites.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/share/src/scss/index.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/studentCommon.js" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/studentCommon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/swiper/swiper-4.3.3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/swiper/swiper-4.3.3.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/addAddress.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/addAddress.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/address.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/address.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/balanceWater.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/balanceWater.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/bindCard.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/bindCard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/coachDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachDetail.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/coachList.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/coinWaterList.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/coinWaterList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/confirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/confirm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/course.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/course.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/directory/directory.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/directory/directory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/info.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/info.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/leftMenu.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/leftMenu.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/login/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/makeCash.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/makeCash.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/makeCashType.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/makeCashType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/match-Rule.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-Rule.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/match-waitting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchList.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-fastCalculation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastCalculation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-fastReverse.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-fastScan.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastScan.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-numberBattle.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-numberBattle.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-pokerRelay.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-pokerRelay.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matching-reading.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/messageDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/messageDetail.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/messagesList.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/messagesList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/my-404.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/my-404.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/myWallet.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/myWallet.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/news/news-detail.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/news/news-detail.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/news/news-list.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/news/news-list.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/order.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/paySuccess.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/paySuccess.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/privacyAgreement.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/privacyAgreement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/ready-numberBattle.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-numberBattle.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/ready-pokerRelay.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-pokerRelay.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/ready-reading.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-reading.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/recentMatch.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/record.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/resetPassword.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/setting.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/setting.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/shop.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/shop.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/singleRecord.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/singleRecord.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-fastCalculation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-fastReverse.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastReverse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-fastScan.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-numberBattle.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-pokerRelay.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-reading.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/suggest.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/suggest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/system/system-teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/system/system-teacher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/system/system.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/system/system.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/team.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/team.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teamDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/teamDetail.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/train.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/train.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/userAgreement.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/userAgreement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/userCenter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/css/layui.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/css/layui.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.1.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.1.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.1.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font.1/iconfont.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font/iconfonts.svg" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/font/iconfonts.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/themes/dt-armada-child/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Autoloader.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Autoloader.class.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Autoloader.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Autoloader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/APC.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/APC.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/CacheBase.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/CacheBase.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/DiscISAM.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/DiscISAM.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/ICache.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/ICache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Igbinary.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Igbinary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Memcache.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Memcache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Memory.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Memory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/MemoryGZip.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/MemoryGZip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/MemorySerialized.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/MemorySerialized.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/PHPTemp.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/PHPTemp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/SQLite.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/SQLite.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/SQLite3.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/SQLite3.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Wincache.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorage/Wincache.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorageFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CachedObjectStorageFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CalcEngine/CyclicReferenceStack.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CalcEngine/CyclicReferenceStack.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CalcEngine/Logger.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/CalcEngine/Logger.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/DateTime.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/DateTime.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Engineering.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Engineering.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Exception.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Exception.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/ExceptionHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/ExceptionHandler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Financial.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Financial.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/FormulaParser.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/FormulaParser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/FormulaToken.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/FormulaToken.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Function.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Function.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Logical.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Logical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/LookupRef.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/LookupRef.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/MathTrig.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/MathTrig.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Statistical.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Statistical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/TextData.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/TextData.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Token/Stack.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/Token/Stack.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/functionlist.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Calculation/functionlist.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/AdvancedValueBinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/AdvancedValueBinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DataType.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DataType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DataValidation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DataValidation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DefaultValueBinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/DefaultValueBinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/Hyperlink.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/Hyperlink.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/IValueBinder.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Cell/IValueBinder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Axis.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Axis.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/DataSeries.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/DataSeries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/DataSeriesValues.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/DataSeriesValues.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Exception.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Exception.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/GridLines.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/GridLines.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Layout.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Layout.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Legend.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Legend.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/PlotArea.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/PlotArea.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Properties.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Properties.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Renderer/PHP Charting Libraries.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Renderer/PHP Charting Libraries.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Renderer/jpgraph.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Renderer/jpgraph.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Title.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Chart/Title.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Comment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/DocumentProperties.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/DocumentProperties.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/DocumentSecurity.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/DocumentSecurity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Exception.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Exception.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/HashTable.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/HashTable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Helper/HTML.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Helper/HTML.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/IComparable.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/IComparable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/NamedRange.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/NamedRange.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Abstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Abstract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/CSV.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/CSV.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/DefaultReadFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/DefaultReadFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2003XML.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2003XML.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007/Chart.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007/Chart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel2007/Theme.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/Escher.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/Escher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/MD5.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/MD5.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/RC4.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Excel5/RC4.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Exception.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Exception.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Gnumeric.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/Gnumeric.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/HTML.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/HTML.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/IReadFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/IReadFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/IReader.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/IReader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/OOCalc.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/OOCalc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/SYLK.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Reader/SYLK.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/ReferenceHelper.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/ReferenceHelper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/ITextElement.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/ITextElement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/Run.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/Run.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/TextElement.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/RichText/TextElement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Settings.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/CodePage.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/CodePage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Date.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Date.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Drawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Drawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer/SpgrContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer/SpgrContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DgContainer/SpgrContainer/SpContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer/BSE.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer/BSE.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer/BSE/Blip.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Escher/DggContainer/BstoreContainer/BSE/Blip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Excel5.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Excel5.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/File.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Font.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/Font.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/CHANGELOG.TXT" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/CHANGELOG.TXT" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/CholeskyDecomposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/CholeskyDecomposition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/EigenvalueDecomposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/EigenvalueDecomposition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/LUDecomposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/LUDecomposition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/Matrix.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/Matrix.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/QRDecomposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/QRDecomposition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/SingularValueDecomposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/SingularValueDecomposition.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LMQuadTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LMQuadTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LagrangeInterpolation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LagrangeInterpolation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LagrangeInterpolation2.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LagrangeInterpolation2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LevenbergMarquardt.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/LevenbergMarquardt.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/MagicSquareExample.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/MagicSquareExample.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/Stats.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/Stats.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/benchmark.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/benchmark.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/polyfit.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/polyfit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/tile.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/examples/tile.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/tests/TestMatrix.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/tests/TestMatrix.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/utils/Error.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/utils/Error.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/utils/Maths.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/JAMA/utils/Maths.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/ChainedBlockStream.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/ChainedBlockStream.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS/File.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS/Root.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLE/PPS/Root.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLERead.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/OLERead.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/gnu-lgpl.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/gnu-lgpl.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/pclzip.lib.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/pclzip.lib.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PCLZip/readme.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PasswordHasher.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/PasswordHasher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/String.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/String.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/TimeZone.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/TimeZone.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/XMLWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/XMLWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/ZipArchive.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/ZipArchive.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/ZipStreamWrapper.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/ZipStreamWrapper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/bestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/bestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/exponentialBestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/exponentialBestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/linearBestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/linearBestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/logarithmicBestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/logarithmicBestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/polynomialBestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/polynomialBestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/powerBestFitClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/powerBestFitClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/trendClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Shared/trend/trendClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Alignment.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Alignment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Border.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Border.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Borders.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Borders.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Conditional.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Conditional.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Fill.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Fill.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Font.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Font.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/NumberFormat.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/NumberFormat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Protection.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Protection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Supervisor.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Supervisor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter/Column.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter/Column.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter/Column/Rule.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/AutoFilter/Column/Rule.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/BaseDrawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/BaseDrawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/CellIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/CellIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Column.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Column.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnCellIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnCellIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnDimension.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnDimension.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/ColumnIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Drawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Drawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Drawing/Shadow.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Drawing/Shadow.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/HeaderFooter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/HeaderFooter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/HeaderFooterDrawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/HeaderFooterDrawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/MemoryDrawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/MemoryDrawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/PageMargins.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/PageMargins.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/PageSetup.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/PageSetup.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Protection.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Protection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Row.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/Row.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowCellIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowCellIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowDimension.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowDimension.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/RowIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/SheetView.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Worksheet/SheetView.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/WorksheetIterator.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/WorksheetIterator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Abstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Abstract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/CSV.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/CSV.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Chart.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Chart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Comments.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Comments.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/ContentTypes.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/ContentTypes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/DocProps.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/DocProps.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Drawing.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Drawing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Rels.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Rels.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/RelsRibbon.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/RelsRibbon.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/RelsVBA.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/RelsVBA.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/StringTable.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/StringTable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Style.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Style.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Theme.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Workbook.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Workbook.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Worksheet.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/Worksheet.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/WriterPart.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel2007/WriterPart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/BIFFwriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/BIFFwriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Escher.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Escher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Font.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Font.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Parser.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Parser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Workbook.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Workbook.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Worksheet.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Worksheet.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Xf.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Excel5/Xf.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Exception.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/Exception.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/HTML.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/HTML.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/IWriter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/IWriter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Cell/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Cell/Comment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Content.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Meta.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Meta.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/MetaInf.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/MetaInf.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Mimetype.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Mimetype.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Settings.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Styles.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Styles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Thumbnails.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/Thumbnails.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/WriterPart.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/OpenDocument/WriterPart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/Core.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/Core.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/DomPDF.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/DomPDF.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/mPDF.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/mPDF.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/tcPDF.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Writer/PDF/tcPDF.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/bg/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/bg/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/cs/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/cs/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/cs/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/cs/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/da/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/da/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/da/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/da/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/de/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/de/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/de/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/de/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/en/uk/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/en/uk/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/es/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/es/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/es/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/es/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fi/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fi/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fi/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fi/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fr/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fr/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fr/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/fr/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/hu/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/hu/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/hu/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/hu/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/it/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/it/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/it/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/it/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/nl/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/nl/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/nl/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/nl/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/no/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/no/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/no/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/no/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pl/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pl/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pl/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pl/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/br/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/br/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/br/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/br/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/pt/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/ru/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/ru/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/ru/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/ru/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/sv/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/sv/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/sv/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/sv/functions" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/tr/config" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/tr/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/tr/functions" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/locale/tr/functions" afterDir="false" />
+    </list>
+    <ignored path="wp.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="wp" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="info.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/info.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="418">
+              <caret line="43" column="55" selection-start-line="43" selection-start-column="55" selection-end-line="43" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-matchs.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="174">
+              <caret line="564" column="47" selection-start-line="564" selection-start-column="47" selection-end-line="564" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-account.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="756">
+              <caret line="211" column="52" lean-forward="true" selection-start-line="211" selection-start-column="52" selection-end-line="211" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-ajax.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="914">
+              <caret line="923" column="18" lean-forward="true" selection-start-line="923" selection-start-column="18" selection-end-line="923" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userCenter.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="307">
+              <caret line="99" column="123" selection-start-line="99" selection-start-column="123" selection-end-line="99" selection-end-column="123" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="singleRecord.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/singleRecord.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="307">
+              <caret line="84" column="35" selection-start-line="84" selection-start-column="35" selection-end-line="84" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="team.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/team.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="record.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/record.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="185" column="40" selection-start-line="185" selection-start-column="40" selection-end-line="185" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-teams.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="274">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>24</find>
+      <find>$.Request('match_more')</find>
+      <find>answer_submit</find>
+      <find>fastScan</find>
+      <find>fastScan(</find>
+      <find>subjectfastScan</find>
+      <find>answer</find>
+      <find>subjectFastReverse</find>
+      <find>subjectReading</find>
+      <find>收货</find>
+      <find>addAddress()</find>
+      <find>save_address</find>
+      <find>get_coach_lists</find>
+      <find>$_GET['action']</find>
+      <find>data-categoryId</find>
+      <find>category_id</find>
+      <find>match_id</find>
+      <find>coachCount</find>
+      <find>record</find>
+      <find>record(</find>
+      <find>请先联系管理员设置比赛别名</find>
+      <find>home</find>
+      <find>a-btn</find>
+      <find>answer_url</find>
+      <find>&amp;match_more=</find>
+      <find>match_more=</find>
+      <find>myCoach</find>
+      <find>info</find>
+      <find>logoImg</find>
+      <find>查看</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>$title</replace>
+      <replace>child_page</replace>
+      <replace>match</replace>
+      <replace>$this-&gt;meta['match_status']</replace>
+      <replace>$_POST['page']</replace>
+      <replace>home_url('</replace>
+      <replace>/matchs</replace>
+      <replace>&lt;?=$_GET['match_more']?&gt;</replace>
+      <replace>&lt;?=$_GET['match_id']?&gt;</replace>
+      <replace>ACTION</replace>
+      <replace>&lt;?=$_GET['project_id']?&gt;</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-reading.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchList.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/confirm.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/coachList.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/subject-fastReverse.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/userCenter.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/page-articlelist.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/nlyd-interface.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/view/banner.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-matchList.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/record.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada/page.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada/single.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/taxonomy.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php" />
+        <option value="$PROJECT_DIR$/wp-includes/library/Workerman/Worker.php" />
+        <option value="$PROJECT_DIR$/wp-config.php" />
+        <option value="$PROJECT_DIR$/wp-includes/library/RewriteRule.class.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-login.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-messages.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-wxpay.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/confirm.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-home.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-numberBattle.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-pokerRelay.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-numberBattle.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-pokerRelay.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastCalculation.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-reading.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastScan.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/address.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/addAddress.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-orders.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/record.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/singleRecord.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/info.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/select2/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="2780" />
+    <option name="y" value="40" />
+    <option name="width" value="1925" />
+    <option name="height" value="1060" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-match" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
+              <item name="account" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
+              <item name="teams" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="dt-armada-child" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
+              <item name="library" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://E:/php/tool/wamp64/www/nlyd/wp-content/plugins/nlyd-student/Controller/class-student-account-matchList.php" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\matchs" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\teams" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\login" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\account" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\matchs" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-includes\library" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-includes\library\Workerman" />
+      <recent name="E:\php\tool\wamp64\www\nlyd\wp-includes\library\Vendor" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e60e5c82-12c8-404e-b743-36e7c17071ea" name="默认" comment="" />
+      <created>1530278223773</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1530278223773</updated>
+      <workItem from="1530278225591" duration="5607000" />
+      <workItem from="1530283934769" duration="294000" />
+      <workItem from="1530319941653" duration="442000" />
+      <workItem from="1530321093451" duration="1217000" />
+      <workItem from="1530327038887" duration="2673000" />
+      <workItem from="1530333709578" duration="14954000" />
+      <workItem from="1530351281337" duration="763000" />
+      <workItem from="1530493099406" duration="8305000" />
+      <workItem from="1530514448687" duration="7111000" />
+      <workItem from="1530596059196" duration="4010000" />
+      <workItem from="1530665972125" duration="33962000" />
+      <workItem from="1530709520656" duration="742000" />
+      <workItem from="1530752131241" duration="21863000" />
+      <workItem from="1530838225591" duration="15217000" />
+      <workItem from="1530925914808" duration="32560000" />
+      <workItem from="1531183856369" duration="16322000" />
+      <workItem from="1531270734723" duration="24287000" />
+      <workItem from="1531359661745" duration="19897000" />
+      <workItem from="1531446411316" duration="23295000" />
+      <workItem from="1531529983149" duration="25511000" />
+      <workItem from="1531704612017" duration="22164000" />
+      <workItem from="1531736917469" duration="3555000" />
+      <workItem from="1531788992227" duration="18019000" />
+      <workItem from="1531815325421" duration="41332000" />
+      <workItem from="1531962849061" duration="8677000" />
+      <workItem from="1531971651322" duration="15988000" />
+      <workItem from="1532047588087" duration="23480000" />
+      <workItem from="1532081048804" duration="578000" />
+      <workItem from="1532307381997" duration="25012000" />
+      <workItem from="1532397171684" duration="24942000" />
+      <workItem from="1532433035715" duration="31958000" />
+      <workItem from="1532568474614" duration="19981000" />
+      <workItem from="1532654463464" duration="8563000" />
+      <workItem from="1532684990965" duration="28873000" />
+      <workItem from="1532772692772" duration="3052000" />
+      <workItem from="1532775760745" duration="56000" />
+      <workItem from="1532914704720" duration="20526000" />
+      <workItem from="1532941042227" duration="1631000" />
+      <workItem from="1533000394405" duration="53000000" />
+      <workItem from="1533115660959" duration="5568000" />
+      <workItem from="1533172625324" duration="2289000" />
+      <workItem from="1533194873764" duration="34214000" />
+      <workItem from="1533516959487" duration="75378000" />
+      <workItem from="1533776356065" duration="46639000" />
+      <workItem from="1533948320396" duration="26219000" />
+      <workItem from="1534121831693" duration="22872000" />
+      <workItem from="1534208235624" duration="3432000" />
+      <workItem from="1534246817824" duration="13547000" />
+      <workItem from="1534382463641" duration="12632000" />
+      <workItem from="1534397423705" duration="41000" />
+      <workItem from="1534400238330" duration="3874000" />
+    </task>
+    <task id="LOCAL-00082" summary="数字争霸">
+      <created>1533001801708</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1533001801709</updated>
+    </task>
+    <task id="LOCAL-00083" summary="数字争霸多轮次比赛">
+      <created>1533019065817</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1533019065817</updated>
+    </task>
+    <task id="LOCAL-00084" summary="扑克接力">
+      <created>1533028575777</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1533028575777</updated>
+    </task>
+    <task id="LOCAL-00085" summary="扑克接力">
+      <created>1533032846575</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1533032846575</updated>
+    </task>
+    <task id="LOCAL-00086" summary="扑克接力">
+      <created>1533035187582</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1533035187582</updated>
+    </task>
+    <task id="LOCAL-00087" summary="参赛报名">
+      <created>1533087021357</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1533087021357</updated>
+    </task>
+    <task id="LOCAL-00088" summary="参赛报名">
+      <created>1533088023401</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1533088023401</updated>
+    </task>
+    <task id="LOCAL-00089" summary="参赛报名">
+      <created>1533090728890</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1533090728890</updated>
+    </task>
+    <task id="LOCAL-00090" summary="参赛报名">
+      <created>1533092145812</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1533092145812</updated>
+    </task>
+    <task id="LOCAL-00091" summary="比赛">
+      <created>1533094427743</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1533094427743</updated>
+    </task>
+    <task id="LOCAL-00092" summary="扑克接力">
+      <created>1533109442440</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1533109442440</updated>
+    </task>
+    <task id="LOCAL-00093" summary="所在城市">
+      <created>1533111014419</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1533111014419</updated>
+    </task>
+    <task id="LOCAL-00094" summary="单项比赛排名">
+      <created>1533127444133</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1533127444134</updated>
+    </task>
+    <task id="LOCAL-00095" summary="参赛报名">
+      <created>1533195140006</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1533195140006</updated>
+    </task>
+    <task id="LOCAL-00096" summary="比赛">
+      <created>1533198938577</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1533198938577</updated>
+    </task>
+    <task id="LOCAL-00097" summary="比赛">
+      <created>1533202941697</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1533202941697</updated>
+    </task>
+    <task id="LOCAL-00098" summary="比赛">
+      <created>1533203506236</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1533203506236</updated>
+    </task>
+    <task id="LOCAL-00099" summary="比赛倒计时">
+      <created>1533267210795</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1533267210795</updated>
+    </task>
+    <task id="LOCAL-00100" summary="比赛">
+      <created>1533277568949</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1533277568949</updated>
+    </task>
+    <task id="LOCAL-00101" summary="比赛">
+      <created>1533289582610</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1533289582610</updated>
+    </task>
+    <task id="LOCAL-00102" summary="比赛">
+      <created>1533533921727</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1533533921727</updated>
+    </task>
+    <task id="LOCAL-00103" summary="比赛">
+      <created>1533536763514</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1533536763514</updated>
+    </task>
+    <task id="LOCAL-00104" summary="比赛">
+      <created>1533541854063</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1533541854063</updated>
+    </task>
+    <task id="LOCAL-00105" summary="比赛">
+      <created>1533546742554</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1533546742554</updated>
+    </task>
+    <task id="LOCAL-00106" summary="比赛">
+      <created>1533550697699</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1533550697699</updated>
+    </task>
+    <task id="LOCAL-00107" summary="比赛">
+      <created>1533554216994</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1533554216994</updated>
+    </task>
+    <task id="LOCAL-00108" summary="比赛">
+      <created>1533612732143</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1533612732143</updated>
+    </task>
+    <task id="LOCAL-00109" summary="比赛">
+      <created>1533620604409</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1533620604409</updated>
+    </task>
+    <task id="LOCAL-00110" summary="比赛">
+      <created>1533628915440</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1533628915441</updated>
+    </task>
+    <task id="LOCAL-00111" summary="比赛">
+      <created>1533632005648</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1533632005648</updated>
+    </task>
+    <task id="LOCAL-00112" summary="比赛">
+      <created>1533709874456</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1533709874456</updated>
+    </task>
+    <task id="LOCAL-00113" summary="比赛">
+      <created>1533722160262</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1533722160262</updated>
+    </task>
+    <task id="LOCAL-00114" summary="比赛">
+      <created>1533727493130</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1533727493130</updated>
+    </task>
+    <task id="LOCAL-00115" summary="后台题库">
+      <created>1533801274557</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1533801274558</updated>
+    </task>
+    <task id="LOCAL-00116" summary="题库管理">
+      <created>1533801489242</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1533801489243</updated>
+    </task>
+    <task id="LOCAL-00117" summary="比赛">
+      <created>1533872252237</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1533872252237</updated>
+    </task>
+    <task id="LOCAL-00118" summary="比赛">
+      <created>1533950528155</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1533950528156</updated>
+    </task>
+    <task id="LOCAL-00119" summary="比赛">
+      <created>1533952879806</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1533952879806</updated>
+    </task>
+    <task id="LOCAL-00120" summary="比赛">
+      <created>1533971528598</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1533971528598</updated>
+    </task>
+    <task id="LOCAL-00121" summary="比赛">
+      <created>1534143927276</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1534143927277</updated>
+    </task>
+    <task id="LOCAL-00122" summary="比赛">
+      <created>1534144385534</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1534144385534</updated>
+    </task>
+    <task id="LOCAL-00123" summary="比赛">
+      <created>1534145402726</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1534145402726</updated>
+    </task>
+    <task id="LOCAL-00124" summary="比赛">
+      <created>1534145672898</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1534145672898</updated>
+    </task>
+    <task id="LOCAL-00125" summary="比赛">
+      <created>1534145950958</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1534145950958</updated>
+    </task>
+    <task id="LOCAL-00126" summary="比赛">
+      <created>1534149495875</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1534149495875</updated>
+    </task>
+    <task id="LOCAL-00127" summary="比赛">
+      <created>1534153252538</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1534153252538</updated>
+    </task>
+    <task id="LOCAL-00128" summary="比赛">
+      <created>1534153423690</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1534153423690</updated>
+    </task>
+    <task id="LOCAL-00129" summary="比赛">
+      <created>1534296804484</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1534296804484</updated>
+    </task>
+    <task id="LOCAL-00130" summary="比赛">
+      <created>1534301572674</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1534301572674</updated>
+    </task>
+    <option name="localTasksCounter" value="131" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="857124000" />
+  </component>
+  <component name="TodoView" selected-index="4">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="2553" y="-7" width="2062" height="1136" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22954091" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.26467663" />
+      <window_info anchor="bottom" id="调试" order="7" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32935324" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="运行" order="7" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="找到" order="8" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="bottom" id="找到" order="14" />
+      <window_info anchor="bottom" id="运行" order="10" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18463074" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.22189055" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32935324" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="调试" order="13" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="json返回错误完善" />
+    <MESSAGE value="个人中心设置接口更新" />
+    <MESSAGE value="比赛控制" />
+    <MESSAGE value="个人中心代码完善" />
+    <MESSAGE value="个人中心修改" />
+    <MESSAGE value="test" />
+    <MESSAGE value="比赛管理后台设置" />
+    <MESSAGE value="个人中心" />
+    <MESSAGE value="个人中心比赛" />
+    <MESSAGE value="比赛管理设置" />
+    <MESSAGE value="比赛详情" />
+    <MESSAGE value="战队管理设置" />
+    <MESSAGE value="比赛报名设置" />
+    <MESSAGE value="参赛报名设置" />
+    <MESSAGE value="数字争霸" />
+    <MESSAGE value="数字争霸多轮次比赛" />
+    <MESSAGE value="扑克接力" />
+    <MESSAGE value="所在城市" />
+    <MESSAGE value="单项比赛排名" />
+    <MESSAGE value="参赛报名" />
+    <MESSAGE value="比赛倒计时" />
+    <MESSAGE value="后台题库" />
+    <MESSAGE value="题库管理" />
+    <MESSAGE value="比赛" />
+    <option name="LAST_COMMIT_MESSAGE" value="比赛" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="10" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/wp-includes/link-template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="2953" column="12" selection-start-line="2953" selection-start-column="12" selection-end-line="2953" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12863">
+          <caret line="689" column="59" lean-forward="true" selection-start-line="689" selection-start-column="59" selection-end-line="689" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/Workerman/Worker.php" />
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/Autoloader.class.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="13" column="21" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="672">
+          <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-alipay.php" />
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/RewriteRule.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1387">
+          <caret line="84" column="9" selection-start-line="84" selection-start-column="9" selection-end-line="84" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-messages.php" />
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="185" column="13" selection-start-line="185" selection-start-column="13" selection-end-line="185" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-wxpay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1767">
+          <caret line="305" column="5" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="305" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/confirm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="18" column="113" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-numberBattle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-numberBattle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="72" column="47" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="50" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="724">
+          <caret line="63" column="37" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-pokerRelay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="82" column="36" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-pokerRelay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="83" column="45" lean-forward="true" selection-start-line="83" selection-start-column="45" selection-end-line="83" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-reading.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="40" column="43" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="70" column="10" lean-forward="true" selection-start-line="70" selection-start-column="10" selection-end-line="70" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/team.php" />
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/match-Rule.php" />
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastScan.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="194" column="61" lean-forward="true" selection-start-line="194" selection-start-column="61" selection-end-line="194" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastCalculation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6064">
+          <caret line="332" column="39" selection-start-line="332" selection-start-column="31" selection-end-line="332" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/match-waitting.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="623">
+          <caret line="54" column="67" selection-start-line="54" selection-start-column="67" selection-end-line="54" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="94" column="59" selection-start-line="94" selection-start-column="59" selection-end-line="94" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastReverse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="23" column="106" selection-start-line="23" selection-start-column="98" selection-end-line="23" selection-end-column="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="608">
+          <caret line="53" column="63" selection-start-line="53" selection-start-column="63" selection-end-line="53" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-399" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-145">
+          <caret line="78" column="18" lean-forward="true" selection-start-line="78" selection-start-column="18" selection-end-line="78" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-912" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="478">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-info.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="25" column="49" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/addAddress.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="58" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/address.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="132" selection-start-line="11" selection-start-column="126" selection-end-line="11" selection-end-column="132" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="34" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-orders.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="63" lean-forward="true" selection-start-line="23" selection-start-column="63" selection-end-line="23" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-setting.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="390" column="14" selection-start-line="390" selection-start-column="14" selection-end-line="390" selection-end-column="14" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#!!top" expanded="true" />
+            <element signature="n#close#0;n#Student_Payment#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-coachList.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="109" column="6" lean-forward="true" selection-start-line="109" selection-start-column="6" selection-end-line="109" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/record.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="185" column="40" selection-start-line="185" selection-start-column="40" selection-end-line="185" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="564" column="47" selection-start-line="564" selection-start-column="47" selection-end-line="564" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/singleRecord.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="84" column="35" selection-start-line="84" selection-start-column="35" selection-end-line="84" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/team.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="211" column="52" lean-forward="true" selection-start-line="211" selection-start-column="52" selection-end-line="211" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/info.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="43" column="55" selection-start-line="43" selection-start-column="55" selection-end-line="43" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="99" column="123" selection-start-line="99" selection-start-column="123" selection-end-line="99" selection-end-column="123" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="914">
+          <caret line="923" column="18" lean-forward="true" selection-start-line="923" selection-start-column="18" selection-end-line="923" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
