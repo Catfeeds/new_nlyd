@@ -50,14 +50,44 @@ class Student_Account_News extends Student_Home
     /**
      * 新闻详情
      */
-     public function newsDetail(){    
+    public function newsDetail(){
         $view = student_view_path.'news/news-detail.php';
         $id = intval($_GET['id']);
-        $row = get_posts($id);
-//        var_dump($row[0]);
-//         var_dump(get_previous_post());
-//         var_dump(get_next_post()->ID);
-        load_view_template($view, ['row' => $row[0]]);
+        $row = get_post($id);
+
+        //将全局当前文章改为$row
+        global $post,$wpdb;
+        $post = $row;
+        $cateToken = 0;
+        foreach (get_the_category() as $category){
+            //判断是否是新闻咨询
+            if($category->category_nicename == 'news'){
+                $cateToken = 1;
+                break;
+            }
+        }
+        if($cateToken === 0) return false;
+
+        //查询浏览量
+        $readRes = $wpdb->get_row('SELECT meta_id,meta_value FROM '.$wpdb->postmeta.' WHERE post_id='.$id.' AND meta_key="read_num"', ARRAY_A);
+        if(!$readRes){
+            if(!($metaId = $wpdb->insert($wpdb->postmeta,['post_id' => $id, 'meta_key' => 'read_num', 'meta_value' => 1]))){
+                return false;
+            }
+            $readNum = 1;
+        }else{
+            $readNum = $readRes['meta_value'];
+            $metaId = $readRes['meta_id'];
+        }
+        $data = [
+            'row' => $post,
+            'next' => get_next_post(true),
+            'prev' => get_previous_post(true),
+            'readNum' => $readNum
+        ];
+        //浏览量+1
+        $wpdb->update($wpdb->postmeta, ['meta_value' => ++$readNum], ['meta_id' => $metaId]);
+        load_view_template($view, $data);
     }
     /**
      * 默认公用js/css引入
