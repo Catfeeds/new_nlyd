@@ -1,22 +1,25 @@
 
 jQuery(document).ready(function($) {
-
-    $('.js-data-example-ajax').select2({
-
-        ajax: {
-            url: ajaxurl+'?action=get_question_list',
-            dataType: 'json',
-            delay: 600, //wait 250 milliseconds before triggering the request
-            processResults: function (res) {
-                // Tranforms the top-level key of the response object from 'items' to 'results'
-                return {
-                    results: res.data
-                };
+    $('.js-data-example-ajax').each(function () {
+        var _this=$(this)
+        var team_type = _this.attr('data-type');
+        var team_id = _this.attr('team-id');
+        _this.select2({
+            ajax: {
+                url: ajaxurl+'?action='+_this.attr('data-action')+'&team_type='+team_type+'&team_id='+team_id,
+                dataType: 'json',
+                delay: 600, //wait 250 milliseconds before triggering the request
+                processResults: function (res) {
+                    // Tranforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: res.data
+                    };
+                }
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
             }
-            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-        }
 
-    });
+        });
+    })
 
     $('#addSelect').click(function(){
         var _this=$(this);
