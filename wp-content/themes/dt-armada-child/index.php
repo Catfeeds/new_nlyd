@@ -131,7 +131,7 @@ get_header(); ?>
 
                         <div class="head-info layui-row  width-padding">
                             <span class="pull-left">最新资讯</span>
-                            <span class="pull-right" onclick="window.location.href='<?= home_url('account/news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
+                            <span class="pull-right" onclick="window.location.href='<?= home_url('news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <?php
                         if(!empty($cat_query)) {
