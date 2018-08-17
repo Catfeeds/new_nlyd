@@ -2,7 +2,7 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_left_path.'leftMenu.php';
+                require_once leo_student_public_view.'leftMenu.php';
             
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
