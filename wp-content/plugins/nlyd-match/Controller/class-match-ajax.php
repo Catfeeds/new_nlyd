@@ -500,6 +500,21 @@ class Match_Ajax
             wp_send_json_error(['info' => '删除失败']);
         }
     }
+
+    /**
+     * 踢出战队
+     */
+    public function expelTeam(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $bool = $wpdb->update($wpdb->prefix.'match_team', ['status' => -3], ['id' => $id]);
+        if($bool){
+            wp_send_json_success(['info' => '操作成功']);
+        }else{
+            wp_send_json_error(['info' => '操作失败']);
+        }
+    }
 }
 
 new Match_Ajax();
