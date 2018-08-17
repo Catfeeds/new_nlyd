@@ -15,7 +15,7 @@ class Student_Home
         //判断是否是管理员操作面板和是否登录
         if(!is_admin() && !is_user_logged_in()){
 
-            wp_redirect(home_url('student/login'));
+            wp_redirect(home_url('logins'));
         }
 
         global $current_user,$wpdb,$user_info;
