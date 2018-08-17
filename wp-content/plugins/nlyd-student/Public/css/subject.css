@@ -69,6 +69,9 @@
     font-size: 0.14rem;
     margin: 20px 0;
 }
+p.question{
+    color: #000;
+}
 /* 数字争霸 */
 .matching-number{
     width: -webkit-calc(5% - 5px);
