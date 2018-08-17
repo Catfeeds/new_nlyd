@@ -32,7 +32,7 @@
                     <div class="shop-search layui-row">
                         <i class="iconfont searchIcon">&#xe63b;</i>
                         <input type="text" class="serachInput" placeholder="搜索商品">
-                        <a class="shopCar" href="<?=home_url('/student/account/order');?>">
+                        <a class="shopCar" href="<?=home_url('orders');?>">
                             <span class="layui-badge">16</span>
                             <i class="iconfont">&#xe63d;</i>
                         </a>

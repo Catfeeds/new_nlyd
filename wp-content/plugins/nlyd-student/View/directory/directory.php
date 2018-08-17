@@ -49,7 +49,7 @@
                 <div class="layui-row width-padding  layui-bg-white">
                     <ul style="margin:0">
                     <li>
-                        <a class="system-list system-course small" href="<?=home_url('/account/directory/?action=directoryCoach');?>">
+                        <a class="system-list system-course small" href="<?=home_url('directory/directoryCoach');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     01
@@ -67,7 +67,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-teacher small" href="<?=home_url('/account/directory/?action=directoryPlayer');?>">
+                        <a  class="system-list system-teacher small" href="<?=home_url('directory/directoryPlayer');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     02
@@ -85,7 +85,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-match small" href="<?=home_url('/account/directory/?action=directoryTeam');?>">
+                        <a  class="system-list system-match small" href="<?=home_url('directory/directoryTeam');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     03
@@ -103,7 +103,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-test small" href="<?=home_url('/account/directory/?action=directoryRemember');?>">
+                        <a  class="system-list system-test small" href="<?=home_url('directory/directoryRemember');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     04
@@ -121,7 +121,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-course small" href="<?=home_url('/account/directory/?action=directoryRead');?>">
+                        <a  class="system-list system-course small" href="<?=home_url('directory/directoryRead');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     05
@@ -139,7 +139,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-teacher small" href="<?=home_url('/account/directory/?action=directorycalculation');?>">
+                        <a  class="system-list system-teacher small" href="<?=home_url('directory/directorycalculation');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     06
