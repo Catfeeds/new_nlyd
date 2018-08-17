@@ -86,8 +86,12 @@
                             <div class="nl-match-body width-margin">
                                 <div class="nl-match-detail">
                                     <span class="nl-match-label">选手姓名：</span>
+                                    <?php if(!empty($player['real_name'])){?>
                                     <span class="nl-match-info"><?=$player['real_name']?></span>
                                     <span class="nl-match-rz">已认证</span>
+                                    <?php }else{?>
+                                        <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
+                                    <?php }?>
                                 </div>
                                 <div class="nl-match-detail">
                                     <span class="nl-match-label">所属战队：</span>
@@ -95,8 +99,11 @@
                                         <?php if(!empty($player['team_id'])){ ?>
                                         <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
                                         <?=$player['user_team']?>
-                                        <?php }else{ ?>
-                                            <a href="<?=home_url('student/account/team/?action=lists')?>" class="nl-see-link">加入战队</a>
+                                        <?php }else{
+                                            $url = home_url('teams/index');
+                                            if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
+                                        ?>
+                                            <a href="<?=$url?>" class="nl-see-link">加入战队</a>
                                         <?php }?>
                                     </span>
                                 </div>
@@ -113,7 +120,7 @@
                             <!-- <span class="nl-match-people">28报名</span> -->
                             <div class="nl-match-header width-margin">
                                 <span class="nl-match-name">邮寄地址</span>
-                                <a class="nl-match-people" href="<?=home_url('/account/info/?action=address&match_id='.$_GET['match_id'])?>">增加/修改</a>
+                                <a class="nl-match-people" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
                             </div>
                             <div class="nl-match-body width-margin">
                                 <?php if(!empty($address)){ ?>

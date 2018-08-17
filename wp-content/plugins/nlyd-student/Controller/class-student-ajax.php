@@ -429,13 +429,17 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }
         if(empty($_POST['match_id']) || empty($_POST['project_id'])  || !isset($_POST['cost'])) wp_send_json_error(array('info'=>'参数错误'));
+
+        global $wpdb,$current_user;
+        if(empty(get_user_meta($current_user->ID,'user_real_name'))){
+            wp_send_json_error(array('info'=>'请先实名认证'));
+        }
+
         if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
         if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
         if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
-
-        global $wpdb,$current_user;
 
         $row = $wpdb->get_row("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
         if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info&match_id='.$_POST['match_id'])));
@@ -1010,7 +1014,7 @@ class Student_Ajax
         if($b){
             
             if(!empty($_POST['match_id'])){
-                $url = home_url('matchs/confirm&match_id='.$_POST['match_id']);
+                $url = home_url('matchs/confirm/match_id/'.$_POST['match_id']);
             }else{
                 $url = '';
             }
@@ -1385,8 +1389,9 @@ class Student_Ajax
 
         }
         if($resul){
-            $success['info'] = '设置成功';
-            wp_send_json_success($success);
+
+            $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
+            wp_send_json_success(array('info'=>$success,'url'=>$url));
         }else{
             wp_send_json_success(array('info'=>'设置失败'));
         }

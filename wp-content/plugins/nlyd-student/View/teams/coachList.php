@@ -31,7 +31,9 @@
                         <?php if(!empty($category)):
                             $url = home_url('/teams/'.$action);
                             //$action = isset($_GET['action'])?$_GET['action']:'index';
-                            if(isset($_GET['match_id'])) $url .= 'match_id/'.$_GET['match_id'];
+                            $set_url = home_url('/teams/coachList/category_id/'.$_GET['category_id']);
+                            if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
+                            if(isset($_GET['match_id'])) $set_url .= '/match_id/'.$_GET['match_id'];
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
@@ -307,7 +309,7 @@ layui.use(['element','flow','layer'], function(){
                                 var dom='<div class="no-info">无教练信息</div>'
                                 if(flag.length>0){
                                     var text=$('.layui-this').text();
-                                    dom+='<a class="a-btn" href="<?=home_url('/teams/coachList/category_id/'.$_GET['category_id']);?>">设置我的'+text+'教练</a>'
+                                    dom+='<a class="a-btn" href="<?=$set_url;?>">设置我的'+text+'教练</a>'
                                 }
                                 lis.push(dom) 
                             }else{

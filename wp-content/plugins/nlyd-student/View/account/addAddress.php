@@ -81,7 +81,7 @@ layui.use(['layer','form'], function(){
             $.alerts(res.data.info)
             if(res.success){
                 setTimeout(function(){
-                    // window.location.href=res.data.url
+                    window.location.href=res.data.url
                 },1600)
             }    
         })

@@ -32,7 +32,7 @@ class Match
 
                 //获取比赛meta
                 $sql = "select 
-                          id,match_id,match_genre,
+                          id,match_id,match_genre,match_genre,match_status,
                           if(unix_timestamp(match_start_time) > 1,match_start_time,'') match_start_time, 
                           if(unix_timestamp(entry_start_time) > 1,entry_start_time,'') entry_start_time, 
                           if(unix_timestamp(entry_end_time) > 1,entry_end_time,'') entry_end_time, 
