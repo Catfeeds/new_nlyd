@@ -51,7 +51,7 @@
                 <?php }else{ ?>
                     <div class="no-info-page">
                         <div class="no-info-img">
-                            <img src="<?=student_css_url.'image/noInfo/noMessage1040@2x.png'?>">
+                            <img src="<?=student_css_url.'image/noInfo/noCoach1044@3x.png'?>">
                         </div>
                         <?php if($action == 'myCoach'){?>
                             <p class="no-info-text">您还未设置任何教练</p>
