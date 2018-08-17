@@ -19,6 +19,7 @@ class Student_Account extends Student_Home
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         $this->ajaxControll = new Student_Ajax();
+
         //添加短标签
         add_shortcode('student-home',array($this,$action));
     }
@@ -106,13 +107,14 @@ class Student_Account extends Student_Home
      * 我的比赛列表
      */
     public function recentMatch(){
+
         global $wpdb,$current_user;
         $sql = "select c.id
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
                   where user_id = {$current_user->ID} and b.match_status in(2,1,-2) LIMIT 1";
         $row = $wpdb->get_row($sql);
-        //print_r($row);
+        //var_dump($row);
         $view = student_view_path.'recentMatch.php';
         load_view_template($view, array('row' => $row));
 
