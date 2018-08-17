@@ -15,9 +15,18 @@
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
-                    <div class="title-img  layui-hide-md layui-hide-lg  layui-show-xs-block layui-show-sm-block ">
+                    <!-- <div class="title-img  layui-hide-md layui-hide-lg  layui-show-xs-block layui-show-sm-block ">
                         <img src="<?=$user_info['user_head'];?>">
+                    </div> -->
+                <!-- 轮播 -->
+                <div class="swiper-container layui-bg-white">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=$user_info['user_head'];?>"></div>
+                        </div>
                     </div>
+                    <div class="swiper-pagination"></div>
+                </div>
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
                         <?php if(!empty($category)):
                             $url = home_url('/teams/myCoach/');
@@ -67,6 +76,20 @@
 <input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>">
 <script>
 jQuery(function($) { 
+    var mySwiper = new Swiper('.swiper-container', {
+        loop : true,
+        autoplay:{
+            disableOnInteraction:false
+        },//可选选项，自动滑动
+        autoplayDisableOnInteraction : false,    /* 注意此参数，默认为true */ 
+        initialSlide :0,//初始展示页
+        pagination: {
+            el: '.swiper-pagination',
+            dynamicBullets: true,
+            dynamicMainBullets: 2,
+            clickable :true,
+        },
+    }); 
     var arr = <?=json_encode($category)?>; 
 
 layui.use(['element','flow','layer'], function(){
