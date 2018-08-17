@@ -166,12 +166,13 @@ jQuery(function($) {
         var row={rights:right,question:select,yours:'',isRight:false} 
         thisRow=row
         ajaxData.push(thisRow)
-        console.log(ajaxData)
     }
+
     showTime=function(){  
         if(!stop){
             _count_time--
         }
+
             var day = Math.floor((_count_time / 3600) / 24);
             var hour = Math.floor((_count_time / 3600) % 24);
             var minute = Math.floor((_count_time / 60) % 60);
@@ -185,13 +186,14 @@ jQuery(function($) {
             if(_count_time<=-1){
                 // ajaxData.push(thisRow)
                 initBuild(itemLen,items,nandu)
-                showQusetion(thisRow,answerHide,getAjaxTime)
+                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
                 clearTimeout(timer)
             }
             timer=setTimeout("showTime()",1000);
 
     }  
     showQusetion=function(row,flashTime,answerTime){//处理页面
+
             $('.answer').text(row.rights).removeClass('hide');
             $('.count_downs').addClass('hide');
             $('#selectWrapper').addClass('hide');
@@ -212,26 +214,26 @@ jQuery(function($) {
 
     }
     initBuild(itemLen,items,nandu)
-    showQusetion(thisRow,answerHide,getAjaxTime)
+    showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
 
 
     $('#selectWrapper').on('click','.fastScan-item',function(){
         var _this=$(this);
         if(!_this.hasClass('noClick')){
             var text=_this.text()
-            var thisAjaxRow=ajaxData[ajaxData.length-1]
-            thisAjaxRow.yours=text;//存储我的答案;
-            if(text==thisAjaxRow.rights){//选择正确
-                thisAjaxRow.isRight=true;
+            ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
+            if(text==ajaxData[ajaxData.length-1].rights){//选择正确
+                ajaxData[ajaxData.length-1].isRight=true;
                 _this.addClass('right-fastScan')
             }else{
-                thisAjaxRow.isRight=false;
+                ajaxData[ajaxData.length-1].isRight=false;
                 _this.addClass('error-fastScan')
             }
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
+            console.log(ajaxData[ajaxData.length-1])
             initBuild(itemLen,items,nandu)
             setTimeout(() => {
-                showQusetion(thisAjaxRow,answerHide,getAjaxTime)
+                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
             }, 300);
             clearTimeout(timer);
         }
@@ -251,7 +253,7 @@ jQuery(function($) {
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
-                }   
+                }
             }else{
                 $.alerts(res.data.info)
             }

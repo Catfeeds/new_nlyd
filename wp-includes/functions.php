@@ -7,7 +7,6 @@
 
 require( ABSPATH . WPINC . '/option.php' );
 
-
 /**
  * Convert given date string into a different format.
  *

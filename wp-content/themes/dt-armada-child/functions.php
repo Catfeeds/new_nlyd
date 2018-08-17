@@ -6,6 +6,8 @@
  * Time: 21:29
  */
 
+date_default_timezone_set('PRC');
+
 /**
  * 年齡組別
  */
