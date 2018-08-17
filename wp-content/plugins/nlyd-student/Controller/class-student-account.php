@@ -180,7 +180,7 @@ class Student_Account extends Student_Home
     /**
      * 我的训练
      */
-    public function train(){
+    public function matchList(){
         $view = student_view_path.'train.php';
         load_view_template($view);
     }

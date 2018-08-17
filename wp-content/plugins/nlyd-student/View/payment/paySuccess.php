@@ -26,8 +26,8 @@
                 <div class="pay-success layui-row">
                     <div class="pay-info">成功报名</div>
                     <div class="btn-zoo">
-                        <div class="btn-z"><a class='left' href="<?=home_url('/account/matchList/?action=info&match_id='.$row->match_id);?>">比赛详情</a></div>
-                        <div class="btn-z"><a class='right' href="<?=home_url('/account/order/?action=info&order_id='.$row->id);?>">订单详情</a></div>
+                        <div class="btn-z"><a class='left' href="<?=home_url('matchs/info/match_id/'.$row->match_id);?>">比赛详情</a></div>
+                        <div class="btn-z"><a class='right' href="javascript:;">订单详情</a></div>
                     </div>
                 </div>
             </div>

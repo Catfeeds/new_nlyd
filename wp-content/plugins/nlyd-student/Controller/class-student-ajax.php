@@ -810,7 +810,16 @@ class Student_Ajax
             $result = $wpdb->insert($wpdb->prefix.'my_address',$_POST);
         }else{
 
-            $result = $wpdb->insert($wpdb->prefix.'my_address',array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
+            $result = $wpdb->update($wpdb->prefix.'my_address',[
+                'fullname' => trim($_POST['fullname']),
+                'telephone' => $_POST['telephone'],
+                'country' => $_POST['country'],
+                'province' => $_POST['province'],
+                'city' => $_POST['city'],
+                'area' => $_POST['area'],
+                'address' => $_POST['address'],
+                'is_default' => isset($_POST['is_default']) ? 1 : 0,
+            ],array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
         }
 
         if($a && $result){

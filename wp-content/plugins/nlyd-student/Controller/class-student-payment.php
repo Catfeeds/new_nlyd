@@ -1,5 +1,5 @@
 <?php
-class Student_Payment {
+class Student_Payment extends Student_Home {
 
     public static $payClass;
     public function __construct($action)
@@ -39,6 +39,7 @@ class Student_Payment {
             );
 
         }
+
 
         //添加短标签
         add_shortcode('payment-home',array($this,$action));
@@ -398,12 +399,15 @@ class Student_Payment {
         global $wpdb,$current_user;
         $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
         if(empty($row)){
-            $this->get_404('参数错误');
+            $this->get_404('未找到数据');
             return;
-
         };
         // TODO 查询比赛详情和订单详情
+        wp_register_style( 'paySuccess', student_css_url.'paySuccess.css',array('my-student') );
+        wp_enqueue_style( 'paySuccess' );
+
         $view = student_view_path.'paySuccess.php';
+//        load_view_template($view);
         load_view_template($view,array('row'=>$row));
     }
 

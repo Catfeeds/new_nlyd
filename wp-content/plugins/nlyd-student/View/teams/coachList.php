@@ -27,7 +27,7 @@
                         <?php if(!empty($category)):
                             $url = home_url('/teams/'.$action);
                             //$action = isset($_GET['action'])?$_GET['action']:'index';
-                            if(isset($_GET['match_id'])) $url .= 'match_id/'.$_GET['match_id'];
+                            if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>

@@ -101,8 +101,13 @@
                                         <?php if(!empty($player['team_id'])){ ?>
                                         <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
                                         <?=$player['user_team']?>
+<<<<<<< HEAD
                                         <?php }else{?>
                                             <a href="<?=home_url('teams/index/match_id/'.$_GET['match_id'])?>" class="nl-see-link">加入战队</a>
+=======
+                                        <?php }else{ ?>
+                                            <a href="<?=home_url('teams/index')?>" class="nl-see-link">加入战队</a>
+>>>>>>> f6716e4525d7f1fffe3d44656fafc559470852e2
                                         <?php }?>
                                     </span>
                                 </div>
