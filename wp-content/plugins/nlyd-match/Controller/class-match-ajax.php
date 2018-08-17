@@ -241,6 +241,7 @@ class Match_Ajax
         }
 
         $orderRefundId = $wpdb->insert_id;
+        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
@@ -319,6 +320,7 @@ class Match_Ajax
                                 WHERE r.id='.$id, ARRAY_A);
 
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
+        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
@@ -366,6 +368,7 @@ class Match_Ajax
         global $wpdb;
         $order = $wpdb->get_row('SELECT serialnumber,pay_lowdown,cost,pay_type FROM '.$wpdb->prefix.'order WHERE id='.$id, ARRAY_A);
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
+        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':

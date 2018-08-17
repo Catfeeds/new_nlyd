@@ -22,7 +22,7 @@
         </a>
         <h1 class="mui-title">支付成功</h1>
         </header>
-            <div class="layui-row nl-border nl-content layui-bg-gray">
+            <div class="layui-row nl-border nl-content">
                 <div class="pay-success layui-row">
                     <div class="pay-info">成功报名</div>
                     <div class="btn-zoo">
