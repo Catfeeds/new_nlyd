@@ -8,7 +8,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback static" onclick="window.location.href = <?=home_url('account')?>">
+            <a class="mui-pull-left nl-goback static" onclick='window.location.href = "<?=home_url('account')?>"'>
                 <i class="iconfont">&#xe610;</i>
             </a>
             <h1 class="mui-title">设置</h1>
