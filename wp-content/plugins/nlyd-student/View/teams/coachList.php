@@ -15,10 +15,6 @@
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
-                    <!-- <div class="title-img  layui-hide-md layui-hide-lg  layui-show-xs-block layui-show-sm-block ">
-                        <img src="<?=$user_info['user_head'];?>">
-                    </div> -->
-                <!-- 轮播 -->
                 <div class="swiper-container layui-bg-white">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
