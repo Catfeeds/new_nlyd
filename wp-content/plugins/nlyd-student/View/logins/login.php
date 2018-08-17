@@ -149,7 +149,7 @@
                     </p>
                     <div class="layui-form-item">
                         <div class="layui-input-inline">
-                            <button class="layui-btn submitBtn  nl-bg-blue" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</button>
+                            <button class="layui-btn submitBtn  nl-bg-blue" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</button>
                         </div>
                     </div>
                 </form>

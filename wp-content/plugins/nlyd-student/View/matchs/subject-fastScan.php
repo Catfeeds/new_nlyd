@@ -3,7 +3,7 @@
     <div class="layui-row">
         <?php
             if(!is_mobile()){
-                require_once leo_student_left_path.'leftMenu.php';
+                require_once leo_student_public_view.'leftMenu.php';
             }
         ?>
         <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 detail-content-wrapper">

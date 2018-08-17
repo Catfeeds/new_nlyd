@@ -25,32 +25,12 @@ $banners = get_option('index_banner_url');
 $which_cat = get_category_by_slug('news');
 $recentPosts = new WP_Query();
 $cat_query = $recentPosts->query('showposts=1&cat='.$which_cat->cat_ID.'&paged=1');
-
 //var_dump($cat_query);
+
 get_header(); ?>
 
-<div class="nl-foot-nav">
-    <a class="nl-foot-item active" href="<?=home_url();?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe62d;</i></div>
-        <div class="nl-foot-name">首页</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('/student/account/matchList');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe631;</i></div>
-        <div class="nl-foot-name">训练</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('/student/account/matchList');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe692;</i></div>
-        <div class="nl-foot-name">比赛</div>
-    </a>
-    <a class="nl-foot-item">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe630;</i></div>
-        <div class="nl-foot-name">考级</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('student/account')?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe632;</i></div>
-        <div class="nl-foot-name">我的</div>
-    </a>
-</div>
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
+
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
@@ -151,7 +131,7 @@ get_header(); ?>
 
                         <div class="head-info layui-row  width-padding">
                             <span class="pull-left">最新资讯</span>
-                            <span class="pull-right" onclick="window.location.href='<?= home_url('student/account/news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
+                            <span class="pull-right" onclick="window.location.href='<?= home_url('account/news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <?php
                         if(!empty($cat_query)) {

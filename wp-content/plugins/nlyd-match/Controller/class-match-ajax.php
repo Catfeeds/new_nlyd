@@ -244,7 +244,6 @@ class Match_Ajax
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
-                require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-account-wxpay.php';
                 $param['transaction_id'] = unserialize($order['pay_lowdown'])['transaction_id']; //微信订单号
                 $param['out_trade_no'] = $order['serialnumber'];
                 $param['out_refund_no'] = $refund_no; //TODO 商户的微信退款单号
@@ -320,9 +319,9 @@ class Match_Ajax
                                 WHERE r.id='.$id, ARRAY_A);
 
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
+        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
-                require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-account-wxpay.php';
 
                 $param = [
                     'transaction_id' => unserialize($order['pay_lowdown'])['transaction_id'], //微信订单号 (四选一)
@@ -330,17 +329,16 @@ class Match_Ajax
                     'out_refund_no' => $order['refund_no'], //商户退款单号 (四选一)
                     'refund_id' => unserialize($order['refund_lowdown'])['refund_id'], //微信退款单号 (四选一)
                 ];
-                $payClass = new Student_Account_Wxpay();
+                $payClass = new Student_Payment('wxpay');
                 $res = $payClass::$payClass->refundQuery($param);
                 break;
             case 'zfb':
-                require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-account-alipay.php';
                 $param = [
                     'out_trade_no' => $order['serialnumber'],        //商户订单号，和支付宝交易号二选一
                     'trade_no' =>  unserialize($order['pay_lowdown'])['trade_no'],        //支付宝交易号，和商户订单号二选一
                     'out_request_no' => unserialize($order['refund_lowdown'])['out_request_no'],        //请求退款接口时，传入的退款请求号，如果在退款请求时未传入，则该值为创建交易时的外部交易号
                 ];
-                $payClass = new Student_Account_Alipay();
+                $payClass = new Student_Payment('alipay');
                 $res = $payClass::$payClass->refund($param);
                 break;
             case 'ylk':
@@ -368,21 +366,19 @@ class Match_Ajax
         global $wpdb;
         $order = $wpdb->get_row('SELECT serialnumber,pay_lowdown,cost,pay_type FROM '.$wpdb->prefix.'order WHERE id='.$id, ARRAY_A);
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
-
+        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
                 //微信
-                require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-account-wxpay.php';
-                $payClass = new Student_Account_Wxpay();
+                $payClass = new Student_Payment('wxpay');
                 $result = $payClass::$payClass->closeOrder($order['serialnumber']); //return array
                 break;
             case 'zfb':
-                require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-account-alipay.php';
                 $param = [
                     'out_trade_no' => $order['serialnumber'],//商户订单号，和支付宝交易号二选一
                     'trade_no' => unserialize($order['pay_lowdown'])['trade_no'],        //支付宝交易号，和商户订单号二选一
                 ];
-                $payClass = new Student_Account_Alipay();
+                $payClass = new Student_Payment('alipay');
                 $result = $payClass::$payClass->closeOrder($param);
                 break;
             case 'yld':

@@ -1,3 +1,12 @@
+<?php
+/**
+ * 公用PC菜单
+ * Created by PhpStorm.
+ * User: leo
+ * Date: 2018/8/17
+ * Time: 11:22
+ */
+?>
 <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
 <!--[if lt IE 9]>
   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
