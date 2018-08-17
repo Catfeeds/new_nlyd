@@ -238,7 +238,6 @@ jQuery(function($) {
                 _this.addClass('right-fastScan')
             }else{
                 isFalse=false;
-                console.log(flaseQuestion)
                 ajaxData[ajaxData.length-1].isRight=false;
                 _this.addClass('error-fastScan')
             }
@@ -246,7 +245,7 @@ jQuery(function($) {
             initBuild(itemLen,items,nandu,isFalse)
             setTimeout(() => {
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-            }, 300);
+            }, 500);
             clearTimeout(timer);
         }
     })
