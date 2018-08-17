@@ -511,6 +511,8 @@ p.share-font{
         overflow: hidden;
         padding-bottom: 80px;
         /* padding-top: 40px; */
+    }
+    .main-page .nl-page-form,.form-page .nl-page-form{
         margin-top: 40px;
     }
     .form-page,.main-page{

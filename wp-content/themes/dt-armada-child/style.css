@@ -11,7 +11,7 @@ Version:        0.1.0
 @import url("../dt-armada/style.css");
 @import url("css/layui.css");
 html, body, body.page, .wf-container > *{
-    font:normal normal normal 0.12rem / 0.24rem "Open Sans", Regular!important;
+    font:normal normal normal 0.14rem / 0.28rem "Open Sans", Regular!important;
     color: #757575;
     /* letter-spacing:0.01rem; */
 }
@@ -53,7 +53,7 @@ html{font-size:625%!important;}
     background-size: contain!important;
     border-radius:0 !important;
 }
-.accent-gradient .share-overlay, .accent-gradient .overlay, .accent-gradient #load{
+.accent-gradient #load,#load{
     background: #fff!important;
     
 }

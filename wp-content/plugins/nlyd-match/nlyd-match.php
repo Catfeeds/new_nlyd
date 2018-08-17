@@ -981,10 +981,10 @@ if(!class_exists('MatchController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
-            wp_register_script( 'admin_select2_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'admin_select2_js' );
-            wp_register_style( 'admin_select2_css',match_css_url.'layui.css','', leo_match_version  );
-            wp_enqueue_style( 'admin_select2_css' );
+            wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'admin_layui_js' );
+            wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
+            wp_enqueue_style( 'admin_layui_css' );
 
             wp_register_script( 'admin_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'admin_select2_js' );
