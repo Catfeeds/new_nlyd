@@ -139,9 +139,24 @@ Alert.prototype={
 				document.cookie=name+"="+cval+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
 		},
 		/*获取URL参数*/
-		Request: function (m) {
+		Requests: function (m) {
 			var sValue = location.search.match(new RegExp("[\?\&]" + m + "=([^\&]*)(\&?)", "i"));
 			return sValue ? sValue[1] : sValue;
+		},
+		Request:function(m){
+			var url=window.location.href;
+			var arr=url.split('/');
+			var flag=false;
+			for(var i=0;i<arr.length;i++){
+				if(arr[i]==m && !isNaN(parseInt(arr[i+1]))){
+					return arr[i+1]
+					flag=true;
+					break;
+				}	
+			}
+			if(!flag){
+				return null;
+			}
 		},
 		/*更新URL参数*/
 		UrlUpdateParams: function (url, name, value) {
