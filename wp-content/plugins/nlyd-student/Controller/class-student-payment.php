@@ -4,13 +4,13 @@ class Student_Payment {
     public static $payClass;
     public function __construct($action)
     {
-        if(isset($_GET['func'])){
-            $function = $_GET['func'];
+        if(isset($_GET['type'])){
+            $type = $_GET['type'];
         }else {
-            $function = $_GET['func'] = 'notifyUrl';
+            $type = $_GET['type'] = 'alipay';
         }
         $interface_config = get_option('interface_config');
-        if($action == 'wxpay' || $action == 'wxpay/'){
+        if($type == 'wxpay' || $type == 'wxpay/'){
 
             require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
             //TODO 脑力运动
@@ -26,7 +26,7 @@ class Student_Payment {
             //var_dump($interface_config['wx']);exit;
             self::$payClass = new wxpay($interface_config['wx']['api'], $interface_config['wx']['merchant'], $interface_config['wx']['secret_key']);
 
-            if($function == 'wx_downloadBill'){
+            if($action == 'wx_downloadBill'){
                 $this->wx_downloadBill();
                 exit;
             }
@@ -41,7 +41,7 @@ class Student_Payment {
         }
 
         //添加短标签
-        add_shortcode('payment-home',array($this,$function));
+        add_shortcode('payment-home',array($this,$action));
     }
 
     /***************************************微信start*****************************************/
@@ -50,7 +50,7 @@ class Student_Payment {
      * 微信支付参数
      */
     public function getWxParam($order){
-        $params['notify_url'] = home_url('account/student/wxpay/'); //商品描述
+        $params['notify_url'] = home_url('payment/wx_notifyUrl/type/wxpay'); //商品描述
         $params['body'] = '脑力中国'; //商品描述
         $params['serialnumber'] = $order['serialnumber']; // TODO 自定义的订单号
 //        $params['price'] = 0.01; //订单金额 只能为整数 单位为分
@@ -324,8 +324,8 @@ class Student_Payment {
         }
         //请求参数
         $param = [
-            'notify_url'    => home_url('student/account/alipay'),
-            'return_url'    => home_url('student/account/alipay/?action=returnUrl&serialnumber='.$order['serialnumber']),
+            'notify_url'    => home_url('payment/zfb_notifyUrl/type/alipay'),
+            'return_url'    => home_url('payment/zfb_returnUrl/type/alipay/serialnumber/'.$order['serialnumber']),
             'out_trade_no'  => $order['serialnumber'],
             'subject'       => '脑力中国',
 //            'total_amount'  =>  0.01,
