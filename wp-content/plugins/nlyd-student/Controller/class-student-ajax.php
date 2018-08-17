@@ -62,23 +62,27 @@ class Student_Ajax
                 $my_answer = str_replace('×','*',$_POST['my_answer']);
                 $my_answer = str_replace('÷','/',$my_answer);
 
-                /*var_dump(!preg_match('/^((\d++(\.\d+)?|\((?1)\))((\+|\/|\*|-)(\d++(\.\d+)?|(?1)))*)$/', $my_answer));*/
-                if((!preg_match("/[\+\-\*\/\.]{2}|[^\+\-\*\/\(\)\d\.]+/i", $my_answer)) && (substr_count($my_answer,"(") == substr_count($my_answer,")"))){
+                if(!preg_match("/[\+\-\*\/\.]{2}|[^\+\-\*\/\(\)\d\.]+/i", $my_answer)){
 
-                    $b = 0;
-                    $str = '$b = '.$my_answer.';';
-                    eval($str);
+                    $l_cont = substr_count($my_answer,"(");
+                    $r_cont = substr_count($my_answer,")");
 
-                    if($b == 24){
-                        wp_send_json_success(array('info'=>true));
-                    }else{
+                    if((substr_count($my_answer,"(") == substr_count($my_answer,")")) && ($l_cont != 0) && ($r_cont != 0)){
 
-                        wp_send_json_success(array('info'=>false));
+                        $b = 0;
+                        $str = '$b = '.$my_answer.';';
+                        eval($str);
+
+                        if($b == 24){
+                            wp_send_json_success(array('info'=>true));
+                        }else{
+
+                            wp_send_json_success(array('info'=>false));
+                        }
                     }
                 }
 
                 wp_send_json_error(array('info'=>false));
-
 
             }
         }
@@ -293,10 +297,10 @@ class Student_Ajax
                     foreach ($match_questions as $val){
                         $results = $twentyfour->calculate($val);
                         //print_r($results);
-                        $questions_answer[] = $results[0];
+                        $questions_answer[] = empty($results) ? $results[0] : '本题无解';
                     }
                     $isRight = array_column($data_arr,'isRight');
-
+                    //die;
                     $count_value = array_count_values($isRight);
                     $len = $count_value['true'];
                     $my_score = $len * 10;

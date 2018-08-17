@@ -1,5 +1,5 @@
 <?php
-
+use library\TwentyFour;
 /**
  * 学生-往期/近期比赛
  * Created by PhpStorm.
@@ -1165,6 +1165,7 @@ class Student_Matchs extends Student_Home
             //$redis->set('end_time'.$current_user->ID,'');
 
             $current_match_more = $this->redis->get('current_match_more'.$current_user->ID);
+
             if($current_match_more != $this->match_alias.'_'.$this->current_more){
 
                 //保存用户当前进行的比赛项目与比赛轮数
@@ -2018,6 +2019,8 @@ class Student_Matchs extends Student_Home
      *  逆向速算成绩页
      */
      public function subjectFastReverse(){
+
+
          if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
              $this->get_404('参数错误');
          }

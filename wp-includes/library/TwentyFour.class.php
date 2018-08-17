@@ -49,7 +49,7 @@ class TwentyFour
                 $my_answer = str_replace('/','÷',$my_answer);
 
                 $this->list[] = $my_answer;
-                //print_r($list);
+                //print_r($my_answer);
             }
             /*var_dump(eval($result));
             var_dump($expressions[0]);
@@ -82,7 +82,7 @@ class TwentyFour
                 $expressions[$j] = $expRight;
             }
         }
-        //print_r($expressions[0]);
+        //leo_dump($expressions[0]);
         return false;
     }
 
