@@ -144,7 +144,7 @@ jQuery(function($) {
                                                 +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
                                             +'</div>'
                                 }
-                                var end_time = new Date(v.match_start_time).getTime();//月份是实际月份-1
+                                var end_time = new Date(v.entry_end_time).getTime();//月份是实际月份-1
                                 var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                 var sys_second = (end_time-serverTimes)/1000;
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
@@ -175,7 +175,7 @@ jQuery(function($) {
                                                         +'<span class="nl-match-label">报名截止：</span>'
                                                         +'<span class="nl-match-info getTimes" data-seconds="'+sys_second+'">'
                                                         
-                                                        +'00:00:00</span>'
+                                                        +'报名结束</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
                                                         +'<span class="nl-match-label">已报选手：</span>'
@@ -250,7 +250,7 @@ jQuery(function($) {
                                                     +'<span class="nl-match-name">'+v.post_title+'</span>'
                                                     // +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                     +isMe
-                                                    +'<p class="long-name">2018脑力世界杯金澳凯文速度计以(温州平阳)战队精英赛</p>'
+                                                    +'<p class="long-name">'+v.post_title+'</p>'
                                                 +'</div>'
                                                 +'<div class="nl-match-body">'
                                                     +'<div class="nl-match-detail">'

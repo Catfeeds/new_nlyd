@@ -197,26 +197,13 @@ class Match
      * 战队队长设置box
      */
     public function team_leader_meta_box($post){
-        $team_id = intval($_GET['post']);
-        global $wpdb;
-        $row = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'team_meta AS t 
-         LEFT JOIN '.$wpdb->prefix.'match_team AS m 
-         ON m.id=t.team_leader 
-         LEFT JOIN '.$wpdb->prefix.'users AS u 
-         ON u.ID=m.user_id
-         WHERE t.team_id='.$team_id, ARRAY_A);
-        ?>
+        $team_leader = get_user_meta($this->team_meta['team_leader'],'user_real_name');
+    ?>
         <p>队长设置
-            <select class="js-data-example-ajax" name="team[team_leader]" style="width: 90%" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>>
-                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
+            <select class="js-data-example-ajax" name="team[team_leader]" style="width: 90%" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>">
+                <?php if(!empty($team_leader)):?><option value="<?=$this->team_meta['team_leader']?>" selected="selected"><?=$team_leader[0]['real_name']?></option><?php endif;?>
             </select>
         </p>
-        <!--<p>队长<input  value="<?/*=$this->team_meta['team_leader']*/?>" type="text" name="team[team_leader]"/></p>-->
-        <!--<p>队长设置<input  value="<?/*=$this->team_meta['team_leader']*/?>" placeholder="(用户名|昵称|手机)搜索" class="team_leader_director" data-type="student" data-team="<?/*=$team_id*/?>" type="text" name="team[team_leader]"/>
-            <select name="match_team" id="">
-            </select>
-            <button class="button confirmLeaderOrDirector" type="button" data-type="leader">确认队长</button> <span id="msg"></span>
-        </p>-->
     <?php }
 
 
@@ -250,19 +237,13 @@ class Match
             </select>
         <?php
         endif;
-        $team_id = intval($_GET['post']);
-        $row = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'team_meta AS t 
-         LEFT JOIN '.$wpdb->prefix.'match_team AS m 
-         ON m.id=t.team_director 
-         LEFT JOIN '.$wpdb->prefix.'users AS u 
-         ON u.ID=m.user_id
-         WHERE t.team_id='.$team_id, ARRAY_A);
+        $team_director = get_user_meta($this->team_meta['team_director'],'user_real_name');
         ?>
 
         <p><label class="post-attributes-label" for="parent_id">战队口号</label><input  value="<?=$this->team_meta['team_slogan'];?>" type="text" name="team[team_slogan]"/></p>
         <p>战队负责人
             <select class="js-data-example-ajax" name="team[team_director]" style="width: 90%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
-                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
+                <?php if(!empty($team_director)):?><option value="<?=$this->team_meta['team_slogan']?>" selected="selected"><?=$team_director[0]['real_name']?></option><?php endif;?>
             </select>
         </p>
 
@@ -339,9 +320,24 @@ class Match
      * 比赛时间box
      */
     public function time_review_meta_box($post){?>
-        <p>比赛时间<input  value="<?=$this->meta['match_start_time']?>" type="text" name="match[match_start_time]"/></p>
-        <p>报名开始时间<input  value="<?=$this->meta['entry_start_time']?>" type="text" name="match[entry_start_time]"/></p>
-        <p>报名结束时间<input  value="<?=$this->meta['entry_end_time']?>" type="text" name="match[entry_end_time]"/></p>
+        <div class="layui-inline">
+            <label class="layui-form-label">比赛时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input" id="match_start_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">报名开始时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['entry_start_time']?>" name="match[entry_start_time]" class="layui-input" id="entry_start_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">报名结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input" id="entry_end_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
         <p>比赛状态
             <input type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >已结束
             <input type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >等待开赛

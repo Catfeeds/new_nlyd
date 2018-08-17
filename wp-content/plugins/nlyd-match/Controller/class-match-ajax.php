@@ -417,40 +417,40 @@ class Match_Ajax
         }
         global $wpdb;
 
-        $select = "SELECT a.user_id,b.team_id FROM wp_usermeta a ";
+        $select = "SELECT a.user_id as id ,b.team_id,c.display_name as text FROM wp_usermeta a ";
 
         $left_join = "left join {$wpdb->prefix}match_team b on a.user_id = b.user_id
                       left join {$wpdb->prefix}users c on a.user_id = c.ID";
 
-        $where = " where a.meta_key = 'wp_user_level' AND meta_value = {$user_role} AND b.user_type = {$user_type} AND b.status = 2 ";
-        $where_ = " AND b.team_id = {$team_id} ";
+        $where = " where a.meta_key = 'wp_user_level' AND a.meta_value = {$user_role} ";
+        $where_ = " AND b.status = 2 AND b.user_type = {$user_type} AND b.team_id = {$team_id} ";
         if(!empty($_GET['term'])){
             $where .= "  and (c.user_login like '%{$_GET['term']}%' or c.user_nicename like '%{$_GET['term']}%' or c.user_email like '%{$_GET['term']}%' or c.display_name like '%{$_GET['term']}%') ";
         }
         $limit = " limit 0,10 ";
 
         $sql = $select.$left_join.$where.$where_.$limit;
-
         $rows = $wpdb->get_results($sql,ARRAY_A);
+
         if(empty($rows)){
-            $left_join = " left join {$wpdb->prefix}users b  on a.user_id = b.user_id ";
+            $select = "SELECT a.user_id as id ,c.display_name as text FROM wp_usermeta a ";
+            $left_join = " left join {$wpdb->prefix}users c  on a.user_id = c.ID ";
+
             $sql = $select.$left_join.$where.$limit;
-            print_r($sql);die;
             $rows = $wpdb->get_results($sql,ARRAY_A);
 
         }
-        global $wpdb;
-        $rows = $wpdb->get_results('SELECT m.id AS match_team_id,u.user_nicename FROM '.$wpdb->prefix.'match_team m 
-         LEFT JOIN '.$wpdb->users.' u 
-         ON u.ID=m. user_id 
-         WHERE m.team_id='.$team_id.' AND 
-         m.user_type='.$user_type.' AND 
-         (u.user_login LIKE "%'.$val.'%" OR u.user_mobile LIKE "%'.$val.'%" OR u.user_nicename LIKE "%'.$val.'%" OR u.user_email LIKE "%'.$val.'%")',
-         ARRAY_A);
-        if($rows)
-            wp_send_json_success(['info' => $rows]);
-        else
-            wp_send_json_error(['info' => '无数据']);
+        if(!empty($rows)){
+            foreach ($rows as $k => $val ){
+                $user = get_user_meta($val['id'],'user_real_name');
+                if(!empty($user[0])){
+                    $rows[$k]['text'] = $user[0]['real_name'];
+                }else{
+                    $rows[$k]['text'] = preg_replace('/, /','',$val['text']);
+                }
+            }
+        }
+        wp_send_json_success($rows);
     }
 
     /**

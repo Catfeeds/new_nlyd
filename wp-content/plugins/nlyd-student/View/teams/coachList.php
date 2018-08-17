@@ -11,7 +11,7 @@
             <?php echo (isset($_GET['match_id']) ? '<a class="mui-pull-left nl-goback static" href="'.home_url('matchs/confirm/match_id/'.intval($_GET['match_id'])).'">' : '<a class="mui-pull-left nl-goback static" href="'.home_url('account').'">'); ?>
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title"><?=$_GET['action'] == 'myCoach' ? '我的教练' :'教练列表';?></h1>
+        <h1 class="mui-title"><?=$action == 'myCoach' ? '我的教练' :'教练列表';?></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
@@ -29,10 +29,9 @@
                 </div>
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
                         <?php if(!empty($category)):
-                            $url = home_url('/teams/myCoach/');
+                            $url = home_url('/teams/'.$action);
                             //$action = isset($_GET['action'])?$_GET['action']:'index';
-                            $url .= $action;
-                            if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
+                            if(isset($_GET['match_id'])) $url .= 'match_id/'.$_GET['match_id'];
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
@@ -42,7 +41,7 @@
                             <?php } ?>
                         </ul>
                         <?php endif;?>
-                        <input type="hidden" name="user_id" value="<?=$_GET['action']=='myCoach'?$user_id:'';?>">
+                        <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show layui-row layui-col-space20" id="flow-zoo">
 
@@ -52,13 +51,13 @@
                 <?php }else{ ?>
                     <div class="no-info-page">
                         <div class="no-info-img">
-                            <img src="<?=student_css_url.'image/noInfo/noMessage1040@2x.png'?>">
+                            <img src="<?=student_css_url.'image/noInfo/noCoach1044@3x.png'?>">
                         </div>
-                        <?php if($_GET['action'] == 'myCoach'){?>
+                        <?php if($action == 'myCoach'){?>
                             <p class="no-info-text">您还未设置任何教练</p>
                             <?php
-                                $url = home_url('/account/coachList');
-                                $url = !empty($_GET['match_id']) ? $url.'?action=index&match_id='.$_GET['match_id'] : home_url('/account/coachList/?action=index');
+                                $url = home_url('/teams/coachList');
+                                if(!empty($_GET['match_id']) ) $url .= 'match_id/'.$_GET['match_id'];
                             ?>
                             <a class="a-btn" href="<?=$url;?>">去设置我的教练</a>
                         <?php }else{ ?>
@@ -304,7 +303,12 @@ layui.use(['element','flow','layer'], function(){
                             }
                         }else{
                             if(page==1){
-                                var dom='<tr><td colspan="7">无教练信息</td></tr>'
+                                var flag='<?=$action ?>';
+                                var dom='<div class="no-info">无教练信息</div>'
+                                if(flag.length>0){
+                                    var text=$('.layui-this').text();
+                                    dom+='<a class="a-btn" href="<?=home_url('/teams/coachList/category_id/'.$_GET['category_id']);?>">设置我的'+text+'教练</a>'
+                                }
                                 lis.push(dom) 
                             }else{
                                 $.alerts('没有更多了')

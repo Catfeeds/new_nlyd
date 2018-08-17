@@ -481,6 +481,30 @@ a {
     border: none;
 }
 
+.share-bg{
+    position:fixed;
+    z-index:99999;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:rgba(103, 167, 245, 0.64);
+    display:block;
+}
+.share-box{
+    width:75%;
+    position: relative;
+    top:10%;
+    left:15%;
+    text-align:right;
+}
+p.share-font{
+    position: relative;
+    top: 10%;
+    text-align:center;
+    color:#fff;
+    font-size:0.16rem
+}
 @media screen and (min-width: 992px){
     .nl-page-form{
         border: 1px solid #f2f2f2;

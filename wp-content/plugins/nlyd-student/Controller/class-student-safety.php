@@ -23,6 +23,8 @@ class Student_Safety extends Student_Home
         add_shortcode('safety-home',array($this,$action));
     }
 
+
+
     /*
      * 设置
      */

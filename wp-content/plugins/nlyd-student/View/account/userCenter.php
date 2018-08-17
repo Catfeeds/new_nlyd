@@ -95,11 +95,17 @@
                 </div>
             </div>
             <div class="width-margin layui-row menu-wrapper">
-                <?php if(!empty($my_team['my_team'])){ ?>
+                <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                 <!-- 我的战队 -->
-                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>"><span class="pull-left"><?=$my_team['my_team']?></span><span class="pull-right">查看</span></a>
+                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
+                        <span class="pull-left"><?=$my_team['my_team']?></span>
+                        <?php if($my_team['status'] != 2):?>
+                        <span>(<?=$my_team['status_cn']?>)</span>
+                        <?php endif;?>
+                        <span class="pull-right">查看</span>
+                    </a>
                 <?php }else{ ?>
-                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left">暂无战队</span><span class="pull-right">加入战队</span></a>
+                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left no-team">暂无战队</span><span class="pull-right">加入战队</span></a>
                 <?php }; ?>
                 <!-- 我的钱包 -->
                 <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('account/wallet')?>">
