@@ -68,11 +68,11 @@ class Teacher
                 <div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
-                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
-                            <option value="-1">批量操作</option>
-                            <option value="delete">删除</option>
-                        </select>
-                        <input type="submit" id="doaction" class="button action" value="应用">
+<!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
+<!--                            <option value="-1">批量操作</option>-->
+<!--                            <option value="delete">删除</option>-->
+<!--                        </select>-->
+<!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
                     </div>
                     <div class="tablenav-pages one-page">
                         <?=$pageHtml?>
@@ -161,11 +161,11 @@ class Teacher
                 <div class="tablenav bottom">
 
                     <div class="alignleft actions bulkactions">
-                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
-                            <option value="-1">批量操作</option>
-                            <option value="delete">删除</option>
-                        </select>
-                        <input type="submit" id="doaction2" class="button action" value="应用">
+<!--                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">-->
+<!--                            <option value="-1">批量操作</option>-->
+<!--                            <option value="delete">删除</option>-->
+<!--                        </select>-->
+<!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
                     </div>
                     <div class="tablenav-pages one-page">
                         <?=$pageHtml?>
