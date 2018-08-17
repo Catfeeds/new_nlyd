@@ -54,7 +54,7 @@
                                 <div class="one-ques">
                                     <p><?=$k+1;?>运算数字：<?=arr2str($val,'、')?></p>
                                     <p class="yours">你的答案：<span class="<?=$my_answer[$k] == $questions_answer[$k] ? 'yes' : 'error';?>"><?= $my_answer[$k] == 'unsolvable' ? '本题无解' : $my_answer[$k]?></span></p>
-                                    <p class="rights">正确示例：<?=$questions_answer[$k]?></p>
+                                    <p class="rights">正确示例：<?=!empty($questions_answer[$k]) ? $questions_answer[$k] : '本题无解'?></p>
                                 </div>
                                 <?php } ?>
                                 <?php endif;?>
