@@ -341,15 +341,37 @@ class Teacher
      * 教练的学员
      */
     public function student(){
-
+        global $current_user,$wpdb;
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
         $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
-        if($type == 0)
-            $typeWhere = '';
-        else
-            $typeWhere = 'AND co.apply_status='.$type;
+        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+        $catArr = [];
+        //类别
+        $compute = isset($_GET['compute']) ? intval($_GET['compute']) : 0;
+        $memory = isset($_GET['memory']) ? intval($_GET['memory']) : 0;
+        $read = isset($_GET['read']) ? intval($_GET['read']) : 0;
+        if($compute > 0) $catArr[] = $compute;
+        if($memory > 0) $catArr[] = $memory;
+        if($read > 0) $catArr[] = $read;
+        if(empty($catArr)){
+            foreach ($postsRows as $pRow){
+                if(preg_match('/算/', $pRow['post_title']) || preg_match('/记/', $pRow['post_title']) || preg_match('/读/', $pRow['post_title'])){
+                    $catArr[] = $pRow['ID'];
+                }
+            }
+        }
+        $cateWhere = ' AND co.category_id IN(';
+        foreach ($catArr as $cate){
+            $cateWhere .= $cate.',';
+        }
+        $cateWhere = substr($cateWhere, 0, strlen($cateWhere)-1);
+        $cateWhere .= ')';
+        //类别end
+        if($type == 0) $typeWhere = '';
+        else $typeWhere = 'AND co.apply_status='.$type;
 
-        global $current_user,$wpdb;
+
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
@@ -361,7 +383,7 @@ class Teacher
                 END AS apply_name 
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
                 LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
-                WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.'
+                WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.' 
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -375,8 +397,7 @@ class Teacher
             'current' => $page
         ));
 
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
-        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">学员</h1>
@@ -393,16 +414,25 @@ class Teacher
                     <lable for="du"><?=$prow['post_title']?></lable>
 
                     <?php if(preg_match('/算/', $prow['post_title'])){ ?>
-                        <input id="du" type="checkbox" checked="checked" name="compute" value="<?=$prow['ID']?>">
+                        <input id="compute" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="compute" value="<?=$prow['ID']?>">
                     <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
-                        <input id="du" type="checkbox"  checked="checked" name="memory" value="<?=$prow['ID']?>">
+                        <input id="memory" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="memory" value="<?=$prow['ID']?>">
                     <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
-                        <input id="du" type="checkbox"  checked="checked" name="read" value="<?=$prow['ID']?>">
+                        <input id="read" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="read" value="<?=$prow['ID']?>">
                     <?php } ?>
 
 
                 <?php } ?>
-                <button type="button" class="button" onclick="window.location.href='<?=$type?>'">确定</button>
+                <button type="button" class="button" onclick="window.location.href='<?='?page=teacher-student&type='.$type.'&id='.$coach_id?>'+typeFunc()">确定</button>
+                <script type="text/javascript">
+                    function typeFunc() {
+                        var compute = document.getElementById('compute').checked ? document.getElementById('compute').value : 0;
+                        var memory = document.getElementById('memory').checked ? document.getElementById('memory').value : 0;
+                        var read = document.getElementById('read').checked ? document.getElementById('read').value : 0;
+                        var str = '&compute='+compute+'&memory='+memory+'&read='+read;
+                        return str;
+                    }
+                </script>
             </div>
             <form method="get" onsubmit="return false;">
 
