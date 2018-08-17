@@ -404,6 +404,7 @@ if(!class_exists('MatchController')){
 
                     $data = $_POST['team'];
                     $data['team_id'] = $post_ID;
+                    //var_dump($_POST['team']);die;
                     $wpdb->delete($wpdb->prefix.'team_meta',array('team_id'=>$post_ID));
                     //print_r($data);
                     $a = $wpdb->insert($wpdb->prefix.'team_meta',$data);

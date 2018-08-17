@@ -37,6 +37,7 @@
                 <h1 class="mui-title">我的消息</h1>
             </header>
                 <div class="layui-row nl-border nl-content">
+
                     <div class="no-info-page">
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMessage1040@2x.png'?>">
