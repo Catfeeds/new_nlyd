@@ -1400,7 +1400,7 @@ class Student_Ajax
         if($resul){
 
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
-            wp_send_json_success(array('info'=>$success,'url'=>$url));
+            wp_send_json_success(array('info'=>'保存成功','url'=>$url));
         }else{
             wp_send_json_success(array('info'=>'设置失败'));
         }

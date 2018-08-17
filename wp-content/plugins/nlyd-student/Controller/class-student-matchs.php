@@ -573,7 +573,7 @@ class Student_Matchs extends Student_Home
              'post_title'=>$this->match['post_title'],
              'match_title'=>$this->match_title,
              'match_more'=>$this->default_match_more,
-             'answer_url'=>home_url('/matchs/'.$action.'/match_id/'.$_GET['match_id'].'/project_id/'.$_GET['project_id']),
+             'answer_url'=>home_url('/matchs/'.$action.'/match_id/'.$_GET['match_id'].'/project_id/'.$_GET['project_id'].'/type/select'),
          );
 
          //print_r($data);

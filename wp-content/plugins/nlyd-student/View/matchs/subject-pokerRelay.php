@@ -10,6 +10,9 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
+            <?php if(isset($_GET['type'])){ ?>
+                <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
+            <?php } ?>
         <h1 class="mui-title">本轮答题记录</h1>
         </header>
             <div class="layui-row nl-border nl-content">
@@ -135,11 +138,11 @@
                         </div>
                     </div>
                 </div>
-                <?php if(!empty($next_more_url)): ?>
+                <?php if(!empty($next_more_url) && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_more_url?>">距下一轮开赛&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_more_down?>">subjectFastScan00:00:00</span></div>
                     <a href="<?=$next_more_url?>">进入下一轮比赛</a>
                 <?php endif;?>
-                <?php if(!empty($next_project_url)): ?>
+                <?php if(!empty($next_project_url) && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_project_url?>">距下一项目开赛 <span class="count_down next_project_down" data-seconds="<?=$next_project_down?>">subjectFastScan00:00:00</span></div>
                     <a href="<?=$next_project_url?>">进入下一项比赛</a>
                 <?php endif;?>
@@ -170,19 +173,20 @@ jQuery(function($) {
         $('.right-answer .poker-wrapper').css('width',W1);
     }
     initWidth();
-
-$('.count_down').countdown(function(S, d){//倒计时
-    var _this=$(this);
-    var D=d.day>0 ? d.day+'天' : '';
-    var h=d.hour<10 ? '0'+d.hour : d.hour;
-    var m=d.minute<10 ? '0'+d.minute : d.minute;
-    var s=d.second<10 ? '0'+d.second : d.second;
-    var time=D+h+':'+m+':'+s;
-     _this.text(time);
-    if(S<=0){
-        window.location.href=_this.parents('.a-btn').attr('href')
-    }
-});
+    <?php if(!isset($_GET['type'])): ?>
+    $('.count_down').countdown(function(S, d){//倒计时
+        var _this=$(this);
+        var D=d.day>0 ? d.day+'天' : '';
+        var h=d.hour<10 ? '0'+d.hour : d.hour;
+        var m=d.minute<10 ? '0'+d.minute : d.minute;
+        var s=d.second<10 ? '0'+d.second : d.second;
+        var time=D+h+':'+m+':'+s;
+         _this.text(time);
+        if(S<=0){
+            window.location.href=_this.parents('.a-btn').attr('href')
+        }
+    });
+    <?php endif;?>
     $('.your-answer .poker-window').scroll(function(){
         var left=$(this).children('.poker-wrapper').position().left;
         $('.right-answer .poker-window').scrollLeft(-left)
