@@ -14,6 +14,7 @@ class Student_Matchs extends Student_Home
 
     public $match_title;       //比赛题目
     public $match_alias;       //比赛别名
+    public $current_more;       //比赛轮数
     public $default_use_time;       //项目时间
     public $default_count_down;       //比赛剩余时间
     public $default_match_more;       //比赛轮数
@@ -165,7 +166,7 @@ class Student_Matchs extends Student_Home
         global $wpdb,$current_user;
 
         //获取比赛详情
-        $sql = "select a.ID,a.post_title,b.match_start_time,b.match_use_time,b.match_more,b.match_subject_interval,b.match_address,b.match_cost,
+        $sql = "select a.ID,a.post_title,a.post_content,b.match_start_time,b.match_use_time,b.match_more,b.match_subject_interval,b.match_address,b.match_cost,
                 b.match_address,b.entry_end_time,b.match_category_order,b.str_bit,b.match_status,c.user_id,
                 case b.match_status 
                     when -3 then '已结束' 
@@ -982,17 +983,6 @@ class Student_Matchs extends Student_Home
             }
         }
         $match_more = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
-        /*$questions_answer = json_decode($row['questions_answer']);
-        print_r($questions_answer);
-        $my_answer = json_decode('[5,6,2,1,3,7,1,0,6,1,7,6,4,1,6]');
-        print_r($my_answer);
-        $len = count($questions_answer);
-        //print_r($questions_answer);
-        $error_len = count(array_diff_assoc($questions_answer,$my_answer));
-        //print_r($error_len);
-
-        $my_score = ($len-$error_len)*12 + $_POST['surplus_time'] * 1;
-        print_r($my_score);*/
 
         $data = array(
             'match_more_cn'=>chinanum($match_more),
@@ -1166,13 +1156,25 @@ class Student_Matchs extends Student_Home
 
         $count_down = $this->default_use_time = $use_time * 60;
 
+        //当前比赛轮数
+        $this->current_more = !empty($_GET['match_more']) ? $_GET['match_more'] : 1;
+
         //进入比赛redis保存结束时间
 
         if(in_array(ACTION,array('numberBattleReady','pokerRelayReady','fastCalculation','fastReverse','fastScan','readingReady'))){
             //$redis->set('end_time'.$current_user->ID,'');
-            if(empty($this->redis->get('end_time'.$current_user->ID))){
+
+            $current_match_more = $this->redis->get('current_match_more'.$current_user->ID);
+            if($current_match_more != $this->match_alias.'_'.$this->current_more){
+
+                //保存用户当前进行的比赛项目与比赛轮数
+                $this->redis->setex('current_match_more'.$current_user->ID,$count_down,$this->match_alias.'_'.$this->current_more);
                 $this->redis->setex('end_time'.$current_user->ID,$count_down,time()+$count_down);
             }
+
+            /*if(empty($this->redis->get('end_time'.$current_user->ID))){
+                $this->redis->setex('end_time'.$current_user->ID,$count_down,time()+$count_down);
+            }*/
         }
         if(empty($this->redis->get('end_time'.$current_user->ID))){
 
