@@ -71,6 +71,16 @@ jQuery(document).ready(function($) {
                         }
                     }
                 }
+                if($('#getTimes').length>0){//最新比赛倒计时
+                    $('#getTimes').attr('data-seconds',match_start_time).countdown(function(S, d){//倒计时
+                        var D=d.day>0 ? d.day+'天' : d.day;
+                        var h=d.hour<10 ? '0'+d.hour : d.hour;
+                        var m=d.minute<10 ? '0'+d.minute : d.minute;
+                        var s=d.second<10 ? '0'+d.second : d.second;
+                        var time=D+h+':'+m+':'+s;
+                        $(this).attr('data-seconds',S).text(time);
+                    })
+                }    
             }
         }
     }

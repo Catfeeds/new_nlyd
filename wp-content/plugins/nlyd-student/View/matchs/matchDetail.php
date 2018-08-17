@@ -33,7 +33,7 @@
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name">2018脑力世界杯金澳凯文速度计以(温州平阳)战队精英赛</p>
+                                    <p class="long-name"><?=$match['post_content']?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">

@@ -1088,7 +1088,7 @@ class Student_Ajax
         $pageSize = 15;
         $start = ($page-1)*$pageSize;
 
-        $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.match_start_time,
+        $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
                     b.match_address,b.match_cost,b.entry_end_time,b.match_status,c.user_id,
                     case b.match_status 
                     when -3 then '已结束' 

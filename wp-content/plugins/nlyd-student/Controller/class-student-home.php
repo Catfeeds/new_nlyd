@@ -61,7 +61,7 @@ class Student_Home
     }
 
     public function get_404($tag){
-        $view = leo_student_left_path.'my-404.php';
+        $view = leo_student_public_view.'my-404.php';
 
         $data['message'] = $tag;
         load_view_template($view,$data);
