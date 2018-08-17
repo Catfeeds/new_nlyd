@@ -179,7 +179,7 @@ jQuery(function($) {
                                                         +'<span class="nl-match-label">报名截止：</span>'
                                                         +'<span class="nl-match-info getTimes" data-seconds="'+sys_second+'">'
                                                         
-                                                        +'报名截止</span>'
+                                                        +'报名结束</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
                                                         +'<span class="nl-match-label">已报选手：</span>'
@@ -254,7 +254,7 @@ jQuery(function($) {
                                                     +'<span class="nl-match-name">'+v.post_title+'</span>'
                                                     // +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                     +isMe
-                                                    +'<p class="long-name">2018脑力世界杯金澳凯文速度计以(温州平阳)战队精英赛</p>'
+                                                    +'<p class="long-name">'+v.post_title+'</p>'
                                                 +'</div>'
                                                 +'<div class="nl-match-body">'
                                                     +'<div class="nl-match-detail">'

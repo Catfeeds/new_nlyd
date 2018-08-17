@@ -105,7 +105,7 @@
                         <span class="pull-right">查看</span>
                     </a>
                 <?php }else{ ?>
-                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left grey-color">暂无战队</span><span class="pull-right">加入战队</span></a>
+                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left no-team">暂无战队</span><span class="pull-right">加入战队</span></a>
                 <?php }; ?>
                 <!-- 我的钱包 -->
                 <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('account/wallet')?>">

@@ -39,8 +39,9 @@
     background: #6fadfc;
 }
 
-.grey-color{
+.no-team{
     color:#747474;
+
 }
 
 
@@ -194,7 +195,7 @@
         height: 55px;
         overflow: hidden;
         border-radius: 5px;
-        font-size: 0.14rem;
+        font-size: 0.13rem;
         line-height: 55px;
         margin-top: 10px;
         color: rgba(67, 148, 249, 1);

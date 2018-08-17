@@ -4,9 +4,14 @@ class Student_Payment {
     public static $payClass;
     public function __construct($action)
     {
-
+        if(isset($_GET['func'])){
+            $function = $_GET['func'];
+        }else {
+            $function = $_GET['func'] = 'notifyUrl';
+        }
         $interface_config = get_option('interface_config');
-        if($action == 'wxpay' ){
+        if($action == 'wxpay' || $action == 'wxpay/'){
+
             require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
             //TODO 脑力运动
             //$interface_config['wx']['api'] = 'wxaee5846345bca60d';
@@ -21,13 +26,8 @@ class Student_Payment {
             //var_dump($interface_config['wx']);exit;
             self::$payClass = new wxpay($interface_config['wx']['api'], $interface_config['wx']['merchant'], $interface_config['wx']['secret_key']);
 
-            if(isset($_GET['action'])){
-                $function = $_GET['action'];
-            }else {
-                $function = $_GET['action'] = 'notifyUrl';
-            }
-            if($function == 'downloadBill'){
-                $this->downloadBill();
+            if($function == 'wx_downloadBill'){
+                $this->wx_downloadBill();
                 exit;
             }
         }else{
@@ -41,7 +41,7 @@ class Student_Payment {
         }
 
         //添加短标签
-        add_shortcode('payment-home',array($this,$action));
+        add_shortcode('payment-home',array($this,$function));
     }
 
     /***************************************微信start*****************************************/
@@ -63,45 +63,31 @@ class Student_Payment {
      * 微信下载对账单
      */
     public function wx_downloadBill(){
-        $date = $_GET['date'];//  = '20180730'; //TODO
+        $date = $_GET['date']  = '20180730'; //TODO
 
         $res = self::$payClass->downloadBill($date);
         if($res != ''){
             $arr = explode("\r\n", $res);
-            $html = '<table style="color: black;text-align: center" border="1px solid #000000">';
-            foreach ($arr as $v){
-                $html .= '<tr>';
-                foreach (explode(',', $v) as $v2){
-                    $html .= '<td style="text-align: center; vnd.ms-excel.numberformat:@">'.$v2.'</td>';
-                }
-                $html .= '</tr>';
-            }
-            $html .= '</table>';
-
             $filename = 'wxBill_';
             $filename .= $date."_";
             $filename .= time().".xls";
-            $path = WP_PLUGIN_DIR.'/downloadFile/'.$filename;
-            file_put_contents($path,$html);
-            $file_temp = fopen ( $path, "r");
+            header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+            header('Content-Disposition:inline;filename="'.$filename.'"');
+            require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+            require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+            $objPHPExcel = new \PHPExcel();
+            $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('left');
+            foreach ($arr as $k => $row){
+                $coll = 'A';
+                foreach (explode(',', $row) as $v2){
+//                    $html .= '<td style="text-align: center; vnd.ms-excel.numberformat:@">'.$v2.'</td>';
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($coll.($k+1),' '.$v2);
+                    ++$coll;
+                }
+            }
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
 
-            // Begin writing headers
-            header ( "Pragma: public" );
-            header ( "Expires: 0" );
-            header ( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-            header ( "Cache-Control: public" );
-            header ( "Content-Description: File Transfer" );
-            // Use the switch-generated Content-Type
-            header ( "Content-Type: application/vnd.ms-excel" );
-            // Force the download
-            $header = "Content-Disposition: attachment; filename=" . $filename . ";";
-            header ( $header );
-            header ( "Content-Transfer-Encoding: binary" );
-            header ( "Content-Length: " . filesize($path) );
-
-            //@readfile ( $file );
-            echo fread ($file_temp, filesize ($path) );
-            fclose ($file_temp);
             exit;
         }
 
