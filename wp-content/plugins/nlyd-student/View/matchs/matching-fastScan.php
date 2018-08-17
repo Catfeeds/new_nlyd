@@ -52,6 +52,8 @@ jQuery(function($) {
     nandu=0,//难度系数，越小越难
     stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
+    flaseQuestion=0,//错误答题，需要存入cookie
+    flaseMax=10,//错题数量
     // _count_time=5,getAjaxTime=5;
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>,//程序获取时间
@@ -152,27 +154,35 @@ jQuery(function($) {
     total生成选项个数
     level难度系数(越小越难，即不同字符个数)
     itemLen生成字符串长度
+    isFalseAdd上一题是否正确
     */ 
-    initBuild=function(itemLen,total,level) {//处理数据
-        var right=buildQuestion(itemLen)
-        var select=buildSelect(right,total,level)
-        var leng=select.length;
-        var arr=[]
-        for(var i=0;i<leng;i++){
-            arr.push(i)
+    initBuild=function(itemLen,total,level,isFalseAdd) {//处理数据
+        if(!isFalseAdd){
+            flaseQuestion++
         }
-        var randIndex = Math.round(Math.random() * (arr.length - 1));//随机取一个下标
-        select.splice(arr[randIndex], 0,right); //随机插入
-        var row={rights:right,question:select,yours:'',isRight:false} 
-        thisRow=row
-        ajaxData.push(thisRow)
+        if(flaseQuestion<flaseMax){
+            var right=buildQuestion(itemLen)
+            var select=buildSelect(right,total,level)
+            var leng=select.length;
+            var arr=[]
+            for(var i=0;i<leng;i++){
+                arr.push(i)
+            }
+            var randIndex = Math.round(Math.random() * (arr.length - 1));//随机取一个下标
+            select.splice(arr[randIndex], 0,right); //随机插入
+            var row={rights:right,question:select,yours:'',isRight:false} 
+            thisRow=row
+            ajaxData.push(thisRow)
+        }else{
+            $.alerts('错误'+flaseMax+'题')
+            submit($('.count_down').attr('data-seconds'))
+        }
     }
 
     showTime=function(){  
         if(!stop){
             _count_time--
         }
-
             var day = Math.floor((_count_time / 3600) / 24);
             var hour = Math.floor((_count_time / 3600) % 24);
             var minute = Math.floor((_count_time / 60) % 60);
@@ -185,7 +195,7 @@ jQuery(function($) {
             $('.count_downs').text(text).attr('data-seconds',_count_time)
             if(_count_time<=-1){
                 // ajaxData.push(thisRow)
-                initBuild(itemLen,items,nandu)
+                initBuild(itemLen,items,nandu,false)
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
                 clearTimeout(timer)
             }
@@ -213,12 +223,13 @@ jQuery(function($) {
             showTime()
 
     }
-    initBuild(itemLen,items,nandu)
+    initBuild(itemLen,items,nandu,true)
     showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
 
 
     $('#selectWrapper').on('click','.fastScan-item',function(){
         var _this=$(this);
+        var isFalse=true;
         if(!_this.hasClass('noClick')){
             var text=_this.text()
             ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
@@ -226,12 +237,13 @@ jQuery(function($) {
                 ajaxData[ajaxData.length-1].isRight=true;
                 _this.addClass('right-fastScan')
             }else{
+                isFalse=false;
+                console.log(flaseQuestion)
                 ajaxData[ajaxData.length-1].isRight=false;
                 _this.addClass('error-fastScan')
             }
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-            console.log(ajaxData[ajaxData.length-1])
-            initBuild(itemLen,items,nandu)
+            initBuild(itemLen,items,nandu,isFalse)
             setTimeout(() => {
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
             }, 300);
