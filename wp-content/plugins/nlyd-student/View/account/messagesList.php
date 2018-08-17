@@ -74,7 +74,7 @@ jQuery(function($) {
                                 if(value.read_status==2){
                                     type='read';
                                 }
-                                var url=window.home_url+'/student/account/messages/?action=messageDetail&messages_id='+value.id;
+                                var url=window.home_url+'/account/messageDetail/'+value.id;
 
                                 var dom='<a class="message-row '+type+'" href="'+url+'">'
                                             +'<div class="message-title">'
