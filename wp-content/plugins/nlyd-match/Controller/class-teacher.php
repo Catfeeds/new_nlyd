@@ -90,6 +90,8 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="datum" class="manage-column column-name">教练资料</th>
+                        <th scope="col" id="student" class="manage-column column-name">查看学员</th>
                         <th scope="col" id="email" class="manage-column column-email sortable desc">
                             <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                         </th>
@@ -105,17 +107,25 @@ class Teacher
                             </th>
                             <td class="username column-username has-row-actions column-primary" data-colname="用户名">
                                 <strong><a href="javascript:;"><?=$row['user_login']?></a></strong><br>
-                                <div class="row-actions">
-                                    <span class="edit"><a href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">教练资料</a> | </span>
-                                    <span class="view"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?>" aria-label="">查看学员</a></span>
-                                </div>
-                                <button type="button" class="toggle-row">
-                                    <span class="screen-reader-text">显示详情</span>
-                                </button>
+<!--                                <div class="row-actions">-->
+<!--                                    <span class="edit"><a href="--><?php //echo '?page=teacher-datum&id='.$row['id'] ?><!--">教练资料</a> | </span>-->
+<!--                                    <span class="view"><a href="--><?php //echo '?page=teacher-student&id='.$row['coach_id'] ?><!--" aria-label="">查看学员</a></span>-->
+<!--                                </div>-->
+<!--                                <button type="button" class="toggle-row">-->
+<!--                                    <span class="screen-reader-text">显示详情</span>-->
+<!--                                </button>-->
                             </td>
                             <td class="name column-name" data-colname="姓名">
                                 <span aria-hidden="true"><?=str_replace(', ', '', $row['display_name'])?></span>
                                 <span class="screen-reader-text">未知</span>
+                            </td>
+                            <td class="name column-name" data-colname="教练资料">
+                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">教练资料</a></span>
+                                <span class="screen-reader-text">-</span>
+                            </td>
+                            <td class="name column-name" data-colname="查看学员">
+                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?><" aria-label="">查看学员</a></span>
+                                <span class="screen-reader-text">-</span>
                             </td>
                             <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
 
@@ -134,7 +144,13 @@ class Teacher
                         <th scope="col" class="manage-column column-username column-primary sortable desc">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" class="manage-column column-name">姓名</th>
+                        <th scope="col" class="manage-column column-datum column-primary sortable desc">
+                            姓名
+                        </th>
+                        <th scope="col" class="manage-column column-student column-primary">
+                            教练资料
+                        </th>
+                        <th scope="col" class="manage-column column-name">查看学员</th>
                         <th scope="col" class="manage-column column-email sortable desc">
                             <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                         </th>
