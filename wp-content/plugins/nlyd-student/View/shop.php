@@ -16,8 +16,17 @@
         <h1 class="mui-title">教辅商城</h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
-                <div class="title-img img-box">
+                <!-- <div class="title-img img-box">
                     <img src="<?=$user_info['user_head'];?>">
+                </div> -->
+                <!-- 轮播 -->
+                <div class="swiper-container layui-bg-white">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=$user_info['user_head'];?>"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
                 </div>
                 <div class="width-margin width-margin-pc">
                     <div class="shop-search layui-row">
@@ -79,7 +88,20 @@
 
 <script>
 jQuery(function($) { 
-
+    var mySwiper = new Swiper('.swiper-container', {
+        loop : true,
+        autoplay:{
+            disableOnInteraction:false
+        },//可选选项，自动滑动
+        autoplayDisableOnInteraction : false,    /* 注意此参数，默认为true */ 
+        initialSlide :0,//初始展示页
+        pagination: {
+            el: '.swiper-pagination',
+            dynamicBullets: true,
+            dynamicMainBullets: 2,
+            clickable :true,
+        },
+    }); 
 layui.use(['element','flow','layer'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载

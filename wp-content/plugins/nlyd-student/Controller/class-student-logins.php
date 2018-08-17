@@ -7,7 +7,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Login
+class Student_Logins
 {
     public function __construct($action)
     {

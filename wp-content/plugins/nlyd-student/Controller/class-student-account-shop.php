@@ -43,6 +43,10 @@ class Student_Account_Shop extends Student_Home
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
         if($_GET['action']=='index'){//设置
+            wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-swiper' );
+            wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
+            wp_enqueue_style( 'my-student-swiper' );
             wp_register_style( 'my-student-shop', student_css_url.'shop.css',array('my-student') );
             wp_enqueue_style( 'my-student-shop' );
         }

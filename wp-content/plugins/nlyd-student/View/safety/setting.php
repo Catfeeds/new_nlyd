@@ -8,7 +8,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback">
+            <a class="mui-pull-left nl-goback static" onclick="window.location.href = <?=home_url('account')?>">
                 <i class="iconfont">&#xe610;</i>
             </a>
             <h1 class="mui-title">设置</h1>
@@ -17,21 +17,21 @@
                 <div class="main-page">
                     <div class="nl-page-form width-margin-pc">
                         <div class="form-inputs">
-                            <a class="form-input-row a" href="<?=home_url('/account/setting/?action=userAgreement');?>">
+                            <a class="form-input-row a" href="<?=home_url('/safety/userAgreement');?>">
                                 <div class="form-input-label">用户协议</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
-                            <a class="form-input-row a" href="<?=home_url('/account/setting/?action=privacyAgreement');?>">
+                            <a class="form-input-row a" href="<?=home_url('/safety/privacyAgreement');?>">
                                 <div class="form-input-label">隐私协议</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
-                            <a class="form-input-row a" href="<?=home_url('/account/setting/?action=suggest');?>">
+                            <a class="form-input-row a" href="<?=home_url('/safety/suggest');?>">
                                 <div class="form-input-label">意见反馈</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <div class="form-input-row">
                                 <div class="form-input-label">版本号</div>
-                                <span class="form-input-right">V2.01</span>
+                                <span class="form-input-right">V<?=leo_student_version?></span>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">清除缓存</div>

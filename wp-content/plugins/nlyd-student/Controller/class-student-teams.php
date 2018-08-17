@@ -144,6 +144,10 @@ class Student_Teams
         }
         
         if(ACTION=='myCoach'){//我的教练
+            wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-swiper' );
+            wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
+            wp_enqueue_style( 'my-student-swiper' );
             wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
             wp_enqueue_style( 'my-student-userCenter' );
             wp_register_style( 'my-student-coachList', student_css_url.'coachList.css',array('my-student') );
@@ -151,6 +155,10 @@ class Student_Teams
         }
 
         if(ACTION=='coachDetail'){//教练详情页
+            wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-swiper' );
+            wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
+            wp_enqueue_style( 'my-student-swiper' );
             wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
             wp_enqueue_style( 'my-student-userCenter' );
             wp_register_style( 'my-student-coachDetail', student_css_url.'coachDetail.css',array('my-student') );
