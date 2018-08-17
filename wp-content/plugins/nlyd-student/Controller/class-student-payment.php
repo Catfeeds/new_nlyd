@@ -396,15 +396,16 @@ class Student_Payment {
      */
     public function zfb_returnUrl(){
         global $wpdb,$current_user;
-        $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
-        if(empty($row)){
-            $this->get_404('参数错误');
-            return;
-
-        };
+//        $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
+//        if(empty($row)){
+//            $this->get_404('参数错误');
+//            return;
+//
+//        };
         // TODO 查询比赛详情和订单详情
         $view = student_view_path.'paySuccess.php';
-        load_view_template($view,array('row'=>$row));
+        load_view_template($view);
+//        load_view_template($view,array('row'=>$row));
     }
 
     /**
