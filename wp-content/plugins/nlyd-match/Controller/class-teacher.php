@@ -353,13 +353,15 @@ class Teacher
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
-        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
                 WHEN 1 THEN "<span style=\'color:#2aa52e\'>申请中</span>" 
                 WHEN 2 THEN "<span style=\'color:#0073aa\'>已通过</span>" 
                 END AS apply_name 
-                FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.'  
+                FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
+                LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
+                WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.'
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -372,6 +374,9 @@ class Teacher
             'total' => $pageAll,
             'current' => $page
         ));
+
+        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $postsRows = $wpdb->get_results($sql,ARRAY_A);
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">学员</h1>
@@ -380,6 +385,25 @@ class Teacher
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>
             </ul>
+            <br class="clear">
+            <br class="clear">
+            <div>
+                <?php foreach ($postsRows as $prow){?>
+
+                    <lable for="du"><?=$prow['post_title']?></lable>
+
+                    <?php if(preg_match('/算/', $prow['post_title'])){ ?>
+                        <input id="du" type="checkbox" checked="checked" name="compute" value="<?=$prow['ID']?>">
+                    <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
+                        <input id="du" type="checkbox"  checked="checked" name="memory" value="<?=$prow['ID']?>">
+                    <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
+                        <input id="du" type="checkbox"  checked="checked" name="read" value="<?=$prow['ID']?>">
+                    <?php } ?>
+
+
+                <?php } ?>
+                <button type="button" class="button" onclick="window.location.href='<?=$type?>'">确定</button>
+            </div>
             <form method="get" onsubmit="return false;">
 
 
@@ -413,6 +437,7 @@ class Teacher
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
+                        <th scope="col" id="type" class="manage-column column-type">类别</th>
                         <th scope="col" id="email" class="manage-column column-email sortable desc">
                             <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                         </th>
@@ -444,6 +469,7 @@ class Teacher
                                  </td>
                                  <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=str_replace(', ', '', $row['display_name'])?></span><span class="screen-reader-text">未知</span></td>
                                  <td class="email column-mobile" data-colname="手机"><a href="tel:<?=$row['user_mobile']?>"><?=$row['user_mobile']?></a></td>
+                                 <td class="email column-type" data-colname="类别"><?=$row['post_title']?></td>
                                  <td class="email column-email" data-colname="电子邮件"><a href="mailto:456789@qq.com"><?=$row['user_email']?></a></td>
                                  <td class="role column-role" data-colname="申请状态"><?=$row['apply_name']?></td>
 
@@ -454,19 +480,20 @@ class Teacher
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td id="cb" class="manage-column column-cb check-column">
+                        <td class="manage-column column-cb check-column">
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
+                        <th scope="col" class="manage-column column-username column-primary sortable desc">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" id="name" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
-                        <th scope="col" id="email" class="manage-column column-email sortable desc">
+                        <th scope="col"  class="manage-column column-name">姓名</th>
+                        <th scope="col"  class="manage-column column-mobile">手机</th>
+                        <th scope="col" class="manage-column column-type">类别</th>
+                        <th scope="col" class="manage-column column-email sortable desc">
                             <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" id="role" class="manage-column column-role">申请状态</th>
+                        <th scope="col" class="manage-column column-role">申请状态</th>
                     </tr>
                     </tfoot>
 
