@@ -1957,7 +1957,7 @@ class Student_Ajax
             case 'alipay':
 
                 //支付宝需要跳转到自己的方法
-                $result = ['status' => true, 'data' => home_url('payment/pay/id='.$order['id'])];
+                $result = ['status' => true, 'data' => home_url('payment/zfb_pay/type/alipay/id/'.$order['id'])];
                 break;
         }
 
