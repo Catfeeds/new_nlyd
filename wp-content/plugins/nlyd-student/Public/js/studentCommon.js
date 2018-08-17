@@ -158,7 +158,7 @@ jQuery(document).ready(function($) {
     
         }
     }
-    //监听屏幕方向
+    //屏幕改变时tabs标签页动画的初始位置初始化
     window.onresize = function(){
         $('.nl-transform').each(function(){
             var _this=$(this);
