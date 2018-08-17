@@ -141,7 +141,7 @@
                         </div>
                         <div class="userCenter-detail-foot">比 赛</div>
                     </a>
-                    <a href="<?=home_url('/account/train');?>">
+                    <a href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/train-big.png'?>" class="menuImg">
@@ -149,7 +149,7 @@
                         </div>
                         <div class="userCenter-detail-foot">训 练</div>
                     </a>
-                    <a href="<?=home_url('/account/matchList');?>">
+                    <a href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/course-big.png'?>" class="menuImg">

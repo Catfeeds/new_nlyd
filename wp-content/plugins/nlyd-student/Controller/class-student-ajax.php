@@ -806,7 +806,7 @@ class Student_Ajax
             $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
         }
 
-        if(empty($_POST['id'])){
+        if(empty($_POST['id']) || $_POST['id'] < 1){
 
             unset($_POST['action']);
             unset($_POST['_wpnonce']);
