@@ -32,12 +32,14 @@
     letter-spacing: 0.01rem;
 }
 .error-fastScan{
-    border: 1px solid #CF1818;
-    color: #CF1818;
+    border: 1px solid #f9a9b8;
+    background: #f9a9b8;
+    color: #fa5f68;
 }
 .right-fastScan{
-    border: 1px solid #0F940B;
-    color: #0F940B;
+    border: 1px solid #b7edd4;
+    background: #b7edd4;
+    color: #0a8406;
 }
 .hide{
     display: none;

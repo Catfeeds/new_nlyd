@@ -46,7 +46,7 @@ class Student_Ajax
         }else{
 
             $twentyfour = new TwentyFour();
-
+            //$_POST['numbers'] = array(5,5,5,9);
             if($_POST['my_answer'] == 'unsolvable'){
 
                 $results = $twentyfour->calculate($_POST['numbers']);
@@ -58,7 +58,7 @@ class Student_Ajax
                 }
 
             }else{
-
+                //$_POST['my_answer'] = '(5+5)+5+9';
                 $my_answer = str_replace('×','*',$_POST['my_answer']);
                 $my_answer = str_replace('÷','/',$my_answer);
 
@@ -67,19 +67,23 @@ class Student_Ajax
                     $l_cont = substr_count($my_answer,"(");
                     $r_cont = substr_count($my_answer,")");
 
-                    if((substr_count($my_answer,"(") == substr_count($my_answer,")")) && ($l_cont != 0) && ($r_cont != 0)){
-
-                        $b = 0;
-                        $str = '$b = '.$my_answer.';';
-                        eval($str);
-
-                        if($b == 24){
-                            wp_send_json_success(array('info'=>true));
-                        }else{
-
+                    if(($l_cont != 0) || ($r_cont != 0)){
+                        if((substr_count($my_answer,"(") != substr_count($my_answer,")")) ){
                             wp_send_json_success(array('info'=>false));
                         }
                     }
+
+                    $b = 0;
+                    $str = '$b = '.$my_answer.';';
+                    eval($str);
+                    //var_dump($b);
+                    if($b == 24){
+                        wp_send_json_success(array('info'=>true));
+                    }else{
+
+                        wp_send_json_success(array('info'=>false));
+                    }
+
                 }
 
                 wp_send_json_error(array('info'=>false));
