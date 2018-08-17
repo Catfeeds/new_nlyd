@@ -110,8 +110,6 @@ input[type=text].confirm_info{
 }
 .nl-match-rz{
     background-color: #FB8E8E;
-    width: 40px;
-    height: 22px;
     border-radius: 4px;
     line-height: 22px;
     text-align: center;
@@ -121,11 +119,11 @@ input[type=text].confirm_info{
     margin-left: 13.5px;
 }
 .nl-match-label{
-    font-size: 0.13rem;
+    font-size: 0.14rem;
     color: #9C9C9C;
 }
 .nl-match-info{
-    font-size: 0.13rem;
+    font-size: 0.14rem;
     color: #747474;
 }
 .nl-match-footer{

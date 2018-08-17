@@ -267,8 +267,8 @@ class Order {
         $row = $wpdb->get_row('SELECT o.pay_lowdown,o.cost,o.serialnumber,o.telephone,o.address,o.express_number,o.express_company,u.user_login,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE "-" END AS pay_type 
         FROM '.$wpdb->prefix.'order AS o
-        LEFT JOIN '.$wpdb->prefix.'users AS u ON U.id=o.user_id 
-        WHERE serialnumber='.$serial, ARRAY_A);
+        LEFT JOIN '.$wpdb->prefix.'users AS u ON u.id=o.user_id 
+        WHERE o.serialnumber='.$serial, ARRAY_A);
         ?>
             <div id="box">
                 <table id="form-table">

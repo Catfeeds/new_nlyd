@@ -16,7 +16,13 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-        <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs/info/match_id/'.$_GET['match_id'])?>">
+
+        <?php if(isset($_GET['match_id'])){ ?>
+            <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs/info/match_id/'.$_GET['match_id'])?>">
+        <?php }else{ ?>
+                <a class="mui-pull-left nl-goback">
+        <?php } ?>
+
         <i class="iconfont">&#xe610;</i>
         </a>
         <h1 class="mui-title">报名信息确认</h1>
@@ -183,6 +189,9 @@ jQuery(function($) {
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{
                         $.alerts(res.data.info)
+                        setTimeout(() => {
+                            window.location.href=res.data.url;
+                        }, 300);
                     }
                 })
                 return false;
@@ -210,7 +219,7 @@ jQuery(function($) {
         }
         $.post(window.admin_ajax,data,function(res){
             if(res.success){
-                window.location.href = res.data.info;
+                window.location.href=res.data.info;
             }else{
                 $.alerts(res.data.info)
             }

@@ -297,7 +297,7 @@ class Student_Ajax
                     foreach ($match_questions as $val){
                         $results = $twentyfour->calculate($val);
                         //print_r($results);
-                        $questions_answer[] = empty($results) ? $results[0] : '本题无解';
+                        $questions_answer[] = !empty($results) ? $results[0] : '本题无解';
                     }
                     $isRight = array_column($data_arr,'isRight');
                     //die;
@@ -814,7 +814,16 @@ class Student_Ajax
             $result = $wpdb->insert($wpdb->prefix.'my_address',$_POST);
         }else{
 
-            $result = $wpdb->insert($wpdb->prefix.'my_address',array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
+            $result = $wpdb->update($wpdb->prefix.'my_address',[
+                'fullname' => trim($_POST['fullname']),
+                'telephone' => $_POST['telephone'],
+                'country' => $_POST['country'],
+                'province' => $_POST['province'],
+                'city' => $_POST['city'],
+                'area' => $_POST['area'],
+                'address' => $_POST['address'],
+                'is_default' => isset($_POST['is_default']) ? 1 : 0,
+            ],array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
         }
 
         if($a && $result){
@@ -1962,7 +1971,7 @@ class Student_Ajax
             case 'alipay':
 
                 //支付宝需要跳转到自己的方法
-                $result = ['status' => true, 'data' => home_url('payment/pay/id='.$order['id'])];
+                $result = ['status' => true, 'data' => home_url('payment/zfb_pay/type/alipay/id/'.$order['id'])];
                 break;
         }
 

@@ -72,7 +72,7 @@
                 <span class="pull-right">我的脑币：21</span>
             </a>
             <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-                    <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
+            <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
                         <div class="userCenter-detail-head">
                             <!-- <i class="iconfont">&#xe60f;</i> -->
                             <div class="menuImg-wrapper">
@@ -84,7 +84,6 @@
                     </a>
                     <a href="<?=home_url('/account/messages');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
                         <div class="userCenter-detail-head">
-                            <!-- <i class="iconfont">&#xe60f;</i> -->
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
                             </div>
@@ -92,9 +91,8 @@
                         </div>
                         <div class="userCenter-detail-foot">消 息</div>
                     </a>
-                    <a href="<?=home_url('/account/match/?action=recentMatch');?>">
+                    <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
-                            <!-- <i class="iconfont">&#xe60f;</i> -->
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
                             </div>
@@ -102,7 +100,7 @@
                         </div>
                         <div class="userCenter-detail-foot">比 赛</div>
                     </a>
-                    <a>
+                    <a href="<?=home_url('/account/train');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/train-big.png'?>" class="menuImg">
@@ -110,7 +108,7 @@
                         </div>
                         <div class="userCenter-detail-foot">训 练</div>
                     </a>
-                    <a>
+                    <a href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/course-big.png'?>" class="menuImg">
@@ -126,7 +124,7 @@
                         </div>
                         <div class="userCenter-detail-foot">教 练</div>
                     </a>
-                    <a>
+                    <a href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/order-big.png'?>" class="menuImg">
@@ -166,7 +164,7 @@
                         </div>
                         <div class="userCenter-detail-foot">设 置</div>
                     </a>
-                    <a href="<?=home_url('/account/teams');?>">
+                    <a href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
@@ -174,7 +172,7 @@
                         </div>
                         <div class="userCenter-detail-foot">战 队</div>
                     </a>
-                    <a>
+                    <a href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/secure-big.png'?>" class="menuImg">

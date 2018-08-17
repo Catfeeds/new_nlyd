@@ -15,10 +15,6 @@
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
-                    <!-- <div class="title-img  layui-hide-md layui-hide-lg  layui-show-xs-block layui-show-sm-block ">
-                        <img src="<?=$user_info['user_head'];?>">
-                    </div> -->
-                <!-- 轮播 -->
                 <div class="swiper-container layui-bg-white">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
@@ -58,7 +54,7 @@
                         <?php if($action == 'myCoach'){?>
                             <p class="no-info-text">您还未设置任何教练</p>
                             <?php
-                                $url = home_url('/teams/coachList/');
+                                $url = home_url('/teams/coachList');
                                 if(!empty($_GET['match_id']) ) $url .= 'match_id/'.$_GET['match_id'];
                             ?>
                             <a class="a-btn" href="<?=$url;?>">去设置我的教练</a>
@@ -309,7 +305,7 @@ layui.use(['element','flow','layer'], function(){
                                 var dom='<div class="no-info">无教练信息</div>'
                                 if(flag.length>0){
                                     var text=$('.layui-this').text();
-                                    dom+='<a class="a-btn" href="<?=$set_url;?>">设置我的'+text+'教练</a>'
+                                    dom+='<a class="a-btn" href="<?=home_url('/teams/coachList/category_id/'.$_GET['category_id']);?>">设置我的'+text+'教练</a>'
                                 }
                                 lis.push(dom) 
                             }else{
