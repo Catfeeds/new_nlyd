@@ -165,7 +165,7 @@
                         </div>
                         <div class="userCenter-detail-foot">教 练</div>
                     </a>
-                    <a href="<?=home_url('/account/order');?>">
+                    <a href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/order-big.png'?>" class="menuImg">

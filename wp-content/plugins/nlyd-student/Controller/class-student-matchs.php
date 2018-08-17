@@ -2127,6 +2127,14 @@ class Student_Matchs extends Student_Home
         load_view_template($view,$data);
     }
 
+    /**
+     * 开始比赛
+     */
+    public function startMatch(){
+
+        $view = student_view_path.'match.php';
+        load_view_template($view);
+    }
 
     /**
      * 默认公用js/css引入
@@ -2257,6 +2265,12 @@ class Student_Matchs extends Student_Home
         if(ACTION=='matchWaitting'){//比赛等待倒计时页面
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
+        }
+        if(ACTION=='startMatch'){//开始比赛
+            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-cookie' );
+            wp_register_style( 'my-student-match', student_css_url.'match.css',array('my-student') );
+            wp_enqueue_style( 'my-student-match' );
         }
     }
 }
