@@ -7,7 +7,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Shop
+class Student_Shops
 {
 
     private $action;
@@ -24,7 +24,7 @@ class Student_Shop
 //        };
         //添加短标签
         $this->action = $action;
-        add_shortcode('shop-home',array($this,$action));
+        add_shortcode('shops-home',array($this,$action));
     }
 
     public function index(){

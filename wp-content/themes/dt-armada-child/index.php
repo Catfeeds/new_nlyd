@@ -46,7 +46,7 @@ get_header(); ?>
                         <div class="top-nav-btn active"><a href="<?=home_url();?>">首 页</a></div>
                         <div class="top-nav-btn"><a  href="<?=home_url('directory');?>">名 录</a></div>
                         <div class="top-nav-btn"><a>课 程</a></div>
-                        <div class="top-nav-btn"><a href="<?=home_url('shop');?>">商 城</a></div>
+                        <div class="top-nav-btn"><a href="<?=home_url('shops');?>">商 城</a></div>
                         <div class="top-nav-btn"><a>公 益</a></div>
                     </div>
                 </div>
