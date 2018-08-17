@@ -85,25 +85,6 @@
 <script>
 jQuery(function($) { 
 
-        var data={
-            action:'get_count_down',
-            _wpnonce:$('#inputNewMatch').val()
-        }
-        $.post(window.admin_ajax,data,function(res, textStatus, xhr){
-            if(res.success){
-                var end_time = new Date(res.data.info).getTime();//月份是实际月份-1
-                var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-                var sys_second = (end_time-serverTimes)/1000;
-                $('#getTime').attr('data-seconds',sys_second).countdown(function(S, d){//倒计时
-                    var D=d.day>0 ? d.day+'天' : d.day;
-                    var h=d.hour<10 ? '0'+d.hour : d.hour;
-                    var m=d.minute<10 ? '0'+d.minute : d.minute;
-                    var s=d.second<10 ? '0'+d.second : d.second;
-                    var time=D+h+':'+m+':'+s;
-                    $(this).text(time);
-                })
-            }
-        })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载

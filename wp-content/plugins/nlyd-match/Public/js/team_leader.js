@@ -43,22 +43,16 @@ jQuery(document).ready(function($) {
             }
         });
     });
-    layui.use('laydate', function(){
+    layui.use(['laydate','form',], function(){
         var laydate = layui.laydate;
+        var form = layui.form
       //日期时间选择器
-        laydate.render({
-            elem: '#match_start_time'
-            ,type: 'datetime'
-        });
-        //日期时间选择器
-        laydate.render({
-            elem: '#entry_start_time'
-            ,type: 'datetime'
-        });
-                  //日期时间选择器
-        laydate.render({
-            elem: '#entry_end_time'
-            ,type: 'datetime'
-        });
+      $('.date-picker').each(function(){
+          var id=$(this).attr('id');
+            laydate.render({
+                elem: '#'+id
+                ,type: 'datetime'
+            });
+      })
     })
 });
