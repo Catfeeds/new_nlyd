@@ -1,5 +1,6 @@
 
 jQuery(document).ready(function($) {
+    var eventToken = 1;
     $('#tab').on('mouseover', 'li', function () {
         $(this).css({'background-color': '#23282d', 'color' : '#ffffff'});
     }).on('mouseout', 'li', function () {
@@ -27,6 +28,8 @@ jQuery(document).ready(function($) {
     });
 
     function post_ajax(id,sta) {
+        if(eventToken == 0) return false;
+        eventToken = 0;
         $.ajax({
             url : ajax_url,
             data : {'id':id, 'action' : 'coachApplyStatus', 'status': sta},
@@ -37,6 +40,10 @@ jQuery(document).ready(function($) {
                 if(response.success){
                     window.location.reload();
                 }
+                eventToken = 1;
+            },
+            error : function () {
+                eventToken = 1;
             }
         });
     }
