@@ -241,7 +241,6 @@ class Match_Ajax
         }
 
         $orderRefundId = $wpdb->insert_id;
-        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
@@ -320,7 +319,6 @@ class Match_Ajax
                                 WHERE r.id='.$id, ARRAY_A);
 
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
-        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
@@ -368,7 +366,6 @@ class Match_Ajax
         global $wpdb;
         $order = $wpdb->get_row('SELECT serialnumber,pay_lowdown,cost,pay_type FROM '.$wpdb->prefix.'order WHERE id='.$id, ARRAY_A);
         if(!$order) wp_send_json_error(array('info' => '未找到订单,请刷新重试'));
-        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-home.php';
         require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
@@ -501,6 +498,21 @@ class Match_Ajax
             wp_send_json_success(['info' => '删除成功']);
         }else{
             wp_send_json_error(['info' => '删除失败']);
+        }
+    }
+
+    /**
+     * 踢出战队
+     */
+    public function expelTeam(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $bool = $wpdb->update($wpdb->prefix.'match_team', ['status' => -3], ['id' => $id]);
+        if($bool){
+            wp_send_json_success(['info' => '操作成功']);
+        }else{
+            wp_send_json_error(['info' => '操作失败']);
         }
     }
 }

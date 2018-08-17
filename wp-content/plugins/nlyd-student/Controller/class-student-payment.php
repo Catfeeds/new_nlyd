@@ -1,11 +1,10 @@
 <?php
 
-class Student_Payment extends Student_Home {
+class Student_Payment {
 
     public static $payClass;
     public function __construct($action)
     {
-        parent::__construct();
 
         if(isset($_GET['type'])){
             $type = $_GET['type'];
@@ -402,7 +401,10 @@ class Student_Payment extends Student_Home {
         global $wpdb,$current_user;
         $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
         if(empty($row)){
-            $this->get_404('未找到数据');
+            $view = leo_student_public_view.'my-404.php';
+
+            $data['message'] = '未找到数据';
+            load_view_template($view,$data);
             return;
         };
         // TODO 查询比赛详情和订单详情

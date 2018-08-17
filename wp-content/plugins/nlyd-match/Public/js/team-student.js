@@ -59,4 +59,22 @@ jQuery(document).ready(function($) {
             }
         });
     }
+
+    //踢出战队
+    $('.expel').on('click', function () {
+        if(!confirm('是否确定将此成员踢出战队?')) return false;
+        var id = $(this).closest('tr').attr('data-id');
+        $.ajax({
+            data : {'action' : 'expelTeam','id':id},
+            dataType : 'json',
+            type : 'post',
+            url : ajax_url,
+            success : function (response) {
+                alert(response['data']['info']);
+                if(response['success']){
+                    window.location.reload();
+                }
+            }
+        });
+    })
 });
