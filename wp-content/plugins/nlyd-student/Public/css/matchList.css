@@ -126,7 +126,7 @@ p.long-name{
     background: -o-linear-gradient(#4394F9,#68a9fe);
     background: -moz-linear-gradient(#4394F9,#68a9fe);
     background: linear-gradient(#4394F9,#68a9fe);
-    border: 1px solid #4394F9;
+    border: none;
 }
 .nl-badge{
     position: relative;
