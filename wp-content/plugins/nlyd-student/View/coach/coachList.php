@@ -29,9 +29,10 @@
                 </div>
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
                         <?php if(!empty($category)):
-                            $url = home_url('/teams/'.$action);
+                            $url = home_url('/coach/');
                             //$action = isset($_GET['action'])?$_GET['action']:'index';
-                            if(isset($_GET['match_id'])) $url .= 'match_id/'.$_GET['match_id'];
+                            $url .= $action;
+                            if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
@@ -41,7 +42,7 @@
                             <?php } ?>
                         </ul>
                         <?php endif;?>
-                        <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
+                        <input type="hidden" name="user_id" value="<?=$_GET['action']=='myCoach'?$user_id:'';?>">
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show layui-row layui-col-space20" id="flow-zoo">
 
@@ -56,8 +57,8 @@
                         <?php if($action == 'myCoach'){?>
                             <p class="no-info-text">您还未设置任何教练</p>
                             <?php
-                                $url = home_url('/teams/coachList');
-                                if(!empty($_GET['match_id']) ) $url .= 'match_id/'.$_GET['match_id'];
+                                $url = home_url('/coach');
+                                $url = !empty($_GET['match_id']) ? $url.'?action=index&match_id='.$_GET['match_id'] : home_url('/coach');
                             ?>
                             <a class="a-btn" href="<?=$url;?>">去设置我的教练</a>
                         <?php }else{ ?>

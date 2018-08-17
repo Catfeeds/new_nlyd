@@ -63,7 +63,7 @@ class Student_Account extends Student_Home
     public function messages(){//消息列表
         global $user_info,$wpdb;
         //print_r($user_info);
-        $result = $wpdb->get_row('SELECT id from '.$wpdb->prefix.'messages WHERE status=1 AND user_id='.$user_info['user_id']);
+        $result = $wpdb->get_row('SELECT id from '.$wpdb->prefix.'messages WHERE user_id='.$user_info['user_id']);
 
         $view = student_view_path.'messagesList.php';
         load_view_template($view, array('is_show' => $result));
