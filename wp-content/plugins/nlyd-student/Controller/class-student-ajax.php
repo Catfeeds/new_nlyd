@@ -300,6 +300,7 @@ class Student_Ajax
                         $questions_answer[] = !empty($results) ? $results[0] : '本题无解';
                     }
                     $isRight = array_column($data_arr,'isRight');
+                    //print_r($questions_answer);
                     //die;
                     $count_value = array_count_values($isRight);
                     $len = $count_value['true'];
@@ -1374,6 +1375,9 @@ class Student_Ajax
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
                         unset($_POST['user_gender']);
                     }
+                    if(!empty($_POST['meta_val']['real_age'])){
+                        update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['user_age']) && $user_age_update = true;
+                    }
 //                    $_POST['user_address'] = array(
 //                        'province'=>'四川省',
 //                        'city'=>'成都市',
@@ -1394,7 +1398,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false;
+            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false;
 
         }
         if($resul){
