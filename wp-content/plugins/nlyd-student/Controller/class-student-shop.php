@@ -7,29 +7,27 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Account_Shop extends Student_Home
+class Student_Shop
 {
 
-
-    public function __construct($shortCode)
+    private $action;
+    public function __construct($action)
     {
-
-        parent::__construct();
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
-        if(isset($_GET['action'])){
-            $function = $_GET['action'];
-        }else {
-            $function = $_GET['action'] = 'index';
-        };
+//        if(isset($_GET['action'])){
+//            $function = $_GET['action'];
+//        }else {
+//            $function = $_GET['action'] = 'index';
+//        };
         //添加短标签
-        add_shortcode('student-account',array($this,$function));
+        $this->action = $action;
+        add_shortcode('shop-home',array($this,$action));
     }
 
     public function index(){
-
         $view = student_view_path.'shop.php';
         load_view_template($view);
     }
@@ -42,7 +40,7 @@ class Student_Account_Shop extends Student_Home
         wp_enqueue_script( 'student-cookie' );
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        if($_GET['action']=='index'){//设置
+        if($this->action=='index'){//设置
             wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-swiper' );
             wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );

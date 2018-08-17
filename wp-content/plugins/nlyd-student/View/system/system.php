@@ -11,7 +11,7 @@
             <div class="layui-row nl-border nl-content">
                 <ul style="margin:0">
                     <li>
-                        <a class="system-list system-course" href="<?=home_url('/account/system/?action=systemCourse');?>">
+                        <a class="system-list system-course" href="<?=home_url('system/systemCourse');?>">
                             <div class="item-wrapper">
                                 <div class="left-icon">
                                 </div>
@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-teacher" href="<?=home_url('/account/system/?action=systemTeacher');?>">
+                        <a  class="system-list system-teacher" href="<?=home_url('system/systemTeacher');?>">
                             <div class="item-wrapper">
                                 <div class="left-icon">
                                 </div>
@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-match" href="<?=home_url('/account/system/?action=systemMatch');?>">
+                        <a  class="system-list system-match" href="<?=home_url('system/systemMatch');?>">
                             <div class="item-wrapper">
                                 <div class="left-icon">
                                 </div>
@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-test" href="<?=home_url('/account/system/?action=systemTest');?>">
+                        <a  class="system-list system-test" href="<?=home_url('system/systemTest');?>">
                             <div class="item-wrapper">
                                 <div class="left-icon">
                                 </div>

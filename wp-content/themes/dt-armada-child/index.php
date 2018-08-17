@@ -44,9 +44,9 @@ get_header(); ?>
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn active"><a href="<?=home_url();?>">首 页</a></div>
-                        <div class="top-nav-btn"><a  href="<?=home_url('/student/account/directory');?>">名 录</a></div>
+                        <div class="top-nav-btn"><a  href="<?=home_url('directory');?>">名 录</a></div>
                         <div class="top-nav-btn"><a>课 程</a></div>
-                        <div class="top-nav-btn"><a href="<?=home_url('/student/account/shop');?>">商 城</a></div>
+                        <div class="top-nav-btn"><a href="<?=home_url('shop');?>">商 城</a></div>
                         <div class="top-nav-btn"><a>公 益</a></div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ get_header(); ?>
                             </a>
                         </div>
                         <div class="entrance-wrap">
-                            <a class="index-btn" href="<?=home_url('student/account/system')?>">
+                            <a class="index-btn" href="<?=home_url('system')?>">
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/sys-big.png'?>">
                                 </div>
@@ -94,7 +94,7 @@ get_header(); ?>
                             </a>
                         </div>
                         <div class="entrance-wrap">
-                            <a class="index-btn"   href="<?=home_url('/student/account/concatUs');?>">
+                            <a class="index-btn"   href="<?=home_url('system/concatUs');?>">
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">
                                 </div>

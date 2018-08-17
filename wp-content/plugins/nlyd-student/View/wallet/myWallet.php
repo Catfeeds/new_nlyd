@@ -35,8 +35,8 @@
                                 <span>余 额</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('/account/wallet/?action=balanceWater');?>" class="nl-dark-blue">收支记录</a>
-                                <a href="<?=home_url('/account/wallet/?action=makeCash');?>" class="nl-dark-blue">提 现</a>
+                                <a href="<?=home_url('wallet/balanceWater');?>" class="nl-dark-blue">收支记录</a>
+                                <a href="<?=home_url('wallet/makeCash');?>" class="nl-dark-blue">提 现</a>
                             </div>
                         </div>
                         <div class="row-detail">
@@ -102,7 +102,7 @@
                                 <span>脑 币</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('/account/wallet/?action=coinWaterList');?>" class="nl-dark-blue">更多脑币记录</a>
+                                <a href="<?=home_url('wallet/coinWaterList');?>" class="nl-dark-blue">更多脑币记录</a>
                             </div>
                         </div>
                         <div class="row-detail">
@@ -168,7 +168,7 @@
                                 <span>收款账户</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('/account/wallet/?action=bindCard');?>" class="nl-dark-blue">更 换</a>
+                                <a href="<?=home_url('wallet/bindCard');?>" class="nl-dark-blue">更 换</a>
                             </div>
                         </div>
                         <div class="card-info">
