@@ -31,12 +31,12 @@
     margin-bottom: 10px;
     letter-spacing: 0.01rem;
 }
-.error-fast{
+.error-fastScan{
     border: 1px solid #f9a9b8;
     background: #f9a9b8;
     color: #fa5f68;
 }
-.right-fast{
+.right-fastScan{
     border: 1px solid #b7edd4;
     background: #b7edd4;
     color: #0a8406;
