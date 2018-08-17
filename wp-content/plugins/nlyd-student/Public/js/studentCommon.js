@@ -7,6 +7,14 @@ jQuery(document).ready(function($) {
               event.preventDefault();
             }
           }, false);
+        var lastTouchEnd = 0;
+        document.documentElement.addEventListener('touchend', function (event) {
+        var now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+        }, false);
     }
     isIos=function(){
         var u = navigator.userAgent, app = navigator.appVersion;  
