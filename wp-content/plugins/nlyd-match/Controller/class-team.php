@@ -29,7 +29,7 @@ if(!class_exists('Team')){
             $id = intval($_GET['id']);
             $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
             $page < 1 && $page = 1;
-            $pageSize = 1;
+            $pageSize = 20;
             $start = ($page-1)*$pageSize;
             global $wpdb;
             $sql = 'SELECT SQL_CALC_FOUND_ROWS 
@@ -124,6 +124,7 @@ if(!class_exists('Team')){
                                                 <span class="edit"><a href="javascript:;" class="agree">同意入队</a> | </span>
                                                 <span class="delete"><a class="submitdelete refuse" href="javascript:;"">拒绝入队</a> </span>
                                             <?php } ?>
+                                            <span class=""><a class="submitdelete " href="javascript:;" style="height: 1em;display: inline-block"></a> </span>
                                         </div>
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
