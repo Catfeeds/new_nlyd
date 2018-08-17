@@ -35,11 +35,18 @@ class Student_Account extends Student_Home
         $message_total = $wpdb->get_row("select if(count(id)>0,count(id),0) total from {$wpdb->prefix}messages where user_id = {$user_info['user_id']} and read_status = 1 ");
 
         //获取我的战队
-        $sql = "select b.ID,b.post_title my_team
+        $sql = "select b.ID,b.post_title my_team,a.status,
+                case a.status
+                when -1 then '退队审核中'
+                when 1 then '入队审核中'
+                when 2 then '正式队员'
+                else '--'
+                end as status_cn
                 from {$wpdb->prefix}match_team a 
                 left join {$wpdb->prefix}posts b on a.team_id = b.ID 
-                where a.user_id = {$user_info['user_id']} and a.user_type = 1 and a.status = 2 ";
+                where a.user_id = {$user_info['user_id']} and a.user_type = 1 and a.status > -2 ";
         $my_team = $wpdb->get_row($sql,ARRAY_A);
+        //var_dump($my_team);
         //print_r($sql);
         //获取我的技能
         $sql1 = "select mental,
@@ -149,6 +156,25 @@ class Student_Account extends Student_Home
 
         $view = student_view_path.'addAddress.php';
         load_view_template($view,array('row'=>$row,'get' => $_GET));
+    }
+
+    /**
+     * 安全中心
+     */
+    public function secure(){
+
+        // //获取教练分类
+        $category = $this->ajaxControll->get_coach_category(false);
+
+        // //获取我的教练列表
+        // $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : $category[0]->ID;
+        // global $current_user;
+        // $coach_lists = $this->ajaxControll->get_coach_lists($category_id,'',false);
+
+        $data = array('category'=>$category);
+
+        $view = student_view_path.'course.php';
+        load_view_template($view,$data);
     }
 
 
