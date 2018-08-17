@@ -7,15 +7,12 @@
  * Date: 2018/7/16
  * Time: 14:38
  */
-class Student_Account_Directory extends Student_Home
+class Student_Directory
 {
 
     public $ajaxControll;
-    public function __construct($shortCode)
+    public function __construct($action)
     {
-
-        parent::__construct();
-
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
@@ -29,7 +26,7 @@ class Student_Account_Directory extends Student_Home
         $this->ajaxControll = new Student_Ajax();
 
         //添加短标签
-        add_shortcode('student-account',array($this,$function));
+        add_shortcode('directory-home',array($this,$action));
     }
 
 
@@ -37,8 +34,8 @@ class Student_Account_Directory extends Student_Home
     /**
      * 名录
      */
-    public function index(){    
-        $view = student_view_path.'directory/directory.php';
+    public function index(){
+        $view = student_view_path.'directory.php';
         load_view_template($view);
     }
     /**

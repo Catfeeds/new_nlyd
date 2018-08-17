@@ -39,9 +39,9 @@
                 <div class="layui-row width-padding">
                     <div class="top-nav">
                         <div class="top-nav-btn"><a href="<?=home_url();?>">首 页</a></div>
-                        <div class="top-nav-btn active"><a  href="<?=home_url('/account/directory');?>">名 录</a></div>
+                        <div class="top-nav-btn active"><a  href="<?=home_url('directory');?>">名 录</a></div>
                         <div class="top-nav-btn"><a>课 程</a></div>
-                        <div class="top-nav-btn"><a href="<?=home_url('/account/shop');?>">商 城</a></div>
+                        <div class="top-nav-btn"><a href="<?=home_url('shop');?>">商 城</a></div>
                         <div class="top-nav-btn"><a>公 益</a></div>
                     </div>
                 </div>

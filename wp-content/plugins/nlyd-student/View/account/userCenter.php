@@ -108,7 +108,7 @@
                     <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left no-team">暂无战队</span><span class="pull-right">加入战队</span></a>
                 <?php }; ?>
                 <!-- 我的钱包 -->
-                <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('account/wallet')?>">
+                <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('wallet')?>">
                     <span class="pull-left">我的余额：<i class="iconfont">&#xe61e;</i>3200.00</span>
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a>

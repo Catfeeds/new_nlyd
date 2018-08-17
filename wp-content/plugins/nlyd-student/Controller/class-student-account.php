@@ -177,6 +177,31 @@ class Student_Account extends Student_Home
         load_view_template($view,$data);
     }
 
+    /**
+     * 我的训练
+     */
+    public function train(){
+        $view = student_view_path.'train.php';
+        load_view_template($view);
+    }
+
+    /**
+     * 我的课程
+     */
+    public function course(){
+        // //获取教练分类
+        $category = $this->ajaxControll->get_coach_category(false);
+
+        // //获取我的教练列表
+        // $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : $category[0]->ID;
+        // global $current_user;
+        // $coach_lists = $this->ajaxControll->get_coach_lists($category_id,'',false);
+
+        $data = array('category'=>$category);
+
+        $view = student_view_path.'course.php';
+        load_view_template($view,$data);
+    }
 
     /**
      * 默认公用js/css引入
@@ -234,6 +259,21 @@ class Student_Account extends Student_Home
             wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-addAddress', student_css_url.'addAddress.css',array('my-student') );
             wp_enqueue_style( 'my-student-addAddress' );
+        }
+
+        if(ACTION == 'train'){//我的训练
+            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-cookie' );
+
+            wp_register_style( 'my-student-match', student_css_url.'match.css',array('my-student') );
+            wp_enqueue_style( 'my-student-match' );
+        }
+
+        if(ACTION == 'course'){//我的课程
+            wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-Hammer' );
+            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-cookie' );
         }
 
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
