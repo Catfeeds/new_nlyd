@@ -303,7 +303,12 @@ layui.use(['element','flow','layer'], function(){
                             }
                         }else{
                             if(page==1){
-                                var dom='<tr><td colspan="7">无教练信息</td></tr>'
+                                var flag='<?=$action ?>';
+                                var dom='<div class="no-info">无教练信息</div>'
+                                if(flag.length>0){
+                                    var text=$('.layui-this').text();
+                                    dom+='<a class="a-btn" href="<?=home_url('/teams/coachList/category_id/'.$_GET['category_id']);?>">设置我的'+text+'教练</a>'
+                                }
                                 lis.push(dom) 
                             }else{
                                 $.alerts('没有更多了')
