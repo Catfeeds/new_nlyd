@@ -505,6 +505,9 @@ p.share-font{
     color:#fff;
     font-size:0.16rem
 }
+.content .nl-table td{
+font-size:0.12rem;
+}
 @media screen and (min-width: 992px){
     .nl-page-form{
         border: 1px solid #f2f2f2;

@@ -317,9 +317,20 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
     var hammerPrev = new Hammer($('#prev')[0]);
     hammerPrev.on("tap", function (e) {
         var active=$('.poker-wrapper .poker.active');
+        var htmlActive=$('.poker-wrapper .poker.active').html();
+        var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
+        var textActive=$('.poker-wrapper .poker.active').attr('data-text')
         if(active.prev('.poker').length>0){
-            active.prev('.poker').addClass('active');
-            active.removeClass('active')
+            var html=active.prev('.poker').html();
+            var color=active.prev('.poker').attr('data-color')
+            var text=active.prev('.poker').attr('data-text')
+
+            active.prev('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
+            active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
+            if(colorActive!=color){
+                active.prev('.poker').removeClass(color).addClass(colorActive);
+                active.removeClass(colorActive).addClass(color);
+            }
             initRight()
         }
     });
@@ -327,9 +338,20 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
     var hammerNext = new Hammer($('#next')[0]);
     hammerNext.on("tap", function (e) {
         var active=$('.poker-wrapper .poker.active');
+        var htmlActive=$('.poker-wrapper .poker.active').html();
+        var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
+        var textActive=$('.poker-wrapper .poker.active').attr('data-text')
         if(active.next('.poker').length>0){
-            active.next('.poker').addClass('active');
-            active.removeClass('active')
+            var html=active.next('.poker').html();
+            var color=active.next('.poker').attr('data-color')
+            var text=active.next('.poker').attr('data-text')
+
+            active.next('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
+            active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
+            if(colorActive!=color){
+                active.next('.poker').removeClass(color).addClass(colorActive);
+                active.removeClass(colorActive).addClass(color);
+            }
             initRight()
         }
     });

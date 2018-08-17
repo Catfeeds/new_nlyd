@@ -53,7 +53,7 @@
                                     </div>
                                     <?php if($match['match_status'] == 1): ?>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">报名截止倒计时：</div>
+                                        <div class="nl-match-label">报名截止：</div>
                                         <div class="nl-match-info">已截止</div>
                                     </div>
                                     <?php endif ?>
@@ -148,7 +148,7 @@ jQuery(function($) {
                             } 
                         }else{
                             if(page==1){
-                                var dom='<tr><td colspan="5">近期比赛无记录</td><tr>'
+                                var dom='<tr><td colspan="5">无记录</td><tr>'
                                 lis.push(dom) 
                             }else{
                                 $.alerts('没有更多了')

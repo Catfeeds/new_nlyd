@@ -337,7 +337,6 @@
                 dataType:'json',
                 timeout:3000,
                 success: function(data, textStatus, jqXHR){
-                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
                         if(data.data.url){
