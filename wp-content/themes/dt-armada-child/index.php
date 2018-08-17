@@ -26,7 +26,6 @@ $which_cat = get_category_by_slug('news');
 $recentPosts = new WP_Query();
 $cat_query = $recentPosts->query('showposts=1&cat='.$which_cat->cat_ID.'&paged=1');
 //var_dump($cat_query);
-
 get_header(); ?>
 
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
@@ -133,6 +132,7 @@ get_header(); ?>
                             <span class="pull-left">最新资讯</span>
                             <span class="pull-right" onclick="window.location.href='<?= home_url('category/new-news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
+
                         <?php
                         if(!empty($cat_query)) {
                             foreach ($cat_query as $cat){
