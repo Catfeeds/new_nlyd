@@ -42,7 +42,7 @@
                         <ul style="margin-left: 0" class="mui-bar mui-bar-nav layui-tab-title">
                             <li class="layui-this">近期比赛</li>
                             <li>往期比赛</li>
-                            <div class="nl-transform">近期比赛</div>
+                            <div class="nl-transform" data-y="-5">近期比赛</div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 近期比赛 -->

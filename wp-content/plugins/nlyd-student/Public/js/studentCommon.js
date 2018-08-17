@@ -148,12 +148,16 @@ jQuery(document).ready(function($) {
         }
     }
     //监听屏幕方向
-    window.onorientationchange = function(){
+    window.onresize = function(){
         $('.nl-transform').each(function(){
             var _this=$(this);
             var left=_this.parents('.layui-tab-title').find('.layui-this').position().left;
+            var y=0;
+            if(_this.attr('data-y')){
+                y=_this.attr('data-y')
+            }
             _this.css({
-                'transform':'translate3d('+left+'px, 0px, 0px)',
+                'transform':'translate3d('+left+'px, '+y+'px, 0px)',
             })
         })
     } 

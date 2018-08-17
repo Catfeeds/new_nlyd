@@ -29,14 +29,14 @@ $rows = get_option('index_banner_url');
         <input name="action" type="hidden" value="saveBanner">
         banner上传:
           <div id="pro-box">
-              <?php foreach ($rows as $row){ ?>
+              <?php if(!empty($rows)){foreach ($rows as $row){ ?>
                   <p>
                       <input type="text" size="60" value="<?=!empty($row) ? $row : '';?>" name="index_banner_url[]" class="upload_input"/>
                       <img src="<?=!empty($row) ? $row : '';?>" class="logoImg">
                       <a class="upload_button button" href="#">上传</a>
                       <a class="del_button button" href="#">删除</a>
                   </p>
-              <?php } ?>
+              <?php }} ?>
 
           </div>
 <!--        <p>-->
@@ -56,6 +56,7 @@ $rows = get_option('index_banner_url');
             <input type="text" size="60" value="" name="index_banner_url[]" class="upload_input"/>
             <img src="" class="logoImg">
             <a class="upload_button button" href="#">上传</a>
+            <a class="del_button button" href="#">删除</a>
         </p>
     </div>
 </div>
@@ -104,7 +105,7 @@ $rows = get_option('index_banner_url');
         });
         
         $('#add-banner').on('click', function () {
-            var _p = $('#template').html();
+            var _p = $('#template').find('p').clone(true);
             // $(_p).show();
             $('#pro-box').append(_p);
         });

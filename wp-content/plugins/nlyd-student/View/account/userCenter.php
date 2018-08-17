@@ -95,10 +95,12 @@
                 </div>
             </div>
             <div class="width-margin layui-row menu-wrapper">
-                <?php if(!empty($my_team['my_team'])):?>
+                <?php if(!empty($my_team['my_team'])){ ?>
                 <!-- 我的战队 -->
                     <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>"><span class="pull-left"><?=$my_team['my_team']?></span><span class="pull-right">查看</span></a>
-                <?php endif;?>
+                <?php }else{ ?>
+                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left">暂无战队</span><span class="pull-right">加入战队</span></a>
+                <?php }; ?>
                 <!-- 我的钱包 -->
                 <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('account/wallet')?>">
                     <span class="pull-left">我的余额：<i class="iconfont">&#xe61e;</i>3200.00</span>
@@ -189,7 +191,7 @@
                         </div>
                         <div class="userCenter-detail-foot">自 测</div>
                     </a>
-                    <a href="<?=home_url('/account/setting');?>">
+                    <a href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
