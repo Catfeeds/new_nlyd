@@ -189,7 +189,7 @@
                         </div>
                         <div class="userCenter-detail-foot">自 测</div>
                     </a>
-                    <a href="<?=home_url('/account/setting');?>">
+                    <a href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">

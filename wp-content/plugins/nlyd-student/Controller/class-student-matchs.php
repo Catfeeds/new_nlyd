@@ -2195,7 +2195,7 @@ class Student_Matchs extends Student_Home
         }
 
         if(ACTION=='record'){//战绩排名页
-            wp_register_script( 'student-share',student_js_url.'share/dist/soshm.js', leo_student_version  );
+            wp_register_script( 'student-share',student_js_url.'share/NativeShare.js', leo_student_version  );
             wp_enqueue_script( 'student-share' );
 
             wp_register_style( 'my-student-record', student_css_url.'record.css',array('my-student') );
@@ -2203,7 +2203,7 @@ class Student_Matchs extends Student_Home
             
         }
         if(ACTION=='singleRecord'){//单项比赛成绩排名页
-            wp_register_script( 'student-share',student_js_url.'share/dist/soshm.js', leo_student_version  );
+            wp_register_script( 'student-share',student_js_url.'share/NativeShare.js', leo_student_version  );
             wp_enqueue_script( 'student-share' );
             wp_register_style( 'my-student-singleRecord', student_css_url.'singleRecord.css',array('my-student') );
             wp_enqueue_style( 'my-student-singleRecord' );

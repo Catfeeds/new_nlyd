@@ -406,14 +406,14 @@ jQuery(function($) {
                 return false;
             });
             form.on('submit(registerBtn)', function(data){//注册
-                sendloginAjax(url,data.field)
+                sendloginAjax(window.admin_ajax,data.field)
                 return false;
             });
             element.on('tab(tabs)', function(){//tabs
                 var left=$(this).position().left;
                 var html=$(this).html();
                 var css=''
-                if(index==0){
+                if($(this).index()==0){
                     css='22.5px 0 0 22.5px'
                 }else{
                     css='0px 22.5px 22.5px 0'
