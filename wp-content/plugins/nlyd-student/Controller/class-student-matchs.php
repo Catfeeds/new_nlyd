@@ -151,7 +151,7 @@ class Student_Matchs extends Student_Home
     public function index(){
 
          /*$a = new TwentyFour();
-        var_dump($a->calculate(array(5,5,3,6)));*/
+        var_dump($a->calculate(array(5,5,5,9)));*/
 
         global $wpdb;
 

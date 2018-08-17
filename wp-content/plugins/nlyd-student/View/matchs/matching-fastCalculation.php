@@ -343,7 +343,7 @@ jQuery(function($) {
             _wpnonce:$('#inputSubmit').val(),
             match_id:<?=$_GET['match_id']?>,
             project_id:<?=$_GET['project_id']?>,
-            match_more:<?=$_GET['match_more']?>,
+            match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
             my_answer:ajaxData,
             match_action:'subjectFastCalculation',
             surplus_time:time,
