@@ -27,7 +27,9 @@
                         <?php if(!empty($category)):
                             $url = home_url('/teams/'.$action);
                             //$action = isset($_GET['action'])?$_GET['action']:'index';
+                            $set_url = home_url('/teams/coachList/category_id/'.$_GET['category_id']);
                             if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
+                            if(isset($_GET['match_id'])) $set_url .= '/match_id/'.$_GET['match_id'];
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
@@ -53,7 +55,7 @@
                             <p class="no-info-text">您还未设置任何教练</p>
                             <?php
                                 $url = home_url('/teams/coachList');
-                                if(!empty($_GET['match_id']) ) $url .= 'match_id/'.$_GET['match_id'];
+                                if(!empty($_GET['match_id']) ) $url .= '/match_id/'.$_GET['match_id'];
                             ?>
                             <a class="a-btn" href="<?=$url;?>">去设置我的教练</a>
                         <?php }else{ ?>

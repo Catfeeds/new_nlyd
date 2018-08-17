@@ -31,22 +31,36 @@ class Match
             if(in_array($post_type,array('match','genre','project','match-category'))){
 
                 //获取比赛meta
-                $sql = "select * from {$wpdb->prefix}match_meta where match_id = {$_GET['post']} ";
+                $sql = "select 
+                          id,match_id,match_genre,match_genre,match_status,
+                          if(unix_timestamp(match_start_time) > 1,match_start_time,'') match_start_time, 
+                          if(unix_timestamp(entry_start_time) > 1,entry_start_time,'') entry_start_time, 
+                          if(unix_timestamp(entry_end_time) > 1,entry_end_time,'') entry_end_time, 
+                          if(match_cost < 0,'',match_cost) match_cost, 
+                          if(match_more < 1,'',match_more) match_more,
+                          if(match_use_time < 1,'',match_use_time) match_use_time, 
+                          if(match_project_interval < 1,'',match_project_interval) match_project_interval, 
+                          if(match_subject_interval < 1,'',match_subject_interval) match_subject_interval,
+                          if(str_bit < 1,'',str_bit) str_bit,
+                          if(child_count_down < 1,'',child_count_down) child_count_down
+                from {$wpdb->prefix}match_meta where match_id = {$_GET['post']} ";
                 $post_meta = $wpdb->get_row($sql,ARRAY_A);
                 //var_dump($sql);
                 $this->meta = $post_meta;
                 switch ($post_type){
                     case 'match':
                         //获取比赛选项
-                        $sql = " select *,
-                                  if(project_washing_out < 1,'',project_washing_out) project_washing_out, 
+                        $sql = " select id,post_id,match_project_id,
                                   if(project_use_time < 1,'',project_use_time) project_use_time, 
-                                  if(unix_timestamp(project_start_time)=0,'',project_start_time) project_start_time, 
+                                  if(match_more < 1,'',match_more) match_more,
+                                  if(unix_timestamp(project_start_time) > 1,project_start_time,'') project_start_time, 
+                                  if(project_washing_out < 1,'',project_washing_out) project_washing_out, 
                                   if(project_time_interval < 1,'',project_time_interval) project_time_interval,
-                                  if(match_more = 0,'',match_more) match_more,
-                                  if(str_bit = 0,'',str_bit) str_bit
+                                  if(str_bit < 1,'',str_bit) str_bit,
+                                  if(child_count_down < 1,'',child_count_down) child_count_down
                                   from {$wpdb->prefix}match_project where post_id = {$_GET['post']}
                                ";
+                        //print_r($sql);
                         $rows = $wpdb->get_results($sql,ARRAY_A);
                         $temp_key = array_column($rows,'match_project_id');
                         $match_project = array_combine($temp_key,$rows) ;

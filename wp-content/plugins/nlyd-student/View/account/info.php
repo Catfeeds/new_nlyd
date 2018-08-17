@@ -110,10 +110,10 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">所在城市</div>
-                                    <input readonly id="areaSelect" type="text" placeholder="所在城市" value="<?=$user_info['user_address']['province']?><?=$user_info['user_address']['city']?><?=$user_info['user_address']['area']?>" class="nl-input" lay-verify="required">
-                                    <input  type="hidden" id="province" name="user_address[province]" value="<?=$user_info['user_address']['province']?>"/>
-                                    <input  type="hidden" id="city" name="user_address[city]" value="<?=$user_info['user_address']['city']?>">
-                                    <input  type="hidden" id="area" name="user_address[area]" value="<?=$user_info['user_address']['area']?>"/>
+                                    <input readonly id="areaSelect" type="text" placeholder="所在城市" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
+                                    <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
+                                    <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
+                                    <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
                                 <div class="a-btn" lay-filter="certificationFormBtn" lay-submit="">保存</div>
                             </div>

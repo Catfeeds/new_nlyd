@@ -420,7 +420,7 @@ class Match_Ajax
         }
         global $wpdb;
 
-        $select = "SELECT a.user_id as id ,b.team_id,c.display_name as text FROM wp_usermeta a ";
+        $select = "SELECT a.user_id as id ,b.team_id,c.display_name as text FROM {$wpdb->prefix}usermeta a ";
 
         $left_join = "left join {$wpdb->prefix}match_team b on a.user_id = b.user_id
                       left join {$wpdb->prefix}users c on a.user_id = c.ID";
