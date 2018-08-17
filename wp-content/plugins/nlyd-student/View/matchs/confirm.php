@@ -102,7 +102,7 @@
                                         <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
                                         <?=$player['user_team']?>
                                         <?php }else{ ?>
-                                            <a href="<?=home_url('student/account/team/?action=lists')?>" class="nl-see-link">加入战队</a>
+                                            <a href="<?=home_url('teams/index')?>" class="nl-see-link">加入战队</a>
                                         <?php }?>
                                     </span>
                                 </div>
