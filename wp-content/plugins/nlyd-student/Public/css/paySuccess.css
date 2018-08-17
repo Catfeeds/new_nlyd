@@ -1,0 +1,46 @@
+.pay-success{
+    width: 100%;
+    padding-top: 145px;
+}
+.pay-info{
+    margin-bottom: 48px;
+    color: #4394F9;
+    text-align: center;
+    font-size: 0.18rem;
+}
+.btn-zoo{
+    width: 100%;
+    display: flex;
+}
+.btn-z{
+    flex: 1;
+}
+.btn-z a{
+    display: block;
+    width: 80%;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    font-size: 0.16rem;
+    border-radius: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.btn-z a.left{
+    background: -webkit-linear-gradient(#4394F9, #68AAFE);
+    background: -o-linear-gradient(#4394F9, #68AAFE);
+    background: -moz-linear-gradient(#4394F9, #68AAFE);
+    background: linear-gradient(#4394F9, #68AAFE);
+    border: 1px solid rgba(111, 175, 255, 0.2);
+    color: #fff;
+    float: right;
+    margin-right:2%;
+}
+.btn-z a.right{
+    border: 1px solid rgba(67, 148, 249, 1);
+    color: rgba(67, 148, 249, 1);
+    background: #fff;
+    float: left;
+    margin-left: 2%;
+}

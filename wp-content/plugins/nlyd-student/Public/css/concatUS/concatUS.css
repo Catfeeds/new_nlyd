@@ -1,0 +1,42 @@
+#baiduMap{
+    height: 206px;
+}
+.concat-row{
+   padding-left: 36px;
+   padding-right:  21px;
+   padding-top: 10px;
+   padding-bottom: 10px;
+   border-radius: 6px;
+   margin-bottom: 10px;
+   overflow: hidden;
+}
+.blue-b{
+    border: 1px solid RGBA(67, 148, 249, 1);
+}
+.orange-b{
+    border: 1px solid RGBA(251, 142, 142, 1);
+}
+.violet-b{
+    border: 1px solid RGBA(167, 152, 255, 1);
+}
+p.concat-info:last-child{
+    margin-bottom: 0;
+}
+p.concat-info span{
+    color: RGBA(38, 38, 38, 0.8);
+    font-size: 0.14rem;
+}
+.img-we{
+    width: 86px;
+    height: 86px;
+    float: left;
+}
+.img-we img{
+    width: 100%;
+    height: 100%;
+}
+.img-detail{
+    float: left;
+    margin-left: 17px;
+    margin-top: 15px;
+}

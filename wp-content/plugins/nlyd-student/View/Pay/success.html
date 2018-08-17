@@ -1,0 +1,55 @@
+<!-- 手机绑定匹配 -->
+<extend name="Base/common"/>
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CSS__/tickets.css?v=JSS_CSS_V"/>
+    <style>
+
+    </style>
+</block>
+<block name="body">
+    <div class="big-bg">
+        <div class="mui-content">
+            <div id="tickets" class="tickets payTikets paddind5">
+                <ul class="manlist">
+                    <volist name="row" id="vo">
+                        <li class="logLi">
+                            <h4>
+                                [{$vo.parkname}{$vo.row}排{$vo.column}号] 管理费&nbsp;&nbsp;
+                                <font color="#B6232B">¥{$vo.price} / {$vo.duration}年</font>
+                            </h4>
+                            <p>
+                                <label>续缴年限：</label>
+                                <font color="#B6232B">
+                                    {$vo.before_date}
+                                </font>
+                                -
+                                <font color="#B6232B">
+                                    {$vo.after_date}
+                                </font>
+                            </p>
+                            <p>
+                                <label>缴费时间：</label>
+                                {$vo.time|time_format="Y年m月d日"}
+                            </p>
+                            <p>
+                                <label>下次缴费时间：</label>
+                                {: date("Y年m月d日",strtotime("-1 year +1 day",strtotime($vo['after_date'])));}
+                            </p>
+                            <span class="CGiMG"></span>
+                        </li>
+                    </volist>
+                </ul>
+                <!--支付成功-->
+                <notempty name="isLogin">
+                    <div class="paysucbtn">
+                        <a href="{:U('Manage/log')}">查看缴费记录</a>
+                    </div>
+                </notempty>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script>    
+    </script>
+</block>

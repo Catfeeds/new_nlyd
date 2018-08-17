@@ -1,0 +1,16 @@
+.circle-metal{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bolder;
+    font-size: 0.14rem;
+    text-align: center;
+    background-color: #4394f9;
+    margin-top: 10px;
+}
+.nl-page-form input.nl-input, .nl-page-form div.nl-input{
+    padding-left:0;
+    color: rgba(116, 116, 116, 1);
+}

@@ -1,0 +1,102 @@
+
+/*  */
+.title-img{
+   width: 100%;
+   min-height: 180px;
+   margin-bottom: 15px;
+}
+.shop-search{
+    height: 35px;
+    position: relative;
+}
+.searchIcon{
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    font-size:0.20rem;
+    margin-top: -12px; 
+}
+input[type="text"].serachInput{
+    display: block;
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    height: 100%;
+    margin-bottom: 0;
+    border-radius: 20px;
+    background-color: #eee;
+    float: left;
+    padding: 0;
+    padding-left: 40px;
+    border: none;
+}
+.shopCar{
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 100%;
+    float: left;
+    text-align: right;
+    line-height: 35px;
+    color: #4394f9;
+}
+.shopCar i{
+    font-size: 0.25rem;
+}
+.layui-badge{
+    position: absolute;
+    left: 30px;
+    top: 0;
+    padding: 0;
+    font-size: 0.12rem;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 15px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+
+.goods-row{
+    display: block;
+    margin-top: 10px;
+    color: rgba(116, 116, 116, 1);
+}
+.goods-left-img{
+    width: 150px;
+    float: left;
+}
+.goods-right-info{
+    float: left;
+    width: -webkit-calc(100% - 150px);
+    width: calc(100% - 150px);
+}
+.goods-wrap{
+    padding: 0 10px;
+}
+.goods-name{
+    color: #262626;
+    font-size: 0.14rem;
+}
+.goods-price{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.goods-detail{
+    height: 70px;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    overflow:hidden;
+    -webkit-line-break:auto;
+    -webkit-box-orient:vertical;
+}
+.orange-color{
+    color: #fcb1b1;
+}
+.addShopCar{
+    font-size:0.24rem;
+    color: #4394f9;
+}
+

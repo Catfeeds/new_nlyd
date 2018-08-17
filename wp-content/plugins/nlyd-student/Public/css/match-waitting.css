@@ -1,0 +1,35 @@
+@media screen and (max-width: 991px){
+    #page{
+        top: 0;
+    }
+}
+.count-wrapper{
+    width: 80%;
+    height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    margin-top: -150px;
+}
+.count-nl-logo{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+}
+.count-nl-logo img{
+    width: 100%
+}
+.match-name{
+    text-align: center;
+    font-size: 0.16rem;
+    padding-top: 10px;
+}
+.match-detail{
+    text-align: center;
+    font-size: 0.14rem;
+    padding-top: 10px;
+}
+.a-btn.wait{
+    position: relative;
+    top: 0;
+}

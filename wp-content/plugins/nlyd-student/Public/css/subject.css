@@ -1,0 +1,197 @@
+.font-darkBlue{
+    color: rgba(67, 148, 249, 1);
+}
+.subject-title{
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: flex;
+}
+.subject-title-info{
+    height: 32px;
+    line-height: 32px;
+    flex: 1;
+}
+.subject-title-info a{
+    display: block;
+    margin: auto;
+    width: 79px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid rgba(111, 175, 255, 1);
+    border-radius: 6px;
+    color: rgba(67, 148, 249, 1);
+}
+.subject-title-info a.disabled-a{
+    border: 1px solid rgba(191, 190, 190, 1);
+    color: rgba(191, 190, 190, 1);
+}
+
+.subject-row{
+    display: flex;
+}
+.one-info{
+    flex: 1;
+}
+.subject-title span{
+    text-align: center;
+}
+.subject-title span:first-child{
+    text-align: left;
+}
+.left-label{
+    width: 65px;
+    float: left;
+    text-align: left;
+}
+.getBottom{
+    bottom: 80px;
+}
+
+.your-answer,
+.right-answer{
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.answerBtn{
+    width: 90px;
+    height: 29px;
+    line-height: 29px;
+    text-align: center;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(#2E89FA, #6FAFFF);
+    background: -o-linear-gradient(#2E89FA, #6FAFFF);
+    background: -moz-linear-gradient(#2E89FA, #6FAFFF);
+    background: linear-gradient(#2E89FA, #6FAFFF);
+    color: #fff;
+    font-size: 0.14rem;
+    margin: 20px 0;
+}
+/* 数字争霸 */
+.matching-number{
+    width: -webkit-calc(5% - 5px);
+    width: calc(5% - 5px);
+    float: left;
+    height: 25px;
+    font-size: 0.16rem;
+    color: rgba(116, 116, 116, 1);
+    text-align: center;
+    line-height: 25px;
+    margin-right:5px;
+    border-bottom: 1px solid transparent;
+}
+.matching-number.grey{
+    border-bottom: 1px solid grey;
+}
+.your-answer .matching-number.active{
+    border-bottom: 1px solid #CF1818;
+    color: #CF1818;
+}
+.right-answer .matching-number.active{
+    border-bottom: 1px solid #0F940B;
+    color: #0F940B;
+}
+/* 扑克接力 */
+.porker-zoo{
+    width: 80%;
+    margin: auto;
+    height: 199px;
+    overflow: hidden;
+}
+.poker-window{
+    position: relative;
+    width: 100%;
+    height: 216px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.poker-wrapper{
+    position: absolute;
+    width: 100000px;
+    left: 0;
+    top: 0;
+    height: 199px;
+}
+
+.poker{
+    position: relative;
+    float: left;
+    width: 110px;
+    height: 172px;
+    border: 1px solid rgba(164, 164, 164, 1);
+    border-radius: 6px;
+    margin-right: -65px; 
+    background-color: #fff;
+    font-size: 0.16rem;
+    margin-top: 25px;
+}
+.poker-detail{
+    position: absolute;
+    width: 20px;
+    text-align: center;
+}
+.small.poker-detail div{
+    line-height: 16px;
+}
+.poker-top{
+    left: 5px;
+    top:5px;
+}
+.poker-bottom{
+    right: 5px;
+    bottom: 5px;
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);	
+}
+.heart,.diamond{
+    color: #AB0606;
+}
+.spade,.club{
+    color: #1D1D1D;
+}
+.poker-logo{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: -webkit-calc(50% - 25px);
+    left: calc(50% - 25px);
+    top: -webkit-calc(50% - 25px);
+    top: calc(50% - 25px);
+}
+.poker-logo img{
+    width: 100%;
+    height: 100%;
+}
+.your-answer .poker.active{
+    box-shadow:#CF1818 0 3px 6px;
+    margin-top: 0;
+}
+.right-answer .poker.active{
+    box-shadow:#0F940B 0 3px 6px;
+    margin-top: 0;
+}
+.answer-zoo,.reading-answer{
+     padding-bottom: 80px;
+}
+/* 快速阅读 */
+.reading-answer{
+    padding-left: 10px;
+   
+}
+.one-ques p{
+    margin-bottom: 0;
+}
+.error{
+    color: #CF1818;
+}
+.yes{
+    color: #0F940B;
+}
+.yours,.rights{
+    padding-left: 10px;
+}

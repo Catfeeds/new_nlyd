@@ -1,0 +1,27 @@
+
+.message-row{
+    border-radius: 5px;
+    display: block;
+    background: #fff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 6px;
+    padding: 10px 15px;
+    margin-top: 10px;
+}
+.message-row .accept-name{
+    color: rgba(67, 148, 249, 1);
+    font-size: 0.14rem;
+}
+.message-row.read .accept-name{
+    color: rgba(116, 116, 116, 1);
+}
+.message-row .message-detail{
+    font-size: 0.13rem;
+    color: rgba(116, 116, 116, 1);
+}
+.message-row.read .message-detail{
+    color: rgb(184, 188, 190);
+}
+.message-time{
+    float: right;
+    color: rgb(184, 188, 190);
+}
