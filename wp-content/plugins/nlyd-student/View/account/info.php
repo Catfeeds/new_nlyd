@@ -35,7 +35,7 @@
                 <div class="main-page">
                     <form class="nl-page-form layui-form width-margin-pc" lay-filter='nicenameForm'>   
                     
-                        <div class="nl-form-tips">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
+                        <div class="nl-form-tips width-padding width-padding-pc">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
                         <div class="form-inputs">
                             <div class="form-input-row">
                                 <div class="form-input-label">账户头像</div>

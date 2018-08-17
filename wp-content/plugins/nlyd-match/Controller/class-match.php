@@ -320,9 +320,24 @@ class Match
      * 比赛时间box
      */
     public function time_review_meta_box($post){?>
-        <p>比赛时间<input  value="<?=$this->meta['match_start_time']?>" type="text" name="match[match_start_time]"/></p>
-        <p>报名开始时间<input  value="<?=$this->meta['entry_start_time']?>" type="text" name="match[entry_start_time]"/></p>
-        <p>报名结束时间<input  value="<?=$this->meta['entry_end_time']?>" type="text" name="match[entry_end_time]"/></p>
+        <div class="layui-inline">
+            <label class="layui-form-label">比赛时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input" id="match_start_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">报名开始时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['entry_start_time']?>" name="match[entry_start_time]" class="layui-input" id="entry_start_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">报名结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input" id="entry_end_time" placeholder="yyyy-MM-dd HH:mm:ss">
+            </div>
+        </div>
         <p>比赛状态
             <input type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >已结束
             <input type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >等待开赛

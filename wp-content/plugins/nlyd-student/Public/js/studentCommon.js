@@ -90,8 +90,8 @@ jQuery(document).ready(function($) {
             return false;
         }
     }
-    $('body').on('click','share-bg',function(){
-        $(this).css('display','none')
+    $('body').on('click','.share-bg',function(){
+        $('.share-bg').css('display','none')
     })
     share=function(){//分享功能
 
@@ -104,10 +104,11 @@ jQuery(document).ready(function($) {
                             $('.share-bg').css('display','block')
                         }else{
                             var src=window.plugins_url+'/nlyd-student/Public/css/image/weChat-share.png'
-                            var dom='<div class="share-bg" style="position:fixed;z-index:99999;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.7);display:block;">'
-                                        +'<div style="position: relative;top:0;right:0;padding:5px 15px;text-align:right;">'
-                                            +'<img src="'+src+'" height="170">'
+                            var dom='<div class="share-bg">'
+                                        +'<div class="img-box share-box">'
+                                            +'<img src="'+src+'">'
                                         +'</div>'
+                                        +'<p class="share-font">点击右上角分享给好友或朋友圈</p>'
                                     +'</div>'
                             $('body').append(dom)
                         }

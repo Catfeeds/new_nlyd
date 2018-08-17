@@ -53,7 +53,8 @@ class Student_Payment {
         $params['notify_url'] = home_url('account/student/wxpay/'); //商品描述
         $params['body'] = '脑力中国'; //商品描述
         $params['serialnumber'] = $order['serialnumber']; // TODO 自定义的订单号
-        $params['price'] = 0.01; //订单金额 只能为整数 单位为分
+//        $params['price'] = 0.01; //订单金额 只能为整数 单位为分
+        $params['price'] = $order['cost']; //订单金额 只能为整数 单位为分
         $params['attach'] = 'serialnumber='.$order['serialnumber']; //附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
         return $params;
     }
@@ -341,7 +342,8 @@ class Student_Payment {
             'return_url'    => home_url('student/account/alipay/?action=returnUrl&serialnumber='.$order['serialnumber']),
             'out_trade_no'  => $order['serialnumber'],
             'subject'       => '脑力中国',
-            'total_amount'  => $order['cost'] = 0.01,
+//            'total_amount'  =>  0.01,
+            'total_amount'  => $order['cost'],
             'body'  => '', //商品描述,可空
         ];
 
