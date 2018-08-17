@@ -23,6 +23,8 @@ class Order {
         return 'o.serialnumber,
         o.id,
         o.cost,
+        um.meta_key,
+        um.meta_value,
         IFNULL(o.fullname,"-") AS fullname,
         IFNULL(o.telephone,"-") AS telephone,
         IFNULL(o.address,"-") AS address,
@@ -64,9 +66,10 @@ class Order {
                 return false;
         }
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS '.$this->getSelectField().' FROM '.$wpdb->prefix.'order AS o
-        LEFT JOIN '.$wpdb->prefix.'users AS u ON u.ID=o.user_id
+        LEFT JOIN '.$wpdb->prefix.'users AS u ON u.ID=o.user_id 
+        LEFT JOIN '.$wpdb->prefix.'usermeta AS um ON u.ID=um.user_id AND um.meta_key="user_real_name" 
         LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=o.match_id 
-        WHERE '.$pay_status.' 
+        WHERE '.$pay_status.'   
         ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 //        var_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -146,6 +149,7 @@ class Order {
                         </th>
                         <th scope="col" id="username" class="manage-column column-username">用户名</th>
                         <th scope="col" id="post_title" class="manage-column column-post_title">比赛</th>
+                        <th scope="col" id="real_name" class="manage-column column-real_name">真实姓名</th>
                         <th scope="col" id="funllname" class="manage-column column-funllname">收件人</th>
                         <th scope="col" id="telephone" class="manage-column column-telephone">联系电话</th>
                         <th scope="col" id="address" class="manage-column column-address">收获地址</th>
@@ -186,7 +190,14 @@ class Order {
                                 </td>
                                 <td class="name column-username" data-colname="用户名"><span aria-hidden="true">—</span><span class="screen-reader-text"><?=$row['user_login']?></span></td>
                                 <td class="email column-post_title" data-colname=""><?=$row['post_title']?></td>
-                                <td class="role column-role" data-colname="收件人"><?=$row['funllname']?></td>
+                                <td class="email column-real_name" data-colname="">
+                                    <?php if($row['meta_value']){?>
+                                        <?php echo isset(unserialize($row['meta_value'])['real_name']) ? unserialize($row['meta_value'])['real_name'] : '无'; ?>
+                                    <?php }else{ ?>
+                                        无
+                                    <?php } ?>
+                                </td>
+                                <td class="role column-role" data-colname="收件人"><?=$row['fullname']?></td>
                                 <td class="posts column-telephone" data-colname="联系电话"><?=$row['telephone']?></td>
                                 <td class="posts column-address" data-colname="收货地址"><?=$row['address']?></td>
                                 <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type']?></td>
@@ -212,6 +223,7 @@ class Order {
                         </th>
                         <th scope="col" class="manage-column column-username">用户名</th>
                         <th scope="col" class="manage-column column-post_title">比赛</th>
+                        <th scope="col" class="manage-column column-real_name">真实姓名</th>
                         <th scope="col" class="manage-column column-funllname">收件人</th>
                         <th scope="col" class="manage-column column-telephone">联系电话</th>
                         <th scope="col" class="manage-column column-address">收获地址</th>

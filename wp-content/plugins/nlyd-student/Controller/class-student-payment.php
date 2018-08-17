@@ -1,13 +1,16 @@
 <?php
+
 class Student_Payment extends Student_Home {
 
     public static $payClass;
     public function __construct($action)
     {
+        parent::__construct();
+
         if(isset($_GET['type'])){
             $type = $_GET['type'];
         }else {
-            $type = $_GET['type'] = 'alipay';
+            $type = $action;
         }
         $interface_config = get_option('interface_config');
         if($type == 'wxpay' || $type == 'wxpay/'){
