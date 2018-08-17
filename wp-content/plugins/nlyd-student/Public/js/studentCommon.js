@@ -1,4 +1,13 @@
 jQuery(document).ready(function($) {
+    if('ontouchstart' in window){
+        var dom='<meta name="viewport"  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">'
+        $('body').append(dom)
+        document.documentElement.addEventListener('touchstart', function (event) {//禁止缩放
+            if (event.touches.length > 1) {
+              event.preventDefault();
+            }
+          }, false);
+    }
     isIos=function(){
         var u = navigator.userAgent, app = navigator.appVersion;  
         var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器  
