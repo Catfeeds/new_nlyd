@@ -43,23 +43,22 @@ jQuery(document).ready(function($) {
             }
         });
     });
-    // $('#team_director_input').on('change', function () {
-    //     var val = $(this).val();
-    //     var team_id = $(this).attr('data-director');
-    //     $.ajax({
-    //         url : ajax_url,
-    //         data : {'action': 'getMemberByWhere', 'val':val, 'team_id':team_id,'type':'coach'},
-    //         dataType : 'json',
-    //         type : 'post',
-    //         success : function (response) {
-    //             var html = '';
-    //             if(response.success){
-    //                 $.each(response.data.info, function (i, v) {
-    //                     html += '<option value="'+v.match_team_id+'">'+v.user_nicename+'</option>'
-    //                 })
-    //             }
-    //             $('#match_team_list_d').html(html);
-    //         }
-    //     })
-    // })
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+      //日期时间选择器
+        laydate.render({
+            elem: '#match_start_time'
+            ,type: 'datetime'
+        });
+        //日期时间选择器
+        laydate.render({
+            elem: '#entry_start_time'
+            ,type: 'datetime'
+        });
+                  //日期时间选择器
+        laydate.render({
+            elem: '#entry_end_time'
+            ,type: 'datetime'
+        });
+    })
 });
