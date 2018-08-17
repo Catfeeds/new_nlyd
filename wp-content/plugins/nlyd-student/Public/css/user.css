@@ -217,7 +217,7 @@ line-height:45px;
     text-align: center;
     margin-bottom: 45px;
     overflow: hidden;
-    font-size: 0.13rem;
+    font-size: 0.14rem;
 }
 .nl-agreement .login-by{
     float: left;
@@ -256,7 +256,7 @@ input[type=tel].layui-input{
     text-align: center;
 }
 .content-p{
-    font-size: 0.13rem;
+    font-size: 0.14rem;
 }
 .content-p.indent{
     text-indent: 0.26rem;

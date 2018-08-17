@@ -101,8 +101,8 @@
                                         <?php if(!empty($player['team_id'])){ ?>
                                         <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
                                         <?=$player['user_team']?>
-                                        <?php }else{ ?>
-                                            <a href="<?=home_url('student/account/team/?action=lists')?>" class="nl-see-link">加入战队</a>
+                                        <?php }else{?>
+                                            <a href="<?=home_url('teams/index/match_id/'.$_GET['match_id'])?>" class="nl-see-link">加入战队</a>
                                         <?php }?>
                                     </span>
                                 </div>
@@ -119,7 +119,7 @@
                             <!-- <span class="nl-match-people">28报名</span> -->
                             <div class="nl-match-header width-margin">
                                 <span class="nl-match-name">邮寄地址</span>
-                                <a class="nl-match-people" href="<?=home_url('/account/info/?action=address&match_id='.$_GET['match_id'])?>">增加/修改</a>
+                                <a class="nl-match-people" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
                             </div>
                             <div class="nl-match-body width-margin">
                                 <?php if(!empty($address)){ ?>
@@ -182,6 +182,9 @@ jQuery(function($) {
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{
                         $.alerts(res.data.info)
+                        setTimeout(() => {
+                            window.location.href=res.data.url;
+                        }, 300);
                     }
                 })
                 return false;
@@ -209,7 +212,7 @@ jQuery(function($) {
         }
         $.post(window.admin_ajax,data,function(res){
             if(res.success){
-                window.open(res.data.info); 
+                window.location.href=res.data.info; 
             }else{
                 $.alerts(res.data.info)
             }
