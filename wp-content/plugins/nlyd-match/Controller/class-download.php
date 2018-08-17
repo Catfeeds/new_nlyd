@@ -38,66 +38,69 @@ class Download
         LEFT JOIN '.$wpdb->posts.' AS p ON o.match_id=p.ID
         WHERE o.created_time BETWEEN "'.$start.'" AND "'.$end.'"', ARRAY_A);
 
-        $html = '<table cellspacing="0" cellpadding="0" style="color: black;text-align: center" border="1px solid #000000">
-                <tr>
-                    <th>订单流水</th>
-                    <th>用户名</th>
-                    <th>比赛</th>
-                    <th>收件人</th>
-                    <th>联系电话</th>
-                    <th>收获地址</th>
-                    <th>订单类型</th>
-                    <th>快递单号</th>
-                    <th>快递公司</th>
-                    <th>支付类型</th>
-                    <th>订单总价</th>
-                    <th>支付状态</th>
-                    <th>创建时间</th>
-                </tr>';
-        foreach ($rows as $row){
-            $html .= '<tr>
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['serialnumber'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['user_login'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['post_title'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['funllname'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['telephone'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['address'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['order_type'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['express_number'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['express_company'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['pay_type'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['cost'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['pay_name'].'</td>               
-                         <td style="text-align: center; vnd.ms-excel.numberformat:@">'.$row['created_time'].'</td>               
-                    </tr>';
-        }
-        $html .= '</table>';
+
         $date = $_POST['start_date'].'-'.$_POST['end_date'];
         $filename = 'order_';
         $filename .= $date."_";
         $filename .= time().".xls";
-        $path = self::$downloadPath.$filename;
-        file_put_contents($path,$html);
-        $file_temp = fopen ( $path, "r");
+//        $path = self::$downloadPath.$filename;
+//        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        $objPHPExcel = new \PHPExcel();
 
-        // Begin writing headers
-        header ( "Pragma: public" );
-        header ( "Expires: 0" );
-        header ( "Cache-Control: must-revalidate, post-check=0, pre-check=0" );
-        header ( "Cache-Control: public" );
-        header ( "Content-Description: File Transfer" );
-        // Use the switch-generated Content-Type
-        header ( "Content-Type: application/vnd.ms-word" );
-        // Force the download
-        $header = "Content-Disposition: attachment; filename=" . $filename . ";";
-        header ( $header );
-        header ( "Content-Transfer-Encoding: binary" );
-        header ( "Content-Length: " . filesize($path) );
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
 
-        //@readfile ( $file );
-        echo fread ($file_temp, filesize ($path) );
-        fclose ($file_temp);
-        exit;
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', '订单流水');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B1', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C1', '比赛');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D1', '收件人');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E1', '联系电话');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F1', '收获地址');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G1', '订单类型');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H1', '快递单号');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I1', '快递公司');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J1', '支付类型');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K1', '订单总价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L1', '支付状态');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M1', '创建时间');
+        foreach ($rows as $k => $row){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+2),' '.$row['serialnumber']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+2),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+2),' '.$row['post_title']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+2),' '.$row['funllname']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+2),' '.$row['telephone']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+2),' '.$row['address']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+2),' '.$row['order_type']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+2),' '.$row['express_number']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+2),' '.$row['express_company']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+2),' '.$row['pay_type']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+2),' '.$row['cost']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+2),' '.$row['pay_title']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.($k+2),' '.$row['created_time']);
+        }
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        return;
     }
 
     public function question(){

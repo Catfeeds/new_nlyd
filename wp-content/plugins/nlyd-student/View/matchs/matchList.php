@@ -48,7 +48,7 @@
                             <!-- 近期比赛 -->
                             <div class="layui-tab-item layui-show">
                                 <div class="countdown-time"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;最新比赛倒计时
-                                    <span class="getTime" id="getTime">00:00:00</span>        
+                                    <span class="getTime" id="getTimes">00:00:00</span>        
                                 </div>
                                 <ul class="flow-default layui-row layui-col-space20" id="flow-match1">
                                     
@@ -85,6 +85,9 @@
 <script>
 jQuery(function($) { 
 
+    if(window.wait_match == ''){
+        $('.countdown-time').hide();
+    }
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
