@@ -145,14 +145,16 @@ if(!class_exists('StudentController')){
                 WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status = 2 
                 ORDER BY match_start_time asc limit 1
                 ";
+                //print_r($sql);
                 $row = $wpdb->get_row($sql,ARRAY_A);
 
                 if(!empty($row)){
                     $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-time();
                     $this->wait_match['match_url'] = home_url('matchs/matching/match_id/'.$row['match_id']);
-                    $this->wait_match['waiting_url'] = home_url('matchs/matchWaitting/match_id='.$row['match_id']);
+                    $this->wait_match['waiting_url'] = home_url('matchs/matchWaitting/match_id/'.$row['match_id']);
                     $this->wait_match['match_id'] = $row['match_id'];
                 }
+
             }
             $class_path = leo_student_path.'Controller/class-'.MODEL.'-'.CONTROLLER.'.php';
             //var_dump($class_path);
