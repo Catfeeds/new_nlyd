@@ -16,7 +16,7 @@ class Student_Logins
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
-var_dump(111);
+
         //添加短标签
         add_shortcode('student-login',array($this,$action));
     }
