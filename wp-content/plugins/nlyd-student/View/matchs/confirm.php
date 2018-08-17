@@ -210,7 +210,7 @@ jQuery(function($) {
         }
         $.post(window.admin_ajax,data,function(res){
             if(res.success){
-                window.open(res.data.info); 
+                window.location.href = res.data.info;
             }else{
                 $.alerts(res.data.info)
             }
