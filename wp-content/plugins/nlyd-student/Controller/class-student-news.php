@@ -7,11 +7,11 @@
  * Date: 2018/7/16
  * Time: 14:38
  */
-class Student_Account_News extends Student_Home
+class Student_News extends Student_Home
 {
 
     public $ajaxControll;
-    public function __construct($shortCode)
+    public function __construct($action)
     {
 
         parent::__construct();
@@ -19,17 +19,10 @@ class Student_Account_News extends Student_Home
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
-        
-        if(isset($_GET['action'])){
-            $function = $_GET['action'];
-        }else {
-            $function = $_GET['action'] = 'index';
-        }
-
         $this->ajaxControll = new Student_Ajax();
 
         //添加短标签
-        add_shortcode('student-account',array($this,$function));
+        add_shortcode('news-home',array($this,$action));
     }
 
 
@@ -37,8 +30,8 @@ class Student_Account_News extends Student_Home
     /**
      * 新闻列表
      */
-    public function index(){    
-        $view = student_view_path.'news/news-list.php';
+    public function index(){
+        $view = student_view_path.'news-list.php';
 //        global $wpdb;
         $which_cat = get_category_by_slug('news');
         $recentPosts = new WP_Query();

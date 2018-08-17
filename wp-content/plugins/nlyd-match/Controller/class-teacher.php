@@ -124,7 +124,7 @@ class Teacher
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="name column-name" data-colname="查看学员">
-                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?><" aria-label="">查看学员</a></span>
+                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?>" aria-label="">查看学员</a></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
@@ -144,7 +144,7 @@ class Teacher
                         <th scope="col" class="manage-column column-username column-primary sortable desc">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" class="manage-column column-datum column-primary sortable desc">
+                        <th scope="col" class="manage-column column-datum column-primary">
                             姓名
                         </th>
                         <th scope="col" class="manage-column column-student column-primary">
@@ -350,7 +350,7 @@ class Teacher
             $typeWhere = 'AND co.apply_status='.$type;
 
         global $current_user,$wpdb;
-        $pageSize = 1;
+        $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
         $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,
