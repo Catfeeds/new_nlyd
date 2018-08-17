@@ -297,7 +297,7 @@ class Student_Ajax
                     foreach ($match_questions as $val){
                         $results = $twentyfour->calculate($val);
                         //print_r($results);
-                        $questions_answer[] = empty($results) ? $results[0] : '本题无解';
+                        $questions_answer[] = !empty($results) ? $results[0] : '本题无解';
                     }
                     $isRight = array_column($data_arr,'isRight');
                     //die;

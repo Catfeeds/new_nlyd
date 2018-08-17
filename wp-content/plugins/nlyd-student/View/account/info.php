@@ -337,10 +337,14 @@
                 dataType:'json',
                 timeout:3000,
                 success: function(data, textStatus, jqXHR){
-                    // console.log(data)
+                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
-                       window.location.reload()
+                        if(data.data.url){
+                            window.location.href=data.data.url
+                        }else{
+                            window.location.reload()
+                        }
                     }
                     return false;
                 }
@@ -353,7 +357,12 @@
             form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
-                console.log(data.field)
+                var match_id=$.Request('match_id')
+                if(match_id!=null){
+                    data.field.match_id=match_id
+                }else{
+                    data.field.match_id=''
+                }
                 sendloginAjax(window.admin_ajax,data.field)
                 return false;
             });

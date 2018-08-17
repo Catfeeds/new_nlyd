@@ -150,6 +150,9 @@ class Student_Matchs extends Student_Home
      */
     public function index(){
 
+        // $a = new TwentyFour();
+        //var_dump($a->calculate(array(2,2,12,9)));
+
         global $wpdb;
 
         $row = $wpdb->get_row('SELECT ID FROM '.$wpdb->prefix.'posts WHERE post_status="publish" AND post_type="match"');

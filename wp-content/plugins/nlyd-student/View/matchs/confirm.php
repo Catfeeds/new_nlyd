@@ -119,7 +119,7 @@
                             <!-- <span class="nl-match-people">28报名</span> -->
                             <div class="nl-match-header width-margin">
                                 <span class="nl-match-name">邮寄地址</span>
-                                <a class="nl-match-people" href="<?=home_url('/account/info/?action=address&match_id='.$_GET['match_id'])?>">增加/修改</a>
+                                <a class="nl-match-people" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
                             </div>
                             <div class="nl-match-body width-margin">
                                 <?php if(!empty($address)){ ?>
@@ -182,6 +182,9 @@ jQuery(function($) {
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{
                         $.alerts(res.data.info)
+                        setTimeout(() => {
+                            window.location.href=res.data.url;
+                        }, 300);
                     }
                 })
                 return false;
@@ -209,7 +212,7 @@ jQuery(function($) {
         }
         $.post(window.admin_ajax,data,function(res){
             if(res.success){
-                window.open(res.data.info); 
+                window.location.href=res.data.info; 
             }else{
                 $.alerts(res.data.info)
             }

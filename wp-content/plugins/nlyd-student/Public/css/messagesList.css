@@ -15,7 +15,7 @@
     color: rgba(116, 116, 116, 1);
 }
 .message-row .message-detail{
-    font-size: 0.13rem;
+    font-size: 0.14rem;
     color: rgba(116, 116, 116, 1);
 }
 .message-row.read .message-detail{
