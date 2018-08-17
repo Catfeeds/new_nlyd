@@ -126,7 +126,7 @@ class Match
         ?>
 
         <p>绑定题目
-            <select class="js-data-example-ajax" name="parent_id" style="width: 90%">
+            <select class="js-data-example-ajax" name="parent_id" style="width: 90%" data-action="get_question_list">
                 <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
             </select>
         </p>
@@ -196,7 +196,7 @@ class Match
     /**
      * 战队队长设置box
      */
-    public function team_leader_meta_box(){
+    public function team_leader_meta_box($post){
         $team_id = intval($_GET['post']);
         global $wpdb;
         $row = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'team_meta AS t 
@@ -206,12 +206,17 @@ class Match
          ON u.ID=m.user_id
          WHERE t.team_id='.$team_id, ARRAY_A);
         ?>
-        <p>队长<input  value="<?=$this->team_meta['team_leader']?>" type="text" name="team[team_leader]"/></p>
-        <p>队长设置<input  value="<?=$row['user_nicename']?>" placeholder="(用户名|昵称|手机)搜索" class="team_leader_director" data-type="student" data-team="<?=$team_id?>" type="text" name="team_leader"/>
+        <p>队长设置
+            <select class="js-data-example-ajax" name="team[team_leader]" style="width: 90%" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>>
+                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
+            </select>
+        </p>
+        <!--<p>队长<input  value="<?/*=$this->team_meta['team_leader']*/?>" type="text" name="team[team_leader]"/></p>-->
+        <!--<p>队长设置<input  value="<?/*=$this->team_meta['team_leader']*/?>" placeholder="(用户名|昵称|手机)搜索" class="team_leader_director" data-type="student" data-team="<?/*=$team_id*/?>" type="text" name="team[team_leader]"/>
             <select name="match_team" id="">
             </select>
             <button class="button confirmLeaderOrDirector" type="button" data-type="leader">确认队长</button> <span id="msg"></span>
-        </p>
+        </p>-->
     <?php }
 
 
@@ -227,7 +232,7 @@ class Match
     /**
      * 战队口号/国籍设置
      */
-    public function team_nationality_meta_box(){
+    public function team_nationality_meta_box($post){
         global $wpdb;
         $rows = $wpdb->get_results("select id,title,code from {$wpdb->prefix}world");
         //print_r($rows);
@@ -255,12 +260,10 @@ class Match
         ?>
 
         <p><label class="post-attributes-label" for="parent_id">战队口号</label><input  value="<?=$this->team_meta['team_slogan'];?>" type="text" name="team[team_slogan]"/></p>
-        <p><label class="post-attributes-label" for="parent_id">战队负责人</label><input  value="<?=$this->team_meta['team_director'];?>" type="text" name="team[team_director]"/></p>
-        <p><label class="post-attributes-label" for="parent_id">战队负责人设置</label><input  value="<?=$row['user_nicename']?>" data-team="<?=$team_id?>" type="text" data-type="coach" class="team_leader_director" name="team_director"/>
-            <select name="match_team_d" id="">
-
+        <p>战队负责人
+            <select class="js-data-example-ajax" name="team[team_director]" style="width: 90%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
+                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
             </select>
-            <button class="button confirmLeaderOrDirector" type="button" data-type="director">确认负责人</button> <span id="msg_d"></span>
         </p>
 
     <?php }

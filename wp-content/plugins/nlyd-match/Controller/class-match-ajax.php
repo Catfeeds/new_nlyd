@@ -406,20 +406,43 @@ class Match_Ajax
      *根据查询条件匹配战队成员列表 学生或者教练
      */
     public function getMemberByWhere(){
-        $team_id = intval($_POST['team_id']);
-        $val = trim($_POST['val']);
-        $type = $_POST['type'];
+        $type = $_GET['team_type'];
+        $team_id = $_GET['team_id'];
+
         switch ($type){
-            case 'student':
+            case 'team_leader': //队长
+                $user_role = 0;
                 $user_type = 1;
                 break;
-            case 'coach':
+            case 'team_director':   //负责人
+                $user_role = 7;
                 $user_type = 2;
                 break;
-            default:
-                wp_send_json_error(['info' => '参数错误!']);
         }
-        if($team_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+
+        $select = "SELECT a.user_id,b.team_id FROM wp_usermeta a ";
+
+        $left_join = "left join {$wpdb->prefix}match_team b on a.user_id = b.user_id
+                      left join {$wpdb->prefix}users c on a.user_id = c.ID";
+
+        $where = " where a.meta_key = 'wp_user_level' AND meta_value = {$user_role} AND b.user_type = {$user_type} AND b.status = 2 ";
+        $where_ = " AND b.team_id = {$team_id} ";
+        if(!empty($_GET['term'])){
+            $where .= "  and (c.user_login like '%{$_GET['term']}%' or c.user_nicename like '%{$_GET['term']}%' or c.user_email like '%{$_GET['term']}%' or c.display_name like '%{$_GET['term']}%') ";
+        }
+        $limit = " limit 0,10 ";
+
+        $sql = $select.$left_join.$where.$where_.$limit;
+
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(empty($rows)){
+            $left_join = " left join {$wpdb->prefix}users b  on a.user_id = b.user_id ";
+            $sql = $select.$left_join.$where.$limit;
+            print_r($sql);die;
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        }
         global $wpdb;
         $rows = $wpdb->get_results('SELECT m.id AS match_team_id,u.user_nicename FROM '.$wpdb->prefix.'match_team m 
          LEFT JOIN '.$wpdb->users.' u 
