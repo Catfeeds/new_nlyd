@@ -71,8 +71,8 @@ jQuery(document).ready(function($) {
                         }
                     }
                 }
-                if($('#getTime').length>0){//最新比赛倒计时
-                    $('#getTime').attr('data-seconds',match_start_time).countdown(function(S, d){//倒计时
+                if($('#getTimes').length>0){//最新比赛倒计时
+                    $('#getTimes').attr('data-seconds',match_start_time).countdown(function(S, d){//倒计时
                         var D=d.day>0 ? d.day+'天' : d.day;
                         var h=d.hour<10 ? '0'+d.hour : d.hour;
                         var m=d.minute<10 ? '0'+d.minute : d.minute;
