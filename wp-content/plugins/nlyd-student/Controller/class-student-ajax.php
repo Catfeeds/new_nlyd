@@ -300,6 +300,7 @@ class Student_Ajax
                         $questions_answer[] = !empty($results) ? $results[0] : '本题无解';
                     }
                     $isRight = array_column($data_arr,'isRight');
+                    //print_r($questions_answer);
                     //die;
                     $count_value = array_count_values($isRight);
                     $len = $count_value['true'];

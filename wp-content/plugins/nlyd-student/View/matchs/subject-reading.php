@@ -97,6 +97,9 @@
                 <div class="a-btn" href="<?=$next_project_url?>">距下一项目开赛 <span class="count_down next_project_down" data-seconds="<?=$next_project_down?>">00:00:00</span></div>
                 <a href="<?=$next_project_url?>">下一项目</a>
                 <?php endif;?>
+                <?php if(empty($next_project_url)):?>
+                    <a href="#">跳到哪儿?</a>
+                <?php endif;?>
             </div>
         </div>           
     </div>
