@@ -1,0 +1,141 @@
+/* 个人中心 */
+.userCenter-wrapper{
+    width: 200px;
+    background-color:#fff;
+    float: left;
+}
+.userCenter-info{
+    background-color: #fff;
+    color: #fff;
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* height: 210px; */
+    border: 1px solid #00000024;
+    border-bottom: none;
+}
+.userCenter-message,
+.userCenter-edit{
+    display: none;
+    position: absolute;
+    top: 10px;
+    color: #fff;
+}
+.userCenter-message{
+    left: 20px;
+}
+.userCenter-edit{
+    right: 20px;
+}
+.userCenter-main{
+    position: relative;
+    background-color: #fff;
+}
+.userCenter-main .userCenter-type{
+    position: absolute;
+    right: -13px;
+    top: 0;
+    text-align: center;
+    background-color: #f5aee4;
+    color: #fff;
+    border-radius: 5px;
+    width: 50px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 1em;
+}
+.userCenter-info>div{
+    text-align: center;
+}
+.userCenter-operations{
+    margin-top: 30px;
+    height: 25px;
+}
+.userCenter-operation{
+    width: calc(50% - 0.5px);
+    float: left;
+     color: #68aafe;
+}
+.userCenter-name{
+    color: #919191;
+    font-weight: 800;
+}
+.userCenter-describe{
+    color: #919191;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+/* 列表 */
+.userCenter-detail{
+    margin: 0!important;
+    border-top: 1px solid #00000024;
+    border-left: 1px solid #00000024;
+    border-right: 1px solid #00000024;   
+}
+.userCenter-detail a{
+    display: block;
+    position: relative;
+    border-bottom: 1px solid #00000024;  
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #747474;
+}
+.userCenter-detail a i{
+    position: absolute;
+    display: none;
+    right: 0;
+    top:0;
+}
+
+@media screen and (max-width: 970px){
+    /* 个人中心 */
+    .userCenter-wrapper{
+        width: 100%;
+        background-color: #f8f6f6;
+    }
+    .userCenter-info{
+        background-color: #6aa6f1;
+        /* height: 280px; */
+        border: none;
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+    .userCenter-name{
+        color: #f6f6f6;
+        font-weight: 800;
+    }
+    .userCenter-describe{
+        color: #f2f4f6;
+    }
+    .userCenter-operations{
+        width: 261px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .userCenter-operation{
+        color: #fff;
+    }
+    .userCenter-operation:first-child{
+        border-right: 1px solid #fff;
+    }
+    .userCenter-message,
+    .userCenter-edit{
+        display: block;
+    }
+
+    /* 列表 */
+    .userCenter-detail{
+        margin:15px 0 0 0!important;
+        padding: 0 20px!important;
+        background-color: #fff;
+        border: none;
+    }
+    .userCenter-detail a{
+        text-align: left;
+    }
+    .userCenter-detail a i{
+        display: block;
+    }
+}
