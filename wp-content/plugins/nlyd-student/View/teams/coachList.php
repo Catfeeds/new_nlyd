@@ -56,7 +56,7 @@
                         <?php if($action == 'myCoach'){?>
                             <p class="no-info-text">您还未设置任何教练</p>
                             <?php
-                                $url = home_url('/teams/coachList');
+                                $url = home_url('/teams/coachList/');
                                 if(!empty($_GET['match_id']) ) $url .= 'match_id/'.$_GET['match_id'];
                             ?>
                             <a class="a-btn" href="<?=$url;?>">去设置我的教练</a>
