@@ -219,10 +219,7 @@
 .team-detail-footer .team-type:last-child{
     margin-right: 0;
 }
-.swiper-content{
-    height: 172px;
-    background: #68AAFE;
-}
+
 @media screen and (max-width: 991px){
     .team-row{
         width: -webkit-calc(100% - 2px);

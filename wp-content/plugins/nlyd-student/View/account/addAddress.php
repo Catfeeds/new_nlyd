@@ -20,7 +20,6 @@
                     <h1 class="mui-title">收货地址管理</h1>
                 </header>
                 <div class="layui-row nl-border nl-content">
-                    <div class="nl-form-tips">为了确保您能收到平台发送证书，奖品等，请如实填写个人信息</div>
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label">姓名</div>
