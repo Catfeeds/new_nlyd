@@ -460,6 +460,11 @@ class Student_Ajax
             'pay_status'=>1,
             'created_time'=>date('Y-m-d H:i:s',time()),
         );
+        //如果报名金额为0, 直接支付成功状态
+        if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
+            $data['pay_status'] = 2;
+        }
+
         //print_r($data);die;
         //开启事务
         $wpdb->startTrans();
@@ -469,10 +474,13 @@ class Student_Ajax
         $serialnumber = createNumber($current_user->ID,$wpdb->insert_id);
         $b = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
 
-        if($b && $a ){
 
+        if($b && $a ){
             $wpdb->commit();
-            wp_send_json_success(array('info' => '请选择支付方式','serialnumber'=>$serialnumber));
+            if($data['pay_status'] == 2){
+                wp_send_json_success(array('info' => '报名成功','serialnumber'=>$serialnumber, 'is_pay' => 0, 'url' => home_url('payment/success/serialnumber/'.$serialnumber)));
+            }
+            wp_send_json_success(array('info' => '请选择支付方式','serialnumber'=>$serialnumber,'is_pay' => 1));
         }else{
 
             $wpdb->rollback();
