@@ -461,7 +461,7 @@ class Student_Ajax
             'created_time'=>date('Y-m-d H:i:s',time()),
         );
         //TODO 测试时 订单价格为0
-//        $_POST['cost'] = 0;
+        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
         if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
             $data['pay_status'] = 2;
