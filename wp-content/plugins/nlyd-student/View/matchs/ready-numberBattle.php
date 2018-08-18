@@ -77,7 +77,7 @@ jQuery(function($) {
             project_id:<?=$_GET['project_id']?>,
             match_more:$('#inputMatchMore').val(),
             my_answer:my_answer,
-            match_action:'numberBattle',
+            match_action:'subjectNumberBattle',
             surplus_time:time,
         }
         $.post(window.admin_ajax,data,function(res){
