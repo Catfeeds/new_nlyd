@@ -91,7 +91,7 @@ class wxpay
         $inputObj->SetTotal_fee($params['price']*100);//总金额
         $inputObj->SetNotify_url($params['notify_url']);
         $inputObj->SetTrade_type('MWEB');
-        $inputObj->SetScene_info('{"h5_info": {"type":"Wap","wap_url": '.home_url().',"wap_name": "国际脑力运动"}}');
+        $inputObj->SetScene_info('{"h5_info": {"type":"Wap","wap_url": '.home_url('payment/success/type/wxpay').',"wap_name": "国际脑力运动"}}');
 
         //签名
         $inputObj->SetSign($this->key);
