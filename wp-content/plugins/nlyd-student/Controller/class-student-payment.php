@@ -21,9 +21,9 @@ class Student_Payment {
 
                 require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
                 //TODO 脑力运动
-                //$interface_config['wx']['api'] = 'wxaee5846345bca60d';
-                //$interface_config['wx']['merchant'] = '1494311232';
-                //$interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
+//                $interface_config['wx']['api'] = 'wxaee5846345bca60d';
+//                $interface_config['wx']['merchant'] = '1494311232';
+//                $interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
 
                 //TODO 测试
                 $interface_config['wx']['api'] = 'wx4b9c68ca93325828';
@@ -120,7 +120,7 @@ class Student_Payment {
 //        var_dump($result);return;
         if($result != false){
             if($result['status']){
-                echo '<script>window.location.href="'.$result['data'].'"</script>';
+                echo '<script>window.location.href="'.$result['data'].'&redirect_url='.urlencode(home_url('payment/success/type/wxpay/serialnumber/'.$order['serialnumber'])).'"</script>';
             }else{
                 echo $result['data'];
             }
