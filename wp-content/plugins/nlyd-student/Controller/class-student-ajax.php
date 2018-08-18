@@ -447,7 +447,7 @@ class Student_Ajax
         if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
 
         $row = $wpdb->get_row("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
-        if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info&match_id='.$_POST['match_id'])));
+        if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
         $data = array(
             'user_id'=>$current_user->ID,
             'match_id'=>$_POST['match_id'],
