@@ -194,7 +194,7 @@ jQuery(function($) {
                             next(lis.join(''),false)
                         }
                         $('.getTimes').countdown(function(s, d){//倒计时
-                            var D=d.day>0 ? d.day : '';
+                            var D=d.day>0 ? d.day+'天' : '';
                             var h=d.hour<10 ? '0'+d.hour : d.hour;
                             var m=d.minute<10 ? '0'+d.minute : d.minute;
                             var s=d.second<10 ? '0'+d.second : d.second;
