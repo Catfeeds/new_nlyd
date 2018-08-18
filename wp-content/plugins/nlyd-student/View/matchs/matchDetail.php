@@ -101,6 +101,9 @@
                         <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
                             <a class="a-btn" href="<?=home_url('/matchs/matching/match_id/'.$_GET['match_id']);?>">进入比赛</a>
                         <?php endif;?>
+                        <?php if($match['match_status'] == -3):?>
+                            <a class="a-btn" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
