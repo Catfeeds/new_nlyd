@@ -245,7 +245,7 @@ jQuery(function($) {
             initBuild(itemLen,items,nandu,isFalse)
             setTimeout(() => {
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-            }, 500);
+            }, 300);
             clearTimeout(timer);
         }
     })
