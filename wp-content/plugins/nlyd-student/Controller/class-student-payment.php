@@ -137,6 +137,7 @@ class Student_Payment {
      * 微信H5支付回调
      */
     public function wx_notifyUrl(){
+        file_put_contents('wxNofity.txt', date('Y-m-d H:i:s').'执行微信支付回调');
         //返回结果示例
 //        $foo = '<xml>
 //  <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
