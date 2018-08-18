@@ -507,6 +507,7 @@ p.share-font{
 }
 .content .nl-table td{
 font-size:0.12rem;
+padding:0;
 }
 @media screen and (min-width: 992px){
     .nl-page-form{

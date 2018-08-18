@@ -112,21 +112,6 @@
 
 <script>
 jQuery(function($) { 
-    $.ajax({type:'HEAD', async: false})
-    .success(function(data, status, xhr){
-        var end_time = new Date($('#time_count').attr('data-end')).getTime();//月份是实际月份-1
-        var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-        var sys_second = (end_time-serverTimes)/1000;
-        $('#time_count').attr('data-seconds',sys_second).countdown(function(s, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-        $(this).text(time);
-    });
-    });
-
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -145,6 +130,17 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax,postData,function(res,ajaxStatu,xhr){
+                    var end_time = new Date($('#time_count').attr('data-end')).getTime();//月份是实际月份-1
+                    var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
+                    var sys_second = (end_time-serverTimes)/1000;
+                    $('#time_count').attr('data-seconds',sys_second).countdown(function(s, d){//倒计时
+                        var D=d.day>0 ? d.day+'天' : '';
+                        var h=d.hour<10 ? '0'+d.hour : d.hour;
+                        var m=d.minute<10 ? '0'+d.minute : d.minute;
+                        var s=d.second<10 ? '0'+d.second : d.second;
+                        var time=D+h+':'+m+':'+s;
+                        $(this).text(time);
+                    });
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var dom='<tr>'
