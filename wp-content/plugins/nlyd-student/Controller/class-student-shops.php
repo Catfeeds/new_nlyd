@@ -28,8 +28,16 @@ class Student_Shops
     }
 
     public function index(){
+        global $wpdb;
+        $rows = $wpdb->get_results('SELECT 
+        id,goods_title,goods_intro,images,brain,stock,sales,price 
+        FROM '.$wpdb->prefix.'goods WHERE shelf=1', ARRAY_A);
+        foreach ($rows as &$row){
+            $row['images'] = unserialize($row['images']);
+        }
+//        var_dump($rows);
         $view = student_view_path.'shop.php';
-        load_view_template($view);
+        load_view_template($view, ['rows' => $rows]);
     }
    
     /**

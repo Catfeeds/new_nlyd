@@ -338,7 +338,7 @@ if(!class_exists('GoodsController')){
                                     </th>
                                     <style type="text/css">
                                         .logoImg{
-                                            width: 20em;
+                                            width: <?php echo (is_mobile() ? '99%;' : '20em;');?>
                                         }
                                         #template{
                                             display: none;
