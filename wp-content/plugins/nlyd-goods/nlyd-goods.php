@@ -20,13 +20,23 @@ if(!class_exists('GoodsController')){
 
         public function main(){
 
-            add_action('admin_menu',array($this,'add_submenu'));
+            define( 'leo_goods_path', plugin_dir_path( __FILE__ ) );
+            define( 'leo_goods_url', plugins_url('',__FILE__ ) );
+            define( 'leo_goods_version','1.0' );//样式版本
+            define( 'goods_js_url', leo_goods_url.'/Public/js/' );
 
+
+
+            add_action('admin_menu',array($this,'add_submenu'));
             add_action('admin_enqueue_scripts', array($this,'scripts_default'));
-//
 //            add_action( 'wp_ajax_saveInterface',array($this,'saveInterface'));
 //            add_action( 'wp_ajax_saveLogo',array($this,'saveLogo'));
 //            add_action( 'wp_ajax_saveBanner',array($this,'saveBanner'));
+            add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+
+
+            //引入ajax操作文件
+            include_once(leo_goods_path.'/Controller/class-goods-ajax.php');
         }
 
         public function add_submenu(){
@@ -41,13 +51,239 @@ if(!class_exists('GoodsController')){
          * 商品列表
          */
         public function goodsLists(){
+            global $wpdb;
+            $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
+            $pageSize = 20;
+            $start = ($page-1)*$pageSize;
+            //上下架
+            $shelftype = isset($_GET['shelftype']) ? intval($_GET['shelftype']) : 0;
+            switch ($shelftype){
+                case 1:
+                    $shelfWhere = 'shelf=1';
+                    break;
+                case 2:
+                    $shelfWhere = 'shelf=2';
+                    break;
+                default:
+                    $shelfWhere = '1=1';
+            }
+            $rows = $wpdb->get_results('
+            SELECT SQL_CALC_FOUND_ROWS id,goods_title,goods_intro,price,brain,stock,sales,shelf,
+            CASE shelf 
+            WHEN 1 THEN "<span style=\'color:#02892E;\'>上架</span>" 
+            WHEN 2 THEN "<span style=\'color:#902800;\'>下架</span>" 
+            END AS shelf_name 
+            FROM '.$wpdb->prefix.'goods 
+            WHERE '.$shelfWhere.' 
+            ORDER BY `id` DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 
+            $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+            $pageAll = ceil($count['count']/$pageSize);
+            $pageHtml = paginate_links( array(
+                'base' => add_query_arg( 'cpage', '%#%' ),
+                'format' => '',
+                'prev_text' => __('&laquo;'),
+                'next_text' => __('&raquo;'),
+                'total' => $pageAll,
+                'current' => $page
+            ));
+            ?>
+            <div class="wrap">
+                <h1 class="wp-heading-inline">商品</h1>
+
+                <a href="?page=goods-add" class="page-title-action">添加商品</a>
+                <hr class="wp-header-end">
+
+
+                <h2 class="screen-reader-text">过滤用户列表</h2><ul class="subsubsub">
+                    <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（9）</span></a> |</li>
+                    <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>
+                    <li class="editor"><a href="users.php?role=editor">教练<span class="count">（4）</span></a> |</li>
+                    <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（4）</span></a></li>
+                </ul>
+                <form method="get">
+
+                    <p class="search-box">
+                        <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                        <input type="search" id="user-search-input" name="s" value="">
+                        <input type="submit" id="search-submit" class="button" value="搜索用户"></p>
+
+                    <input type="hidden" id="_wpnonce" name="_wpnonce" value="1f250f719f"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+
+                        <div class="alignleft actions bulkactions">
+                            <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
+                                <option value="-1">批量操作</option>
+                                <option value="delete">删除</option>
+                            </select>
+                            <input type="submit" id="doaction" class="button action" value="应用">
+                        </div>
+                        <div class="alignleft actions">
+                            <label class="screen-reader-text" for="new_role">将上架状态变更为…</label>
+                            <select name="new_role" id="new_role">
+                                <option value="0" <?php if($shelftype == 0) echo 'selected="selected"' ?>>将上架状态变更为…</option>
+
+                                <option value="1" <?php if($shelftype == 1) echo 'selected="selected"' ?>>上架</option>
+                                <option value="2" <?php if($shelftype == 2) echo 'selected="selected"' ?>>下架</option>
+                            </select>
+                            <input type="button" onclick="window.location.href='<?='?page=goods&shelftype='?>'+document.getElementById('new_role').value" name="changeit" id="changeit" class="button" value="更改">
+                        </div>
+                        <div class="tablenav-pages one-page">
+                            <span class="displaying-num"><?=$count['count']?>个项目</span>
+                         <?=$pageHtml?>
+                        </div>
+                        <br class="clear">
+                    </div>
+
+
+                    <h2 class="screen-reader-text">商品列表</h2><table class="wp-list-table widefat fixed striped users">
+                        <thead>
+                        <tr>
+                            <td id="cb" class="manage-column column-cb check-column">
+                                <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                                <input id="cb-select-all-1" type="checkbox">
+                            </td>
+                            <th scope="col" id="goods_title" class="manage-column column-goods_title column-primary sortable desc">
+                                <span>商品名称</span>
+                            </th>
+                            <th scope="col" id="goods_shelf_name" class="manage-column column-goods_shelf_name">上架状态</th>
+                            <th scope="col" id="goods_intro" class="manage-column column-goods_intro">商品简介</th>
+                            <th scope="col" id="goods_price" class="manage-column column-goods_price">商品价格</th>
+                            <th scope="col" id="goods_brain" class="manage-column column-goods_brain">可用脑币</th>
+                            <th scope="col" id="goods_stock" class="manage-column column-goods_stock">商品库存</th>
+                            <th scope="col" id="goods_sales" class="manage-column column-goods_sales">商品销量</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody id="the-list" data-wp-lists="list:user">
+
+                        <?php foreach ($rows as $row) { ?>
+
+                            <tr id="" data-id="<?=$row['id']?>">
+                                <th scope="row" class="check-column">
+                                    <label class="screen-reader-text" for="user_5"></label>
+                                    <input type="checkbox" name="users[]" id="user_5" class="subscriber" value="5">
+                                </th>
+                                <td class="goods_title column-goods_title has-row-actions column-primary" data-colname="商品名称">
+                                    <strong><?=$row['goods_title']?></strong>
+                                    <br>
+                                    <div class="row-actions">
+                                        <span class="edit"><a href="?page=goods-add&goodsId=<?=$row['id']?>">编辑</a> |</span>
+                                        <?php if($row['shelf'] == 1){ ?>
+                                            <span class="delete"><a class="lower" href="javascript:;">下架</a> </span>
+                                        <?php }elseif ($row['shelf'] == 2){ ?>
+                                            <span class="edit"><a href="javascript:;" class="upper" style="color: #02892E">上架</a> </span>
+                                        <?php } ?>
+<!--                                        <span class="view"><a href="http://127.0.0.1/nlyd/author/13982242710/" aria-label="阅读13982242710的文章">查看</a></span-->
+                                    </div>
+                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                                </td>
+                                <td class="goods_intro column-goods_shelf_name" data-colname="上架状态">
+                                    <?=$row['shelf_name']?>
+                                </td>
+                                <td class="goods_intro column-goods_intro" data-colname="商品简介">
+                                    <span aria-hidden="true"><?=$row['goods_intro']?></span>
+                                    <span class="screen-reader-text">无</span>
+                                </td>
+                                <td class="goods_price column-goods_price" data-colname="商品价格"><?=$row['price']?></td>
+                                <td class="goods_brain column-goods_brain" data-colname="可用脑币"><?=$row['brain']?></td>
+                                <td class="goods_stock column-goods_stock" data-colname="商品库存"><?=$row['stock']?></td>
+                                <td class="gods_sales column-gods_sales" data-colname="商品销量"><?=$row['sales']?></td>
+
+                            </tr>
+                        <?php } ?>
+
+                        <tfoot>
+                        <tr>
+                            <td class="manage-column column-cb check-column">
+                                <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                                <input id="cb-select-all-2" type="checkbox">
+                            </td>
+                            <th scope="col" class="manage-column column-goods_title column-primary sortable desc">
+                                    <span>商品名称</span>
+                            </th>
+                            <th scope="col" class="manage-column column-goods_shelf_name">上架状态</th>
+                            <th scope="col" class="manage-column column-goods_intro">商品简介</th>
+                            <th scope="col" class="manage-column column-goods_price">商品价格</th>
+                            <th scope="col" class="manage-column column-goods_brain">可用脑币</th>
+                            <th scope="col" class="manage-column column-goods_stock">商品库存</th>
+                            <th scope="col" class="manage-column column-goods_sales">商品销量</th>
+
+                        </tr>
+                        </tfoot>
+
+                    </table>
+                    <div class="tablenav bottom">
+
+                        <div class="alignleft actions bulkactions">
+                            <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
+                                <option value="-1">批量操作</option>
+                                <option value="delete">删除</option>
+                            </select>
+                            <input type="submit" id="doaction2" class="button action" value="应用">
+                        </div>
+                        <div class="alignleft actions">
+                            <label class="screen-reader-text" for="new_role2">将上架状态变更为…</label>
+                            <select name="new_role2" id="new_role2">
+                                <option value="0" <?php if($shelftype == 0) echo 'selected="selected"' ?>>将上架状态变更为…</option>
+
+                                <option value="1" <?php if($shelftype == 1) echo 'selected="selected"' ?>>上架</option>
+                                <option value="2" <?php if($shelftype == 2) echo 'selected="selected"' ?>>下架</option>
+                            </select>
+                            <input type="button" name="changeit2" onclick="window.location.href='<?='?page=goods&shelftype='?>'+document.getElementById('new_role2').value" id="changeit2" class="button" value="更改">		</div>
+                        <div class="tablenav-pages one-page">
+                            <span class="displaying-num"><?=$count['count']?>个项目</span>
+                            <?=$pageHtml?>
+                        </div>
+                        <br class="clear">
+                    </div>
+                </form>
+
+                <br class="clear">
+            </div>
+            <?php
         }
 
         /**
          * 新增商品
          */
         public function addGoods(){
+            global $wpdb;
+            if(is_post()){
+                //去除空数组
+                $imagesArr = [];
+                if(is_array($_POST['goods_images'])){
+                    foreach ($_POST['goods_images'] as $image){
+                        if(empty($image)) continue;
+                        $imagesArr[] = $image;
+                    }
+                }
+                //插入数据
+                $data = [
+                  'goods_title' => trim($_POST['goods_title']),
+                  'goods_intro' => trim($_POST['goods_intro']),
+                  'price' => trim($_POST['goods_price']),
+                  'brain' => trim($_POST['goods_brain']),
+                  'stock' => trim($_POST['goods_stock']),
+                  'sales' => trim($_POST['goods_sales']),
+                  'images' => serialize($imagesArr),
+                ];
+                //是否存在id
+                if(($goodsId = intval($_POST['goods_id'])) > 0){
+                    $bool = $wpdb->update($wpdb->prefix.'goods', $data, ['id' => $goodsId]);
+                }else{
+                    $bool = $wpdb->insert($wpdb->prefix.'goods', $data);
+                }
+                if($bool) echo '<script type="text/javascript"> alert("编辑商品成功") </script>';
+                else echo '<script type="text/javascript"> alert("编辑商品失败") </script>';
+            }
+            if(isset($_GET['goodsId'])){
+                $id = intval($_GET['goodsId']);
+                if($id > 0){
+                    $row = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'goods WHERE id='.$id, ARRAY_A);
+                }
+            }
+
             ?>
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
                 <div id="screen-meta" class="metabox-prefs">
@@ -55,89 +291,96 @@ if(!class_exists('GoodsController')){
 
                 </div>
 
-
                 <div class="wrap">
                     <h1>添加商品</h1>
 
-                        <form method="post" action="options.php" novalidate="novalidate">
+                        <form method="post" action="" novalidate="novalidate" enctype="multipart/form-data">
                             <table class="form-table">
 
                                 <tbody><tr>
                                     <th scope="row"><label for="goods_title">商品名称</label></th>
-                                    <td><input name="goods_title" type="text" id="goods_title" value="" class="goods_title-text"></td>
+                                    <td><input name="goods_title" type="text" id="goods_title" value="<?=isset($row['goods_title']) ? $row['goods_title'] : ''?>" class="goods_title-text"></td>
                                 </tr>
 
                                 <tr>
                                     <th scope="row"><label for="goods_intro">商品简介</label></th>
-                                    <td><input name="goods_intro" type="text" id="goods_intro" aria-describedby="goods_intro-description" value="" class="regular-text">
+                                    <td><input name="goods_intro" type="text" id="goods_intro" aria-describedby="goods_intro-description" value="<?=isset($row['goods_intro']) ? $row['goods_intro'] : ''?>" class="regular-text">
                                         <p class="description" id="goods_intro-description">用简洁的文字描述商品。</p></td>
                                 </tr>
 
                                 <tr>
                                     <th scope="row"><label for="goods_price">商品价格</label></th>
-                                    <td><input name="goods_price" type="text" id="goods_price" aria-describedby="goods_price-description" value="" class="goods_price-text">
+                                    <td><input name="goods_price" type="text" id="goods_price" aria-describedby="goods_price-description" value="<?=isset($row['price']) ? $row['price'] : ''?>" class="goods_price-text">
                                         <p class="description" id="goods_price-description">默认0.00</p></td>
                                 </tr>
 
                                 <tr>
                                     <th scope="row"><label for="goods_brain">使用脑币</label></th>
-                                    <td><input name="goods_brain" type="text" id="goods_brain" aria-describedby="goods_brain-description" value="" class="goods_brain-text">
+                                    <td><input name="goods_brain" type="text" id="goods_brain" aria-describedby="goods_brain-description" value="<?=isset($row['brain']) ? $row['brain'] : ''?>" class="goods_brain-text">
     <!--                                    <p class="description" id="goods_brain-description">需要</p></td>-->
                                 </tr>
 
                                 <tr>
                                     <th scope="row"><label for="goods_stock">商品库存</label></th>
-                                    <td><input name="goods_stock" type="text" id="goods_stock" aria-describedby="goods_stock-description" value="" class="goods_stock-text">
+                                    <td><input name="goods_stock" type="text" id="goods_stock" aria-describedby="goods_stock-description" value="<?=isset($row['stock']) ? $row['stock'] : ''?>" class="goods_stock-text">
     <!--                                    <p class="description" id="goods_brain-description">需要</p></td>-->
                                 </tr>
 
                                 <tr>
                                     <th scope="row"><label for="goods_sales">商品销量</label></th>
-                                    <td><input name="goods_sales" type="text" id="goods_sales" aria-describedby="goods_sales-description" value="" class="goods_sales-text">
+                                    <td><input name="goods_sales" type="text" id="goods_sales" aria-describedby="goods_sales-description" value="<?=isset($row['sales']) ? $row['sales'] : ''?>" class="goods_sales-text">
     <!--                                    <p class="description" id="goods_brain-description">需要</p></td>-->
                                 </tr>
+                                <tr>
 
+                                    <th>
+                                        商品相册:
+                                        <input type="button" id="add-banner" class="button button-primary" value="添加">
+                                    </th>
+                                    <style type="text/css">
+                                        .logoImg{
+                                            width: 20em;
+                                        }
+                                        #template{
+                                            display: none;
+                                        }
+                                    </style>
+                                   <td>
+                                       <div id="pro-box">
+
+                                           <?php
+                                           if(isset($row) && is_array(unserialize($row['images']))) {
+                                               foreach (unserialize($row['images']) as $image) {
+                                           ?>
+                                                  <p>
+                                                      <input type="text" size="60" value="<?=$image?>" name="goods_images[]" class="upload_input">
+                                                      <img src="<?=$image?>" class="logoImg">
+                                                      <a class="upload_button button" href="#">上传</a>
+                                                      <a class="del_button button" href="#">删除</a>
+                                                  </p>
+                                           <?php
+                                               }
+                                           }
+                                           ?>
+
+
+
+                                       </div>
+                                   </td>
+
+
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="保存更改"></p>
+                                        <input type="hidden" name="goods_id" value="<?=isset($row['id']) ? $row['id'] : 0?>">
+                                    </th>
+                                </tr>
                                 </tbody>
                             </table>
                         </form>
-                    <style type="text/css">
-                        .logoImg{
-                            width: 20em;
-                        }
-                    </style>
-                        <form name="interface" id="interface" class="validate interface" novalidate="novalidate">
-
-                            <input name="action" type="hidden" value="saveBanner">
-                            banner上传:
-                            <div id="pro-box">
-                                <p>
-                                    <input type="text" size="60" value="http://127.0.0.1/new_nlyd/wp-content/uploads/2018/07/leo.jpg" name="index_banner_url[]" class="upload_input">
-                                    <img src="http://127.0.0.1/new_nlyd/wp-content/uploads/2018/07/leo.jpg" class="logoImg">
-                                    <a class="upload_button button" href="#">上传</a>
-                                    <a class="del_button button" href="#">删除</a>
-                                </p>
-                                <p>
-                                    <input type="text" size="60" value="http://127.0.0.1/new_nlyd/wp-content/uploads/2018/08/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg" name="index_banner_url[]" class="upload_input">
-                                    <img src="http://127.0.0.1/new_nlyd/wp-content/uploads/2018/08/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg" class="logoImg">
-                                    <a class="upload_button button" href="#">上传</a>
-                                    <a class="del_button button" href="#">删除</a>
-                                </p>
-
-                            </div>
-                            <!--        <p>-->
-                            <!--            <input type="text" size="60" value="" name="index_banner_url[]" class="upload_input"/>-->
-                            <!--            <img src="--><!--?//=!empty($logo_url) ? $logo_url : '';?--><!--" class="logoImg">-->
-                            <!--            <a class="upload_button button" href="#">上传</a>-->
-                            <!--        </p>-->
 
 
-                            <p class="submit">
-                                <input type="submit" id="interfaceSub" class="button button-primary" value="提交">
-                                <input type="button" id="add-banner" class="button button-primary" value="添加">
-                            </p>
-                        </form>
-
-                        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="保存更改"></p></form>
 
                 </div>
 
@@ -145,7 +388,16 @@ if(!class_exists('GoodsController')){
                 <div class="clear">
 
                 </div>
+                <div id="template">
+                    <p>
+                        <input type="text" size="60" value="" name="goods_images[]" class="upload_input"/>
+                        <img src="" class="logoImg">
+                        <a class="upload_button button" href="#">上传</a>
+                        <a class="del_button button" href="#">删除</a>
+                    </p>
+                </div>
             </div>
+            <?php wp_enqueue_media();?>
             <script>
                 jQuery(document).ready(function($){
                     var upload_frame;
@@ -209,195 +461,6 @@ if(!class_exists('GoodsController')){
             require_once( leo_user_interface_path . 'view/banner.php' );
         }
 
-        /**
-         * logo设置
-         */
-        public function my_submenu_page_logo(){
-            $logo_url = get_option('logo_url');
-            require_once( leo_user_interface_path . 'view/logo.php' );
-        }
-
-        /**
-         * 页面以及数据处理
-         */
-        public function my_submenu_page_display(){
-
-            $interface_config = get_option('interface_config');
-
-            $config = $this->getConfig();
-
-            require_once( leo_user_interface_path . 'view/view.php' );
-        }
-
-        public function getConfig(){
-
-            return array(
-                'smtp'=>array(
-                    'title'=>'邮件',
-                    'tag'=>array(
-                        array(
-                            'title'=>'SMTP服务器',
-                            'name'=>'host',
-                            'placeholder'=>'邮件发送所需SMTP服务器',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'SMTP服务器端口',
-                            'name'=>'port',
-                            'placeholder'=>'邮件发送所需SMTP服务器端口',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'SMTP服务器用户名',
-                            'name'=>'user_name',
-                            'placeholder'=>'邮件发送所需SMTP服务器帐号',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'SMTP服务器密码',
-                            'name'=>'user_pass',
-                            'placeholder'=>'邮件发送所需SMTP服务器密码',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'SMTP服务授权码',
-                            'name'=>'user_warrant',
-                            'placeholder'=>'邮件发送所需SMTP服务授权码',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'发件人email',
-                            'name'=>'from_email',
-                            'placeholder'=>'一般设置为服务器用户名',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'发件人名称',
-                            'name'=>'from_name',
-                            'placeholder'=>'邮件发送所需发件人名称',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'回复人email',
-                            'name'=>'reply_email',
-                            'placeholder'=>'留空则为发件人email',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'回复人名称',
-                            'name'=>'reply_name',
-                            'placeholder'=>'留空则为发件人名称',
-                            'type'=>'input'
-                        ),
-                    )
-                ),
-                'sms'=>array(
-                    'title'=>'短信',
-                    'tag'=>array(
-                        array(
-                            'title'=>'短信网关',
-                            'name'=>'host',
-                            'placeholder'=>'发送短信所需网关url接口',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'短信KeyId',
-                            'name'=>'key',
-                            'placeholder'=>'发送短信所需API_KEY',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'短信KeySecret',
-                            'name'=>'secret',
-                            'placeholder'=>'发送短信所需API_Secret',
-                            'type'=>'input'
-                        ),
-                    )
-                ),
-                'zfb'=>array(
-                    'title'=>'支付宝',
-                    'tag'=>array(
-                        array(
-                            'title'=>'支付宝网关',
-                            'name'=>'host',
-                            'placeholder'=>'支付宝调用所需url接口',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'支付宝APP_ID',
-                            'name'=>'api',
-                            'placeholder'=>'支付宝调用所需APP_ID',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'支付宝支付密钥',
-                            'name'=>'secret_key',
-                            'placeholder'=>'支付宝调用所需微信支付密钥',
-                            'type'=>'input'
-                        ),
-                    )
-                ),
-                'wx'=>array(
-                    'title'=>'微信',
-                    'tag'=>array(
-                        array(
-                            'title'=>'微信网关',
-                            'name'=>'host',
-                            'placeholder'=>'微信调用所需url接口',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'微信APP_ID',
-                            'name'=>'api',
-                            'placeholder'=>'微信调用所需APP_ID',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'微信AppSecret',
-                            'name'=>'secret',
-                            'placeholder'=>'AppSecret(应用密钥)',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'微信支付商户号',
-                            'name'=>'merchant',
-                            'placeholder'=>'微信调用所需微信支付商户号',
-                            'type'=>'input'
-                        ),
-                        array(
-                            'title'=>'微信支付密钥',
-                            'name'=>'secret_key',
-                            'placeholder'=>'微信调用所需微信支付密钥',
-                            'type'=>'input'
-                        ),
-
-                    )
-                ),
-                'login'=>array(
-                    'title'=>'第三方登录',
-                    'tag'=>array(
-                        array(
-                            'title'=>'微信登录',
-                            'name'=>'wx_login',
-                            'placeholder'=>'控制微信登录开启/关闭',
-                            'type'=>'checkbox'
-                        ),
-                        array(
-                            'title'=>'QQ登录',
-                            'name'=>'qq_login',
-                            'placeholder'=>'控制QQ登录开启/关闭',
-                            'type'=>'checkbox'
-                        ),
-                        array(
-                            'title'=>'其他登录',
-                            'name'=>'other_login',
-                            'placeholder'=>'控制其他第三方登录开启/关闭',
-                            'type'=>'checkbox'
-                        ),
-                    )
-                ),
-            );
-        }
 
         /**
          * 引入js/css
@@ -464,6 +527,22 @@ if(!class_exists('GoodsController')){
                 wp_send_json_error('保存失败');
             }
         }
+
+        /**
+         * css / js
+         */
+        public function register_scripts(){
+            switch ($_GET['page']){
+                case 'goods':
+                    wp_register_script('lists-js',goods_js_url.'lists.js');
+                    wp_enqueue_script( 'lists-js' );
+//                    wp_register_style('list-css',match_css_url.'order-lists.css');
+//                    wp_enqueue_style( 'list-css' );
+                    break;
+            }
+            echo "<script>var ajax_url='".admin_url('admin-ajax.php' )."';</script>";
+        }
     }
+
 }
 new GoodsController();
