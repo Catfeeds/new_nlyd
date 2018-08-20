@@ -5,7 +5,7 @@
 .news-prev{
     display: block;
    color:  RGBA(104, 170, 254, 1);
-   width: 40px;
+   width: 45px;
    text-align: left;
    cursor: pointer;
    float: left;
@@ -14,14 +14,14 @@
     display: block;
     color:  RGBA(104, 170, 254, 1);
     text-align: right;
-    width: 40px;
+    width: 45px;
     cursor: pointer;
     float: left;
  }
  .news-name{
     float: left;
-    width: -webkit-calc(100% - 80px);
-    width: calc(100% - 80px);
+    width: -webkit-calc(100% - 90px);
+    width: calc(100% -90px);
     text-align: center;
     font-size: 0.16rem;
     color: RGBA(38, 38, 38, 1);
@@ -54,3 +54,11 @@
       color: RGBA(38, 38, 38, 0.6);
       text-indent: 0.28rem;
  }
+ @media screen and (max-width: 991px){
+    .article-top-bar{
+        display: none;
+    }
+}
+@media screen and (min-width: 992px){
+
+}
