@@ -35,14 +35,14 @@
                             <div class="matching-key number rand" date-number="" data-index='2'></div>
                             <div class="matching-key number rand" date-number="" data-index='3'></div>
                             <div class="matching-key number rand" date-number="" data-index='4'></div>
-                            <div class="matching-key number" date-number="(">(</div>
+                            <div class="matching-key number leftBrackets" date-number="(">(</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="+">+</div>
-                            <div class="matching-key number" date-number="-">-</div>
-                            <div class="matching-key number" date-number="*">×</div>
-                            <div class="matching-key number" date-number="/">÷</div>
-                            <div class="matching-key number" date-number=")">)</div>
+                            <div class="matching-key number operator" date-number="+">+</div>
+                            <div class="matching-key number operator reduce" date-number="-">-</div>
+                            <div class="matching-key number operator" date-number="*">×</div>
+                            <div class="matching-key number operator" date-number="/">÷</div>
+                            <div class="matching-key number rightBrackets" date-number=")">)</div>
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="matching-key" id="del">删除</div>
@@ -158,22 +158,67 @@ jQuery(function($) {
                     $('.answer').text(number)
                     $('.number').removeClass('disabled')
                 }else{
+                    var len=text.length;
+                    var x=text.charAt(len-1,1);
                     if(!isNaN(parseInt(number))){//数字，前一位必须是符号
-                        var len=text.length;
                         if(len>0){
-                            var x=text.charAt(len-1,1);
-                            if(isNaN(parseInt(x))){
+                            if(isNaN(parseInt(x)) && x!==')'){
                                 $('.answer').text(text+number)
                                 _this.addClass('disabled')
                                 dataIndex.push(_this.attr('data-index'))
                             }
                         }else{
+
                             $('.answer').text(text+number)
                             _this.addClass('disabled')
                             dataIndex.push(_this.attr('data-index'))
                         }
                     }else{//符号
-                        $('.answer').text(text+number)
+                        var flag=false
+                        if(len>0){
+                            if(_this.hasClass('operator')){//运算符
+                                if(x===')'){
+                                    flag=true
+                                }
+                                if (_this.hasClass('reduce')) {//减号
+                                   if(x==='(' || !isNaN(parseInt(x))){
+                                       flag=true   
+                                   }
+                                }else{
+                                    if(!isNaN(parseInt(x))){
+                                        flag=true  
+                                    }
+                                }
+                            }
+                            if(_this.hasClass('leftBrackets')){//左括号
+                                if(isNaN(parseInt(x)) && x!==")"){
+                                        flag=true
+                                }   
+                            }
+                            if(_this.hasClass('rightBrackets')){//右括号
+                                var leftBracket = 0, rightBracket = 0;
+                                for (var i = 0; i < text.length; i++) {
+                                    if (text.charAt(i) === "(") {
+                                        leftBracket++;
+                                    } else if(text.charAt(i) === ")") {
+                                        rightBracket++;
+                                    }
+                                }
+                                if(leftBracket>rightBracket){
+                                    if(!isNaN(parseInt(x)) || x=== ")"){
+                                        flag=true
+                                    }
+                                        
+                                } 
+                            }
+                        }else{
+                            if (_this.hasClass('reduce') || _this.hasClass('leftBrackets')) {//减号//左括号
+                                flag=true  
+                            }
+                        }
+                        if(flag){
+                            $('.answer').text(text+number) 
+                        }
                     }
                 }
             }
@@ -278,7 +323,7 @@ jQuery(function($) {
                         setTimeout(() => {
                             initQuestion()
                             nextQuestion()
-                        }, 100);
+                        }, 200);
                         _this.removeClass('disabled')
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {

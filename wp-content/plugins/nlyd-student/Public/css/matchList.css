@@ -251,4 +251,7 @@ p.long-name{
     .countdown-time{
         padding-bottom: 10px;
     }
+    .layui-tab-brief[overflow]>.layui-tab-title .layui-this:after{
+        top: auto;
+    }
 }

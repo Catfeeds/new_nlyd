@@ -147,7 +147,7 @@
                     <a href="<?=$next_project_url?>">进入下一项比赛</a>
                 <?php endif;?>
                 <?php if(empty($next_project_url)):?>
-                    <a href="#">跳到哪儿?</a>
+                    <a class="a-btn" href="#">比赛结束,查看详情</a>
                 <?php endif;?>
             </div>
         </div>           
