@@ -95,27 +95,24 @@ if(!class_exists('GoodsController')){
                 <hr class="wp-header-end">
 
 
-                <h2 class="screen-reader-text">过滤用户列表</h2><ul class="subsubsub">
-                    <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（9）</span></a> |</li>
-                    <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>
-                    <li class="editor"><a href="users.php?role=editor">教练<span class="count">（4）</span></a> |</li>
-                    <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（4）</span></a></li>
-                </ul>
                 <form method="get">
 
                     <p class="search-box">
-                        <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                        <label class="screen-reader-text" for="user-search-input">搜索商品:</label>
                         <input type="search" id="user-search-input" name="s" value="">
-                        <input type="submit" id="search-submit" class="button" value="搜索用户"></p>
+                        <input type="button" id="search-submit" class="button" value="搜索商品">
+                    </p>
 
                     <input type="hidden" id="_wpnonce" name="_wpnonce" value="1f250f719f"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
                         <div class="alignleft actions bulkactions">
-                            <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
-                                <option value="-1">批量操作</option>
-                                <option value="delete">删除</option>
+                            <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                            <select name="action" id="bulk-action-selector-top">
+                                <option value="0">批量操作</option>
+                                <option value="1">上架</option>
+                                <option value="2">下架</option>
                             </select>
-                            <input type="submit" id="doaction" class="button action" value="应用">
+                            <input type="button" id="doaction" class="button action batch" value="应用">
                         </div>
                         <div class="alignleft actions">
                             <label class="screen-reader-text" for="new_role">将上架状态变更为…</label>
@@ -162,7 +159,7 @@ if(!class_exists('GoodsController')){
                             <tr id="" data-id="<?=$row['id']?>">
                                 <th scope="row" class="check-column">
                                     <label class="screen-reader-text" for="user_5"></label>
-                                    <input type="checkbox" name="users[]" id="user_5" class="subscriber" value="5">
+                                    <input type="checkbox" name="users[]" id="user_5" class="subscriber check-children" value="<?=$row['id']?>">
                                 </th>
                                 <td class="goods_title column-goods_title has-row-actions column-primary" data-colname="商品名称">
                                     <strong><?=$row['goods_title']?></strong>
@@ -216,11 +213,13 @@ if(!class_exists('GoodsController')){
                     <div class="tablenav bottom">
 
                         <div class="alignleft actions bulkactions">
-                            <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
-                                <option value="-1">批量操作</option>
-                                <option value="delete">删除</option>
+                            <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                            <select name="action2" id="bulk-action-selector-bottom">
+                                <option value="0">批量操作</option>
+                                <option value="1">上架</option>
+                                <option value="2">下架</option>
                             </select>
-                            <input type="submit" id="doaction2" class="button action" value="应用">
+                            <input type="button" id="doaction2" class="button action batch" value="应用">
                         </div>
                         <div class="alignleft actions">
                             <label class="screen-reader-text" for="new_role2">将上架状态变更为…</label>
