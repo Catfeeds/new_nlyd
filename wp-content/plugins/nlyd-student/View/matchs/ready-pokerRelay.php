@@ -80,7 +80,7 @@ jQuery(function($) {
             project_id:<?=$_GET['project_id']?>,
             match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1 ?>,
             my_answer:my_answer,
-            match_action:'pokerRelay',
+            match_action:'subjectPokerRelay',
             surplus_time:time,
         }
         $.post(window.admin_ajax,data,function(res){

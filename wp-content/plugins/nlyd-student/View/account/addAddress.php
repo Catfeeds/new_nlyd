@@ -26,6 +26,7 @@
                             <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="请填写收货人姓名" class="nl-input nl-foucs" lay-verify="required">
                             <input name='action' value='save_address' type="hidden">
                             <input type="hidden" name="_wpnonce"  value="<?=wp_create_nonce('student_save_address_code_nonce');?>">
+                            <input type="hidden" name="id"  value="<?php echo isset($row['id']) ? $row['id'] : 0; ?>">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label">国家</div>

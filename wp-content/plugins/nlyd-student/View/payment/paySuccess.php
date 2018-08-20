@@ -36,8 +36,8 @@
 </div>
 
 <script>
-jQuery(function($) { 
-
-
-})
+// jQuery(function($) {
+//
+//
+// })
 </script>

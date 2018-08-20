@@ -185,6 +185,11 @@ jQuery(function($) {
             form.on('submit(pay-formbtn)', function(data){
                 $.post(window.admin_ajax,data.field,function(res){
                     if(res.success){
+                        //不需要支付
+                        if(res.data.is_pay == 0){
+                            window.location.href=res.data.url;
+                            return false;
+                        }
                         serialnumber=res.data.serialnumber;//获取订单号
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{

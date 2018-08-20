@@ -450,7 +450,7 @@ class Student_Ajax
         if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
 
         $row = $wpdb->get_row("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
-        if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info&match_id='.$_POST['match_id'])));
+        if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
         $data = array(
             'user_id'=>$current_user->ID,
             'match_id'=>$_POST['match_id'],
@@ -463,6 +463,13 @@ class Student_Ajax
             'pay_status'=>1,
             'created_time'=>date('Y-m-d H:i:s',time()),
         );
+        //TODO 测试时 订单价格为0
+        $_POST['cost'] = 0;
+        //如果报名金额为0, 直接支付成功状态
+        if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
+            $data['pay_status'] = 2;
+        }
+
         //print_r($data);die;
         //开启事务
         $wpdb->startTrans();
@@ -472,10 +479,13 @@ class Student_Ajax
         $serialnumber = createNumber($current_user->ID,$wpdb->insert_id);
         $b = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
 
-        if($b && $a ){
 
+        if($b && $a ){
             $wpdb->commit();
-            wp_send_json_success(array('info' => '请选择支付方式','serialnumber'=>$serialnumber));
+            if($data['pay_status'] == 2){
+                wp_send_json_success(array('info' => '报名成功','serialnumber'=>$serialnumber, 'is_pay' => 0, 'url' => home_url('payment/success/serialnumber/'.$serialnumber)));
+            }
+            wp_send_json_success(array('info' => '请选择支付方式','serialnumber'=>$serialnumber,'is_pay' => 1));
         }else{
 
             $wpdb->rollback();
@@ -813,7 +823,7 @@ class Student_Ajax
             $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
         }
 
-        if(empty($_POST['id'])){
+        if(empty($_POST['id']) || $_POST['id'] < 1){
 
             unset($_POST['action']);
             unset($_POST['_wpnonce']);

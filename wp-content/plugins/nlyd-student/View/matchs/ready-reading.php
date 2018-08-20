@@ -56,7 +56,7 @@ jQuery(function($) {
         })
     })
     submit=function(time){//提交答案
-        var my_answer=[];
+        var my_answer={};
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
@@ -64,7 +64,7 @@ jQuery(function($) {
             project_id:<?=$_GET['project_id']?>,
             match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
             my_answer:my_answer,
-            match_action:'reading',
+            match_action:'subjectReading',
             surplus_time:time,
         }
         $.post(window.admin_ajax,data,function(res){

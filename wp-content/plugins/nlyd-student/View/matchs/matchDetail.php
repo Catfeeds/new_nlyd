@@ -51,12 +51,10 @@
                                         <div class="nl-match-label">报名费用：</div>
                                         <div class="nl-match-info">¥<?=$match['match_cost']?></div>
                                     </div>
-                                    <?php if($match['match_status'] == 1): ?>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info">已截止</div>
+                                        <div class="nl-match-info" id="time_count" data-end="<?=$match['entry_end_time']?>">已截止</div>
                                     </div>
-                                    <?php endif ?>
                                 </div>
                             </li>
                             <?php if(!empty($match_project)): ?>
@@ -103,6 +101,9 @@
                         <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
                             <a class="a-btn" href="<?=home_url('/matchs/matching/match_id/'.$_GET['match_id']);?>">进入比赛</a>
                         <?php endif;?>
+                        <?php if($match['match_status'] == -3):?>
+                            <a class="a-btn" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -117,6 +118,7 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
+        
         flow.load({
             elem: '#flow-table' //流加载容器
             ,scrollElem: '#flow-table' //滚动条所在元素，一般不用填，此处只是演示需要。
@@ -131,6 +133,17 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax,postData,function(res,ajaxStatu,xhr){
+                    var end_time = new Date($('#time_count').attr('data-end')).getTime();//月份是实际月份-1
+                    var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
+                    var sys_second = (end_time-serverTimes)/1000;
+                    $('#time_count').attr('data-seconds',sys_second).countdown(function(s, d){//倒计时
+                        var D=d.day>0 ? d.day+'天' : '';
+                        var h=d.hour<10 ? '0'+d.hour : d.hour;
+                        var m=d.minute<10 ? '0'+d.minute : d.minute;
+                        var s=d.second<10 ? '0'+d.second : d.second;
+                        var time=D+h+':'+m+':'+s;
+                        $(this).text(time);
+                    });
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var dom='<tr>'

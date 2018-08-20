@@ -9,7 +9,7 @@
         <div class="nl-foot-icon"><i class="iconfont">&#xe631;</i></div>
         <div class="nl-foot-name">训练</div>
     </a>
-    <a class="nl-foot-item active" href="<?=home_url('/account/matchList');?>">
+    <a class="nl-foot-item active" href="<?=home_url('matchs');?>">
         <div class="nl-foot-icon"><i class="iconfont">&#xe692;</i></div>
         <div class="nl-foot-name">比赛</div>
     </a>
@@ -194,7 +194,7 @@ jQuery(function($) {
                             next(lis.join(''),false)
                         }
                         $('.getTimes').countdown(function(s, d){//倒计时
-                            var D=d.day>0 ? d.day : '';
+                            var D=d.day>0 ? d.day+'天' : '';
                             var h=d.hour<10 ? '0'+d.hour : d.hour;
                             var m=d.minute<10 ? '0'+d.minute : d.minute;
                             var s=d.second<10 ? '0'+d.second : d.second;
