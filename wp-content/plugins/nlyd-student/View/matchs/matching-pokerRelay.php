@@ -89,7 +89,7 @@ jQuery(function($) {
             match_action:'subjectPokerRelay',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

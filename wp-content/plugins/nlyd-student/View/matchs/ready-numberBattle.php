@@ -55,7 +55,7 @@ jQuery(function($) {
             match_more:$('#inputMatchMore').val(),
             match_action:'numberBattle',
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
@@ -80,7 +80,7 @@ jQuery(function($) {
             match_action:'subjectNumberBattle',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 //return false;
                 if(res.data.url){

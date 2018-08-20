@@ -44,7 +44,7 @@ jQuery(function($) {
             match_action:'reading',
             question_id:$('input[name="question_id"]').val()
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
 
             if(res.success){
                 if(res.data.url){
@@ -67,7 +67,7 @@ jQuery(function($) {
             match_action:'subjectReading',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

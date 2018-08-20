@@ -105,7 +105,7 @@ layui.use(['element','flow'], function(){
                     match_more:$('.lun-active').attr('data-post-id'),
                     page:fenleiPage
                 }
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
                         $('#danxiang_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩

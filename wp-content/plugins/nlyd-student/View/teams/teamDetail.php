@@ -128,7 +128,7 @@ layui.use(['element','layer','flow'], function(){
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -178,7 +178,7 @@ layui.use(['element','layer','flow'], function(){
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                         if(res.success){ 
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -238,7 +238,7 @@ layui.use(['element','layer','flow'], function(){
                     team_id:id,
                     handle:'join',//操作 join:入队 其他:离队
                 };
-                $.post(window.admin_ajax,data,function(res){//设为主训教练
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){//设为主训教练
                     console.log(data)
                     console.log(res)
                     $.alerts(res.data.info)
@@ -281,7 +281,7 @@ layui.use(['element','layer','flow'], function(){
                         team_id:id,
                         handle:'leave',//操作 join:入队 其他:离队
                     };
-                    $.post(window.admin_ajax,data,function(res){//
+                    $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){//
                         console.log(res)
                         $.alerts(res.data.info)
                         if(res.success){

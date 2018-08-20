@@ -57,7 +57,7 @@
                 dataType:'json',
                 timeout:3000,
                 success: function(data, textStatus, jqXHR){
-                    // console.log(data)
+                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
                        window.location.reload()
@@ -67,7 +67,7 @@
             });
         }
         $('#loginOut').click(function(){//登出
-            sendloginAjax(window.admin_ajax,{action:'user_logout'})
+            sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),{action:'user_logout'})
         })
     })
 </script>

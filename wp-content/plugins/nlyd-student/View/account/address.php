@@ -80,7 +80,7 @@ layui.use(['layer'], function(){
                         _wpnonce:$("#defaultAddress").val(),
                         id:_this.attr('data-id')
                     }
-                    $.post(window.admin_ajax,postData,function(res){
+                    $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                         $.alerts(res.data.info)
                         if(res.success){
                             $('.default-address.set-address').text('设为默认').removeClass('set-address');
@@ -119,7 +119,7 @@ layui.use(['layer'], function(){
                     id:_this.attr('data-id')
                 }
                 console.log(postData)
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     console.log(res)
                     $.alerts(res.data.info)
                     if(res.success){

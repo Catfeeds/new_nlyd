@@ -327,7 +327,7 @@ jQuery(document).ready(function($) {
             formData.append('meta_val',blob);
             $.ajax({
                 type: "POST",
-                    url: window.admin_ajax,
+                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: formData,
                     dataType:'json',
                     timeout:3000,
@@ -335,7 +335,6 @@ jQuery(document).ready(function($) {
                     processData : false,
                     cache : false,
                     success: function(data, textStatus, jqXHR){
-                        console.log(data)
                         $.alerts(data.data.info)
                         if(data.data.head_url){
                             $('.logoImg').attr('src',data.data.head_url)

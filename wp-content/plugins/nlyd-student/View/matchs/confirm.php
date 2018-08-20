@@ -183,7 +183,7 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(pay-formbtn)', function(data){
-                $.post(window.admin_ajax,data.field,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),data.field,function(res){
                     if(res.success){
                         //不需要支付
                         if(res.data.is_pay == 0){
@@ -222,7 +222,7 @@ jQuery(function($) {
             _wpnonce:$('#inputPay').val(),
             serialnumber:serialnumber
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 window.location.href=res.data.info;
             }else{

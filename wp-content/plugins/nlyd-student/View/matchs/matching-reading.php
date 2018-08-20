@@ -81,7 +81,7 @@ jQuery(function($) {
             surplus_time:time,
         }
         console.log(data)
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

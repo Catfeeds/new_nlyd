@@ -98,7 +98,7 @@ jQuery(function($) {
             match_action:'subjectFastReverse',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
@@ -253,7 +253,7 @@ jQuery(function($) {
                 }
                 $.ajax({
                     type: "POST",
-                    url: window.admin_ajax,
+                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: data,
                     dataType:'json',
                     timeout:2000,
