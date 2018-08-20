@@ -23,7 +23,7 @@ get_header( 'single' ); ?>
 
 			<!-- !- Content -->
 			<div id="content" class="content" role="main">
-				
+
 				<div class="layui-fluid">
 					<div class="layui-row">
 						<div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
@@ -37,14 +37,15 @@ get_header( 'single' ); ?>
 								<div class="width-margin width-margin-pc news-wrapper layui-row">
 									<div class="news-title lauyi-row">
 										<div class="layui-row">
-											<?php if($next->ID){ ?>
-												<a class="news-prev" href="<?=home_url('student/account/news/?action=newsDetail&id='.$next->ID)?>">上一篇</a>
+
+											<?php if(get_next_post(true)->ID){ ?>
+												<a class="news-prev" href="<?=get_next_post(true)->guid?>">上一篇</a>
 											<?php }else{ ?>
 												<a class="news-prev" href="javascript:;">无上篇</a>
 											<?php }?>
 											<p class="news-name"><?=$row->post_title?></p>
-											<?php if($prev->ID){ ?>
-												<a class="news-next" href="<?=home_url('student/account/news/?action=newsDetail&id='.$prev->ID)?>">下一篇</a>
+											<?php if(get_previous_post(true)->ID){ ?>
+												<a class="news-next" href="<?=get_previous_post(true)->guid?>">下一篇</a>
 											<?php }else{ ?>
 												<a class="news-next" href="javascript:;">无下篇</a>
 											<?php }?>
@@ -61,8 +62,8 @@ get_header( 'single' ); ?>
 									<div class="new-content">
 										<?php get_template_part( 'content-single', str_replace( 'dt_', '', get_post_type() ) ); ?>
 
-										<?php 
-										// comments_template( '', true ); 
+										<?php
+										// comments_template( '', true );
 										?>
 									</div>
 								</div>
