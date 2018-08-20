@@ -226,14 +226,14 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
             $('.choose-wrapper.'+id).addClass('active');
         });
     })
-    $('body').on('tap','.poker-wrapper .poker',function (e) {
+    $('body').on('click','.poker-wrapper .poker',function (e) {
         var _this=$(this)
         var active=$('.poker-wrapper .poker.active')
         active.removeClass('active');
         _this.addClass('active');
     })
     // $('.choose-wrapper .choose-poker').each(function(i){//扑克选择区tap事件
-    $('body').on('tap','.choose-wrapper .choose-poker',function (e) {
+    $('body').on('click','.choose-wrapper .choose-poker',function (e) {
 
         var _this=$(this);
            var text=_this.attr('data-text');

@@ -341,8 +341,6 @@
                     if(data.success){
                         if(data.data.url){
                             window.location.href=data.data.url
-                        }else{
-                            window.location.reload()
                         }
                     }
                     return false;
