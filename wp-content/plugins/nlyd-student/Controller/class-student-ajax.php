@@ -2085,10 +2085,18 @@ class Student_Ajax
         $which_cat = get_category_by_slug('news');
         $recentPosts = new WP_Query();
         $cat_query = $recentPosts->query('showposts='.$pageSize.'&cat='.$which_cat->cat_ID.'&paged='.$page);
-        if($cat_query)
+
+        if($cat_query){
+            //内容截取和图片
+            foreach ($cat_query as $v){
+                $v->image = wp_get_attachment_image_src(get_post_thumbnail_id($v->ID), 'thumbnail')[0];
+                $v->post_content = msubstr(strip_tags($v->post_content),0,35);
+            }
             wp_send_json_success(array('info' => $cat_query));
-        else
+        }else{
             wp_send_json_error(array('info' => '获取失败'));
+        }
+
     }
 
 
