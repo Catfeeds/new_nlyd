@@ -11,7 +11,22 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 $config = Presscore_Config::get_instance();
 presscore_config_base_init();
-get_header( 'single' ); ?>
+get_header( 'single' );
+
+//查询浏览量
+$readRes = $wpdb->get_row('SELECT meta_id,meta_value FROM '.$wpdb->postmeta.' WHERE post_id='.$post->ID.' AND meta_key="read_num"', ARRAY_A);
+if(!$readRes){
+    if(!($metaId = $wpdb->insert($wpdb->postmeta,['post_id' => $post->ID, 'meta_key' => 'read_num', 'meta_value' => 1]))){
+        return false;
+    }
+    $readNum = 1;
+}else{
+    $readNum = $readRes['meta_value'];
+    $metaId = $readRes['meta_id'];
+}
+//浏览量+1
+$wpdb->update($wpdb->postmeta, ['meta_value' => ++$readNum], ['meta_id' => $metaId]);
+?>
 
 <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
@@ -43,7 +58,7 @@ get_header( 'single' ); ?>
 											<?php }else{ ?>
 												<a class="news-prev" href="javascript:;">无上篇</a>
 											<?php }?>
-											<p class="news-name"><?=$row->post_title?></p>
+											<p class="news-name"><?=$post->post_title?></p>
 											<?php if(get_previous_post(true)->ID){ ?>
 												<a class="news-next" href="<?=get_previous_post(true)->guid?>">下一篇</a>
 											<?php }else{ ?>
@@ -52,7 +67,7 @@ get_header( 'single' ); ?>
 										</div>
 										<div class="layui-row">
 											<div class="pull-left news-info">
-												<span class="news-build">发布日期：<?=explode(' ',$row->post_date)[0]?></span>
+												<span class="news-build">发布日期：<?=explode(' ',$post->post_date)[0]?></span>
 												<span class="news-scan">浏览数量：<?=$readNum?></span>
 											</div>
 											<div class="pull-right news-share">分享</div>
