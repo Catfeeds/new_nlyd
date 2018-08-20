@@ -36,6 +36,6 @@ p.nl-ad-detail{
     display:-webkit-box;
     -webkit-line-clamp:3;
     overflow:hidden;
-    -webkit-line-break:auto;
+    line-break:auto;
     -webkit-box-orient:vertical;
 }
