@@ -120,7 +120,7 @@ layui.use(['element','flow','layer'], function(){
     //                 user_id:user_id,
     //             }
     //             var lis = [];
-    //             $.post(window.admin_ajax,postData,function(res){
+    //             $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
     //                     if(res.success){
     //                         $.each(res.data.info,function(i,v){
     //                             var dom=

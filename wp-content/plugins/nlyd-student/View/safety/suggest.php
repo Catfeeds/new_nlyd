@@ -128,7 +128,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: window.admin_ajax,
+                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: fd,
                     dataType:'json',
                     timeout:3000,
@@ -152,7 +152,7 @@
             });
         });
         $('#loginOut').click(function(){//登出
-            sendloginAjax(window.admin_ajax,{action:'user_logout'})
+            sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),{action:'user_logout'})
         })
     })
 </script>

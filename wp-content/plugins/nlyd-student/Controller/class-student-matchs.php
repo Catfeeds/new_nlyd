@@ -370,7 +370,7 @@ class Student_Matchs extends Student_Home
                  $action = 'numberBattleReady';
                  break;
          }
-         $data['match_url'] = home_url('/account/matchList/'.$action.'/match_id/'.$row['match_id']).'/project_id/'.$first_match['ID'];
+         $data['match_url'] = home_url('matchs/'.$action.'/match_id/'.$row['match_id']).'/project_id/'.$first_match['ID'];
          $data['count_down'] = strtotime($this->match['match_start_time'])-time();
          $data['match_title'] = $first_match['post_title'];
          //print_r($first_match);

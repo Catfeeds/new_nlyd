@@ -1,6 +1,9 @@
 .search-zoo{
     margin-top: 4.5px;
 }
+a:hover {
+    color: currentColor!important;
+  }
 .pt-10{
     padding-top: 10px;
 }
@@ -75,10 +78,6 @@
     
 }
 
-
-.nl-ad{
-    /* height: 112px; */
-}
 .nl-ad-row{
     display: block;
     padding-top: 10px;
@@ -131,7 +130,7 @@ p.nl-ad-tips{
     display:-webkit-box;
     -webkit-line-clamp:3;
     overflow:hidden;
-    -webkit-line-break:auto;
+    line-break:auto;
     -webkit-box-orient:vertical;
     word-wrap: break-word;
 }

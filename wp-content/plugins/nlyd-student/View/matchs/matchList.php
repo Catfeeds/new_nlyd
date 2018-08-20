@@ -110,7 +110,7 @@ jQuery(function($) {
                     match_type:'now',
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res,ajaxStatu,xhr){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签
@@ -217,7 +217,7 @@ jQuery(function($) {
                     match_type:'history',
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签

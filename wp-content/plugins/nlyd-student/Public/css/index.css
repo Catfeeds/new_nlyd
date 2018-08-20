@@ -2,6 +2,9 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
+  a:hover {
+    color: currentColor;
+  }
 .img-box{
     min-height: 1px;
     display: flex;
@@ -108,6 +111,9 @@ font-size:14px;
     color: #fff;
     padding: 0;
     bottom:30px;
+}
+a.a-btn:hover{
+    color: #fff!important;
 }
 .a-btn.disabled{
     background: -webkit-linear-gradient(#919191,#b8bcbe);

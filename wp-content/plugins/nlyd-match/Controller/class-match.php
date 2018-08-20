@@ -32,7 +32,7 @@ class Match
 
                 //获取比赛meta
                 $sql = "select 
-                          id,match_id,match_genre,match_genre,match_status,match_category_order,
+                          id,match_id,match_genre,match_genre,match_status,match_category_order,match_slogan,match_address,match_max_number,
                           if(unix_timestamp(match_start_time) > 1,match_start_time,'') match_start_time, 
                           if(unix_timestamp(entry_start_time) > 1,entry_start_time,'') entry_start_time, 
                           if(unix_timestamp(entry_end_time) > 1,entry_end_time,'') entry_end_time, 
@@ -320,7 +320,7 @@ class Match
                 <label class="layui-form-label">比赛类型</label>
                 <div class="layui-input-inline">
                 <?php if(!empty($the_query->post)){ ?>
-                    <select name="quiz1">
+                    <select name="match[match_genre]">
                         <option value="">请选择</option>
                         <?php
                         foreach ($the_query->posts as $v){

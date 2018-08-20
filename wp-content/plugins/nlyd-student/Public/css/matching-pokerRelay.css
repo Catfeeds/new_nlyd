@@ -103,14 +103,13 @@
     height: 172px;
     border: 1px solid rgba(164, 164, 164, 1);
     border-radius: 6px;
-    /* display: inline-block; */
     margin-right: -65px; 
     background-color: #fff;
     margin-top: 25px;
-    transition: all .2s;
-    -moz-transition: all .2s;	/* Firefox 4 */
-    -webkit-transition: all .2s;	/* Safari 和 Chrome */
-    -o-transition: all .2s;	/* Opera */
+    /* transition: all .2s;
+    -moz-transition: all .2s;
+    -webkit-transition: all .2s;
+    -o-transition: all .2s; */
     font-size: 0.16rem;
 }
 .poker-detail{

@@ -153,7 +153,7 @@ jQuery(function($) {
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     // console.log(res)
                         if(res.success){ 
                             $.each(res.data.list,function(index,value){

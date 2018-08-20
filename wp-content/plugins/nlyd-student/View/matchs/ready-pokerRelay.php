@@ -60,7 +60,7 @@ jQuery(function($) {
             match_more:$('#inputMatchMore').val(),
             match_action:'pokerRelay',
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
 
             if(res.success){
                 if(res.data.url){
@@ -83,7 +83,7 @@ jQuery(function($) {
             match_action:'subjectPokerRelay',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

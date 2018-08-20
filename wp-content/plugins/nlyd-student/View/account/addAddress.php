@@ -76,7 +76,7 @@ layui.use(['layer','form'], function(){
         if(data.field.is_default){
             data.field.is_default=1
         }
-        $.post(window.admin_ajax,data.field,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data.field,function(res){
             console.log(res)
             $.alerts(res.data.info)
             if(res.success){

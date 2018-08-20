@@ -59,7 +59,7 @@ jQuery(function($) {
                             page:page
                         }
                         var lis = [];
-                        $.post(window.admin_ajax,postData,function(res){
+                        $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                                 if(res.success){
                                     // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
                                     $.each(res.data.info,function(index,value){

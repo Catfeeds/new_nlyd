@@ -120,6 +120,9 @@ p.long-name{
     color: RGBA(67, 148, 249, 1);
     border: 1px solid RGBA(67, 148, 249, 1);
 }
+.nl-match-button a:hover{
+    color: RGBA(67, 148, 249, 1);
+}
 .nl-match-footer .last-btn a{
     color: #fff;
     background: -webkit-linear-gradient(#4394F9,#68a9fe);
@@ -127,6 +130,9 @@ p.long-name{
     background: -moz-linear-gradient(#4394F9,#68a9fe);
     background: linear-gradient(#4394F9,#68a9fe);
     border: none;
+}
+.nl-match-footer .last-btn a:hover{
+    color: #fff;
 }
 .nl-badge{
     position: relative;
@@ -250,5 +256,8 @@ p.long-name{
     }
     .countdown-time{
         padding-bottom: 10px;
+    }
+    .layui-tab-brief[overflow]>.layui-tab-title .layui-this:after{
+        top: auto;
     }
 }

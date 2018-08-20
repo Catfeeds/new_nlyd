@@ -33,8 +33,3 @@
         </div>           
     </div>
 </div>
-
-<script>
-jQuery(function($) {
-})
-</script>

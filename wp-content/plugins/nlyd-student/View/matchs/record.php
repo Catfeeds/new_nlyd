@@ -218,7 +218,7 @@ layui.use(['element','flow'], function(){
                             match_id:$.Request('match_id'),
                             page:page
                         }
-                        $.post(window.admin_ajax,postData,function(res){
+                        $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                             if(res.success){ 
                                 $.each(res.data.info,function(index,value){
                                     var dom='<tr>'
@@ -266,7 +266,7 @@ layui.use(['element','flow'], function(){
                     category_id:category_id,
                     page:fenleiPage
                 }
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
                         $('#fenlei_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩
@@ -341,7 +341,7 @@ layui.use(['element','flow'], function(){
                     postData.age_group=age_group;
                 }
                 console.log(postData)
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
                         $('#danxiang_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩

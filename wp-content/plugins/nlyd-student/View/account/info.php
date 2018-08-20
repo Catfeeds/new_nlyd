@@ -138,7 +138,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: window.admin_ajax,
+                url: window.admin_ajax+"?date="+new Date().getTime(),
                 data: datas,
                 dataType:'json',
                 timeout:3000,
@@ -341,8 +341,6 @@
                     if(data.success){
                         if(data.data.url){
                             window.location.href=data.data.url
-                        }else{
-                            window.location.reload()
                         }
                     }
                     return false;
@@ -362,12 +360,12 @@
                 }else{
                     data.field.match_id=''
                 }
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
             form.on('submit(nicenameFormBtn)', function(data){//昵称
                 console.log(data.field)
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
 
@@ -431,7 +429,7 @@
             formData.append('meta_val',blob);
             $.ajax({
                 type: "POST",
-                    url: window.admin_ajax,
+                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: formData,
                     dataType:'json',
                     timeout:3000,

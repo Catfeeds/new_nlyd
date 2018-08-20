@@ -190,6 +190,9 @@
         border-radius: 50%;
         overflow: hidden;
     }
+    a.userCenter-row:hover{
+        color: rgba(67, 148, 249, 1);
+    }
     .userCenter-row{
         display: block;
         height: 55px;
@@ -309,6 +312,10 @@
         left: 13px;
         top: 2px;
     }
+    a.userCenter-message:hover,
+    a.userCenter-edit:hover{
+        color: #f6f6f6;
+    }
     .userCenter-message,
     .userCenter-edit{
         color: #f6f6f6;
@@ -378,7 +385,9 @@
         height: 80px;
         width: 25%;
     }
-
+    .userCenter-detail a:hover{
+        color: #747474;
+    }
 
     .userCenter-detail-head{
         display: block;

@@ -89,7 +89,7 @@ jQuery(function($) {
             match_action:'subjectPokerRelay',
             surplus_time:time,
         }
-        $.post(window.admin_ajax,data,function(res){
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
@@ -236,10 +236,6 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
     $('body').on('click','.choose-wrapper .choose-poker',function (e) {
 
         var _this=$(this);
-        // var dom=$(this)[0];
-        // var hammertime = new Hammer(dom);
-        // $(this).css('touch-action','auto');//允许默认浏览器tap事件，水平滚动
-        // hammertime.on("tap", function (e) {
            var text=_this.attr('data-text');
            var color=_this.attr('data-color');
            _this.addClass('active');
@@ -270,22 +266,10 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
             if($('.poker-wrapper .poker.active').length>0){//绑定事件
                 var active=$('.poker-wrapper .poker.active')
                 active.after(poker);
-                // var hammerdoms = new Hammer(active.next('.poker')[0]);
-                // active.next('.poker').css('touch-action','auto')
-                // hammerdoms.on("tap", function (ev) {
-                //     $('.poker-wrapper .poker').removeClass('active');
-                //     active.next('.poker').addClass('active');
-                // });
                 active.removeClass('active')
             }else{
                 $('.poker-wrapper .poker.active').removeClass('active')
                 $('.poker-wrapper').append(poker)
-                // var hammerdom = new Hammer($('.poker-wrapper .poker').last()[0]);
-                // $('.poker-wrapper .poker').last().css('touch-action','auto')
-                // hammerdom.on("tap", function (ev) {
-                //     $('.poker-wrapper .poker').removeClass('active');
-                //     active.next('.poker').addClass('active');
-                // });
             }
             initWidth();
             initRight()

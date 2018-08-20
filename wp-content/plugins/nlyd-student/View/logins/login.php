@@ -394,19 +394,19 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(loginFormFastBtn)', function(data){//快速登录
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
             form.on('submit(loginFormForgetBtn)', function(data){//重置密码
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
             form.on('submit(loginFormPswBtn)', function(data){//账号密码登录
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
             form.on('submit(registerBtn)', function(data){//注册
-                sendloginAjax(window.admin_ajax,data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
             element.on('tab(tabs)', function(){//tabs
@@ -465,7 +465,7 @@ jQuery(function($) {
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax,data)
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
                     var wait=60;  
                     time(wait,$(this))
                 }else{
@@ -490,7 +490,7 @@ jQuery(function($) {
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax,data)
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
                     var wait=60;  
                     time(wait,$(this))
                     return false

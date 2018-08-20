@@ -132,7 +132,7 @@ jQuery(function($) {
                     match_id:<?=$_GET['match_id']?>,
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res,ajaxStatu,xhr){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
                     var end_time = new Date($('#time_count').attr('data-end')).getTime();//月份是实际月份-1
                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                     var sys_second = (end_time-serverTimes)/1000;

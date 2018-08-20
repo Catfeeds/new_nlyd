@@ -117,7 +117,7 @@ layui.use(['element','flow','layer'], function(){
                     category_id:category_id,
                     coach_id:coach_id,
                 }
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     $.alerts(res.data.info)
                     if(res.success){
                        _this.css('display','none');
@@ -166,7 +166,7 @@ layui.use(['element','flow','layer'], function(){
                     match_id:match_id,
                     category_id:category_id,
                 }
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){
                         if(res.data.url.length>0){
                             window.location.href=res.data.url
@@ -211,7 +211,7 @@ layui.use(['element','flow','layer'], function(){
                     user_id:user_id,
                 }
                 var lis = [];
-                $.post(window.admin_ajax,postData,function(res){
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var major_coach='';//主训教练，我的教练
