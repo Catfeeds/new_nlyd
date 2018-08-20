@@ -321,7 +321,7 @@ class Student_Ajax
                 $update_arr['match_questions'] = json_encode($match_questions);
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
-            case 'subjectReading':
+            case 'subjectReading': //文章速读
                 $questions_answer = json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -362,6 +362,9 @@ class Student_Ajax
                 //修改其分类
                 wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
 
+                break;
+            default:
+                wp_send_json_error(array('info'=>'未知错误'));
                 break;
         }
         $update_arr['answer_status'] = 1;
@@ -1231,7 +1234,7 @@ class Student_Ajax
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID}
-                where {$where} order by b.match_status desc limit $start,$pageSize;
+                where {$where} order by b.match_status desc,b.match_start_time asc limit $start,$pageSize;
                 ";
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -1418,7 +1421,9 @@ class Student_Ajax
         if($resul){
 
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
-            wp_send_json_success(array('info'=>'保存成功','url'=>$url));
+            $success['info'] = '保存成功';
+            $success['url'] = $url;
+            wp_send_json_success($success);
         }else{
             wp_send_json_success(array('info'=>'设置失败'));
         }
