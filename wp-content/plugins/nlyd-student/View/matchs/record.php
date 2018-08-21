@@ -22,6 +22,7 @@
                         <li class="layui-this">总排名</li>
                         <li>分类排名</li>
                         <li>单项排名</li>
+                        <div class="nl-transform">总排名</div>
                     </ul>
                     <?php endif;?>
                     <div class="layui-tab-content" style="padding: 0;">
@@ -200,6 +201,14 @@ layui.use(['element','flow'], function(){
      <?php 
     endif;
     ?>
+     element.on('tab(tabs)', function(){//tabs
+        var left=$(this).position().left+parseInt($(this).css('marginLeft'));
+        var html=$(this).html();
+        var data_id=$(this).attr('data-id')
+        $('.nl-transform').css({
+            'transform':'translate3d('+left+'px, 0px, 0px)'
+        }).html(html)
+    })
     flow.load({
             elem: '#flow' //流加载容器
             ,scrollElem: '#flow' //滚动条所在元素，一般不用填，此处只是演示需要。

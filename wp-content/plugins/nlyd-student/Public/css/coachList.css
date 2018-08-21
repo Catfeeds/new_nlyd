@@ -14,14 +14,11 @@
 
 .layui-tab-brief>.layui-tab-title .layui-this{
     color: #fff;
-    border: 1px solid rgba(104, 170, 254, 1);
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    color: #fff;
-    
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
+    border: 1px solid transparent;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
 }
 .layui-tab-title li{
     display: inline-block;
@@ -45,6 +42,31 @@
     -webkit-transition: none;
     -o-transition: none;
 }
+.nl-transform{
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
+    transform: translate3d(0px, 0px, 0px);
+    display: inline-block;
+    vertical-align: middle;
+    color: #fff;
+    height: 40px;
+    width: -webkit-calc(100%/3 - 10px);
+    width: calc(100%/3 - 10px);
+    line-height: 40px;
+    padding: 0;
+    min-width: 65px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.16rem;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+}
 .layui-tab-title li a{
     color: rgba(116, 116, 116, 1);
 }
@@ -56,9 +78,6 @@
 }
 .layui-tab-title li:first-child{
     margin-left: 0;
-}
-.layui-tab-title li i{
-    color: #4394f9;
 }
 
 .content ul.flow-default{
@@ -96,14 +115,6 @@ overflow: hidden;
 .coach-picture{
     height: 154px;
     float: left;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-.coach-picture img{
-    width: 100%;
-    height: auto;
-    margin :auto;
 }
 .coach-detail{
     height: 100%;
@@ -113,40 +124,30 @@ overflow: hidden;
     padding-left: 2%;
     margin-top: 5px;
 }
-.coach-name{
-    font-size: 0.18rem;
-    color: rgba(67, 148, 249, 1);
-}
+
 .coach-detail-row{
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
 }
-.coach-info{
-    /* font-size: 12px; */
-    color: rgba(116, 116, 116, 1);
-}
+
 .coach-btn{
     width: 90%;
     height: 40px;
     border-radius: 6px;
     text-align: center;
     line-height: 40px;
-    background: -webkit-linear-gradient(70deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.7));
-    background: -o-linear-gradient(70deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.7));
-    background: -moz-linear-gradient(70deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.7));
-    background: linear-gradient(70deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.7));
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     color: #fff;
     font-size: 0.14rem;
-}
-.layui-flow-more{
-    position: relative;
-    bottom: 0;
 }
 .nl-badge{
     position: relative;
     display: inline-block;
-    /* font-size: 12px; */
+    font-size: 0.12rem;
     width: 20px;
     height: 20px;
     left: 2%;
@@ -159,12 +160,6 @@ overflow: hidden;
     color: #fff;
     border-radius: 50%;
 }
-.nl-dark-blue{
-    color: #4394f9;
-}
-.nl-orange{
-    color: #FF6464;
-}
 .coach-type{
     display: inline-block;
     width: -webkit-calc( 97% / 3 - 6px );
@@ -172,22 +167,21 @@ overflow: hidden;
     height: 17px;
     line-height: 17px;
     text-align: center;
-    /* font-size: 10px; */
+    font-size: 0.12rem;
     border-radius: 2px;
     margin-right: 1.5%;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
-    color: #AFAFAF;
     border: 1px solid #AFAFAF;
 }
 .orange{
-    color: #FF6464;
-    border: 1px solid #FF6464;
+    color: #FB8E8E;
+    border: 1px solid #FB8E8E;
 }
 .blue{
-    color: #4394F9;
-    border: 1px solid #5DA3FC;
+    color: #2484FE;
+    border: 1px solid #2484FE;
 }
 .coach-detail-footer .coach-type:last-child{
     margin-right: 0;

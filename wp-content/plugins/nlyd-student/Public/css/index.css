@@ -1,60 +1,22 @@
-
-* {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-  }
-  a:hover {
-    color: currentColor;
-  }
-.img-box{
-    min-height: 1px;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-.img-box img{
-    width: 100%;
-    height: auto;
-    margin :auto;
-}
-.nl-light-blue{
-    color: #68aafe;
-}
 .nl-dark-blue{
-    color: #4394f9;
+    color: #4394F9;
 }
-.nl-grey{
-    color: #bfbfbf;
-}
-.nl-black{
-    color:#747474;
-}
-.nl-ios-click{
-    cursor: pointer;
-}
-.nl-shadow{
-    box-shadow:rgba(5, 30, 61, 0.1) 0px 2px 4px
-}
-.nl-bg-blue{
-    background: -webkit-linear-gradient(#4394F9, #68AAFE);
-    background: -o-linear-gradient(#4394F9, #68AAFE);
-    background: -moz-linear-gradient(#4394F9, #68AAFE);
-    background: linear-gradient(#4394F9, #68AAFE);
-}
+
 input::-webkit-input-placeholder {
     color:#b8bcbe;
-    font-size:14px;
+    font-size:0.14rem;
 }
 input:-moz-placeholder {
 color:#b8bcbe;
-font-size:14px;
+font-size:0.14rem;
 }
 input::-moz-placeholder {
 color:#b8bcbe;
-font-size:14px;
+font-size:0.14rem;
 }
 input:-ms-input-placeholder {
 color:#b8bcbe;
-font-size:14px;
+font-size:0.14rem;
 }
 
 /* mobile footer */
@@ -66,7 +28,7 @@ font-size:14px;
 }
 .nl-foot-icon,.nl-foot-name{
     text-align: center;
-    color: #747474;
+    color: rgba(38, 38, 38, 0.6);
     height: 25px;
 }
 .nl-foot-icon{
@@ -89,7 +51,7 @@ font-size:14px;
 .nl-foot-item.active .nl-foot-icon,
 .nl-foot-item.active .nl-foot-name
 {
-    color: #4394F9;
+    color: #2484FE;
 }
 /*  */
 .a-btn{
@@ -100,11 +62,10 @@ font-size:14px;
     line-height: 45px;
     text-align: center;
     border-radius: 125px;
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    box-shadow: 0 4px 6px rgba(49, 133, 238, 0.3);
+    background: -webkit-linear-gradient(#68AAFE, #2484FE);
+    background: -o-linear-gradient(#68AAFE, #2484FE);
+    background: -moz-linear-gradient(#68AAFE, #2484FE);
+    background: linear-gradient(#68AAFE, #2484FE);
     left: 50%;
     margin-left: -126px;
     font-size: 0.16rem;
@@ -120,7 +81,6 @@ a.a-btn:hover{
     background: -o-linear-gradient(#919191,#b8bcbe);
     background: -moz-linear-gradient(#919191,#b8bcbe);
     background: linear-gradient(#919191,#b8bcbe);
-    box-shadow: 0 4px 6px #b8bcbe;
     border: none;
 }
 /* 上滑bottom下拉 */
@@ -159,7 +119,7 @@ a.a-btn:hover{
     display: block;
     position: fixed;
     z-index: 889;
-    color: black;
+    color: #262626;
     -webkit-transition: all 0.4s;
     transition: all 0.4s;
     bottom: -350px;
@@ -171,7 +131,6 @@ a.a-btn:hover{
 }
 .selectOption{
     font-size: 0.16rem;
-    color: rgba(116, 116, 116, 1);
     position: relative;
     width: 100%;
     height: 50px;
@@ -214,10 +173,10 @@ a.a-btn:hover{
     text-align: center;
     line-height: 40px;
     color: #fff;
-    background: -webkit-linear-gradient(#4394F9, #68aafe7d);
-    background: -o-linear-gradient(#4394F9, #68aafe7d);
-    background: -moz-linear-gradient(#4394F9, #68aafe7d);
-    background: linear-gradient(#4394F9, #68aafe7d);
+    background: -webkit-linear-gradient(#2484FE, #68aafe7d);
+    background: -o-linear-gradient(#2484FE, #68aafe7d);
+    background: -moz-linear-gradient(#2484FE, #68aafe7d);
+    background: linear-gradient(#2484FE, #68aafe7d);
     margin: auto;
     border-radius: 5px;
 }
@@ -242,7 +201,7 @@ a.a-btn:hover{
     bottom: 0;
     width: 100%;
 }
-.layui-flow-more a{
+.layui-flow-more a.img-box{
     display: block;
     width: 33px;
     height: 33px;
@@ -255,7 +214,7 @@ a.a-btn:hover{
     padding-top: 50px;
     text-align: center;
     font-size: 0.16rem;
-    color: #747474;
+    color: rgba(38, 38, 38, 0.6);
 }
 /* 表单 */
 .nl-page-form{
@@ -265,6 +224,7 @@ a.a-btn:hover{
     text-align: left;
     font-size: 0.12rem;
     background: #eee;
+    line-height: 0.18rem;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -281,6 +241,7 @@ a.a-btn:hover{
     line-height: 55px;
     text-align: center;
     border-bottom: 1px solid rgba(241, 241, 241, 1);
+    color: rgba(38, 38, 38, 0.6);
 }
 .form-input-label{
     float: left;
@@ -288,7 +249,6 @@ a.a-btn:hover{
     height: 55px;
     line-height: 55px;
     text-align: right;
-    color: rgba(116, 116, 116, 1);
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap
@@ -304,6 +264,7 @@ a.a-btn:hover{
     text-align: left;
     padding: 0;
     margin: 0;
+    margin-top: 1px;
     padding-left: 20px;
     background: #fff;
     color: #b8bcbe;
@@ -396,7 +357,6 @@ a.a-btn:hover{
 p.no-info-text{
     text-align: center;
     font-size: 0.16rem;
-    color: rgba(116, 116, 116, 1);
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -454,11 +414,11 @@ p.no-info-text{
     height: 44px;
     text-align: left;
     line-height: 44px;
-    color: #007aff;
+    color: #2484FE;
 }
 a {
     text-decoration: none;
-    color: #007aff;
+    color: #2484FE;
 }
 .search-warapper{
     padding: 10px 0;
@@ -542,10 +502,10 @@ padding:0;
     .mui-bar{
         /* display: none; */
         position: relative;
-        background: -webkit-linear-gradient(#4394F9, #68AAFE);
-        background: -o-linear-gradient(#4394F9, #68AAFE);
-        background: -moz-linear-gradient(#4394F9, #68AAFE);
-        background: linear-gradient(#4394F9, #68AAFE);
+        background: -webkit-linear-gradient(#68AAFE, #2484FE);
+        background: -o-linear-gradient(#68AAFE, #2484FE);
+        background: -moz-linear-gradient(#68AAFE, #2484FE);
+        background: linear-gradient(#68AAFE, #2484FE);
         color: #fff;
         z-index: 100;
         position: relative;

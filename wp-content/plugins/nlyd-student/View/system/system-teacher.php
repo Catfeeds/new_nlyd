@@ -25,6 +25,7 @@
                             <li class="layui-this">认证教练</li>
                             <li>基地教练</li>
                             <li>认证记忆导师</li>
+                            <div class="nl-transform">认证教练</div>
                         </ul>
                     </header>
                     <div class="layui-tab-content width-margin width-margin-pc">
@@ -155,6 +156,14 @@ jQuery(function($) {
         
         $('.layui-tab-content .layui-tab-item').removeClass('layui-show');
         $('.layui-tab-content .layui-tab-item').eq(index).addClass('layui-show');
+
+        var left=_this.position().left+parseInt(_this.css('marginLeft'));
+        var html=_this.html();
+        // var data_id=$(this).attr('data-id')
+        $('.nl-transform').css({
+            'transform':'translate3d('+left+'px, 0px, 0px)'
+        }).html(html)
     })
+    
 })
 </script>

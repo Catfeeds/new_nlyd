@@ -3,7 +3,7 @@
 <div class="wrapper_content">
     <p class="titleLanguage">
         <span>切换语言</span>
-        <span class="nl-light-blue nl-ios-click">中文</span>
+        <span class="c_blue pointer">中文</span>
     </p>
     <div class="login-box-top">
         <div class="box-logo ">
@@ -44,15 +44,15 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <button class="getCodeBtn nl-dark-blue getCode" data-sendCodeCase="19">获取验证码</button>
+                                <button class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</button>
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span  data-show="a3" class="login-by-code nl-dark-blue display-block login-by">使用帐号密码登录</span>
+                            <span  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</span>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                            <button class="layui-btn submitBtn  nl-bg-blue" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</button>
+                            <button class="layui-btn submitBtn  bg_gradient_blue" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</button>
                             </div>
                         </div>
                     </form>
@@ -74,12 +74,12 @@
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span data-show="a1"  class="login-by-psw  nl-dark-blue login-by">使用手机验证码快速登录</span>
-                            <span data-show="a2"  class="login-by-reset nl-dark-blue login-by pull-right">忘记密码</span>
+                            <span data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</span>
+                            <span data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</span>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <button class="layui-btn submitBtn  nl-bg-blue" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</button>
+                                <button class="layui-btn submitBtn  bg_gradient_blue" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</button>
                             </div>
                         </div>
                     </form>
@@ -97,7 +97,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <button class="getCodeBtn nl-dark-blue getCode" data-sendCodeCase="16" >获取验证码</button>
+                                <button class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</button>
                             </div>
                         </div>
                         <div class="layui-form-item" >
@@ -111,11 +111,11 @@
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span data-show="a1"  class="login-by-psw  nl-dark-blue login-by">返回登陆</span>
+                            <span data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</span>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <button class="layui-btn submitBtn  nl-bg-blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit="">确认重置</button>
+                                <button class="layui-btn submitBtn  bg_gradient_blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit="">确认重置</button>
                             </div>
                         </div>
                     </form>
@@ -135,7 +135,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-inline">
                             <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                            <button class="getCodeBtn nl-dark-blue getCode" data-sendCodeCase="17">获取验证码</button>
+                            <button class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</button>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -145,17 +145,17 @@
                     </div>
                                         
                     <p class="row-margin">
-                        <span data-show="a1"  class="login-fast nl-dark-blue login-by">使用手机验证码快速登录</span>
+                        <span data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</span>
                     </p>
                     <div class="layui-form-item">
                         <div class="layui-input-inline">
-                            <button class="layui-btn submitBtn  nl-bg-blue" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</button>
+                            <button class="layui-btn submitBtn  bg_gradient_blue" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</button>
                         </div>
                     </div>
                 </form>
             </div> 
         </div> 
-        <div class="nl-agreement">登录或注册即同意<span class="nl-dark-blue nl-ios-click">【脑力中国用户协议】</span></div>
+        <div class="nl-agreement">登录或注册即同意<span class="c_blue pointer">【脑力中国用户协议】</span></div>
         <ul style="margin-left: 0"  class="login-type">
             <li class="login-type-wrapper">
                 <div class="login-type-logo">
@@ -549,7 +549,7 @@ jQuery(function($) {
             // $('.login-by').removeClass('display-block').addClass('display-hide');
             // $('.login-by-psw').removeClass('display-hide').addClass('display-block');
         })
-        $('.nl-agreement .nl-ios-click').click(function(){
+        $('.nl-agreement .pointer').click(function(){
                 var html=$('.userAgreement').html(); 
                 layer.open({
                     type: 1

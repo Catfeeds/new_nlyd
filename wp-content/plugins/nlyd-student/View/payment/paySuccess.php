@@ -1,12 +1,4 @@
-<style>
 
-@media screen and (max-width: 991px){
-    #content{
-        background:#fff;
-    }
-}
-
-</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -15,7 +7,7 @@
         ?>
 
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
         <header class="mui-bar mui-bar-nav">
         <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
@@ -24,20 +16,12 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="pay-success layui-row">
-                    <div class="pay-info">成功报名</div>
-                    <div class="btn-zoo">
-                        <div class="btn-z"><a class='left' href="<?=home_url('matchs/info/match_id/'.$row->match_id);?>">比赛详情</a></div>
-                        <div class="btn-z"><a class='right' href="javascript:;">订单详情</a></div>
-                    </div>
+                    <div class="pay-info"><div class="nl-badge"><i class="iconfont">&#xe608;</i></div>报名成功</div>
+                    <div class="order-info">您已成功报名“2018世界杯全人脑力总决赛。</div>
+                    <a class='top' href="<?=home_url('matchs/info/match_id/'.$row->match_id);?>">比赛详情</a>
+                    <a class='bottom' href="javascript:;">订单详情</a>
                 </div>
             </div>
         </div>           
     </div>
 </div>
-
-<script>
-// jQuery(function($) {
-//
-//
-// })
-</script>

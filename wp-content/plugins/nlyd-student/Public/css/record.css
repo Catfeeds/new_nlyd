@@ -14,14 +14,12 @@
 
 .layui-tab-brief>.layui-tab-title .layui-this{
     color: #fff;
-    border: 1px solid rgba(104, 170, 254, 1);
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    color: #fff;
-    
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
+    border: 1px solid transparent;
+    border-top-color: #68AAFE;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
 }
 .layui-unselect{
     display: none;
@@ -36,8 +34,10 @@
     width: calc(100%/3 - 10px);
     line-height: 40px;
     padding: 0;
-    transition: all .2s;
-    -webkit-transition: all .2s;
+    transition: none;
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
     position: relative;
     min-width: 65px;
     text-align: center;
@@ -45,6 +45,32 @@
     border: 1px solid rgba(116, 116, 116, 1);
     border-radius: 6px;
     font-size: 0.16rem;
+}
+.nl-transform{
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
+    transform: translate3d(0px, 0px, 0px);
+    display: inline-block;
+    vertical-align: middle;
+    color: #fff;
+    height: 40px;
+    width: -webkit-calc(100%/3 - 10px);
+    width: calc(100%/3 - 10px);
+    line-height: 40px;
+    padding: 0;
+    min-width: 65px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-top-color: #68AAFE;
+    border-radius: 6px;
+    font-size: 0.16rem;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
 }
 .layui-tab-title li:first-child{
     margin-left: 0;

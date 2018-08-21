@@ -20,7 +20,7 @@
                         <div class="form-input-row">
                             <div class="form-input-label">提现至</div>
                             <div class="show-value">民生银行 尾号2630 储蓄卡</div>
-                            <a href="<?=home_url('wallet/makeCashType');?>" class="form-input-right nl-dark-blue">更 换</a>
+                            <a href="<?=home_url('wallet/makeCashType');?>" class="form-input-right c_blue">更 换</a>
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label">提现金额</div>

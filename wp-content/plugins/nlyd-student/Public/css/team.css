@@ -15,10 +15,10 @@
 .layui-tab-brief>.layui-tab-title .layui-this{
     color: #fff;
     border: 1px solid rgba(104, 170, 254, 1);
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     color: #fff;
     
     box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
@@ -71,18 +71,18 @@
     width: -webkit-calc(50% - 7px);
     width: calc(50% - 7px);
     margin-left:10px;
-    height: 140px;
     border: 1px solid rgba(220, 220, 220, 1);
     border-radius: 5px;
     background-color: #fff;
     padding-top: 10px;
+    padding-bottom: 10px;
 }
 #team-flow .team-row:nth-child(even){
     margin-left: 0;
 }
 .team-tips{
-    color: rgba(116, 116, 116, 1);
-    font-size: 0.1rem;
+    font-size: 0.12rem;
+    line-height: 0.18rem
 }
 .team-join{
    position: absolute;
@@ -134,10 +134,6 @@
     float: left;
 }
 
-.team-name{
-    font-size: 0.16rem;
-    color: rgba(67, 148, 249, 1);
-}
 .team-detail-row{
     padding-left: 16px;
     margin-top: 2px;
@@ -150,11 +146,11 @@
 }
 .team-info,.team-info-label{
     font-size: 0.14rem;
-    color: rgba(116, 116, 116, 1);
+    color: rgba(38, 38, 38, 0.6);
 }
 .team-detail-row.waitting .team-info{
     font-size: 0.12rem;
-    color: rgba(251, 142, 142, 1);
+    color: #FB8E8E;
 }
 .team-btn{
     width: 115px;
@@ -168,10 +164,6 @@
     background: linear-gradient(70deg,rgba(99, 147, 255, 1),rgba(99, 193, 255, 0.7));
     color: #fff;
     font-size: 0.14rem;
-}
-.layui-flow-more{
-    position: relative;
-    bottom: 0;
 }
 .nl-badge{
     position: relative;
@@ -189,7 +181,7 @@
     color: #fff;
     border-radius: 50%;
 }
-.nl-dark-blue{
+.c_blue{
     color: #4394f9;
 }
 .team-type{

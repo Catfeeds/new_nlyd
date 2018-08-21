@@ -590,6 +590,7 @@ class wxpay
 
             if($queryRes != false && $queryRes['status'] != false){
                 $queryRes['notifyData'] = $data;
+                $queryRes['order'] = $orderParam;
                 return $queryRes;
             }else{
                 return false;

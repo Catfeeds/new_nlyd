@@ -24,7 +24,7 @@
     height: 102px;
     text-align: center;
     line-height: 102px;
-    color: #747474;
+    color: rgba(38, 38, 38, 0.6);
 }
 .layui-layer.nl-box-skin .layui-layer-btn{
     padding: 0;
@@ -45,11 +45,14 @@
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
     border-top:1px solid rgb(238, 238, 238);
     background-color: #fff;
-    color: #4394f9;
+    color: #4394F9;
 }
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn1{
-    border-top: 1px solid #4e9afa;
-    background-color:  #4e9afa;
+    border-top: 1px solid #68AAFE;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     color: #fff;
 }
 .layui-tab-bar{

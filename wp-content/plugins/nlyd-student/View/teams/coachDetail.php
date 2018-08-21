@@ -26,21 +26,21 @@
                                     <div class="coachDetail-infoRow">
                                         <span class="nl-coach-name"><?=$user_info['real_name']?></span>
                                         <?php if(!empty($user_info['user_gender'])):?>
-                                        <span class="nl-grey-font">$user_info['user_gender']</span>
+                                        <span>$user_info['user_gender']</span>
                                         <?php endif;?>
-                                        <span class="nl-grey-font">ID <?=$user_info['user_ID']?></span>
+                                        <span>ID <?=$user_info['user_ID']?></span>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span class="nl-grey-font">国际脑力运动委员会（IISC）</span>
-                                        <a class="nl-blue-font"><i class="iconfont">&#xe657;</i>查看脑力证书</a>
+                                        <span>国际脑力运动委员会（IISC）</span>
+                                        <a class="c_blue"><i class="iconfont">&#xe657;</i>查看脑力证书</a>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span class="nl-grey-font"><?=$user_info['user_coach_level']?></span>
+                                        <span><?=$user_info['user_coach_level']?></span>
                                     </div>
                                     <?php if(!empty($skill)):?>
                                     <div class="coachDetail-infoRow">
                                         <?php foreach ($skill as $v){ ?>
-                                        <div class="coach-type"><?=$v['post_title']?></div>
+                                        <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div>
                                         <?php } ?>
                                     </div>
                                     <?php endif;?>
@@ -65,29 +65,29 @@
                                         <div class="course-wrapper">
                                             <a class="course">
                                                 <div class="course-body">
-                                                    <div class="course-name">高效记忆术·G第1期</div>
-                                                    <div class="course-address">四川.成都.武侯区</div>
+                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
+                                                    <div class="c_black6">四川.成都.武侯区</div>
                                                 </div>
                                                 <div class="course-footer">抢占名额中</div>
                                             </a>
                                             <a class="course">
                                                 <div class="course-body">
-                                                    <div class="course-name">高效记忆术·G第1期</div>
-                                                    <div class="course-address">四川.成都.武侯区</div>
+                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
+                                                    <div class="c_black6">四川.成都.武侯区</div>
                                                 </div>
                                                 <div class="course-footer disabled">名额已满</div>
                                             </a>
                                             <a class="course">
                                                 <div class="course-body">
-                                                    <div class="course-name">高效记忆术·G第1期</div>
-                                                    <div class="course-address">四川.成都.武侯区</div>
+                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
+                                                    <div class="c_black6">四川.成都.武侯区</div>
                                                 </div>
                                                 <div class="course-footer disabled">名额已满</div>
                                             </a>
                                             <a class="course">
                                                 <div class="course-body">
-                                                    <div class="course-name">高效记忆术·G第1期</div>
-                                                    <div class="course-address">四川.成都.武侯区</div>
+                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
+                                                    <div class="c_black6">四川.成都.武侯区</div>
                                                 </div>
                                                 <div class="course-footer">抢占名额中</div>
                                             </a>
@@ -104,7 +104,7 @@
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-metal">学 员</div>
-                                <div class="coachDetail-top">&nbsp;*M、R、A分别代表记忆、速读、心算&nbsp;&nbsp;<span class="nl-blue-font"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
+                                <div class="coachDetail-top">&nbsp;*M、R、A分别代表记忆、速读、心算&nbsp;&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
                                 <table class="nl-table" id="flow-table">
                                     <tr>
                                         <td>头像</td>
@@ -159,7 +159,7 @@ jQuery(function($) {
                             $.each(res.data.list,function(index,value){
                                 var dom='<tr>'
                                             +'<td>'
-                                                +'<div class="player-img">'
+                                                +'<div class="player-img img-box">'
                                                     +'<img src="'+value.user_head+'">'
                                                 +'</div>'
                                             +'</td>'
