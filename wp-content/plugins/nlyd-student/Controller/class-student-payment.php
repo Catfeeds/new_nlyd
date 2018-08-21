@@ -168,7 +168,7 @@ class Student_Payment {
             //获取订单信息回调,用于验证签名
             global $wpdb;
             $order = $wpdb->get_row(
-                'SELECT serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
+                'SELECT serialnumber,match_id,user_id,fullname,telephone,order_type,address,pay_type,cost,pay_status,created_time FROM '
                 .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no, ARRAY_A);
             if($order){
                 return $this->getWxParam($order);
@@ -178,9 +178,10 @@ class Student_Payment {
         });
         if($queryRes && $queryRes['trade_state'] === 'SUCCESS'){
             // TODO 处理业务逻辑
-            $serialnumber = $queryRes['out_trade_no'];
+            $serialnumber = $queryRes['notifyData']['out_trade_no'];
+            $pay_status = $queryRes['order']['order_type'] == 2 ? 2 : 4;
             $updateData = [
-                'pay_status' => 2,
+                'pay_status' => $pay_status,
                 'pay_type' => 'wx',
                 'pay_lowdown' => serialize($queryRes['notifyData'])
             ];
@@ -386,12 +387,13 @@ class Student_Payment {
         $data = $_POST;
         self::$payClass ->notify($data, function ($data){
             global $wpdb;
-            $order = $wpdb->get_row('SELECT id,pay_status,cost FROM '.$wpdb->prefix.'order WHERE serialnumber='.$data['out_trade_no'], ARRAY_A);
+            $order = $wpdb->get_row('SELECT id,pay_status,cost,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$data['out_trade_no'], ARRAY_A);
             //file_put_contents('aaa.txt', json_decode($order, JSON_UNESCAPED_UNICODE));
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
+                $pay_status = $order['order_type'] == 2 ? 2 : 4;
                 $updateData = [
-                    'pay_status' => 2,
+                    'pay_status' => $pay_status,
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];

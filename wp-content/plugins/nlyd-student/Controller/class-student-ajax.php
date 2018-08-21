@@ -1906,10 +1906,19 @@ class Student_Ajax
                 $payStatusWhere = 'pay_status=1';
                 break;
             case 2://待发货
-                $payStatusWhere = '1=1';
+                $payStatusWhere = 'pay_status=2';
                 break;
             case 3://待收货
-                $payStatusWhere = '1=1';
+                $payStatusWhere = 'pay_status=3';
+                break;
+            case 4://已完成
+                $payStatusWhere = 'pay_status=4';
+                break;
+            case -1://待退款
+                $payStatusWhere = 'pay_status=-1';
+                break;
+            case -2://已退款
+                $payStatusWhere = 'pay_status=-2';
                 break;
             default:
                 wp_send_json_error(array('info' => '参数错误'));
@@ -1940,7 +1949,10 @@ class Student_Ajax
         WHEN -2 THEN "已退款" 
         WHEN -1 THEN "待退款" 
         WHEN 1 THEN "待支付" 
-        WHEN 2 THEN "支付完成" 
+        WHEN 2 THEN "待发货" 
+        WHEN 3 THEN "待收货" 
+        WHEN 4 THEN "订单完成" 
+        WHEN 5 THEN "已失效" 
         END AS pay_status,
         created_time
         FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' 
