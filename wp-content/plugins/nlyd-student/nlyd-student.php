@@ -21,8 +21,6 @@ if(!class_exists('StudentController')){
         public function __construct()
         {
 
-            var_dump(1);
-            var_dump(date('Y-m-d H:i:s',time() ));
 
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
