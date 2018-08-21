@@ -6,11 +6,9 @@ class Student_Payment {
     public function __construct($action)
     {
 
-        if($action == 'success'){
-            //止血显paySuccess
-            $this->zfb_returnUrl();
+        if($action == 'success') $action = 'zfb_returnUrl';
+        if(!$action == 'zfb_returnUrl'){
 
-        }else{
             if(isset($_GET['type'])){
                 $type = $_GET['type'];
             }else {
@@ -38,17 +36,13 @@ class Student_Payment {
                     exit;
                 }
             }else{
-
                 require_once INCLUDES_PATH.'library/Vendor/Alipay/alipay.php';
                 self::$payClass =  new alipay('2017123001371219',
                     'MIIEpAIBAAKCAQEAuFAjw6VL6CGjp7zxAJzcLSPXxYVHfILRukhTL6Z1ZyRBLlmTW+yFiq96+pNKSbWzmniNcsPqA4xRD0amORUiXxcfY/rlSBSxn/aIHPfLZDFhhGNxuHS1BeXQjJpzOgKzrlWZwrYvVU21Qw1Z74Jdk8TlZySeDgypBNfIKHRpni2AVo+8tT0DvvqsHqilvo8AGJI1U/pDl3TjJSAY6sp0Z/YK/rhPqlgUyzu/nlt9uRLExG4fa224EvKv+Qn/ZdTmzdzvfcxrDfo9iAXJPh1CxT8holbC8TLq+Ff5Ddh7yj/4NaF438uqSy0MwYpYW4nEDkQvvhQLC7uhRsRSpHl3TQIDAQABAoIBAQCjClkoty7Xb/Jp7gwuo5Ns5tj3I/fhn4NQyquzagdOrtZt3tUoqqhSzvn1cJd1bqMq0NsnG0EF1HjcD3343sYh4b1l3so1ogCiZR1wqo4j2j7OMn2lUq/TQMDjr7igJ0W0wIocoLZsOipO3x+ga+zFS5Y2UED0YqSc4RhxGNFZFpwEZUd34Ga1OSjKjehIEQzMnrUTNC6EwzNpkLn/oNTExKeD+uz9e9O9MMcXThaTyWxWYismxJDouVep/dEgGslZTOUxrD0iVSUERzsbWqsHFnc9bhxM3qUKzwZ3Dvpy2Uq+psM80Um1dcE6wL+XdLGi3KyayF+zUSUw9EoNg4vhAoGBAOaWEUaAVGMq0hZ6N1Cx5AC1MAh5Jc14DERDp4MgwQ347fUEZ0rhJu26czP4I67ztRuVj7LzsFSshXigHTAVKctUwH18HORxnhrVQDVAYB4ai3fskP/tdpdiVjIvxycWBtqq39MQPnxlFL7c2leoAYFDcIGy5y+elMessTVhgIn5AoGBAMygfJKGWu3OBR3LBnpuBK8gkKdDNMo7SqUjl+U5boIQwXmlJoVMbWtLdXpMjszplavDRkKQ5w2hOhndnWCEdBRVED8f6iWmQ2+n5z4pgn2AYxA7t4a5n+yVlAvTMaTRLK/DpwQl/Cf0yM/Ame5JS2WYdnaxgdDg1r6IQk5zW8z1AoGAVxZ2j9oIBSw3DKY8Hg4RvvKvoYOf82pTt7SVn8DPKSfLN67iFDXVLhQtToN5dqo0zKZAD6ZaAqDmCBjw7SgREOqBiONHRkBjJl9EUNhvdO8xnamLWh2lnKdXRr0kym5XSF8hCeYos3K50xw2msSpTNjbtSCMkD+kkYV3qGGa2oECgYAumCClkLhly/K4TQGloSWp5wVpQNFld0jQ/6DXzlMOhNg5ZdS2p6eGtgEDHympGUs+eFGoWKx0GxFK0H7EeoSgGJqBdTfw6MIUS6xJKFSRVUm5aY+putzil1DFvIpiWEsPnsKKHEglpQSQ4e9rJf9oG+Zlspe3w2rCqe5HRNdTfQKBgQDQI1BrIyEColUlIK7I0yd6z5Kzk7U57D7YYwg6vVlhKwJp0mEyeq/5o5S5xZMHw1Eyz9U0nyeHtxZYbEjWgnQWpoEIhQeG3TzuZmKCZ2UvM4iqK57pm9c5ebX0sOCfYo0VKmJ4n/5vDGN1x0iglAELKRlLDFcxnHMKNLhXC3sd2A==',
                     'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk5Ic/oM4MnQFRtGKVvc57Erl/ownJP+dL3swjrAZPWCE0hxy3mkpxfFvogwjHkGVY+eTDfiMRwnoPyppubMDPSc/ZGtz/XvRvAmJ1BGBhLeOHz46xicqS+QK+sdxWUODBwySnepVrDnSi7cuH0/yyzF6tzyzQsFzYAEZJkv0uPx8/0I3WVwlPRK/T29Iid9SFV9nma2awNkwcjO7G6sMf1SIRXbouNVKsyXPcbjoZZEo/PzHFQ2/Rp7TPQTr+j52qgdvIGtBS+sE4TFSYt7Q/IF8fceejjQTYQzpTWDgO6bkR6Ra5tm37lQzPi4tdk+b7tCZ2bRj7IVAi3OvBEqa9QIDAQAB'
                 );
-
             }
         }
-
-
 
         //添加短标签
         add_shortcode('payment-home',array($this,$action));
@@ -418,15 +412,17 @@ class Student_Payment {
             return;
         };
         // TODO 查询比赛详情和订单详情
+
         wp_register_style( 'userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'userCenter' );
         wp_register_style( 'paySuccess', student_css_url.'paySuccess.css',array('my-student') );
         wp_enqueue_style( 'paySuccess' );
-
         $view = student_view_path.'paySuccess.php';
 //        load_view_template($view);
         load_view_template($view,array('row'=>$row));
+
     }
+
 
     /**
      * 查询订单

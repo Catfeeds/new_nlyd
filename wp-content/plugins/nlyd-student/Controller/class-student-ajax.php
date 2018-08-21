@@ -1897,8 +1897,6 @@ class Student_Ajax
     public function getOrderList(){
         global $wpdb,$current_user;
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        //搜索商品
-        $searchGoodsTitle = isset($_POST['search_goods']) ? trim($_POST['search_goods']) : '';
 
         if(!isset($_POST['pay_status'])) $_POST['pay_status'] = 10;
         switch ($_POST['pay_status']){
@@ -1914,7 +1912,7 @@ class Student_Ajax
             case 3://待收货
                 $payStatusWhere = 'pay_status=3';
                 break;
-            case 4://已完成
+            case 4://已失效
                 $payStatusWhere = 'pay_status=4';
                 break;
             case -1://待退款
@@ -1955,8 +1953,7 @@ class Student_Ajax
         WHEN 1 THEN "待支付" 
         WHEN 2 THEN "待发货" 
         WHEN 3 THEN "待收货" 
-        WHEN 4 THEN "订单完成" 
-        WHEN 5 THEN "已失效" 
+        WHEN 4 THEN "已失效" 
         END AS pay_status,
         created_time
         FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' 
