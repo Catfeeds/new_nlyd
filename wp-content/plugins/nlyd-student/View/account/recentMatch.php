@@ -70,13 +70,13 @@ layui.use(['element','flow'], function(){
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签
-                                var match_status='';//比赛中高亮
+                                var match_status='c_blue';//比赛中高亮
                                 var rightBtn='';   
                                 if(v.user_id!=null){//我报名参加的赛事
                                     isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                 }
                                 if(v.match_status==2){//比赛进行中
-                                    match_status='orange';   
+                                    match_status='c_orange';   
                                 }
                                 if(v.right_url.length>0 && (v.match_status==2 || v.user_id==null)){
                                     rightBtn='<div class="nl-match-button last-btn">'
@@ -89,33 +89,33 @@ layui.use(['element','flow'], function(){
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
                                             +'<div class="nl-match">'
                                                 +'<div class="nl-match-header">'
-                                                    +'<span class="nl-match-name">'+v.post_title+'</span>'
+                                                    +'<span class="nl-match-name  fs_16 c_blue">'+v.post_title+'</span>'
                                                     +isMe
-                                                    +'<p class="long-name">'+v.post_content+'</p>'
+                                                    +'<p class="long-name fs_12 c_black3">'+v.post_content+'</p>'
                                                 +'</div>'
                                                 +'<div class="nl-match-body">'
                                                     +'<div class="nl-match-detail">'
-                                                        +'<span class="nl-match-label">开赛日期：</span>'
-                                                        +'<span class="nl-match-info">'+v.match_start_time+'</span>'
+                                                        +'<span>开赛日期：</span>'
+                                                        +'<span class="c_black">'+v.match_start_time+'</span>'
                                                         +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
-                                                        +'<span class="nl-match-label">比赛地点：</span>'
-                                                        +'<span class="nl-match-info">'+v.match_address+'</span>'
+                                                        +'<span>比赛地点：</span>'
+                                                        +'<span class="c_black">'+v.match_address+'</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
-                                                        +'<span class="nl-match-label">报名费用：</span>'
-                                                        +'<span class="nl-match-info">¥'+v.match_cost+'</span>'
+                                                        +'<span>报名费用：</span>'
+                                                        +'<span class="c_black">¥'+v.match_cost+'</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
-                                                        +'<span class="nl-match-label">报名截止倒计时：</span>'
-                                                        +'<span class="nl-match-info getTimes" data-seconds="'+sys_second+'">'
+                                                        +'<span>报名截止倒计时：</span>'
+                                                        +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
                                                         
                                                         +'报名结束</span>'
                                                     +'</div>'
                                                     +'<div class="nl-match-detail">'
-                                                        +'<span class="nl-match-label">已报选手：</span>'
-                                                        +'<span class="nl-match-info">'+v.entry_total+'人</span>'
+                                                        +'<span>已报选手：</span>'
+                                                        +'<span class="c_black">'+v.entry_total+'人</span>'
                                                     +'</div>'
                                                 +'</div>'
 

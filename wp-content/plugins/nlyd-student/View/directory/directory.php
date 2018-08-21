@@ -3,28 +3,7 @@
   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
   <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<div class="nl-foot-nav">
-    <a class="nl-foot-item active" href="<?=home_url();?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe62d;</i></div>
-        <div class="nl-foot-name">首页</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe631;</i></div>
-        <div class="nl-foot-name">训练</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe692;</i></div>
-        <div class="nl-foot-name">比赛</div>
-    </a>
-    <a class="nl-foot-item">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe630;</i></div>
-        <div class="nl-foot-name">考级</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('student/account')?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe632;</i></div>
-        <div class="nl-foot-name">我的</div>
-    </a>
-</div>
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
@@ -38,18 +17,18 @@
                 <!-- 头部导航 -->
                 <div class="layui-row width-padding">
                     <div class="top-nav">
-                        <div class="top-nav-btn"><a href="<?=home_url();?>">首 页</a></div>
-                        <div class="top-nav-btn active"><a  href="<?=home_url('directory');?>">名 录</a></div>
-                        <div class="top-nav-btn"><a>课 程</a></div>
-                        <div class="top-nav-btn"><a href="<?=home_url('shop');?>">商 城</a></div>
-                        <div class="top-nav-btn"><a>公 益</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url();?>">首 页</a></div>
+                        <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('directory');?>">名 录</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6">课 程</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('shops');?>">商 城</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6">公 益</a></div>
                     </div>
                 </div>
                
                 <div class="layui-row width-padding  layui-bg-white">
                     <ul style="margin:0">
                     <li>
-                        <a class="system-list system-course small" href="<?=home_url('directory/directoryCoach');?>">
+                        <a class="system-list system-course small" href="<?=home_url('teams/coachList/');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     01
@@ -85,7 +64,7 @@
                         </a>
                     </li>
                     <li>
-                        <a  class="system-list system-match small" href="<?=home_url('directory/directoryTeam');?>">
+                        <a  class="system-list system-match small" href="<?=home_url('teams');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     03

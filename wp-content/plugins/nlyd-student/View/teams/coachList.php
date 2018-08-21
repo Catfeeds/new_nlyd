@@ -41,7 +41,7 @@
                         <?php endif;?>
                         <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
                         <div class="layui-tab-content">
-                            <div class="layui-tab-item layui-show layui-row layui-col-space20" id="flow-zoo">
+                            <div class="layui-tab-item layui-show layui-row layui-col-space20 flow-default" id="flow-zoo">
 
                             </div>
                         </div>
@@ -122,7 +122,7 @@ layui.use(['element','flow','layer'], function(){
                     if(res.success){
                        _this.css('display','none');
                        _this.parents('.coach-detail-footer').find('.coach-type').css('display','inline-block')
-                      var setMainCoach='<span class="coach-info nl-orange">等待教练审核</span>'
+                      var setMainCoach='<span class="fs_12 c_black6 c_orange">等待教练审核</span>'
                       _this.parents('.coach-detail-footer').prev('.coach-detail-row').html(setMainCoach)                
                     }
                     
@@ -234,7 +234,7 @@ layui.use(['element','flow','layer'], function(){
                                 }
                                 if(v.apply_status!=null){//1，申请中，2我的教练
                                     if(v.apply_status==1){//1，申请中，2我的教练
-                                        setMainCoach='<span class="coach-info nl-orange">等待教练审核</span>'
+                                        setMainCoach='<span class="fs_12 c_black6 c_orange">等待教练审核</span>'
                                     }else if(v.apply_status==2){//1，申请中，2我的教练
                                         $.each(arr,function(index,value){//橘色高亮
                                             if(value.ID==$('.layui-this').attr('data-id')){
@@ -249,10 +249,10 @@ layui.use(['element','flow','layer'], function(){
                                         })
                                         if(v.my_major_coach=='y'){//主训教练
                                             major_coach='<div class="nl-badge">主</div>';
-                                            setMainCoach='<span class="coach-info nl-dark-blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'" style="display:none;">设为主训教练</span>';
+                                            setMainCoach='<span class="fs_12 c_black6 c_blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'" style="display:none;">设为主训教练</span>';
                                         }else{
                                             major_coach='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';
-                                            setMainCoach='<span class="coach-info nl-dark-blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</span>'
+                                            setMainCoach='<span class="fs_12 c_black6 c_blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</span>'
                                         }
                                     }
 
@@ -267,21 +267,21 @@ layui.use(['element','flow','layer'], function(){
                                 }
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
                                             +'<a class="coach-row" href="'+v.coach_url+'">'
-                                                +'<div class="coach-picture">'
+                                                +'<div class="coach-picture img-box">'
                                                     +'<img src="'+v.user_head+'">'
                                                 +'</div>'
                                                 +'<div class="coach-detail">'
                                                     +'<div class="coach-detail-row">'
-                                                        +'<span class="coach-name">'+v.display_name+'</span>'
-                                                        +'<span class="coach-info">'+v.user_gender+'</span>'
-                                                        +'<span class="coach-info">ID '+v.user_ID+'</span>'
+                                                        +'<span class="fs_18 c_blue">'+v.display_name+'</span>'
+                                                        +'<span class="fs_12 c_black6">'+v.user_gender+'</span>'
+                                                        +'<span class="fs_12 c_black6">ID '+v.user_ID+'</span>'
                                                         +major_coach
                                                     +'</div>'
                                                     +'<div class="coach-detail-row">'
-                                                        +'<span class="coach-info">国际脑力运动委员会（IISC）</span>'
+                                                        +'<span class="fs_12 c_black6">国际脑力运动委员会（IISC）</span>'
                                                     +'</div>'
                                                     +'<div class="coach-detail-row">'
-                                                        +'<span class="coach-info">'+v.user_coach_level+'</span>'
+                                                        +'<span class="fs_12 c_black6">'+v.user_coach_level+'</span>'
                                                     +'</div>'
                                                     +'<div class="coach-detail-row">'
                                                         +setMainCoach

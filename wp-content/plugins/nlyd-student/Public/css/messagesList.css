@@ -8,20 +8,18 @@
     margin-top: 10px;
 }
 .message-row .accept-name{
-    color: rgba(67, 148, 249, 1);
-    font-size: 0.14rem;
+    color: #2484FE;
 }
 .message-row.read .accept-name{
-    color: rgba(116, 116, 116, 1);
+    color: rgba(38, 38, 38, 0.6);
 }
 .message-row .message-detail{
-    font-size: 0.14rem;
-    color: rgba(116, 116, 116, 1);
+    color: rgba(38, 38, 38, 0.6);
 }
 .message-row.read .message-detail{
-    color: rgb(184, 188, 190);
+    color: rgba(38, 38, 38, 0.3);
 }
 .message-time{
     float: right;
-    color: rgb(184, 188, 190);
+    color: rgba(38, 38, 38, 0.3);
 }

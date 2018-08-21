@@ -46,7 +46,7 @@
                             <div class="layui-tab-content">
                                 <!-- 全部 -->
                                 <div class="layui-tab-item layui-show flow-default" id="all">
-                                    <!-- <div class="order-row layui-row">
+                                    <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">完成时间：2017-07-24 13:20</span>
                                             <span class="pull-right">交易成功</span>
@@ -101,11 +101,11 @@
                                         <div class="order-footer layui-row width-padding width-padding-pc">
                                             <div class="order-left-btn">删除订单</div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div> 
                                 <!-- 待支付 -->
                                 <div class="layui-tab-item flow-default" id="apply">
-                                    <!-- <div class="order-row layui-row">
+                                    <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">创建时间：2017-07-24 13:20</span>
                                             <span class="pull-right orange">待支付</span>
@@ -161,11 +161,11 @@
                                             <a href="" class="order-right-btn blue">支付订单</a>
                                             <div class="order-left-btn">取消订单</div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div> 
                                 <!-- 代发货 -->
                                 <div class="layui-tab-item flow-default" id="send">
-                                    <!-- <div class="order-row layui-row">
+                                    <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">支付时间：2017-07-24 13:20</span>
                                             <span class="pull-right blue">代发货</span>
@@ -221,11 +221,11 @@
                                             <a href="" class="order-right-btn blue">查看详情</a>
                                             <div class="order-left-btn">提醒发货</div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div> 
                                 <!-- 待收货 -->
                                 <div class="layui-tab-item flow-default" id="accept">
-                                    <!-- <div class="order-row layui-row">
+                                    <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">发货时间：2017-07-24 13:20</span>
                                             <span class="pull-right blue">待收货</span>
@@ -253,7 +253,7 @@
                                             <div class="order-left-btn ml-20">查看物流</div>
                                             <div class="order-left-btn">查看详情</div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div> 
                             </div> 
                         </div>    

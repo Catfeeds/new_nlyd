@@ -1,17 +1,16 @@
 .search-zoo{
     margin-top: 4.5px;
 }
-a:hover {
-    color: currentColor!important;
-  }
+
 .pt-10{
     padding-top: 10px;
 }
 
 .top-nav-btn{
     text-align: center;
-    display: inline-block;
-    margin-right:calc(25% - 50px) ;
+    display: block;
+    margin-right:calc(100%/4 - 37px*5/4);
+    float: left;
 }
 .top-nav-btn:last-child{
     margin-right: 0;
@@ -24,12 +23,8 @@ a:hover {
     height: 45px;
     line-height: 45px;
     text-align: center;
-    color: RGBA(38, 38, 38, 0.6);
-    font-size: 0.16rem;
 }
-.top-nav-btn.active a{
-    color: #68AAFE;
-}
+
 .top-nav-btn.active a:after{
     position: absolute;
     left: 0;
@@ -44,7 +39,7 @@ a:hover {
     pointer-events: none;
     border: none;
     border-radius: 0;
-    border-bottom: 3px solid #4394F9;
+    border-bottom: 3px solid #2484FE;
 }
 .entrance{
     display: flex;
@@ -69,9 +64,7 @@ a:hover {
 }
 .entrance-name{
     line-height: 40px;
-    font-size: 0.14rem;
     text-indent: 0.03rem;
-    color: RGBA(38, 38, 38, 0.6)
 }
 .img-btn{
     width: 40px;
@@ -97,42 +90,17 @@ a:hover {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.head-info span{
-    color: RGBA(38, 38, 38, 0.6); 
-    font-size: 0.14rem;
-}
-.head-info span:first-child{
-    color: #68AAFE;
-   
-}
+
 .foot-info{
     padding-top: 10px;
 }
-.nl-ad-tips,.nl-ad-detail,.nl-ad-name{
+.nl-ad-row p {
     padding-left: 14px;
     margin-bottom: 5px;
 }
-p.nl-ad-name{
-    color: #262626;
-    font-size: 0.14rem;
-    height: 24px;
-    white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-p.nl-ad-tips{
-    color: #FB8E8E;
-    font-size: 0.12rem;
-}
 .nl-ad-detail{
-    color: RGBA(38, 38, 38, 0.6);
+    padding-left: 14px;
     margin-bottom: 0;
-    display:-webkit-box;
-    -webkit-line-clamp:3;
-    overflow:hidden;
-    line-break:auto;
-    -webkit-box-orient:vertical;
-    word-wrap: break-word;
 }
 @media screen and (min-width: 992px){
     .mui-bar{
@@ -140,6 +108,5 @@ p.nl-ad-tips{
     }
 }
 @media screen and (max-width: 991px){
-    
 }
 

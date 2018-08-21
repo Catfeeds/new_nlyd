@@ -1,10 +1,8 @@
 
 .nl-blue-font{
-    color: rgba(67, 148, 249, 1);
+    color: #2484FE;
 }
-.nl-grey-font{
-    color: rgba(116, 116, 116, 1);
-}
+
 .teamDetail-row{
     position: relative;
     margin-bottom: 11px;
@@ -16,7 +14,7 @@
     margin-bottom: 0;
 }
 .nl-team-name{
-    color: rgba(67, 148, 249, 1);
+    color: #2484FE;
     font-size: 0.16rem;
 }
 .nl-team-step{
@@ -46,7 +44,7 @@
     background: -moz-linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
     background: linear-gradient(rgba(104, 170, 254, 1),rgba(99, 147, 255, 1));
     color: #fff;
-    /* font-size: 12px; */
+    font-size: 0.12rem;
     border-radius: 0 0 4px 4px;
 }
 
@@ -72,7 +70,7 @@
 }
 .teamDetail-top{
     padding-top: 10px;
-    color: rgba(196, 196, 196, 1);
+    font-size: 0.12rem
 }
 .content .nl-table td,.content table.nl-table{
     border-color:transparent;
@@ -82,8 +80,6 @@
     position: relative;
     margin-top: 0;
     margin-bottom: 87px;
-    width: -webkit-calc(100% - 30px);
-    width: calc(100% - 30px);
 }
 
 .player-img{
@@ -103,8 +99,6 @@
 }
 
 .content .nl-table td{
-    color: rgba(175, 173, 173, 1);
-    /* font-size: 12px; */
     text-align: center;
     overflow: hidden;
     text-overflow:ellipsis;
@@ -115,9 +109,6 @@
     width: 100%;
     margin: auto;
     overflow: hidden;
-}
-.content .nl-table td.nl-blue-font{
-    color: rgba(67, 148, 249, 1);
 }
 .layui-flow-more{
     bottom: -25px;
@@ -139,14 +130,12 @@
 
 .layui-tab-brief>.layui-tab-title .layui-this{
     color: #fff;
-    border: 1px solid rgba(104, 170, 254, 1);
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    color: #fff;
-    
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
+    border: 1px solid transparent;
+    border-top-color: #68AAFE;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
 }
 .layui-tab-title li{
     display: inline-block;
@@ -158,15 +147,38 @@
     width: calc(100%/3 - 10px);
     line-height: 40px;
     padding: 0;
-    transition: all .2s;
-    -webkit-transition: all .2s;
     position: relative;
     min-width: 65px;
     text-align: center;
     cursor: pointer;
     border: 1px solid rgba(116, 116, 116, 1);
     border-radius: 6px;
-    font-size: 0.16rem;
+    font-size: 0.14rem;
+}
+.nl-transform{
+    top: 0;
+    width: -webkit-calc(100%/3 - 10px);
+    width: calc(100%/3 - 10px);
+    border: 1px solid transparent;
+    border-top-color: #68AAFE;
+    height: 40px;
+    line-height: 40px;
+    left: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    position: absolute;
+    font-size: 0.14rem;
+    text-align: center;
+    font-weight: 500;
+    text-transform: uppercase;
+    -webkit-font-smoothing: subpixel-antialiased;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+    transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
+    transform: translate3d(0px, 0px, 0px);
+    border-radius: 6px;
 }
 .layui-tab-title li:first-child{
     margin-left: 0;

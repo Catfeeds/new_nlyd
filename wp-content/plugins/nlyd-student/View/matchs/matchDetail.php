@@ -29,31 +29,31 @@
                             <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name <?=$match['match_status'] != 1?'finish':'';?>"><?=$match['post_title']?></span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':' ';?>"><?=$match['post_title']?></span>
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name"><?=$match['post_content']?></p>
+                                    <p class="long-name fs_12 c_black3 text_1"><?=$match['post_content']?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛日期：</div>
-                                        <div class="nl-match-info">
+                                        <div class="nl-match-info text_1 c_black">
                                             <?=$match['match_start_time']?>
-                                            <span class="nl-match-type <?=$match['match_status'] == 2?'orange':'';?> "><?=$match['match_status_cn']?></span>
+                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛地点：</div>
-                                        <div class="nl-match-info"><?=$match['match_address']?></div>
+                                        <div class="nl-match-info text_1 c_black"><?=$match['match_address']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名费用：</div>
-                                        <div class="nl-match-info">¥<?=$match['match_cost']?></div>
+                                        <div class="nl-match-info text_1 c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info" id="time_count" data-end="<?=$match['entry_end_time']?>">已截止</div>
+                                        <div class="nl-match-info text_1 c_black" id="time_count" data-end="<?=$match['entry_end_time']?>">已截止</div>
                                     </div>
                                 </div>
                             </li>
@@ -61,17 +61,17 @@
                             <!-- 比赛项目 -->
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
-                                    <span class="nl-match-name <?=$match['match_status'] != 1?'finish':'';?> ">比赛项目</span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':'';?> ">比赛项目</span>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
                                     <div class="nl-match-detail layui-row">
                                         <div class="nl-match-label"><?=$val['parent_title']?>：</div>
-                                        <div class="nl-match-info">
+                                        <div class="nl-match-info text_1 c_black">
                                         <?php foreach ($val['project'] as $v ){ ?>
                                         
                                             <div class="one-item"><?=$v['post_title']?>
-                                                &nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="nl-see-link">查看规则</a>
+                                                &nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue fs_12 ">查看规则</a>
                                              </div>
                                         
                                         <?php } ?>

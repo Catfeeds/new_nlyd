@@ -35,10 +35,10 @@
     line-height: 25px;
     text-align: center;
     color: #fff;
-    background: -webkit-linear-gradient(#4394F9, #68AAFE);
-    background: -o-linear-gradient(#4394F9, #68AAFE);
-    background: -moz-linear-gradient(#4394F9, #68AAFE);
-    background: linear-gradient(#4394F9, #68AAFE);
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     font-size: 0.14rem;
 }
 .rule-title{

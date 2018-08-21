@@ -1,23 +1,19 @@
 .pay-success{
-    width: 100%;
-    padding-top: 145px;
+    width: 90%;
+    padding-top: 110px;
+    margin: auto;
 }
 .pay-info{
-    margin-bottom: 48px;
+    margin-bottom: 20px;
     color: #4394F9;
     text-align: center;
-    font-size: 0.18rem;
+    font-size: 0.16rem;
 }
-.btn-zoo{
-    width: 100%;
-    display: flex;
-}
-.btn-z{
-    flex: 1;
-}
-.btn-z a{
+
+
+a{
     display: block;
-    width: 80%;
+    width: 100%;
     height: 45px;
     line-height: 45px;
     text-align: center;
@@ -27,20 +23,34 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.btn-z a.left{
-    background: -webkit-linear-gradient(#4394F9, #68AAFE);
-    background: -o-linear-gradient(#4394F9, #68AAFE);
-    background: -moz-linear-gradient(#4394F9, #68AAFE);
-    background: linear-gradient(#4394F9, #68AAFE);
-    border: 1px solid rgba(111, 175, 255, 0.2);
+a.top{
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     color: #fff;
-    float: right;
-    margin-right:2%;
+    margin-bottom: 20px;
 }
-.btn-z a.right{
-    border: 1px solid rgba(67, 148, 249, 1);
-    color: rgba(67, 148, 249, 1);
+a.bottom{
+    border: 1px solid #2484FE;
+    color: #2484FE;
     background: #fff;
-    float: left;
-    margin-left: 2%;
+}
+.nl-badge{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 10px;
+    text-align: center;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+    color: #fff;
+    border-radius: 50%;
+}
+.order-info{
+    margin-bottom: 20px;
+    text-align: center;
 }

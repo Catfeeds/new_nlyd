@@ -6,11 +6,6 @@
     left: 50%;
     transform: translate(-50%,0%);
     padding: 0 40px 0 40px;
-   
-    
-    /* box-shadow: 0 4px 10px 0 rgba(0,0,0,0.12), 4px 0 10px 0 rgba(164,164,164,0.50);
-    border-radius: 2px;
-    border: 1px solid #c6c6c6; */
 }
 
 
@@ -81,17 +76,7 @@
 .layui-form-item{
     margin-bottom:0;
 }
-/* .layui-tab-brief>.layui-tab-title .layui-this{
-    color: #fff;
-    border:none;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
-} */
-/* .layui-tab-brief>.layui-tab-title .layui-this i{
-    color: #fff;
-} */
+
 .layui-tab-title li{
     display: inline-block;
     vertical-align: middle;

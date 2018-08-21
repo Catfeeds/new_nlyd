@@ -27,14 +27,14 @@
                         <div class="address-left">
                             <div class="address-title">
                                 <span class="accept-name"><?=$val['fullname']?></span>
-                                <span class="phone-number"><?=$val['telephone']?></span>
+                                <span class="phone-number ff_num"><?=$val['telephone']?></span>
                                 <span data-id="<?=$val['id']?>" class="default-address <?=$val['is_default'] != 1 ? '':'set-address';?>"><?=$val['is_default'] != 1 ? '设为默认':'默认地址'?></span>
                             </div>
                             <p class="address-detail"><?=$val['user_address']?></p>
                         </div>
                         <div  class="address-right">
-                            <a class="address-btn edit" href="<?=home_url('/account/addAddress/address_id/'.$val['id']);?>">修改</a>
-                            <div class="address-btn del" data-id="<?=$val['id']?>">删除</div>
+                            <a class="address-btn bg_gradient_blue c_white" href="<?=home_url('/account/addAddress/address_id/'.$val['id']);?>">修改</a>
+                            <div class="address-btn del bg_gradient_grey c_white" data-id="<?=$val['id']?>">删除</div>
                         </div>
                     </div>
                     <?php  } }else{ ?>

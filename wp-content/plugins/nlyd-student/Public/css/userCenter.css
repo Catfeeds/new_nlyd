@@ -40,7 +40,7 @@
 }
 
 .no-team{
-    color:#747474;
+    color:rgba(38, 38, 38, 0.6);;
 
 }
 
@@ -90,7 +90,7 @@
         height: 50px;
         line-height: 50px;
         text-align: center;
-        color: #747474;
+        color: rgba(38, 38, 38, 0.6);;
         border-bottom: 1px solid #f2f2f2;
         border-left: 5px solid transparent;
     }
@@ -191,7 +191,7 @@
         overflow: hidden;
     }
     a.userCenter-row:hover{
-        color: rgba(67, 148, 249, 1);
+        color: #2484FE;
     }
     .userCenter-row{
         display: block;
@@ -201,7 +201,7 @@
         font-size: 0.14rem;
         line-height: 55px;
         margin-top: 10px;
-        color: rgba(67, 148, 249, 1);
+        color: #2484FE;
         text-align: left;
     }
     .userCenter-names{
@@ -345,7 +345,7 @@
     }
     .userCenter-level-item{
         flex-grow:1;
-        color:rgba(116, 116, 116, 1);
+        color:rgba(38, 38, 38, 0.6);;
 
     }
     .userCenter-level-item p{
@@ -357,10 +357,10 @@
     .userCenter-level-item p:first-child{
         font-size: 0.14rem;
         line-height: 35.5px;
-        color: rgba(67, 148, 249, 1);
+        color: #2484FE;
     }
     .userCenter-detail i{
-        color: rgba(67, 148, 249, 1);
+        color: #2484FE;
     }
     /* 列表 */
     .userCenter-detail{
@@ -378,7 +378,7 @@
         position: relative;
         line-height: 50px;
         text-align: center;
-        color: #747474;
+        color: rgba(38, 38, 38, 0.6);;
         border: none;
         display: block;
         float: left;
@@ -386,7 +386,7 @@
         width: 25%;
     }
     .userCenter-detail a:hover{
-        color: #747474;
+        color: rgba(38, 38, 38, 0.6);
     }
 
     .userCenter-detail-head{
@@ -403,11 +403,11 @@
         line-height: normal;
     }
     /* .userCenter-detail-head i{
-        color: rgba(67, 148, 249, 1);
+        color: #2484FE;
         font-size: 25px;
     }
     .userCenter-detail-head i.disabled{
-        color: #747474;
+        color: rgba(38, 38, 38, 0.6);;
     } */
     .userCenter-detail-foot{
         height: auto;
