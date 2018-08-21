@@ -37,25 +37,28 @@
                             <i class="iconfont">&#xe63d;</i>
                         </a>
                     </div>
-
-                    <a class="goods-row layui-row">
-                        <div class="goods-left-img img-box">
-                            <img src="">
-                        </div>
-                        <div class="goods-right-info">
-                            <div class="goods-wrap">
-                                
-                                <div class="goods-name">商品名字</div>
-                                <div class="goods-price">
-                                    <span class="c_blue">￥ 180.00</span>
-                                    <span class="orange-color">170+10脑币</span>
-                                    <i class="iconfont addShopCar pull-right">&#xe673;</i>
-                                </div>
-                                <div class="goods-detail">商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍</div>
-                        
+                    <?php foreach ($rows as $row){ ?>
+                        <a class="goods-row layui-row">
+                            <div class="goods-left-img img-box">
+                                <img src="<?=empty($row['images']) ? '' : $row['images'][0]?>">
                             </div>
-                        </div>
-                    </a>
+                            <div class="goods-right-info">
+                                <div class="goods-wrap">
+
+                                    <div class="goods-name"><?=$row['goods_title']?></div>
+                                    <div class="goods-price">
+                                        <span class="nl-dark-blue">￥ <?php echo ($row['price']+$row['brain']);?></span>
+                                        <br />
+                                        <span class="orange-color"><?=$row['price']?>+<?=$row['brain']?>脑币</span>
+                                        <i class="iconfont addShopCar pull-right">&#xe673;</i>
+                                    </div>
+                                    <div class="goods-detail"><?=$row['goods_intro']?></div>
+
+                                </div>
+                            </div>
+                        </a>
+
+                    <?php } ?>
 
                     <a class="goods-row layui-row">
                         <div class="goods-left-img img-box">

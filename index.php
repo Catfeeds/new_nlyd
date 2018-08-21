@@ -13,5 +13,8 @@
  */
 define('WP_USE_THEMES', true);
 
+//设置时区
+date_default_timezone_set('Asia/Shanghai');
+
 /** Loads the WordPress Environment and Template */
 require( dirname( __FILE__ ) . '/wp-blog-header.php' );

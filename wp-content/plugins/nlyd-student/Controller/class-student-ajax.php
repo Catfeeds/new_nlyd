@@ -25,6 +25,11 @@ class Student_Ajax
         add_action( 'wp_ajax_nopriv_'.$action,  array($this,$action) );
     }
 
+    public function set_test(){
+
+        var_dump('定时器测试');
+        die;
+    }
 
     /**
     *获取24点结果
@@ -464,7 +469,7 @@ class Student_Ajax
             'created_time'=>date('Y-m-d H:i:s',time()),
         );
         //TODO 测试时 订单价格为0
-        $_POST['cost'] = 0;
+//        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
         if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
             $data['pay_status'] = 2;
@@ -1223,7 +1228,8 @@ class Student_Ajax
         $where = join(' and ',$map);
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
-                b.match_address,b.match_cost,b.entry_end_time,b.match_status ,c.user_id,
+                if(b.match_address = '','--',b.match_address) match_address,
+                b.match_cost,b.entry_end_time,b.match_status ,c.user_id,
                 (case b.match_status 
                 when -3 then '已结束' 
                 when -2 then '等待开赛' 
@@ -1891,6 +1897,9 @@ class Student_Ajax
     public function getOrderList(){
         global $wpdb,$current_user;
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        //搜索商品
+        $searchGoodsTitle = isset($_POST['search_goods']) ? trim($_POST['search_goods']) : '';
+
         if(!isset($_POST['pay_status'])) $_POST['pay_status'] = 10;
         switch ($_POST['pay_status']){
             case 10: //全部订单
@@ -1900,16 +1909,25 @@ class Student_Ajax
                 $payStatusWhere = 'pay_status=1';
                 break;
             case 2://待发货
-                $payStatusWhere = '1=1';
+                $payStatusWhere = 'pay_status=2';
                 break;
             case 3://待收货
-                $payStatusWhere = '1=1';
+                $payStatusWhere = 'pay_status=3';
+                break;
+            case 4://已完成
+                $payStatusWhere = 'pay_status=4';
+                break;
+            case -1://待退款
+                $payStatusWhere = 'pay_status=-1';
+                break;
+            case -2://已退款
+                $payStatusWhere = 'pay_status=-2';
                 break;
             default:
                 wp_send_json_error(array('info' => '参数错误'));
         }
         $page < 1 && $page = 1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT 
         id,
@@ -1920,7 +1938,8 @@ class Student_Ajax
         IFNULL(address, "-") AS address,
         CASE order_type 
         WHEN 1 THEN "报名订单" 
-        END AS order_type,
+        WHEN 2 THEN "商品订单" 
+        END AS order_type_title,
         IFNULL(express_number, "-") AS express_number,
         IFNULL(express_company, "-") AS express_company,
         CASE pay_type 
@@ -1934,12 +1953,56 @@ class Student_Ajax
         WHEN -2 THEN "已退款" 
         WHEN -1 THEN "待退款" 
         WHEN 1 THEN "待支付" 
-        WHEN 2 THEN "支付完成" 
+        WHEN 2 THEN "待发货" 
+        WHEN 3 THEN "待收货" 
+        WHEN 4 THEN "订单完成" 
+        WHEN 5 THEN "已失效" 
         END AS pay_status,
         created_time
         FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' 
         AND '.$payStatusWhere.' 
         LIMIT '.$start.','.$pageSize, ARRAY_A);
+
+        //查询商品或比赛
+        foreach ($rows as $k => $order){
+            switch ($order['order_type']){
+                case 1://报名订单
+                    $posts = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$order['match_id']);
+                    $goodsData = [
+                        [
+                            'goods_title' => $posts->post_title,
+                            'goods_num' => 1,
+                            'price' => $order['cost'],
+                            'pay_price' => $order['cost'],
+                            'pay_brain' => 0,
+                        ]
+                    ];
+                    $allPrice = $order['cost'];
+                    break;
+                case 2://商品订单
+                    $goodsRows = $wpdb->get_results('SELECT od.goods_num,od.pay_price,od.pay_brain,g.goods_title FROM 
+                    '.$wpdb->prefix.'order_goods AS od 
+                    LEFT JOIN '.$wpdb->prefix.'goods AS g ON od.goods_id=g.id');
+                    $goodsData = [];
+                    $allPrice = 0;
+                    foreach ($goodsRows as $goodsRow){
+                        $goodsData[] = [
+                            'goods_title' => $goodsRow->goods_title,
+                            'goods_num' => $goodsRow->goods_num,
+                            'price' => ($goodsRow->pay_price+$goodsRow->pay_brain) * $goodsRow->goods_num,
+                            'pay_price' => $goodsRow->pay_price * $goodsRow->goods_num,
+                            'pay_brain' => $goodsRow->pay_brain * $goodsRow->goods_num,
+                        ];
+                        $allPrice += $goodsRow->pay_price * $goodsRow->goods_num;
+                    }
+                    break;
+            }
+            $order['goodsList'] = $goodsData;
+            $order['allPrice'] = $allPrice;
+            $order['addGoodsNum'] = count($goodsData);
+            $rows[$k] = $order;
+
+        }
         if($rows) wp_send_json_success(array('info' => $rows));
         wp_send_json_error(array('info' => '无订单'));
     }
@@ -2099,6 +2162,147 @@ class Student_Ajax
 
     }
 
+    /**
+     * 商品列表
+     */
+    public function getGoodsLists(){
+        global $wpdb;
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        //搜索商品
+        $searchWhere = isset($_POST['search_str']) ? 'AND goods_title LIKE "%'.trim($_POST['search_str']).'%"' : '';
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results('SELECT 
+        id,goods_title,goods_intro,images,brain,stock,sales,price 
+        FROM '.$wpdb->prefix.'goods WHERE shelf=1 AND stock>0 '.$searchWhere.' LIMIT '.$start.','.$pageSize, ARRAY_A);
+        foreach ($rows as &$row){
+            $row['images'] = unserialize($row['images']);
+        }
+        if($rows) wp_send_json_success(['info' => $rows]);
+        else wp_send_json_error(['info' => '没有商品']);
+    }
+
+    /**
+     * 加入购物车
+     */
+    public function joinCart(){
+        global $wpdb,$current_user;
+        $goodsId = intval($_POST['goods_id']);
+        $goodsNum = intval($_POST['num']);
+        if($goodsId < 1) wp_send_json_error(['info' => '非法参数']);
+        //检查商品库存
+        $goods = $wpdb->get_row('SELECT stock FROM '.$wpdb->prefix.'goods WHERE id='.$goodsId);
+        if(!$goods) wp_send_json_error(['info' => '未找到商品']);
+        if($goods['stock'] < $goodsNum) wp_send_json_error(['info' => '商品库存不足']);
+        //该商品是否已存在购物车
+        $row = $wpdb->get_row('SELECT id,goods_num FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$current_user->ID.' AND goods_id='.$goodsId.' AND order_id=0', ARRAY_A);
+        if($row){
+            $bool = $wpdb->update($wpdb->prefix.'order_goods',['goods_num' => $goodsNum+$row['goods_num']], ['id' => $row['id']]);
+        }else{
+            $bool = $wpdb->insert($wpdb->prefix.'order_goods', ['goods_num' => $goodsNum,'goods_id' => $goodsId, 'user_id' => $current_user->ID]);
+        }
+        if($bool) wp_send_json_success(['info' => '加入购物车成功']);
+        else wp_send_json_error(['info' => '操作失败']);
+    }
+
+    /**
+     * 提交订单
+     */
+    public function subGoodsOrder(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_join_cart_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
+        $user_id = $current_user->ID;
+        $address_id = intval($_POST['address']);
+        $address = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'my_address 
+        WHERE user_id='.$user_id.' AND id='.$address_id, ARRAY_A);
+        if(!$address) wp_send_json_error(['info' => '出错了, 找不到收货地址']);
+        //文件锁
+        if(!is_file('flock.txt')) file_put_contents('flock.txt', 1);
+        $fp = fopen('flock.txt', 'a+');
+        if(flock($fp, LOCK_EX)){
+            //查询购物车
+            $orderGoodsRows = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$user_id.' AND order_id=0', ARRAY_A);
+            //计算支付价格
+            $allPrice = 0;//支付金额
+            $allBrain = 0;//脑币
+            $orderGoodsIdStr = '(';// (1,2,3) 后面修改order_goods的order_id使用
+            $wpdb->startTrans();
+            foreach ($orderGoodsRows as $orderGoodsRow){
+                $goods = $wpdb->get_row('SELECT id,goods_title,shelf,price,stock FROM '.$wpdb->prefix.'goods WHERE id='.$orderGoodsRow['goods_id'], ARRAY_A);
+                //不存在商品
+                if(!$goods){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '出错了, 找不到商品']);
+                }
+                //已下架商品
+                if($goods['shelf'] == 2) {
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => $goods['goods_title'].'-已下架']);
+                }
+                //库存不足
+                if($goods['stock'] < $orderGoodsRow['goods_num']){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => $goods['goods_title'].'-库存不足']);
+                }
+                //减少商品库存
+                if(!$wpdb->update($wpdb->prefix.'goods', ['stock' => $goods['stock'] - $orderGoodsRow['goods_num']], ['id' => $goods['id']])){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '出错了, 库存更新失败']);
+                }
+                //更新order_goods 支付价格和支付脑币
+                if(!$wpdb->update($wpdb->prefix.'order_goods', ['pay_price' => $goods['price'], 'pay_brain' => $goods['brain']], ['id' => $goods['id']])){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '出错了, 支付价格更新失败']);
+                }
+                $allPrice += $goods['price'] * $orderGoodsRow['goods_num'];
+                $allBrain += $goods['brain'] * $orderGoodsRow['goods_num'];
+                $orderGoodsIdStr .= $orderGoodsRow['id'].',';
+            }
+            $orderGoodsIdStr = substr($orderGoodsIdStr,0,strlen($orderGoodsIdStr)-1);
+            $orderGoodsIdStr .= ')';
+            //订单数据
+            $orderInsertData = [
+                'user_id' => $user_id,
+                'match_id' => 0,
+                'fullname' => $address['fullname'],
+                'telephone' => $address['telephone'],
+                'address' => $address['country'].$address['province'].$address['city'].$address['area'].$address['address'],
+                'order_type' => 2,
+                'express_number' => '',
+                'express_company' => '',
+                'cost' => $allPrice,
+                'pay_status' => 1,
+                'created_time' => date('Y-m-d H:i:s'),
+            ];
+
+            $bool = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
+            if($bool){//新增订单数据
+                $insertId = $wpdb->insert_id;
+                if($wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($user_id,$wpdb->insert_id)], ['id' => $insertId])){//修改订单号
+                    if($wpdb->query('UPDATE '.$wpdb->prefix.'order_goods SET order_id='.$insertId.' WHERE id IN'.$orderGoodsIdStr)){  //修改order_goods的状态
+                        $wpdb->commit();
+                        wp_send_json_success(['info' => $insertId]);
+                    }else{
+                        //修改order_goods的状态失败
+                        $wpdb->rollback();
+                        wp_send_json_error(['info' => '提交订单失败']);
+                    }
+                }else{
+                    //修改订单号失败
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '提交订单失败']);
+                }
+            }else{
+                //插入订单数据失败
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '提交订单失败']);
+            }
+        }else{
+            wp_send_json_error(['info' => '系统繁忙,请稍后再试']);
+        }
+    }
 
     /**
      * 战绩排名
