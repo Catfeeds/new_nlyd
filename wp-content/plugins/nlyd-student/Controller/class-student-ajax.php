@@ -2105,6 +2105,47 @@ class Student_Ajax
 
     }
 
+    /**
+     * 商品列表
+     */
+    public function getGoodsLists(){
+        global $wpdb;
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results('SELECT 
+        id,goods_title,goods_intro,images,brain,stock,sales,price 
+        FROM '.$wpdb->prefix.'goods WHERE shelf=1 AND stock>0 LIMIT '.$start.','.$pageSize, ARRAY_A);
+        foreach ($rows as &$row){
+            $row['images'] = unserialize($row['images']);
+        }
+        if($rows) wp_send_json_success(['info' => $rows]);
+        else wp_send_json_error(['info' => '没有商品']);
+    }
+
+    /**
+     * 加入购物车
+     */
+    public function joinCart(){
+        global $wpdb,$current_user;
+        $goodsId = intval($_POST['goods_id']);
+        $goodsNum = intval($_POST['num']);
+        if($goodsId < 1) wp_send_json_error(['info' => '非法参数']);
+        //检查商品库存
+        $goods = $wpdb->get_row('SELECT stock FROM '.$wpdb->prefix.'goods WHERE id='.$goodsId);
+        if(!$goods) wp_send_json_error(['info' => '未找到商品']);
+        if($goods['stock'] < $goodsNum) wp_send_json_error(['info' => '商品库存不足']);
+        //该商品是否已存在购物车
+        $row = $wpdb->get_row('SELECT id,goods_num FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$current_user->ID.' AND goods_id='.$goodsId.' AND order_id=0', ARRAY_A);
+        if($row){
+            $bool = $wpdb->update($wpdb->prefix.'order_goods',['goods_num' => $goodsNum+$row['goods_num']], ['id' => $row['id']]);
+        }else{
+            $bool = $wpdb->insert($wpdb->prefix.'order_goods', ['goods_num' => $goodsNum,'goods_id' => $goodsId, 'user_id' => $current_user->ID]);
+        }
+        if($bool) wp_send_json_success(['info' => '加入购物车成功']);
+        else wp_send_json_error(['info' => '操作失败']);
+    }
+
 
     /**
      * 战绩排名
