@@ -31,10 +31,16 @@ a.top{
     color: #fff;
     margin-bottom: 20px;
 }
+a.top:hover{
+    color: #fff;
+}
 a.bottom{
     border: 1px solid #2484FE;
     color: #2484FE;
     background: #fff;
+}
+a.bottom:hover{
+    color: #2484FE;
 }
 .nl-badge{
     display: inline-block;

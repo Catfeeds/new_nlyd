@@ -20,6 +20,8 @@ if(!class_exists('myInterface')){
 
         public function main(){
 
+            require_once( leo_user_interface_path . 'Controller/class-default-ajax.php' );
+
             add_action('admin_menu',array($this,'add_submenu'));
 
             add_action('admin_enqueue_scripts', array($this,'scripts_default'));
@@ -34,8 +36,17 @@ if(!class_exists('myInterface')){
             add_submenu_page( 'options-general.php', '接口设置', '接口设置', 'manage_options', 'interface', array($this,'my_submenu_page_display') );
             add_submenu_page( 'options-general.php', 'logo设置', 'logo设置', 'manage_options', 'logo', array($this,'my_submenu_page_logo') );
             add_submenu_page( 'options-general.php', 'banner设置', 'banner设置', 'manage_options', 'banner', array($this,'my_submenu_page_banner') );
+            add_submenu_page( 'options-general.php', '默认配置', '默认配置', 'manage_options', 'default_setting', array($this,'my_submenu_page_setting') );
 
         }
+
+        /**
+         * 项目所有默认设置
+         */
+        public function my_submenu_page_setting(){
+            require_once( leo_user_interface_path . 'view/setting.php' );
+        }
+
 
         /**
          * 首页banner设置

@@ -4,32 +4,26 @@
     }
 }
 .count-wrapper{
-    width: 80%;
+    width: 90%;
     height: 250px;
     position: absolute;
     top: 50%;
-    left: 10%;
+    left: 5%;
     margin-top: -150px;
 }
-.count-nl-logo{
-    width: 100px;
-    height: 100px;
-    margin: auto;
-}
-.count-nl-logo img{
-    width: 100%
-}
-.match-name{
+p.match-name{
     text-align: center;
-    font-size: 0.16rem;
-    padding-top: 10px;
+    font-size: 0.20rem;
+    margin-bottom: 20px;
 }
 .match-detail{
     text-align: center;
-    font-size: 0.14rem;
-    padding-top: 10px;
+    margin-top: 20px;
 }
 .a-btn.wait{
     position: relative;
     top: 0;
+    left: 0;
+    margin-left: 0;
+    width: 100%;
 }
