@@ -1,0 +1,401 @@
+2018-08-21 14:37:48  SELECT a.post_title,b.* FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:40:51  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:48:45  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:53:00  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:53:30  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:54:30  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:56:17  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:56:32  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:58:18  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:58:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 14:59:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:00:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:01:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:02:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:03:32  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:04:32  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:06:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:07:29  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:08:37  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:09:36  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:10:31  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:11:34  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:14:05  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:14:33  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:17:20  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:19:20  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:20:06  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:24:27  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:25:32  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:27:01  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:27:39  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:28:27  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:30:06  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:31:50  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:32:47  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:34:52  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:35:30  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:36:43  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:42:29  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:43:42  SELECT a.post_title,b.id,b.match_id,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:44:27  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_use_time,b.match_use_time,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:47:21  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:47:36  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:49:05  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:51:05  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:53:05  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:54:58  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:55:28  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:56:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 15:59:13  select count(*) total from  
+2018-08-21 16:00:15  select count(*) total from wp_match_project where post_id = 170  
+2018-08-21 16:00:30  select count(*) total from wp_match_project where post_id = 170  
+2018-08-21 16:02:45  select count(*) total from wp_match_project where post_id = 170  
+2018-08-21 16:04:10  select count(*) total from wp_match_project where post_id = 170  
+2018-08-21 16:04:31  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:05:26  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:06:47  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:07:31  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:10:14  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:10:33  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:12:33  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:14:33  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:21:16  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:21:43  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:23:58  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:24:30  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:25:35  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:27:35  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:29:35  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:31:35  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:33:26  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:37:41  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:39:41  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:41:41  select count(*) total from wp_match_project where post_id = 575  
+2018-08-21 16:44:09  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:44:27  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:45:40  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:46:29  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:47:56  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:48:28  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:49:31  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:50:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:51:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:53:51  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:56:20  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:56:38  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 16:57:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:00:21  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:00:35  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:01:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:02:37  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:03:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:04:38  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:05:27  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:06:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:07:28  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:08:29  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:09:31  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:10:45  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:11:36  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:12:44  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:13:31  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:14:35  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:15:26  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:16:42  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:17:27  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:18:51  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:20:09  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:20:28  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:21:57  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:22:29  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:23:29  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:24:31  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:25:33  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:26:32  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:27:33  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:28:33  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:29:33  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 
+2018-08-21 17:30:33  SELECT a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time FROM wp_posts a 
+                LEFT JOIN wp_match_meta b ON a.ID = b.match_id
+                WHERE  a.post_type = "match"  and  a.post_status = "publish" 
+                 

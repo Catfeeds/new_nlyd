@@ -21,10 +21,6 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');*/
              <img src="<?=!empty($logo_url) ? $logo_url : '';?>" class="logoImg" style="width: 20em">
              <a id="upload" class="upload_button button" href="#">上传</a>
          </p>
-        <p>
-            使用默认比赛项目
-            <input type="checkbox" name="match_project_default" value="1" <?= $match_project_default  ? 'checked' : '';?> />
-        </p>
 
         <p class="submit"><input type="submit" id="interfaceSub" class="button button-primary" value="提交"></p>
     </form>
