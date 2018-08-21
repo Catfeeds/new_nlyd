@@ -2111,11 +2111,13 @@ class Student_Ajax
     public function getGoodsLists(){
         global $wpdb;
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        //搜索商品
+        $searchWhere = isset($_POST['search_str']) ? 'AND goods_title LIKE "%'.trim($_POST['search_str']).'%"' : '';
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT 
         id,goods_title,goods_intro,images,brain,stock,sales,price 
-        FROM '.$wpdb->prefix.'goods WHERE shelf=1 AND stock>0 LIMIT '.$start.','.$pageSize, ARRAY_A);
+        FROM '.$wpdb->prefix.'goods WHERE shelf=1 AND stock>0 '.$searchWhere.' LIMIT '.$start.','.$pageSize, ARRAY_A);
         foreach ($rows as &$row){
             $row['images'] = unserialize($row['images']);
         }
