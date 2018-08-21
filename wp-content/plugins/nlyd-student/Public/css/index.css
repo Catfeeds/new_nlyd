@@ -472,8 +472,31 @@ p.share-font{
     font-size:0.16rem
 }
 .content .nl-table td{
-font-size:0.12rem;
-padding:0;
+    font-size:0.12rem;
+    padding:0;
+}
+/* 比赛页面 */
+.matching-sumbit{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 69px;
+    height: 28px;
+    border: 1px solid #2484FE;
+    border-radius: 6px;
+    line-height: 28px;
+    text-align: center;
+    color: #2484FE;
+    font-size: 0.12rem;
+}
+.matching-row-label,.matching-row-list{
+    float: left;
+}
+.matching-row-label{
+    width: 74px;
+    text-align: left;
+    height: 28px;
+    line-height: 28px;
 }
 @media screen and (min-width: 992px){
     .nl-page-form{

@@ -8,9 +8,9 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="fs-14"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                        <span class="fs-14">第1/1题</span>
-                        <span class="blue-font fs-14">
+                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10">第1题</span>
+                        <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
@@ -18,7 +18,7 @@
                     </div>
                    
                     <div class="matching-fast">
-                        <p class="count_p">
+                        <p class="count_p c_black">
                             <span id="type">连加运算</span>
                             <span class="count_downs" data-seconds="10">00:03:00</span>
                             <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
@@ -28,32 +28,30 @@
                         <div class="item-wrapper">
                             <div class="fast-item" id="question"></div>
                             <div class="fast-item answer" id="answer"></div>
-                            <!-- <div class="fast-item error-fast">4A@#$%</div>
-                            <div class="fast-item right-fast">4A@#$%</div> -->
                         </div>
                     </div>
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="1">1</div>
-                            <div class="matching-key number" date-number="2">2</div>
-                            <div class="matching-key number" date-number="3">3</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="1">1</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="2">2</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="3">3</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="4">4</div>
-                            <div class="matching-key number" date-number="5">5</div>
-                            <div class="matching-key number" date-number="6">6</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="4">4</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="5">5</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="6">6</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="7">7</div>
-                            <div class="matching-key number" date-number="8">8</div>
-                            <div class="matching-key number" date-number="9">9</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="7">7</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="8">8</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key" id="del">删除</div>
-                            <div class="matching-key number" date-number="-">-</div>
-                            <div class="matching-key number" date-number="0">0</div>
-                            <div class="matching-key" id="next">下一题</div>
+                            <div class="matching-key bg_orange" id="del">删除</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="-">-</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="0">0</div>
+                            <div class="matching-key bg_orange" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 
@@ -68,9 +66,6 @@ jQuery(function($) {
     var even_add_time = $('#even_add_time').val(); //连加
     var add_and_subtract_time = $('#add_and_subtract_time').val(); //加减
     var wax_and_wane_time = $('#wax_and_wane_time').val(); //乘除
-    // var even_add_time = 0; //连加
-    // var add_and_subtract_time = 0; //加减
-    // var wax_and_wane_time = 15; //乘除
     var level={number:2,symbol:1},//题目难度
     type='连加运算',//当前子相运算类型
     ajaxData=[],//提交的数据

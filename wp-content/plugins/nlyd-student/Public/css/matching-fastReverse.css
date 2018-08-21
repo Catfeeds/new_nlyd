@@ -17,28 +17,7 @@
     margin-top: 20px;
 }
 
-.matching-row-label{
-    font-size: 0.14rem;
-    color: rgba(67, 148, 249, 1);
-    width: 74px;
-    text-align: left;
-    height: 28px;
-    line-height: 28px;
-}
 
-.matching-sumbit{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 69px;
-    height: 28px;
-    border: 1px solid rgba(111, 175, 255, 1);
-    border-radius: 6px;
-    line-height: 28px;
-    text-align: center;
-    color: rgba(67, 148, 249, 1);
-    font-size: 0.14rem;
-}
 .matching-fast{
     width: 90%;
     margin: auto;
@@ -87,11 +66,6 @@
     color: #fff;
     font-size: 0.16rem;
     border-radius: 6px;
-    background: -webkit-linear-gradient(#4394F9,#4A94F2);
-    background: -o-linear-gradient(#4394F9,#4A94F2);
-    background: -moz-linear-gradient(#4394F9,#4A94F2);
-    background: linear-gradient(#4394F9,#4A94F2);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
     margin-left: 12px;
 }
 .matching-key.disabled{
@@ -110,7 +84,6 @@
 }
 .count_p{
     margin-top: 40px;
-    font-size: 0.12rem;
     text-align: center;
 }
 .count_p span{

@@ -9,9 +9,9 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="fs-14"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                            <span class="fs-14">第<span id="number">1</span>/<?=count($match_questions)?>题</span>
-                            <span class="blue-font fs-14">
+                            <span class="c_black"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
+                            <span class="c_blue">第<span id="number">1</span>/<?=count($match_questions)?>题</span>
+                            <span class="c_blue ml_10">
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </span>
@@ -22,14 +22,14 @@
                             $key = 0;
                             foreach ($match_questions as $k => $val ){ ?>
                             <div class="matching-reading <?=$key==0?'active':''?>" data-index="<?=$key;?>" data-id="<?=$k;?>">
-                                <p class="ques"><?=$key+1;?>.<?=$val?></p>
+                                <p class="c_black"><?=$key+1;?>.<?=$val?></p>
                                 <?php
                                 foreach ($questions_answer[$k]['problem_select'] as $y => $v ){
                                    // print_r($v);
                                 ?>
                                 <div class="reading-select">
                                     <input type="checkbox" name='<?=$y?>' class="select_answer" lay-skin="primary">
-                                    <span><?=get_select($y)?>.<?=$v;?></span>
+                                    <span  class="c_black"><?=get_select($y)?>. <?=$v;?></span>
                                 </div>
                                 <?php } ?>
                             </div>
