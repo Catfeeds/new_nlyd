@@ -38,7 +38,7 @@
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
-                    <div class="width-margin width-margin-pc layui-row " id="team-flow">
+                    <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
                         <p class="team-tips">*每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入</p>
                     </div>
                 <?php }else{ ?>
@@ -133,7 +133,7 @@ layui.use(['layer','flow'], function(){
                                 var dom='<a class="team-row" href="'+value.team_url+'">'+statue
                                             +'<div class="team-detail">'
                                                 +'<div class="team-detail-row">'
-                                                    +'<span class="team-name">'+value.post_title+'</span>'
+                                                    +'<span class="fs_16 c_blue">'+value.post_title+'</span>'
                                                 +'</div>'
                                                 +'<div class="team-detail-row">'
                                                     +'<span class="team-info-label">战队负责人：</span>'

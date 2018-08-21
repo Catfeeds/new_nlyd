@@ -43,11 +43,11 @@ get_header(); ?>
                 <!-- 头部导航 -->
                 <div class="layui-row width-padding">
                     <div class="top-nav">
-                        <div class="top-nav-btn active"><a href="<?=home_url();?>">首 页</a></div>
-                        <div class="top-nav-btn"><a  href="<?=home_url('directory');?>">名 录</a></div>
-                        <div class="top-nav-btn"><a>课 程</a></div>
-                        <div class="top-nav-btn"><a href="<?=home_url('shops');?>">商 城</a></div>
-                        <div class="top-nav-btn"><a>公 益</a></div>
+                        <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url();?>">首 页</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('directory');?>">名 录</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6">课 程</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('shops');?>">商 城</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6">公 益</a></div>
                     </div>
                 </div>
                 <!-- 轮播 -->
@@ -75,7 +75,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/for-us-big.png'?>">
                                 </div>
-                                <div class="entrance-name">关于我们</div>
+                                <div class="entrance-name c_black6">关于我们</div>
                             </a>
                         </div>
                         <div class="entrance-wrap">
@@ -83,7 +83,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/sys-big.png'?>">
                                 </div>
-                                <div class="entrance-name">体系标准</div>
+                                <div class="entrance-name c_black6">体系标准</div>
                             </a>
                         </div>
                         <div class="entrance-wrap">
@@ -91,7 +91,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">
                                 </div>
-                                <div class="entrance-name">合作联系</div>
+                                <div class="entrance-name c_black6">合作联系</div>
                             </a>
                         </div>
                     </div>
@@ -104,8 +104,8 @@ get_header(); ?>
                     <!-- 课程 资讯 -->
                     <div class="layui-row">
                         <div class="head-info layui-row width-padding">
-                            <span class="pull-left">推荐课程</span>
-                            <span class="pull-right">推荐课程 <i class="iconfont">&#xe640;</i></span>
+                            <span class="pull-left  c_blue fs_14">推荐课程</span>
+                            <span class="pull-right fs_14">推荐课程 <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <div class="nl-ad-row layui-bg-white  width-padding">
                             <div class="layui-row foot-info">
@@ -113,17 +113,17 @@ get_header(); ?>
                                     <img src="<?=student_css_url.'image/homePage/course1.png'?>">
                                 </div>
                                 <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
-                                    <p class="nl-ad-name">课程名称</p>
-                                    <p class="nl-ad-tips">抢占名额中(2/18)</p>
-                                    <div class="nl-ad-detail">这里是课程介绍摘要，截取课程简要介绍，不超过30个字符</div>
+                                    <p class="text_1 c_black">课程名称</p>
+                                    <p class="fs_12 c_orange">抢占名额中(2/18)</p>
+                                    <div class="fs_12 c_black6 text_2 nl-ad-detail">这里是课程介绍摘要，截取课程简要介绍，不超过30个字符</div>
                                 </div>
                             </div>
                         </div>
 
 
                         <div class="head-info layui-row  width-padding">
-                            <span class="pull-left">最新资讯</span>
-                            <span class="pull-right" onclick="window.location.href='<?= home_url('category/new-news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
+                            <span class="pull-left c_blue fs_14">最新资讯</span>
+                            <span class="pull-right fs_14" onclick="window.location.href='<?= home_url('category/new-news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <?php
                         if(!empty($cat_query)) {
@@ -135,8 +135,8 @@ get_header(); ?>
                                     <img src="<?= wp_get_attachment_image_src(get_post_thumbnail_id($cat->ID), 'thumbnail')[0] ?>">
                                 </div>
                                 <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
-                                    <p class="nl-ad-name"><?= $cat->post_title ?></p>
-                                    <div class="nl-ad-detail"><?= msubstr(strip_tags($cat->post_content),0,35) ?></div>
+                                    <p class="text_1 c_black"><?= $cat->post_title ?></p>
+                                    <div class="fs_12 c_black6 text_2 nl-ad-detail"><?= msubstr(strip_tags($cat->post_content),0,35) ?></div>
                                 </div>
                             </div>
                         </div>                

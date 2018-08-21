@@ -32,7 +32,7 @@
                             <td>类别</td>
                             <td>级别</td>
                             <td>主训教练</td>
-                            <td>国际</td>
+                            <td>国籍</td>
                         </tr>
                         <tr>
                             <td>
@@ -46,7 +46,7 @@
                             <td>类别</td>
                             <td>级别</td>
                             <td>主训教练</td>
-                            <td>国际</td>
+                            <td>国籍</td>
                         </tr>
                         <tr>
                             <td>
@@ -60,7 +60,7 @@
                             <td>类别</td>
                             <td>级别</td>
                             <td>主训教练</td>
-                            <td>国际</td>
+                            <td>国籍</td>
                         </tr>
                         <tr>
                             <td>
@@ -74,7 +74,7 @@
                             <td>类别</td>
                             <td>级别</td>
                             <td>主训教练</td>
-                            <td>国际</td>
+                            <td>国籍</td>
                         </tr>
                     </table>
                 </div>

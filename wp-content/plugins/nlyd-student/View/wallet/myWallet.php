@@ -29,14 +29,14 @@
                         <span class="wallet-flex">银行卡：<span class="bold">1</span></span>
                     </div>
                     <div class="wallet-row">
-                        <div class="wallet-row-title nl-dark-blue">
+                        <div class="wallet-row-title c_blue">
                             <div class="pull-left">
                                 <i class="iconfont"></i>
                                 <span>余 额</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('wallet/balanceWater');?>" class="nl-dark-blue">收支记录</a>
-                                <a href="<?=home_url('wallet/makeCash');?>" class="nl-dark-blue">提 现</a>
+                                <a href="<?=home_url('wallet/balanceWater');?>" class="c_blue">收支记录</a>
+                                <a href="<?=home_url('wallet/makeCash');?>" class="c_blue">提 现</a>
                             </div>
                         </div>
                         <div class="row-detail">
@@ -96,23 +96,23 @@
                     </div>
 
                     <div class="wallet-row">
-                        <div class="wallet-row-title nl-dark-blue">
+                        <div class="wallet-row-title c_blue">
                         <div class="pull-left">
                                 <i class="iconfont"></i>
                                 <span>脑 币</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('wallet/coinWaterList');?>" class="nl-dark-blue">更多脑币记录</a>
+                                <a href="<?=home_url('wallet/coinWaterList');?>" class="c_blue">更多脑币记录</a>
                             </div>
                         </div>
                         <div class="row-detail">
                             <span>连续登录21天</span>
-                            <span class="nl-dark-blue">+10脑币</span>
+                            <span class="c_blue">+10脑币</span>
                             <span>2018-07-16</span>
                         </div>
                         <div class="row-detail">
                             <span>完善个人资料</span>
-                            <span class="nl-dark-blue">+10脑币</span>
+                            <span class="c_blue">+10脑币</span>
                             <span>2018-07-16</span>
                         </div>
                         <div class="dot">
@@ -162,13 +162,13 @@
                     </div>
 
                     <div class="wallet-row">
-                        <div class="wallet-row-title nl-dark-blue">
+                        <div class="wallet-row-title c_blue">
                         <div class="pull-left">
                                 <i class="iconfont"></i>
                                 <span>收款账户</span>
                             </div>
                             <div class="pull-right wallet-btn">
-                                <a href="<?=home_url('wallet/bindCard');?>" class="nl-dark-blue">更 换</a>
+                                <a href="<?=home_url('wallet/bindCard');?>" class="c_blue">更 换</a>
                             </div>
                         </div>
                         <div class="card-info">

@@ -127,7 +127,6 @@
 .mui-bar.system-list .nl-goback{
     height: 100%;
     line-height: 130px;
-    /* color: RGBA(38, 38, 38, 1); */
     color: #fff;
     position: absolute;
     left: 0;
@@ -182,23 +181,19 @@ p.content-p{
 .content table.nl-table tr td{
     color: RGBA(38, 38, 38, 0.6);
     flex: 1;
-    font-size: 0.14rem;
+    font-size: 0.12rem;
     text-align: center;
     padding:5px 0px;
 }
 .content table.nl-table tr td span{
     display: block;
     max-width: 120px;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
 }
 .content table.nl-table tr:nth-child(odd){
     background: RGBA(246, 250, 255, 1);
 }
 .content table.nl-table tr:first-child td{
     color: RGBA(38, 38, 38, 1);
-    font-size: 0.14rem;
 }
 .player-img{
     width: 30px;

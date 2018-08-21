@@ -3,7 +3,7 @@ layui.define('jquery', function(exports){
     
     var $ = layui.$, Flow = function(options){}
     ,ELEM_MORE = 'layui-flow-more'
-    ,ELEM_LOAD = '';
+    ,ELEM_LOAD = '<a class="img-box"></a>';
   
     //主方法
     Flow.prototype.load = function(options){
@@ -14,14 +14,14 @@ layui.define('jquery', function(exports){
       var scrollElem = $(options.scrollElem || document); //滚动条所在元素
       var mb = options.mb || 50; //与底部的临界距离
       var isAuto = 'isAuto' in options ? options.isAuto : true; //是否自动滚动加载
-      var end = options.end || ''; //“末页”显示文案
+      var end = options.end || '<span class="fs_12 c_black3">已加载完全部数据</span>'; //“末页”显示文案
       
       //滚动条所在元素是否为document
       var notDocment = options.scrollElem && options.scrollElem !== document;
       
       //加载更多
-      var ELEM_TEXT = '展开'
-      ,more = $('<div class="layui-flow-more"><a href="javascript:;" class="img-box">'+ ELEM_TEXT +'</a></div>');
+      var ELEM_TEXT = '<a href="javascript:;" class="fs_12 c_blue"><span>加载更多</span></a>'
+      ,more = $('<div class="layui-flow-more">'+ ELEM_TEXT +'</div>');
       
       if(!elem.find('.layui-flow-more')[0]){
         elem.append(more);

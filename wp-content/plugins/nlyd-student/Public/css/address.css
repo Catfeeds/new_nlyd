@@ -32,7 +32,7 @@ p.address-detail{
 }
 .default-address{
     float: right;
-    color: #68AAFE;
+    color: #2484FE;
 }
 .address-row.swipeleft .default-address{
     margin-right: 155px;
@@ -61,18 +61,10 @@ p.address-detail{
     width: 70px;
     height: 70px;
     float: left;
-    color: #fff;
 }
-.address-btn.edit{
-    background: #68AAFE;
-}
-.address-btn.del{
-    background: rgba(116, 116, 116, 1);
 
-}
+
 .accept-name,.phone-number,.address-detail{
-    color: rgba(116, 116, 116, 1);
-    font-size: 0.14rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -82,10 +74,10 @@ p.address-detail{
 }
 .set-address{
     float: right;
-    color: rgba(67, 148, 249, 1);
+    color: #2484FE;
 }
 .set-address.default-address{
-    color: rgba(251, 142, 142, 1);
+    color: #FB8E8E;
 }
 .no-default{
     margin-top: 20px;

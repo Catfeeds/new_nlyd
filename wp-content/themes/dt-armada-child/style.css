@@ -11,9 +11,8 @@ Version:        0.1.0
 @import url("../dt-armada/style.css");
 @import url("css/layui.css");
 html, body, body.page, .wf-container > *{
-    font:normal normal normal 0.14rem / 0.28rem "Open Sans", Regular!important;
-    color: #757575;
-    /* letter-spacing:0.01rem; */
+    font:normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
+    color: rgba(38, 38, 38, 0.6);
 }
 @font-face {font-family: 'iconfont';
     src: url('iconfont.eot');
@@ -41,10 +40,6 @@ a{
     text-decoration: none!important;
 }
 
-.mui-popover.mui-active{
-    bottom: 0;
-}
-html{font-size:625%!important;}
 .pace .pace-activity::after, .pace .pace-activity::before{
     content: none!important;
 }
@@ -57,25 +52,160 @@ html{font-size:625%!important;}
     background: #fff!important;
     
 }
+a:hover {
+    color: currentColor;
+  }
+/* 中文字体 */
+.ff_cn{
+    font-family:'PingFang SC';
+}
+/* 数字和英文字体 */
+.ff_num{
+    font-family:'Arial'!important;
+}
+/* 字体大小 */
+.fs_16{
+    font-size: 0.16rem;
+}
+.fs_15{
+    font-size: 0.15rem;
+}
+.fs_14{
+    font-size: 0.14rem;
+}
+.fs_13{
+    font-size: 0.13rem;
+}
+.fs_12{
+    font-size: 0.12rem;
+}
+/* 字体颜色 */
+.c_white,a.c_white{
+    color: #fff;
+}
+a.c_white:hover{
+    color: #fff
+}
+.c_blue,a.c_blue{
+    color: #2484FE;
+}
+a.c_blue:hover{
+    color: #2484FE
+}
+.c_orange,a.c_orange{
+    color: #FB8E8E;
+}
+a.c_orange:hover{
+    color: #FB8E8E
+}
+.c_black,a.c_black{
+    color: #262626;
+}
+a.c_black:hover{
+    color: #262626
+}
+.c_black6,a.c_black6{
+    color: rgba(38, 38, 38, 0.6);
+}
+a.c_black6:hover{
+    color: rgba(38, 38, 38, 0.6);
+}
+.c_black3,a.c_black3{
+    color: rgba(38, 38, 38, 0.3);
+}
+a.c_black3:hover{
+    color: rgba(38, 38, 38, 0.3);
+}
+/* 背景 */
+.bg_blue{
+    background: #2484FE;
+}
+.bg_orange{
+    background: #FB8E8E;
+}
+.bg_gradient_blue{
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+}
+.bg_gradient_grey{
+    background: -webkit-linear-gradient(#b8bcbe,#919191);
+    background: -o-linear-gradient(#b8bcbe,#919191);
+    background: -moz-linear-gradient(#b8bcbe,#919191);
+    background: linear-gradient(#b8bcbe,#919191);
+}
+
+/*  间距*/
+.mb_10{
+    margin-bottom: 10px;
+}
+.mb_15{
+    margin-bottom: 15px;
+}
+.pl_15{
+    padding-left: 15px;
+}
+/* 图片 */
+.img-box{
+    min-height: 1px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.img-box img{
+    width: 100%;
+    height: auto;
+    margin :auto;
+}
+/* 省略 */
+.text_1{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.text_2{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    line-break:auto;
+    -webkit-box-orient:vertical;
+    word-wrap: break-word;
+}
+.text_3{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    line-break:auto;
+    -webkit-box-orient:vertical;
+    word-wrap: break-word;
+}
+.pointer{
+    cursor: pointer;
+}
+@media screen and (min-width:992px) {
+    html{font-size:625%!important;}
+}
 @media screen and (min-width:360px) and (max-width:374px) and (orientation:portrait) {
-    html { font-size: 703%; }
+    html { font-size: 703%!important; }
 }
 @media screen and (min-width:375px) and (max-width:383px) and (orientation:portrait) {
-    html { font-size: 732.4%; }
+    html { font-size: 732.4%!important; }
 }
 @media screen and (min-width:384px) and (max-width:399px) and (orientation:portrait) {
-    html { font-size: 750%; }
+    html { font-size: 750%!important; }
 }
 @media screen and (min-width:400px) and (max-width:413px) and (orientation:portrait) {
-    html { font-size: 781.25%; }
+    html { font-size: 781.25%!important; }
 }
 @media screen and (min-width:414px) and (max-width:431px) and (orientation:portrait){
-    html { font-size: 808.6%; }
+    html { font-size: 808.6%!important; }
 }
 @media screen and (min-width:432px) and (max-width:479px) and (orientation:portrait){
-    html { font-size: 843.75%; }
+    html { font-size: 843.75%!important; }
 }
 @media screen and (max-width: 991px){
+    html{font-size:625%!important;}
     /* .mui-bar{
         display: block;
     } */

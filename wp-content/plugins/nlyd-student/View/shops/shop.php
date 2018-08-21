@@ -68,7 +68,7 @@
                             <div class="goods-wrap">
                                 <div class="goods-name">商品名字</div>
                                 <div class="goods-price">
-                                    <span class="nl-dark-blue">￥ 180.00</span>
+                                    <span class="c_blue">￥ 180.00</span>
                                     <span class="orange-color">170+10脑币</span>
                                     <i class="iconfont addShopCar pull-right">&#xe673;</i>
                                 </div>

@@ -34,16 +34,16 @@
                             <!-- <span class="nl-team-step">战队申请审核中</span> -->
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span class="nl-grey-font">战队负责人：</span>
-                            <span class="nl-grey-font"><?=$team['team_director']?></span>
+                            <span>战队负责人：</span>
+                            <span><?=$team['team_director']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span class="nl-grey-font">战队口号：</span>
-                            <span class="nl-grey-font"><?=$team['team_slogan']?></span>
+                            <span>战队口号：</span>
+                            <span><?=$team['team_slogan']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span class="nl-grey-font">战队成员：</span>
-                            <span class="nl-grey-font"><?=$team['team_total']?>人</span>
+                            <span>战队成员：</span>
+                            <span><?=$team['team_total']?>人</span>
                         </div>
                     </div>
                 </div>
@@ -58,6 +58,7 @@
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <li class="layui-this">普通队员</li>
                             <li>认证教练</li>
+                            <div class="nl-transform">普通队员</div>
                         </ul>
                         <div class="teamDetail-top">*M、R、A分别代表记忆、速读、心算</div>
                         <div class="layui-tab-content" style="padding: 0;">
@@ -113,6 +114,14 @@ jQuery(function($) {
 layui.use(['element','layer','flow'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
+    element.on('tab(tabs)', function(){//tabs
+        var left=$(this).position().left+parseInt($(this).css('marginLeft'));
+        var html=$(this).html();
+        var data_id=$(this).attr('data-id')
+        $('.nl-transform').css({
+            'transform':'translate3d('+left+'px, 0px, 0px)'
+        }).html(html)
+    })
 //-----------------------普通队员分页-------------------
     flow.load({
         elem: '#flow-table' //流加载容器

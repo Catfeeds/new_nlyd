@@ -1,11 +1,4 @@
 
-<style>
-    @media screen and (max-width: 991px){
-        #content,.detail-content-wrapper{
-            background:#efeff4;
-        }
-    }
-</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -28,41 +21,41 @@
         <h1 class="mui-title">报名信息确认</h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <form id="pay-form" class="layui-form" action="" >
+                <form id="pay-form" class="layui-form width-margin width-margin-pc" action="" >
                     <ul style="margin:0">
                         <li class="nl-match">
-                            <div class="nl-match-header width-margin">
-                                <span class="nl-match-name"><?=$match['post_title']?></span>
-                                <p class="long-name" style="margin:0"><?=$match['post_content']?></p>
+                            <div class="nl-match-header ">
+                                <span class="fs_16 c_blue"><?=$match['post_title']?></span>
+                                <p class="fs_12 c_black3" style="margin:0"><?=$match['post_content']?></p>
                             </div>
-                            <div class="nl-match-body width-margin">
+                            <div class="nl-match-body ">
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">开赛日期：</span>
-                                    <span class="nl-match-info"><?=$match['match_start_time']?></span>
+                                    <span >开赛日期：</span>
+                                    <span class="c_black"><?=$match['match_start_time']?></span>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">开赛地点：</span>
-                                    <span class="nl-match-info"><?=$match['match_address']?></span>
+                                    <span >开赛地点：</span>
+                                    <span class="c_black"><?=$match['match_address']?></span>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">报名费用：</span>
-                                    <input class="confirm_info" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
-                                    <!-- <span class="nl-match-info">¥<?=$match['match_cost']?></span> -->
+                                    <span >报名费用：</span>
+                                    <input class="c_black" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
+                                    <!-- <span class="c_black">¥<?=$match['match_cost']?></span> -->
                                 </div>
                             </div>
                         </li>
                         <!-- 比赛项目 -->
                         <?php if(!empty($match_project)): ?>
                         <li class="nl-match">
-                            <div class="nl-match-header width-margin">
-                                <span class="nl-match-name">参赛项目</span>
+                            <div class="nl-match-header ">
+                                <span class="fs_16 c_blue">参赛项目</span>
                             </div>
-                            <div class="nl-match-body width-margin">
+                            <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label"><?=$val['parent_title']?>：</span>
+                                    <span ><?=$val['parent_title']?>：</span>
                                     <input type="hidden" name="project_id[]" value="<?=$k?>"/>
-                                    <span class="nl-match-info">
+                                    <span class="c_black">
                                         <?php
                                             $str = '';
                                             foreach ($val['project'] as $v) {
@@ -86,22 +79,22 @@
                         <?php endif;?>
                         <!-- 选手信息 -->
                         <li class="nl-match">
-                            <div class="nl-match-header width-margin">
-                                <span class="nl-match-name">选手信息</span>
+                            <div class="nl-match-header ">
+                                <span class="fs_16 c_blue">选手信息</span>
                             </div>
-                            <div class="nl-match-body width-margin">
+                            <div class="nl-match-body ">
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">选手姓名：</span>
+                                    <span >选手姓名：</span>
                                     <?php if(!empty($player['real_name'])){?>
-                                    <span class="nl-match-info"><?=$player['real_name']?></span>
+                                    <span class="c_black"><?=$player['real_name']?></span>
                                     <span class="nl-match-rz">已认证</span>
                                     <?php }else{?>
                                         <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
                                     <?php }?>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">所属战队：</span>
-                                    <span class="nl-match-info">
+                                    <span >所属战队：</span>
+                                    <span class="c_black">
                                         <?php if(!empty($player['team_id'])){ ?>
                                         <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
                                         <?=$player['user_team']?>
@@ -114,35 +107,33 @@
                                     </span>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">选手ID：</span>
-                                    <span class="nl-match-info"><?=$player['user_ID']?></span>
+                                    <span >选手ID：</span>
+                                    <span class="c_black"><?=$player['user_ID']?></span>
                                 </div>
                             </div>
                         </li>
 
                         <!-- 邮寄地址 -->
                         <li class="nl-match">
-                            <!-- <div class="nl-match-metal">我</div> -->
-                            <!-- <span class="nl-match-people">28报名</span> -->
-                            <div class="nl-match-header width-margin">
-                                <span class="nl-match-name">邮寄地址</span>
-                                <a class="nl-match-people" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
+                            <div class="nl-match-header ">
+                                <span class="fs_16 c_blue">邮寄地址</span>
+                                <a class="nl-match-people c_blue" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
                             </div>
-                            <div class="nl-match-body width-margin">
+                            <div class="nl-match-body ">
                                 <?php if(!empty($address)){ ?>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">收货人姓名：</span>
-                                    <input class="confirm_info" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
+                                    <span >收货人姓名：</span>
+                                    <input class="c_black" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
                                 
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">联系电话：</span>
-                                    <input class="confirm_info" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
+                                    <span >联系电话：</span>
+                                    <input class="c_black" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
                                     
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span class="nl-match-label">收货地址：</span>
-                                    <span class="nl-match-info">
+                                    <span >收货地址：</span>
+                                    <span class="c_black">
                                     <?=$address['user_address']?>
                                         <input type="hidden" name="address" value="<?=$address['user_address']?>">
                                     </span>
@@ -166,9 +157,9 @@
 <div class="selectBottom">
     <div class="grayLayer cancel"></div>
     <div class="selectBox">
-        <div class="selectOption pay" id="weiChat"><i class="iconfont">&#xe63e;</i>微信<input type="radio" name="pay" value="wx" class="payRadio"></div>
-        <div class="selectOption pay" id="zfb"><i class="iconfont">&#xe611;</i>支付宝<input type="radio" name="pay" value="zfb" class="payRadio"></div>
-        <div class="selectOption pay" id="visa"><i class="iconfont">&#xe615;</i>银联支付<input type="radio" name="pay" value="visa" class="payRadio"></div>
+        <div class="selectOption pay" id="weiChat"><i class="iconfont">&#xe63e;</i>微信</div>
+        <div class="selectOption pay" id="zfb"><i class="iconfont">&#xe611;</i>支付宝</div>
+        <div class="selectOption pay" id="visa"><i class="iconfont">&#xe615;</i>银联支付</div>
         <div class="selectOption cancel">取消</div>
     </div>
 </div>

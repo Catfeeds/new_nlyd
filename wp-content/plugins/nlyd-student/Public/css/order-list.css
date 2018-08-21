@@ -27,8 +27,10 @@
     width: calc(25% - 11px);
     line-height: 40px;
     padding: 0;
-    transition: all .2s;
-    -webkit-transition: all .2s;
+    transition: none;
+    -moz-transition: none;
+    -webkit-transition: none;
+    -o-transition: none;
     position: relative;
     min-width: auto;
     text-align: center;
@@ -48,9 +50,9 @@
 }
 .nl-transform{
     top: 0;
-    width: -webkit-calc(25% - 9px);
-    width: calc(25% - 9px);
-    border: 1px solid rgba(104, 170, 254, 1);
+    width: -webkit-calc(25% - 11px);
+    width: calc(25% - 11px);
+    border: 1px solid transparent;
     height: 40px;
     line-height: 40px;
     left: 0;
@@ -62,11 +64,11 @@
     font-weight: 500;
     text-transform: uppercase;
     -webkit-font-smoothing: subpixel-antialiased;
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
+    border-top-color: #68AAFE;
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
     transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
     transform: translate3d(0px, 0px, 0px);
     border-radius: 6px;
