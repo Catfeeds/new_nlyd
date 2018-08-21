@@ -32,7 +32,7 @@ class Order {
         IFNULL(o.express_company,"-") AS express_company,
         CASE o.order_type WHEN 1 THEN "比赛订单" ELSE "-" END AS order_type,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
-        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "待发货" WHEN 3 THEN "待收货" WHEN 4 THEN "已失效" ELSE "-" END AS pay_title,
+        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
         p.post_title,
         o.pay_status,
@@ -60,13 +60,16 @@ class Order {
                 $pay_status = 'pay_status=3';
                 break;
             case 5:
-                $pay_status = 'pay_status=-1';
+                $pay_status = 'pay_status=4';
                 break;
             case 6:
-                $pay_status = 'pay_status=-2';
+                $pay_status = 'pay_status=-1';
                 break;
             case 7:
-                $pay_status = 'pay_status=4';
+                $pay_status = 'pay_status=-2';
+                break;
+            case 8:
+                $pay_status = 'pay_status=5';
                 break;
             default:
                 return false;
@@ -104,11 +107,12 @@ class Order {
                 <ul id="tab">
                     <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=1'">全部</li>
                     <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=2'">待支付</li>
-                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3'">待收货</li>
-                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4'">已收货</li>
-                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5'">待退款</li>
-                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6'">已退款</li>
-                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7'">已失效</li>
+                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3'">已支付</li>
+                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4'">待收货</li>
+                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5'">已完成</li>
+                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6'">待退款</li>
+                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7'">已退款</li>
+                    <li class="<?php if($type == 8) echo 'active'?>" onclick="window.location.href='?page=order&type=8'">已失效</li>
                 </ul>
             </div>
 

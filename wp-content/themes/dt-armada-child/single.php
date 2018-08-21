@@ -43,7 +43,7 @@ $wpdb->update($wpdb->postmeta, ['meta_value' => ++$readNum], ['meta_id' => $meta
 					<div class="layui-row">
 						<div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
 							<header class="mui-bar mui-bar-nav">
-								<a class="mui-pull-left nl-goback">
+								<a class="mui-pull-left nl-goback static" onclick="window.location.href='<?= home_url("category/new-news/"); ?>'">
 									<i class="iconfont">&#xe610;</i>
 								</a>
 								<h1 class="mui-title">新闻详情</h1>

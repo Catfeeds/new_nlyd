@@ -1906,14 +1906,17 @@ class Student_Ajax
             case 1://待支付
                 $payStatusWhere = 'pay_status=1';
                 break;
-            case 2://待发货
+            case 2://待发货 支付完成
                 $payStatusWhere = 'pay_status=2';
                 break;
             case 3://待收货
                 $payStatusWhere = 'pay_status=3';
                 break;
-            case 4://已失效
+            case 4://订单完成 (已收货)
                 $payStatusWhere = 'pay_status=4';
+                break;
+            case 5://订单失效
+                $payStatusWhere = 'pay_status=5';
                 break;
             case -1://待退款
                 $payStatusWhere = 'pay_status=-1';
@@ -1930,6 +1933,7 @@ class Student_Ajax
         $rows = $wpdb->get_results('SELECT 
         id,
         serialnumber,
+        pay_status,
         match_id,
         IFNULL(fullname, "-") AS fullname,
         telephone,
@@ -1951,10 +1955,11 @@ class Student_Ajax
         WHEN -2 THEN "已退款" 
         WHEN -1 THEN "待退款" 
         WHEN 1 THEN "待支付" 
-        WHEN 2 THEN "待发货" 
+        WHEN 2 THEN "已支付" 
         WHEN 3 THEN "待收货" 
-        WHEN 4 THEN "已失效" 
-        END AS pay_status,
+        WHEN 4 THEN "已完成" 
+        WHEN 5 THEN "已失效" 
+        END AS pay_status_title,
         created_time
         FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' 
         AND '.$payStatusWhere.' 
