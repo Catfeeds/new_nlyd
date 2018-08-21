@@ -2150,14 +2150,20 @@ class Student_Ajax
      * 提交订单
      */
     public function subGoodsOrder(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_join_cart_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
+        $user_id = $current_user->ID;
+        $address_id = intval($_POST['address']);
+        $address = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'my_address 
+        WHERE user_id='.$user_id.' AND id='.$address_id, ARRAY_A);
+        if(!$address) wp_send_json_error(['info' => '出错了, 找不到收货地址']);
         //文件锁
         if(!is_file('flock.txt')) file_put_contents('flock.txt', 1);
         $fp = fopen('flock.txt', 'a+');
         if(flock($fp, LOCK_EX)){
-
-            $user_id = 1;
             //查询购物车
-            global $wpdb;
             $orderGoodsRows = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$user_id.' AND order_id=0', ARRAY_A);
             //计算支付价格
             $allPrice = 0;//支付金额
@@ -2196,9 +2202,9 @@ class Student_Ajax
             $orderInsertData = [
                 'user_id' => $user_id,
                 'match_id' => 0,
-                'fullname' => '',
-                'telephone' => '',
-                'address' => '',
+                'fullname' => $address['fullname'],
+                'telephone' => $address['telephone'],
+                'address' => $address['country'].$address['province'].$address['city'].$address['area'].$address['address'],
                 'order_type' => 2,
                 'express_number' => '',
                 'express_company' => '',
@@ -2230,7 +2236,7 @@ class Student_Ajax
                 wp_send_json_error(['info' => '提交订单失败']);
             }
         }else{
-            wp_send_json_error(['info' => '系统繁忙']);
+            wp_send_json_error(['info' => '系统繁忙,请稍后再试']);
         }
     }
 
