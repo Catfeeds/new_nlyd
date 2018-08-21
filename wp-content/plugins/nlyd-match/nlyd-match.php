@@ -995,7 +995,7 @@ if(!class_exists('MatchController')){
 
             wp_register_script( 'admin_match_question',match_js_url.'question.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'admin_match_question' );
-            if(isset($_GET['action']) && $_GET['action'] == 'edit'){
+            if($this->post_type == 'match'){
                 wp_register_script( 'team_leader',match_js_url.'team_leader.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'team_leader' );
             }

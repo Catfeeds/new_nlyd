@@ -21,6 +21,7 @@ if(!class_exists('StudentController')){
         public function __construct()
         {
 
+
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
@@ -42,6 +43,44 @@ if(!class_exists('StudentController')){
 
             //配置自己的重写模版
             add_action('template_redirect', array($this,'custom_rewrite_template'));
+
+
+            //register_activation_hook( __FILE__, 'my_activation' );
+            //删除一个定时器
+            //register_deactivation_hook(__FILE__, array($this,'my_deactivation'));
+
+            //var_dump(date('Y-m-d H:i:s',wp_next_scheduled('my_minutely_event')));
+
+        }
+
+        function my_deactivation() {
+            wp_clear_scheduled_hook('my_minutely_event');
+        }
+
+        public function my_activation() {
+            add_filter('cron_schedules', array($this,'cron_add_weekly'));
+
+            if(!wp_next_scheduled('my_minutely_event')){
+                wp_schedule_event(time(),'minutely',array($this,'my_minutely_event'),array('action'=>'my_task_function'));
+            }
+            add_action( 'my_minutely_event', array($this,'my_task_function'),10,1 );
+
+        }
+
+        function my_task_function() { ?>
+            <script>
+                alert(1);
+            </script>
+        <?php }
+
+        public function cron_add_weekly( $schedules )
+        {
+            // Adds once weekly to the existing schedules.
+            $schedules['minutely'] = array(
+                'interval' => 60, // 1周 = 60秒 * 60分钟 * 24小时 * 7天
+                'display' => __('每分钟执行一次')
+            );
+            return $schedules;
         }
 
 
