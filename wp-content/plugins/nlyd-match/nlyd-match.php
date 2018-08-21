@@ -395,6 +395,7 @@ if(!class_exists('MatchController')){
                         $this->save_match_project($post_ID,$match_project);
                     }
                     unset($match_meta['match_project']);
+
                     $wpdb->delete($wpdb->prefix.'match_meta',array('match_id'=>$post_ID));
                     $a = $wpdb->insert($wpdb->prefix.'match_meta',$match_meta);
 
