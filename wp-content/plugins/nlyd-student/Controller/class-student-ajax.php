@@ -464,7 +464,7 @@ class Student_Ajax
             'created_time'=>date('Y-m-d H:i:s',time()),
         );
         //TODO 测试时 订单价格为0
-        $_POST['cost'] = 0;
+//        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
         if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
             $data['pay_status'] = 2;
@@ -2140,6 +2140,93 @@ class Student_Ajax
         else wp_send_json_error(['info' => '操作失败']);
     }
 
+    /**
+     * 提交订单
+     */
+    public function subGoodsOrder(){
+        //文件锁
+        if(!is_file('flock.txt')) file_put_contents('flock.txt', 1);
+        $fp = fopen('flock.txt', 'a+');
+        if(flock($fp, LOCK_EX)){
+
+            $user_id = 1;
+            //查询购物车
+            global $wpdb;
+            $orderGoodsRows = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$user_id.' AND order_id=0', ARRAY_A);
+            //计算支付价格
+            $allPrice = 0;//支付金额
+            $allBrain = 0;//脑币
+            $orderGoodsIdStr = '(';// (1,2,3) 后面修改order_goods的order_id使用
+            $wpdb->startTrans();
+            foreach ($orderGoodsRows as $orderGoodsRow){
+                $goods = $wpdb->get_row('SELECT id,goods_title,shelf,price,stock FROM '.$wpdb->prefix.'goods WHERE id='.$orderGoodsRow['goods_id'], ARRAY_A);
+                //不存在商品
+                if(!$goods){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '出错了, 找不到商品']);
+                }
+                //已下架商品
+                if($goods['shelf'] == 2) {
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => $goods['goods_title'].'-已下架']);
+                }
+                //库存不足
+                if($goods['stock'] < $orderGoodsRow['goods_num']){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => $goods['goods_title'].'-库存不足']);
+                }
+                //减少商品库存
+                if(!$wpdb->update($wpdb->prefix.'goods', ['stock' => $goods['stock'] - $orderGoodsRow['goods_num']], ['id' => $goods['id']])){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '出错了, 库存更新失败']);
+                }
+                $allPrice += $goods['price'] * $orderGoodsRow['goods_num'];
+                $allBrain += $goods['brain'] * $orderGoodsRow['goods_num'];
+                $orderGoodsIdStr .= $orderGoodsRow['id'].',';
+            }
+            $orderGoodsIdStr = substr($orderGoodsIdStr,0,strlen($orderGoodsIdStr)-1);
+            $orderGoodsIdStr .= ')';
+            //订单数据
+            $orderInsertData = [
+                'user_id' => $user_id,
+                'match_id' => 0,
+                'fullname' => '',
+                'telephone' => '',
+                'address' => '',
+                'order_type' => 2,
+                'express_number' => '',
+                'express_company' => '',
+                'cost' => $allPrice,
+                'pay_status' => 1,
+                'created_time' => date('Y-m-d H:i:s'),
+            ];
+
+            $bool = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
+            if($bool){//新增订单数据
+                $insertId = $wpdb->insert_id;
+                if($wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($user_id,$wpdb->insert_id)], ['id' => $insertId])){//修改订单号
+                    if($wpdb->query('UPDATE '.$wpdb->prefix.'order_goods SET order_id='.$insertId.' WHERE id IN'.$orderGoodsIdStr)){  //修改order_goods的状态
+                        $wpdb->commit();
+                        wp_send_json_success(['info' => $insertId]);
+                    }else{
+                        //修改order_goods的状态失败
+                        $wpdb->rollback();
+                        wp_send_json_error(['info' => '提交订单失败']);
+                    }
+                }else{
+                    //修改订单号失败
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '提交订单失败']);
+                }
+            }else{
+                //插入订单数据失败
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '提交订单失败']);
+            }
+        }else{
+            wp_send_json_error(['info' => '系统繁忙']);
+        }
+    }
 
     /**
      * 战绩排名
