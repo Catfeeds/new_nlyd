@@ -25,6 +25,11 @@ class Student_Ajax
         add_action( 'wp_ajax_nopriv_'.$action,  array($this,$action) );
     }
 
+    public function set_test(){
+
+        var_dump('定时器测试');
+        die;
+    }
 
     /**
     *获取24点结果
@@ -1223,7 +1228,8 @@ class Student_Ajax
         $where = join(' and ',$map);
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
-                b.match_address,b.match_cost,b.entry_end_time,b.match_status ,c.user_id,
+                if(b.match_address = '','--',b.match_address) match_address,
+                b.match_cost,b.entry_end_time,b.match_status ,c.user_id,
                 (case b.match_status 
                 when -3 then '已结束' 
                 when -2 then '等待开赛' 

@@ -6,7 +6,27 @@
  * Time: 21:29
  */
 
-date_default_timezone_set('PRC');
+/*add_filter('cron_schedules', 'cron_add_weekly');
+var_dump(wp_get_schedules());
+//wp_clear_scheduled_hook('my_minutely_event');
+if(!wp_next_scheduled('my_minutely_event')){
+    wp_schedule_event(time(),'minutely','my_minutely_event');
+}
+var_dump(wp_next_scheduled('my_minutely_event'));
+add_action( 'my_minutely_event', 'my_task_function' );
+function my_task_function(){
+    print "I was just called. I'll be called at the same time tomorrow";die;
+}
+
+function cron_add_weekly( $schedules )
+{
+    // Adds once weekly to the existing schedules.
+    $schedules['minutely'] = array(
+        'interval' => 60, // 1周 = 60秒 * 60分钟 * 24小时 * 7天
+        'display' => __('每分钟执行一次')
+    );
+    return $schedules;
+}*/
 
 /**
  * 年齡組別
