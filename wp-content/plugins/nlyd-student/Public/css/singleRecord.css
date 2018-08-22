@@ -12,7 +12,6 @@
 .content table.nl-table{
     border-bottom: none;
     position: relative;
-    margin-top: 20px;
 }
 .content .nl-table td{
     padding: 5px 0;
@@ -41,6 +40,7 @@
 }
 .top3{
     color: #fff;
+    border:none;
     background: -webkit-linear-gradient(#68AAFE, #4394F9);
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
@@ -63,7 +63,6 @@ tr.nl-me td{
     color: #2484FE;
 }
 .single-match-title{
-    height: 32px;
     width: 100%;
 }
 .single-match-name{

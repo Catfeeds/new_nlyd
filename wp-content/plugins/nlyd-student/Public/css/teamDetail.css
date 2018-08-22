@@ -124,13 +124,15 @@
 }
 
 .layui-tab-brief>.layui-tab-title .layui-this{
-    color: #fff;
+    color: rgba(116, 116, 116, 1);
+    border: 0.5px solid transparent;
+    /* color: #fff;
     border: 1px solid transparent;
     border-top-color: #68AAFE;
     background: -webkit-linear-gradient(#68AAFE, #4394F9);
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9); */
 }
 .layui-tab-title li{
     display: inline-block;
@@ -138,15 +140,15 @@
     color:rgba(116, 116, 116, 1);
     height: 40px;
     margin-left: 12px;
-    width: -webkit-calc(100%/3 - 10px);
-    width: calc(100%/3 - 10px);
+    width: -webkit-calc(100%/3 - 9px);
+    width: calc(100%/3 - 9px);
     line-height: 40px;
     padding: 0;
     position: relative;
     min-width: 65px;
     text-align: center;
     cursor: pointer;
-    border: 1px solid rgba(116, 116, 116, 1);
+    border: 0.5px solid rgba(116, 116, 116, 1);
     border-radius: 6px;
     font-size: 0.14rem;
 }

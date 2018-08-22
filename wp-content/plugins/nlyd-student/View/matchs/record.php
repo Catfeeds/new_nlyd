@@ -101,11 +101,22 @@
                         <!-- 单项排名 -->
                         <div class="layui-tab-item">
                             <?php if(!empty($default_category)): ?>
-                            <div class="btn-wrapper one-rank">
+                            <div class="btn-wrapper ">
+                                <div class="btn-zoo">
+                                    <div class="btn-window">
+                                        <div class="btn-inner-wrapper">
+                                            <?php foreach ($default_category as $k =>$val){ ?>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                            <!-- <div class="btn-wrapper">
                                 <?php foreach ($default_category as $k =>$val){ ?>
                                 <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
                                 <?php } ?>
-                            </div>
+                            </div> -->
                             <?php endif;?>
                             <table class="nl-table">
                                 <thead>
@@ -150,6 +161,7 @@
 <div class="selectBottom">
     <div class="grayLayer cancel"></div>
     <div class="selectBox shareBox">
+        <img class="share-bgs" src="<?=student_css_url.'image/share/share-bg.png'?>">
         <div class="shareItem">
             <div class="shareContent shareLeft" data-id="wechatFriend">
                 <div class="shareTop"><i class="iconfont">&#xe695;</i></div>
@@ -187,6 +199,14 @@ $('.a-btn').click(function(){//查看本项目比赛详情
     var href=window.home_url+'/matchs/singleRecord/match_id/'+match_id+'/project_id/'+project_id;
     window.location.href=href
 })
+initWidth=function() {//按钮滚动区域宽度
+    var len=$('.btn-inner-wrapper .classify-btn ').length;
+    var width=$('.btn-inner-wrapper .classify-btn ').width();
+    var marginRight=parseInt($('.btn-inner-wrapper .classify-btn ').css('marginRight'))
+    var W=width*len+marginRight*(len-1)+'px';
+    $('.btn-inner-wrapper').css('width',W);
+}
+initWidth()
 layui.use(['element','flow'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
@@ -215,6 +235,7 @@ layui.use(['element','flow'], function(){
             ,done: function(page, next){ //加载下一页
                 var lis = [];
                 if(hasTwoPage){//第二页的数据是否存在
+                    $('#allRanking').css('display','none')
                     if(page==1){
                         next(lis.join(''),true)
                     }else{
@@ -232,8 +253,8 @@ layui.use(['element','flow'], function(){
                                     if(res.data.my_ranking!=null){
                                         if(value.ranking==res.data.my_ranking.ranking){
                                             nl_me='nl-me'
-                                            if(value.ranking==1){
-                                                $('#allRanking').remove()
+                                            if(value.ranking!=1){
+                                                $('#allRanking').css('display','table-row')
                                             }
                                         }
                                     }  
@@ -273,6 +294,7 @@ layui.use(['element','flow'], function(){
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
+                $('#fenlei_me').css('display','none');
                 fenleiPage++
                 var lis = [];
                 var postData={
@@ -284,7 +306,6 @@ layui.use(['element','flow'], function(){
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
-                        $('#fenlei_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
                             var Html='<td>'
@@ -296,8 +317,6 @@ layui.use(['element','flow'], function(){
                                     +'<td>'+rows.score+'</td>'
                                     +'<td>'+rows.group+'</td>'
                             // $('#fenlei_me').html(Html)
-                        }else{
-                            $('#fenlei_me').remove()
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -305,10 +324,8 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
-                                    if(value.ranking==1){
-                                        $('#fenlei_me').remove()
-                                    }else{
-                                        $('#fenlei_me').html(Html)
+                                    if(value.ranking!=1){
+                                        $('#fenlei_me').html(Html).css('display','table-row');
                                     }
                                 }
                             }  
@@ -344,12 +361,14 @@ layui.use(['element','flow'], function(){
   }
   initFenlei(0,$('.fenlei .classify-active').attr('data-post-id'))
    initDanxiang=function(fenleiPage,project_id,age_group){
+       
        flow.load({
             elem: '#flow-one' //流加载容器
             ,scrollElem: '#flow-one' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
+                $('#danxiang_me').css('display','none');
                 fenleiPage++
                 var lis = [];
                 var postData={
@@ -365,20 +384,17 @@ layui.use(['element','flow'], function(){
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
-                        $('#danxiang_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
                               var Html='<td>'
-                                                    +'<div class="nl-circle">'+rows.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td>'+rows.user_name+'</td>'
-                                                +'<td>'+rows.ID+'</td>'
-                                                +'<td>'+rows.city+'</td>'
-                                                +'<td>'+rows.score+'</td>'
-                                                +'<td>'+rows.group+'</td>'
+                                            +'<div class="nl-circle">'+rows.ranking+'</div>'
+                                        +'</td>'
+                                        +'<td>'+rows.user_name+'</td>'
+                                        +'<td>'+rows.ID+'</td>'
+                                        +'<td>'+rows.city+'</td>'
+                                        +'<td>'+rows.score+'</td>'
+                                        +'<td>'+rows.group+'</td>'
                             // $('#danxiang_me').html(Html)
-                        }else{
-                            $('#danxiang_me').remove()
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -386,10 +402,8 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
-                                    if(value.ranking==1){
-                                        $('#danxiang_me').remove()
-                                    }else{
-                                        $('#danxiang_me').html(Html)
+                                    if(value.ranking!=1){
+                                        $('#danxiang_me').html(Html).css('display','table-row');
                                     }
                                 }
                             }  
@@ -448,6 +462,7 @@ $('.show-type').click(function(){//下拉
     var select= $(this).parents('td').find('.show-type').eq(0).html()
     var thisHtml=_this.html();
     _this.parents('td').find('.ul-select').toggleClass("ul-select-show");
+    console.log(select,thisHtml)
     if(select!=thisHtml){
         var data_group=_this.attr('data-group')
         $('#flow-one').empty();

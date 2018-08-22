@@ -54,6 +54,7 @@
 <div class="selectBottom">
     <div class="grayLayer cancel"></div>
     <div class="selectBox shareBox">
+        <img class="share-bgs" src="<?=student_css_url.'image/share/share-bg.png'?>">
         <div class="shareItem">
             <div class="shareContent shareLeft" data-id="wechatFriend">
                 <div class="shareTop"><i class="iconfont">&#xe695;</i></div>
@@ -95,6 +96,7 @@ layui.use(['element','flow'], function(){
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
+                $('#danxiang_me').css('display','none');
                 fenleiPage++
                 var lis = [];
                 var postData={
@@ -106,11 +108,10 @@ layui.use(['element','flow'], function(){
                     page:fenleiPage
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    if(res.success){ 
-                        $('#danxiang_me').empty();
+                    if(res.success){
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
-                              var danxiang_meHtml='<td>'
+                              var Html='<td>'
                                                     +'<div class="nl-circle">'+rows.ranking+'</div>'
                                                 +'</td>'
                                                 +'<td>'+rows.user_name+'</td>'
@@ -118,9 +119,7 @@ layui.use(['element','flow'], function(){
                                                 +'<td>'+rows.city+'</td>'
                                                 +'<td>'+rows.score+'</td>'
                                                 +'<td>'+rows.group+'</td>'
-                            // $('#danxiang_me').html(danxiang_meHtml)
-                        }else{
-                            $('#danxiang_me').remove()
+                            // $('#danxiang_me').html(Html)
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -128,10 +127,8 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
-                                    if(value.ranking==1){
-                                        $('#fenlei_me').remove()
-                                    }else{
-                                        $('#fenlei_me').html(Html)
+                                    if(value.ranking!=1){
+                                        $('#fenlei_me').html(Html).css('display','table-row');
                                     }
                                 }
                             }  
