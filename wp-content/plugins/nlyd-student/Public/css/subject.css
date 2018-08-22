@@ -59,7 +59,7 @@
     height: 29px;
     line-height: 29px;
     text-align: center;
-    border-radius: 6px;
+    border-radius: 3px;
     background: -webkit-linear-gradient(7deg,#68AAFE, #4394F9);
     background: -o-linear-gradient(7deg,#68AAFE, #4394F9);
     background: -moz-linear-gradient(7deg,#68AAFE, #4394F9);
@@ -170,11 +170,11 @@ p.question{
     height: 100%;
 }
 .your-answer .poker.active{
-    box-shadow:#CF1818 0 3px 6px;
+    box-shadow:#CF1818 0 0 3px;
     margin-top: 0;
 }
 .right-answer .poker.active{
-    box-shadow:#0F940B 0 3px 6px;
+    box-shadow:#0F940B 0 0 3px;
     margin-top: 0;
 }
 .answer-zoo,.reading-answer{
