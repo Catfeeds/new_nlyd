@@ -2331,6 +2331,16 @@ class Student_Ajax
     }
 
     /**
+     * 订单自动确认收货
+     */
+    public function autoCollectGoods(){
+        global $wpdb;
+        $contrastTime = time()-86400*15;//15天
+        $wpdb->query('UPDATE '.$wpdb->prefix.'order'.' SET pay_status=4 WHERE pay_status=3 AND send_goods_time<'.$contrastTime);
+
+    }
+
+    /**
      * 战绩排名
      */
 
