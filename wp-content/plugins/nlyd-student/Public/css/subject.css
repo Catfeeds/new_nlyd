@@ -1,12 +1,10 @@
-.font-darkBlue{
-    color: rgba(67, 148, 249, 1);
-}
+
 .subject-title{
     margin-top: 20px;
     margin-bottom: 15px;
     display: flex;
 }
-.subject-title-info{
+.subject-title>div{
     height: 32px;
     line-height: 32px;
     flex: 1;
@@ -20,9 +18,10 @@
     line-height: 30px;
     border: 1px solid rgba(111, 175, 255, 1);
     border-radius: 6px;
-    color: rgba(67, 148, 249, 1);
+    color: #2484FE;
 }
 .subject-title-info a.disabled-a{
+    font-size: 0.12rem;
     border: 1px solid rgba(191, 190, 190, 1);
     color: rgba(191, 190, 190, 1);
 }
@@ -61,16 +60,16 @@
     line-height: 29px;
     text-align: center;
     border-radius: 6px;
-    background: -webkit-linear-gradient(#2E89FA, #6FAFFF);
-    background: -o-linear-gradient(#2E89FA, #6FAFFF);
-    background: -moz-linear-gradient(#2E89FA, #6FAFFF);
-    background: linear-gradient(#2E89FA, #6FAFFF);
+    background: -webkit-linear-gradient(7deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(7deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(7deg,#68AAFE, #4394F9);
+    background: linear-gradient(7deg,#68AAFE, #4394F9);
     color: #fff;
     font-size: 0.14rem;
     margin: 20px 0;
 }
 p.question{
-    color: #000;
+    color: #262626;
 }
 /* 数字争霸 */
 .matching-number{

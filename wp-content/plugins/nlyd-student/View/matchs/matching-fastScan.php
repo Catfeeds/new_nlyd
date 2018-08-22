@@ -9,9 +9,9 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="fs-14"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                        <span class="fs-14">第1/1题</span>
-                        <span class="blue-font fs-14">
+                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10">第1/1题</span>
+                        <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"></span>
                         </span>

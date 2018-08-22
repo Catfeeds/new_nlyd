@@ -24,11 +24,11 @@
     float: left;
     height: 25px;
     font-size: 0.16rem;
-    color: rgba(116, 116, 116, 1);
+    color: #262626;
     text-align: center;
     line-height: 25px;
     margin-right:2px;
-    border-bottom: 1px solid rgba(116, 116, 116, 1);
+    border-bottom: 1px solid #262626;
 }
 .matching-number.active{
     background: -webkit-linear-gradient(#4394F9,#68AAFE);
@@ -46,17 +46,7 @@
     line-height: 30px;
     margin-top: 20px;
 }
-.matching-row-label,.matching-row-list{
-    float: left;
-}
-.matching-row-label{
-    font-size: 0.14rem;
-    color: rgba(67, 148, 249, 1);
-    width: 74px;
-    text-align: left;
-    height: 28px;
-    line-height: 28px;
-}
+
 .matching-row-list{
     width: -webkit-calc(100% - 74px);
     width: calc(100% - 74px);
@@ -77,19 +67,6 @@
     background: -moz-linear-gradient(#4394F9,#68AAFE);
     background: linear-gradient(#4394F9,#68AAFE);
     box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
-}
-.matching-sumbit{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 69px;
-    height: 28px;
-    border: 1px solid rgba(111, 175, 255, 1);
-    border-radius: 6px;
-    line-height: 28px;
-    text-align: center;
-    color: rgba(67, 148, 249, 1);
-    font-size: 0.14rem;
 }
 .matching-keyboard{
     margin-top: 25px;
