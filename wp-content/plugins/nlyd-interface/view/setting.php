@@ -26,6 +26,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">使用默认比赛项目</label></th>
                 <td><input type="checkbox" name="default_match_project" value="1" <?= $setting['default_match_project']  ? 'checked' : '';?> class="regular-text" /></td>
             </tr>
+
         <p class="submit"><input type="submit" name="submit" id="submit_form" class="button button-primary" value="保存更改"></p>
     </form>
 </div>
