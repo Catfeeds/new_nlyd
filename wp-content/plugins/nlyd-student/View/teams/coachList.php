@@ -71,6 +71,8 @@
 <input type="hidden" name="_wpnonce" id="setCoach" value="<?=wp_create_nonce('student_set_coach_code_nonce');?>">
 <!-- 设为主训教练 -->
 <input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>">
+<!-- 解除教练关系 -->
+<input type="hidden" name="_wpnonce" id="clearCoach" value="<?=wp_create_nonce('student_relieve_coach_code_nonce');?>">
 <script>
 jQuery(function($) { 
     var mySwiper = new Swiper('.swiper-container', {
@@ -245,6 +247,57 @@ layui.use(['element','flow','layer'], function(){
         });
         return false
     })
+    $('body').on('click','.clearCoach',function(){//解除教学关系
+        var _this=$(this);
+        var coach_id=_this.attr('data-coachId');
+        var category_id=_this.attr('data-categoryId');
+        var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
+            layer.open({
+            type: 1
+            ,maxWidth:300
+            ,title: '解除教学关系' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">您是否确认解除与“'+coach_name+'”的教学关系？</div>'
+            ,btn: ['再想想', '确认', ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
+                /*var match_id=''
+                if($.Request('match_id')!=null){
+                    match_id=$.Request('match_id')
+                }*/
+                var postData={
+                    action:'relieveMyCoach',
+                    _wpnonce:$('#clearCoach').val(),
+                    coach_id:coach_id,
+                    // match_id:match_id,
+                    category_id:category_id,
+                }
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    console.log(res)
+                    if(res.success){
+                        window.location.reload()
+
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+
+                })
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+        return false
+    })
  //--------------------分页--------------------------
     flow.load({
         elem: '#flow-zoo' //流加载容器
@@ -293,9 +346,9 @@ layui.use(['element','flow','layer'], function(){
                                     } 
 
                                 }
-                                if(v.apply_status!=null){//1，申请中，2我的教练
+                                if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
                                     if(v.apply_status==1){//1，申请中，2我的教练
-                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 ">教练审核中...</div></div>';
+                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_grey text_1 ">教练审核中···</div></div>';
                                         isLeft="ta_l"
                                     }else if(v.apply_status==2){//1，申请中，2我的教练
                                         
@@ -332,6 +385,8 @@ layui.use(['element','flow','layer'], function(){
                                             }
                                         })
 
+                                    }else{
+                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
                                     }
 
                                     isMyCoach='<div class="coach-type text_1 '+readClass+'">'+read_major_coach+' 速读类</div>'
