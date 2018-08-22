@@ -2343,7 +2343,7 @@ class Student_Ajax
         if($wpdb->query('UPDATE '.$wpdb->prefix.'order SET pay_status=5 WHERE pay_status=1 AND serialnumber='.$serialnumber))
             wp_send_json_success(['info' => '订单已取消']);
         else
-            wp_send_json_error(['info' => '取消订单失败,请稍后再试']);
+            wp_send_json_error(['info' => '操作失败,请稍后再试']);
     }
 
     /**
@@ -2353,6 +2353,37 @@ class Student_Ajax
         global $wpdb;
         $contrastTime = time()-86400*15;//15天
         $wpdb->query('UPDATE '.$wpdb->prefix.'order'.' SET pay_status=4 WHERE pay_status=3 AND send_goods_time<'.$contrastTime);
+
+    }
+
+    /**
+     * 更换我的主训教练
+     */
+    public function replaceMajorCoach(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_replace_major_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
+        global $wpdb,$current_user;
+        //判断当前是否是已申请的教练
+        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} ",ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
+        if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
+
+        //开启事务
+        $wpdb->startTrans();
+        //取消原主训教练
+        $cancelRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=0 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID);
+        if(!$cancelRes) {
+            $wpdb->rollback();
+            wp_send_json_error(array('info'=>'更换主训教练失败'));
+        }
+        //设着当前教练为主训
+        $currentRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=1 WHERE id='.$row['id']);
+        if($currentRes)
+            wp_send_json_success(['info' => '主训教练更换成功']);
+        else
+            wp_send_json_error(array('info'=>'更换主训教练失败'));
     }
 
     /**
