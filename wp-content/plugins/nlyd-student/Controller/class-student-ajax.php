@@ -2331,13 +2331,28 @@ class Student_Ajax
     }
 
     /**
+     * 取消订单
+     * 可取消状态 :  未支付
+     */
+    public function cancelOrder(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_cancel_goods_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        $serialnumber = trim($_POST['serialnumber']);
+        global $wpdb;
+        if($wpdb->query('UPDATE '.$wpdb->prefix.'order SET pay_status=5 WHERE pay_status=1 AND serialnumber='.$serialnumber))
+            wp_send_json_success(['info' => '订单已取消']);
+        else
+            wp_send_json_error(['info' => '取消订单失败,请稍后再试']);
+    }
+
+    /**
      * 订单自动确认收货
      */
     public function autoCollectGoods(){
         global $wpdb;
         $contrastTime = time()-86400*15;//15天
         $wpdb->query('UPDATE '.$wpdb->prefix.'order'.' SET pay_status=4 WHERE pay_status=3 AND send_goods_time<'.$contrastTime);
-
     }
 
     /**
