@@ -31,7 +31,7 @@ class Student_Account_startMatch extends Student_Home
 
 
 
-        $view = student_view_path.'match.php';
+        $view = student_view_path.CONTROLLER.'/match.php';
         load_view_template($view);
     }
 

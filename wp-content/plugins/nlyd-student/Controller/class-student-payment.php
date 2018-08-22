@@ -415,7 +415,7 @@ class Student_Payment {
         }
         // TODO 查询比赛详情和订单详情
 
-        $view = student_view_path.'paySuccess.php';
+        $view = student_view_path.CONTROLLER.'/paySuccess.php';
 //        load_view_template($view);
         load_view_template($view,array('row'=>$row));
 

@@ -36,7 +36,7 @@ class Student_Shops
             $row['images'] = unserialize($row['images']);
         }
 //        var_dump($rows);
-        $view = student_view_path.'shop.php';
+        $view = student_view_path.CONTROLLER.'/shop.php';
         load_view_template($view, ['rows' => $rows]);
     }
    

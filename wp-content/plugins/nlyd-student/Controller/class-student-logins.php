@@ -23,7 +23,7 @@ class Student_Logins
 
     public function index(){
 
-        $view = student_view_path.'login.php';
+        $view = student_view_path.CONTROLLER.'/login.php';
         load_view_template($view);
     }
 

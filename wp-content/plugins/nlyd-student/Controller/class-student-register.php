@@ -21,7 +21,7 @@ class Student_Register
 
     public function index(){
 
-        $view = student_view_path.'register.php';
+        $view = student_view_path.CONTROLLER.'/register.php';
         load_view_template($view);
 
     }

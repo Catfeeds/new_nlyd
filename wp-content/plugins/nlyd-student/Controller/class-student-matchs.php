@@ -264,7 +264,7 @@ class Student_Matchs extends Student_Home
 
         $row = $wpdb->get_row('SELECT ID FROM '.$wpdb->prefix.'posts WHERE post_status="publish" AND post_type="match"');
 
-        $view = student_view_path.'matchList.php';
+        $view = student_view_path.CONTROLLER.'/matchList.php';
         load_view_template($view,array('row' => $row));
     }
 
@@ -413,7 +413,7 @@ class Student_Matchs extends Student_Home
         //print_r($match);
 
         $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
-        $view = student_view_path.'matchDetail.php';
+        $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
 
@@ -431,7 +431,7 @@ class Student_Matchs extends Student_Home
         $data = array(
             'post_content'=>$row->post_content,
         );
-        $view = student_view_path.'match-Rule.php';
+        $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view,$data);
     }
     /**
@@ -499,7 +499,7 @@ class Student_Matchs extends Student_Home
          $data['project_title'] = $next_match_project['post_title'];
          $data['project_num'] = $num;
 
-        $view = student_view_path.'match-waitting.php';
+        $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
     }
 
@@ -510,6 +510,12 @@ class Student_Matchs extends Student_Home
 
     }
 
+    /*
+     * 比赛项目答题也
+     */
+    public function answerLog(){
+
+    }
 
 
 
@@ -553,7 +559,7 @@ class Student_Matchs extends Student_Home
         //print_r($sql1);
         $data = array('match'=>$match,'match_project'=>$project,'player'=>$player,'address'=>$address);
 
-        $view = student_view_path.'confirm.php';
+        $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
     }
 
@@ -668,7 +674,7 @@ class Student_Matchs extends Student_Home
 
          $data = array('list'=>$list,'my_ranking'=>$my_ranking,'match_title'=>$title,'match_category'=>$match_category,'count'=>count($rows) > 10 ? count($rows) : 0,'default_category'=>$default_category);
          //print_r($data);
-         $view = student_view_path.'record.php';
+         $view = student_view_path.CONTROLLER.'/record.php';
          load_view_template($view,$data);
     }
     /**
@@ -712,7 +718,7 @@ class Student_Matchs extends Student_Home
          );
 
          //print_r($data);
-         $view = student_view_path.'singleRecord.php';
+         $view = student_view_path.CONTROLLER.'/singleRecord.php';
          load_view_template($view,$data);
     }
      /**
@@ -819,7 +825,7 @@ class Student_Matchs extends Student_Home
          }
 
          //print_r($data);
-        $view = student_view_path.'subject-numberBattle.php';
+        $view = student_view_path.CONTROLLER.'/subject-numberBattle.php';
         load_view_template($view,$data);
      }
      /**
@@ -924,7 +930,7 @@ class Student_Matchs extends Student_Home
          }
 
          //print_r($data);
-         $view = student_view_path.'subject-pokerRelay.php';
+         $view = student_view_path.CONTROLLER.'/subject-pokerRelay.php';
          load_view_template($view,$data);
      }
 
@@ -1002,7 +1008,7 @@ class Student_Matchs extends Student_Home
         $data['match_more_cn'] = chinanum($match_more);
         $data['post_title'] = $this->match['post_title'];
 
-        $view = student_view_path.'ready-numberBattle.php';
+        $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';
 
         load_view_template($view,$data);
     }
@@ -1090,7 +1096,7 @@ class Student_Matchs extends Student_Home
         $data['match_title'] = $this->match_title;
         $data['match_more_cn'] = chinanum($match_more);
 
-        $view = student_view_path.'ready-pokerRelay.php';
+        $view = student_view_path.CONTROLLER.'/ready-pokerRelay.php';
         load_view_template($view,$data);
     }
     /**
@@ -1129,7 +1135,7 @@ class Student_Matchs extends Student_Home
             'str_length'=>$this->default_str_length
         );
         //print_r($data);
-        $view = student_view_path.'matching-numberBattle.php';
+        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view,$data);
     }
     /**
@@ -1199,7 +1205,7 @@ class Student_Matchs extends Student_Home
              'list_keys'=>array_keys($list),
          );
 
-         $view = student_view_path.'matching-pokerRelay.php';
+         $view = student_view_path.CONTROLLER.'/matching-pokerRelay.php';
          load_view_template($view,$data);
      }
 
@@ -1522,7 +1528,7 @@ class Student_Matchs extends Student_Home
              'post_title'=>$this->match['post_title'],
          );
 
-        $view = student_view_path.'ready-reading.php';
+        $view = student_view_path.CONTROLLER.'/ready-reading.php';
         load_view_template($view,$data);
     }
     /**
@@ -1595,7 +1601,7 @@ class Student_Matchs extends Student_Home
              'questions_answer' =>empty($row['questions_answer']) ? '' : json_decode($row['questions_answer'],true),
          );
          //print_r($data);
-        $view = student_view_path.'matching-reading.php';
+        $view = student_view_path.CONTROLLER.'/matching-reading.php';
         load_view_template($view,$data);
     }
     /**
@@ -1717,7 +1723,7 @@ class Student_Matchs extends Student_Home
                  $data['next_project_url'] = home_url('/matchs/'.$action.'/match_id/'.$_GET['match_id'].'/project_id/'.$match_category['ID'].'/match_more/1');
              }
          }
-        $view = student_view_path.'subject-reading.php';
+        $view = student_view_path.CONTROLLER.'/subject-reading.php';
         load_view_template($view,$data);
     }
     /**
@@ -1794,7 +1800,7 @@ class Student_Matchs extends Student_Home
              'post_title'=>$this->match['post_title'],
          );
         //print_r($data);
-        $view = student_view_path.'matching-fastScan.php';
+        $view = student_view_path.CONTROLLER.'/matching-fastScan.php';
         load_view_template($view,$data);
     }
     /**
@@ -1899,7 +1905,7 @@ class Student_Matchs extends Student_Home
              }
          }
 
-         $view = student_view_path.'subject-fastScan.php';
+         $view = student_view_path.CONTROLLER.'/subject-fastScan.php';
          load_view_template($view,$data);
     }
     /**
@@ -1972,7 +1978,7 @@ class Student_Matchs extends Student_Home
              'child_count_down' => $this->child_count_down,
          );
 
-        $view = student_view_path.'matching-fastCalculation.php';
+        $view = student_view_path.CONTROLLER.'/matching-fastCalculation.php';
         load_view_template($view,$data);
     }
     /**
@@ -2078,7 +2084,7 @@ class Student_Matchs extends Student_Home
              }
          }
 
-        $view = student_view_path.'subject-fastCalculation.php';
+        $view = student_view_path.CONTROLLER.'/subject-fastCalculation.php';
         load_view_template($view,$data);
     }
     /**
@@ -2150,7 +2156,7 @@ class Student_Matchs extends Student_Home
              'post_title'=>$this->match['post_title'],
          );
 
-        $view = student_view_path.'matching-fastReverse.php';
+        $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
         load_view_template($view,$data);
     }
     /**
@@ -2264,7 +2270,7 @@ class Student_Matchs extends Student_Home
              }
          }
 
-        $view = student_view_path.'subject-fastReverse.php';
+        $view = student_view_path.CONTROLLER.'/subject-fastReverse.php';
         load_view_template($view,$data);
     }
 
@@ -2273,7 +2279,7 @@ class Student_Matchs extends Student_Home
      */
     public function startMatch(){
 
-        $view = student_view_path.'match.php';
+        $view = student_view_path.CONTROLLER.'/match.php';
         load_view_template($view);
     }
 

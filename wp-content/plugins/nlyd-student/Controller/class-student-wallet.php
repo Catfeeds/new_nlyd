@@ -33,28 +33,28 @@ class Student_Wallet extends Student_Home
      * 列表
      */
     public function index(){
-        $view = student_view_path.'myWallet.php';
+        $view = student_view_path.CONTROLLER.'/myWallet.php';
         load_view_template($view);
     }
     /**
      * 余额收支记录
      */
      public function balanceWater(){
-        $view = student_view_path.'balanceWater.php';
+        $view = student_view_path.CONTROLLER.'/balanceWater.php';
         load_view_template($view);
     }
     /**
      * 提现
      */
      public function makeCash(){
-        $view = student_view_path.'makeCash.php';
+        $view = student_view_path.CONTROLLER.'/makeCash.php';
         load_view_template($view);
     }
     /**
      * 更多脑币记录
      */
      public function coinWaterList(){
-        $view = student_view_path.'coinWaterList.php';
+        $view = student_view_path.CONTROLLER.'/coinWaterList.php';
         load_view_template($view);
     }
  
@@ -62,14 +62,14 @@ class Student_Wallet extends Student_Home
      * 绑定银行卡
      */
      public function bindCard(){
-        $view = student_view_path.'bindCard.php';
+        $view = student_view_path.CONTROLLER.'/bindCard.php';
         load_view_template($view);
     }
     /**
      * 提现方式
      */
      public function makeCashType(){
-        $view = student_view_path.'makeCashType.php';
+        $view = student_view_path.CONTROLLER.'/makeCashType.php';
         load_view_template($view);
     }
     /**

@@ -20,7 +20,7 @@ class Student_Reset
     }
 
     public function index(){
-        $view = student_view_path.'resetPassword.php';
+        $view = student_view_path.CONTROLLER.'/resetPassword.php';
         load_view_template($view);
     }
 
