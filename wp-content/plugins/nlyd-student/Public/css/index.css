@@ -194,6 +194,9 @@ a.a-btn:hover{
     position: relative;
     padding-bottom: 35px;
 }
+table .layui-flow-more{
+    bottom: -35px;
+}
 .layui-flow-more{
     position: absolute;
     left: 0;

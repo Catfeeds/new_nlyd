@@ -136,12 +136,12 @@ layui.use(['element','flow'], function(){
                             }
                             
                         }else{
-                            if(page==1){
-                                var dom='<div class="no-info">近期比赛无记录</div>'
-                                lis.push(dom) 
-                            }else{
-                                $.alerts('没有更多了')
-                            }
+                            // if(page==1){
+                            //     var dom='<div class="no-info">近期比赛无记录</div>'
+                            //     lis.push(dom) 
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
                             next(lis.join(''),false)
                         }
                         $('.getTimes').countdown(function(s, d){//倒计时

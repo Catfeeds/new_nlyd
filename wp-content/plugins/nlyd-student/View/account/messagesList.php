@@ -93,12 +93,12 @@ jQuery(function($) {
                                 next(lis.join(''),true)
                             }
                         }else{
-                            if(page==1){
-                                var dom='<div class="no-info">暂无消息</div>'
-                                lis.push(dom)
-                            }else{
-                                $.alerts('没有更多了')
-                            }
+                            // if(page==1){
+                            //     var dom='<div class="no-info">暂无消息</div>'
+                            //     lis.push(dom)
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
                             next(lis.join(''),false)
                         }
                 })

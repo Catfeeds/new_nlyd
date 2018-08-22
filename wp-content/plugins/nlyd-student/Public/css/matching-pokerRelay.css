@@ -42,7 +42,6 @@
     background: -o-linear-gradient(#4394F9,#68AAFE);
     background: -moz-linear-gradient(#4394F9,#68AAFE);
     background: linear-gradient(#4394F9,#68AAFE);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
 }
 /* 扑克展示区 */
 .matching-number-zoo{
