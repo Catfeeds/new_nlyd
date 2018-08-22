@@ -141,10 +141,6 @@ overflow: hidden;
     border-radius: 20px;
     text-align: center;
     line-height: 40px;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
     color: #fff;
     font-size: 0.14rem;
 }
@@ -156,10 +152,6 @@ overflow: hidden;
     height: 14px;
     line-height: 14px;
     text-align: center;
-    background: -webkit-linear-gradient(#FB8E8E,#FF6464);
-    background: -o-linear-gradient(#FB8E8E,#FF6464);
-    background: -moz-linear-gradient(#FB8E8E,#FF6464);
-    background: linear-gradient(#FB8E8E,#FF6464);
     color: #fff;
     border-radius: 50%;
 }
