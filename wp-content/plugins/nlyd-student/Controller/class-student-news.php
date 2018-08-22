@@ -31,7 +31,7 @@ class Student_News extends Student_Home
      * 新闻列表
      */
     public function index(){
-        $view = student_view_path.'news-list.php';
+        $view = student_view_path.CONTROLLER.'/news-list.php';
 //        global $wpdb;
         $which_cat = get_category_by_slug('news');
         $recentPosts = new WP_Query();
@@ -44,7 +44,7 @@ class Student_News extends Student_Home
      * 新闻详情
      */
     public function newsDetail(){
-        $view = student_view_path.'news/news-detail.php';
+        $view = student_view_path.CONTROLLER.'/news/news-detail.php';
         $id = intval($_GET['id']);
         $row = get_post($id);
 

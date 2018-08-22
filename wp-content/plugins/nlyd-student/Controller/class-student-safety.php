@@ -30,7 +30,7 @@ class Student_Safety extends Student_Home
      */
     public function setting(){
 
-        $view = student_view_path.'setting.php';
+        $view = student_view_path.CONTROLLER.'/setting.php';
         load_view_template($view);
     }
 
@@ -39,7 +39,7 @@ class Student_Safety extends Student_Home
      *
      **/
     public function privacyAgreement(){
-        $view = student_view_path.'privacyAgreement.php';
+        $view = student_view_path.CONTROLLER.'/privacyAgreement.php';
         load_view_template($view);
     }
 
@@ -48,7 +48,7 @@ class Student_Safety extends Student_Home
      *
      **/
     public function suggest(){
-        $view = student_view_path.'suggest.php';
+        $view = student_view_path.CONTROLLER.'/suggest.php';
         load_view_template($view);
     }
 
@@ -59,7 +59,7 @@ class Student_Safety extends Student_Home
      *
      **/
     public function userAgreement(){
-        $view = student_view_path.'userAgreement.php';
+        $view = student_view_path.CONTROLLER.'/userAgreement.php';
         load_view_template($view);
     }
 

@@ -36,14 +36,14 @@ class Student_System
      * 体系标准
      */
     public function index(){    
-        $view = student_view_path.'system.php';
+        $view = student_view_path.CONTROLLER.'/system.php';
         load_view_template($view);
     }
         /**
      * 体系标准
      */
      public function system(){
-        $view = student_view_path.'system.php';
+        $view = student_view_path.CONTROLLER.'/system.php';
         load_view_template($view);
 
     }
@@ -51,7 +51,7 @@ class Student_System
      * 课程体系
      */
      public function systemCourse(){
-        $view = student_view_path.'system-course.php';
+        $view = student_view_path.CONTROLLER.'/system-course.php';
         load_view_template($view);
 
     }
@@ -59,7 +59,7 @@ class Student_System
      * 师资体系
      */
      public function systemTeacher(){
-        $view = student_view_path.'system-teacher.php';
+        $view = student_view_path.CONTROLLER.'/system-teacher.php';
         load_view_template($view);
 
     }
@@ -67,7 +67,7 @@ class Student_System
      * 赛事体系
      */
      public function systemMatch(){
-        $view = student_view_path.'system-match.php';
+        $view = student_view_path.CONTROLLER.'/system-match.php';
         load_view_template($view);
 
     }
@@ -75,7 +75,7 @@ class Student_System
      * 测评体系
      */
      public function systemTest(){
-        $view = student_view_path.'system-test.php';
+        $view = student_view_path.CONTROLLER.'/system-test.php';
         load_view_template($view);
 
     }
@@ -84,7 +84,7 @@ class Student_System
      * 合作联系
      */
     public function concatUs(){
-        $view = student_view_path.'concatUs.php';
+        $view = student_view_path.CONTROLLER.'/concatUs.php';
         load_view_template($view);
     }
 

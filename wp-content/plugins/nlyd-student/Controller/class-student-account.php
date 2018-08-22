@@ -59,7 +59,7 @@ class Student_Account extends Student_Home
         //print_r($sql1);
         //print_r($user_info);
 
-        $view = student_view_path.'userCenter.php';
+        $view = student_view_path.CONTROLLER.'/userCenter.php';
         load_view_template($view,array('user_info'=>$user_info,'message_total'=>$message_total->total,'my_team'=>$my_team,'my_skill'=>$my_skill));
 
     }
@@ -72,7 +72,7 @@ class Student_Account extends Student_Home
         //print_r($user_info);
         $result = $wpdb->get_row('SELECT id from '.$wpdb->prefix.'messages WHERE user_id='.$user_info['user_id']);
 
-        $view = student_view_path.'messagesList.php';
+        $view = student_view_path.CONTROLLER.'/messagesList.php';
         load_view_template($view, array('is_show' => $result));
     }
 
@@ -92,7 +92,7 @@ class Student_Account extends Student_Home
             ),array(
                 'id' => $id
             ));
-        $view = student_view_path.'messageDetail.php';
+        $view = student_view_path.CONTROLLER.'/messageDetail.php';
         load_view_template($view, array('row' => $row));
     }
 
@@ -106,7 +106,7 @@ class Student_Account extends Student_Home
         //获取默认收货地址
         $user_address = $wpdb->get_row("select fullname,telephone,concat_ws('',country,province,city,area) address from {$wpdb->prefix}my_address where user_id = {$user_info['user_id']} order by  is_default desc ",ARRAY_A);
 
-        $view = student_view_path.'info.php';
+        $view = student_view_path.CONTROLLER.'/info.php';
         load_view_template($view,array('user_info'=>$user_info,'user_address'=>$user_address));
     }
 
@@ -122,7 +122,7 @@ class Student_Account extends Student_Home
                   where user_id = {$current_user->ID} and b.match_status in(2,1,-2) LIMIT 1";
         $row = $wpdb->get_row($sql);
         //var_dump($row);
-        $view = student_view_path.'recentMatch.php';
+        $view = student_view_path.CONTROLLER.'/recentMatch.php';
         load_view_template($view, array('row' => $row));
 
     }
@@ -135,7 +135,7 @@ class Student_Account extends Student_Home
         $sql = "select id,fullname,telephone,concat_ws('',country,province,city,area,address) user_address,is_default from {$wpdb->prefix}my_address where user_id = {$current_user->ID} order by is_default desc";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
-        $view = student_view_path.'address.php';
+        $view = student_view_path.CONTROLLER.'/address.php';
         load_view_template($view,array('lists'=>$rows));
     }
     /**
@@ -154,7 +154,7 @@ class Student_Account extends Student_Home
             }
         }
 
-        $view = student_view_path.'addAddress.php';
+        $view = student_view_path.CONTROLLER.'/addAddress.php';
         load_view_template($view,array('row'=>$row,'get' => $_GET));
     }
 
@@ -173,7 +173,7 @@ class Student_Account extends Student_Home
 
         $data = array('category'=>$category);
 
-        $view = student_view_path.'course.php';
+        $view = student_view_path.CONTROLLER.'/course.php';
         load_view_template($view,$data);
     }
 
@@ -181,7 +181,7 @@ class Student_Account extends Student_Home
      * 我的训练
      */
     public function matchList(){
-        $view = student_view_path.'train.php';
+        $view = student_view_path.CONTROLLER.'/train.php';
         load_view_template($view);
     }
 
@@ -199,7 +199,7 @@ class Student_Account extends Student_Home
 
         $data = array('category'=>$category);
 
-        $view = student_view_path.'course.php';
+        $view = student_view_path.CONTROLLER.'/course.php';
         load_view_template($view,$data);
     }
 
