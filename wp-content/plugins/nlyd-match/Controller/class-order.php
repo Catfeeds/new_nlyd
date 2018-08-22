@@ -12,7 +12,7 @@ class Order {
         add_menu_page('订单', '订单', 'administrator', 'order',array($this,'orderLists'),'dashicons-businessman',99);
         add_submenu_page('order','退款单','退款单','administrator','order-refundOrder',array($this,'refundOrder'));
         add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
-        add_submenu_page('order','发货','发货','administrator','order-deliver',array($this,'deliverGoods'));
+        add_submenu_page('order','发货','发货','administrator','order-collect',array($this,'collectGoods'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
 
@@ -196,12 +196,12 @@ class Order {
                                                     break;
                                                 case 2:
                                                     if($row['order_type'] == 2){
-                                                        echo '<span class="edit"><a href="?page=order-deliver&id='.$row['id'].'" class="deliver">发货</a> </span>';
+                                                        echo '<span class="edit"><a href="?page=order-collect&id='.$row['id'].'" class="deliver">发货</a> </span>';
                                                     }
                                                     break;
                                                 case 3:
                                                     if($row['order_type'] == 2){
-                                                        echo '<span class="edit"><a href="?page=order-deliver&id='.$row['id'].'" class="deliver">查看发货</a> </span>';
+                                                        echo '<span class="edit"><a href="?page=order-collect&id='.$row['id'].'" class="deliver">查看发货</a> </span>';
                                                     }
                                                     break;
                                             }
@@ -523,7 +523,7 @@ class Order {
     /**
      * 发货
      */
-    public function deliverGoods(){
+    public function collectGoods(){
         global $wpdb;
         if(is_post()){
             $id = intval($_POST['id']);

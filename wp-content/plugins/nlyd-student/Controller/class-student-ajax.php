@@ -2211,12 +2211,22 @@ class Student_Ajax
      * 提交订单
      */
     public function subGoodsOrder(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_join_cart_code_nonce') ) {
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_sub_order_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
         global $wpdb,$current_user;
         $user_id = $current_user->ID;
         $address_id = intval($_POST['address']);
+        $cartIdArr = $_POST['carts'];
+        $orderGoodsIdStr = '(';
+        if(is_array($cartIdArr) && !empty($cartIdArr)){
+            foreach ($cartIdArr as $cartId){
+                $orderGoodsIdStr .= $cartId.',';
+            }
+            $orderGoodsIdStr = substr($orderGoodsIdStr, 0, strlen($orderGoodsIdStr)-1).')';
+        }else{
+            wp_send_json_error(['info' => '请选择商品']);
+        }
         $address = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'my_address 
         WHERE user_id='.$user_id.' AND id='.$address_id, ARRAY_A);
         if(!$address) wp_send_json_error(['info' => '出错了, 找不到收货地址']);
@@ -2225,11 +2235,11 @@ class Student_Ajax
         $fp = fopen('flock.txt', 'a+');
         if(flock($fp, LOCK_EX)){
             //查询购物车
-            $orderGoodsRows = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$user_id.' AND order_id=0', ARRAY_A);
+            $orderGoodsRows = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'order_goods WHERE user_id='.$user_id.' AND order_id=0 AND id IN'.$orderGoodsIdStr, ARRAY_A);
             //计算支付价格
             $allPrice = 0;//支付金额
             $allBrain = 0;//脑币
-            $orderGoodsIdStr = '(';// (1,2,3) 后面修改order_goods的order_id使用
+//            $orderGoodsIdStr = '(';// (1,2,3) 后面修改order_goods的order_id使用
             $wpdb->startTrans();
             foreach ($orderGoodsRows as $orderGoodsRow){
                 $goods = $wpdb->get_row('SELECT id,goods_title,shelf,price,stock FROM '.$wpdb->prefix.'goods WHERE id='.$orderGoodsRow['goods_id'], ARRAY_A);
@@ -2260,7 +2270,7 @@ class Student_Ajax
                 }
                 $allPrice += $goods['price'] * $orderGoodsRow['goods_num'];
                 $allBrain += $goods['brain'] * $orderGoodsRow['goods_num'];
-                $orderGoodsIdStr .= $orderGoodsRow['id'].',';
+//                $orderGoodsIdStr .= $orderGoodsRow['id'].',';
             }
             $orderGoodsIdStr = substr($orderGoodsIdStr,0,strlen($orderGoodsIdStr)-1);
             $orderGoodsIdStr .= ')';
@@ -2304,6 +2314,20 @@ class Student_Ajax
         }else{
             wp_send_json_error(['info' => '系统繁忙,请稍后再试']);
         }
+    }
+
+    /**
+     * 确认收货
+     */
+    public function collectGoods(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_collect_goods_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
+        $id = intval($_POST['id']);
+        $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 4], ['id' => $id, 'pay_stats' => 3, 'user_id' => $current_user->ID]);
+        if($bool) wp_send_json_success(['info' => '订单已确认收货']);
+        else  wp_send_json_error(['info' => '操作失败,请稍后再试']);
     }
 
     /**
