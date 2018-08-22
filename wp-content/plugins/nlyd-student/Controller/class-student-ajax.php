@@ -1035,7 +1035,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         //获取教练信息
-        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} ",ARRAY_A);
+        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
 
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
@@ -2366,7 +2366,7 @@ class Student_Ajax
         if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
         //判断当前是否是已申请的教练
-        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} ",ARRAY_A);
+        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
 
@@ -2380,10 +2380,39 @@ class Student_Ajax
         }
         //设着当前教练为主训
         $currentRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=1 WHERE id='.$row['id']);
-        if($currentRes)
+        if($currentRes){
+            $wpdb->commit();
             wp_send_json_success(['info' => '主训教练更换成功']);
-        else
+
+        }else{
+            $wpdb->rollback();
             wp_send_json_error(array('info'=>'更换主训教练失败'));
+        }
+    }
+
+    /**
+     * 解除教练关系
+     */
+    public function relieveMyCoach(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
+        global $wpdb,$current_user;
+        //判断当前是否是已申请的教练
+        $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
+        if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
+
+        //改变状态
+        if($wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id'])){
+            //TODO 发送短信通知教练 ====================================
+
+
+            wp_send_json_success(['info' => '解除教学失败']);
+        } else{
+            wp_send_json_error(array('info'=>'解除教学失败'));
+        }
     }
 
     /**
