@@ -35,14 +35,14 @@ class Student_Directory
      * 名录
      */
     public function index(){
-        $view = student_view_path.'directory.php';
+        $view = student_view_path.CONTROLLER.'/directory.php';
         load_view_template($view);
     }
     /**
      * 认证教练名录
      */
      public function directoryCoach(){
-        $view = student_view_path.'directory-coach.php';
+        $view = student_view_path.CONTROLLER.'/directory-coach.php';
         load_view_template($view);
 
     }
@@ -50,7 +50,7 @@ class Student_Directory
      * 脑力健将名录
      */
      public function directoryPlayer(){
-        $view = student_view_path.'directory-player.php';
+        $view = student_view_path.CONTROLLER.'/directory-player.php';
         load_view_template($view);
 
     }
@@ -58,7 +58,7 @@ class Student_Directory
      * 脑力战队名录
      */
      public function directoryTeam(){
-        $view = student_view_path.'directory-team.php';
+        $view = student_view_path.CONTROLLER.'/directory-team.php';
         load_view_template($view);
 
     }
@@ -66,7 +66,7 @@ class Student_Directory
      * 记忆水平认证名录
      */
      public function directoryRemember(){
-        $view = student_view_path.'directory-remember.php';
+        $view = student_view_path.CONTROLLER.'/directory-remember.php';
         load_view_template($view);
 
     }
@@ -74,7 +74,7 @@ class Student_Directory
      * 速读水平认证名录
      */
      public function directoryRead(){
-        $view = student_view_path.'directory-read.php';
+        $view = student_view_path.CONTROLLER.'/directory-read.php';
         load_view_template($view);
 
     }
@@ -82,7 +82,7 @@ class Student_Directory
      * 心算水平认证名录
      */
      public function directoryCalculation(){
-        $view = student_view_path.'directory-calculation.php';
+        $view = student_view_path.CONTROLLER.'/directory-calculation.php';
         load_view_template($view);
 
     }

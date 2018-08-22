@@ -7,13 +7,13 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="count-wrapper">
-                    <p class="match-name c_blue"><?=$match_title?></p>
+                    <p class="match-name c_blue"><?=$post_title?></p>
                     <?php if($count_down > 0 ){ ?>
                     <div class="a-btn wait">倒计时<span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span></div>
                     <?php }else{ ?>
                     <a class="a-btn wait" href="<?=$match_url?>">进入比赛</a>
                     <?php }?>
-                    <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=$project_title?>”，第1轮</p>
+                    <p class="match-detail c_black fs_16">第1个项目“<?=$match_title?>”，第1轮</p>
                 </div> 
             </div>           
         </div>

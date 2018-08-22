@@ -20,7 +20,7 @@ class Student_Orders extends Student_Home
         global $wpdb, $current_user;
         $row = $wpdb->get_row('SELECT count(id) as count FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID, ARRAY_A);
         // var_dump($row['count']);
-        $view = student_view_path.'order.php';
+        $view = student_view_path.CONTROLLER.'/order.php';
         load_view_template($view, array('is_show' => $row));
     }
 

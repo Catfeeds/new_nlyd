@@ -81,7 +81,7 @@ class Student_Teams
         $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$_GET['coach_id']}";
         $id = $wpdb->get_var($sql2);
         //print_r($id);
-        $view = student_view_path.'coachDetail.php';
+        $view = student_view_path.CONTROLLER.'/coachDetail.php';
         load_view_template($view,array('user_info'=>$user_info,'skill'=>$rows,'content'=>$content,'my_coach_id'=>$id));
     }
 
@@ -99,7 +99,7 @@ class Student_Teams
         $sql = "select count(id) as len from {$wpdb->prefix}coach_skill where {$where}";
         $count = $wpdb->get_row($sql);
         $data = array('category'=>$category,'coachCount' => $count->len,'action'=>'coachList');
-        $view = student_view_path.'coachList.php';
+        $view = student_view_path.CONTROLLER.'/coachList.php';
         load_view_template($view,$data);
     }
 
@@ -124,7 +124,7 @@ class Student_Teams
 
         $count = $wpdb->get_row($sql);
 
-        $view = student_view_path.'coachList.php';
+        $view = student_view_path.CONTROLLER.'/coachList.php';
         load_view_template($view,array('category'=>$category,'user_id'=>$current_user->ID, 'coachCount' => $count->len,'action'=>'myCoach'));
     }
 
@@ -147,7 +147,7 @@ class Student_Teams
 
         $row = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'posts WHERE post_status="publish" and post_type = "team"');
         //print_r($rows);
-        $view = student_view_path.'team.php';
+        $view = student_view_path.CONTROLLER.'/team.php';
         load_view_template($view,array('lists'=>$rows, 'row' => $row));
     }
 
@@ -189,7 +189,7 @@ class Student_Teams
         $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}match_team where team_id = {$team['ID']} and status = 2 and user_type = 1");
         $team['team_total'] = $total;
 
-        $view = student_view_path.'teamDetail.php';
+        $view = student_view_path.CONTROLLER.'/teamDetail.php';
         load_view_template($view,array('team'=>$team));
     }
 

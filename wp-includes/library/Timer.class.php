@@ -69,14 +69,14 @@ class Timer
                     //var_dump($results);
                     foreach ($results as $val){
 
-                        $project_use_time = !empty($val['project_use_time']) ? $val['project_use_time'] : $v['match_use_time'];
-                        $match_more = !empty($val['match_more']) ? $val['match_more'] : $v['match_more'];
-                        $project_time_interval = !empty($val['project_time_interval']) ? $val['project_time_interval'] : $v['match_subject_interval'];
+                        $project_use_time = $val['project_use_time'] > 0 ? $val['project_use_time'] : $v['match_use_time'];
+                        $match_more = $val['match_more'] > 0 ? $val['match_more'] : $v['match_more'];
+                        $project_time_interval = $val['project_time_interval'] > 0 ? $val['project_time_interval'] : $v['match_subject_interval'];
 
                         $match_use_time += $project_use_time*$match_more + ($match_more-1)*$project_time_interval + $v['match_project_interval'];
                         //var_dump($match_end_time);
                     }
-                    $match_end_time = strtotime($v['match_start_time']) + $match_use_time*60;
+                    $match_end_time = strtotime($v['match_start_time']) + ($match_use_time-$v['match_project_interval'])*60;
 
                     if(strtotime($results[0]['project_start_time']) > 1){
                         $fixed = $results[0];

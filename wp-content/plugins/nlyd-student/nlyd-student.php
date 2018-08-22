@@ -122,7 +122,7 @@ if(!class_exists('StudentController')){
             define('ACTION',$action);
 
             //项目默认路径
-            define( 'student_view_path', leo_student_path.'View/'.CONTROLLER.'/' );
+            define( 'student_view_path', leo_student_path.'View/' );
             define( 'leo_student_public_view', leo_student_path.'View/public/' );
             define( 'student_controller_path', leo_student_path.'Controller/' );
 
