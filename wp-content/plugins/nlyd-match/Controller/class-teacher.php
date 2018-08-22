@@ -378,6 +378,7 @@ class Teacher
         $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
+                WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
                 WHEN 1 THEN "<span style=\'color:#2aa52e\'>申请中</span>" 
                 WHEN 2 THEN "<span style=\'color:#0073aa\'>已通过</span>" 
                 END AS apply_name 
@@ -405,6 +406,8 @@ class Teacher
                 <li class="<?php if($type == 0) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=0'.'&id='.$coach_id?>'">所有</li>
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>
+                <li class="<?php if($type == -1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=-1'.'&id='.$coach_id?>'">已拒绝</li>
+                <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除</li>
             </ul>
             <br class="clear">
             <br class="clear">
