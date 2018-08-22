@@ -40,9 +40,9 @@
                         </ul>
                         <?php endif;?>
                         <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
-                        <div class="layui-tab-content">
+                        <div class="layui-tab-content" style="padding:0">
                             <div class="layui-tab-item layui-show layui-row layui-col-space20 flow-default" id="flow-zoo">
-
+                                
                             </div>
                         </div>
                     </div>
@@ -92,17 +92,18 @@ jQuery(function($) {
 layui.use(['element','flow','layer'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
-    $('body').on('click','.coach-btn',function(){//申请当我教练
+    $('body').on('click','.setTeacher',function(){//申请当我教练
         var _this=$(this);
         var coach_id=_this.attr('data-coachId');
         var category_id=_this.attr('data-categoryId');
+        var coach_name=_this.attr('data-coachName')
             layer.open({
             type: 1
             ,maxWidth:300
-            ,title: '提示' //不显示标题栏
+            ,title: '教练申请' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否请TA当教练？</div>'
+            ,content: '<div class="box-conent-wrapper">是否确认向“'+coach_name+'”发送教练申请？</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 
@@ -120,10 +121,9 @@ layui.use(['element','flow','layer'], function(){
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     $.alerts(res.data.info)
                     if(res.success){
-                       _this.css('display','none');
-                       _this.parents('.coach-detail-footer').find('.coach-type').css('display','inline-block')
-                      var setMainCoach='<span class="fs_12 c_black6 c_orange">等待教练审核</span>'
-                      _this.parents('.coach-detail-footer').prev('.coach-detail-row').html(setMainCoach)                
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1600);
                     }
                     
                 })
@@ -139,13 +139,15 @@ layui.use(['element','flow','layer'], function(){
         var _this=$(this);
         var coach_id=_this.attr('data-coachId');
         var category_id=_this.attr('data-categoryId');
+        var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
             layer.open({
             type: 1
             ,maxWidth:300
-            ,title: '提示' //不显示标题栏
+            ,title: '设置主训教练' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否立即更换主训教练？</div>'
+            ,content: '<div class="box-conent-wrapper">是否确认设置“'+coach_name+'”为'+type+'主训教练？</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 
@@ -170,10 +172,66 @@ layui.use(['element','flow','layer'], function(){
                     if(res.success){
                         if(res.data.url.length>0){
                             window.location.href=res.data.url
+                        }else{
+                            window.location.reload()
                         }
-                        $('.setCoach').css('display','inline');
-                        $('.coach-row .nl-badge').html('<i class="iconfont">&#xe608;</i>')
-                        _this.css('display','none').parents('.coach-row').find('.nl-badge').html('主');
+
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+
+                })
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+        return false
+    })
+
+    $('body').on('click','.clearMain',function(){//解除主训
+        var _this=$(this);
+        var coach_id=_this.attr('data-coachId');
+        var category_id=_this.attr('data-categoryId');
+        var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
+            layer.open({
+            type: 1
+            ,maxWidth:300
+            ,title: '解除主训教学关系' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">您是否确认解除与“'+coach_name+'”的主训关系？</div>'
+            ,btn: ['再想想', '确认', ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
+                /*var match_id=''
+                if($.Request('match_id')!=null){
+                    match_id=$.Request('match_id')
+                }*/
+                var postData={
+                    action:'set_major_coach',
+                    _wpnonce:$('#setMain').val(),
+                    coach_id:coach_id,
+                    // match_id:match_id,
+                    category_id:category_id,
+                }
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    console.log(res)
+                    if(res.success){
+                        if(res.data.url.length>0){
+                            window.location.href=res.data.url
+                        }else{
+                            window.location.reload()
+                        }
+
                     }else{
                         $.alerts(res.data.info)
                     }
@@ -212,85 +270,111 @@ layui.use(['element','flow','layer'], function(){
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var major_coach='';//主训教练，我的教练
                                 var isMyCoach='';//不是我的教练
-                                var memoryClass='';
-                                var computeClass='';
-                                var readClass='';
-                                var setMainCoach='';//设为主训教练
+                                var memoryClass='',computeClass='',readClass='';
+                                var memory_major_coach="",compute_major_coach="",read_major_coach="";
+                                var coach_btn="";
+                                var text=$('.layui-this').text();
+                                var clear_btn="";
+                                var isLeft="ta_r";
                                 if(v.compute!=null || v.read!=null || v.memory!=null){
                                     if(v.compute!=null){
-                                        computeClass='blue'
+                                        computeClass='c_blue'
                                     }
                                     if(v.memory!=null){
-                                        memoryClass='blue'
+                                        memoryClass='c_blue'
                                     }
                                     if(v.read!=null){
-                                        readClass='blue'
+                                        readClass='c_blue'
                                     } 
 
                                 }
                                 if(v.apply_status!=null){//1，申请中，2我的教练
                                     if(v.apply_status==1){//1，申请中，2我的教练
-                                        setMainCoach='<span class="fs_12 c_black6 c_orange">等待教练审核</span>'
+                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 ">教练审核中...</div></div>';
+                                        isLeft="ta_l"
                                     }else if(v.apply_status==2){//1，申请中，2我的教练
+                                        
+                                        if(v.my_major_coach=='y'){//主训教练
+                                            
+                                            major_coach='<div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div>';
+                                            clear_btn='<span class="clearMain fl_1 text_1 ta_l"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</span>'
+                                        }else{
+                                            major_coach='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
+                                            coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</div></div>';
+                                            clear_btn='<span class="clearCoach fl_1 text_1 ta_l" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</span>'
+                                        }
                                         $.each(arr,function(index,value){//橘色高亮
                                             if(value.ID==$('.layui-this').attr('data-id')){
+
                                                 if(value.post_title=='速算类'){
-                                                    computeClass='orange';
+                                                    compute_major_coach=major_coach;
+                                                    if(v.my_major_coach=='y'){
+                                                        computeClass='c_orange';
+                                                    }
                                                 }else if(value.post_title=='速记类'){
-                                                    memoryClass='orange';
+                                                    // memoryClass='c_orange';
+                                                    memory_major_coach=major_coach;
+                                                    if(v.my_major_coach=='y'){
+                                                        memoryClass='c_orange';
+                                                    }
                                                 }else if(value.post_title=='速读类'){
-                                                    readClass='orange';
+                                                    // readClass='c_orange';
+                                                    read_major_coach=major_coach;
+                                                    if(v.my_major_coach=='y'){
+                                                        readClass='c_orange';
+                                                    }
                                                 }
                                             }
                                         })
-                                        if(v.my_major_coach=='y'){//主训教练
-                                            major_coach='<div class="nl-badge">主</div>';
-                                            setMainCoach='<span class="fs_12 c_black6 c_blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'" style="display:none;">设为主训教练</span>';
-                                        }else{
-                                            major_coach='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';
-                                            setMainCoach='<span class="fs_12 c_black6 c_blue setCoach" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</span>'
-                                        }
+
                                     }
 
-                                    isMyCoach='<div class="coach-type '+readClass+'">速读类</div>'
-                                              +'<div class="coach-type '+memoryClass+'">速记类</div>'
-                                              +'<div class="coach-type '+computeClass+'">速算类</div>'
+                                    isMyCoach='<div class="coach-type text_1 '+readClass+'">'+read_major_coach+' 速读类</div>'
+                                              +'<div class="coach-type text_1 '+memoryClass+'">'+memory_major_coach+' 速记类</div>'
+                                              +'<div class="coach-type text_1 '+computeClass+'">'+compute_major_coach+' 速算类</div>'
                                 }else{
-                                    isMyCoach='<div class="coach-type '+readClass+'" style="display:none;">速读类</div>'
-                                              +'<div class="coach-type '+memoryClass+'" style="display:none;">记忆类</div>'
-                                              +'<div class="coach-type '+computeClass+'" style="display:none;">速算类</div>'
-                                              +'<div class="coach-btn" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div>';//不是我的教练
+                                    isMyCoach='<div class="coach-type text_1 '+readClass+'">速读类</div>'
+                                              +'<div class="coach-type text_1 '+memoryClass+'">记忆类</div>'
+                                              +'<div class="coach-type text_1 '+computeClass+'">速算类</div>'
+                                    coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
+                                    isLeft="ta_l"
                                 }
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
-                                            +'<a class="coach-row" href="'+v.coach_url+'">'
-                                                +'<div class="coach-picture img-box">'
-                                                    +'<img src="'+v.user_head+'">'
-                                                +'</div>'
-                                                +'<div class="coach-detail">'
-                                                    +'<div class="coach-detail-row">'
-                                                        +'<span class="fs_18 c_blue">'+v.display_name+'</span>'
-                                                        +'<span class="fs_12 c_black6">'+v.user_gender+'</span>'
-                                                        +'<span class="fs_12 c_black6">ID '+v.user_ID+'</span>'
-                                                        +major_coach
+                                            +'<div class="coach-row">'
+                                                +'<div class="coach-row-top">'
+                                                    +'<div class="coach-picture img-box">'
+                                                        +'<img src="'+v.user_head+'">'
                                                     +'</div>'
-                                                    +'<div class="coach-detail-row">'
-                                                        +'<span class="fs_12 c_black6">国际脑力运动委员会（IISC）</span>'
-                                                    +'</div>'
-                                                    +'<div class="coach-detail-row">'
-                                                        +'<span class="fs_12 c_black6">'+v.user_coach_level+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="coach-detail-row">'
-                                                        +setMainCoach
-                                                    +'</div>'
-                                                    +'<div class="coach-detail-footer">'
-                                                        +isMyCoach
+                                                    +'<div class="coach-detail">'
+                                                        +'<div class="text_1">'
+                                                            +'<span class="fs_16 c_blue">'+v.display_name+'</span>'
+                                                            +'<span class="c_black6">'+v.user_gender+'</span>'
+                                                            +'<span class="c_black6">ID '+v.user_ID+'</span>'
+                                                        +'</div>'
+                                                        +'<div class="text_1">'
+                                                            +'<span class="c_black6">国际脑力运动委员会（IISC）</span>'
+                                                        +'</div>'
+                                                        +'<div class="text_1">'
+                                                            +'<span class="c_black6">'+v.user_coach_level+'</span>'
+                                                        +'</div>'
+                                                        +'<div class="coach-detail-footer">'
+                                                            +isMyCoach
+                                                        +'</div>'
                                                     +'</div>'
                                                 +'</div>'
-                                            +'</a>'
+                                                +'<div class="coach-row-footer">'
+                                                    +'<div class="left_c">'
+                                                        +clear_btn
+                                                        +'<a class="c_black6 fl_1 text_1 '+isLeft+'"  href="'+v.coach_url+'">查看详情</a>'
+                                                    +'</div>'
+                                                    +coach_btn
+                                                +'</div>'
+                                            +'</div>'
                                         +'</li>'
                                 lis.push(dom) 
                             })

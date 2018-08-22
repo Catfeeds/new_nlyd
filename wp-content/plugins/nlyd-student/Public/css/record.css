@@ -13,13 +13,14 @@
 }
 
 .layui-tab-brief>.layui-tab-title .layui-this{
-    color: #fff;
-    border: 1px solid transparent;
+    color: rgba(116, 116, 116, 1);
+    border: 0.5px solid transparent;
+    /* border: 1px solid transparent;
     border-top-color: #68AAFE;
     background: -webkit-linear-gradient(#68AAFE, #4394F9);
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9); */
 }
 .layui-unselect{
     display: none;
@@ -30,8 +31,8 @@
     color:rgba(116, 116, 116, 1);
     height: 40px;
     margin-left: 12px;
-    width: -webkit-calc(100%/3 - 10px);
-    width: calc(100%/3 - 10px);
+    width: -webkit-calc(100%/3 - 9px);
+    width: calc(100%/3 - 9px);
     line-height: 40px;
     padding: 0;
     transition: none;
@@ -42,9 +43,9 @@
     min-width: 65px;
     text-align: center;
     cursor: pointer;
-    border: 1px solid rgba(116, 116, 116, 1);
+    border: 0.5px solid rgba(116, 116, 116, 1);
     border-radius: 6px;
-    font-size: 0.16rem;
+    font-size: 0.14rem;
 }
 .nl-transform{
     position: absolute;
@@ -66,7 +67,7 @@
     border: 1px solid transparent;
     border-top-color: #68AAFE;
     border-radius: 6px;
-    font-size: 0.16rem;
+    font-size: 0.14rem;
     background: -webkit-linear-gradient(#68AAFE, #4394F9);
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
@@ -99,7 +100,6 @@
 .content table.nl-table{
     border-bottom: none;
     position: relative;
-    margin-top: 20px;
 }
 .content .nl-table td{
     padding: 5px 0;
@@ -163,9 +163,43 @@ tr.nl-me td{
     margin-top: 0;
 }
 .btn-wrapper{
-    height: 32px;
     width: 100%;
+    position: relative;
     margin-top: 20px;
+}
+.btn-zoo{
+    width: 100%;
+    margin: auto;
+    height: 22px;
+    overflow: hidden;
+}
+.btn-window{
+    position: relative;
+    width: 100%;
+    height: 39px;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.btn-inner-wrapper{
+    position: absolute;
+    width: 100000px;
+    left: 0;
+    top: 0;
+    height: 22px;
+}
+.classify-btn{
+    display: block;
+    float: left;
+    width: 56px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.btn-inner-wrapper .classify-btn:last-child{
+    margin-right: 0;
 }
 .btn-wrap{
     width: -webkit-calc(100% / 3);
@@ -179,14 +213,6 @@ tr.nl-me td{
 }
 .btn-wrap:last-child{
     text-align: right;
-}
-.classify-btn{
-    display: inline-block;
-    flex: 1;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    cursor: pointer;
 }
 .btn-wrapper.one-rank{
     display: flex;

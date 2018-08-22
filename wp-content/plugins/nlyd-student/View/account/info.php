@@ -39,7 +39,7 @@
                         <div class="form-inputs">
                             <div class="form-input-row">
                                 <div class="form-input-label">账户头像</div>
-                                <span class="Mobile form-input-right">修改</span>
+                                <!-- <span class="Mobile form-input-right">修改</span> -->
                                 <div id="imgBox" class="imgBox">
                                     <img class="logoImg" src="<?=$user_info['user_head'];?>">
                                 </div>

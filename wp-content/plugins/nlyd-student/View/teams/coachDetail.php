@@ -57,45 +57,45 @@
                                 <p>国际脑力运动推广大使</p>
                             </div>
                         </div>
-                        <div class="coachDetail-row have-metal width-padding width-margin-pc">
-                            <div class="width-padding-pc">
-                                <div class="coachDetail-metal">课 程</div>
-                                <div class="course-zoo">
-                                    <div class="course-window">
-                                        <div class="course-wrapper">
-                                            <a class="course">
-                                                <div class="course-body">
-                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
-                                                    <div class="c_black6">四川.成都.武侯区</div>
-                                                </div>
-                                                <div class="course-footer">抢占名额中</div>
-                                            </a>
-                                            <a class="course">
-                                                <div class="course-body">
-                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
-                                                    <div class="c_black6">四川.成都.武侯区</div>
-                                                </div>
-                                                <div class="course-footer disabled">名额已满</div>
-                                            </a>
-                                            <a class="course">
-                                                <div class="course-body">
-                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
-                                                    <div class="c_black6">四川.成都.武侯区</div>
-                                                </div>
-                                                <div class="course-footer disabled">名额已满</div>
-                                            </a>
-                                            <a class="course">
-                                                <div class="course-body">
-                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>
-                                                    <div class="c_black6">四川.成都.武侯区</div>
-                                                </div>
-                                                <div class="course-footer">抢占名额中</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="coachDetail-row have-metal width-padding width-margin-pc">-->
+<!--                            <div class="width-padding-pc">-->
+<!--                                <div class="coachDetail-metal">课 程</div>-->
+<!--                                <div class="course-zoo">-->
+<!--                                    <div class="course-window">-->
+<!--                                        <div class="course-wrapper">-->
+<!--                                            <a class="course">-->
+<!--                                                <div class="course-body">-->
+<!--                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>-->
+<!--                                                    <div class="c_black6">四川.成都.武侯区</div>-->
+<!--                                                </div>-->
+<!--                                                <div class="course-footer">抢占名额中</div>-->
+<!--                                            </a>-->
+<!--                                            <a class="course">-->
+<!--                                                <div class="course-body">-->
+<!--                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>-->
+<!--                                                    <div class="c_black6">四川.成都.武侯区</div>-->
+<!--                                                </div>-->
+<!--                                                <div class="course-footer disabled">名额已满</div>-->
+<!--                                            </a>-->
+<!--                                            <a class="course">-->
+<!--                                                <div class="course-body">-->
+<!--                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>-->
+<!--                                                    <div class="c_black6">四川.成都.武侯区</div>-->
+<!--                                                </div>-->
+<!--                                                <div class="course-footer disabled">名额已满</div>-->
+<!--                                            </a>-->
+<!--                                            <a class="course">-->
+<!--                                                <div class="course-body">-->
+<!--                                                    <div class="course-name c_blue">高效记忆术·G第1期</div>-->
+<!--                                                    <div class="c_black6">四川.成都.武侯区</div>-->
+<!--                                                </div>-->
+<!--                                                <div class="course-footer">抢占名额中</div>-->
+<!--                                            </a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <?php if(empty($my_coach_id)): ?>
                         <div class="a-btn">请TA当教练</div>
                         <?php endif;?>

@@ -12,6 +12,7 @@
 }
 
 .layui-tab-brief>.layui-tab-title .layui-this{
+    border: 0.5px solid transparent;
     color:rgba(116, 116, 116, 1);
 }
 .layui-unselect{
@@ -23,14 +24,10 @@
     color:rgba(116, 116, 116, 1);
     height: 40px;
     margin-left: 12px;
-    width: -webkit-calc(25% - 11px);
-    width: calc(25% - 11px);
+    width: -webkit-calc(25% - 12px);
+    width: calc(25% - 12px);
     line-height: 40px;
     padding: 0;
-    transition: none;
-    -moz-transition: none;
-    -webkit-transition: none;
-    -o-transition: none;
     position: relative;
     min-width: auto;
     text-align: center;

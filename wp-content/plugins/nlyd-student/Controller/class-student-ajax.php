@@ -1040,6 +1040,15 @@ class Student_Ajax
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
         $major = $row['major'] != 1 ? 1 : '';
+
+
+        //判断是否已存在其它主训教练,如果有, 更换主训教练
+        if($major == 1){
+            if($wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE user_id='.$current_user->ID.' AND category_id='.$_POST['category_id'].' AND major=1 AND apply_status=2')){
+                //已有主训教练
+                wp_send_json_error(['info' => 100]);
+            }
+        }
         
         $a = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>''),array('category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
         $b = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>$major),array('id'=>$row['id'],'user_id'=>$current_user->ID));
