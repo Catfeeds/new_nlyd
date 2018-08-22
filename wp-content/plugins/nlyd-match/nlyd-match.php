@@ -514,11 +514,11 @@ if(!class_exists('MatchController')){
                             $this->post_type, 'normal'
                         );
 
-                        add_meta_box( 'order_meta_box',
+                        /*add_meta_box( 'order_meta_box',
                             '比赛顺序设置',
                             array($this->match,'order_review_meta_box'),
                             $this->post_type, 'normal'
-                        );
+                        );*/
 
                         add_meta_box( 'project_meta_box',
                             '比赛项目设置',
