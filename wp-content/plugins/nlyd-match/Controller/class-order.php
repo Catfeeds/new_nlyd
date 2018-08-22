@@ -195,9 +195,7 @@ class Order {
                                                     echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial=<?=$row[\'serialnumber\']?>">退款</a>  </span>';
                                                     break;
                                                 case 2:
-                                                    if($row['order_type'] == 2){
                                                         echo '<span class="edit"><a href="?page=order-send&id='.$row['id'].'" class="deliver">发货</a> </span>';
-                                                    }
                                                     break;
                                                 case 3:
                                                     if($row['order_type'] == 2){
@@ -533,7 +531,7 @@ class Order {
         }else{
             $id = intval($_GET['id']);
         }
-        $row = $wpdb->get_row('SELECT serialnumber,order_type,match_id,id,cost,fullname,telephone,address,express_number,express_company FROM '.$wpdb->prefix.'order WHERE id='.$id.' AND (pay_status=2 OR pay_status=3) AND order_type=2', ARRAY_A);
+        $row = $wpdb->get_row('SELECT serialnumber,order_type,match_id,id,cost,fullname,telephone,address,express_number,express_company FROM '.$wpdb->prefix.'order WHERE id='.$id.' AND pay_status=2', ARRAY_A);
         if(!$row){
             echo '参数错误,订单不存在';
             return;

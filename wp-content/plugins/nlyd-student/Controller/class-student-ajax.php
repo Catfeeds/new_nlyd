@@ -1050,7 +1050,7 @@ class Student_Ajax
             }
         }
         
-        $a = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>''),array('category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
+//        $a = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>''),array('category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
         $b = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>$major),array('id'=>$row['id'],'user_id'=>$current_user->ID));
         if($b){
             
@@ -2414,13 +2414,14 @@ class Student_Ajax
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
 
         //改变状态
-        if($wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id'])){
+
+        $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id']);
+        if($update){
             //TODO 发送短信通知教练 ====================================
 
-
-            wp_send_json_success(['info' => '解除教学失败']);
+            wp_send_json_success(['info' => '解除教学关系成功']);
         } else{
-            wp_send_json_error(array('info'=>'解除教学失败'));
+            wp_send_json_error(array('info'=>'解除教学关系失败'));
         }
     }
 
