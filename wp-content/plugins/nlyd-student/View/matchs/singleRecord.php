@@ -16,7 +16,7 @@
         </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin width-margin-pc">
-                    <div class="match-title"><?=$post_title?><div class="share" id="shareBtn">分享我的战绩</div></div>
+                    <div class="match-title c_black"><?=$post_title?><div class="share" id="shareBtn">分享我的战绩</div></div>
                     <div class="single-match-title">
                         <div class="single-match-name"><?=$match_title?></div>
                         <?php if($match_more > 0):?>
@@ -118,7 +118,9 @@ layui.use(['element','flow'], function(){
                                                 +'<td>'+rows.city+'</td>'
                                                 +'<td>'+rows.score+'</td>'
                                                 +'<td>'+rows.group+'</td>'
-                            $('#danxiang_me').html(danxiang_meHtml)
+                            // $('#danxiang_me').html(danxiang_meHtml)
+                        }else{
+                            $('#danxiang_me').remove()
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -126,6 +128,11 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
+                                    if(value.ranking==1){
+                                        $('#fenlei_me').remove()
+                                    }else{
+                                        $('#fenlei_me').html(Html)
+                                    }
                                 }
                             }  
                             var dom='<tr class="'+nl_me+'">'
@@ -146,12 +153,12 @@ layui.use(['element','flow'], function(){
                             next(lis.join(''),true)
                         }
                     }else{
-                        if(fenleiPage==1){
-                            var dom='<tr><td colspan="6">暂无数据</td></tr>'
-                            lis.push(dom) 
-                        }else{
-                            $.alerts('没有更多了')
-                        }
+                        // if(fenleiPage==1){
+                        //     var dom='<tr><td colspan="6">暂无数据</td></tr>'
+                        //     lis.push(dom) 
+                        // }else{
+                        //     $.alerts('没有更多了')
+                        // }
                         next(lis.join(''),false)
                     }
                 }) 

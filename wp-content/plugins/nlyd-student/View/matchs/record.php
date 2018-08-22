@@ -16,7 +16,7 @@
         </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
-                    <div class="match-title"><?=$match_title?><a class="share" id="shareBtn">分享我的战绩</a></div>
+                    <div class="match-title c_black"><?=$match_title?><a class="share" id="shareBtn">分享我的战绩</a></div>
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
                         <li class="layui-this">总排名</li>
@@ -38,8 +38,8 @@
                                         <td>项目总分</td>
                                         <td>组别</td>
                                     </tr>
-                                    <?php if(!empty($my_ranking)): ?>
-                                    <tr class="nl-me">
+                                    <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
+                                    <tr class="nl-me" id="allRanking">
                                         <td>
                                             <div class="nl-circle"><?=$my_ranking['ranking']?></div>
                                         </td>
@@ -54,7 +54,7 @@
                                 <tbody id="flow">
                                     <?php if(!empty($list)){ ?>
                                     <?php foreach ($list as $k => $v){ ?>
-                                    <tr>
+                                    <tr class="<?= $my_ranking['ranking']==$v['ranking'] ? 'nl-me' : '';?>">
                                         <td>
                                             <div class="nl-circle <?= $k<2 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                         </td>
@@ -65,9 +65,7 @@
                                         <td><?=$v['group']?></td>
                                     </tr>
                                     <?php } ?>
-                                    <?php }else{ ?>
-                                        <tr><td colspan="6">暂无数据</td></tr>
-                                    <?php } ?>
+                                    <?php }?>
                                 </tbody>
                             </table>
                         </div>
@@ -230,7 +228,16 @@ layui.use(['element','flow'], function(){
                         $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                             if(res.success){ 
                                 $.each(res.data.info,function(index,value){
-                                    var dom='<tr>'
+                                    var nl_me='';
+                                    if(res.data.my_ranking!=null){
+                                        if(value.ranking==res.data.my_ranking.ranking){
+                                            nl_me='nl-me'
+                                            if(value.ranking==1){
+                                                $('#allRanking').remove()
+                                            }
+                                        }
+                                    }  
+                                    var dom='<tr class="'+nl_me+'">'
                                                 +'<td>'
                                                     +'<div class="nl-circle">'+value.ranking+'</div>'
                                                 +'</td>'
@@ -248,7 +255,7 @@ layui.use(['element','flow'], function(){
                                     next(lis.join(''),true)
                                 }
                             }else{
-                                $.alerts('没有更多了')
+                                // $.alerts('没有更多了')
                                 next(lis.join(''),false)
                             }
                         }) 
@@ -280,15 +287,17 @@ layui.use(['element','flow'], function(){
                         $('#fenlei_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
-                              var fenlei_meHtml='<td>'
-                                                    +'<div class="nl-circle">'+rows.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td>'+rows.user_name+'</td>'
-                                                +'<td>'+rows.ID+'</td>'
-                                                +'<td>'+rows.city+'</td>'
-                                                +'<td>'+rows.score+'</td>'
-                                                +'<td>'+rows.group+'</td>'
-                            $('#fenlei_me').html(fenlei_meHtml)
+                            var Html='<td>'
+                                        +'<div class="nl-circle">'+rows.ranking+'</div>'
+                                    +'</td>'
+                                    +'<td>'+rows.user_name+'</td>'
+                                    +'<td>'+rows.ID+'</td>'
+                                    +'<td>'+rows.city+'</td>'
+                                    +'<td>'+rows.score+'</td>'
+                                    +'<td>'+rows.group+'</td>'
+                            // $('#fenlei_me').html(Html)
+                        }else{
+                            $('#fenlei_me').remove()
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -296,6 +305,11 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
+                                    if(value.ranking==1){
+                                        $('#fenlei_me').remove()
+                                    }else{
+                                        $('#fenlei_me').html(Html)
+                                    }
                                 }
                             }  
                             var dom='<tr class="'+nl_me+'">'
@@ -316,12 +330,12 @@ layui.use(['element','flow'], function(){
                             next(lis.join(''),true)
                         }
                     }else{
-                        if(fenleiPage==1){
-                            var dom='<tr><td colspan="6">暂无数据</td></tr>'
-                            lis.push(dom) 
-                        }else{
-                            $.alerts('没有更多了')
-                        }
+                        // if(fenleiPage==1){
+                        //     var dom='<tr><td colspan="6">暂无数据</td></tr>'
+                        //     lis.push(dom) 
+                        // }else{
+                        //     $.alerts('没有更多了')
+                        // }
                         next(lis.join(''),false)
                     }
                 }) 
@@ -349,13 +363,12 @@ layui.use(['element','flow'], function(){
                 if(typeof(age_group)!='undefined'){
                     postData.age_group=age_group;
                 }
-                console.log(postData)
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){ 
                         $('#danxiang_me').empty();
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
-                              var danxiang_meHtml='<td>'
+                              var Html='<td>'
                                                     +'<div class="nl-circle">'+rows.ranking+'</div>'
                                                 +'</td>'
                                                 +'<td>'+rows.user_name+'</td>'
@@ -363,7 +376,9 @@ layui.use(['element','flow'], function(){
                                                 +'<td>'+rows.city+'</td>'
                                                 +'<td>'+rows.score+'</td>'
                                                 +'<td>'+rows.group+'</td>'
-                            $('#danxiang_me').html(danxiang_meHtml)
+                            // $('#danxiang_me').html(Html)
+                        }else{
+                            $('#danxiang_me').remove()
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -371,6 +386,11 @@ layui.use(['element','flow'], function(){
                             if(res.data.my_ranking!=null){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
+                                    if(value.ranking==1){
+                                        $('#danxiang_me').remove()
+                                    }else{
+                                        $('#danxiang_me').html(Html)
+                                    }
                                 }
                             }  
                             var dom='<tr class="'+nl_me+'">'
@@ -391,12 +411,12 @@ layui.use(['element','flow'], function(){
                             next(lis.join(''),true)
                         }
                     }else{
-                        if(fenleiPage==1){
-                            var dom='<tr><td colspan="6">暂无数据</td></tr>'
-                            lis.push(dom) 
-                        }else{
-                            $.alerts('没有更多了')
-                        }
+                        // if(fenleiPage==1){
+                        //     var dom='<tr><td colspan="6">暂无数据</td></tr>'
+                        //     lis.push(dom) 
+                        // }else{
+                        //     $.alerts('没有更多了')
+                        // }
                         next(lis.join(''),false)
                     }
                 }) 

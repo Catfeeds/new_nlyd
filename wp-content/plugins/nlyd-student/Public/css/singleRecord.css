@@ -15,8 +15,7 @@
     margin-top: 20px;
 }
 .content .nl-table td{
-    color: rgba(175, 173, 173, 1);
-    /* font-size: 12px; */
+    padding: 5px 0;
     text-align: center;
     overflow: hidden;
     white-space: nowrap;
@@ -26,7 +25,7 @@
     overflow: visible;
 }
 .content .nl-table tr.table-head td{
-    color: rgba(67, 148, 249, 1);
+    color:  #2484FE;;
 }
 .nl-circle{
     width: 25px;
@@ -35,8 +34,8 @@
     text-align: center;
     /* font-size: 12px; */
     border-radius: 50%;
-    border: 1px solid rgba(67, 148, 249, 1);  
-    color: rgba(67, 148, 249, 1);  
+    border: 1px solid #2484FE;;  
+    color: #2484FE;;  
     background: #fff;
     margin: auto;
 }
@@ -46,62 +45,45 @@
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
     background: linear-gradient(#68AAFE, #4394F9);
-    box-shadow: 0 3px 6px rgba(67, 148, 249, 0.5);
 }
-thead tr.nl-me{
-    border-bottom: 1px solid rgba(67, 148, 249, 0.5);
+tr.nl-me{
+    border: 1px dashed #2484FE;
+    background: rgb(36, 132, 254,0.1);
 }
-tbody tr.nl-me{
-    border-radius: 6px;
-    border: 1px solid rgba(67, 148, 249, 0.5);
+tr.nl-me td{
+    color: #2484FE;
 }
 .match-title{
     font-size: 0.16rem;
-    color: rgba(116, 116, 116, 1);
     line-height: 50px;
 }
 .match-title .share{
     float: right;
     font-size: 0.14rem;
-    color: #4394F9;
+    color: #2484FE;
 }
 .single-match-title{
     height: 32px;
     width: 100%;
 }
 .single-match-name{
-    width: 90px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    color: #fff;
-    font-size: 0.14rem;
-    border-radius: 6px;
-    margin-right: 14px;
-    float: left;
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
-    box-shadow: 0 3px 6px rgba(67, 148, 249, 0.5);
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    text-align: left;
+    color: #2484FE;
 }
 .single-match-lun{
-    float: left;
-    width: 65px;
-    height: 30px;
-    border: 1px solid transparent;
-    line-height: 30px;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
     text-align: center;
-    border-radius: 6px;
-    color: rgba(116, 116, 116, 1);
-    font-size: 0.14rem;
+    cursor: pointer;
+    margin-left: 10px;
 }
 .single-match-lun.lun-active{
-    border: 1px solid rgba(67, 148, 249, 1);
-    color: rgba(67, 148, 249, 1);
-}
-.layui-flow-more{
-    bottom: -25px;
+    border-bottom: 2px solid #2484FE;
+    color: #2484FE;
 }
 @media screen and (min-width: 991px){
     .nl-border{

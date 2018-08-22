@@ -12,7 +12,7 @@ class Order {
         add_menu_page('订单', '订单', 'administrator', 'order',array($this,'orderLists'),'dashicons-businessman',99);
         add_submenu_page('order','退款单','退款单','administrator','order-refundOrder',array($this,'refundOrder'));
         add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
-//        add_submenu_page('order','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
+        add_submenu_page('order','发货','发货','administrator','order-send',array($this,'sendGoods'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
 
@@ -30,11 +30,12 @@ class Order {
         IFNULL(o.address,"-") AS address,
         IFNULL(o.express_number,"-") AS express_number,
         IFNULL(o.express_company,"-") AS express_company,
-        CASE o.order_type WHEN 1 THEN "比赛订单" ELSE "-" END AS order_type,
+        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "商品订单" ELSE "-" END AS order_type_title,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
-        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "待发货" WHEN 3 THEN "待收货" WHEN 4 THEN "已失效" ELSE "-" END AS pay_title,
+        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
         p.post_title,
+        o.order_type,
         o.pay_status,
         o.created_time ';
     }
@@ -60,13 +61,16 @@ class Order {
                 $pay_status = 'pay_status=3';
                 break;
             case 5:
-                $pay_status = 'pay_status=-1';
+                $pay_status = 'pay_status=4';
                 break;
             case 6:
-                $pay_status = 'pay_status=-2';
+                $pay_status = 'pay_status=-1';
                 break;
             case 7:
-                $pay_status = 'pay_status=4';
+                $pay_status = 'pay_status=-2';
+                break;
+            case 8:
+                $pay_status = 'pay_status=5';
                 break;
             default:
                 return false;
@@ -104,11 +108,12 @@ class Order {
                 <ul id="tab">
                     <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=1'">全部</li>
                     <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=2'">待支付</li>
-                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3'">待收货</li>
-                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4'">已收货</li>
-                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5'">待退款</li>
-                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6'">已退款</li>
-                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7'">已失效</li>
+                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3'">已支付</li>
+                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4'">待收货</li>
+                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5'">已完成</li>
+                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6'">待退款</li>
+                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7'">已退款</li>
+                    <li class="<?php if($type == 8) echo 'active'?>" onclick="window.location.href='?page=order&type=8'">已失效</li>
                 </ul>
             </div>
 
@@ -186,11 +191,19 @@ class Order {
                                         <?php
                                             switch ($row['pay_status']){
                                                 case -1:
-                                        ?>
-                                                    <span class="edit"><a href="javascript:;" class="no_refund">不退款</a>| </span>
-                                                    <span class="delete"><a class="submitdelete" href="?page=order-refund&serial=<?=$row['serialnumber']?>">退款</a> | </span>
-                                        <?php
-                                                break;
+                                                    echo '<span class="edit"><a href="javascript:;" class="no_refund">不退款</a> | </span>';
+                                                    echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial=<?=$row[\'serialnumber\']?>">退款</a>  </span>';
+                                                    break;
+                                                case 2:
+                                                    if($row['order_type'] == 2){
+                                                        echo '<span class="edit"><a href="?page=order-send&id='.$row['id'].'" class="deliver">发货</a> </span>';
+                                                    }
+                                                    break;
+                                                case 3:
+                                                    if($row['order_type'] == 2){
+                                                        echo '<span class="edit"><a href="?page=order-send&id='.$row['id'].'" class="deliver">查看发货</a> </span>';
+                                                    }
+                                                    break;
                                             }
                                         ?>
                                     </div>
@@ -208,12 +221,23 @@ class Order {
                                 <td class="role column-role" data-colname="收件人"><?=$row['fullname']?></td>
                                 <td class="posts column-telephone" data-colname="联系电话"><?=$row['telephone']?></td>
                                 <td class="posts column-address" data-colname="收货地址"><?=$row['address']?></td>
-                                <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type']?></td>
+                                <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type_title']?></td>
                                 <td class="posts column-express_number" data-colname="快递单号"><?=$row['express_number']?></td>
                                 <td class="posts column-express_company" data-colname="快递公司"><?=$row['express_company']?></td>
                                 <td class="posts column-pay_type" data-colname="支付类型"><?=$row['pay_type']?></td>
                                 <td class="posts column-cost" data-colname="订单总价"><?=$row['cost']?></td>
-                                <td class="posts column-pay_status" data-colname="支付状态"><?=$row['pay_title']?></td>
+                                <td class="posts column-pay_status" data-colname="支付状态">
+
+                                    <?php
+                                        if($row['pay_status'] == 2 && $row['order_type'] == 2){
+                                            echo '待发货';
+                                        }else{
+                                            echo $row['pay_title'];
+                                        }
+                                    ?>
+
+
+                                </td>
                                 <td class="posts column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
 
                             </tr>
@@ -370,12 +394,6 @@ class Order {
         <div class="wrap">
             <h1 class="wp-heading-inline">退款单</h1>
 
-
-
-
-
-
-
             <div class="tablenav top">
 
 <!--                <div class="alignleft actions bulkactions">-->
@@ -501,6 +519,119 @@ class Order {
         <?php
     }
 
+
+    /**
+     * 发货
+     */
+    public function sendGoods(){
+        global $wpdb;
+        if(is_post()){
+            $id = intval($_POST['id']);
+            $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 3, 'send_goods_time' => time(), 'express_number' => trim($_POST['express_number']), 'express_company' => trim($_POST['express_company'])], ['id' => $id]);
+            if($bool) echo '<script type="text/javascript">alert("操作成功,快递数据已修改");</script>';
+            else echo '<script type="text/javascript">alert("操作失败");</script>';
+        }else{
+            $id = intval($_GET['id']);
+        }
+        $row = $wpdb->get_row('SELECT serialnumber,order_type,match_id,id,cost,fullname,telephone,address,express_number,express_company FROM '.$wpdb->prefix.'order WHERE id='.$id.' AND (pay_status=2 OR pay_status=3) AND order_type=2', ARRAY_A);
+        if(!$row){
+            echo '参数错误,订单不存在';
+            return;
+        }
+        //查询包含的商品名称
+        $goodsTitleStr = '';
+        if($row['order_type'] == 2){
+            //商品订单
+            $goodsRows = $wpdb->get_results('SELECT g.goods_title FROM '.$wpdb->prefix.'order_goods AS od 
+            LEFT JOIN '.$wpdb->prefix.'goods AS g 
+            ON od.goods_id=g.id WHERE order_id='.$row['id']);
+            foreach ($goodsRows as $goodsRow){
+                $goodsTitleStr .= $goodsRow->goods_title.',';
+            }
+            $goodsTitleStr = substr($goodsTitleStr, 0, strlen($goodsTitleStr)-1);
+        }else{
+            //比赛订单
+            $goodsTitleStr = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$row['match_id'])->post_title;
+        }
+        ?>
+        <div class="wrap">
+            <h1 id="deliver-goods">发货</h1>
+
+
+            <div id="ajax-response"></div>
+
+            <p>输入快递单号和选择快递公司</p>
+            <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate">
+                <input name="action" type="hidden" value="createuser">
+                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="e42b69e4e9"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
+
+                    <tbody>
+                  <tr>
+                      <th>
+                          <h2>订单信息</h2>
+                      </th>
+                  </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="serialnumber">订单号 <span class="description"></span></label></th>
+                        <td><?=$row['serialnumber']?></td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="email">商品 <span class="description"></span></label></th>
+                        <td><?=$goodsTitleStr?></td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="first_name">支付金额 </label></th>
+                        <td><?=$row['cost']?></td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="fullname">收件人 </label></th>
+                        <td><?=$row['fullname']?></td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="telephone">联系电话 </label></th>
+                        <td><?=$row['telephone']?></td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row"><label for="address">收货地址 </label></th>
+                        <td><?=$row['address']?></td>
+                    </tr>
+
+
+                   <tr>
+                       <th>
+                           <h2>填写快递信息</h2>
+                       </th>
+                   </tr>
+                  <tr class="form-field">
+                      <th scope="row"><label for="express_number">快递单号 </label></th>
+                      <td><input name="express_number" type="text" id="express_number" value="<?=$row['express_number']?>"></td>
+                  </tr>
+
+                  <tr class="form-field">
+                        <th scope="row"><label for="express_company">快递公司</label></th>
+                        <td>
+                            <select name="express_company" id="express_company">
+
+                                <option <?php echo $row['express_company'] == 'shentong' ? 'selected="selected"' : '';?> value="shentong">申通快递</option>
+                                <option <?php echo $row['express_company'] == 'shunfeng' ? 'selected="selected"' : '';?> value="shunfeng">顺丰快递</option>
+                                <option <?php echo $row['express_company'] == 'yunda' ? 'selected="selected"' : '';?> value="yunda">韵达快递</option>
+                                <option <?php echo $row['express_company'] == 'zhongtong' ? 'selected="selected"' : '';?> value="zhongtong">中通快递</option>
+                                <option <?php echo $row['express_company'] == 'youzheng' ? 'selected="selected"' : '';?> value="youzheng">邮政</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <p class="submit">
+                    <input type="hidden" name="id" value="<?=$id?>">
+                    <input type="submit" name="createuser" id="createusersub" class="button button-primary" value="确认">
+                </p>
+            </form>
+        </div>
+        <?php
+    }
 
     /**
      * 引入当前页面css/js

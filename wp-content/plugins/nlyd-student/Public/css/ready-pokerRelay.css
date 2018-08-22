@@ -127,17 +127,7 @@
     height: 30px;
     margin-top: 20px;
 }
-.matching-row-label,.matching-row-list{
-    float: left;
-}
-.matching-row-label{
-    font-size: 0.14rem;
-    color: rgba(67, 148, 249, 1);
-    width: 74px;
-    text-align: left;
-    height: 28px;
-    line-height: 28px;
-}
+
 .matching-row-list{
     width: -webkit-calc(100% - 74px);
     width: calc(100% - 74px);

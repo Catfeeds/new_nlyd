@@ -9,17 +9,18 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="fs-14"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                        <span class="fs-14">第1/1题</span>
-                        <span class="blue-font fs-14">
+                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10"> 第1题</span>
+                        <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                         <div class="matching-sumbit" id="sumbit">提交</div>
                     </div>
-                    <p class="count_p">
-                            请用完给出的4个数字，并利用运算符号使运算结果等于24！<br>
-                            <span>*若您跳过此题不作答，则扣掉2秒时间</span>
+                    <p class="count_p fs_14">
+                        <span class="c_black">请用完给出的4个数字，并利用运算符号使运算结果等于24！</span>
+                        <br>
+                        <span>*若您跳过此题不作答，则扣掉2秒时间</span>
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
@@ -31,23 +32,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number rand" date-number="" data-index='1'></div>
-                            <div class="matching-key number rand" date-number="" data-index='2'></div>
-                            <div class="matching-key number rand" date-number="" data-index='3'></div>
-                            <div class="matching-key number rand" date-number="" data-index='4'></div>
-                            <div class="matching-key number leftBrackets" date-number="(">(</div>
+                            <div class="bg_yellow matching-key number rand" date-number="" data-index='1'></div>
+                            <div class="bg_yellow matching-key number rand" date-number="" data-index='2'></div>
+                            <div class="bg_yellow matching-key number rand" date-number="" data-index='3'></div>
+                            <div class="bg_yellow matching-key number rand" date-number="" data-index='4'></div>
+                            <div class="bg_gradient_blue matching-key number leftBrackets" date-number="(">(</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number operator" date-number="+">+</div>
-                            <div class="matching-key number operator reduce" date-number="-">-</div>
-                            <div class="matching-key number operator" date-number="*">×</div>
-                            <div class="matching-key number operator" date-number="/">÷</div>
-                            <div class="matching-key number rightBrackets" date-number=")">)</div>
+                            <div class="bg_gradient_blue matching-key number operator" date-number="+">+</div>
+                            <div class="bg_gradient_blue matching-key number operator reduce" date-number="-">-</div>
+                            <div class="bg_gradient_blue matching-key number operator" date-number="*">×</div>
+                            <div class="bg_gradient_blue matching-key number operator" date-number="/">÷</div>
+                            <div class="bg_gradient_blue matching-key number rightBrackets" date-number=")">)</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key" id="del">删除</div>
-                            <div class="matching-key number" date-number="本题无解">本题无解</div>
-                            <div class="matching-key" id="next">下一题</div>
+                            <div class="bg_orange matching-key" id="del">删除</div>
+                            <div class="bg_gradient_blue matching-key number" date-number="本题无解">本题无解</div>
+                            <div class="bg_orange matching-key" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 

@@ -8,16 +8,16 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="fs-14"><?=$match_title?><span class="blue-font">第一轮</span></span>
-                        <span class="fs-14">第1/1题</span>
-                        <span class="blue-font fs-14">
+                        <span class="c_black"><?=$match_title?>第一轮</span>
+                        <span class="c_blue ml_10">第1/1题</span>
+                        <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                         <div class="matching-sumbit" id="sumbit">提交</div>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label">选中可操作</div>
+                        <div class="matching-row-label">辅助操作</div>
                         <div class="matching-row-list">
                             <div class="matching-btn" id="prev">前移1位</div>
                             <div class="matching-btn" id="next">后移1位</div>
