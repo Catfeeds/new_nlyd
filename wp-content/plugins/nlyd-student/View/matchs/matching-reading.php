@@ -10,7 +10,7 @@
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
                             <span class="c_black"><?=$match_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                            <span class="c_blue">第<span id="number">1</span>/<?=count($match_questions)?>题</span>
+                            <span class="c_blue ml_10">第<span id="number">1</span>/<?=count($match_questions)?>题</span>
                             <span class="c_blue ml_10">
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>

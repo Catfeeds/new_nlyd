@@ -335,7 +335,6 @@
         bottom: -23px;
         height: 55px;
         border-radius: 5px;
-        box-shadow: 0 3px 6px rgba(185, 185, 185, 0.16);
         display: -webkit-flex;
         display: flex;
         flex-wrap: nowrap;
@@ -370,7 +369,6 @@
         background-color: #fff;
         border: none;
         border-radius: 10px;
-        box-shadow: 0 3px 6px rgba(243, 209, 209, 0.16);
         background-color: #fff;
         overflow: hidden;
     }

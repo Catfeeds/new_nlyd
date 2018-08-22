@@ -325,12 +325,12 @@ layui.use(['element','flow'], function(){
                     }
                     
                 }else{
-                    if(page==1){
-                        var dom='<div class="no-info">无新闻信息</div>'
-                        lis.push(dom) 
-                    }else{
-                        $.alerts('没有更多了')
-                    }
+                    // if(page==1){
+                    //     var dom='<div class="no-info">无新闻信息</div>'
+                    //     lis.push(dom) 
+                    // }else{
+                    //     $.alerts('没有更多了')
+                    // }
                     next(lis.join(''),false)
                 }
             })       
@@ -400,12 +400,12 @@ layui.use(['element','flow'], function(){
                             }
                             
                         }else{
-                            if(page==1){
-                                var dom='<div class="no-info">无新闻信息</div>'
-                                lis.push(dom) 
-                            }else{
-                                $.alerts('没有更多了')
-                            }
+                            // if(page==1){
+                            //     var dom='<div class="no-info">无新闻信息</div>'
+                            //     lis.push(dom) 
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
                             next(lis.join(''),false)
                         }
                     })       

@@ -161,12 +161,12 @@ layui.use(['element','layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            if(page==1){
-                                var dom='<tr><td colspan="7">无队员信息</td></tr>'
-                                lis.push(dom) 
-                            }else{
-                                $.alerts('没有更多了')
-                            }
+                            // if(page==1){
+                            //     var dom='<tr><td colspan="7">无队员信息</td></tr>'
+                            //     lis.push(dom) 
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
                             next(lis.join(''),false)
                         }
                 })         
@@ -211,12 +211,12 @@ layui.use(['element','layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            if(page==1){
-                                var dom='<tr><td colspan="7">无教练信息</td></tr>'
-                                lis.push(dom) 
-                            }else{
-                                $.alerts('没有更多了')
-                            }
+                            // if(page==1){
+                            //     var dom='<tr><td colspan="7">无教练信息</td></tr>'
+                            //     lis.push(dom) 
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
                             next(lis.join(''),false)
                         }
                 })         

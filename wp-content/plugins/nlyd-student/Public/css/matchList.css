@@ -140,7 +140,6 @@ p.long-name{
         position: relative;
         background: #fff;
         margin-bottom: 10px;
-        box-shadow: 0 3px 6px 0 rgba(139, 139, 139, 0.16);
         padding-top: 15px;
     }
     .layui-tab-title li{

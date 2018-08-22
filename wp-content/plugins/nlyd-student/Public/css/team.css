@@ -19,9 +19,6 @@
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
     background: linear-gradient(#68AAFE, #4394F9);
-    color: #fff;
-    
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
 }
 .layui-tab-title li{
     display: inline-block;
@@ -91,8 +88,6 @@
    right: 0;
    top: 0;
    border-radius: 0 0 0 100%;
-   box-shadow: rgba(0, 0, 0, 0.16) 0 3px 6px;
-   /* text-align: center; */
    line-height: 50px;
 }
 .team-join.canJoin{
@@ -217,6 +212,5 @@
         width: -webkit-calc(100% - 2px);
         width: calc(100% - 2px);
         margin-left: 0;
-        box-shadow: 0 3px 6px 0 rgba(139, 139, 139, 0.16);
     }
 }

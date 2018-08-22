@@ -158,22 +158,13 @@ layui.use(['layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            if(page==1){
-                                var dom='<div class="no-info">暂无任何战队相关</div>'
-                                lis.push(dom)     
-                                // var dom='<div class="no-info-page">'
-                                //             +'<div class="no-info-img">'
-                                //                 +'<img src="<?=student_css_url.'image/noInfo/noTeam1094@2x.png'?>">'
-                                //             +'</div>'
-                                //             +'<p class="no-info-text">暂无任何战队相关</p>'
-                                //         +'</div>'
-                                next(lis.join(''),false)
-                                // $('.detail-content-wrapper').html(dom)
-                            }else{
-                                $.alerts('没有更多了')
-                                next(lis.join(''),false)
-                            }
-                            
+                            // if(page==1){
+                            //     var dom='<div class="no-info">暂无任何战队相关</div>'
+                            //     lis.push(dom)     
+                            // }else{
+                            //     $.alerts('没有更多了')
+                            // }
+                            next(lis.join(''),false)
                         }
                 })         
         }

@@ -79,16 +79,13 @@ jQuery(function($) {
                                         next(lis.join(''),true) 
                                     } 
                                 }else{
-                                    if(page==1){
-                                        var dom='<tr><td colspan="4">无教练信息</td></tr>'
-                                        lis.push(dom)     
-                
-                                        next(lis.join(''),false)
-                                    }else{
-                                        $.alerts('没有更多了')
-                                        next(lis.join(''),false)
-                                    }
-                                    
+                                    // if(page==1){
+                                    //     var dom='<tr><td colspan="4">无教练信息</td></tr>'
+                                    //     lis.push(dom)     
+                                    // }else{
+                                    //     $.alerts('没有更多了')
+                                    // }
+                                    next(lis.join(''),false)
                                 }
                         })         
                 }
