@@ -173,9 +173,8 @@ class Student_Payment {
         if($queryRes && $queryRes['trade_state'] === 'SUCCESS'){
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
-            $pay_status = $queryRes['order']['order_type'] == 2 ? 2 : 4;
             $updateData = [
-                'pay_status' => $pay_status,
+                'pay_status' => 2,
                 'pay_type' => 'wx',
                 'pay_lowdown' => serialize($queryRes['notifyData'])
             ];
@@ -385,9 +384,8 @@ class Student_Payment {
             //file_put_contents('aaa.txt', json_decode($order, JSON_UNESCAPED_UNICODE));
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
-                $pay_status = $order['order_type'] == 2 ? 2 : 4;
                 $updateData = [
-                    'pay_status' => $pay_status,
+                    'pay_status' => 2,
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];
@@ -404,19 +402,19 @@ class Student_Payment {
     public function zfb_returnUrl(){
         global $wpdb,$current_user;
         $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
+        wp_register_style( 'userCenter', student_css_url.'userCenter.css',array('my-student') );
+        wp_enqueue_style( 'userCenter' );
+        wp_register_style( 'paySuccess', student_css_url.'paySuccess.css',array('my-student') );
+        wp_enqueue_style( 'paySuccess' );
         if(empty($row)){
             $view = leo_student_public_view.'my-404.php';
 
             $data['message'] = '未找到数据';
             load_view_template($view,$data);
             return;
-        };
+        }
         // TODO 查询比赛详情和订单详情
 
-        wp_register_style( 'userCenter', student_css_url.'userCenter.css',array('my-student') );
-        wp_enqueue_style( 'userCenter' );
-        wp_register_style( 'paySuccess', student_css_url.'paySuccess.css',array('my-student') );
-        wp_enqueue_style( 'paySuccess' );
         $view = student_view_path.'paySuccess.php';
 //        load_view_template($view);
         load_view_template($view,array('row'=>$row));
