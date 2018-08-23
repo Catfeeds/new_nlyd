@@ -330,6 +330,11 @@ jQuery(function($) {
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
                         _this.removeClass('disabled')
+                        if(errorThrown=='timeout'){
+                            $.alerts('网络超时')
+                        }
+                        initQuestion()
+                        nextQuestion()
                     }
                 });
             }
