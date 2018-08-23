@@ -1043,7 +1043,7 @@ class Student_Ajax
         if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>'参数错误'));
         //是否同时设置为主训教练
         $major = intval($_POST['major']) == 1 ? 1 : 0;
-        var_dump($_POST['category_id']);die;
+//        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
         $id = $wpdb->get_var("select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} and coach_id = {$_POST['coach_id']}");
         if(empty($id)){
