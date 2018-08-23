@@ -1004,8 +1004,8 @@ class Student_Ajax
                 }
             }
         }
-        echo '<pre />';
-        print_r($rows);die;
+//        echo '<pre />';
+//        print_r($rows);die;
         if($json){
             wp_send_json_success(array('info'=>$rows));
         }else{
