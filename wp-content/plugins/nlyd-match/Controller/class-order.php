@@ -191,8 +191,7 @@ class Order {
                                         <?php
                                             switch ($row['pay_status']){
                                                 case -1:
-                                                    echo '<span class="edit"><a href="javascript:;" class="no_refund">不退款</a> | </span>';
-                                                    echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial=<?=$row[\'serialnumber\']?>">退款</a>  </span>';
+//                                                    echo '<span class="edit"><a href="javascript:;" class="no_refund">不退款</a> | </span>';
                                                     break;
                                                 case 2:
                                                         echo '<span class="edit"><a href="?page=order-send&id='.$row['id'].'" class="deliver">发货</a> </span>';
@@ -203,6 +202,10 @@ class Order {
                                                     }
                                                     break;
                                             }
+                                        if($row['pay_status'] != -2 && $row['pay_status'] != 1 && $row['pay_status'] != 5){
+                                            //不是已退款,不是未支付,不是失效订单
+                                            echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial='.$row['serialnumber'].'">退款</a>  </span>';
+                                        }
                                         ?>
                                     </div>
                                     <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
