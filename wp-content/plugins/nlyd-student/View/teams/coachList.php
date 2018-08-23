@@ -92,8 +92,12 @@ jQuery(function($) {
         },
     }); 
     var arr = <?=json_encode($category)?>; 
-
-layui.use(['element','flow','layer'], function(){
+$('body').on('click','.layui-form-checkbox',function(){
+    var _this=$(this);
+    _this.toggleClass('layui-form-checked')
+    _this.prev('input').click()
+})
+layui.use(['element','flow','layer','form'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
     $('body').on('click','.setTeacher',function(){//申请当我教练
@@ -101,6 +105,7 @@ layui.use(['element','flow','layer'], function(){
         var coach_id=_this.attr('data-coachId');
         var category_id=_this.attr('data-categoryId');
         var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
             layer.open({
             type: 1
             ,maxWidth:300
@@ -108,6 +113,7 @@ layui.use(['element','flow','layer'], function(){
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
             ,content: '<div class="box-conent-wrapper">是否确认向“'+coach_name+'”发送教练申请？</div>'
+            +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> 同时设为'+type+'主训教练</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 
@@ -116,11 +122,16 @@ layui.use(['element','flow','layer'], function(){
                 layer.closeAll();
             }
             ,btn2: function(index, layero){
+                var major=0;
+                if($('.coachCheckbox').attr('checked')){
+                    major=1;
+                }
                 var postData={
                     action:'set_coach',
                     _wpnonce:$('#setCoach').val(),
                     category_id:category_id,
                     coach_id:coach_id,
+                    major:major,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     $.alerts(res.data.info)
@@ -205,11 +216,9 @@ layui.use(['element','flow','layer'], function(){
                                         category_id:category_id,
                                     }
                                     $.post(window.admin_ajax+"?date="+new Date().getTime(),replaceData,function(response){
-                                        
                                         $.alerts(response.data.info)
                                         if(response.success){
                                             var majorDom=$('.nl-badge.bg_gradient_orange')
-                                            // console.log(majorDom.length)
                                             if(majorDom.length>0){//列表中存在主训教练
                                                 var this_coach_name=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
                                                 var this_coach_id=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
@@ -224,9 +233,6 @@ layui.use(['element','flow','layer'], function(){
                                             _this.parents('.coach-row').find('.nl-badge').parents('.coach-type').removeClass('c_blue').addClass('c_orange')
                                             _this.parents('.coach-row-footer').find('.left_c .ta_l').text('解除主训关系').removeClass('clearCoach').addClass('clearMain')
                                             _this.parents('.right_c').remove()
-                                            // setTimeout(() => {
-                                            //     window.location.reload()
-                                            // }, 1600);
                                         }
                                     })
                                 }
