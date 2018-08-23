@@ -949,12 +949,12 @@ class Student_Ajax
                 $rows[$k]['my_coach'] = 'n';
                 $rows[$k]['my_major_coach'] = 'n';
 
+                $rows[$k]['category_id'] = $category_id;
                 if(!empty($my_coach)){
                     if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
                         $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
-                    $rows[$k]['category_id'] = $category_id;
                     $rows[$k]['apply_status'] = $my_coach['apply_status'];
                     $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
                 }
@@ -1003,8 +1003,8 @@ class Student_Ajax
                 }
             }
         }
-//        echo '<pre />';
-//        print_r($rows);die;
+        echo '<pre />';
+        print_r($rows);die;
         if($json){
             wp_send_json_success(array('info'=>$rows));
         }else{
@@ -1043,7 +1043,7 @@ class Student_Ajax
         if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>'参数错误'));
         //是否同时设置为主训教练
         $major = intval($_POST['major']) == 1 ? 1 : 0;
-
+        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
         $id = $wpdb->get_var("select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} and coach_id = {$_POST['coach_id']}");
         if(empty($id)){
