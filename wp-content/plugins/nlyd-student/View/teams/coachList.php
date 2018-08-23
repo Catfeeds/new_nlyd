@@ -8,7 +8,22 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <?php echo (isset($_GET['match_id']) ? '<a class="mui-pull-left nl-goback static" href="'.home_url('matchs/confirm/match_id/'.intval($_GET['match_id'])).'">' : '<a class="mui-pull-left nl-goback static" href="'.home_url('account').'">'); ?>
+            <?php
+            if(isset($_GET['match_id'])){
+                if(isset($_GET['back'])){
+                    $back_u = home_url('teams/myCoach/match_id/'.intval($_GET['match_id']));
+                }else{
+                    $back_u = home_url('matchs/confirm/match_id/'.intval($_GET['match_id']));
+                }
+            }else{
+                if(isset($_GET['back'])){
+                    $back_u = home_url('teams/myCoach');
+                }else{
+                    $back_u = home_url('account');
+                }
+            }
+            echo '<a class="mui-pull-left nl-goback static" href="'.$back_u.'">';
+           ?>
         <i class="iconfont">&#xe610;</i>
         </a>
         <h1 class="mui-title"><?=$action == 'myCoach' ? '我的教练' :'教练列表';?></h1>
@@ -40,6 +55,9 @@
                             $set_url = home_url('/teams/coachList/category_id/'.$_GET['category_id']);
                             if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                             if(isset($_GET['match_id'])) $set_url .= '/match_id/'.$_GET['match_id'];
+                            if(isset($_GET['back'])){
+                                $url .= '/back/1';
+                            }
                         ?>
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
@@ -512,7 +530,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 var flag='<?=$action ?>';
                                 if(flag.length>0){
                                     var text=$('.layui-this').text();
-                                    var dom='<a class="a-btn" href="<?=home_url('/teams/coachList/category_id/'.$_GET['category_id']);?>">设置我的'+text+'教练</a>'
+                                    var dom='<a class="a-btn" href="<?=isset($_GET['match_id']) ? home_url('/teams/coachList/category_id/'.$_GET['category_id'].'/match_id/'.$_GET['match_id'].'/back/1') : home_url('/teams/coachList/category_id/'.$_GET['category_id'].'/back/1');?>">设置我的'+text+'教练</a>'
                                 }
                                 lis.push(dom) 
                             }
