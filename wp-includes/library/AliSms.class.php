@@ -64,6 +64,26 @@ class AliSms
                 $template['title'] = '信息变更验证码';
                 $template['text'] =  '验证码${code}，您正在尝试变更重要信息，请妥善保管账户信息。';
                 break;
+            case 14:
+                $template['code'] =  'SMS_142946294';
+                $template['title'] = '解除教学关系';
+                $template['text'] =  '尊敬的${coach}您好，ID为${user_id}的学员解除了与您的${cate}教练关系，您可登录系统查看详情。';
+                break;
+            case 13:
+                $template['code'] =  'SMS_142946289';
+                $template['title'] = '申请成为教练';
+                $template['text'] =  '尊敬的${coach}您好, ID为${user}的学员申请您成为其${cate}教练, 请您尽快登录系统处理该申请';
+                break;
+            case 12:
+                $template['code'] =  'SMS_142951263';
+                $template['title'] = '退出战队申请';
+                $template['text'] =  '尊敬的${teams}您好，ID为${user_id}的学员向您发送了“退出战队”申请，请您尽快登录系统处理该申请。';
+                break;
+            case 11:
+                $template['code'] =  'SMS_142946275';
+                $template['title'] = '加入战队申请';
+                $template['text'] =  '尊敬的${teams}您好，ID为${user_id}的学员向您发送了“加⼊战队”申请，请您尽快登录系统处理该申请。';
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $template['title'] = '短信测试';
