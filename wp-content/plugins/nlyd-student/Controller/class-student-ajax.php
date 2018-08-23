@@ -953,13 +953,44 @@ class Student_Ajax
                         $rows[$k]['my_coach'] = 'y';
                         $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
-                }
                 $rows[$k]['category_id'] = $category_id;
                 $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
+                }
+                //每种分类对应的状态
+                $categoryArr = ['read', 'memory', 'compute'];
+                foreach ($categoryArr as $cate){
+                    $readApply = $wpdb->get_row('SELECT apply_status FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate]);
+                    if($readApply){
+                        $rows[$k]['category'][$cate]['is_apply'] = 'false'; //是否申请中
+                        $rows[$k]['category'][$cate]['is_my_coach'] = 'false'; //是否已通过
+                        $rows[$k]['category'][$cate]['is_my_major'] = 'false'; //是否是主训
+                        $rows[$k]['category'][$cate]['is_relieve'] = 'false'; //是否已解除
+                        $rows[$k]['category'][$cate]['is_refuse'] = 'false';//是否已拒绝
+                        switch ($readApply->apply_status){
+                            case 1://申请中
+                                $rows[$k]['category'][$cate]['is_apply'] = 'true';
+                                break;
+                            case 2://已通过
+                                $rows[$k]['category'][$cate]['is_my_coach'] = 'true';
+                                $rows[$k]['category'][$cate]['is_my_major'] = $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'true' : 'false';
+                                break;
+                            case 3://已解除
+                                $rows[$k]['category'][$cate]['is_relieve'] = 'true';
+                                break;
+                            case -1://已拒绝
+                                $rows[$k]['category'][$cate]['is_refuse'] = 'true';
+                                break;
+                            case 4://申请中同时设置为教练
+                                $rows[$k]['category'][$cate]['is_apply'] = 'true';
+                                $rows[$k]['category'][$cate]['is_my_major'] = 'true';
+                                break;
+                        }
+                    }
+                }
             }
-
         }
+
         //print_r($rows);
         if($json){
             wp_send_json_success(array('info'=>$rows));
