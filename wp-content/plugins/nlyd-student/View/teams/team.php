@@ -27,13 +27,13 @@
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <div class="swiper-content">11111111111111</div>
+                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="swiper-content">2222222222222</div>
+                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
                             </div>
                             <div class="swiper-slide">
-                                <div class="swiper-content">33333333333333</div>
+                                <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>

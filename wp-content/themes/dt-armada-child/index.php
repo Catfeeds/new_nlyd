@@ -53,16 +53,25 @@ get_header(); ?>
                 <!-- 轮播 -->
                 <div class="swiper-container layui-bg-white">
                     <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
+                        </div>
                         <?php
-                        if($banners) {
-                            foreach ($banners as $banner) {
+                        //if($banners) {
+                            //foreach ($banners as $banner) {
                         ?>
-                                <div class="swiper-slide">
-                                    <div class="swiper-content img-box"><img src="<?=$banner?>"></div>
-                                </div>
+                                <!-- <div class="swiper-slide"> -->
+                                    <!-- <div class="swiper-content img-box"><img src="<?=$banner?>"></div> -->
+                                <!-- </div> -->
                         <?php
-                            }
-                        }
+                            // }
+                        // }
                         ?>
                     </div>
                     <div class="swiper-pagination"></div>
