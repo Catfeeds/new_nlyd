@@ -975,6 +975,7 @@ class Student_Ajax
                         }
                         $rows[$k]['category'][$cateK]['name'] = $cate;
                         $rows[$k]['category'][$cateK]['post_title'] = $post_title;
+                        $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否再当前分类
                         $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
                         $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
                         $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
@@ -996,6 +997,7 @@ class Student_Ajax
                                 $rows[$k]['category'][$cateK]['is_refuse'] = 'true';
                                 break;
                         }
+                        $rows[$k]['category'][$cateK]['is_current'] = 'true';//此教练是否再当前分类
                     }
                 }
             }
