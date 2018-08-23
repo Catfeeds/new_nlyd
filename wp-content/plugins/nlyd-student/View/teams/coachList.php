@@ -17,8 +17,18 @@
                 <?php if($coachCount > 0){?>
                 <div class="swiper-container layui-bg-white">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
+                        <!-- <div class="swiper-slide">
                             <div class="swiper-content img-box"><img src="<?=$user_info['user_head'];?>"></div>
+                        </div> -->
+                        
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad1.png'?>"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad2.png'?>"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-content img-box"><img src="<?=student_css_url.'image/homePage/ad3.png'?>"></div>
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>

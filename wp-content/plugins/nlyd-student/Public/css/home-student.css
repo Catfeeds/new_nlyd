@@ -9,7 +9,7 @@
 .top-nav-btn{
     text-align: center;
     display: block;
-    margin-right:calc(100%/4 - 37px*5/4);
+    margin-right:calc(100%/4 - 40px*5/4);
     float: left;
 }
 .top-nav-btn:last-child{
@@ -17,9 +17,9 @@
 }
 .top-nav-btn a{
     position: relative;
-    display: inline-block;
+    display: block;
     margin: auto;
-    width: 37px;
+    width: 40px;
     height: 45px;
     line-height: 45px;
     text-align: center;
@@ -56,7 +56,7 @@
 }
 .index-btn{
     display: inline-block;
-    padding: 18px 0;
+    padding: 5px 0;
 }
 .img-btn,.entrance-name{
     float: left;
