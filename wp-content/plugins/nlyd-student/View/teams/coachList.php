@@ -71,6 +71,10 @@
 <input type="hidden" name="_wpnonce" id="setCoach" value="<?=wp_create_nonce('student_set_coach_code_nonce');?>">
 <!-- 设为主训教练 -->
 <input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>">
+<!-- 解除教练关系 -->
+<input type="hidden" name="_wpnonce" id="clearCoach" value="<?=wp_create_nonce('student_relieve_coach_code_nonce');?>">
+<!-- 更换主训教练 -->
+<input type="hidden" name="_wpnonce" id="replaceMain" value="<?=wp_create_nonce('student_replace_major_code_nonce');?>">
 <script>
 jQuery(function($) { 
     var mySwiper = new Swiper('.swiper-container', {
@@ -88,8 +92,12 @@ jQuery(function($) {
         },
     }); 
     var arr = <?=json_encode($category)?>; 
-
-layui.use(['element','flow','layer'], function(){
+$('body').on('click','.layui-form-checkbox',function(){
+    var _this=$(this);
+    _this.toggleClass('layui-form-checked')
+    _this.prev('input').click()
+})
+layui.use(['element','flow','layer','form'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
     $('body').on('click','.setTeacher',function(){//申请当我教练
@@ -97,6 +105,7 @@ layui.use(['element','flow','layer'], function(){
         var coach_id=_this.attr('data-coachId');
         var category_id=_this.attr('data-categoryId');
         var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
             layer.open({
             type: 1
             ,maxWidth:300
@@ -104,6 +113,7 @@ layui.use(['element','flow','layer'], function(){
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
             ,content: '<div class="box-conent-wrapper">是否确认向“'+coach_name+'”发送教练申请？</div>'
+            +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> 同时设为'+type+'主训教练</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 
@@ -112,18 +122,21 @@ layui.use(['element','flow','layer'], function(){
                 layer.closeAll();
             }
             ,btn2: function(index, layero){
+                var major=0;
+                if($('.coachCheckbox').attr('checked')){
+                    major=1;
+                }
                 var postData={
                     action:'set_coach',
                     _wpnonce:$('#setCoach').val(),
                     category_id:category_id,
                     coach_id:coach_id,
+                    major:major,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     $.alerts(res.data.info)
                     if(res.success){
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1600);
+                        _this.removeClass('setTeacher').addClass('bg_gradient_grey').text('教练审核中···')
                     }
                     
                 })
@@ -157,10 +170,6 @@ layui.use(['element','flow','layer'], function(){
             }
             ,btn2: function(index, layero){
                 var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
-                /*var match_id=''
-                if($.Request('match_id')!=null){
-                    match_id=$.Request('match_id')
-                }*/
                 var postData={
                     action:'set_major_coach',
                     _wpnonce:$('#setMain').val(),
@@ -170,16 +179,72 @@ layui.use(['element','flow','layer'], function(){
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){
-                        if(res.data.url.length>0){
-                            window.location.href=res.data.url
-                        }else{
-                            window.location.reload()
-                        }
-
-                    }else{
                         $.alerts(res.data.info)
+                        if(res.data.url&&res.data.url.length>0){
+                            setTimeout(() => {
+                                window.location.href=res.data.url
+                            }, 1600);
+                            
+                        }else{
+                            _this.parents('.coach-row').find('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
+                            _this.parents('.coach-row').find('.nl-badge').parents('.coach-type').removeClass('c_blue').addClass('c_orange')
+                            _this.parents('.coach-row-footer').find('.left_c .clearCoach').text('解除主训关系').removeClass('clearCoach').addClass('clearMain')
+                            _this.parents('.right_c').remove()
+                        }
+                    }else{//存在主训教练，更改主训
+                        var type=$('.layui-this a').text()
+                        if(res.data.info==100){
+                            layer.open({
+                                 type: 1
+                                ,maxWidth:300
+                                ,title: '更换主训教练' //不显示标题栏
+                                ,skin:'nl-box-skin'
+                                ,id: 'certification' //防止重复弹出
+                                ,content: '<div class="box-conent-wrapper">你已设置“'+type+'”主训教练是否确认更换？</div>'
+                                ,btn: ['再想想', '确认', ]
+                                ,success: function(layero, index){
+                                    
+                                }
+                                ,yes: function(index, layero){
+                                    layer.closeAll();
+                                }
+                                ,btn2: function(index, layero){
+                                    var replaceData={
+                                        action:'replaceMajorCoach',
+                                        _wpnonce:$('#replaceMain').val(),
+                                        coach_id:coach_id,
+                                        category_id:category_id,
+                                    }
+                                    $.post(window.admin_ajax+"?date="+new Date().getTime(),replaceData,function(response){
+                                        $.alerts(response.data.info)
+                                        if(response.success){
+                                            var majorDom=$('.nl-badge.bg_gradient_orange')
+                                            if(majorDom.length>0){//列表中存在主训教练
+                                                var this_coach_name=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
+                                                var this_coach_id=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
+                                                var this_category_id=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
+                                                var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</div></div>';
+                                                majorDom.parents('.coach-type').removeClass('c_orange').addClass('c_blue')
+                                                majorDom.removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
+                                                majorDom.parents('.coach-row').find('.left_c .ta_l').text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
+                                                majorDom.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
+                                            }
+                                            _this.parents('.coach-row').find('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
+                                            _this.parents('.coach-row').find('.nl-badge').parents('.coach-type').removeClass('c_blue').addClass('c_orange')
+                                            _this.parents('.coach-row-footer').find('.left_c .ta_l').text('解除主训关系').removeClass('clearCoach').addClass('clearMain')
+                                            _this.parents('.right_c').remove()
+                                        }
+                                    })
+                                }
+                                ,closeBtn:2
+                                ,btnAagn: 'c' //按钮居中
+                                ,shade: 0.3 //遮罩
+                                ,isOutAnim:true//关闭动画
+                            });
+                        }else{
+                            $.alerts(res.data.info)
+                        }
                     }
-
                 })
             }
             ,closeBtn:2
@@ -211,16 +276,10 @@ layui.use(['element','flow','layer'], function(){
                 layer.closeAll();
             }
             ,btn2: function(index, layero){
-                var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
-                /*var match_id=''
-                if($.Request('match_id')!=null){
-                    match_id=$.Request('match_id')
-                }*/
                 var postData={
                     action:'set_major_coach',
                     _wpnonce:$('#setMain').val(),
                     coach_id:coach_id,
-                    // match_id:match_id,
                     category_id:category_id,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
@@ -229,9 +288,59 @@ layui.use(['element','flow','layer'], function(){
                         if(res.data.url.length>0){
                             window.location.href=res.data.url
                         }else{
-                            window.location.reload()
+                            var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</div></div>';
+                            _this.parents('.coach-row').find('.nl-badge.bg_gradient_orange').parents('.coach-type').removeClass('c_orange').addClass('c_blue')
+                            _this.parents('.coach-row').find('.nl-badge.bg_gradient_orange').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
+                            _this.text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
+                            _this.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
+                            
                         }
 
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+
+                })
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+        return false
+    })
+    $('body').on('click','.clearCoach',function(){//解除教学关系
+        var _this=$(this);
+        var coach_id=_this.attr('data-coachId');
+        var category_id=_this.attr('data-categoryId');
+        var coach_name=_this.attr('data-coachName')
+        var type=$('.layui-this a').text()
+            layer.open({
+            type: 1
+            ,maxWidth:300
+            ,title: '解除教学关系' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">您是否确认解除与“'+coach_name+'”的教学关系？</div>'
+            ,btn: ['再想想', '确认', ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                var postData={
+                    action:'relieveMyCoach',
+                    _wpnonce:$('#clearCoach').val(),
+                    coach_id:coach_id,
+                    category_id:category_id,
+                }
+                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    if(res.success){
+                        _this.parents('.coach-row').find('.nl-badge.bg_gradient_blue').remove()
+                        _this.parents('.coach-row').find('.coach-btn').removeClass('bg_gradient_orange').removeClass('setCoach').addClass('bg_gradient_blue').addClass('setTeacher')
+                        _this.remove()
                     }else{
                         $.alerts(res.data.info)
                     }
@@ -293,20 +402,20 @@ layui.use(['element','flow','layer'], function(){
                                     } 
 
                                 }
-                                if(v.apply_status!=null){//1，申请中，2我的教练
+                                if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
                                     if(v.apply_status==1){//1，申请中，2我的教练
-                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 ">教练审核中...</div></div>';
+                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_grey text_1 ">教练审核中···</div></div>';
                                         isLeft="ta_l"
                                     }else if(v.apply_status==2){//1，申请中，2我的教练
                                         
                                         if(v.my_major_coach=='y'){//主训教练
                                             
                                             major_coach='<div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div>';
-                                            clear_btn='<span class="clearMain fl_1 text_1 ta_l"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</span>'
+                                            clear_btn='<span class="clearMain text_1 ta_l"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</span>'
                                         }else{
                                             major_coach='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
                                             coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</div></div>';
-                                            clear_btn='<span class="clearCoach fl_1 text_1 ta_l" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</span>'
+                                            clear_btn='<span class="clearCoach text_1 ta_l" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</span>'
                                         }
                                         $.each(arr,function(index,value){//橘色高亮
                                             if(value.ID==$('.layui-this').attr('data-id')){
@@ -332,6 +441,8 @@ layui.use(['element','flow','layer'], function(){
                                             }
                                         })
 
+                                    }else{
+                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
                                     }
 
                                     isMyCoach='<div class="coach-type text_1 '+readClass+'">'+read_major_coach+' 速读类</div>'
@@ -370,7 +481,7 @@ layui.use(['element','flow','layer'], function(){
                                                 +'<div class="coach-row-footer">'
                                                     +'<div class="left_c">'
                                                         +clear_btn
-                                                        +'<a class="c_black6 fl_1 text_1 '+isLeft+'"  href="'+v.coach_url+'">查看详情</a>'
+                                                        +'<a class="c_black6 text_1 '+isLeft+'"  href="'+v.coach_url+'">查看详情</a>'
                                                     +'</div>'
                                                     +coach_btn
                                                 +'</div>'

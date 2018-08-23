@@ -7,8 +7,7 @@ class Student_Payment {
     {
 
         if($action == 'success') $action = 'zfb_returnUrl';
-        if(!$action == 'zfb_returnUrl'){
-
+        if($action != 'zfb_returnUrl'){
             if(isset($_GET['type'])){
                 $type = $_GET['type'];
             }else {
@@ -337,7 +336,6 @@ class Student_Payment {
             'total_amount'  => $order['cost'],
             'body'  => '', //商品描述,可空
         ];
-
         self::$payClass->pay($param);
         return;
     }

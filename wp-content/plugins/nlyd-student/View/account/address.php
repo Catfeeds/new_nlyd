@@ -3,13 +3,18 @@
     <div class="layui-row">
         <?php
                 require_once leo_student_public_view.'leftMenu.php';
-            
+
         ?>
 
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <?php echo (isset($_GET['match_id']) ? '<a class="mui-pull-left nl-goback">' : '<a class="mui-pull-left nl-goback static" href="'.home_url('/account/info').'">'); ?>
+            <?php
+            if(isset($_GET['match_id']))
+                echo '<a class="mui-pull-left nl-goback static" href="'.home_url('matchs/confirm/match_id/'.$_GET['match_id']).'">';
+            else
+                echo '<a class="mui-pull-left nl-goback static" href="'.home_url('account/info/').'">';
+          ?>
         <i class="iconfont">&#xe610;</i>
         </a>
         <h1 class="mui-title">收货地址管理</h1>
@@ -46,7 +51,7 @@
                 ?>
                 <a class="a-btn" href="<?=$add_url;?>">新 增</a>
             </div>
-        </div>           
+        </div>
     </div>
 </div>
 <!-- 删除地址 -->
@@ -55,7 +60,7 @@
 <input type="hidden" name="_wpnonce" id="defaultAddress" value="<?=wp_create_nonce('student_set_default_code_nonce');?>">
 
 <script>
-jQuery(function($) { 
+jQuery(function($) {
 layui.use(['layer'], function(){
     $('.address-row').on('click','.default-address',function(){//设置默认地址
         var _this=$(this);
@@ -69,7 +74,7 @@ layui.use(['layer'], function(){
                 ,content: '<div class="box-conent-wrapper">是否确认设为默认地址</div>'
                 ,btn: ['再想想', '确认', ]
                 ,success: function(layero, index){
-                    
+
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
@@ -85,7 +90,7 @@ layui.use(['layer'], function(){
                         if(res.success){
                             $('.default-address.set-address').text('设为默认').removeClass('set-address');
                             _this.text('默认地址').addClass('set-address');
-                        }    
+                        }
                     })
                 }
                 ,closeBtn:2
@@ -107,7 +112,7 @@ layui.use(['layer'], function(){
             ,content: '<div class="box-conent-wrapper">是否确认删除地址</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
-                
+
             }
             ,yes: function(index, layero){
                 layer.closeAll();
@@ -124,7 +129,7 @@ layui.use(['layer'], function(){
                     $.alerts(res.data.info)
                     if(res.success){
                         _this.parents('.address-row').remove()
-                    }    
+                    }
                 })
             }
             ,closeBtn:2
