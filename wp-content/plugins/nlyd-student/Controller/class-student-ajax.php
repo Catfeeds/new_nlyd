@@ -962,14 +962,25 @@ class Student_Ajax
                 $categoryArr = ['read', 'memory', 'compute'];
                 foreach ($categoryArr as $cateK => $cate){
                     $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate]);
-                    if($readApply){
+                        switch ($cate){
+                            case 'read':
+                                $post_title = '速读类';
+                                break;
+                            case 'memory':
+                                $post_title = '速记类';
+                                break;
+                            case 'compute':
+                                $post_title = '速算类';
+                                break;
+                        }
                         $rows[$k]['category'][$cateK]['name'] = $cate;
-                        $rows[$k]['category'][$cateK]['post_title'] = $readApply->post_title;
+                        $rows[$k]['category'][$cateK]['post_title'] = $post_title;
                         $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
                         $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
                         $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
                         $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
                         $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
+                    if($readApply){
                         switch ($readApply->apply_status){
                             case 1://申请中
                                 $rows[$k]['category'][$cateK]['is_apply'] = 'true';
@@ -983,10 +994,6 @@ class Student_Ajax
                                 break;
                             case -1://已拒绝
                                 $rows[$k]['category'][$cateK]['is_refuse'] = 'true';
-                                break;
-                            case 4://申请中同时设置为教练
-                                $rows[$k]['category'][$cateK]['is_apply'] = 'true';
-                                $rows[$k]['category'][$cateK]['is_my_major'] = 'true';
                                 break;
                         }
                     }
@@ -2421,8 +2428,7 @@ class Student_Ajax
         //取消原主训教练
         $cancelRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=0 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID);
         //取消正在申请中的同时设置主训
-        $cancelApply = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=1 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID.' AND apply_status=4');
-        if(!$cancelRes && !$cancelApply) {
+        if(!$cancelRes) {
             $wpdb->rollback();
             wp_send_json_error(array('info'=>'更换主训教练失败'));
         }
