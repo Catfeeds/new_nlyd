@@ -71,11 +71,15 @@ class Match_Ajax
             $id = intval($_POST['id']);
             $idWhere = 'id='.$id;
         }
-        $user = $wpdb->get_results('SELECT u.user_mobile FROM '.$wpdb->prefix.'my_coach AS m 
+        $user = $wpdb->get_results('SELECT u.user_mobile,m.apply_status FROM '.$wpdb->prefix.'my_coach AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON m.user_id=u.ID 
-            WHERE m.'.$idWhere.' AND m.`apply_status`=1',ARRAY_A);
-
-        $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE '.$idWhere.' AND `apply_status`=1';
+            WHERE m.'.$idWhere.' AND (m.`apply_status`=1 OR m.`apply_status`=4)',ARRAY_A);
+        //是否同时设置为主训
+        if($user['apply_status'] == 4){
+            $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET (`apply_status`,major) VALUES ('.$status.',1) WHERE '.$idWhere.' AND `apply_status`=4';
+        }else{
+            $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE '.$idWhere.' AND `apply_status`=1';
+        }
         if($status != -1  && $status != 2){
             wp_send_json_error(array('info' => '操作失败,状态参数异常'));
         }
