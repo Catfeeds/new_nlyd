@@ -380,7 +380,8 @@ class Student_Ajax
         die;*/
         $result = $wpdb->update($wpdb->prefix.'match_questions',$update_arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
         if($result){
-            wp_send_json_success(array('info'=>'提交完成','url'=>home_url('matchs/'.$_POST['match_action'].'/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
+            //wp_send_json_success(array('info'=>'提交完成','url'=>home_url('matchs/'.$_POST['match_action'].'/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
+            wp_send_json_success(array('info'=>'提交完成','url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
         }else {
             wp_send_json_error(array('info' => '提交失败'));
         }
@@ -953,13 +954,44 @@ class Student_Ajax
                         $rows[$k]['my_coach'] = 'y';
                         $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
-                }
                 $rows[$k]['category_id'] = $category_id;
                 $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
+                }
+                //每种分类对应的状态
+                $categoryArr = ['read', 'memory', 'compute'];
+                foreach ($categoryArr as $cate){
+                    $readApply = $wpdb->get_row('SELECT apply_status FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate]);
+                    if($readApply){
+                        $rows[$k]['category'][$cate]['is_apply'] = 'false'; //是否申请中
+                        $rows[$k]['category'][$cate]['is_my_coach'] = 'false'; //是否已通过
+                        $rows[$k]['category'][$cate]['is_my_major'] = 'false'; //是否是主训
+                        $rows[$k]['category'][$cate]['is_relieve'] = 'false'; //是否已解除
+                        $rows[$k]['category'][$cate]['is_refuse'] = 'false';//是否已拒绝
+                        switch ($readApply->apply_status){
+                            case 1://申请中
+                                $rows[$k]['category'][$cate]['is_apply'] = 'true';
+                                break;
+                            case 2://已通过
+                                $rows[$k]['category'][$cate]['is_my_coach'] = 'true';
+                                $rows[$k]['category'][$cate]['is_my_major'] = $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'true' : 'false';
+                                break;
+                            case 3://已解除
+                                $rows[$k]['category'][$cate]['is_relieve'] = 'true';
+                                break;
+                            case -1://已拒绝
+                                $rows[$k]['category'][$cate]['is_refuse'] = 'true';
+                                break;
+                            case 4://申请中同时设置为教练
+                                $rows[$k]['category'][$cate]['is_apply'] = 'true';
+                                $rows[$k]['category'][$cate]['is_my_major'] = 'true';
+                                break;
+                        }
+                    }
+                }
             }
-
         }
+
         //print_r($rows);
         if($json){
             wp_send_json_success(array('info'=>$rows));
@@ -994,18 +1026,20 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+        global $wpdb,$current_user;
 
         if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>'参数错误'));
+        //是否同时设置为主训教练
+        $apply_status = intval($_POST['major']) == 1 ? 4 : 1;
 
-        global $wpdb,$current_user;
         //查询以前是否进行过申请
         $id = $wpdb->get_var("select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} and coach_id = {$_POST['coach_id']}");
 
         if(empty($id)){
-            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1);
+            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>$apply_status);
             $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
         }else{
-            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1,'major'=>''),array('id'=>$id,'category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
+            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>$apply_status,'major'=>''),array('id'=>$id,'category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
         }
 
         if($result){
@@ -1042,11 +1076,13 @@ class Student_Ajax
         $major = $row['major'] != 1 ? 1 : '';
 
 
-        //判断是否已存在其它主训教练,如果有, 更换主训教练
+        //判断是否已存在其它主训教练或正在申请的教练是主训教练,如果有, 更换主训教练
         if($major == 1){
-            if($wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE user_id='.$current_user->ID.' AND category_id='.$_POST['category_id'].' AND major=1 AND apply_status=2')){
+            if($coachRow = $wpdb->get_row('SELECT id,apply_status FROM '.$wpdb->prefix.'my_coach WHERE user_id='.$current_user->ID.' AND category_id='.$_POST['category_id'].' AND ((major=1 AND apply_status=2) OR apply_status=4) ')){
                 //已有主训教练
-                wp_send_json_error(['info' => 100]);
+                $responseStatus = $coachRow['apply_status'] == 4 ? 1000 : 100;
+                //1000为正在申请的教练是主训, 100是已存在主训
+                wp_send_json_error(['info' => $responseStatus]);
             }
         }
         
@@ -2383,7 +2419,9 @@ class Student_Ajax
         $wpdb->startTrans();
         //取消原主训教练
         $cancelRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=0 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID);
-        if(!$cancelRes) {
+        //取消正在申请中的同时设置主训
+        $cancelApply = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=1 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID.' AND apply_status=4');
+        if(!$cancelRes && !$cancelApply) {
             $wpdb->rollback();
             wp_send_json_error(array('info'=>'更换主训教练失败'));
         }
