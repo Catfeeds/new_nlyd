@@ -309,6 +309,7 @@ layui.use(['element','flow','layer','form'], function(){
                     category_id:category_id,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    $.alerts(res.data.info)
                     if(res.success){
                         if(res.data.url.length>0){
                             window.location.href=res.data.url
@@ -325,8 +326,6 @@ layui.use(['element','flow','layer','form'], function(){
                                 }
                             })
                         }
-                    }else{
-                        $.alerts(res.data.info)
                     }
 
                 })
@@ -366,6 +365,7 @@ layui.use(['element','flow','layer','form'], function(){
                     category_id:category_id,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    $.alerts(res.data.info)
                     if(res.success){
                         _this.parents('.coach-row').find('.nl-badge.bg_gradient_blue').remove()
                         _this.parents('.coach-row').find('.coach-btn').removeClass('bg_gradient_orange').removeClass('setCoach').addClass('bg_gradient_blue').addClass('setTeacher').text('请TA当教练')
@@ -377,8 +377,6 @@ layui.use(['element','flow','layer','form'], function(){
                                 __this.children('.nl-badge').remove()
                             }
                         })
-                    }else{
-                        $.alerts(res.data.info)
                     }
 
                 })
