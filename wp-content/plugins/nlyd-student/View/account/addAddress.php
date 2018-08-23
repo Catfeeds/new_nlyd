@@ -56,12 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <?php if(isset($get['match_id'])){?>
-                    <!-- <input type="hidden" name="id" id="match_id" value="<?=$get['match_id'];?>"> -->
-                <?php }else{ ?>
-                    <!-- <input type="hidden" name="id" id="match_id" value=""> -->
-                <?php } ?>
-                <div class="a-btn" lay-filter="addAdressBtn" lay-submit="">保存</div>
+                <div class="a-btn" lay-filter="addAdressBtn" lay-submit="">保存更改</div>
             </form>
         </div>           
     </div>

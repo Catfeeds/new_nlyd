@@ -467,11 +467,8 @@ layui.use(['element','flow','layer','form'], function(){
                                                             +'<span class="c_black6">'+v.user_gender+'</span>'
                                                             +'<span class="c_black6">ID '+v.user_ID+'</span>'
                                                         +'</div>'
-                                                        +'<div class="text_1">'
-                                                            +'<span class="c_black6">国际脑力运动委员会（IISC）</span>'
-                                                        +'</div>'
-                                                        +'<div class="text_1">'
-                                                            +'<span class="c_black6">'+v.user_coach_level+'</span>'
+                                                        +'<div class="text_3">'
+                                                            +'<span class="c_black6">国际脑力运动委员会（IISC） '+v.user_coach_level+'</span>'
                                                         +'</div>'
                                                         +'<div class="coach-detail-footer">'
                                                             +isMyCoach
