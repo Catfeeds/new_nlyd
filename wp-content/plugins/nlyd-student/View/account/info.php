@@ -75,7 +75,7 @@
                                         
                                 </div>
                             </a>
-                            <div class="a-btn" lay-filter="nicenameFormBtn" lay-submit="">保存</div>
+                            <div class="a-btn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</div>
                         </div>
                 
                     </form>
@@ -115,7 +115,7 @@
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
-                                <div class="a-btn" lay-filter="certificationFormBtn" lay-submit="">保存</div>
+                                <div class="a-btn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</div>
                             </div>
                             
                         </form>
