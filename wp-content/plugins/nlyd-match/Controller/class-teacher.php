@@ -368,16 +368,8 @@ class Teacher
         $cateWhere = substr($cateWhere, 0, strlen($cateWhere)-1);
         $cateWhere .= ')';
         //类别end
-        if($type == 0) {
-            $typeWhere = '';
-        } else {
-            if($type == 1){
-                //此处为申请并同时设置为主训
-                $typeWhere = 'AND (co.apply_status=1 OR co.apply_status=4)';
-            }else{
-                $typeWhere = 'AND co.apply_status='.$type;
-            }
-        }
+        if($type == 0) $typeWhere = '';
+        else $typeWhere = 'AND co.apply_status='.$type;
 
 
         $pageSize = 20;
@@ -389,7 +381,6 @@ class Teacher
                 WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
                 WHEN 1 THEN "<span style=\'color:#2aa52e\'>申请中</span>" 
                 WHEN 2 THEN "<span style=\'color:#0073aa\'>已通过</span>" 
-                WHEN 4 THEN "<span style=\'color:#0073aa\'>申请中</span>" 
                 END AS apply_name 
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
                 LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
@@ -500,7 +491,7 @@ class Teacher
                                      <div class="apply_option">
                                      <div class="row-actions">
 
-                                         <?php if($row['apply_status'] == 1 || $row['apply_status'] == 4){ ?>
+                                         <?php if($row['apply_status'] == 1){ ?>
 
 
                                          <span class="edit"><a href="javascript:;" class="agree"> 通过审核</a> | </span>
