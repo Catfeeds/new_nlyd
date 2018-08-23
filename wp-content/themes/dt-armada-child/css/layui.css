@@ -20,10 +20,11 @@
     border-bottom:none;
     margin-top: 20px;
 }
+.layui-layer-content{
+    padding: 40px 10px;
+}
 .layui-layer.nl-box-skin .box-conent-wrapper{
-    height: 102px;
     text-align: center;
-    line-height: 102px;
     color: rgba(38, 38, 38, 0.6);
 }
 .layui-layer.nl-box-skin .layui-layer-btn{
