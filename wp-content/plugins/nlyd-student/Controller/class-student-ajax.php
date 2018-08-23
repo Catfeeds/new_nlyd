@@ -961,8 +961,7 @@ class Student_Ajax
                 //每种分类对应的状态
                 $categoryArr = ['read', 'memory', 'compute'];
                 foreach ($categoryArr as $cateK => $cate){
-                    var_dump($rows[$k][$cate]);
-                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
+                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title,mc.major FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
                         switch ($cate){
                             case 'read':
                                 $post_title = '速读类';
@@ -990,7 +989,7 @@ class Student_Ajax
                                 break;
                             case 2://已通过
                                 $rows[$k]['category'][$cateK]['is_my_coach'] = 'true';
-                                $rows[$k]['category'][$cateK]['is_my_major'] = $my_coach['major'] == 'y' ? 'true' : 'false';
+                                $rows[$k]['category'][$cateK]['is_my_major'] = $readApply->major == 1 ? 'true' : 'false';
                                 break;
                             case 3://已解除
                                 $rows[$k]['category'][$cateK]['is_relieve'] = 'true';
