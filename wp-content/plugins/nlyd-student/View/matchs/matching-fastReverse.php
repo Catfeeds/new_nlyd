@@ -320,6 +320,7 @@ jQuery(function($) {
                         }else{
                             $('.answer').addClass('error-fast')
                         }
+                        ajaxData[ajaxData.length-1]['isRight']=isRight
                         // ajaxData.push(thisRow);
                         setTimeout(() => {
                             initQuestion()

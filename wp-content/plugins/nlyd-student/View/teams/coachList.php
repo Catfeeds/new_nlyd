@@ -193,9 +193,15 @@ layui.use(['element','flow','layer','form'], function(){
                             }, 1600);
                             
                         }else{
-                            _this.parents('.coach-row').find('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
-                            _this.parents('.coach-row').find('.nl-badge').parents('.coach-type').removeClass('c_blue').addClass('c_orange')
                             _this.parents('.coach-row-footer').find('.left_c .clearCoach').text('解除主训关系').removeClass('clearCoach').addClass('clearMain')
+                            _this.parents('.coach-row').find('.coach-type').each(function(){
+                                var __this=$(this);
+                                var data_id=__this.attr('data-id')
+                                if(category_id==data_id){
+                                    __this.removeClass('c_blue').addClass('c_orange')
+                                    __this.children('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
+                                }
+                            })
                             _this.parents('.right_c').remove()
                         }
                     }else{//存在主训教练，更改主训
@@ -225,20 +231,33 @@ layui.use(['element','flow','layer','form'], function(){
                                     $.post(window.admin_ajax+"?date="+new Date().getTime(),replaceData,function(response){
                                         $.alerts(response.data.info)
                                         if(response.success){
-                                            var majorDom=$('.nl-badge.bg_gradient_orange')
+                                            var majorDom=$('.coach-type.c_orange')
                                             if(majorDom.length>0){//列表中存在主训教练
-                                                var this_coach_name=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
-                                                var this_coach_id=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
-                                                var this_category_id=majorDom.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
-                                                var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</div></div>';
-                                                majorDom.parents('.coach-type').removeClass('c_orange').addClass('c_blue')
-                                                majorDom.removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
-                                                majorDom.parents('.coach-row').find('.left_c .ta_l').text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
-                                                majorDom.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
+                                                majorDom.each(function(){
+                                                    var __this=$(this);
+                                                    var data_id=__this.attr('data-id')
+                                                    if(category_id==data_id){
+                                                        var this_coach_name=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
+                                                        var this_coach_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
+                                                        var this_category_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
+                                                        var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</div></div>';
+                                                        __this.removeClass('c_orange').addClass('c_blue')
+                                                        __this.children('.nl-badge').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
+                                                        __this.parents('.coach-row').find('.left_c .ta_l').text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
+                                                        __this.parents('.coach-row').find('.coach-row-footer').append(coach_btn)     
+                                                    }
+                                                })
+
                                             }
-                                            _this.parents('.coach-row').find('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
-                                            _this.parents('.coach-row').find('.nl-badge').parents('.coach-type').removeClass('c_blue').addClass('c_orange')
                                             _this.parents('.coach-row-footer').find('.left_c .ta_l').text('解除主训关系').removeClass('clearCoach').addClass('clearMain')
+                                            _this.parents('.coach-row').find('.coach-type').each(function(){
+                                                var __this=$(this)
+                                                var data_id=__this.attr('data-id')
+                                                if(category_id==data_id){
+                                                    __this.removeClass('c_blue').addClass('c_orange')
+                                                    __this.children('.nl-badge').removeClass('bg_gradient_blue').addClass('bg_gradient_orange')
+                                                }
+                                            })
                                             _this.parents('.right_c').remove()
                                         }
                                     })
@@ -290,19 +309,22 @@ layui.use(['element','flow','layer','form'], function(){
                     category_id:category_id,
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    console.log(res)
                     if(res.success){
                         if(res.data.url.length>0){
                             window.location.href=res.data.url
                         }else{
                             var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</div></div>';
-                            _this.parents('.coach-row').find('.nl-badge.bg_gradient_orange').parents('.coach-type').removeClass('c_orange').addClass('c_blue')
-                            _this.parents('.coach-row').find('.nl-badge.bg_gradient_orange').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
                             _this.text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
                             _this.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
-                            
+                            _this.parents('.coach-row').find('.coach-type').each(function(){
+                                var __this=$(this);
+                                var data_id=__this.attr('data-id')
+                                if(category_id==data_id){
+                                    __this.removeClass('c_orange').addClass('c_blue')
+                                    __this.children('.nl-badge').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
+                                }
+                            })
                         }
-
                     }else{
                         $.alerts(res.data.info)
                     }
@@ -390,86 +412,12 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
-                                // var major_coach='';//主训教练，我的教练
-                                // var isMyCoach='';//不是我的教练
-                                // var memoryClass='',computeClass='',readClass='';
-                                // var memory_major_coach="",compute_major_coach="",read_major_coach="";
-                                // var coach_btn="";
-                                // var text=$('.layui-this').text();
-                                // var clear_btn="";
-                                // var isLeft="ta_r";
-                                // if(v.compute!=null || v.read!=null || v.memory!=null){
-                                //     if(v.compute!=null){
-                                //         computeClass='c_blue'
-                                //     }
-                                //     if(v.memory!=null){
-                                //         memoryClass='c_blue'
-                                //     }
-                                //     if(v.read!=null){
-                                //         readClass='c_blue'
-                                //     } 
-
-                                // }
-                                // if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
-                                //     if(v.apply_status==1){//1，申请中，2我的教练
-                                //         coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_grey text_1 ">教练审核中···</div></div>';
-                                //         isLeft="ta_l"
-                                //     }else if(v.apply_status==2){//1，申请中，2我的教练
-                                        
-                                //         if(v.my_major_coach=='y'){//主训教练
-                                            
-                                //             major_coach='<div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div>';
-                                //             clear_btn='<span class="clearMain text_1 ta_l"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</span>'
-                                //         }else{
-                                //             major_coach='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
-                                //             coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</div></div>';
-                                //             clear_btn='<span class="clearCoach text_1 ta_l" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</span>'
-                                //         }
-                                //         $.each(arr,function(index,value){//橘色高亮
-                                //             if(value.ID==$('.layui-this').attr('data-id')){
-
-                                //                 if(value.post_title=='速算类'){
-                                //                     compute_major_coach=major_coach;
-                                //                     if(v.my_major_coach=='y'){
-                                //                         computeClass='c_orange';
-                                //                     }
-                                //                 }else if(value.post_title=='速记类'){
-                                //                     // memoryClass='c_orange';
-                                //                     memory_major_coach=major_coach;
-                                //                     if(v.my_major_coach=='y'){
-                                //                         memoryClass='c_orange';
-                                //                     }
-                                //                 }else if(value.post_title=='速读类'){
-                                //                     // readClass='c_orange';
-                                //                     read_major_coach=major_coach;
-                                //                     if(v.my_major_coach=='y'){
-                                //                         readClass='c_orange';
-                                //                     }
-                                //                 }
-                                //             }
-                                //         })
-
-                                //     }else{
-                                //         coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
-                                //     }
-
-                                //     isMyCoach='<div class="coach-type text_1 '+readClass+'">'+read_major_coach+' 速读类</div>'
-                                //               +'<div class="coach-type text_1 '+memoryClass+'">'+memory_major_coach+' 速记类</div>'
-                                //               +'<div class="coach-type text_1 '+computeClass+'">'+compute_major_coach+' 速算类</div>'
-                                // }else{
-                                //     isMyCoach='<div class="coach-type text_1 '+readClass+'">速读类</div>'
-                                //               +'<div class="coach-type text_1 '+memoryClass+'">记忆类</div>'
-                                //               +'<div class="coach-type text_1 '+computeClass+'">速算类</div>'
-                                //     coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
-                                //     isLeft="ta_l"
-                                // }
-                                var detailFooter=""
-                                var coach_btn=""
-                                var clear_btn=""
-                                var isLeft='ta_r'
+                                var detailFooter="";
+                                var coach_btn="";
+                                var clear_btn="";
+                                var isLeft='ta_r';
                                 var post_title="";
                                 $.each(v.category,function(index,value){
                                     var is_current="";//当前教练橘色或蓝色类型判断
@@ -478,7 +426,6 @@ layui.use(['element','flow','layer','form'], function(){
                                        
                                         is_current="c_blue"
                                         if(value.is_my_major=="true"){//当前教练是主训教练
-                                            // console.log(i,value.post_title)
                                             is_current='c_orange'
                                             metal='<div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div>';
                                         }else{
