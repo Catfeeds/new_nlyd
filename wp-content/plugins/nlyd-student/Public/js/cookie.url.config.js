@@ -138,6 +138,21 @@ Alert.prototype={
 			if(cval!=null)
 				document.cookie=name+"="+cval+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
 		},
+		SetSession:function(name,data){
+			var result=data;
+			result=typeof(result)=='object' ? JSON.stringify(result) : result;
+			result=escape(result)
+			sessionStorage.setItem(name, result);
+		},
+		GetSession:function(name,type){
+			var result=sessionStorage.getItem(name)
+			result=unescape(result)
+			result=type ? JSON.parse(result) : result;
+			return result
+		},
+		DelSession:function(name){
+			sessionStorage.removeItem(name);
+		},
 		/*获取URL参数*/
 		Requests: function (m) {
 			var sValue = location.search.match(new RegExp("[\?\&]" + m + "=([^\&]*)(\&?)", "i"));
