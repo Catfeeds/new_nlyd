@@ -43,7 +43,7 @@ jQuery(function($) {
         var time=D+h+':'+m+':'+s;
         $(this).text(time);
         if(S<=0){//本轮比赛结束
-            // window.location.href="<?=$match_url?>"
+            window.location.href="<?=$match_url?>"
         }
     });
 
