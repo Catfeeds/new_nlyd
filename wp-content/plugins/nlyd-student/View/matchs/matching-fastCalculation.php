@@ -12,15 +12,15 @@
                         <span class="c_blue ml_10">第1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
                         </span>
                         <div class="matching-sumbit" id="sumbit">提交</div>
                     </div>
                    
                     <div class="matching-fast">
                         <p class="count_p c_black">
-                            <span id="type">连加运算</span>
-                            <span class="count_downs" data-seconds="10">00:03:00</span>
+                            <span id="type"></span>
+                            <span class="count_downs" data-seconds="10">初始中...</span>
                             <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
                             <input type="hidden"id="add_and_subtract_time" value="<?=$child_count_down['add_and_subtract'] ?>">
                             <input type="hidden"id="wax_and_wane_time" value="<?=$child_count_down['wax_and_wane'] ?>">
@@ -66,16 +66,50 @@ jQuery(function($) {
     var even_add_time = $('#even_add_time').val(); //连加
     var add_and_subtract_time = $('#add_and_subtract_time').val(); //加减
     var wax_and_wane_time = $('#wax_and_wane_time').val(); //乘除
+    // var even_add_time = 2; //连加
+    // var add_and_subtract_time = 2; //加减
+    // var wax_and_wane_time = 2000; //乘除
     var level={number:2,symbol:1},//题目难度
-    type='连加运算',//当前子相运算类型
+    n_type=0,
+    type='',//当前子相运算类型
     ajaxData=[],//提交的数据
-    thisRow={},//当前题目信息
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
-    cx_interval_times=6,//乘除法每隔多少题增加一个难度
-    count_down=function(){
-        var n_type=0;
-        var sys_second=even_add_time;
+    cx_interval_times=6;//乘除法每隔多少题增加一个难度
+
+
+    // var matchSession=$.GetSession('match','true');
+    // var isMatching=false;//判断用户是否刷新页面
+    // if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    //     isMatching=true;
+    //     ajaxData=matchSession['ajaxData'];
+    //     level=matchSession['level'];
+    //     n_type=matchSession['n_type'];
+    //     nextBtn_click=matchSession['nextBtn_click'];
+    // }
+    if(n_type==0){
+        type="连加运算" 
+    }else if(n_type==1){
+        type="加减运算" 
+    }else{
+        type='乘除运算'
+    }
+    $('#type').text(type)
+    // if(!isMatching){
+        inItFastCalculation(level,type);
+    // }
+    nextQuestion()
+    count_down()  
+
+    function count_down(){
+        var sys_second='';
+        if(n_type==0){
+            sys_second=even_add_time
+        }else if(n_type==1){
+            sys_second=add_and_subtract_time
+        }else{
+            sys_second=wax_and_wane_time
+        }
         var timer = setInterval(function(){
             if (sys_second > 0) {
                 sys_second -= 1;
@@ -91,8 +125,8 @@ jQuery(function($) {
                 $('.count_downs').text(text).attr('data-seconds',sys_second)
                 $('#type').text(type)
             } else {//倒计时结束
-                n_type++
                 level={number:2,symbol:1};//初始化难度
+                n_type++
                 if(n_type==0){
                     type="连加运算" 
                     sys_second=even_add_time;
@@ -119,33 +153,32 @@ jQuery(function($) {
                     }
                     submit(0)
                 }
- 
+                
                 $('.count_downs').text('00:00:00').attr('data-seconds',sys_second)
                 $('#type').text(type)
                 $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
                 inItFastCalculation(level,type);  
-                
+                nextQuestion()
             }
 
         }, 1000);
-    }
-    count_down()    
-    randSZ=function() {//生成随即数字0-9
+    }  
+    function randSZ() {//生成随即数字0-9
         return ( Math.floor ( Math.random ( ) * 9  ) );
     }
-    randJJ=function() {//生成随机+-
+    function randJJ() {//生成随机+-
             var arr=['+','-'];
 
             var pos = Math.round(Math.random() * (arr.length - 1));
 
             return arr[pos];
     }
-    randCC=function() {//生成随机×÷
+    function randCC() {//生成随机×÷
             var arr=['×','÷'];
             var pos = Math.round(Math.random() * (arr.length - 1));
             return arr[pos];
     }
-    compare=function(old) {
+    function compare(old) {
         var newStr=randSZ();
         var oldStr=old
         if(oldStr==newStr){
@@ -154,7 +187,7 @@ jQuery(function($) {
             return newStr
         }
     }
-    add=function(level,type) {//连加运算
+    function add(level,type) {//连加运算
         var result='';
         var L=level['symbol'];
         var N=level['number'];
@@ -209,7 +242,7 @@ jQuery(function($) {
         var row={question:firstNumber+result,rights:answer,yours:'',isRight:false,}
         return row;
     }
-    CX=function(level) {//乘除运算
+    function CX(level) {//乘除运算
         var firstNumber='';//符号左侧数字
         var answer='';//计算出的答案
         var secondNumber=compare(0);//符号右侧数字
@@ -251,23 +284,31 @@ jQuery(function($) {
         return row
         
     }
-    inItFastCalculation=function(level,type) {
+    function inItFastCalculation(levels,type) {
         var text=''
         var row=''
         if(type=='连加运算'){//连加运算
-            row=add(level,type);
+            row=add(levels,type);
         }else if(type=='加减运算'){//加减运算
-            row=add(level,type);
+            row=add(levels,type);
         }else if(type=='乘除运算'){//乘除运算
-            row=CX(level);
+            row=CX(levels);
         }
-        $('#question').text(row.question+'=?')
-        thisRow=row;
-        ajaxData.push(thisRow)
-        // console.log(ajaxData)
+        ajaxData.push(row)
+        // var sessionData={
+        //     ajaxData:ajaxData,
+        //     match_id:$.Request('match_id'),
+        //     project_id:$.Request('project_id'),
+        //     match_more:$.Request('match_more'),
+        //     level:level,
+        //     n_type:n_type,
+        //     nextBtn_click:nextBtn_click
+        // }
+        // $.SetSession('match',sessionData)
     }
-    inItFastCalculation(level,type);
-
+    function nextQuestion() {
+        $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
+    }
     $('.number').each(function(i){//键盘数字tap事件
         var _this=$(this);
         var dom=$(this)[0]
@@ -325,14 +366,14 @@ jQuery(function($) {
             thisAjaxRow['isRight']=false;
             $('#answer').removeClass('answer').addClass('error-fast')
         }
-        // ajaxData.push(thisRow)
         setTimeout(() => {
             $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
             inItFastCalculation(level,type);
+            nextQuestion()
         }, 500);
         
     });
-    submit=function(time){//提交答案
+    function submit(time){//提交答案
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
@@ -345,6 +386,7 @@ jQuery(function($) {
         }
 
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+            // $.DelSession('match')
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

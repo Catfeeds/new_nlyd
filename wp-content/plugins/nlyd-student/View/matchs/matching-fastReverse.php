@@ -59,35 +59,47 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    var ajaxData=[],thisRow={},dataIndex=[];
+    var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
-    randSZ=function() {//生成随即数字
+    var matchSession=$.GetSession('match','true');
+    var isMatching=false;//判断用户是否刷新页面
+    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+    }
+    if(!isMatching){
+        initQuestion();//初始化数据
+    }
+    nextQuestion();//初始化dom
+    count_down();//倒计时
+    function randSZ() {//生成随即数字
             var arr=['1','2','3','4','5','6','7','8','9','10','11','12','13'];
 
             var pos = Math.round(Math.random() * (arr.length - 1));
 
             return arr[pos];
     }
-    initQuestion=function() {
+    function initQuestion() {
         var select=[]
         for (var index = 0; index < 4; index++) {
             var number=randSZ();
             select.push(number)
         }
-        thisRow={question:select,yours:'',isRight:false}
+       var thisRow={question:select,yours:'',isRight:false}
         ajaxData.push(thisRow)
+        var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
+        $.SetSession('match',sessionData)
     }
-    nextQuestion=function() {
+    function nextQuestion() {
         var text=$('.answer').text();
         $('.rand').each(function(i){
-            var text=thisRow['question'][i]
+            var text= ajaxData[ajaxData.length-1]['question'][i]
              $(this).text(text).attr('date-number',text)
         }).removeClass('disabled')
         $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
     }
-    initQuestion();//初始化数据
-    nextQuestion();//初始化dom
-    submit=function(time){//提交答案
+
+    function submit(time){//提交答案
 
         var data={
             action:'answer_submit',
@@ -101,6 +113,7 @@ jQuery(function($) {
         }
         //console.log(data)
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+            $.DelSession('match')
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
@@ -112,7 +125,7 @@ jQuery(function($) {
     }
 
 
-     count_down=function(){
+     function count_down(){
         var timer = setInterval(function(){
             if (sys_second > 0) {
                 sys_second -= 1;
@@ -137,7 +150,6 @@ jQuery(function($) {
 
         }, 1000);
     }
-    count_down()
     $('.number').each(function(i){//键盘数字tap事件
         var _this=$(this);
         var dom=$(this)[0]
