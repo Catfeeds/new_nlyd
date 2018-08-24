@@ -22,7 +22,7 @@
                         <span class="c_blue">快眼扫描第2轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                     </p>
                     <a class="a-btn wait">进入下一轮等待页面</a>
-                    <a class="a-btn back">返回我得比赛列表</a>
+                    <a class="a-btn back">返回我的比赛列表</a>
                 </div>  -->
             </div>           
         </div>
