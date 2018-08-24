@@ -146,8 +146,13 @@ Alert.prototype={
 		},
 		GetSession:function(name,type){
 			var result=sessionStorage.getItem(name)
-			result=unescape(result)
-			result=type ? JSON.parse(result) : result;
+			if(result){
+				result=unescape(result)
+				result=type ? JSON.parse(result) : result;
+			}else{
+				result=null
+			}
+
 			return result
 		},
 		DelSession:function(name){
