@@ -58,6 +58,24 @@ jQuery(document).ready(function($) {
      * 解除教学关系
      */
     $('.relieve').on('click', function () {
+        if(eventToken == 0) return false;
+        eventToken = 0;
         var id = $(this).closest('tr').attr('data-id');
+
+        $.ajax({
+            data : {'action' : 'relieveMyStudent', 'id' : id},
+            type : 'post',
+            dataType : 'json',
+            url : ajax_url,
+            success : function (response) {
+                alert(response.data.info)
+                if(response.success){
+                    window.location.reload();
+                }
+                eventToken = 1;
+            },error : function () {
+                eventToken = 1;
+            }
+        });
     });
 });

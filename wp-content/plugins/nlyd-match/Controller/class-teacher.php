@@ -191,31 +191,34 @@ class Teacher
     public function datum(){
         $err_msg = '';
         $suc_msg = '';
+        global $wpdb;
+
 
         if(is_post()){
             if(!preg_match('/1[345678][0-9]{9}/', $_POST['mobile'])) $err_msg = '手机格式错误';
             if(!preg_match('/[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}/',$_POST['email'])){
                 $err_msg = $err_msg != '' ? $err_msg.', 邮箱格式错误' : '邮箱格式错误';
             }
-            global $wpdb;
             //教练技能
             $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
             $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
             $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
             //如果取消教练类别, 判断此教练的类别是否还存在学员
+            //查询当前教练
+            $old = $wpdb->get_row('SELECT `read`,memory,compute FROM '.$wpdb->prefix.'coach_skill WHERE coach_id='.$_POST['user_id'], ARRAY_A);
             $sql = 'SELECT id FROM '.$wpdb->prefix.'my_coach WHERE coach_id='.$_POST['user_id'].' AND (apply_status=2 OR apply_status=1) AND category_id=';
             $cateErr = '存在学员或正在申请的学员, 请先解除此类别所属学员或拒绝申请<br />';
-            if($read == 0){
-                $id = $wpdb->get_var($sql.$read);
-                if($id) $err_msg = '速读类'.$cateErr;
+            if($read == 0 && $old['read'] != 0){
+                $id = $wpdb->get_var($sql.$old['read']);
+                if($id) $err_msg .= '速读类'.$cateErr;
             }
-            if($memory == 0){
-                $id = $wpdb->get_var($sql.$memory);
-                if($id) $err_msg = '速记类'.$cateErr;
+            if($memory == 0 && $old['memory'] != 0){
+                $id = $wpdb->get_var($sql.$old['memory']);
+                if($id) $err_msg .= '速记类'.$cateErr;
             }
-            if($compute == 0){
-                $id = $wpdb->get_var($sql.$compute);
-                if($id) $err_msg = '速算类'.$cateErr;
+            if($compute == 0 && $old['compute'] != 0){
+                $id = $wpdb->get_var($sql.$old['compute']);
+                if($id) $err_msg .= '速算类'.$cateErr;
             }
 
             if($err_msg == ''){
@@ -239,7 +242,7 @@ class Teacher
 
         }
         $id = $_GET['id'];
-        global $wpdb;
+
         $sql = "SELECT SQL_CALC_FOUND_ROWS b.display_name,b.user_mobile,b.user_login,b.user_email,a.id,a.coach_id,a.read,b.id as user_id,a.memory,a.compute
                     FROM {$wpdb->prefix}users b  
                     LEFT JOIN {$wpdb->prefix}coach_skill a ON a.coach_id = b.ID 

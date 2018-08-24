@@ -505,7 +505,27 @@ class Match_Ajax
      * 教练解除教学关系
      */
     public function relieveMyStudent(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        //查询是否是战队成员
+        global $wpdb;
+        $res = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE id='.$id.' AND apply_status=2');
+        //不存在或已解除
+        if(!$res) wp_send_json_error(['info' => '该学员不存在或已解除']);
 
+        //开始解除
+        $wpdb->startTrans();
+        $bool = $wpdb->update($wpdb->prefix.'my_coach', ['apply_status' => 3], ['id' => $id]);
+        if($bool){
+            //TODO 发送短信通知学员
+
+
+            $wpdb->commit();
+            wp_send_json_success(['info' => '已解除教学关系']);
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '解除失败']);
+        }
     }
 
     /**
