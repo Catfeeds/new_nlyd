@@ -15,6 +15,8 @@ class Match
     private $problem;
     private $alias;
     private $child_count_down;
+    private $default_str_length;
+    
 
     public function __construct()
     {
@@ -72,9 +74,11 @@ class Match
                         //获取当前项目别名
                         $alias = get_post_meta($_GET['post'],'project_alias');
                         $this->alias = $alias[0];
-                        if($this->alias == 'zxss'){
+                        if(in_array($this->alias,array('zxss','kysm'))){
                             $child_count_down = get_post_meta($_GET['post'],'child_count_down');
                             $this->child_count_down = $child_count_down[0];
+
+                            $this->default_str_lenth = get_post_meta($_GET['post'],'default_str_length')[0];
                         }
                         break;
                     default:
@@ -169,16 +173,18 @@ class Match
         <p>加减运算<input  value="<?=$this->child_count_down['add_and_subtract']?>" type="text" name="child_count_down[add_and_subtract]"/>默认单位为分</p>
         <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p>
         <?php }else{ ?>
-        <p>子项比赛用时<input  value="<?=$this->meta['child_count_down']?>" type="text" name="match[child_count_down]"/>默认单位为分</p>
+        <p>子项比赛用时<input  value="<?=$this->child_count_down?>" type="text" name="child_count_down"/>默认单位为秒</p>
         <?php }?>
     <?php }
 
     /**
      * 初始字符位数设置box
      */
-    public function str_bit_set_meta_box(){ ?>
+    public function str_bit_set_meta_box(){ 
+        
+    ?>
 
-        <p>初始长度<input  value="<?=$this->meta['str_bit']?>" type="text" name="match[str_bit]"/></p>
+        <p>初始长度<input  value="<?=$this->default_str_length ?>" type="text" name="default_str_length"/></p>
 
     <?php }
 
@@ -429,9 +435,11 @@ class Match
                     <div class="layui-input-inline">
                         <input class="layui-input" type="text" name="match[match_project][<?=$k?>][str_bit]" value="<?=$this->project[$v->ID]['str_bit']?>" placeholder="初始位数"/>
                     </div>
+                    <?php if(in_array($v->post_title,array('正向速算','快眼扫描'))): ?>
                     <div class="layui-input-inline">
                         <input class="layui-input" type="text" name="match[match_project][<?=$k?>][child_count_down]" value="<?=$this->project[$v->ID]['child_count_down']?>" placeholder="子项倒计时"/>
                     </div>
+                    <?php endif;?>
                 </div>
                 <!-- <div>
                     <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v->ID?>" <?=isset($this->project[$v->ID])?'checked':''; ?> />

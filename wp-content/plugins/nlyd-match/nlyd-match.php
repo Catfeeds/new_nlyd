@@ -382,6 +382,10 @@ if(!class_exists('MatchController')){
 
                     update_post_meta($post_ID,'child_count_down',$_POST['child_count_down']);
                 }
+                if(!empty($_POST['default_str_length'])){
+
+                    update_post_meta($post_ID,'default_str_length',$_POST['default_str_length']);
+                }
 
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
