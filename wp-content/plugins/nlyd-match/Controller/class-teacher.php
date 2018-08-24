@@ -521,6 +521,8 @@ class Teacher
                                          <span class="edit"><a href="javascript:;" class="agree"> 通过审核</a> | </span>
                                          <span class="delete"><a class="submitdelete refuse" href="javascript:;">拒绝申请</a>  </span>
 
+                                         <?php }elseif ($row['apply_status'] == 2){?>
+                                             <span class="delete"><a class="submitdelete relieve" href="javascript:;">解除</a>  </span>
                                          <?php }?>
                                      </div>
                                  </td>

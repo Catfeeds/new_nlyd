@@ -2516,7 +2516,7 @@ class Student_Ajax
     }
 
     /**
-     * 解除教练关系
+     * 学生解除教练关系
      */
     public function relieveMyCoach(){
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {

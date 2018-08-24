@@ -124,7 +124,7 @@ if(!class_exists('Team')){
                                                 <span class="edit"><a href="javascript:;" class="agree">同意入队</a> | </span>
                                                 <span class="delete"><a class="submitdelete refuse" href="javascript:;"">拒绝入队</a> </span>
                                             <?php }else if($row['status'] == 2){ ?>
-                                                 <span class="delete"><a class="submitdelete expel" href="javascript:;"">踢出战队</a> </span>
+<!--                                                 <span class="delete"><a class="submitdelete expel" href="javascript:;"">踢出战队</a> </span>-->
                                             <?php } ?>
 
                                             <span class=""><a class="submitdelete " href="javascript:;" style="height: 1em;display: inline-block"></a> </span>
