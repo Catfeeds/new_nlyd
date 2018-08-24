@@ -527,7 +527,7 @@ class Student_Matchs extends Student_Home
         if($this->project_alias == 'wzsd'){
 
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID));
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
+            if(empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
 
                 $question = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID));
                 //var_dump($question);
@@ -549,6 +549,7 @@ class Student_Matchs extends Student_Home
                     )
                 );
                 $question = $posts[0];
+                print_r($question);
 
                 $this->redis->setex('wzsd_question'.$current_user->ID,$count_down,json_encode($question));
 
@@ -649,23 +650,13 @@ class Student_Matchs extends Student_Home
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
         );
+        //$data['count_down'] = 3000;
 
         if(in_array($this->project_alias,array('zxss','kysm'))){
 
-            if($this->project_alias == 'zxss'){
-                $data['child_count_down'] = $this->child_count_down;
+            $data['child_count_down'] = $this->child_count_down;
 
-            }elseif ($this->project_alias == 'kysm'){
-
-                //设置子项倒计时
-                if(empty($this->redis->get('child_count_down'.$current_user->ID))){
-                    $child_count_down = time()+$this->child_count_down;
-                    $this->redis->setex('child_count_down'.$current_user->ID,$this->child_count_down,$child_count_down);
-                }else{
-                    $child_count_down = $this->redis->get('child_count_down'.$current_user->ID) - time();
-                }
-                $data['child_count_down'] = $child_count_down;
-            }
+            //$data['child_count_down'] = 700;
         }
 
 
