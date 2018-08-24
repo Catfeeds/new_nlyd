@@ -508,10 +508,10 @@ class Student_Matchs extends Student_Home
         //设置倒计时
 
         /*****测试使用*****/
-        if($_GET['test'] == 1){
+        /*if($_GET['test'] == 1){
             $this->redis->del($this->project_alias.'_question'.$current_user->ID);
             $this->redis->del('count_down'.$current_user->ID);
-        }
+        }*/
 
         $count_down = $this->redis->get('count_down'.$current_user->ID);
         //print_r($current_match_more);
@@ -655,12 +655,13 @@ class Student_Matchs extends Student_Home
         if(in_array($this->project_alias,array('zxss','kysm'))){
 
             $data['child_count_down'] = $this->child_count_down;
+            $data['child_type'] = $this->redis->get('child_type'.$current_user->ID);
 
             //$data['child_count_down'] = 700;
         }
 
 
-        //print_r($data);die;
+        print_r($data);die;
         $view = student_view_path.'matchs/match-initial.php';
         load_view_template($view,$data);
         /*if( $this->project_start_time < time() && time() < $this->project_end_time ){
@@ -1727,9 +1728,9 @@ class Student_Matchs extends Student_Home
             if($this->project_alias == 'zxss'){
 
                 if($match_project['child_count_down'] > 0){
-                    $child_count_down['even_add'] = $this->child_count_down;
-                    $child_count_down['add_and_subtract'] = $this->child_count_down;
-                    $child_count_down['wax_and_wane'] = $this->child_count_down;
+                    $child_count_down['even_add'] = $match_project['child_count_down'] * 60;
+                    $child_count_down['add_and_subtract'] = $match_project['child_count_down'] * 60;
+                    $child_count_down['wax_and_wane'] = $match_project['child_count_down'] * 60;
                 }elseif (!empty($child_count_down)){
 
                     $child_count_down['even_add'] *= 60;
@@ -1742,8 +1743,45 @@ class Student_Matchs extends Student_Home
                     $child_count_down['wax_and_wane'] = 180;
                 }
 
-                $this->default_count_down = array_sum($child_count_down);
-                print_r($this->default_count_down);
+                $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+
+                global $current_user;
+                $new_time = time();
+                $first_child = $child_count_down['even_add'];
+                $two_child = $first_child+$child_count_down['add_and_subtract'];
+                $three_child = $two_child+$child_count_down['wax_and_wane'];
+                if(empty($this->redis->get('even_add'.$current_user->ID))){
+                    $this->redis->setex('even_add'.$current_user->ID,$first_child,$first_child+$new_time);
+                }
+                if(empty($this->redis->get('add_and_subtract'.$current_user->ID))){
+                    $this->redis->setex('add_and_subtract'.$current_user->ID,$two_child,$two_child+$new_time);
+                }
+                if(empty($this->redis->get('wax_and_wane'.$current_user->ID))){
+                    $this->redis->setex('wax_and_wane'.$current_user->ID,$three_child,$three_child+$new_time);
+                }
+
+                /*leo_dump($this->redis->get('even_add'.$current_user->ID)-time());
+                leo_dump($this->redis->get('add_and_subtract'.$current_user->ID)-time());
+                leo_dump($this->redis->get('wax_and_wane'.$current_user->ID)-time());*/
+
+                if(!empty($this->redis->get('even_add'.$current_user->ID))){
+
+                    $child_count_down = $this->redis->get('even_add'.$current_user->ID) - time();
+                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,0);
+
+                }elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID))){
+
+                    $child_count_down = $this->redis->get('add_and_subtract'.$current_user->ID) - time();
+                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,1);
+
+                }elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID))){
+
+                    $child_count_down = $this->redis->get('wax_and_wane'.$current_user->ID) - time();
+                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,2);
+
+                }
+
+                //leo_dump($this->default_count_down);die;
             }else if($this->project_alias == 'kysm'){
 
                 if($match_project['child_count_down'] > 0){
