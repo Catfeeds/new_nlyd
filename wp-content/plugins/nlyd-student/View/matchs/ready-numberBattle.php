@@ -28,8 +28,8 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
-                        <?php if(!empty($list)):
-                            foreach ($list as $v){
+                        <?php if(!empty($questions)):
+                            foreach ($questions as $v){
                         ?>
                         <div class="matching-number"><?=$v?></div>
                             <?php } ?>

@@ -17,7 +17,7 @@
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title">
-                            <div class="c_black"><?=$match_title?> 第<?=$match_more_cn?>轮</div>
+                            <div class="c_black"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10">您的得分<?=$my_score?>分</div>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                         </div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <?php if($next_type == 1 && !isset($_GET['type'])): ?>
-                    <div class="a-btn" href="<?=$next_more_url?>">距下一轮开赛&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
+                    <div class="a-btn" href="<?=$next_project_url?>">距下一轮开赛&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
                     <a href="<?=$next_project_url?>">下一轮</a>
                 <?php endif;?>
                 <?php if($next_type == 2 && !isset($_GET['type'])): ?>

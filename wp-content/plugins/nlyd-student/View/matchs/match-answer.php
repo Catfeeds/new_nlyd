@@ -10,22 +10,13 @@
 <?php
 switch ($project_alias){
     case 'szzb':    //数字争霸
-        require_once student_view_path.'matchs/subject-numberBattle.php';
+        require_once student_view_path.'matchs/matching-numberBattle.php';
         break;
     case 'pkjl':    //扑克接力
-        require_once student_view_path.'matchs/subject-pokerRelay.php';
-        break;
-    case 'zxss':    //正向速算
-        require_once student_view_path.'matchs/subject-fastCalculation.php';
-        break;
-    case 'nxss':    //逆向速算
-        require_once student_view_path.'matchs/subject-fastReverse.php';
+        require_once student_view_path.'matchs/matching-pokerRelay.php';
         break;
     case 'wzsd':     //文章速读
         require_once student_view_path.'matchs/matching-reading.php';
-        break;
-    case 'kysm':    //快眼扫描
-        require_once student_view_path.'matchs/subject-fastScan.php';
         break;
     default:
         require_once student_view_path.'public/my-404.php';
