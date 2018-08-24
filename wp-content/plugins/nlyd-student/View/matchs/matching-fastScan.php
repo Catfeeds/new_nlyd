@@ -53,7 +53,28 @@ jQuery(function($) {
     flaseMax=10,//错题数量
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>;//程序获取时间
+    showTime=function(){  
+        if(!stop){
+            _count_time--
+        }
+            var day = Math.floor((_count_time / 3600) / 24);
+            var hour = Math.floor((_count_time / 3600) % 24);
+            var minute = Math.floor((_count_time / 60) % 60);
+            var second = Math.floor(_count_time % 60);
+            day=day>0?day+'天':'';
+            hour= hour<10?"0"+hour:hour;//计算小时
+            minute= minute<10?"0"+minute:minute;//计算分钟
+            second= second<10?"0"+second:second;//计算秒
+            var text=day+hour+':'+minute+':'+second;
+            $('.count_downs').text(text).attr('data-seconds',_count_time)
+            if(_count_time<=-1){
+                initBuild(itemLen,items,nandu,false)
+                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+                clearTimeout(timer)
+            }
+            timer=setTimeout("showTime()",1000);
 
+    }  
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
     if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
@@ -196,28 +217,7 @@ jQuery(function($) {
         }
     }
 
-    function showTime(){  
-        if(!stop){
-            _count_time--
-        }
-            var day = Math.floor((_count_time / 3600) / 24);
-            var hour = Math.floor((_count_time / 3600) % 24);
-            var minute = Math.floor((_count_time / 60) % 60);
-            var second = Math.floor(_count_time % 60);
-            day=day>0?day+'天':'';
-            hour= hour<10?"0"+hour:hour;//计算小时
-            minute= minute<10?"0"+minute:minute;//计算分钟
-            second= second<10?"0"+second:second;//计算秒
-            var text=day+hour+':'+minute+':'+second;
-            $('.count_downs').text(text).attr('data-seconds',_count_time)
-            if(_count_time<=-1){
-                initBuild(itemLen,items,nandu,false)
-                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-                clearTimeout(timer)
-            }
-            timer=setTimeout("showTime()",1000);
 
-    }  
     function showQusetion(row,flashTime,answerTime){//处理页面
             $('.answer').text(row.rights).removeClass('hide');
             $('.count_downs').addClass('hide');
@@ -232,6 +232,7 @@ jQuery(function($) {
                 $('.answer').addClass('hide');
                 $('#selectWrapper').removeClass('hide')
                 $('.count_downs').removeClass('hide')
+                isMatching=!isMatching
             }else{
                 setTimeout(() => {
                     $('.answer').addClass('hide');
@@ -281,6 +282,7 @@ jQuery(function($) {
             surplus_time:time,
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+            $.DelSession('match')
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url
