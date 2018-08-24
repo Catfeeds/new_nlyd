@@ -277,7 +277,6 @@ jQuery(function($) {
                     return false;
                 }
             })
-
             if(text.length!=0){
                 if($('.answer').text()=='本题无解'){
                     text='unsolvable'
@@ -287,12 +286,10 @@ jQuery(function($) {
                         return false;
                     }
                 }
-
-            }else{//扣2s
-
             }
+                ajaxData[ajaxData.length-1].yours=text;
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                thisAjaxRow.yours=text;
+                
                 var data={
                     action:'get_24_result',
                     numbers:thisAjaxRow.question,
@@ -310,8 +307,6 @@ jQuery(function($) {
                             isRight=false;
                             var newTime=res.data.info;
                             sys_second=newTime
-                            // sys_second-=2
-                            
                         }else{
                             if(res.success){
                                 isRight=res.data.info
@@ -327,7 +322,7 @@ jQuery(function($) {
                         setTimeout(() => {
                             initQuestion()
                             nextQuestion()
-                        }, 200);
+                        }, 500);
                         _this.removeClass('disabled')
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {

@@ -329,7 +329,7 @@ jQuery(function($) {
         setTimeout(() => {
             $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
             inItFastCalculation(level,type);
-        }, 300);
+        }, 500);
         
     });
     submit=function(time){//提交答案

@@ -41,8 +41,6 @@
     </div>
 </div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
-
-
 <script>
 jQuery(function($) { 
     var ajaxData=[],
@@ -56,7 +54,7 @@ jQuery(function($) {
     flaseMax=10,//错题数量
     // _count_time=5,getAjaxTime=5;
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
-    getAjaxTime=<?=$child_count_down?>,//程序获取时间
+    getAjaxTime=<?=$child_count_down?>;//程序获取时间
     getHZ=function() {//生成随即汉字
         return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
     }
@@ -159,6 +157,15 @@ jQuery(function($) {
     initBuild=function(itemLen,total,level,isFalseAdd) {//处理数据
         if(!isFalseAdd){
             flaseQuestion++
+            // var cookieData={
+            //     errorNumber:errorNumber,
+            //     match_id:$.Request('match_id'),
+            //     project_id:$.Request('project_id'),
+            //     match_more:$.Request('match_more'),
+            // }
+            // console.log(cookieData)
+            // $.SetCookie('errorNumber',cookieData,1)
+            // console.log($.GetCookie('errorNumber'))
         }
         if(flaseQuestion<flaseMax){
             var right=buildQuestion(itemLen)
