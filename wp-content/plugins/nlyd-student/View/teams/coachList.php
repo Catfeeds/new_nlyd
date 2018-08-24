@@ -149,53 +149,53 @@ layui.use(['element','flow','layer','form'], function(){
             }
             
         })
-            layer.open({
-            type: 1
-            ,maxWidth:300
-            ,title: '教练申请' //不显示标题栏
-            ,skin:'nl-box-skin'
-            ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认向“'+coach_name+'”发送教练申请？</div>'
-            +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> 同时设为'+type+'主训教练</div>'
-            ,btn: ['再想想', '确认', ]
-            ,success: function(layero, index){
+        //     layer.open({
+        //     type: 1
+        //     ,maxWidth:300
+        //     ,title: '教练申请' //不显示标题栏
+        //     ,skin:'nl-box-skin'
+        //     ,id: 'certification' //防止重复弹出
+        //     ,content: '<div class="box-conent-wrapper">是否确认向“'+coach_name+'”发送教练申请？</div>'
+        //     +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> 同时设为'+type+'主训教练</div>'
+        //     ,btn: ['再想想', '确认', ]
+        //     ,success: function(layero, index){
                 
-            }
-            ,yes: function(index, layero){
-                layer.closeAll();
-            }
-            ,btn2: function(index, layero){
-                var major=0;
-                if($('.coachCheckbox').attr('checked')){
-                    major=1;
-                }
-                var postData={
-                    action:'set_coach',
-                    _wpnonce:$('#setCoach').val(),
-                    category_id:category_id,
-                    coach_id:coach_id,
-                    major:major,
-                }
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    $.alerts(res.data.info)
-                    if(res.success){
-                        _this.removeClass('setTeacher').addClass('bg_gradient_grey').text('教练审核中···');
-                        _this.parents('.coach-row').find('.coach-type').each(function(){
-                            var __this=$(this);
-                            var data_id=__this.attr('data-id')
-                            if(category_id==data_id){
-                                __this.html('<span style="color:#FF2300">审核中···</span>')
-                            }
-                        })
-                    }
+        //     }
+        //     ,yes: function(index, layero){
+        //         layer.closeAll();
+        //     }
+        //     ,btn2: function(index, layero){
+        //         var major=0;
+        //         if($('.coachCheckbox').attr('checked')){
+        //             major=1;
+        //         }
+        //         var postData={
+        //             action:'set_coach',
+        //             _wpnonce:$('#setCoach').val(),
+        //             category_id:category_id,
+        //             coach_id:coach_id,
+        //             major:major,
+        //         }
+        //         $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+        //             $.alerts(res.data.info)
+        //             if(res.success){
+        //                 _this.removeClass('setTeacher').addClass('bg_gradient_grey').text('教练审核中···');
+        //                 _this.parents('.coach-row').find('.coach-type').each(function(){
+        //                     var __this=$(this);
+        //                     var data_id=__this.attr('data-id')
+        //                     if(category_id==data_id){
+        //                         __this.html('<span style="color:#FF2300">审核中···</span>')
+        //                     }
+        //                 })
+        //             }
                     
-                })
-            }
-            ,closeBtn:2
-            ,btnAagn: 'c' //按钮居中
-            ,shade: 0.3 //遮罩
-            ,isOutAnim:true//关闭动画
-        });
+        //         })
+        //     }
+        //     ,closeBtn:2
+        //     ,btnAagn: 'c' //按钮居中
+        //     ,shade: 0.3 //遮罩
+        //     ,isOutAnim:true//关闭动画
+        // });
         return false
     })
     $('body').on('click','.setCoach',function(){//设为主训
