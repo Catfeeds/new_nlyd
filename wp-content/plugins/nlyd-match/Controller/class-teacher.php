@@ -55,7 +55,7 @@ class Teacher
         <div class="wrap">
             <h1 class="wp-heading-inline">教练</h1>
 
-<!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
+            <a href="<?=admin_url('admin.php?page=teacher-add')?>" class="page-title-action">添加教练</a>
 
 
 <!--                <p class="search-box">-->
@@ -203,6 +203,11 @@ class Teacher
                 $bool = $wpdb->update($wpdb->users,
                     ['display_name' => $_POST['surname'].', '.$_POST['dis_name'], 'user_mobile' => $_POST['mobile'], 'user_email' => $_POST['email']],
                     ['id' => $_POST['user_id']]);
+                if($bool){
+                    //修改usermeta
+                    update_user_meta($_POST['user_id'], 'last_name', $_POST['surname']);
+                    update_user_meta($_POST['user_id'], 'first_name', $_POST['dis_name']);
+                }
                 //教练技能
                 $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
                 $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
@@ -231,7 +236,7 @@ class Teacher
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
 
                 <div class="wrap" id="profile-page">
-                    <h1 class="wp-heading-inline">教练资料13982242710</h1>
+                    <h1 class="wp-heading-inline">教练资料</h1>
 
 
 
@@ -483,7 +488,7 @@ class Teacher
                          <?php foreach ($rows as $row){ ?>
                              <tr id="user-5" data-id="<?=$row['id']?>">
                                  <th scope="row" class="check-column check" >
-                                     <label class="screen-reader-text">选择13982242710</label>
+                                     <label class="screen-reader-text">选择</label>
                                      <input type="checkbox" name="users[]" id="user_5" class="subscriber" value="5">
                                  </th>
                                  <td class="username column-username has-row-actions column-primary" data-colname="用户名">
@@ -563,7 +568,56 @@ class Teacher
     public function newTeacher(){
         global $wpdb;
         if(is_post()){
-            var_dump(add_user());die;
+            //教练类别
+            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
+            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
+            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+            $errStr = '';
+            if(empty($_POST['pass1']) || $_POST['pass1'] != $_POST['pass2']) $errStr = '两次输入的密码不一样';
+            if(!preg_match('/1[345678][0-9]{9}/', $_POST['user_mobile'])) $errStr = '手机格式错误';
+            if($errStr == '') {
+                $wpdb->startTrans();
+                $insertData = [
+                    'user_login' => $_POST['user_login'],
+                    'user_pass' => $_POST['pass1'],
+                    'user_email' => $_POST['email'],
+                    'user_mobile' => $_POST['user_mobile'],
+                    'display_name' => $_POST['last_name'].', '.$_POST['first_name'],
+                    'role' => $_POST['role']
+                ];
+                $userId = wp_insert_user($insertData);
+                if(is_object($userId)){
+                    $wpdb->rollback();
+                    foreach ($userId->errors as $err){
+                        foreach ($err as $er){
+                            $errStr .= $er.'<br />';
+                        }
+                    }
+                }else{
+                    //修改usermeta表姓氏和名字
+                    update_user_meta($userId, 'last_name', $_POST['last_name']);
+                    update_user_meta($userId, 'first_name', $_POST['first_name']);
+                    //添加教练技能
+                    $skillData = [
+                        'coach_id' => $userId,
+                        'read' => $read,
+                        'memory' => $memory,
+                        'compute' => $compute,
+                    ];
+                    $skillRes = $wpdb->insert($wpdb->prefix.'coach_skill', $skillData);
+                    if(!$skillRes){
+                        $wpdb->rollback();
+                        $errStr = '<strong>添加失败</strong>';
+                    }
+                }
+                if($errStr == '') {
+                    $wpdb->commit();
+                    echo '<script type="text/javascript">window.location.href="'.admin_url('admin.php?page=teacher').'"</script>';
+                    exit;
+                }
+            }
+
+
         }
         $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
         $postsRows = $wpdb->get_results($sql,ARRAY_A);
@@ -575,33 +629,37 @@ class Teacher
             <div id="ajax-response"></div>
 
             <p>新建教练，并将教练加入此站点。</p>
+            <div style="color: #A90000;">
+                <?=$errStr?>
+            </div>
             <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate">
                 <input name="action" type="hidden" value="createuser">
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="8e776847cc"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
-                    <tbody><tr class="form-field form-required">
+                    <tbody>
+                    <tr class="form-field form-required">
                         <th scope="row"><label for="user_login">用户名 <span class="description">（必填）</span></label></th>
-                        <td><input name="user_login" type="text" id="user_login" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></td>
+                        <td><input name="user_login" type="text" id="user_login" value="<?=isset($_POST['user_login']) ? $_POST['user_login'] : ''?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="mobile">手机号码 <span class="description">（必填）</span></label></th>
-                        <td><input name="mobile" type="texy" id="mobile" value=""></td>
+                        <th scope="row"><label for="user_mobile">手机号码 <span class="description">（必填）</span></label></th>
+                        <td><input name="user_mobile" type="text" id="user_mobile" value="<?=isset($_POST['user_mobile']) ? $_POST['user_mobile'] : ''?>"></td>
                     </tr>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="email">电子邮件 <span class="description">（必填）</span></label></th>
-                        <td><input name="email" type="email" id="email" value=""></td>
+                        <td><input name="email" type="email" id="email" value="<?=isset($_POST['email']) ? $_POST['email'] : ''?>"></td>
                     </tr>
                     <tr class="form-field">
                         <th scope="row"><label for="first_name">名字 </label></th>
-                        <td><input name="first_name" type="text" id="first_name" value=""></td>
+                        <td><input name="first_name" type="text" id="first_name" value="<?=isset($_POST['first_name']) ? $_POST['first_name'] : ''?>"></td>
                     </tr>
                     <tr class="form-field">
                         <th scope="row"><label for="last_name">姓氏 </label></th>
-                        <td><input name="last_name" type="text" id="last_name" value=""></td>
+                        <td><input name="last_name" type="text" id="last_name" value="<?=isset($_POST['last_name']) ? $_POST['last_name'] : ''?>"></td>
                     </tr>
-                    <tr class="form-field">
-                        <th scope="row"><label for="url">站点</label></th>
-                        <td><input name="url" type="url" id="url" class="code" value=""></td>
-                    </tr>
+<!--                    <tr class="form-field">-->
+<!--                        <th scope="row"><label for="url">站点</label></th>-->
+<!--                        <td><input name="url" type="url" id="url" class="code" value=""></td>-->
+<!--                    </tr>-->
                     <tr class="form-field form-required user-pass1-wrap">
                         <th scope="row">
                             <label for="pass1-text">
@@ -610,43 +668,31 @@ class Teacher
                         </th>
                         <td>
                             <input class="hidden" value=" "><!-- #24364 workaround -->
-                            <button type="button" class="button wp-generate-pw hide-if-no-js">显示密码</button>
-                            <div class="wp-pwd hide-if-js" style="display: none;">
+<!--                            <button type="button" class="button wp-generate-pw hide-if-no-js">显示密码</button>-->
+
+                            <div class="wp-pwd">
 								<span class="password-input-wrapper show-password">
-					<input type="password" name="pass1" id="pass1" class="regular-text strong" autocomplete="off" data-reveal="1" data-pw="#8LefUAX7w^Q!)9HJFy7muCG" aria-describedby="pass-strength-result" disabled=""><input type="text" id="pass1-text" name="pass1-text" autocomplete="off" class="regular-text strong" disabled="">
+
 				</span>
-                                <button type="button" class="button wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="隐藏密码">
-                                    <span class="dashicons dashicons-hidden"></span>
-                                    <span class="text">隐藏</span>
-                                </button>
-                                <button type="button" class="button wp-cancel-pw hide-if-no-js" data-toggle="0" aria-label="取消密码修改">
-                                    <span class="text">取消</span>
-                                </button>
-                                <div style="" id="pass-strength-result" aria-live="polite" class="strong">强</div>
+                                <input type="text" name="pass1" id="pass1" value="<?=isset($_POST['pass1']) ? $_POST['pass1'] : ''?>" class="regular-text strong" autocomplete="off" data-reveal="1" data-pw="#8LefUAX7w^Q!)9HJFy7muCG" aria-describedby="pass-strength-result">
+<!--                                <input type="text" id="pass1-text" name="pass1-text" autocomplete="off" class="regular-text strong" disabled="">-->
                             </div>
                         </td>
                     </tr>
-                    <tr class="form-field form-required user-pass2-wrap hide-if-js" style="display: none;">
+                    <tr class="form-field form-required user-pass2-wrap">
                         <th scope="row"><label for="pass2">重复密码 <span class="description">（必填）</span></label></th>
                         <td>
-                            <input name="pass2" type="password" id="pass2" autocomplete="off" disabled="">
+                            <input name="pass2" type="text" id="pass2" value="<?=isset($_POST['pass2']) ? $_POST['pass2'] : ''?>" autocomplete="off">
                         </td>
                     </tr>
-                    <tr class="pw-weak" style="display: none;">
-                        <th>确认密码</th>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="pw_weak" class="pw-checkbox">
-                                确认使用弱密码			</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">发送用户通知</th>
-                        <td>
-                            <input type="checkbox" name="send_user_notification" id="send_user_notification" value="1" checked="checked">
-                            <label for="send_user_notification">向新用户发送有关账户详情的电子邮件。</label>
-                        </td>
-                    </tr>
+<!---->
+<!--                    <tr>-->
+<!--                        <th scope="row">发送用户通知</th>-->
+<!--                        <td>-->
+<!--                            <input type="checkbox" name="send_user_notification" id="send_user_notification" value="1" checked="checked">-->
+<!--                            <label for="send_user_notification">向新用户发送有关账户详情的电子邮件。</label>-->
+<!--                        </td>-->
+<!--                    </tr>-->
 <!--                    <tr class="form-field">-->
 <!--                        <th scope="row"><label for="role">角色</label></th>-->
 <!--                        <td>-->
@@ -669,11 +715,11 @@ class Teacher
                                 <lable for="du"><?=$prow['post_title']?></lable>
 
                                 <?php if(preg_match('/算/', $prow['post_title'])){ ?>
-                                    <input id="du" type="checkbox"  name="compute" value="<?=$prow['ID']?>">
+                                    <input id="compute" type="checkbox" <?=(isset($_POST['compute'])&&$_POST['compute'] == $prow['ID'])?'checked="checked"':''?> name="compute" value="<?=$prow['ID']?>">
                                 <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
-                                    <input id="du" type="checkbox" name="memory" value="<?=$prow['ID']?>">
+                                    <input id="memory" type="checkbox" <?=(isset($_POST['memory'])&&$_POST['memory'] == $prow['ID'])?'checked="checked"':''?> name="memory" value="<?=$prow['ID']?>">
                                 <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
-                                    <input id="du" type="checkbox" name="read" value="<?=$prow['ID']?>">
+                                    <input id="read" type="checkbox" <?=(isset($_POST['read'])&&$_POST['read'] == $prow['ID'])?'checked="checked"':''?> name="read" value="<?=$prow['ID']?>">
                                 <?php } ?>
 
 
