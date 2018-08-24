@@ -44,7 +44,6 @@
 <script>
 jQuery(function($) { 
     var ajaxData=[],
-    thisRow={},//存储当前题目相关信息，选择或倒计时结束时push至ajaxData
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
     nandu=0,//难度系数，越小越难
@@ -52,16 +51,49 @@ jQuery(function($) {
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
-    // _count_time=5,getAjaxTime=5;
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>;//程序获取时间
-    getHZ=function() {//生成随即汉字
+    showTime=function(){  
+        if(!stop){
+            _count_time--
+        }
+            var day = Math.floor((_count_time / 3600) / 24);
+            var hour = Math.floor((_count_time / 3600) % 24);
+            var minute = Math.floor((_count_time / 60) % 60);
+            var second = Math.floor(_count_time % 60);
+            day=day>0?day+'天':'';
+            hour= hour<10?"0"+hour:hour;//计算小时
+            minute= minute<10?"0"+minute:minute;//计算分钟
+            second= second<10?"0"+second:second;//计算秒
+            var text=day+hour+':'+minute+':'+second;
+            $('.count_downs').text(text).attr('data-seconds',_count_time)
+            if(_count_time<=-1){
+                initBuild(itemLen,items,nandu,false)
+                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+                clearTimeout(timer)
+            }
+            timer=setTimeout("showTime()",1000);
+
+    }  
+    var matchSession=$.GetSession('match','true');
+    var isMatching=false;//判断用户是否刷新页面
+    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+        flaseQuestion=matchSession['flaseQuestion'];
+        nandu=matchSession['nandu'];
+    }
+    if(!isMatching){
+        initBuild(itemLen,items,nandu,true)
+    }
+    showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+    function getHZ() {//生成随即汉字
         return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
     }
-    randSZ=function() {//生成随即数字0-9
+    function randSZ() {//生成随即数字0-9
         return ( Math.floor ( Math.random ( ) * 9  ) );
     }
-    randZM=function(flag) {//生成随即小写字母
+    function randZM(flag) {//生成随即小写字母
         if(flag==="lower"){ 
              character = String.fromCharCode(Math.floor(Math.random()*26)+"a".charCodeAt(0)); 
         } 
@@ -71,14 +103,14 @@ jQuery(function($) {
         return character; 
        
     }    
-    randZF=function() {//生成随即字符
+    function randZF() {//生成随即字符
             var arr=['~','!','@','#','$','￥','^','&','(',')','?','*','×','÷','<','>',';','"',':','’','“','”'];
 
             var pos = Math.round(Math.random() * (arr.length - 1));
 
             return arr[pos];
     }
-    randHS=function() {//随机执行一个函数
+    function randHS() {//随机执行一个函数
         var arr=['getHZ','randSZ','randZM1','randZF','randZM2'];
 
         var pos = Math.round(Math.random() * (arr.length - 1));
@@ -95,14 +127,14 @@ jQuery(function($) {
         }
     }
 
-    buildQuestion=function(len) {//生成题目
+    function buildQuestion(len) {//生成题目
         var x="";
         for(var i=0;i<len;i++){
             x+=randHS()
         }
         return x;
     }
-    compare=function(old) {//比较字符是否相同
+    function compare(old) {//比较字符是否相同
         var newStr=randHS();
         var oldStr=old
         if(oldStr==newStr){
@@ -111,7 +143,7 @@ jQuery(function($) {
             return newStr
         }
     }
-    levels=function(data,level,arrIndex,str,select) {
+    function levels(data,level,arrIndex,str,select) {
         var randIndex1 = Math.round(Math.random() * (arrIndex.length - 1));//随机取一个下标
         var arrtext=arrIndex[randIndex1]
         var newArrIndex=[];
@@ -135,7 +167,7 @@ jQuery(function($) {
     level难度系数(越小越难，即不同字符个数)
     data
     */ 
-    buildSelect=function(data,total,level){//生成选项
+    function buildSelect(data,total,level){//生成选项
         var len=data.length;
         var select=[];
         var checkIndex=[];//存储已选中下标，进行排除
@@ -154,18 +186,9 @@ jQuery(function($) {
     itemLen生成字符串长度
     isFalseAdd上一题是否正确
     */ 
-    initBuild=function(itemLen,total,level,isFalseAdd) {//处理数据
+    function initBuild(itemLen,total,level,isFalseAdd) {//处理数据
         if(!isFalseAdd){
             flaseQuestion++
-            // var cookieData={
-            //     errorNumber:errorNumber,
-            //     match_id:$.Request('match_id'),
-            //     project_id:$.Request('project_id'),
-            //     match_more:$.Request('match_more'),
-            // }
-            // console.log(cookieData)
-            // $.SetCookie('errorNumber',cookieData,1)
-            // console.log($.GetCookie('errorNumber'))
         }
         if(flaseQuestion<flaseMax){
             var right=buildQuestion(itemLen)
@@ -177,40 +200,25 @@ jQuery(function($) {
             }
             var randIndex = Math.round(Math.random() * (arr.length - 1));//随机取一个下标
             select.splice(arr[randIndex], 0,right); //随机插入
-            var row={rights:right,question:select,yours:'',isRight:false} 
-            thisRow=row
+            var thisRow={rights:right,question:select,yours:'',isRight:false} 
             ajaxData.push(thisRow)
+            var sessionData={
+                ajaxData:ajaxData,
+                match_id:$.Request('match_id'),
+                project_id:$.Request('project_id'),
+                match_more:$.Request('match_more'),
+                nandu:nandu,
+                flaseQuestion:flaseQuestion
+            }
+            $.SetSession('match',sessionData)
         }else{
             $.alerts('错误'+flaseMax+'题')
             submit($('.count_down').attr('data-seconds'))
         }
     }
 
-    showTime=function(){  
-        if(!stop){
-            _count_time--
-        }
-            var day = Math.floor((_count_time / 3600) / 24);
-            var hour = Math.floor((_count_time / 3600) % 24);
-            var minute = Math.floor((_count_time / 60) % 60);
-            var second = Math.floor(_count_time % 60);
-            day=day>0?day+'天':'';
-            hour= hour<10?"0"+hour:hour;//计算小时
-            minute= minute<10?"0"+minute:minute;//计算分钟
-            second= second<10?"0"+second:second;//计算秒
-            var text=day+hour+':'+minute+':'+second;
-            $('.count_downs').text(text).attr('data-seconds',_count_time)
-            if(_count_time<=-1){
-                // ajaxData.push(thisRow)
-                initBuild(itemLen,items,nandu,false)
-                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-                clearTimeout(timer)
-            }
-            timer=setTimeout("showTime()",1000);
 
-    }  
-    showQusetion=function(row,flashTime,answerTime){//处理页面
-
+    function showQusetion(row,flashTime,answerTime){//处理页面
             $('.answer').text(row.rights).removeClass('hide');
             $('.count_downs').addClass('hide');
             $('#selectWrapper').addClass('hide');
@@ -220,18 +228,24 @@ jQuery(function($) {
                 var text=row['question'][i]
                 _this.text(text)
             })
-            setTimeout(() => {
+            if(isMatching){
                 $('.answer').addClass('hide');
                 $('#selectWrapper').removeClass('hide')
                 $('.count_downs').removeClass('hide')
-            }, flashTime*1000);
+                isMatching=!isMatching
+            }else{
+                setTimeout(() => {
+                    $('.answer').addClass('hide');
+                    $('#selectWrapper').removeClass('hide')
+                    $('.count_downs').removeClass('hide')
+                }, flashTime*1000);
+            }
+
             //计时器
             _count_time=answerTime
             showTime()
 
     }
-    initBuild(itemLen,items,nandu,true)
-    showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
 
 
     $('#selectWrapper').on('click','.fastScan-item',function(){
@@ -256,7 +270,7 @@ jQuery(function($) {
             clearTimeout(timer);
         }
     })
-    submit=function(time){//提交答案
+    function submit(time){//提交答案
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
@@ -268,6 +282,7 @@ jQuery(function($) {
             surplus_time:time,
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+            $.DelSession('match')
             if(res.success){
                 if(res.data.url){
                     window.location.href=res.data.url

@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
         lastTouchEnd = now;
         }, false);
     }
-    isIos=function(){
+    function isIos(){
         var u = navigator.userAgent, app = navigator.appVersion;  
         var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
@@ -28,7 +28,7 @@ jQuery(document).ready(function($) {
          }
     }
    
-    initHeight=function(){
+    function initHeight(){
         if('ontouchstart' in window) {
             var window_height=$(window).height();
             var top=parseInt($('#page').css('top'));
@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
         }
 
     })
-    count_down=function(_count_time,waiting_url){
+    function count_down(_count_time,waiting_url){
             _count_time--
             if(_count_time<=120){
                 clearTimeout(count_down_timer)
@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
             count_down_timer=setTimeout("count_down("+_count_time+",'"+waiting_url+"')",1000);
 
     } 
-    getMatchTime=function(){
+    function getMatchTime(){
         var wait_match=window.wait_match;
         if(wait_match.length>0){
              wait_match=JSON.parse(window.wait_match);
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
     $('body').on('click','.share-bg',function(){
         $('.share-bg').css('display','none')
     })
-    share=function(){//分享功能
+    function share(){//分享功能
 
         if('ontouchstart' in window){//移动端
             if(isWeiXin() || isSarari()){

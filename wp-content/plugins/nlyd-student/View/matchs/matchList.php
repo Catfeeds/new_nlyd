@@ -84,8 +84,6 @@
 <input type="hidden" name="_wpnonce" id="inputNewMatch" value="<?=wp_create_nonce('student_get_count_down_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    $.SetSession('hello',{name:1,id:2})
-    console.log($.GetSession('hello','1'))
     if(window.wait_match == ''){
         $('.countdown-time').hide();
     }

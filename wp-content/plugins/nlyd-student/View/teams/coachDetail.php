@@ -20,42 +20,59 @@
                         <div class="coachDetail-row width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-headImg img-box">
-                                    <img src="<?=$user_info['user_head']?>">
+                                    <img src="<?=$user_infos['user_head']?>">
                                 </div>
                                 <div class="coachDetail-coachInfo">
                                     <div class="coachDetail-infoRow">
-                                        <span class="fs_16 c_black"><?=$user_info['real_name']?></span>
-                                        <?php if(!empty($user_info['user_gender'])):?>
-                                        <span> <?=$user_info['user_gender']?> </span>
+                                        <span class="fs_16 c_black"><?=$user_infos['real_name']?></span>
+                                        <?php if(!empty($user_infos['user_gender'])):?>
+                                        <span> <?=$user_infos['user_gender']?> </span>
                                         <?php endif;?>
-                                        <span>ID <?=$user_info['user_ID']?></span>
+                                        <span>ID <?=$user_infos['user_ID']?></span>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span>国际脑力运动委员会（IISC） <?=$user_info['user_coach_level']?></span>
+                                        <span>国际脑力运动委员会（IISC） <?=$user_infos['user_coach_level']?></span>
                                     </div>
                                     <?php if(!empty($skill)):?>
                                     <div class="coachDetail-infoRow coach-detail-footer">
-                                        <?php foreach ($skill as $v){ ?>
-                                        <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                        <?php foreach ($skill['category'] as $v){ ?>
+                                            <?php if($v['is_current'] === false){?>
+<!--                                                <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> --><?//=$v['post_title']?><!--</div>-->
+                                                <div class="coach-type text_1 is_current"><?=$v['post_title']?></div>
+                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                            <?php }elseif($v['is_current'] === true && $v['is_apply'] == true && $v['is_my_coach'] === false){ ?>
+
+                                                <div class="coach-type text_1 is_current c_blue" style="color:#FF2300;">审核中...</div>
+                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                            <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === true){?>
+
+                                                <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
+                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                            <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === false){?>
+
+                                                <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
+                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                            <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === false && $v['is_my_major'] === false){?>
+
+                                                <div class="coach-type text_1 is_current c_blue"><?=$v['post_title']?></div>
+                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                            <?php }?>
                                         <?php } ?>
                                     </div>
-                                    <?php endif;?>
-                                    <?php if(!empty($skill)):?>
-                                    <div class="coachDetail-infoRow coach-detail-footer">
-                                        <?php foreach ($skill as $v){ ?>
-                                        <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
-                                        <?php } ?>
-                                    </div>
-                                    <?php endif;?>
-                                    <?php if(!empty($skill)):?>
-                                    <div class="coachDetail-infoRow coach-detail-footer">
-                                        <?php foreach ($skill as $v){ ?>
-                                        <div class="coach-type text_1 is_current"><?=$v['post_title']?></div>
-                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
-                                        <?php } ?>
-                                    </div>
+<!---->
+<!--                                    <div class="coachDetail-infoRow coach-detail-footer">-->
+<!---->
+<!--                                        <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> --><?//=$v['post_title']?><!--</div>-->
+<!--                                         <div class="coach-type fs_12 text_1">--><?//=$v['post_title']?><!--</div> -->
+<!---->
+<!--                                    </div>-->
+<!---->
+<!--                                    <div class="coachDetail-infoRow coach-detail-footer">-->
+<!---->
+<!--                                        <div class="coach-type text_1 is_current">--><?//=$v['post_title']?><!--</div>-->
+<!--                                         <div class="coach-type fs_12 text_1">--><?//=$v['post_title']?><!--</div> -->
+<!---->
+<!--                                    </div>-->
                                     <?php endif;?>
                                 </div>
                             </div>
