@@ -1741,6 +1741,9 @@ class Student_Matchs extends Student_Home
                     $child_count_down['add_and_subtract'] = 180;
                     $child_count_down['wax_and_wane'] = 180;
                 }
+
+                $this->default_count_down = array_sum($child_count_down);
+                print_r($this->default_count_down);
             }else if($this->project_alias == 'kysm'){
 
                 if($match_project['child_count_down'] > 0){
