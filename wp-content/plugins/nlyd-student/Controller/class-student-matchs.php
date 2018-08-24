@@ -140,24 +140,6 @@ class Student_Matchs extends Student_Home
     public $default_more_interval;         //比赛轮数间的倒计时
     public $current_more;                  //当前进行的比赛轮数
 
-
-
-
-
-
-
-    public $match;
-    public $default_match;
-    public $match_alias;       //比赛别名
-    public $default_use_time;       //项目时间
-    public $default_project_interval;       //比赛项目间隔
-    public $default_str_length;    //初始字符长度
-
-    public $ajaxControll;
-    public $default_category;       //比赛项目
-    public $default_project_more;   //项目轮数
-    public $default_post_parent;   //当前比赛项目类别id
-
     public $redis;
 
     public function __construct($action)
@@ -963,9 +945,13 @@ class Student_Matchs extends Student_Home
         }
 
         if($next){
-            $this->redis->setex('next_count_down'.$current_user->ID,$next_count_down,time()+$next_count_down);
+            if(empty($this->redis->get('next_count_down'.$current_user->ID))){
+
+                $this->redis->setex('next_count_down'.$current_user->ID,$next_count_down,time()+$next_count_down);
+            }
             $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$match_more);
         }else{
+
             $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
             $next_type = 3;
         }
@@ -986,7 +972,7 @@ class Student_Matchs extends Student_Home
             'my_score'=>$row['my_score'],
             'project_title'=>$this->project_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'next_count_down'=>$next_count_down,
+            'next_count_down'=>$this->redis->get('next_count_down'.$current_user->ID)-time(),
             'next_project_url'=>$next_project_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
