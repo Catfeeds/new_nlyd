@@ -28,7 +28,7 @@ switch ($project_alias){
         require_once student_view_path.'matchs/matching-fastScan.php';
         break;
     default:
-        require_once student_view_path.'matchs/ready-numberBattle.php';
+        require_once student_view_path.'public/my-404.php';
         break;
 }
 ?>

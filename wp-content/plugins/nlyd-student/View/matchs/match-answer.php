@@ -22,7 +22,7 @@ switch ($project_alias){
         require_once student_view_path.'matchs/subject-fastReverse.php';
         break;
     case 'wzsd':     //文章速读
-        require_once student_view_path.'matchs/subject-reading.php';
+        require_once student_view_path.'matchs/matching-reading.php';
         break;
     case 'kysm':    //快眼扫描
         require_once student_view_path.'matchs/subject-fastScan.php';

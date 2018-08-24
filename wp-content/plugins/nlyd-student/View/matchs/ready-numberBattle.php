@@ -9,7 +9,7 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
                         <span class="c_blue ml_10">第1/1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>

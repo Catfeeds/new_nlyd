@@ -44,9 +44,10 @@ class Student_Ajax
             $redis = new Redis();
             $redis->connect('127.0.0.1',6379,1);
             $redis->auth('leo626');
-            $default_count_down = $redis->get('end_time'.$current_user->ID)-time()-2;
-            $redis->setex('end_time'.$current_user->ID,$default_count_down,time()+$default_count_down);
-            wp_send_json_error(array('info'=>$default_count_down));
+            $new_time = time();
+            $default_count_down = $redis->get('count_down'.$current_user->ID)-1;
+            $redis->setex('count_down'.$current_user->ID,$default_count_down-$new_time,$default_count_down);
+            wp_send_json_error(array('info'=>$default_count_down-$new_time));
 
         }else{
 
@@ -302,18 +303,65 @@ class Student_Ajax
                     $my_answer = array_column($data_arr,'yours');
                 }
                 if($_POST['match_action'] == 'subjectFastReverse'){
+                    //print_r($_POST);die;
                     $twentyfour = new TwentyFour();
-                    foreach ($match_questions as $val){
-                        $results = $twentyfour->calculate($val);
+                    $success_len = 0;
+
+                    foreach ($data_arr as $val){
+
+                        /*********************************************/
+                        if(!empty($val['yours'])){
+
+                            if($val['yours'] == 'unsolvable'){
+
+                                $results = $twentyfour->calculate($val['question']);
+
+                                if(empty($results)){
+                                    $success_len += 1;
+                                }
+
+                            }
+                            else {
+
+                                //$_POST['my_answer'] = '(5+5)+5+9';
+                                $answer_array = str_replace('×', '*', $val['yours']);
+                                $sub_answer_array = str_replace('÷', '/', $answer_array);
+
+                                if (!preg_match("/[\+\-\*\/\.]{2}|[^\+\-\*\/\(\)\d\.]+/i", $sub_answer_array)) {
+
+                                    $l_cont = substr_count($sub_answer_array, "(");
+                                    $r_cont = substr_count($sub_answer_array, ")");
+
+                                    if (($l_cont != 0) || ($r_cont != 0)) {
+                                        if ((substr_count($sub_answer_array, "(") != substr_count($sub_answer_array, ")"))) {
+                                            continue;
+                                        }
+                                    }
+
+                                    $b = 0;
+                                    $str = '$b = ' . $sub_answer_array . ';';
+                                    eval($str);
+                                    //var_dump($b);
+                                    if ($b == 24) {
+                                        $success_len += 1;
+                                    }
+
+                                }
+                            }
+                        }
+                        /*********************************************/
+                        $results = $twentyfour->calculate($val['question']);
                         //print_r($results);
-                        $questions_answer[] = !empty($results) ? $results[0] : '本题无解';
+                        $questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
+
                     }
-                    $isRight = array_column($data_arr,'isRight');
+                    //print_r($success_len);die;
+                    //$isRight = array_column($data_arr,'isRight');
                     //print_r($questions_answer);
                     //die;
-                    $count_value = array_count_values($isRight);
-                    $len = $count_value['true'];
-                    $my_score = $len * 10;
+                    //$count_value = array_count_values($isRight);
+                    //$len = $count_value['true'];
+                    $my_score = $success_len * 10;
 
                 }else{
 
@@ -322,7 +370,7 @@ class Student_Ajax
                     $my_score = ($len-$error_len)*10;
                 }
 
-
+                //print_r($my_score);die;
                 $update_arr['match_questions'] = json_encode($match_questions);
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
@@ -400,7 +448,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         $result = $wpdb->update($wpdb->prefix.'match_questions',array('answer_status'=>-1),array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
         if($result){
-            $url = home_url('matchs/'.$_POST['match_action'].'/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more']);
+            $url = home_url('matchs/answerMatch/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more']);
             if(isset($_POST['questions_id']) && !empty($_POST['questions_id'])){
                 $url .= '&questions_id='.$_POST['questions_id'];
             }

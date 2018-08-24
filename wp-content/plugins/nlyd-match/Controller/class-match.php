@@ -165,11 +165,11 @@ class Match
     public function child_count_down_meta_box(){
 
         if($this->alias =='zxss'){ ?>
-        <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为秒</p>
-        <p>加减运算<input  value="<?=$this->child_count_down['add_and_subtract']?>" type="text" name="child_count_down[add_and_subtract]"/>默认单位为秒</p>
-        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为秒</p>
+        <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为分</p>
+        <p>加减运算<input  value="<?=$this->child_count_down['add_and_subtract']?>" type="text" name="child_count_down[add_and_subtract]"/>默认单位为分</p>
+        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p>
         <?php }else{ ?>
-        <p>子项比赛用时<input  value="<?=$this->meta['child_count_down']?>" type="text" name="match[child_count_down]"/>默认单位为秒</p>
+        <p>子项比赛用时<input  value="<?=$this->meta['child_count_down']?>" type="text" name="match[child_count_down]"/>默认单位为分</p>
         <?php }?>
     <?php }
 
