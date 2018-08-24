@@ -519,7 +519,6 @@ layui.use(['element','flow','layer','form'], function(){
                                     coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
                                     isLeft="ta_l"
                                 }
-
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
                                             +'<div class="coach-row">'
                                                 +'<div class="coach-row-top">'
@@ -543,7 +542,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                 +'<div class="coach-row-footer">'
                                                     +'<div class="left_c">'
                                                         +clear_btn
-                                                        +'<a class="c_black6 text_1 '+isLeft+'"  href="'+v.coach_url+'">查看详情</a>'
+                                                        +'<a class="c_black6 text_1 '+isLeft+'"  href="'+v.coach_url+'/category_id/<?=$_GET['category_id']?>">查看详情</a>'
                                                     +'</div>'
                                                     +coach_btn
                                                 +'</div>'
