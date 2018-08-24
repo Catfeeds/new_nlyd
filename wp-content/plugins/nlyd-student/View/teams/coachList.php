@@ -165,6 +165,7 @@ layui.use(['element','flow','layer','form'], function(){
                     }
                     ,yes: function(index, layero){
                         layer.closeAll();
+                        _this.removeClass('disabled')
                     }
                     ,btn2: function(index, layero){
                         var major=0;
@@ -223,6 +224,7 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
+                    _this.removeClass('disabled')
                 }
                 ,btn2: function(index, layero){
                     var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
@@ -270,6 +272,7 @@ layui.use(['element','flow','layer','form'], function(){
                                     }
                                     ,yes: function(index, layero){
                                         layer.closeAll();
+                                        _this.removeClass('disabled')
                                     }
                                     ,btn2: function(index, layero){
                                         var replaceData={
@@ -354,6 +357,7 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
+                    _this.removeClass('disabled')
                 }
                 ,btn2: function(index, layero){
                     var postData={
@@ -413,6 +417,7 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
+                    _this.removeClass('disabled')
                 }
                 ,btn2: function(index, layero){
                     var postData={
