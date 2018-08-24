@@ -9,7 +9,7 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
                         <span class="c_blue ml_10">第1/1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
@@ -28,8 +28,8 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
-                        <?php if(!empty($list)):
-                            foreach ($list as $v){
+                        <?php if(!empty($questions)):
+                            foreach ($questions as $v){
                         ?>
                         <div class="matching-number"><?=$v?></div>
                             <?php } ?>

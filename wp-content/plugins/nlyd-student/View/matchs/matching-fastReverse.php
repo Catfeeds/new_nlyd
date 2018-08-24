@@ -4,16 +4,16 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$post_title?></h1>
+            <h1 class="mui-title"><?=$project_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
                         <span class="c_blue ml_10"> 第1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
                         </span>
                         <div class="matching-sumbit" id="sumbit">提交</div>
                     </div>
@@ -99,6 +99,7 @@ jQuery(function($) {
             match_action:'subjectFastReverse',
             surplus_time:time,
         }
+        //console.log(data)
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             if(res.success){
                 if(res.data.url){
@@ -276,7 +277,6 @@ jQuery(function($) {
                     return false;
                 }
             })
-
             if(text.length!=0){
                 if($('.answer').text()=='本题无解'){
                     text='unsolvable'
@@ -286,30 +286,27 @@ jQuery(function($) {
                         return false;
                     }
                 }
-
-            }else{//扣2s
-
             }
+                ajaxData[ajaxData.length-1].yours=text;
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                thisAjaxRow.yours=text;
+                
                 var data={
                     action:'get_24_result',
                     numbers:thisAjaxRow.question,
                     my_answer:thisAjaxRow.yours,
+                    new_date:new Date().getTime(),
                 }
                 $.ajax({
                     type: "POST",
-                    url: window.admin_ajax+"?date="+new Date().getTime(),
+                    url: window.admin_ajax,
                     data: data,
                     dataType:'json',
                     timeout:2000,
                     success: function(res, textStatus, jqXHR){
                         if(text.length==0){//重新计算时间
                             isRight=false;
-                            var newTime=res.data.info
+                            var newTime=res.data.info;
                             sys_second=newTime
-                            // sys_second-=2
-                            
                         }else{
                             if(res.success){
                                 isRight=res.data.info
@@ -325,7 +322,7 @@ jQuery(function($) {
                         setTimeout(() => {
                             initQuestion()
                             nextQuestion()
-                        }, 200);
+                        }, 500);
                         _this.removeClass('disabled')
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
@@ -336,6 +333,7 @@ jQuery(function($) {
                         initQuestion()
                         nextQuestion()
                     }
+
                 });
             }
     });

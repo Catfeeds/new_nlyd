@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$post_title?></h1>
+            <h1 class="mui-title"><?=$match_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
                         <span class="c_blue ml_10">第1/1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
@@ -126,7 +126,7 @@ jQuery(function($) {
         $('.poker-wrapper').css('width',W);
     }
     // initWidth()
-    var AllData=<?=$list?>;
+    var AllData=<?=empty($questions) ? '" "' : $questions;?>;
     var nowPage=1;//当前页
     var onePageItems=false;//false则展示所有
     pagation=function name(data,pages,oneItems) {//数据分页获取数据

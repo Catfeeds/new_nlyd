@@ -72,6 +72,7 @@ font-size:0.14rem;
     color: #fff;
     padding: 0;
     bottom:30px;
+    z-index: 9999;
 }
 a.a-btn:hover{
     color: #fff!important;

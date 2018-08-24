@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$post_title?></h1>
+            <h1 class="mui-title"><?=$project_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$match_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
                         <span class="c_blue ml_10">第1题</span>
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
@@ -329,7 +329,7 @@ jQuery(function($) {
         setTimeout(() => {
             $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
             inItFastCalculation(level,type);
-        }, 300);
+        }, 500);
         
     });
     submit=function(time){//提交答案
