@@ -54,4 +54,10 @@ jQuery(document).ready(function($) {
        $('.check').find('input[type="checkbox"]').prop('checked', status);
        $('.check-all').find('input[type="checkbox"]').prop('checked', status);
     });
+    /**
+     * 解除教学关系
+     */
+    $('.relieve').on('click', function () {
+        var id = $(this).closest('tr').attr('data-id');
+    });
 });

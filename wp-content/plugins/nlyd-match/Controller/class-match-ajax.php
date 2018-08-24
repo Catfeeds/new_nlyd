@@ -502,6 +502,13 @@ class Match_Ajax
     }
 
     /**
+     * 教练解除教学关系
+     */
+    public function relieveMyStudent(){
+
+    }
+
+    /**
      * 踢出战队
      */
     public function expelTeam(){
