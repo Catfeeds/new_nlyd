@@ -170,23 +170,27 @@ p.long-name{
         bottom: 0;
         content: '';
         width: 100%;
-        height: 0px;
-        border-width: 1px;
-        border-style: solid;
-        border-bottom-color: #fff;
-        box-sizing: border-box;
-        pointer-events: none;
+        height: 5px;
+        border-width: 0;
         border: none;
-        border-radius: 0;
-        border-bottom: 5px solid #2484FE69;
+        border-style: none;
+        background: #a5ccff;
     }
     .layui-tab-title .layui-this:after{
         bottom: 0;
-        top: auto;
+        top: -webkit-calc(100% - 5px);
+        top: calc(100% - 5px);
     }
     .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
-        border-bottom: 5px solid #2484FE69;
-        bottom: 0;
+        position: absolute;
+        left: 0;
+        content: '';
+        width: 100%;
+        height: 5px;
+        border-width: 0;
+        border: none;
+        border-style: none;
+        background: #a5ccff;
     }
     .mui-bar{
         padding-left: 0;

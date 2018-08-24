@@ -49,7 +49,7 @@
                 $add_url = home_url('/account/addAddress');
                 if(isset($_GET['match_id'])) $add_url .= '/match_id/'.$_GET['match_id'];
                 ?>
-                <a class="a-btn" href="<?=$add_url;?>">新 增</a>
+                <a class="a-btn" href="<?=$add_url;?>">新增收货地址</a>
             </div>
         </div>
     </div>

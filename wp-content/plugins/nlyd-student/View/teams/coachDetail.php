@@ -19,28 +19,41 @@
                     <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12 have-abtn">
                         <div class="coachDetail-row width-padding width-margin-pc">
                             <div class="width-padding-pc">
-                                <div class="coachDetail-headImg">
+                                <div class="coachDetail-headImg img-box">
                                     <img src="<?=$user_info['user_head']?>">
                                 </div>
                                 <div class="coachDetail-coachInfo">
                                     <div class="coachDetail-infoRow">
-                                        <span class="nl-coach-name"><?=$user_info['real_name']?></span>
+                                        <span class="fs_16 c_black"><?=$user_info['real_name']?></span>
                                         <?php if(!empty($user_info['user_gender'])):?>
-                                        <span>$user_info['user_gender']</span>
+                                        <span> <?=$user_info['user_gender']?> </span>
                                         <?php endif;?>
                                         <span>ID <?=$user_info['user_ID']?></span>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span>国际脑力运动委员会（IISC）</span>
-                                        <a class="c_blue"><i class="iconfont">&#xe657;</i>查看脑力证书</a>
-                                    </div>
-                                    <div class="coachDetail-infoRow">
-                                        <span><?=$user_info['user_coach_level']?></span>
+                                        <span>国际脑力运动委员会（IISC） <?=$user_info['user_coach_level']?></span>
                                     </div>
                                     <?php if(!empty($skill)):?>
-                                    <div class="coachDetail-infoRow">
+                                    <div class="coachDetail-infoRow coach-detail-footer">
                                         <?php foreach ($skill as $v){ ?>
-                                        <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div>
+                                        <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
+                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                        <?php } ?>
+                                    </div>
+                                    <?php endif;?>
+                                    <?php if(!empty($skill)):?>
+                                    <div class="coachDetail-infoRow coach-detail-footer">
+                                        <?php foreach ($skill as $v){ ?>
+                                        <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
+                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
+                                        <?php } ?>
+                                    </div>
+                                    <?php endif;?>
+                                    <?php if(!empty($skill)):?>
+                                    <div class="coachDetail-infoRow coach-detail-footer">
+                                        <?php foreach ($skill as $v){ ?>
+                                        <div class="coach-type text_1 is_current"><?=$v['post_title']?></div>
+                                        <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                         <?php } ?>
                                     </div>
                                     <?php endif;?>
@@ -104,7 +117,8 @@
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-metal">学 员</div>
-                                <div class="coachDetail-top">&nbsp;*M、R、A分别代表记忆、速读、心算&nbsp;&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
+                                <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
+                                <p>*M、R、A分别代表记忆、速读、心算</p>
                                 <table class="nl-table" id="flow-table">
                                     <tr>
                                         <td>头像</td>

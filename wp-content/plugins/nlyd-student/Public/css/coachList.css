@@ -166,12 +166,7 @@ overflow: hidden;
     margin-top: 5px;
     border-right: 1px solid #2484FE;
 }
-.orange{
-    color: #FB8E8E;
-}
-.blue{
-    color: #2484FE;
-}
+
 .coach-detail-footer{
     display: flex;
 }
