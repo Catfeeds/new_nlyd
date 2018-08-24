@@ -412,15 +412,22 @@ class Student_Matchs extends Student_Home
              }
 
              $this->match_id = $row['match_id'];
-         }
+         }/*else{
+
+             //获取比赛状态
+             $sql = "select match_status from {$wpdb->prefix}match_meta where match_id = {$_GET['match_id']}";
+             $row = $wpdb->get_row($sql,ARRAY_A);
+             print_r($row);
+         }*/
 
          $start = reset($this->project_order_array);
          $end = end($this->project_order_array);
+         //print_r($this->project_order_array);
          if(strtotime($start['project_start_time']) > time()){
              $next_match_project = $start;
              $num = 1;
          }elseif (strtotime($end['project_end_time']) < time()){
-             $this->get_404('该比赛已结束');
+             $this->get_404('比赛结束');
              return;
          }else{
              foreach ($this->project_order_array as $k => $val){
