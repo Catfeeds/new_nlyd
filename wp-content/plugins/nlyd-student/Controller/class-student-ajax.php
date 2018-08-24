@@ -2514,7 +2514,8 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'参数错误'));
         }
         $id = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$category_id.' AND user_id='.$current_user->ID.' AND  major=1 AND (apply_status=1 or apply_status=2)');
-        if($id){
+//        var_dump($id);die;
+        if(!$id){
             wp_send_json_success(array('info'=>'当前无主训教练'));
         }else{
             wp_send_json_error(array('info'=>'当前已存在主训教练'));
