@@ -454,6 +454,7 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var detailFooter="";
