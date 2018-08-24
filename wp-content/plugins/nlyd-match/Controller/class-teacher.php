@@ -198,6 +198,26 @@ class Teacher
                 $err_msg = $err_msg != '' ? $err_msg.', 邮箱格式错误' : '邮箱格式错误';
             }
             global $wpdb;
+            //教练技能
+            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
+            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
+            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+            //如果取消教练类别, 判断此教练的类别是否还存在学员
+            $sql = 'SELECT id FROM '.$wpdb->prefix.'my_coach WHERE coach_id='.$_POST['user_id'].' AND (apply_status=2 OR apply_status=1) AND category_id=';
+            $cateErr = '存在学员或正在申请的学员, 请先解除此类别所属学员或拒绝申请<br />';
+            if($read == 0){
+                $id = $wpdb->get_var($sql.$read);
+                if($id) $err_msg = '速读类'.$cateErr;
+            }
+            if($memory == 0){
+                $id = $wpdb->get_var($sql.$memory);
+                if($id) $err_msg = '速记类'.$cateErr;
+            }
+            if($compute == 0){
+                $id = $wpdb->get_var($sql.$compute);
+                if($id) $err_msg = '速算类'.$cateErr;
+            }
+
             if($err_msg == ''){
                 //教练资料
                 $bool = $wpdb->update($wpdb->users,
@@ -208,10 +228,9 @@ class Teacher
                     update_user_meta($_POST['user_id'], 'last_name', $_POST['surname']);
                     update_user_meta($_POST['user_id'], 'first_name', $_POST['dis_name']);
                 }
-                //教练技能
-                $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
-                $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
-                $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
+
+
+
                 $bool_skill = $wpdb->update($wpdb->prefix.'coach_skill',['read' => $read, 'memory' => $memory, 'compute' => $compute], ['id' => intval($_POST['sk_id'])]);
 
                 if($bool || $bool_skill) $suc_msg = '编辑成功';
@@ -502,6 +521,8 @@ class Teacher
                                          <span class="edit"><a href="javascript:;" class="agree"> 通过审核</a> | </span>
                                          <span class="delete"><a class="submitdelete refuse" href="javascript:;">拒绝申请</a>  </span>
 
+                                         <?php }elseif ($row['apply_status'] == 2){?>
+                                             <span class="delete"><a class="submitdelete relieve" href="javascript:;">解除</a>  </span>
                                          <?php }?>
                                      </div>
                                  </td>

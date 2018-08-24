@@ -113,9 +113,8 @@ class Student_Teams
         $rows_ = $this->ajaxControll->get_cocah_member(false);*/
         //print_r($rows_);
         //判断是否为我的教练
-        $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$_GET['coach_id']}";
+        $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$_GET['coach_id']} and apply_status != 2 category_id=".$_GET['category_id'];
         $id = $wpdb->get_var($sql2);
-        //print_r($id);
         $view = student_view_path.CONTROLLER.'/coachDetail.php';
         load_view_template($view,array('user_infos'=>$user_info,'skill'=>$rows,'content'=>$content,'my_coach_id'=>$id));
     }

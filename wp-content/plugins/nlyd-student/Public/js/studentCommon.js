@@ -71,12 +71,10 @@ jQuery(document).ready(function($) {
         var wait_match=window.wait_match;
         if(wait_match.length>0){
              wait_match=JSON.parse(window.wait_match);
-
             if(typeof(wait_match)!='undefined' && wait_match!=null){
                 var match_start_time=wait_match.match_start_time;//比赛距离开始时间
                 var match_url=wait_match.match_url;//倒计时跳转链接
                 var match_id=wait_match.match_id;//比赛id，如果url存在相同的match_id则不跳转
-                //return false;
                 if($.Request('match_id')===null || match_id != $.Request('match_id')){
                     if(match_start_time>120){//倒计时时间大于2分钟,进行倒计时
                         count_down(match_start_time,wait_match.waiting_url)

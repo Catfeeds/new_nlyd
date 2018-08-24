@@ -127,7 +127,7 @@
 <!--                            </div>-->
 <!--                        </div>-->
                         <?php if(empty($my_coach_id)): ?>
-                        <div class="a-btn">请TA当教练</div>
+<!--                        <div class="a-btn">请TA当教练</div>-->
                         <?php endif;?>
                     </div>
                     <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
