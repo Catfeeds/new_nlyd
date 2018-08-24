@@ -20,18 +20,18 @@
                         <div class="coachDetail-row width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-headImg img-box">
-                                    <img src="<?=$user_info['user_head']?>">
+                                    <img src="<?=$user_infos['user_head']?>">
                                 </div>
                                 <div class="coachDetail-coachInfo">
                                     <div class="coachDetail-infoRow">
-                                        <span class="fs_16 c_black"><?=$user_info['real_name']?></span>
-                                        <?php if(!empty($user_info['user_gender'])):?>
-                                        <span> <?=$user_info['user_gender']?> </span>
+                                        <span class="fs_16 c_black"><?=$user_infos['real_name']?></span>
+                                        <?php if(!empty($user_infos['user_gender'])):?>
+                                        <span> <?=$user_infos['user_gender']?> </span>
                                         <?php endif;?>
-                                        <span>ID <?=$user_info['user_ID']?></span>
+                                        <span>ID <?=$user_infos['user_ID']?></span>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span>国际脑力运动委员会（IISC） <?=$user_info['user_coach_level']?></span>
+                                        <span>国际脑力运动委员会（IISC） <?=$user_infos['user_coach_level']?></span>
                                     </div>
                                     <?php if(!empty($skill)):?>
                                     <div class="coachDetail-infoRow coach-detail-footer">

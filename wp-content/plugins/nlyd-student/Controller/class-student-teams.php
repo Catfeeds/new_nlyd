@@ -48,6 +48,7 @@ class Student_Teams
         if(isset($user_info['user_real_name'])){
             $user_real_name = unserialize($user_info['user_real_name']);
             $user_info['real_name'] = $user_real_name['real_name'];
+//            $user_info['real_name'] = $rows['last_name'].$rows['first_name'];
         }else{
             $user = get_userdata( $_GET['coach_id'] );
             if(!empty($user->data->display_name)){
@@ -56,14 +57,48 @@ class Student_Teams
         }
         $user_info['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
         $user_info['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
-
         //获取教练技能
-        $sql = "select b.post_title from {$wpdb->prefix}coach_skill a  
-            right join {$wpdb->prefix}posts b on a.read = b.ID or a.memory = b.ID or a.compute = b.ID
-            where a.coach_id = {$_GET['coach_id']}
-            ";
-        $rows = $wpdb->get_results($sql,ARRAY_A);
 
+        $sql = "select `read`,memory,compute from {$wpdb->prefix}coach_skill where coach_id = {$_GET['coach_id']}";
+        $rows = $wpdb->get_row($sql,ARRAY_A);
+
+        $arr = ['read' => '速读类', 'memory' => '速记类', 'compute' => '速算类'];
+        $k = 0;
+        foreach ($arr as $ak => $ar){
+            $readApply = $wpdb->get_row('SELECT post_title,ID FROM '.$wpdb->prefix.'posts WHERE ID='.$rows[$ak]);
+            $rows['category'][$k]['name'] = $ak;
+            $rows['category'][$k]['post_title'] = $ar;
+            $rows['category'][$k]['category_id'] = $rows[$ak];
+            $rows['category'][$k]['is_current'] = 'false';//此教练是否在当前分类
+            $rows['category'][$k]['is_apply'] = 'false'; //是否申请中
+            $rows['category'][$k]['is_my_coach'] = 'false'; //是否已通过
+            $rows['category'][$k]['is_my_major'] = 'false'; //是否是主训
+            $rows['category'][$k]['is_relieve'] = 'false'; //是否已解除
+            $rows['category'][$k]['is_refuse'] = 'false';//是否已拒绝
+            if($readApply){
+                $rows['category'][$k]['is_current'] = 'true';//此教练是否在当前分类
+                $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$readApply->ID.' AND user_id='.$current_user->ID.' AND coach_id='.$_GET['coach_id']);
+                if($coachStudent){
+                    switch ($coachStudent->apply_status){
+                        case 1://申请中
+                            $rows['category'][$k]['is_apply'] = 'true';
+                            break;
+                        case 2://已通过
+                            $rows['category'][$k]['is_my_coach'] = 'true';
+                            $rows['category'][$k]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
+                            break;
+                        case 3://已解除
+                            $rows['category'][$k]['is_relieve'] = 'true';
+                            break;
+                        case -1://已拒绝
+                            $rows['category'][$k]['is_refuse'] = 'true';
+                            break;
+                    }
+                }
+            }
+            ++$k;
+        }
+//        die;
         //获取学员与主训
         $sql1 = "select sum(student_count) student_count,sum(major_count) major_count from(
                 select count(DISTINCT user_id) student_count,0 major_count from wp_my_coach where coach_id = {$_GET['coach_id']}  and apply_status = 2
@@ -82,7 +117,7 @@ class Student_Teams
         $id = $wpdb->get_var($sql2);
         //print_r($id);
         $view = student_view_path.CONTROLLER.'/coachDetail.php';
-        load_view_template($view,array('user_info'=>$user_info,'skill'=>$rows,'content'=>$content,'my_coach_id'=>$id));
+        load_view_template($view,array('user_infos'=>$user_info,'skill'=>$rows,'content'=>$content,'my_coach_id'=>$id));
     }
 
     /**
