@@ -103,6 +103,8 @@
 <input type="hidden" name="_wpnonce" id="clearCoach" value="<?=wp_create_nonce('student_relieve_coach_code_nonce');?>">
 <!-- 更换主训教练 -->
 <input type="hidden" name="_wpnonce" id="replaceMain" value="<?=wp_create_nonce('student_replace_major_code_nonce');?>">
+<!-- 判断是否存在主训 -->
+<input type="hidden" name="_wpnonce" id="isMajor" value="<?=wp_create_nonce('student_current_coach_code_nonce');?>">
 <script>
 jQuery(function($) { 
     var mySwiper = new Swiper('.swiper-container', {
@@ -134,6 +136,19 @@ layui.use(['element','flow','layer','form'], function(){
         var category_id=_this.attr('data-categoryId');
         var coach_name=_this.attr('data-coachName')
         var type=$('.layui-this a').text()
+        var ajax_data={
+            action:'searchCurrentCoach',
+            _wpnonce:$('#isMajor').val(),
+            category_id:category_id
+        }
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),ajax_data,function(resp){
+            $.alerts(resp.data.info)
+            console.log(resp)
+            if(resp.success){
+
+            }
+            
+        })
             layer.open({
             type: 1
             ,maxWidth:300
