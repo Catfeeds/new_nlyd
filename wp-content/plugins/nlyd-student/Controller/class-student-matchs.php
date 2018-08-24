@@ -655,13 +655,32 @@ class Student_Matchs extends Student_Home
         if(in_array($this->project_alias,array('zxss','kysm'))){
 
             $data['child_count_down'] = $this->child_count_down;
-            $data['child_type'] = $this->redis->get('child_type'.$current_user->ID);
+
+            /*leo_dump($this->redis->get('even_add'.$current_user->ID)-time());
+            leo_dump($this->redis->get('add_and_subtract'.$current_user->ID)-time());
+            leo_dump($this->redis->get('wax_and_wane'.$current_user->ID)-time());*/
+
+            if(!empty($this->redis->get('even_add'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('even_add'.$current_user->ID) - time();
+                $data['child_type'] = 0;
+
+            }elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('add_and_subtract'.$current_user->ID) - time();
+                $data['child_type'] = 1;
+
+            }elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('wax_and_wane'.$current_user->ID) - time();
+                $data['child_type'] = 2;
+            }
+            //$data['child_type'] = $this->redis->get('child_type'.$current_user->ID);
 
             //$data['child_count_down'] = 700;
         }
 
-
-        print_r($data);die;
+        //print_r($data);die;
         $view = student_view_path.'matchs/match-initial.php';
         load_view_template($view,$data);
         /*if( $this->project_start_time < time() && time() < $this->project_end_time ){
@@ -1750,35 +1769,16 @@ class Student_Matchs extends Student_Home
                 $first_child = $child_count_down['even_add'];
                 $two_child = $first_child+$child_count_down['add_and_subtract'];
                 $three_child = $two_child+$child_count_down['wax_and_wane'];
-                if(empty($this->redis->get('even_add'.$current_user->ID))){
+                if(empty($this->redis->get('even_add'.$current_user->ID)) && empty($this->redis->get('add_and_subtract'.$current_user->ID)) && empty($this->redis->get('wax_and_wane'.$current_user->ID)) ){
                     $this->redis->setex('even_add'.$current_user->ID,$first_child,$first_child+$new_time);
+                    $first = true;
                 }
-                if(empty($this->redis->get('add_and_subtract'.$current_user->ID))){
+                if($first){
                     $this->redis->setex('add_and_subtract'.$current_user->ID,$two_child,$two_child+$new_time);
+                    $two = true;
                 }
-                if(empty($this->redis->get('wax_and_wane'.$current_user->ID))){
+                if($two){
                     $this->redis->setex('wax_and_wane'.$current_user->ID,$three_child,$three_child+$new_time);
-                }
-
-                /*leo_dump($this->redis->get('even_add'.$current_user->ID)-time());
-                leo_dump($this->redis->get('add_and_subtract'.$current_user->ID)-time());
-                leo_dump($this->redis->get('wax_and_wane'.$current_user->ID)-time());*/
-
-                if(!empty($this->redis->get('even_add'.$current_user->ID))){
-
-                    $child_count_down = $this->redis->get('even_add'.$current_user->ID) - time();
-                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,0);
-
-                }elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID))){
-
-                    $child_count_down = $this->redis->get('add_and_subtract'.$current_user->ID) - time();
-                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,1);
-
-                }elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID))){
-
-                    $child_count_down = $this->redis->get('wax_and_wane'.$current_user->ID) - time();
-                    $this->redis->setex('child_type'.$current_user->ID,$child_count_down,2);
-
                 }
 
                 //leo_dump($this->default_count_down);die;
