@@ -560,7 +560,8 @@ class Student_Ajax
         global $wpdb,$current_user;
         //判断是否有战队
         $sql = "select id,team_id,user_id,status from {$wpdb->prefix}match_team where user_id = {$current_user->ID} ";
-
+        //开启事务,发送短信失败回滚
+        $wpdb->startTrans();
         if($_POST['handle'] == 'join'){ //加入战队
             $sql .= " and status > -2 ";
             $row = $wpdb->get_row($sql);
@@ -576,6 +577,7 @@ class Student_Ajax
                         $info = '已有战队,暂时不能申请加入战队,请先申请离队';
                         break;
                 }
+                $wpdb->rollback();
                 wp_send_json_error(array('info'=>$info));
             }
             $id = $wpdb->get_var("select id from {$wpdb->prefix}match_team where team_id = {$_POST['team_id']} and user_id = {$current_user->ID} and user_type = 1");
@@ -590,7 +592,10 @@ class Student_Ajax
             $sql .= " and team_id = {$_POST['team_id']} and status = 2 ";
             //print_r($sql);die;
             $row = $wpdb->get_row($sql);
-            if(empty($row)) wp_send_json_error(array('info'=>'你还没有加入任何战队'));
+            if(empty($row)){
+                $wpdb->rollback();
+                wp_send_json_error(array('info'=>'你还没有加入任何战队'));
+            }
 
             $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>-1),array('user_id'=>$current_user->ID,'team_id'=>$_POST['team_id']));
             $msgTemplate = 12;
@@ -599,13 +604,19 @@ class Student_Ajax
         if($result){
 
             /***短信通知战队负责人****/
-            
+            $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
+            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
+            $ali = new AliSms();
+            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $director['uid']), '国际脑力运动');
             /***********end************/
-
-            wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
-        }else{
-            wp_send_json_error(array('info'=>'操作失败'));
+            if($result){
+                $wpdb->commit();
+                wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
+            }
         }
+        $wpdb->rollback();
+        wp_send_json_error(array('info'=>'操作失败'));
+
     }
 
     /**
