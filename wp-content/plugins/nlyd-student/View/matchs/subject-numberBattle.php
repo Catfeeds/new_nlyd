@@ -76,7 +76,7 @@
                     <a href="<?=$next_project_url?>">下一项目</a>
                 <?php endif;?>
                 <?php if($next_type == 3):?>
-                    <a class="a-btn" href="#">比赛结束,查看详情</a>
+                    <a class="a-btn" href="<?=$next_project_url?>">比赛结束,查看详情</a>
                 <?php endif;?>
             </div>
         </div>           

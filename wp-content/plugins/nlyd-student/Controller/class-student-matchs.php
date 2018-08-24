@@ -544,8 +544,8 @@ class Student_Matchs extends Student_Home
 
         /*****测试使用*****/
         if($_GET['test'] == 1){
-            var_dump($this->redis->del($this->project_alias.'_question'.$current_user->ID));
-            var_dump($this->redis->del('count_down'.$current_user->ID));
+            $this->redis->del($this->project_alias.'_question'.$current_user->ID);
+            $this->redis->del('count_down'.$current_user->ID);
         }
 
         $count_down = $this->redis->get('count_down'.$current_user->ID);
@@ -938,14 +938,27 @@ class Student_Matchs extends Student_Home
             $next_key = $this->project_id_array[$key+1];
             //获取下一个比赛项
             $next_match_project = $this->project_key_array[$next_key];
-            //正式上线取消注释
-            //if($next_match_project && (strtotime($next_match_project['project_start_time'])-time() >0)){
-                $next_count_down = strtotime($next_match_project['project_start_time'])-time();
-                $project_id = $next_match_project['match_project_id'];
-                $next = true;
-                $next_type = 2;
-            //}
-            //print_r($next_match_project);
+            //正式上线取消test注释
+            if($_GET['test'] == 1){
+
+                if(!empty($next_match_project)){
+
+                    $next_count_down = strtotime($next_match_project['project_start_time'])-time();
+                    $project_id = $next_match_project['match_project_id'];
+                    $next = true;
+                    $next_type = 2;
+                }
+
+            }else{
+
+                if(!empty($next_match_project) && (strtotime($next_match_project['project_start_time'])-time() >0)){
+                    $next_count_down = strtotime($next_match_project['project_start_time'])-time();
+                    $project_id = $next_match_project['match_project_id'];
+                    $next = true;
+                    $next_type = 2;
+                }
+            }
+            //var_dump($next_match_project);
             //print_r($next_match_project);
         }
 
@@ -953,7 +966,7 @@ class Student_Matchs extends Student_Home
             $this->redis->setex('next_count_down'.$current_user->ID,$next_count_down,time()+$next_count_down);
             $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$match_more);
         }else{
-            $next_project_url = '';
+            $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
             $next_type = 3;
         }
 
