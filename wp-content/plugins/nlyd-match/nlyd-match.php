@@ -1055,8 +1055,6 @@ if(!class_exists('MatchController')){
                 wp_enqueue_style( 'match_css' );
                 wp_register_script( 'match-lists',match_js_url.'match-lists.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'match-lists' );
-                wp_register_script( 'alert',match_js_url.'alert.js',array('jquery'), leo_match_version  );
-                wp_enqueue_script( 'alert' );
             }
             /*
             wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
