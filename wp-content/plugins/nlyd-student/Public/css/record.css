@@ -208,11 +208,15 @@ tr.nl-me td{
     float: left;
     text-align: center;
 }
-.btn-wrap:first-child{
-    text-align: left;
+.btn-wrapper .btn-wrap .classify-btn{
+    margin: auto;
+    float:none;
 }
-.btn-wrap:last-child{
-    text-align: right;
+.btn-wrapper .btn-wrap:last-child .classify-btn{
+    float: right;
+}
+.btn-wrapper .btn-wrap:first-child .classify-btn{
+    float: left;
 }
 .btn-wrapper.one-rank{
     display: flex;

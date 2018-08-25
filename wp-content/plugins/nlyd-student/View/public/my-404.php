@@ -1,6 +1,5 @@
-
 <style>
-    .a-btn.wait{
+.a-btn.wait{
     position: relative;
     top: 0;
     left: 0;

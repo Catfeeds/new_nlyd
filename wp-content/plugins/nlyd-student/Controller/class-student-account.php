@@ -217,8 +217,8 @@ class Student_Account extends Student_Home
             if(ACTION == 'info'){
                 wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-mobileSelect' );
-
-
+                wp_register_script( 'student-info',student_js_url.'account/info.js',array('jquery'), leo_student_version ,true );
+                wp_enqueue_script( 'student-info' );
                 wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
                 wp_enqueue_style( 'my-student-mobileSelect' );
                 wp_register_style( 'my-student-info', student_css_url.'info.css',array('my-student') );
@@ -228,6 +228,8 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION == 'messages'){
+            wp_register_script( 'student-messagesList',student_js_url.'account/messagesList.js',array('jquery'), leo_student_version ,true );
+            wp_enqueue_script( 'student-messagesList' );
             wp_register_style( 'my-student-messagesList', student_css_url.'messagesList.css',array('my-student') );
             wp_enqueue_style( 'my-student-messagesList' );
         }
@@ -240,6 +242,8 @@ class Student_Account extends Student_Home
 
 
         if(ACTION=='recentMatch'){//我的比赛
+            wp_register_script( 'student-recentMatch',student_js_url.'account/recentMatch.js',array('jquery'), leo_student_version ,true );
+            wp_enqueue_script( 'student-recentMatch' );
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
         }
@@ -247,7 +251,8 @@ class Student_Account extends Student_Home
         if(ACTION=='address'){//地址列表
             wp_register_script( 'student-hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-hammer' );
-
+            wp_register_script( 'student-address',student_js_url.'account/address.js',array('jquery'), leo_student_version ,true );
+            wp_enqueue_script( 'student-address' );
             wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
             wp_enqueue_style( 'my-student-address' );
         }
@@ -255,6 +260,8 @@ class Student_Account extends Student_Home
         if(ACTION=='addAddress'){//新增地址
             wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-mobileSelect' );
+            wp_register_script( 'student-addAddress',student_js_url.'account/addAddress.js',array('jquery'), leo_student_version ,true );
+            wp_enqueue_script( 'student-addAddress' );
             wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
             wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-addAddress', student_css_url.'addAddress.css',array('my-student') );
