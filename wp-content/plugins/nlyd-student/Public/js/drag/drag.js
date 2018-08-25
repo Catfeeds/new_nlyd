@@ -1,18 +1,167 @@
-'use strict';(function(factory){if(typeof define==='function'&&define.amd){define(['jquery'],factory);}else{factory(jQuery);}}(function($){var IS_TOUCH_DEVICE=('ontouchstart'in document.documentElement);var DRAG_THRESHOLD=5;var counter=0;var dragEvents=(function(){if(IS_TOUCH_DEVICE){return{START:'touchstart',MOVE:'touchmove',END:'touchend'};}
-else{return{START:'mousedown',MOVE:'mousemove',END:'mouseup'};}}());$.fn.arrangeable=function(options){var dragging=false;var $clone;var dragElement;var originalClientX,originalClientY;var $elements;var touchDown=false;var leftOffset,topOffset;var eventNamespace;if(typeof options==="string"){if(options==='destroy'){if(this.eq(0).data('drag-arrange-destroy')){this.eq(0).data('drag-arrange-destroy')();}
-return this;}}
-options=$.extend({"dragEndEvent":"drag.end.arrangeable"},options);var dragEndEvent=options["dragEndEvent"];$elements=this;eventNamespace=getEventNamespace();this.each(function(){var dragSelector=options.dragSelector;var self=this;var $this=$(this);if(dragSelector){$this.on(dragEvents.START+eventNamespace,dragSelector,dragStartHandler);}else{$this.on(dragEvents.START+eventNamespace,dragStartHandler);}
-function dragStartHandler(e){e.stopPropagation();touchDown=true;originalClientX=e.clientX||e.originalEvent.touches[0].clientX;originalClientY=e.clientY||e.originalEvent.touches[0].clientY;dragElement=self;}});$(document).on(dragEvents.MOVE+eventNamespace,dragMoveHandler).on(dragEvents.END+eventNamespace,dragEndHandler);function dragMoveHandler(e){if(!touchDown){return;}
-var $dragElement=$(dragElement);var dragDistanceX=(e.clientX||e.originalEvent.touches[0].clientX)-originalClientX;var dragDistanceY=(e.clientY||e.originalEvent.touches[0].clientY)-originalClientY;if(dragging){e.stopPropagation();$clone.css({left:leftOffset+dragDistanceX,top:topOffset+dragDistanceY});shiftHoveredElement($clone,$dragElement,$elements);}else if(Math.abs(dragDistanceX)>DRAG_THRESHOLD||Math.abs(dragDistanceY)>DRAG_THRESHOLD){$clone=clone($dragElement);leftOffset=dragElement.offsetLeft-parseInt($dragElement.css('margin-left'))-
-parseInt($dragElement.css('padding-left'));topOffset=dragElement.offsetTop-parseInt($dragElement.css('margin-top'))-
-parseInt($dragElement.css('padding-top'));$clone.css({left:leftOffset,top:topOffset});$dragElement.parent().append($clone);$dragElement.css('visibility','hidden');dragging=true;}}
-function dragEndHandler(e){if(dragging){e.stopPropagation();dragging=false;$clone.remove();dragElement.style.visibility='visible';$(dragElement).parent().trigger(dragEndEvent,[$(dragElement)]);}
-touchDown=false;}
-function destroy(){$elements.each(function(){var dragSelector=options.dragSelector;var $this=$(this);if(dragSelector){$this.off(dragEvents.START+eventNamespace,dragSelector);}else{$this.off(dragEvents.START+eventNamespace);}});$(document).off(dragEvents.MOVE+eventNamespace).off(dragEvents.END+eventNamespace);$elements.eq(0).data('drag-arrange-destroy',null);$elements=null;dragMoveHandler=null;dragEndHandler=null;}
-this.eq(0).data('drag-arrange-destroy',destroy);};function clone($element){var $clone=$element.clone();$clone.css({position:'absolute',width:$element.width(),height:$element.height(),'z-index':100000});return $clone;}
-function getHoveredElement($clone,$dragElement,$movableElements){var cloneOffset=$clone.offset();var cloneWidth=$clone.width();var cloneHeight=$clone.height();var cloneLeftPosition=cloneOffset.left;var cloneRightPosition=cloneOffset.left+cloneWidth;var cloneTopPosition=cloneOffset.top;var cloneBottomPosition=cloneOffset.top+cloneHeight;var $currentElement;var horizontalMidPosition,verticalMidPosition;var offset,overlappingX,overlappingY,inRange;for(var i=0;i<$movableElements.length;i++){$currentElement=$movableElements.eq(i);if($currentElement[0]===$dragElement[0]){continue;}
-offset=$currentElement.offset();horizontalMidPosition=offset.left+0.5*$currentElement.width();verticalMidPosition=offset.top+0.5*$currentElement.height();overlappingX=(horizontalMidPosition<cloneRightPosition)&&(horizontalMidPosition>cloneLeftPosition);overlappingY=(verticalMidPosition<cloneBottomPosition)&&(verticalMidPosition>cloneTopPosition);inRange=overlappingX&&overlappingY;if(inRange){return $currentElement[0];}}}
-function shiftHoveredElement($clone,$dragElement,$movableElements){var hoveredElement=getHoveredElement($clone,$dragElement,$movableElements);if(hoveredElement!==$dragElement[0]){var hoveredElementIndex=$movableElements.index(hoveredElement);var dragElementIndex=$movableElements.index($dragElement);if(hoveredElementIndex<dragElementIndex){$(hoveredElement).before($dragElement);}else{$(hoveredElement).after($dragElement);}
-shiftElementPosition($movableElements,dragElementIndex,hoveredElementIndex);}}
-function shiftElementPosition(arr,fromIndex,toIndex){var temp=arr.splice(fromIndex,1)[0];return arr.splice(toIndex,0,temp);}
-function getEventNamespace(){counter+=1;return '.drag-arrange-'+counter;}}));
+
+;(function( $ ){
+	/**
+	 * Author: https://github.com/Barrior
+	 * 
+	 * DDSort: drag and drop sorting.
+	 * @param {Object} options
+	 *        target[string]: 		可选，jQuery事件委托选择器字符串，默认'li'
+	 *        cloneStyle[object]: 	可选，设置占位符元素的样式
+	 *        floatStyle[object]: 	可选，设置拖动元素的样式
+	 *        down[function]: 		可选，鼠标按下时执行的函数
+	 *        move[function]: 		可选，鼠标移动时执行的函数
+	 *        up[function]: 		可选，鼠标抬起时执行的函数
+	 */
+	$.fn.DDSort = function( options ){
+		var $doc = $( document ),
+			fnEmpty = function(){},
+ 
+			settings = $.extend( true, {
+ 
+				down: fnEmpty,
+				move: fnEmpty,
+				up: fnEmpty,
+ 
+				target: 'li',
+				cloneStyle: {
+					'background-color': '#eee'
+				},
+				floatStyle: {
+					//用固定定位可以防止定位父级不是Body的情况的兼容处理，表示不兼容IE6，无妨
+					'position': 'fixed',
+					'box-shadow': '10px 10px 20px 0 #eee',
+					'webkitTransform': 'rotate(4deg)',
+					'mozTransform': 'rotate(4deg)',
+					'msTransform': 'rotate(4deg)',
+					'transform': 'rotate(4deg)'
+				}
+ 
+			}, options );
+ 
+		return this.each(function(){
+ 
+			var that = $( this ),
+				height = 'height',
+				width = 'width';
+ 
+			if( that.css( 'box-sizing' ) == 'border-box' ){
+				height = 'outerHeight';
+				width = 'outerWidth';
+			}
+ 
+			that.on( 'mousedown.DDSort', settings.target, function( e ){
+				//只允许鼠标左键拖动
+				if( e.which != 1 ){
+					return;
+				}
+				
+				//防止表单元素失效
+				var tagName = e.target.tagName.toLowerCase();
+				if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' ){
+					return;
+				}
+				
+				var THIS = this,
+					$this = $( THIS ),
+					offset = $this.offset(),
+					disX = e.pageX - offset.left,
+					disY = e.pageY - offset.top,
+				
+					clone = $this.clone()
+						.css( settings.cloneStyle )
+						.css( 'height', $this[ height ]() )
+						.empty(),
+						
+					hasClone = 1,
+ 
+					//缓存计算
+					thisOuterHeight = $this.outerHeight(),
+					thatOuterHeight = that.outerHeight(),
+ 
+					//滚动速度
+					upSpeed = thisOuterHeight,
+					downSpeed = thisOuterHeight,
+					maxSpeed = thisOuterHeight * 3;
+				
+				settings.down.call( THIS );
+				
+				$doc.on( 'mousemove.DDSort', function( e ){
+					if( hasClone ){
+						$this.before( clone )
+							.css( 'width', $this[ width ]() )
+							.css( settings.floatStyle )
+							.appendTo( $this.parent() );
+							
+						hasClone = 0;
+					}
+					
+					var left = e.pageX - disX,
+						top = e.pageY - disY,
+						
+						prev = clone.prev(),
+						next = clone.next().not( $this );
+				
+					scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+ 
+					$this.css({
+						left: left,
+						top: top-scrollTop
+					});
+					
+					//向上排序
+					if( prev.length && top < prev.offset().top + prev.outerHeight()/2 ){
+							
+						clone.after( prev );
+						
+					//向下排序
+					}else if( next.length && top + thisOuterHeight > next.offset().top + next.outerHeight()/2 ){
+						
+						clone.before( next );
+ 
+					}
+ 
+					/**
+					 * 处理滚动条
+					 * that是带着滚动条的元素，这里默认以为that元素是这样的元素（正常情况就是这样），如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
+					 */
+					var thatScrollTop = that.scrollTop(),
+						thatOffsetTop = that.offset().top,
+						scrollVal;
+					
+					//向上滚动
+					if( top < thatOffsetTop ){
+ 
+						downSpeed = thisOuterHeight;
+						upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
+						scrollVal = thatScrollTop - upSpeed;
+ 
+					//向下滚动
+					}else if( top + thisOuterHeight - thatOffsetTop > thatOuterHeight ){
+ 
+						upSpeed = thisOuterHeight;
+						downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
+						scrollVal = thatScrollTop + downSpeed;
+					}
+ 
+					that.scrollTop( scrollVal );
+ 
+					settings.move.call( THIS );
+ 
+				})
+				.on( 'mouseup.DDSort', function(){
+					
+					$doc.off( 'mousemove.DDSort mouseup.DDSort' );
+					
+					//click的时候也会触发mouseup事件，加上判断阻止这种情况
+					if( !hasClone ){
+						clone.before( $this.removeAttr( 'style' ) ).remove();
+						settings.up.call( THIS );
+					}
+				});
+				
+				return false;
+			});
+		});
+	};
+ 
+})( jQuery );
