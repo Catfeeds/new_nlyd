@@ -79,26 +79,29 @@ jQuery(function($) {
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
 
-    // var matchSession=$.GetSession('match','true');
-    // var isMatching=false;//判断用户是否刷新页面
-    // if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-    //     isMatching=true;
-    //     ajaxData=matchSession['ajaxData'];
-    //     level=matchSession['level'];
-    //     n_type=matchSession['n_type'];
-    //     nextBtn_click=matchSession['nextBtn_click'];
-    // }
+    var matchSession=$.GetSession('match','true');
+    var isMatching=false;//判断用户是否刷新页面
+    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+        level=matchSession['level'];
+        n_type=matchSession['n_type'];
+        nextBtn_click=matchSession['nextBtn_click'];
+    }
     if(n_type==0){
         type="连加运算" 
+        even_add_time=child_type_down
     }else if(n_type==1){
         type="加减运算" 
+        add_and_subtract_time=child_type_down
     }else{
         type='乘除运算'
+        wax_and_wane_time=child_type_down
     }
     $('#type').text(type)
-    // if(!isMatching){
+    if(!isMatching){
         inItFastCalculation(level,type);
-    // }
+    }
     nextQuestion()
     count_down()  
 
@@ -296,16 +299,16 @@ jQuery(function($) {
             row=CX(levels);
         }
         ajaxData.push(row)
-        // var sessionData={
-        //     ajaxData:ajaxData,
-        //     match_id:$.Request('match_id'),
-        //     project_id:$.Request('project_id'),
-        //     match_more:$.Request('match_more'),
-        //     level:level,
-        //     n_type:n_type,
-        //     nextBtn_click:nextBtn_click
-        // }
-        // $.SetSession('match',sessionData)
+        var sessionData={
+            ajaxData:ajaxData,
+            match_id:$.Request('match_id'),
+            project_id:$.Request('project_id'),
+            match_more:$.Request('match_more'),
+            level:level,
+            n_type:n_type,
+            nextBtn_click:nextBtn_click
+        }
+        $.SetSession('match',sessionData)
     }
     function nextQuestion() {
         $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
@@ -386,16 +389,16 @@ jQuery(function($) {
             surplus_time:time,
         }
 
-        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-            // $.DelSession('match')
-            if(res.success){
-                if(res.data.url){
-                    window.location.href=res.data.url
-                }   
-            }else{
-                $.alerts(res.data.info)
-            }
-        })
+        // $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+        //     // $.DelSession('match')
+        //     if(res.success){
+        //         if(res.data.url){
+        //             window.location.href=res.data.url
+        //         }   
+        //     }else{
+        //         $.alerts(res.data.info)
+        //     }
+        // })
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
