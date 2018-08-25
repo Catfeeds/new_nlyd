@@ -2090,6 +2090,7 @@ class wpdb {
 		$sql = "$type INTO `$table` ($fields) VALUES ($formats)";
 
 		$this->check_current_query = false;
+		//var_dump($this->prepare( $sql, $values ));die;
 		return $this->query( $this->prepare( $sql, $values ) );
 	}
 

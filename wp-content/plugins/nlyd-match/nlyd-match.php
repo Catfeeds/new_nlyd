@@ -18,7 +18,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','1.0' );//样式版本
+            define( 'leo_match_version','2.0.1' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -28,8 +28,14 @@ if(!class_exists('MatchController')){
             $this->main();
         }
 
-        public function main(){
 
+        public function Yct_Row_actions( $actions, $post )
+        {
+            return $actions;
+        }
+        public function main(){
+            //屏蔽非分词类型的文章，例如文章post，上面的英文就是这个意思
+            add_action('post_row_actions', array($this,'Yct_Row_actions'), 10, 2);
 
             //自定义文章页
             add_action( 'init', array($this,'create_match_view'));
@@ -228,7 +234,6 @@ if(!class_exists('MatchController')){
             }
             ?>
 
-
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
                 <div id="screen-meta" class="metabox-prefs">
 
@@ -395,7 +400,7 @@ if(!class_exists('MatchController')){
                     break;
                 case 'options':
                     //删除比赛必须要先关闭比赛
-                    echo '<a href="post.php?post='.$id.'&action=edit">查看详情</a> | <a>关闭比赛</a> | <a>删除比赛</a>';
+                    echo '<a href="post.php?post='.$id.'&action=edit">查看详情</a> | <a href="javascript:;" class="closeMatch" data-id="'.$id.'">关闭比赛</a> | <a href="javascript:;" data-id="'.$id.'" class="delMatch">删除比赛</a>';
                     break;
                 default:
                     break;

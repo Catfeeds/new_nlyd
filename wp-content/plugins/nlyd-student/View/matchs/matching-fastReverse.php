@@ -58,7 +58,7 @@
 </div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
-jQuery(function($) { 
+jQuery(function($) {
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
     var matchSession=$.GetSession('match','true');
@@ -307,7 +307,10 @@ jQuery(function($) {
                     numbers:thisAjaxRow.question,
                     my_answer:thisAjaxRow.yours,
                     new_date:new Date().getTime(),
+                    match_more:$.Request('match_more') ? $.Request('match_more') : 1,
+                    project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
                 }
+                //console.log(data);
                 $.ajax({
                     type: "POST",
                     url: window.admin_ajax,

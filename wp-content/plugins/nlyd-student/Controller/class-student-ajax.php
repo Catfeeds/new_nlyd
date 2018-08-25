@@ -38,6 +38,7 @@ class Student_Ajax
 
         if(empty($_POST['numbers'])) wp_send_json_error(array('info'=>'参数不能为空'));
         if(!is_array($_POST['numbers'])) wp_send_json_error(array('info'=>'参数必须是数组'));
+        if(empty($_POST['match_more']) || empty($_POST['project_alias'])) wp_send_json_error(array('info'=>'参数错误'));
 
         if(empty($_POST['my_answer'])){
             global $current_user;
@@ -45,8 +46,8 @@ class Student_Ajax
             $redis->connect('127.0.0.1',6379,1);
             $redis->auth('leo626');
             $new_time = time();
-            $default_count_down = $redis->get('count_down'.$current_user->ID)-1;
-            $redis->setex('count_down'.$current_user->ID,$default_count_down-$new_time,$default_count_down);
+            $default_count_down = $redis->get('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'])-1;
+            $redis->setex('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'],$default_count_down-$new_time,$default_count_down);
             wp_send_json_error(array('info'=>$default_count_down-$new_time));
 
         }else{
