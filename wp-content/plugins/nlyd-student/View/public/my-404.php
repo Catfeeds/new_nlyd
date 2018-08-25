@@ -49,21 +49,8 @@ p.tips{
             <h1 class="mui-title">404</h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
-                <div class="no-info-page">
-                    <div class="no-info-img">
-                        <img src="<?=student_css_url.'image/noInfo/404x2.png'?>">
-                    </div>
-                    <p class="no-info-text"><?=$data['message']?></p>
-                    <p class="no-info-text">
-                        <?php if(!empty($data['match_url'])):?>
-                        <a href="<?=$data['match_url']?>">返回比赛详情</a>
-                        <?php endif;?>
-                        <?php if(!empty($data['waiting_url'])):?>
-                        <a href="<?=$data['waiting_url']?>">返回比赛等待</a>
-                        <?php endif;?>
-                    </p>
-                </div>
-                <!-- <div class="count-wrapper">
+
+                 <div class="count-wrapper">
                     <p class="tips fs_16">
                         <?=$data['message']?>
                     </p>
@@ -73,7 +60,7 @@ p.tips{
                     <?php if(!empty($data['waiting_url'])):?>
                     <a class="a-btn back" href="<?=$data['waiting_url']?>">返回比赛等待</a>
                     <?php endif;?>
-                </div> -->
+                </div>
             </div>
         </div>           
     </div>

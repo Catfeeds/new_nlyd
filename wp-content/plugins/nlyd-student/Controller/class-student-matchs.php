@@ -490,7 +490,13 @@ class Student_Matchs extends Student_Home
             }
 
             if( time() < $this->project_start_time ){
-                $this->get_404(array('message'=>'该比赛项目未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                $error_data = array(
+                                'message'=>'该比赛项目未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                                'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id),
+                                'start_count_down' => $this->project_start_time - time(),
+                            );
+                //var_dump($error_data);
+                $this->get_404($error_data);
                 return;
             }
 
@@ -550,7 +556,7 @@ class Student_Matchs extends Student_Home
                 $question = $posts[0];
                 //print_r($question);
 
-                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$count_down,json_encode($question));
+                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
 
                 //获取当前题目所有问题
                 $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -582,7 +588,7 @@ class Student_Matchs extends Student_Home
             }else{
 
                 $poker = poker_create();
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$count_down,json_encode($poker));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($poker));
 
                 $match_questions = $questions_answer = $poker;
             }
@@ -597,12 +603,12 @@ class Student_Matchs extends Student_Home
         }
         elseif ($this->project_alias == 'szzb'){
             if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
-                $rang_str = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID),true);
-                //var_dump($question);
-                $question = json_decode($rang_str,true);
+                $rang_str = $this->redis->get($this->project_alias.'_question'.$current_user->ID);
+                //var_dump($rang_str);
+                $question = !empty($rang_str) ? json_decode($rang_str,true) : '';
             }else{
                 $rang_array = rang_str_arr($this->project_str_len);
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$count_down,json_encode($rang_array));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($rang_array));
 
                 $match_questions = $questions_answer = $question = $rang_array;
             }
