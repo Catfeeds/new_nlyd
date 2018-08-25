@@ -508,17 +508,17 @@ class Student_Matchs extends Student_Home
         //设置倒计时
 
         /*****测试使用*****/
-        /*if($_GET['test'] == 1){
+        if($_GET['test'] == 1){
             $this->redis->del($this->project_alias.'_question'.$current_user->ID);
-            $this->redis->del('count_down'.$current_user->ID);
-        }*/
+            $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+        }
 
-        $count_down = $this->redis->get('count_down'.$current_user->ID);
-        //print_r($current_match_more);
-        if(empty($count_down)){
-            //var_dump($this->default_count_down);
+        $count_down_redis = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+        //print_r($count_down);
+        //var_dump($this->default_count_down);
+        if(empty($count_down_redis)){
             $count_down = time()+$this->default_count_down;
-            $this->redis->setex('count_down'.$current_user->ID,$this->default_count_down,$count_down);
+            $this->redis->setex('count_down'.$current_user->ID.$this->project_alias.$this->current_more,$this->default_count_down,$count_down);
         }
 
         $match_questions = '';
@@ -549,7 +549,7 @@ class Student_Matchs extends Student_Home
                     )
                 );
                 $question = $posts[0];
-                print_r($question);
+                //print_r($question);
 
                 $this->redis->setex('wzsd_question'.$current_user->ID,$count_down,json_encode($question));
 
@@ -629,7 +629,8 @@ class Student_Matchs extends Student_Home
             $a = $wpdb->insert($wpdb->prefix.'match_questions',$insert_data);
             //leo_dump($a);
 
-        }else{
+        }
+        else{
 
             //判断状态
             if(!empty($row['answer_status'])){
@@ -645,8 +646,8 @@ class Student_Matchs extends Student_Home
         $data = array(
             'questions'=>$question,
             'match_title'=>$this->match_title,
-            'match_more_cn'=>chinanum($_GET['match_more']),
-            'count_down'=> $count_down-time(),
+            'match_more_cn'=>chinanum($this->current_more),
+            'count_down'=> !empty($count_down_redis) ? $count_down_redis-time() : $count_down - time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
         );
@@ -1882,7 +1883,7 @@ class Student_Matchs extends Student_Home
                     $child_count_down['wax_and_wane'] = 180;
                 }
                 $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-                
+                //print_r($project_use_time);
             }else{
                 $project_use_time = $row['project_use_time'] > 0 ? $row['project_use_time'] : $this->match_count_down;
             }

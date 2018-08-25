@@ -58,7 +58,8 @@
 </div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
-jQuery(function($) { 
+jQuery(function($) {
+    var project_alias = '<?=$project_alias?>';
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
     var matchSession=$.GetSession('match','true');
