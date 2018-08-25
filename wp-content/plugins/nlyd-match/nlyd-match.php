@@ -502,6 +502,7 @@ if(!class_exists('MatchController')){
          * @param $data 项目内容
          */
         public function save_match_project($post_ID,$data){
+            //var_dump($data);die;
             global $wpdb;
             $table = $wpdb->prefix.'match_project';
             $sql = "INSERT INTO {$table} (post_id,match_project_id,project_use_time,project_start_time,project_washing_out,project_time_interval,str_bit,match_more,child_count_down) VALUES ";
