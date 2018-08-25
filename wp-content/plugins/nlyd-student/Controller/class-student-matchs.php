@@ -1862,7 +1862,7 @@ class Student_Matchs extends Student_Home
         //print_r($this->match_start_time);
         //计算每个项目结束时间
         foreach ($rows as $k => $row){
-            print_r($row);
+            //print_r($row);
             if($row['project_alias'] == 'zxss'){
 
                 $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
