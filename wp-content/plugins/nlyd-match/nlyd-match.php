@@ -18,7 +18,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','1.0' );//样式版本
+            define( 'leo_match_version','2.0.1' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -237,7 +237,6 @@ if(!class_exists('MatchController')){
             }
             ?>
 
-
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
                 <div id="screen-meta" class="metabox-prefs">
 
@@ -356,7 +355,7 @@ if(!class_exists('MatchController')){
         public function manage_match_columns($column_name, $id){
             global $wpdb;
             $sql = "select 
-                            match_slogan,match_genre,match_start_time,entry_start_time,entry_end_time,match_address,match_cost,match_status,
+                            match_slogan,match_genre,match_start_time,entry_start_time,entry_end_time,match_address,match_cost,
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 
@@ -404,15 +403,7 @@ if(!class_exists('MatchController')){
                     break;
                 case 'options':
                     //删除比赛必须要先关闭比赛
-                    $status = get_post($id);
-                    $str = '<a href="post.php?post='.$id.'&action=edit">查看详情</a>';
-                    if($status->post_status == 'trash'){
-                        $str .= ' | <a href="javascript:;" data-id="'.$id.'" class="delMatch">删除比赛</a>';
-                    }else{
-
-                        $str.= ' | <a href="javascript:;" class="closeMatch submitdelete" data-status="'.$row['match_status'].'" data-id="'.$id.'">关闭订单</a>';
-                    }
-                    echo $str;
+                    echo '<a href="post.php?post='.$id.'&action=edit">查看详情</a> | <a href="javascript:;" class="closeMatch" data-id="'.$id.'">关闭比赛</a> | <a href="javascript:;" data-id="'.$id.'" class="delMatch">删除比赛</a>';
                     break;
                 default:
                     break;
@@ -1046,7 +1037,8 @@ if(!class_exists('MatchController')){
             wp_enqueue_script( 'admin_layui_js' );
             wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
             wp_enqueue_style( 'admin_layui_css' );
-
+            wp_register_script( 'drag',match_js_url.'drag/drag.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'drag' );
             wp_register_script( 'admin_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'admin_select2_js' );
             wp_register_script( 'admin_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
@@ -1059,6 +1051,8 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 wp_register_script( 'team_leader',match_js_url.'team_leader.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'team_leader' );
+                wp_register_style( 'match_css',match_css_url.'match/match.css','', leo_match_version  );
+                wp_enqueue_style( 'match_css' );
                 wp_register_script( 'match-lists',match_js_url.'match-lists.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'match-lists' );
                 wp_register_script( 'alert',match_js_url.'alert.js',array('jquery'), leo_match_version  );

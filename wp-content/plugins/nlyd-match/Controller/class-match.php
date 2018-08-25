@@ -209,7 +209,7 @@ class Match
             'orderby' => 'ID',
         );
         $the_query = new WP_Query( $args );
-        if ( ! empty($the_query->posts) ) : ?>
+        if (!empty($the_query->posts)) : ?>
             <ul name="parent_id">
                 <?php
                 foreach ($the_query->posts as $v){
@@ -422,8 +422,13 @@ class Match
         //print_r($the_query->posts);
         if (!empty($the_query->posts)) {
             foreach ($the_query->posts as $k => $v){ ?>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v->ID?>" <?=isset($this->project[$v->ID])?'checked':''; ?> /><?=$v->post_title?></label>
+                <div class="layui-inline match_project">
+                    <div class="layui-input-inline title">
+                        <label class="layui-form-label">拖拽排序</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <label class="layui-form-label"><input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v->ID?>" <?=isset($this->project[$v->ID])?'checked':''; ?> /><?=$v->post_title?></label>
+                    </div>
                     <div class="layui-input-inline">
                         <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_use_time]" value="<?=$this->project[$v->ID]['project_use_time']?>" placeholder="比赛用时"/>
                     </div>
@@ -448,17 +453,6 @@ class Match
                     </div>
                     <?php endif;?>
                 </div>
-                <!-- <div>
-                    <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v->ID?>" <?=isset($this->project[$v->ID])?'checked':''; ?> />
-                    <label><?=$v->post_title?></label>
-                    <input type="text" name="match[match_project][<?=$k?>][project_use_time]" value="<?=$this->project[$v->ID]['project_use_time']?>" placeholder="比赛用时"/>
-                    <input type="text" name="match[match_project][<?=$k?>][match_more]" value="<?=$this->project[$v->ID]['match_more']?>" placeholder="比赛轮数"/>
-                    <input type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=$this->project[$v->ID]['project_start_time']?>" placeholder="开始时间"/>
-                    <input type="text" name="match[match_project][<?=$k?>][project_washing_out]" value="<?=$this->project[$v->ID]['project_washing_out']?>" placeholder="淘汰率或淘汰人数"/>
-                    <input type="text" name="match[match_project][<?=$k?>][project_time_interval]" value="<?=$this->project[$v->ID]['project_time_interval']?>" placeholder="间隔时间"/>
-                    <input type="text" name="match[match_project][<?=$k?>][str_bit]" value="<?=$this->project[$v->ID]['str_bit']?>" placeholder="初始位数"/>
-                    <input type="text" name="match[match_project][<?=$k?>][child_count_down]" value="<?=$this->project[$v->ID]['child_count_down']?>" placeholder="子项倒计时"/>
-                </div> -->
             <?php }
         }else{ ?>
             <b>暂无项目</b>
