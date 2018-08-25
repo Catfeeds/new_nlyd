@@ -43,6 +43,26 @@ jQuery(document).ready(function($) {
             }
         });
     });
+    
+    // $(".match_project").Tdrag({
+    //     scope:"#project_meta_box",
+    //     pos:true,
+    //     handle:".title",
+    //     dragChange:true,
+    //     changeMode:"sort",
+    //     moveClass:"abc",
+    //     handle:null,//手柄
+    //     cbStart:function(){},//移动前的回调函数
+    //     cbMove:function(){},//移动中的回调函数
+    //     cbEnd:function(){
+    //         $(".match_project").each(function(){
+    //             var _this=$(this)
+    //             var index=_this.index()
+    //         })
+    //     },//移动结束时候的回调函数
+    // });
+    // $('.match_project').arrangeable({dragSelector: '.title',});
+    $(".match_project").sortable()
     layui.use(['laydate','form',], function(){
         var laydate = layui.laydate;
         var form = layui.form

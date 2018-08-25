@@ -1029,7 +1029,8 @@ if(!class_exists('MatchController')){
             wp_enqueue_script( 'admin_layui_js' );
             wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
             wp_enqueue_style( 'admin_layui_css' );
-
+            wp_register_script( 'drag',match_js_url.'drag/drag.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'drag' );
             wp_register_script( 'admin_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'admin_select2_js' );
             wp_register_script( 'admin_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
@@ -1042,6 +1043,8 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 wp_register_script( 'team_leader',match_js_url.'team_leader.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'team_leader' );
+                wp_register_style( 'match_css',match_css_url.'match/match.css','', leo_match_version  );
+                wp_enqueue_style( 'match_css' );
             }
             /*
             wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
