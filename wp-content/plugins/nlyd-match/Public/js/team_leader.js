@@ -44,28 +44,30 @@ jQuery(document).ready(function($) {
         });
     });
  
-	$( '.postbox').DDSort({
+	$( '.postbox').DDSort({//拖拽
 		target: '.match_project',		
         up:function(){
             $(this).parents('.postbox').find('input').each(function(){
                 var _this=$(this);
                 var index=_this.parents('.match_project').index();
                 var oldName=_this.attr('name');
-                var n=0;
-                var pre="";
-                var next=""
-                for(var i=0;i<oldName.length;i++){
-                    if(oldName.charAt(i)==']'){
-                        n++
-                        if(n==1){
-                            pre=oldName.slice(0,i+1)
-                        }
-                        if(n==2){
-                            next=oldName.slice(i+1)
+                if(oldName){
+                    var n=0;
+                    var pre="";
+                    var next=""
+                    for(var i=0;i<oldName.length;i++){
+                        if(oldName.charAt(i)==']'){
+                            n++
+                            if(n==1){
+                                pre=oldName.slice(0,i+1)
+                            }
+                            if(n==2){
+                                next=oldName.slice(i+1)
+                            }
                         }
                     }
+                    _this.attr('name',pre+'['+index+']'+next);
                 }
-                _this.attr('name',pre+'['+index+']'+next);
             })
         },
         floatStyle: {
