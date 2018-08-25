@@ -60,16 +60,41 @@ class Timer
             foreach ($rows as $v){
 
                 //获取开赛的比赛项目
-                $sql_ = "select project_use_time,match_more,project_time_interval,project_start_time from {$wpdb->prefix}match_project where post_id = {$v['match_id']}  order by project_start_time desc ";
+                $sql_ = "select a.match_project_id,a.project_use_time,a.match_more,a.project_time_interval,a.project_start_time,a.child_count_down,b.meta_value as project_alias
+                         from {$wpdb->prefix}match_project a 
+                         left join {$wpdb->prefix}postmeta b on a.match_project_id = b.post_id AND meta_key = 'project_alias'
+                         where a.post_id = {$v['match_id']}  order by a.project_start_time desc ";
                 $results = $wpdb->get_results($sql_,ARRAY_A);
-
+                //var_dump($sql_);
                 //计算结束时间
                 if(!empty($results)){
                     $match_use_time = 0;
                     //var_dump($results);
                     foreach ($results as $val){
+                        if($val['project_alias'] == 'zxss'){
 
-                        $project_use_time = $val['project_use_time'] > 0 ? $val['project_use_time'] : $v['match_use_time'];
+                            $child_count_down = get_post_meta($val['match_project_id'],'child_count_down')[0];
+                            if($val['child_count_down'] > 0){
+                                $child_count_down['even_add'] = $val['child_count_down'];
+                                $child_count_down['add_and_subtract'] = $val['child_count_down'];
+                                $child_count_down['wax_and_wane'] = $val['child_count_down'];
+                            }elseif (!empty($child_count_down)){
+
+                                $child_count_down['even_add'] *= 1;
+                                $child_count_down['add_and_subtract'] *= 1;
+                                $child_count_down['wax_and_wane'] *= 1;
+                            }else{
+
+                                $child_count_down['even_add'] = 3;
+                                $child_count_down['add_and_subtract'] = 3;
+                                $child_count_down['wax_and_wane'] = 3;
+                            }
+                            $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+                            //print_r($project_use_time);
+                        }else{
+                            $project_use_time = $val['project_use_time'] > 0 ? $val['project_use_time'] : $v['match_use_time'];
+                        }
+
                         $match_more = $val['match_more'] > 0 ? $val['match_more'] : $v['match_more'];
                         $project_time_interval = $val['project_time_interval'] > 0 ? $val['project_time_interval'] : $v['match_subject_interval'];
 
