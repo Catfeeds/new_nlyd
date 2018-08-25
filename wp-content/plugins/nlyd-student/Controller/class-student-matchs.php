@@ -508,10 +508,10 @@ class Student_Matchs extends Student_Home
         //设置倒计时
 
         /*****测试使用*****/
-        if($_GET['test'] == 1){
+        /*if($_GET['test'] == 1){
             $this->redis->del($this->project_alias.'_question'.$current_user->ID);
             $this->redis->del('count_down'.$current_user->ID);
-        }
+        }*/
 
         $count_down = $this->redis->get('count_down'.$current_user->ID);
         //print_r($current_match_more);
@@ -656,9 +656,29 @@ class Student_Matchs extends Student_Home
 
             $data['child_count_down'] = $this->child_count_down;
 
+            /*leo_dump($this->redis->get('even_add'.$current_user->ID)-time());
+            leo_dump($this->redis->get('add_and_subtract'.$current_user->ID)-time());
+            leo_dump($this->redis->get('wax_and_wane'.$current_user->ID)-time());*/
+
+            if(!empty($this->redis->get('even_add'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('even_add'.$current_user->ID) - time();
+                $data['child_type'] = 0;
+
+            }elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('add_and_subtract'.$current_user->ID) - time();
+                $data['child_type'] = 1;
+
+            }elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID))){
+
+                $data['child_type_down'] = $this->redis->get('wax_and_wane'.$current_user->ID) - time();
+                $data['child_type'] = 2;
+            }
+            //$data['child_type'] = $this->redis->get('child_type'.$current_user->ID);
+
             //$data['child_count_down'] = 700;
         }
-
 
         //print_r($data);die;
         $view = student_view_path.'matchs/match-initial.php';
@@ -1727,9 +1747,9 @@ class Student_Matchs extends Student_Home
             if($this->project_alias == 'zxss'){
 
                 if($match_project['child_count_down'] > 0){
-                    $child_count_down['even_add'] = $this->child_count_down;
-                    $child_count_down['add_and_subtract'] = $this->child_count_down;
-                    $child_count_down['wax_and_wane'] = $this->child_count_down;
+                    $child_count_down['even_add'] = $match_project['child_count_down'] * 60;
+                    $child_count_down['add_and_subtract'] = $match_project['child_count_down'] * 60;
+                    $child_count_down['wax_and_wane'] = $match_project['child_count_down'] * 60;
                 }elseif (!empty($child_count_down)){
 
                     $child_count_down['even_add'] *= 60;
@@ -1741,6 +1761,27 @@ class Student_Matchs extends Student_Home
                     $child_count_down['add_and_subtract'] = 180;
                     $child_count_down['wax_and_wane'] = 180;
                 }
+
+                $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+
+                global $current_user;
+                $new_time = time();
+                $first_child = $child_count_down['even_add'];
+                $two_child = $first_child+$child_count_down['add_and_subtract'];
+                $three_child = $two_child+$child_count_down['wax_and_wane'];
+                if(empty($this->redis->get('even_add'.$current_user->ID)) && empty($this->redis->get('add_and_subtract'.$current_user->ID)) && empty($this->redis->get('wax_and_wane'.$current_user->ID)) ){
+                    $this->redis->setex('even_add'.$current_user->ID,$first_child,$first_child+$new_time);
+                    $first = true;
+                }
+                if($first){
+                    $this->redis->setex('add_and_subtract'.$current_user->ID,$two_child,$two_child+$new_time);
+                    $two = true;
+                }
+                if($two){
+                    $this->redis->setex('wax_and_wane'.$current_user->ID,$three_child,$three_child+$new_time);
+                }
+
+                //leo_dump($this->default_count_down);die;
             }else if($this->project_alias == 'kysm'){
 
                 if($match_project['child_count_down'] > 0){
@@ -1821,8 +1862,30 @@ class Student_Matchs extends Student_Home
         //print_r($this->match_start_time);
         //计算每个项目结束时间
         foreach ($rows as $k => $row){
+            //print_r($row);
+            if($row['project_alias'] == 'zxss'){
 
-            $project_use_time = $row['project_use_time'] > 0 ? $row['project_use_time'] : $this->match_count_down;
+                $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
+                if($row['child_count_down'] > 0){
+                    $child_count_down['even_add'] = $row['child_count_down'] * 60;
+                    $child_count_down['add_and_subtract'] = $row['child_count_down'] * 60;
+                    $child_count_down['wax_and_wane'] = $row['child_count_down'] * 60;
+                }elseif (!empty($child_count_down)){
+
+                    $child_count_down['even_add'] *= 60;
+                    $child_count_down['add_and_subtract'] *= 60;
+                    $child_count_down['wax_and_wane'] *= 60;
+                }else{
+
+                    $child_count_down['even_add'] = 180;
+                    $child_count_down['add_and_subtract'] = 180;
+                    $child_count_down['wax_and_wane'] = 180;
+                }
+                $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+                
+            }else{
+                $project_use_time = $row['project_use_time'] > 0 ? $row['project_use_time'] : $this->match_count_down;
+            }
             $match_more = $row['match_more'] > 0 ? $row['match_more'] : $this->match_more;
             $project_time_interval = $row['project_time_interval'] > 0 ? $row['project_time_interval'] : $this->match_subject_interval;
 

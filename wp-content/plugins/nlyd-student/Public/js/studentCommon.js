@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
     $('body').on('click','.share-bg',function(){
         $('.share-bg').css('display','none')
     })
-    function share(){//分享功能
+    share=function(){//分享功能
 
         if('ontouchstart' in window){//移动端
             if(isWeiXin() || isSarari()){

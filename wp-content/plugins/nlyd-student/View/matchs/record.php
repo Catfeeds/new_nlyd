@@ -16,9 +16,13 @@
         </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
+                   
+                    <div class="match-title c_black"><?=$match_title?>
                     <?php if($pay_status == 2):?>
-                    <div class="match-title c_black"><?=$match_title?><a class="share" id="shareBtn">分享我的战绩</a></div>
+                    <a class="share" id="shareBtn">分享我的战绩</a>
                     <?php endif;?>
+                </div>
+                   
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
                         <li class="layui-this">总排名</li>
