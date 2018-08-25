@@ -202,7 +202,7 @@ class Match
             'orderby' => 'ID',
         );
         $the_query = new WP_Query( $args );
-        if ( ! empty($the_query->posts) ) : ?>
+        if (!empty($the_query->posts)) : ?>
             <ul name="parent_id">
                 <?php
                 foreach ($the_query->posts as $v){
@@ -415,7 +415,7 @@ class Match
         //print_r($the_query->posts);
         if (!empty($the_query->posts)) {
             foreach ($the_query->posts as $k => $v){ ?>
-                <div class="layui-inline match_project" DR_drag="1" DR_replace="1">
+                <div class="layui-inline match_project">
                     <div class="layui-input-inline title">
                         <label class="layui-form-label">拖拽排序</label>
                     </div>
