@@ -52,7 +52,10 @@ p.tips{
 
                  <div class="count-wrapper">
                     <p class="tips fs_16">
-                        <?=$data['message']?><span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                        <?=$data['message']?>
+                        <?php if(!empty($start_count_down)):?>
+                        <span class="count_down" data-seconds="<?=$start_count_down?>">初始中...</span>
+                        <?php endif;?>
                     </p>
                     <?php if(!empty($data['match_url'])):?>
                     <a class="a-btn wait" href="<?=$data['match_url']?>">返回比赛详情</a>
