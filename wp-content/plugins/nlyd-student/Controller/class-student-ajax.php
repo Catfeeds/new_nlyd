@@ -414,8 +414,8 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
-
+                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                //var_dump($a);die;
                 break;
             default:
                 wp_send_json_error(array('info'=>'未知错误'));
