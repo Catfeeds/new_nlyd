@@ -78,3 +78,23 @@ p.tips{
         </div>           
     </div>
 </div>
+<script>
+jQuery(function($) { 
+    if($('.count_down').length>0){
+        if($('.count_down').attr('data-seconds')<=0){
+            window.location.href="<?=$match_url?>"
+        }
+        $('.count_down').countdown(function(S, d){//倒计时
+            var D=d.day>0 ? d.day+'天' : '';
+            var h=d.hour<10 ? '0'+d.hour : d.hour;
+            var m=d.minute<10 ? '0'+d.minute : d.minute;
+            var s=d.second<10 ? '0'+d.second : d.second;
+            var time=D+h+':'+m+':'+s;
+            $(this).text(time);
+            if(S<=0){//本轮比赛结束
+                window.location.href="<?=$match_url?>"
+            }
+        });
+    }
+})
+</script>
