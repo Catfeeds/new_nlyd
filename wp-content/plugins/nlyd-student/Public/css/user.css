@@ -141,29 +141,22 @@ line-height:45px;
     line-height: 45px;
     border-radius: 25px!important;
 }
+.layui-btn:focus{
+    background: -webkit-linear-gradient(#68AAFE, #4394F9);
+    background: -o-linear-gradient(#68AAFE, #4394F9);
+    background: -moz-linear-gradient(#68AAFE, #4394F9);
+    background: linear-gradient(#68AAFE, #4394F9);
+    opacity: 1;
+}
 .layui-form-item{
     position: relative;
 }
 .layui-form-item .layui-input-inline{
     width: 100%;
 }
-
-/* .inputIcon{
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 45px;
-    width: 45px;
-    line-height: 45px;
-    text-align: center;
-    z-index: 10;
-} */
-
-
 .submitBtn{
     width: 100%;
 }
-
 .getCodeBtn{
     position: absolute;
     top: 0;

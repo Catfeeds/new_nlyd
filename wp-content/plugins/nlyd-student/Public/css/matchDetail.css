@@ -1,6 +1,6 @@
 
 .content .nl-table td,.content table.nl-table{
-    border-color:rgba(245, 245, 245, 1);
+    border:none;
 }
 .content table.nl-table{
     border-bottom: none;
@@ -26,6 +26,7 @@
 
 .content .nl-table td{
     text-align: center;
+    padding: 5px 0;
 }
 .content ul.flow-default{
     width: 100%;

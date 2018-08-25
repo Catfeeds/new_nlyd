@@ -109,7 +109,11 @@ class Match
         <ul class="select-list">
             <?php if(!empty($this->problem)):?>
             <?php foreach ($this->problem as $k => $val){ ?>
-            <li class="select-li"><input class="select-checkBox" type="checkbox" name="problem[<?=$k?>][answer]" value="1" <?=$val['problem_answer'] == 1 ? 'checked' : '';?> ><input class="select-input" type="text" name="problem[<?=$k?>][select]" value="<?=$val['problem_select']?>"><span class="delSelect">删除</span></li>
+            <li class="select-li">
+                <input class="select-checkBox" type="checkbox" name="problem[<?=$k?>][answer]" value="1" <?=$val['problem_answer'] == 1 ? 'checked' : '';?> >
+                <input class="select-input" type="text" name="problem[<?=$k?>][select]" value="<?=$val['problem_select']?>">
+                <span class="delSelect">删除</span>
+            </li>
             <?php } ?>
             <?php endif;?>
             <!--<li><input type="checkbox" name="problem[0][answer]" value="1"><input type="text" name="problem[0][select]" value="大方"></li>
@@ -142,12 +146,14 @@ class Match
            // print_r($question);
         }
         ?>
-
-        <p>绑定题目
-            <select class="js-data-example-ajax" name="parent_id" style="width: 90%" data-action="get_question_list">
-                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
-            </select>
-        </p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">绑定题目</label>
+            <div class="layui-input-block">
+                <select class="js-data-example-ajax" name="parent_id" style="width: 100%" data-action="get_question_list">
+                    <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
 
     <?php }
 
@@ -158,8 +164,12 @@ class Match
     public function alias_meta_box(){
         $project_alias = get_post_meta($_GET['post'],'project_alias');
         ?>
-
-        <p>项目别名<input  value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>" type="text" name="project_alias"/></p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目别名</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>?>" name="project_alias" class="layui-input" placeholder="项目别名">
+            </div>
+        </div>
 
     <?php }
 
@@ -169,11 +179,34 @@ class Match
     public function child_count_down_meta_box(){
 
         if($this->alias =='zxss'){ ?>
-        <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为分</p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">连加运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['even_add'] ?>" name="child_count_down[even_add]" class="layui-input" placeholder="连加运算">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加减运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['add_and_subtract'] ?>" name="child_count_down[add_and_subtract]" class="layui-input" placeholder="加减运算">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">乘除运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['wax_and_wane'] ?>" name="child_count_down[wax_and_wane]" class="layui-input" placeholder="乘除运算">
+            </div>
+        </div>
+        <!-- <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为分</p>
         <p>加减运算<input  value="<?=$this->child_count_down['add_and_subtract']?>" type="text" name="child_count_down[add_and_subtract]"/>默认单位为分</p>
-        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p>
+        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p> -->
         <?php }else{ ?>
-        <p>子项比赛用时<input  value="<?=$this->child_count_down?>" type="text" name="child_count_down"/>默认单位为秒</p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子项比赛用时(秒)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down ?>" name="child_count_down" class="layui-input" placeholder="子项比赛用时">
+            </div>
+        </div>
         <?php }?>
     <?php }
 
@@ -183,8 +216,12 @@ class Match
     public function str_bit_set_meta_box(){ 
         
     ?>
-
-        <p>初始长度<input  value="<?=$this->default_str_length ?>" type="text" name="default_str_length"/></p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">初始长度</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->default_str_length ?>" name="default_str_length" class="layui-input" placeholder="初始长度">
+            </div>
+        </div>
 
     <?php }
 
@@ -219,11 +256,20 @@ class Match
     public function team_leader_meta_box($post){
         $team_leader = get_user_meta($this->team_meta['team_leader'],'user_real_name');
     ?>
-        <p>队长设置
+      
+    <div class="layui-form-item">
+        <label class="layui-form-label">队长设置</label>
+        <div class="layui-input-block">
+            <select style="width: 100%"  class="js-data-example-ajax" name="team[team_leader]" lay-search="" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>">
+                <?php if(!empty($team_leader)):?><option value="<?=$this->team_meta['team_leader']?>" selected="selected"><?=$team_leader[0]['real_name']?></option><?php endif;?>
+            </select>
+        </div>
+    </div>
+        <!-- <p>队长设置
             <select class="js-data-example-ajax" name="team[team_leader]" style="width: 90%" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>">
                 <?php if(!empty($team_leader)):?><option value="<?=$this->team_meta['team_leader']?>" selected="selected"><?=$team_leader[0]['real_name']?></option><?php endif;?>
             </select>
-        </p>
+        </p> -->
     <?php }
 
 
@@ -231,8 +277,13 @@ class Match
      * 战队最大人数设置box
      */
     public function team_number_meta_box(){ ?>
-
-        <p>最大人数<input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]"/></p>
+    <div class="layui-form-item">
+        <label class="layui-form-label">最大人数</label>
+        <div class="layui-input-block">
+            <input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]" class="layui-input" placeholder="加减运算"/>   
+        </div>
+    </div>
+        <!-- <p>最大人数<input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]"/></p> -->
 
     <?php }
 
@@ -245,8 +296,22 @@ class Match
         //print_r($rows);
         if ( ! empty($rows) ) :
             ?>
-            <label class="post-attributes-label" for="parent_id">国籍</label>
-            <select name="team[team_world]">
+            <div class="layui-form-item">
+                <label class="layui-form-label post-attributes-label" for="parent_id">国籍</label>
+                <div class="layui-input-block">
+                    <select class="" name="team[team_world]">
+                    <option value="">(选择国籍)</option>
+                    <?php
+                    foreach ($rows as $v){
+                        $selected = $this->team_meta['team_world'] == $v->title ? "selected":" ";
+                        echo '<option value="'.$v->title.'" '.$selected.'>'.$v->title.'</option>';
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+            <!-- <label class="post-attributes-label" for="parent_id">国籍</label>
+                <select name="team[team_world]">
                 <option value="">(选择国籍)</option>
                 <?php
                 foreach ($rows as $v){
@@ -254,18 +319,30 @@ class Match
                     echo '<option value="'.$v->title.'" '.$selected.'>'.$v->title.'</option>';
                 }
                 ?>
-            </select>
+            </select> -->
         <?php
         endif;
         $team_director = get_user_meta($this->team_meta['team_director'],'user_real_name');
         ?>
-
-        <p><label class="post-attributes-label" for="parent_id">战队口号</label><input  value="<?=$this->team_meta['team_slogan'];?>" type="text" name="team[team_slogan]"/></p>
-        <p>战队负责人
+        <div class="layui-form-item">
+            <label class="layui-form-label">战队口号</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->team_meta['team_slogan'];?>" name="team[team_slogan]" class="layui-input" placeholder="战队口号">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">战队负责人</label>
+            <div class="layui-input-block">
+                <select class="js-data-example-ajax" name="team[team_director]" style="width: 100%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
+                    <?php if(!empty($team_director)):?><option value="<?=$this->team_meta['team_slogan']?>" selected="selected"><?=$team_director[0]['real_name']?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
+        <!-- <p>战队负责人
             <select class="js-data-example-ajax" name="team[team_director]" style="width: 90%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
                 <?php if(!empty($team_director)):?><option value="<?=$this->team_meta['team_slogan']?>" selected="selected"><?=$team_director[0]['real_name']?></option><?php endif;?>
             </select>
-        </p>
+        </p> -->
 
     <?php }
 
