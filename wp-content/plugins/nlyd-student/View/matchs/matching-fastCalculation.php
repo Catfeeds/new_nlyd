@@ -390,7 +390,7 @@ jQuery(function($) {
         }
 
          $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-             // $.DelSession('match')
+             $.DelSession('match')
              if(res.success){
                  if(res.data.url){
                      window.location.href=res.data.url
