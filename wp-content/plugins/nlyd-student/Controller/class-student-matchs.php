@@ -749,7 +749,7 @@ class Student_Matchs extends Student_Home
 
         }
 
-        $count_down = $this->redis->get('count_down'.$current_user->ID);
+        $count_down = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
 
         $data = array(
             'match_title'=>$this->match_title,
@@ -801,7 +801,7 @@ class Student_Matchs extends Student_Home
         if($this->project_alias == 'szzb'){
             $data['str_length'] = $this->project_str_len;
         }
-        //print_r($data);
+        //print_r($data);die;
         $view = student_view_path.CONTROLLER.'/match-answer.php';
         load_view_template($view,$data);
     }
@@ -822,8 +822,8 @@ class Student_Matchs extends Student_Home
             $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
         }
         //清空题目
-        if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID);
+        if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
+            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
         }
 
 
@@ -935,6 +935,7 @@ class Student_Matchs extends Student_Home
                     }else{
                         $next_type = 3;
                     }
+                    //var_dump($next_type);
                 }
             }
             //print_r($next_match_project);
