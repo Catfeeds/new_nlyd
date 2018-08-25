@@ -8,7 +8,7 @@ Author: leo
 Author URI: --
 */
 if(!class_exists('MatchController')){
-    
+
     class MatchController{
 
         public $post_type;
@@ -308,9 +308,11 @@ if(!class_exists('MatchController')){
          * 标题列排序
          */
         function sort_postviews_column($columns) {
-
+            $columns['students'] = 'students';
             $columns['match_status'] = 'match_status';
-            $columns['data'] = 'post_data';
+//            $columns['cost'] = '报名费用';
+
+//            $columns['data'] = 'post_data';
 
             return $columns;
         }
@@ -323,11 +325,19 @@ if(!class_exists('MatchController')){
                 $columns['students'] = '查看成员';
                 return $columns;
             }
+            unset( $columns['date'] );
             $columns['match_status'] = '状态';
             $columns['author'] = '发布人';
+            $columns['students'] = '报名学员';
+            $columns['slogan'] = '口号';
+            $columns['times'] = '比赛时间';
+            $columns['time_slot'] = '报名时间段';
+            $columns['match_address'] = '比赛地点';
+            $columns['cost'] = '报名费用';
+            $columns['match_type'] = '比赛类型';
+            $columns['date'] = '创建日期';
+            $columns['options'] = '操作';
 
-            /*$columns['data'] = '日期';
-            unset( $columns['date'] );*/
             return $columns;
 
         }
@@ -336,9 +346,8 @@ if(!class_exists('MatchController')){
          */
         public function manage_match_columns($column_name, $id){
             global $wpdb;
-            switch ($column_name){
-                case 'match_status':
-                    $sql = "select 
+            $sql = "select 
+                            match_slogan,match_genre,match_start_time,entry_start_time,entry_end_time,match_address,match_cost,
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 
@@ -348,15 +357,45 @@ if(!class_exists('MatchController')){
                             end match_status_cn  
                             from {$wpdb->prefix}match_meta   where match_id = {$id} 
                             ";
-                    $row = $wpdb->get_row($sql,ARRAY_A);
-
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            switch ($column_name){
+                case 'match_status':
                     echo $row['match_status_cn'];
                     break;
-                case 'students':
-                    echo '<a href="?post_type=team&page=team-student&id='.$id.'">查看成员</a>';
+                case 'slogan':
+                    echo $row['match_slogan'];
                     break;
-                case 'titles':
-                    echo '<a href="">查看成员</a>';
+                case 'times':
+                    echo $row['match_start_time'];
+                    break;
+                case 'time_slot':
+                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
+                    break;
+                case 'match_address':
+                    echo $row['match_address'];
+                    break;
+                case 'cost':
+                    echo $row['match_cost'];
+                    break;
+                case 'students':
+                    echo '<a>查看学员</a>';
+                    break;
+                case 'match_type':
+                    $args = array(
+                        'post_type' => array('genre'),
+                        'post_status' => array('publish'),
+                        'order' => 'DESC',
+                    );
+                    $the_query = new WP_Query( $args );
+                    $str = '-';
+                    foreach ($the_query->posts as $v){
+                        if($row['match_genre'] == $v->ID) $str = $v->post_title;
+                    }
+                    echo $str;
+                    break;
+                case 'options':
+                    //删除比赛必须要先关闭比赛
+                    echo '<a href="post.php?post='.$id.'&action=edit">查看详情</a> | <a>关闭比赛</a> | <a>删除比赛</a>';
                     break;
                 default:
                     break;

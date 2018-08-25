@@ -70,7 +70,8 @@ jQuery(function($) {
     // var add_and_subtract_time = 2; //加减
     // var wax_and_wane_time = 2000; //乘除
     var level={number:2,symbol:1},//题目难度
-    n_type=0,
+    n_type=<?=$child_type?>,
+    child_type_down=<?=$child_type_down?>,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
