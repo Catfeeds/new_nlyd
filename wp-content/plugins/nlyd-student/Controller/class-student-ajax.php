@@ -1023,7 +1023,7 @@ class Student_Ajax
                 $categoryArr = ['read', 'memory', 'compute'];
                 foreach ($categoryArr as $cateK => $cate){
 //                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title,mc.major FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
-                      $readApply = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$val[$cate]);
+//                      $readApply = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$val[$cate]);
                         switch ($cate){
                             case 'read':
                                 $post_title = '速读类';
@@ -1044,7 +1044,7 @@ class Student_Ajax
                         $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
                         $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
                         $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
-                    if($readApply){
+                    if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
                         $rows[$k]['category'][$cateK]['is_current'] = 'true';//此教练是否在当前分类
                         $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate].' AND user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
                         if($coachStudent){

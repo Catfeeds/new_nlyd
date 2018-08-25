@@ -65,7 +65,7 @@ class Student_Teams
         $arr = ['read' => '速读类', 'memory' => '速记类', 'compute' => '速算类'];
         $k = 0;
         foreach ($arr as $ak => $ar){
-            $readApply = $wpdb->get_row('SELECT post_title,ID FROM '.$wpdb->prefix.'posts WHERE ID='.$rows[$ak]);
+//            $readApply = $wpdb->get_row('SELECT post_title,ID FROM '.$wpdb->prefix.'posts WHERE ID='.$rows[$ak]);
             $rows['category'][$k]['name'] = $ak;
             $rows['category'][$k]['post_title'] = $ar;
             $rows['category'][$k]['category_id'] = $rows[$ak];
@@ -75,9 +75,9 @@ class Student_Teams
             $rows['category'][$k]['is_my_major'] = false; //是否是主训
             $rows['category'][$k]['is_relieve'] = false; //是否已解除
             $rows['category'][$k]['is_refuse'] = false;//是否已拒绝
-            if($readApply){
+            if($rows[$ak] != 0 && $rows[$ak] != null){
                 $rows['category'][$k]['is_current'] = true;//此教练是否在当前分类
-                $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$readApply->ID.' AND user_id='.$current_user->ID.' AND coach_id='.$_GET['coach_id']);
+                $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$ak].' AND user_id='.$current_user->ID.' AND coach_id='.$_GET['coach_id']);
                 if($coachStudent){
                     switch ($coachStudent->apply_status){
                         case 1://申请中
@@ -132,7 +132,7 @@ class Student_Teams
         $where = "`read`={$category_id} or memory={$category_id} or compute={$category_id}";
         $sql = "select count(id) as len from {$wpdb->prefix}coach_skill where {$where}";
         $count = $wpdb->get_row($sql);
-        $data = array('category'=>$category,'coachCount' => $count->len,'action'=>'coachList');
+        $data = array('category'=>$category,'coachCount' => $count->len,'action'=>'coachList','category_id'=>$category_id);
         $view = student_view_path.CONTROLLER.'/coachList.php';
         load_view_template($view,$data);
     }
@@ -159,7 +159,7 @@ class Student_Teams
         $count = $wpdb->get_row($sql);
 
         $view = student_view_path.CONTROLLER.'/coachList.php';
-        load_view_template($view,array('category'=>$category,'user_id'=>$current_user->ID, 'coachCount' => $count->len,'action'=>'myCoach'));
+        load_view_template($view,array('category'=>$category,'category_id' => $category_id,'user_id'=>$current_user->ID, 'coachCount' => $count->len,'action'=>'myCoach'));
     }
 
 

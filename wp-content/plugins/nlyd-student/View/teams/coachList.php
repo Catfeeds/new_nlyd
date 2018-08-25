@@ -565,7 +565,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 var flag='<?=$action ?>';
                                 if(flag.length>0){
                                     var text=$('.layui-this').text();
-                                    var dom='<a class="a-btn" href="<?=isset($_GET['match_id']) ? home_url('/teams/coachList/category_id/'.$_GET['category_id'].'/match_id/'.$_GET['match_id'].'/back/1') : home_url('/teams/coachList/category_id/'.$_GET['category_id'].'/back/1');?>">设置我的'+text+'教练</a>'
+                                    var dom='<a class="a-btn" href="<?=isset($_GET['match_id']) ? home_url('/teams/coachList/category_id/'.$category_id.'/match_id/'.$_GET['match_id'].'/back/1') : home_url('/teams/coachList/category_id/'.$category_id.'/back/1');?>">设置我的'+text+'教练</a>'
                                 }
                                 lis.push(dom) 
                             }
