@@ -542,6 +542,40 @@ class Match_Ajax
             wp_send_json_error(['info' => '操作失败']);
         }
     }
+
+    /**
+     * 关闭比赛
+     */
+    public function closeMatch(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        //移入回收站
+        if(wp_trash_post($id)){
+            wp_send_json_success(['info' => '关闭成功']);
+        }else{
+            wp_send_json_error(['info' => '关闭失败']);
+        }
+    }
+
+    /**
+     * 删除比赛
+     */
+    public function delMatch(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        //判断是否是已关闭的比赛(回收站中的)
+        $post = get_post($id);
+        if($post->post_status == 'trash'){
+            //删除post
+            if(wp_delete_post($id)){
+                wp_send_json_success(['info' => '比赛已删除']);
+            }else{
+                wp_send_json_error(['info' => '删除失败']);
+            }
+        }else{
+            wp_send_json_error(['info' => '请先关闭比赛']);
+        }
+    }
 }
 
 new Match_Ajax();

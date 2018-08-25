@@ -104,6 +104,13 @@ class Match
 
     }
 
+    /**
+     * 关闭和删除比赛
+     */
+    public function closeOrDelMatch(){
+        var_dump(111);
+    }
+
 
     /**
      * 问题设置box

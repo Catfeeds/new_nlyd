@@ -31,6 +31,9 @@ if(!class_exists('MatchController')){
 
         public function Yct_Row_actions( $actions, $post )
         {
+//            unset($actions['inline hide-if-no-js']);
+            unset($actions['trash']);
+            unset($actions['view']);
             return $actions;
         }
         public function main(){
@@ -1051,6 +1054,8 @@ if(!class_exists('MatchController')){
                 wp_enqueue_script( 'team_leader' );
                 wp_register_style( 'match_css',match_css_url.'match/match.css','', leo_match_version  );
                 wp_enqueue_style( 'match_css' );
+                wp_register_script( 'match-lists',match_js_url.'match-lists.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'match-lists' );
             }
             /*
             wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
