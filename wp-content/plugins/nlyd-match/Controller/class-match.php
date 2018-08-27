@@ -20,6 +20,7 @@ class Match
 
     public function __construct()
     {
+
         if(isset($_GET['post']) && $_GET['action'] == 'edit'){
 
             global $wpdb;
