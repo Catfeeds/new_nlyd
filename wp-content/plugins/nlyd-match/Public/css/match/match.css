@@ -1,0 +1,14 @@
+span.layui-input{
+    line-height: 38px;
+    border-color: transparent
+}
+span.layui-input:hover{
+    border-color: transparent!important;
+}
+dive.layui-input{
+    line-height: 38px;
+    border-color: transparent
+}
+dive.layui-input:hover{
+    border-color: transparent!important;
+}

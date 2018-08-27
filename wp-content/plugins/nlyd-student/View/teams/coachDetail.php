@@ -1,4 +1,3 @@
-<!-- 比赛详情 -->
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

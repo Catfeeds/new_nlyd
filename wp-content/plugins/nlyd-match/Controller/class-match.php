@@ -108,7 +108,13 @@ class Match
      * 比赛开关控制
      */
     public function match_switch_meta_box(){ ?>
-        自动发布 <input type="checkbox" value="on" name="match_switch" />
+      <div class="layui-form-item" pane="">
+        <label class="layui-form-label" style="text-align:left">自动发布</label>
+        <div class="layui-input-block">
+            <input type="checkbox" checked name="open" lay-skin="switch"  name="match_switch" value="on"  lay-text="是|否">
+        </div>
+    </div>
+        <!-- 自动发布 <input type="checkbox" value="on" name="match_switch" /> -->
     <?php }
 
     /**
@@ -413,7 +419,7 @@ class Match
             <label class="layui-form-label">比赛类型</label>
             <div class="layui-input-block">
             <?php if(!empty($the_query->post)){ ?>
-                <select name="match[match_genre]">
+                <select name="match[match_genre]" lay-search="">
                     <option value="">请选择</option>
                     <?php
                     foreach ($the_query->posts as $v){
