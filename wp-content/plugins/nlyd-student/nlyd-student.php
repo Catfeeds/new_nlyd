@@ -20,9 +20,10 @@ if(!class_exists('StudentController')){
         public $wait_match = array();
         public function __construct()
         {
-
+            //var_dump(date('Y-m-d H:i:s',time()));
             //设置时区
-            date_default_timezone_set('Asia/Shanghai');
+            //date_default_timezone_set('Asia/Shanghai');
+            //var_dump(phpinfo());
 
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );

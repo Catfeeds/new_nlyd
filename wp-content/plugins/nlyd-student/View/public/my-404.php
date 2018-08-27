@@ -72,7 +72,7 @@ p.tips{
 jQuery(function($) { 
     if($('.count_down').length>0){
         if($('.count_down').attr('data-seconds')<=0){
-            window.location.href="<?=$match_url?>"
+            window.location.reload();
         }
         $('.count_down').countdown(function(S, d){//倒计时
             var D=d.day>0 ? d.day+'天' : '';
@@ -82,7 +82,7 @@ jQuery(function($) {
             var time=D+h+':'+m+':'+s;
             $(this).text(time);
             if(S<=0){//本轮比赛结束
-                window.location.href="<?=$match_url?>"
+                window.location.reload();
             }
         });
     }
