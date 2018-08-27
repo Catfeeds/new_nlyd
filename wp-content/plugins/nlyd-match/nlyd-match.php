@@ -515,6 +515,7 @@ if(!class_exists('MatchController')){
 
                     unset($match_meta['match_project']);
 
+                    //查询是否发布了比赛信息
                     //var_dump($match_meta);die;
                     $wpdb->delete($wpdb->prefix.'match_meta',array('match_id'=>$post_ID));
                     $a = $wpdb->insert($wpdb->prefix.'match_meta',$match_meta);
@@ -616,6 +617,12 @@ if(!class_exists('MatchController')){
                 case 'match-category':
 
                     if($this->post_type == 'match'){
+
+                        add_meta_box( 'switch_meta_box',
+                            '比赛发布开关',
+                            array($this->match,'match_switch_meta_box'),
+                            $this->post_type, 'side'
+                        );
 
                         add_meta_box( 'slogan_meta_box',
                             '口号类型设置',

@@ -104,6 +104,12 @@ class Match
 
     }
 
+    /**
+     * 比赛开关控制
+     */
+    public function match_switch_meta_box(){ ?>
+        自动发布 <input type="checkbox" value="on" name="match_switch" />
+    <?php }
 
     /**
      * 问题设置box
@@ -449,38 +455,37 @@ class Match
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">比赛状态</label>
-            <span>
+
+            <div class="layui-input-block">
                 <?php
-                    switch ($this->meta['match_status']) {
-                        case -3:
-                            $text = '已结束';
-                            break;
-                        case -2:
-                            $text = '等待开赛';
-                            break;
-                        case -1:
-                            $text = '未开始';
-                            break;
-                        case 1:
-                            $text = '报名中';
-                            break;
-                        case 2:
-                            $text = '进行中';
-                            break;
-                        default:
-                            $text = '未开始';
-                            break;
-                    }
-                    echo $text;
+                switch ($this->meta['match_status']) {
+                    case -3:
+                        $text = '已结束';
+                        break;
+                    case -2:
+                        $text = '等待开赛';
+                        break;
+                    case -1:
+                        $text = '未开始';
+                        break;
+                    case 1:
+                        $text = '报名中';
+                        break;
+                    case 2:
+                        $text = '进行中';
+                        break;
+                    default:
+                        $text = '未开始';
+                        break;
+                }
                 ?>
-            </span>
-            <!--<div class="layui-input-block">
-                <input title="已结束" type="radio" name="match[match_status]" value="-3" <?/*=$this->meta['match_status'] == -3?'checked':'';*/?> >
+                <span class="layui-input"><?=$text?></span>
+                <!--<input title="已结束" type="radio" name="match[match_status]" value="-3" <?/*=$this->meta['match_status'] == -3?'checked':'';*/?> >
                 <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?/*=$this->meta['match_status'] == -2?'checked':'';*/?> >
                 <input title="未开始" type="radio" name="match[match_status]" value="-1" <?/*=$this->meta['match_status'] == -1 || empty($this->meta['match_status'])?'checked':'';*/?> >
                 <input title="报名中" type="radio" name="match[match_status]" value="1" <?/*=$this->meta['match_status'] == 1?'checked':'';*/?> >
-                <input title="进行中" type="radio" name="match[match_status]" value="2" <?/*=$this->meta['match_status'] == 2?'checked':'';*/?> >
-            </div>-->
+                <input title="进行中" type="radio" name="match[match_status]" value="2" <?/*=$this->meta['match_status'] == 2?'checked':'';*/?> >-->
+            </div>
         </div>
     <?php }
 
