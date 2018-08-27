@@ -16,15 +16,27 @@ jQuery(document).ready(function($) {
         lastTouchEnd = now;
         }, false);
     }
-    function isIos(){
+    addcamera=function(){
         var u = navigator.userAgent, app = navigator.appVersion;  
-        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器  
+        var isAndroid = u.indexOf('Android') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
-        //alert('是否是Android：'+isAndroid);  
-        //alert('是否是iOS：'+isiOS);
-         if(isAndroid){
-            $("input[type='file']").attr('capture','camera');
+         if(navigator.userAgent.indexOf('UCBrowser') > -1) { 
+            if(isAndroid){//
+                // alert('isAndroid UC')
+            }
+            if(isiOS){
+                // alert('isiOS UC')
+            }
+         }else{
+            if(isAndroid){
+                // alert('isAndroid')
+                $("input[type='file']").attr('capture','camera');
+            }
+            if(isiOS){
+                // alert('isiOS')
+            }
          }
+         
     }
    
     function initHeight(){
@@ -188,5 +200,5 @@ jQuery(document).ready(function($) {
     } 
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
-    isIos()
+    addcamera()
 })
