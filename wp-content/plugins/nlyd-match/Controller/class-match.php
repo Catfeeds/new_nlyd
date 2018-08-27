@@ -12,8 +12,6 @@ class Match
     private $meta;
     private $project;
     private $team_meta;
-    private $temp_key;
-    private $post_array;
     private $problem;
     private $alias;
     private $child_count_down;
@@ -54,25 +52,21 @@ class Match
                 switch ($post_type){
                     case 'match':
                         //获取比赛选项
-                        $sql = " select a.id,a.post_id,a.match_project_id ID,
-                                  if(a.project_use_time < 1,'',a.project_use_time) project_use_time, 
-                                  if(a.match_more < 1,'',a.match_more) match_more,
-                                  if(unix_timestamp(a.project_start_time) > 1,a.project_start_time,'') project_start_time, 
-                                  if(a.project_washing_out < 1,'',a.project_washing_out) project_washing_out, 
-                                  if(a.project_time_interval < 1,'',a.project_time_interval) project_time_interval,
-                                  if(a.str_bit < 1,'',a.str_bit) str_bit,
-                                  if(child_count_down < 1,'',child_count_down) child_count_down,
-                                  b.post_title
-                                  from {$wpdb->prefix}match_project a
-                                  left join {$wpdb->prefix}posts b on a.match_project_id = b.ID
-                                  where a.post_id = {$_GET['post']} order by a.id asc
+                        $sql = " select id,post_id,match_project_id,
+                                  if(project_use_time < 1,'',project_use_time) project_use_time, 
+                                  if(match_more < 1,'',match_more) match_more,
+                                  if(unix_timestamp(project_start_time) > 1,project_start_time,'') project_start_time, 
+                                  if(project_washing_out < 1,'',project_washing_out) project_washing_out, 
+                                  if(project_time_interval < 1,'',project_time_interval) project_time_interval,
+                                  if(str_bit < 1,'',str_bit) str_bit,
+                                  if(child_count_down < 1,'',child_count_down) child_count_down
+                                  from {$wpdb->prefix}match_project where post_id = {$_GET['post']}
                                ";
                         //print_r($sql);
                         $rows = $wpdb->get_results($sql,ARRAY_A);
-                        //$this->temp_key = array_column($rows,'match_project_id');
-                        $this->temp_key = array_column($rows,'ID');
-                        $match_project = array_combine($this->temp_key,$rows) ;
-                        //print_r($this->temp_key );
+                        $temp_key = array_column($rows,'match_project_id');
+                        $match_project = array_combine($temp_key,$rows) ;
+                        //print_r($match_project );
                         $this->project = $match_project;
                         break;
                     case 'project':
@@ -104,20 +98,6 @@ class Match
 
     }
 
-    /**
-     * 已报名学员列表
-     */
-    public function enrollStudent(){
-        var_dump(111);
-    }
-
-    /**
-     * 关闭和删除比赛
-     */
-    public function closeOrDelMatch(){
-//        var_dump(111);
-    }
-
 
     /**
      * 问题设置box
@@ -129,7 +109,11 @@ class Match
         <ul class="select-list">
             <?php if(!empty($this->problem)):?>
             <?php foreach ($this->problem as $k => $val){ ?>
-            <li class="select-li"><input class="select-checkBox" type="checkbox" name="problem[<?=$k?>][answer]" value="1" <?=$val['problem_answer'] == 1 ? 'checked' : '';?> ><input class="select-input" type="text" name="problem[<?=$k?>][select]" value="<?=$val['problem_select']?>"><span class="delSelect">删除</span></li>
+            <li class="select-li">
+                <input class="select-checkBox" type="checkbox" name="problem[<?=$k?>][answer]" value="1" <?=$val['problem_answer'] == 1 ? 'checked' : '';?> >
+                <input class="select-input" type="text" name="problem[<?=$k?>][select]" value="<?=$val['problem_select']?>">
+                <span class="delSelect">删除</span>
+            </li>
             <?php } ?>
             <?php endif;?>
             <!--<li><input type="checkbox" name="problem[0][answer]" value="1"><input type="text" name="problem[0][select]" value="大方"></li>
@@ -162,12 +146,14 @@ class Match
            // print_r($question);
         }
         ?>
-
-        <p>绑定题目
-            <select class="js-data-example-ajax" name="parent_id" style="width: 90%" data-action="get_question_list">
-                <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
-            </select>
-        </p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">绑定题目</label>
+            <div class="layui-input-block">
+                <select class="js-data-example-ajax" name="parent_id" style="width: 100%" data-action="get_question_list">
+                    <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
 
     <?php }
 
@@ -178,8 +164,12 @@ class Match
     public function alias_meta_box(){
         $project_alias = get_post_meta($_GET['post'],'project_alias');
         ?>
-
-        <p>项目别名<input  value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>" type="text" name="project_alias"/></p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目别名</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>?>" name="project_alias" class="layui-input" placeholder="项目别名">
+            </div>
+        </div>
 
     <?php }
 
@@ -189,11 +179,34 @@ class Match
     public function child_count_down_meta_box(){
 
         if($this->alias =='zxss'){ ?>
-        <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为分</p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">连加运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['even_add'] ?>" name="child_count_down[even_add]" class="layui-input" placeholder="连加运算">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">加减运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['add_and_subtract'] ?>" name="child_count_down[add_and_subtract]" class="layui-input" placeholder="加减运算">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">乘除运算(分)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down['wax_and_wane'] ?>" name="child_count_down[wax_and_wane]" class="layui-input" placeholder="乘除运算">
+            </div>
+        </div>
+        <!-- <p>连加运算<input  value="<?=$this->child_count_down['even_add']?>" type="text" name="child_count_down[even_add]"/>默认单位为分</p>
         <p>加减运算<input  value="<?=$this->child_count_down['add_and_subtract']?>" type="text" name="child_count_down[add_and_subtract]"/>默认单位为分</p>
-        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p>
+        <p>乘除运算<input  value="<?=$this->child_count_down['wax_and_wane']?>" type="text" name="child_count_down[wax_and_wane]"/>默认单位为分</p> -->
         <?php }else{ ?>
-        <p>子项比赛用时<input  value="<?=$this->child_count_down?>" type="text" name="child_count_down"/>默认单位为秒</p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子项比赛用时(秒)</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->child_count_down ?>" name="child_count_down" class="layui-input" placeholder="子项比赛用时">
+            </div>
+        </div>
         <?php }?>
     <?php }
 
@@ -203,8 +216,12 @@ class Match
     public function str_bit_set_meta_box(){ 
         
     ?>
-
-        <p>初始长度<input  value="<?=$this->default_str_length ?>" type="text" name="default_str_length"/></p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">初始长度</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->default_str_length ?>" name="default_str_length" class="layui-input" placeholder="初始长度">
+            </div>
+        </div>
 
     <?php }
 
@@ -239,11 +256,20 @@ class Match
     public function team_leader_meta_box($post){
         $team_leader = get_user_meta($this->team_meta['team_leader'],'user_real_name');
     ?>
-        <p>队长设置
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">队长设置</label>
+        <div class="layui-input-block">
+            <select style="width: 100%"  class="js-data-example-ajax" name="team[team_leader]" lay-search="" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>">
+                <?php if(!empty($team_leader)):?><option value="<?=$this->team_meta['team_leader']?>" selected="selected"><?=$team_leader[0]['real_name']?></option><?php endif;?>
+            </select>
+        </div>
+    </div>
+        <!-- <p>队长设置
             <select class="js-data-example-ajax" name="team[team_leader]" style="width: 90%" data-action="getMemberByWhere" data-type="team_leader" team-id="<?=$post->ID?>">
                 <?php if(!empty($team_leader)):?><option value="<?=$this->team_meta['team_leader']?>" selected="selected"><?=$team_leader[0]['real_name']?></option><?php endif;?>
             </select>
-        </p>
+        </p> -->
     <?php }
 
 
@@ -251,8 +277,13 @@ class Match
      * 战队最大人数设置box
      */
     public function team_number_meta_box(){ ?>
-
-        <p>最大人数<input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]"/></p>
+    <div class="layui-form-item">
+        <label class="layui-form-label">最大人数</label>
+        <div class="layui-input-block">
+            <input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]" class="layui-input" placeholder="加减运算"/>
+        </div>
+    </div>
+        <!-- <p>最大人数<input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]"/></p> -->
 
     <?php }
 
@@ -265,8 +296,22 @@ class Match
         //print_r($rows);
         if ( ! empty($rows) ) :
             ?>
-            <label class="post-attributes-label" for="parent_id">国籍</label>
-            <select name="team[team_world]">
+            <div class="layui-form-item">
+                <label class="layui-form-label post-attributes-label" for="parent_id">国籍</label>
+                <div class="layui-input-block">
+                    <select class="" name="team[team_world]">
+                    <option value="">(选择国籍)</option>
+                    <?php
+                    foreach ($rows as $v){
+                        $selected = $this->team_meta['team_world'] == $v->title ? "selected":" ";
+                        echo '<option value="'.$v->title.'" '.$selected.'>'.$v->title.'</option>';
+                    }
+                    ?>
+                    </select>
+                </div>
+            </div>
+            <!-- <label class="post-attributes-label" for="parent_id">国籍</label>
+                <select name="team[team_world]">
                 <option value="">(选择国籍)</option>
                 <?php
                 foreach ($rows as $v){
@@ -274,18 +319,30 @@ class Match
                     echo '<option value="'.$v->title.'" '.$selected.'>'.$v->title.'</option>';
                 }
                 ?>
-            </select>
+            </select> -->
         <?php
         endif;
         $team_director = get_user_meta($this->team_meta['team_director'],'user_real_name');
         ?>
-
-        <p><label class="post-attributes-label" for="parent_id">战队口号</label><input  value="<?=$this->team_meta['team_slogan'];?>" type="text" name="team[team_slogan]"/></p>
-        <p>战队负责人
+        <div class="layui-form-item">
+            <label class="layui-form-label">战队口号</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->team_meta['team_slogan'];?>" name="team[team_slogan]" class="layui-input" placeholder="战队口号">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">战队负责人</label>
+            <div class="layui-input-block">
+                <select class="js-data-example-ajax" name="team[team_director]" style="width: 100%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
+                    <?php if(!empty($team_director)):?><option value="<?=$this->team_meta['team_slogan']?>" selected="selected"><?=$team_director[0]['real_name']?></option><?php endif;?>
+                </select>
+            </div>
+        </div>
+        <!-- <p>战队负责人
             <select class="js-data-example-ajax" name="team[team_director]" style="width: 90%" data-action="getMemberByWhere" data-type="team_director" team-id="<?=$post->ID?>">
                 <?php if(!empty($team_director)):?><option value="<?=$this->team_meta['team_slogan']?>" selected="selected"><?=$team_director[0]['real_name']?></option><?php endif;?>
             </select>
-        </p>
+        </p> -->
 
     <?php }
 
@@ -334,34 +391,31 @@ class Match
         );
         $the_query = new WP_Query( $args );
     ?>
-   
-        <div class="layui-block">
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛口号</label>
             <div class="layui-input-block">
-                <input  class="layui-input" value="<?=$this->meta['match_slogan'];?>" type="text" name="match[match_slogan]" placeholder="比赛口号"/>
+            <input placeholder="比赛口号" class="layui-input" value="<?=$this->meta['match_slogan'];?>" type="text" name="match[match_slogan]">
             </div>
         </div>
-        <form>
-            <div class="layui-block">
-                <label class="layui-form-label">比赛类型</label>
-                <div class="layui-input-inline">
-                <?php if(!empty($the_query->post)){ ?>
-                    <select name="match[match_genre]">
-                        <option value="">请选择</option>
-                        <?php
-                        foreach ($the_query->posts as $v){
-                            $selected = $v->ID == $this->meta['match_genre'] ? "selected":" ";
-                            echo '<option value="'.$v->ID.'" '.$selected.'>'.$v->post_title.'</option>';
-                        }
-                        ?>
-                    </select>
-                <?php }else{ ?>
-                    <b>暂无类型</b>
-                    <a href="post-new.php?post_type=genre">去添加</a>
-                <?php }?>
-                </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛类型</label>
+            <div class="layui-input-block">
+            <?php if(!empty($the_query->post)){ ?>
+                <select name="match[match_genre]">
+                    <option value="">请选择</option>
+                    <?php
+                    foreach ($the_query->posts as $v){
+                        $selected = $v->ID == $this->meta['match_genre'] ? "selected":" ";
+                        echo '<option value="'.$v->ID.'" '.$selected.'>'.$v->post_title.'</option>';
+                    }
+                    ?>
+                </select>
+            <?php }else{ ?>
+                <b>暂无类型</b>
+                <a href="post-new.php?post_type=genre">去添加</a>
+            <?php }?>
             </div>
-        </form>
+        </div>
     <?php }
 
 
@@ -369,31 +423,34 @@ class Match
      * 比赛时间box
      */
     public function time_review_meta_box($post){?>
-        <div class="layui-inline">
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input date-picker" id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
-        <div class="layui-inline">
+        <div class="layui-form-item">
             <label class="layui-form-label">报名开始时间</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="text" value="<?=$this->meta['entry_start_time']?>" name="match[entry_start_time]" class="layui-input date-picker" id="entry_start_time" placeholder="报名开始时间">
             </div>
         </div>
-        <div class="layui-inline">
+        <div class="layui-form-item">
             <label class="layui-form-label">报名结束时间</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" id="entry_end_time" placeholder="报名结束时间">
             </div>
         </div>
-        <p>比赛状态
-            <input type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >已结束
-            <input type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >等待开赛
-            <input type="radio" name="match[match_status]" value="-1" <?=$this->meta['match_status'] == -1 || empty($this->meta['match_status'])?'checked':'';?> >未开始
-            <input type="radio" name="match[match_status]" value="1" <?=$this->meta['match_status'] == 1?'checked':'';?> >报名中
-            <input type="radio" name="match[match_status]" value="2" <?=$this->meta['match_status'] == 2?'checked':'';?> >进行中
-        </p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛状态</label>
+            <div class="layui-input-block">
+                <input title="已结束" type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >
+                <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >
+                <input title="未开始" type="radio" name="match[match_status]" value="-1" <?=$this->meta['match_status'] == -1 || empty($this->meta['match_status'])?'checked':'';?> >
+                <input title="报名中" type="radio" name="match[match_status]" value="1" <?=$this->meta['match_status'] == 1?'checked':'';?> >
+                <input title="进行中" type="radio" name="match[match_status]" value="2" <?=$this->meta['match_status'] == 2?'checked':'';?> >
+            </div>
+        </div>
     <?php }
 
 
@@ -401,10 +458,24 @@ class Match
      * 地点费用设置box
      */
     public function address_review_meta_box(){ ?>
-
-        <p>比赛地点<input  value="<?=$this->meta['match_address']?>" type="text" name="match[match_address]"/></p>
-        <p>比赛费用<input  value="<?=$this->meta['match_cost']?>" type="text" name="match[match_cost]"/></p>
-        <p>最多参与人数<input  value="<?=$this->meta['match_max_number']?>" type="text" name="match[match_max_number]"/></p>
+    <div class="layui-form-item">
+        <label class="layui-form-label">比赛地点</label>
+        <div class="layui-input-block">
+            <input placeholder="比赛地点" class="layui-input" value="<?=$this->meta['match_address']?>" type="text" name="match[match_address]">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">比赛费用</label>
+        <div class="layui-input-block">
+        <input placeholder="比赛费用" class="layui-input" value="<?=$this->meta['match_cost']?>" type="text" name="match[match_cost]">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">最多参与人数</label>
+        <div class="layui-input-block">
+        <input placeholder="最多参与人数" class="layui-input" value="<?=$this->meta['match_max_number']?>" type="text" name="match[match_max_number]">
+        </div>
+    </div>
 
     <?php }
 
@@ -412,23 +483,32 @@ class Match
      * 比赛间隔box
      */
     public function interval_review_meta_box(){ ?>
-
-        <p>比赛用时<input  value="<?=$this->meta['match_use_time']?>" type="text" name="match[match_use_time]"/><span>默认单位为分钟</span></p>
-        <p>比赛轮数<input  value="<?=$this->meta['match_more']?>" type="text" name="match[match_more]"/></p>
-        <p>项目间隔<input  value="<?=$this->meta['match_project_interval']?>" type="text" name="match[match_project_interval]"/><span>默认单位为分钟</span></p>
-        <p>每轮题间隔<input  value="<?=$this->meta['match_subject_interval']?>" type="text" name="match[match_subject_interval]"/><span>默认单位为分钟</span></p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛用时(分)</label>
+            <div class="layui-input-block">
+                <input  value="<?=$this->meta['match_use_time']?>" type="text" name="match[match_use_time]" placeholder="比赛用时"  class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛轮数</label>
+            <div class="layui-input-block">
+                <input  value="<?=$this->meta['match_more']?>" type="text" name="match[match_more]" placeholder="比赛轮数"  class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目间隔(分)</label>
+            <div class="layui-input-block">
+                <input  value="<?=$this->meta['match_project_interval']?>" type="text" name="match[match_project_interval]" placeholder="项目间隔"  class="layui-input"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">每轮间隔(分)</label>
+            <div class="layui-input-block">
+                <input  value="<?=$this->meta['match_subject_interval']?>" type="text" name="match[match_subject_interval]" placeholder="每轮题间隔"  class="layui-input"/>
+            </div>
+        </div>
 
     <?php }
-
-
-    public function mop_function($val){
-        if(isset($this->project[$val])){
-            $val = $this->project[$val];
-        }else{
-            $val = (array)$this->post_array[$val];
-        }
-        return $val;
-    }
 
     /**
      * 比赛项目设置box
@@ -442,43 +522,37 @@ class Match
             'order' => 'DESC',
         );
         $the_query = new WP_Query($args);
-        $this->post_array = array_combine(array_column($the_query->posts,'ID'),$the_query->posts);
-
-        $default_array = array_unique(array_merge($this->temp_key,array_column($the_query->posts,'ID')));
-        $match_project = array_map(array($this,'mop_function'),$default_array);
-        //var_dump($match_project);
-
-        if (!empty($match_project)) {
-            foreach ($match_project as $k => $v){
-                ?>
-                <div class="layui-inline match_project">
+        //print_r($the_query->posts);
+        if (!empty($the_query->posts)) {
+            foreach ($the_query->posts as $k => $v){ ?>
+                <div class="layui-form-item match_project">
                     <div class="layui-input-inline title">
                         <label class="layui-form-label">拖拽排序</label>
                     </div>
                     <div class="layui-input-inline">
-                        <label class="layui-form-label"><input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v['ID']?>" <?=!empty($this->project[$v['ID']])?'checked':''; ?> /><?=$v['post_title']?></label>
+                        <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v->ID?>" <?=isset($this->project[$v->ID])?'checked':''; ?> lay-skin="primary" title="<?=$v->post_title?>"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_use_time]" value="<?=!empty($v['project_use_time']) ? $v['project_use_time'] : '';?>" placeholder="比赛用时"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_use_time]" value="<?=$this->project[$v->ID]['project_use_time']?>" placeholder="比赛用时"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][match_more]" value="<?=!empty($v['match_more']) ? $v['match_more'] : '';?>" placeholder="比赛轮数"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][match_more]" value="<?=$this->project[$v->ID]['match_more']?>" placeholder="比赛轮数"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input date-picker" type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=!empty($v['project_start_time']) ? $v['project_start_time'] : '';?>" id="id<?=$k?>" placeholder="开始时间"/>
+                        <input class="layui-input date-picker" type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=$this->project[$v->ID]['project_start_time']?>" id="id<?=$k?>" placeholder="开始时间"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_washing_out]" value="<?=!empty($v['project_washing_out']) ? $v['project_washing_out'] : '';?>" placeholder="淘汰率或淘汰人数"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_washing_out]" value="<?=$this->project[$v->ID]['project_washing_out']?>" placeholder="淘汰率或淘汰人数"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_time_interval]" value="<?=!empty($v['project_time_interval']) ? $v['project_time_interval'] : '';?>" placeholder="间隔时间"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_time_interval]" value="<?=$this->project[$v->ID]['project_time_interval']?>" placeholder="间隔时间"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][str_bit]" value="<?=!empty($v['str_bit']) ? $v['str_bit'] : '';?>" placeholder="初始位数"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][str_bit]" value="<?=$this->project[$v->ID]['str_bit']?>" placeholder="初始位数"/>
                     </div>
-                    <?php if(in_array($v['post_title'],array('正向速算','快眼扫描'))): ?>
+                    <?php if(in_array($v->post_title,array('正向速算','快眼扫描'))): ?>
                     <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][child_count_down]" value="<?=!empty($v['child_count_down']) ? $v['child_count_down'] : '';?>" placeholder="子项倒计时"/>
+                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][child_count_down]" value="<?=$this->project[$v->ID]['child_count_down']?>" placeholder="子项倒计时"/>
                     </div>
                     <?php endif;?>
                 </div>
