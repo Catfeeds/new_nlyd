@@ -105,10 +105,17 @@ class Match
     }
 
     /**
+     * 已报名学员列表
+     */
+    public function enrollStudent(){
+        var_dump(111);
+    }
+
+    /**
      * 关闭和删除比赛
      */
     public function closeOrDelMatch(){
-        var_dump(111);
+//        var_dump(111);
     }
 
 
