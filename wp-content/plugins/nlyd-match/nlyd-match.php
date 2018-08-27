@@ -445,7 +445,10 @@ if(!class_exists('MatchController')){
 
                     update_post_meta($post_ID,'default_str_length',$_POST['default_str_length']);
                 }
+                if(!empty($_POST['default_match_switch'])){
 
+                    update_post_meta($post_ID,'default_match_switch',$_POST['match_switch']);
+                }
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];
