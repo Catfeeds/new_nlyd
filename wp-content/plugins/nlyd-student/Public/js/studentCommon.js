@@ -107,70 +107,66 @@ jQuery(document).ready(function($) {
             return false;
         }
     }
-    function isSarari() {
-        var ua = window.navigator.userAgent.toLowerCase();
-        if(ua.match(/Safari/i) == 'Safari') {
+    function isSafari() {
+        if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
             return true;
         }else{
             return false;
         }
     }
-    $('body').on('click','.share-bg',function(){
-        $('.share-bg').css('display','none')
-    })
     share=function(){//分享功能
 
         if('ontouchstart' in window){//移动端
-            if(isWeiXin() || isSarari()){
-                if(isWeiXin()){//微信浏览器
-                    $('body').on('click','.shareContent',function(){
-                        $(this).parents('.selectBottom').removeClass('selectBottom-show');
-                        if($('.share-bg').length>0){
-                            $('.share-bg').css('display','block')
-                        }else{
-                            var src=window.plugins_url+'/nlyd-student/Public/css/image/weChat-share.png'
-                            var dom='<div class="share-bg">'
-                                        +'<div class="img-box share-box">'
-                                            +'<img src="'+src+'">'
-                                        +'</div>'
-                                        +'<p class="share-font">点击右上角分享给好友或朋友圈</p>'
+            var metaDesc = document.getElementsByName('description')[0];
+            var firstImg = document.getElementsByTagName('img')[0];
+            var nativeShare = new NativeShare()
+            var shareData = {
+                title: document.title,
+                desc: metaDesc && metaDesc.content || '',
+                // 如果是微信该link的域名必须要在微信后台配置的安全域名之内的。
+                link: window.location.href,
+                icon: firstImg && firstImg.src || '',
+            }
+            nativeShare.setShareData(shareData)
+            function call(command) {
+                try {
+                    nativeShare.call(command)
+                } catch (err) {
+                    // 如果不支持，你可以在这里做降级处理
+                    $.alerts(err.message)
+                }
+            }
+            $('body').on('click','.shareContent',function(){
+                var _this=$(this);
+                _this.parents('.selectBottom').removeClass('selectBottom-show');
+                
+                if(isSafari()){//Safari
+                        var dom='点击正下方<i class="iconfont" style="font-size:0.20rem">&#xe68d;</i>按钮分享给好友或朋友圈'
+                        $.alerts(dom)
+                }else if(isWeiXin()){
+                    $(this).parents('.selectBottom').removeClass('selectBottom-show');
+                    if($('.share-bg').length>0){
+                        $('.share-bg').css('display','block')
+                    }else{
+                        var src=window.plugins_url+'/nlyd-student/Public/css/image/weChat-share.png'
+                        var dom='<div class="share-bg">'
+                                    +'<div class="img-box share-box">'
+                                        +'<img src="'+src+'">'
                                     +'</div>'
-                            $('body').append(dom)
-                        }
-
-                    })
-                }else if(isSarari()){//Sarari浏览器
-                    
-                }
-            }else{
-                var metaDesc = document.getElementsByName('description')[0];
-                var firstImg = document.getElementsByTagName('img')[0];
-                var nativeShare = new NativeShare()
-                var shareData = {
-                    title: document.title,
-                    desc: metaDesc && metaDesc.content || '',
-                    // 如果是微信该link的域名必须要在微信后台配置的安全域名之内的。
-                    link: window.location.href,
-                    icon: firstImg && firstImg.src || '',
-                }
-                nativeShare.setShareData(shareData)
-                function call(command) {
-                    try {
-                        nativeShare.call(command)
-                    } catch (err) {
-                        // 如果不支持，你可以在这里做降级处理
-                        $.alerts(err.message)
+                                    +'<p class="share-font">点击右上角分享给好友或朋友圈</p>'
+                                +'</div>'
+                        $('body').append(dom)
                     }
-                }
-                $('body').on('click','.shareContent',function(){
-                    var _this=$(this);
-                    _this.parents('.selectBottom').removeClass('selectBottom-show');
+                }else{
                     var id=_this.attr('data-id');
                     call(id)
-                })
-
-            }
-    
+                }
+                
+            })
+            $('body').on('click','.share-bg',function(){
+                $.alerts(1)
+                $('.share-bg').css('display','none')
+            })
         }
     }
     //屏幕改变时tabs标签页动画的初始位置初始化

@@ -34,7 +34,7 @@ Alert.prototype={
 			"margin-left":"-120px",
 			"display":"none",
 			"z-index":"10005"
-		}).text(this.msg)
+		}).html(this.msg)
 			.stop(true)
 			.fadeIn(300)
 			.delay(500)
