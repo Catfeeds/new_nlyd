@@ -9,7 +9,7 @@
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>
-                    <div class="a-btn wait">倒计时<span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span></div>
+                    <div class="a-btn wait">倒计时<span class="count_down" data-seconds="<?=$count_down?>">初始中...</span></div>
                     <?php }else{ ?>
                     <a class="a-btn wait" href="<?=$match_url?>">进入比赛</a>
                     <?php }?>

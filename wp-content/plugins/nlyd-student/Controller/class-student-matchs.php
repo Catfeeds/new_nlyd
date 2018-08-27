@@ -1146,8 +1146,8 @@ class Student_Matchs extends Student_Home
              }
          }
          $match_category = empty($category) ? '' : $category;
-         $default_category = empty($this->default_category) ? '' : $this->default_category;
-
+         $default_category = empty($this->project_order_array) ? '' : $this->project_order_array;
+         //print_r($default_category);
          //判断是否报名该比赛
          $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
 
@@ -1617,76 +1617,6 @@ class Student_Matchs extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view,$data);
     }
-    /**
-     * 扑克接力
-     */
-     public function pokerRelay (){
-
-         if(empty($_GET['match_id']) || empty($_GET['project_id'])){
-             $this->get_404('参数错误');
-             return;
-         }
-
-         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
-         if(empty($row)){
-             $this->get_404('信息错误');
-             return;
-         }else{
-
-             //判断状态
-             if(!empty($row['answer_status'])){
-                 if($row['answer_status'] == 1){
-                     $this->get_404('答案已提交');
-                     return;
-                 }
-             }else{
-                 $this->get_404('请先进行记忆再答题');
-                 return;
-             }
-         }
-         $poker = poker_create(false);
-
-         if(!empty($poker)){
-             $list = array();
-             foreach ($poker as $v){
-                 $val = str2arr($v,'-');
-                 //'heart','club','diamond','spade'
-                 if($val[0] == 'heart'){
-
-                     $list['heart']['content'][] = $val[1];
-                     $list['heart']['color'] = '638;';
-
-                 }elseif ($val[0] == 'club'){
-
-                     $list['club']['content'][] = $val[1];
-                     $list['club']['color'] = '635';
-
-                 } elseif ($val[0] == 'diamond'){
-
-                     $list['diamond']['content'][] = $val[1];
-                     $list['diamond']['color'] = '634';
-
-                 }elseif ($val[0] == 'spade'){
-
-                     $list['spade']['content'][] = $val[1];
-                     $list['spade']['color'] = '636';
-
-                 }
-             }
-
-         }
-
-         $data = array(
-             'list'=>$list,
-             'match_title'=>$this->match_title,
-             'post_title'=>$this->match['post_title'],
-             'count_down'=>$this->default_count_down,
-             'list_keys'=>array_keys($list),
-         );
-
-         $view = student_view_path.CONTROLLER.'/matching-pokerRelay.php';
-         load_view_template($view,$data);
-     }
 
     /**
      * 判断进入哪一个比赛项目
