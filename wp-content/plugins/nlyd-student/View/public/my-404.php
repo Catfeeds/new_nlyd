@@ -49,23 +49,13 @@ p.tips{
             <h1 class="mui-title">404</h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
-                <div class="no-info-page">
-                    <div class="no-info-img">
-                        <img src="<?=student_css_url.'image/noInfo/404x2.png'?>">
-                    </div>
-                    <p class="no-info-text"><?=$data['message']?></p>
-                    <p class="no-info-text">
-                        <?php if(!empty($data['match_url'])):?>
-                        <a href="<?=$data['match_url']?>">返回比赛详情</a>
-                        <?php endif;?>
-                        <?php if(!empty($data['waiting_url'])):?>
-                        <a href="<?=$data['waiting_url']?>">返回比赛等待</a>
-                        <?php endif;?>
-                    </p>
-                </div>
-                <!-- <div class="count-wrapper">
+
+                 <div class="count-wrapper">
                     <p class="tips fs_16">
-                        <?=$data['message']?><span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                        <?=$data['message']?>
+                        <?php if(!empty($start_count_down)):?>
+                        <span class="count_down" data-seconds="<?=$start_count_down?>">初始中...</span>
+                        <?php endif;?>
                     </p>
                     <?php if(!empty($data['match_url'])):?>
                     <a class="a-btn wait" href="<?=$data['match_url']?>">返回比赛详情</a>
@@ -73,7 +63,7 @@ p.tips{
                     <?php if(!empty($data['waiting_url'])):?>
                     <a class="a-btn back" href="<?=$data['waiting_url']?>">返回比赛等待</a>
                     <?php endif;?>
-                </div> -->
+                </div>
             </div>
         </div>           
     </div>
@@ -82,7 +72,7 @@ p.tips{
 jQuery(function($) { 
     if($('.count_down').length>0){
         if($('.count_down').attr('data-seconds')<=0){
-            window.location.href="<?=$match_url?>"
+            window.location.reload();
         }
         $('.count_down').countdown(function(S, d){//倒计时
             var D=d.day>0 ? d.day+'天' : '';
@@ -92,7 +82,7 @@ jQuery(function($) {
             var time=D+h+':'+m+':'+s;
             $(this).text(time);
             if(S<=0){//本轮比赛结束
-                window.location.href="<?=$match_url?>"
+                window.location.reload();
             }
         });
     }

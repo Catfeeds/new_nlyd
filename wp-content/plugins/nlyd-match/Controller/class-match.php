@@ -20,6 +20,7 @@ class Match
 
     public function __construct()
     {
+
         if(isset($_GET['post']) && $_GET['action'] == 'edit'){
 
             global $wpdb;
@@ -256,7 +257,7 @@ class Match
     public function team_leader_meta_box($post){
         $team_leader = get_user_meta($this->team_meta['team_leader'],'user_real_name');
     ?>
-      
+
     <div class="layui-form-item">
         <label class="layui-form-label">队长设置</label>
         <div class="layui-input-block">
@@ -280,7 +281,7 @@ class Match
     <div class="layui-form-item">
         <label class="layui-form-label">最大人数</label>
         <div class="layui-input-block">
-            <input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]" class="layui-input" placeholder="加减运算"/>   
+            <input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]" class="layui-input" placeholder="加减运算"/>
         </div>
     </div>
         <!-- <p>最大人数<input  value="<?=$this->team_meta['max_number']?>" type="text" name="team[max_number]"/></p> -->

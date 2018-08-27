@@ -34,6 +34,7 @@ if(!class_exists('MatchController')){
 //            unset($actions['inline hide-if-no-js']);
             unset($actions['trash']);
             unset($actions['view']);
+            $actions['student'] = '<span class="inline hide-if-no-js"><a href="?page=match_student&match_id='.$post->ID.'" class="" aria-label="报名学员“'.$post->post_title.'”">报名学员</a></span>';
             return $actions;
         }
         public function main(){
@@ -92,6 +93,9 @@ if(!class_exists('MatchController')){
 
             //添加意见反馈菜单
             include_once(match_controller_path.'class-feedback.php');
+
+            //添加参赛学员菜单
+            include_once(match_controller_path.'class-match_student.php');
 
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
