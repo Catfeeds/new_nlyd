@@ -143,8 +143,8 @@
     color: #2484FE;
 }
 tr.nl-me{
-    border: 1px dashed #2484FE;
-    background: rgb(36, 132, 254,0.1);
+    background: transparent url('./image/record/nl-me.png') no-repeat center center;
+    background-size: 100% 100%;
 }
 tr.nl-me td{
     color: #2484FE;
@@ -218,12 +218,12 @@ tr.nl-me td{
 .btn-wrapper .btn-wrap:first-child .classify-btn{
     float: left;
 }
-.btn-wrapper.one-rank{
+/* .btn-wrapper.one-rank{
     display: flex;
 }
 .btn-wrapper.one-rank{
     flex: 1;
-}
+} */
 .classify-active{
     border-bottom: 2px solid #2484FE;
     color: #2484FE;

@@ -622,7 +622,7 @@ p.share-font{
         display: none;
     }
     .width-margin{
-        position: relative;
+        /* position: relative; */
         width: -webkit-calc(100% - 30px); 
         width: calc(100% - 30px);
         margin-left:auto;
@@ -634,7 +634,7 @@ p.share-font{
         left: 15px;
     }
     .width-padding{
-        position: relative;
+        /* position: relative; */
         width: -webkit-calc(100% - 30px); 
         width: calc(100% - 30px);
         padding-left: 15px;
@@ -646,10 +646,14 @@ p.share-font{
         top: auto;
         bottom: 30px;
     }
-    .a-btn.focus_none,
+    .a-btn.focus_none{
+        position: absolute;
+        bottom: 30px;
+    }
     .nl-foot-nav.focus_none
     {
-        display: none;
+        position: absolute;
+        bottom: 0;
     }
     .layui-form-item .layui-input-inline {
         margin: 0;

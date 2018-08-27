@@ -107,7 +107,7 @@
                         <!-- 单项排名 -->
                         <div class="layui-tab-item">
                             <?php if(!empty($default_category)): ?>
-                            <div class="btn-wrapper ">
+                            <div class="btn-wrapper one-rank">
                                 <div class="btn-zoo">
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">

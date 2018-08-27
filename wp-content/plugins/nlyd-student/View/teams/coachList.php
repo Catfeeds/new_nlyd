@@ -160,6 +160,9 @@ layui.use(['element','flow','layer','form'], function(){
                     ,id: 'certification' //防止重复弹出
                     ,content:content
                     ,btn: ['再想想', '确认', ]
+                    ,cancel:function(){
+                        _this.removeClass('disabled')
+                    }
                     ,success: function(layero, index){
                         
                     }
@@ -216,11 +219,14 @@ layui.use(['element','flow','layer','form'], function(){
                 ,maxWidth:300
                 ,title: '设置主训教练' //不显示标题栏
                 ,skin:'nl-box-skin'
+                ,closeBtn:0
                 ,id: 'certification' //防止重复弹出
                 ,content: '<div class="box-conent-wrapper">是否确认设置“'+coach_name+'”为'+type+'主训教练？</div>'
                 ,btn: ['再想想', '确认', ]
+                ,cancel:function(){
+                    _this.removeClass('disabled')
+                }
                 ,success: function(layero, index){
-                    
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
@@ -267,6 +273,9 @@ layui.use(['element','flow','layer','form'], function(){
                                     ,id: 'certification' //防止重复弹出
                                     ,content: '<div class="box-conent-wrapper">你已设置“'+type+'”主训教练是否确认更换？</div>'
                                     ,btn: ['再想想', '确认', ]
+                                    ,cancel:function(){
+                                        _this.removeClass('disabled')
+                                    }
                                     ,success: function(layero, index){
                                         
                                     }
@@ -352,6 +361,9 @@ layui.use(['element','flow','layer','form'], function(){
                 ,id: 'certification' //防止重复弹出
                 ,content: '<div class="box-conent-wrapper">您是否确认解除与“'+coach_name+'”的主训关系？</div>'
                 ,btn: ['再想想', '确认', ]
+                ,cancel:function(){
+                    _this.removeClass('disabled')
+                }
                 ,success: function(layero, index){
                     
                 }
@@ -412,6 +424,9 @@ layui.use(['element','flow','layer','form'], function(){
                 ,id: 'certification' //防止重复弹出
                 ,content: '<div class="box-conent-wrapper">您是否确认解除与“'+coach_name+'”的教学关系？</div>'
                 ,btn: ['再想想', '确认', ]
+                ,cancel:function(){
+                    _this.removeClass('disabled')
+                }
                 ,success: function(layero, index){
                     
                 }

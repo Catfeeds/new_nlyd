@@ -24,7 +24,6 @@ jQuery(document).ready(function($) {
         //alert('是否是iOS：'+isiOS);
          if(isAndroid){
             $("input[type='file']").attr('capture','camera');
-         }else{
          }
     }
    

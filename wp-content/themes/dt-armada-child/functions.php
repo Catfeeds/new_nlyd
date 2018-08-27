@@ -7,7 +7,7 @@
  */
 
 //设置时区
-date_default_timezone_set('Asia/Shanghai');
+// date_default_timezone_set('Asia/Shanghai');
 
 /**
  * 年齡組別

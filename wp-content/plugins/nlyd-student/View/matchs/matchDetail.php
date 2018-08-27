@@ -134,9 +134,10 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax,postData,function(res,ajaxStatu,xhr){
-                    var end_time = new Date($('#time_count').attr('data-end')).getTime();//月份是实际月份-1
+                    var domTime=$('#time_count').attr('data-end').replace(/-/g,'/');
+                    var end_time = new Date(domTime).getTime();//月份是实际月份-1
                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-                    var sys_second = (end_time-serverTimes)/1000;
+                    var sys_second = (parseInt(end_time)-parseInt(serverTimes))/1000;
                     $('#time_count').attr('data-seconds',sys_second).countdown(function(s, d){//倒计时
                         var D=d.day>0 ? d.day+'天' : '';
                         var h=d.hour<10 ? '0'+d.hour : d.hour;
