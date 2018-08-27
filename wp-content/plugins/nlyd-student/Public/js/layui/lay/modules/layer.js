@@ -1225,11 +1225,11 @@
           //anim: Math.random()*5|0,
           isOutAnim: false,
           skin: 'layui-layer-photos' + skin('photos'),
-          content: '<div class="layui-layer-phimg">'
+          content: '<div class="layui-layer-phimg" style="position: absolute;top: 0;left: 0;">'
             +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
             +'<div class="layui-layer-imgsee">'
               +(data.length > 1 ? '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>' : '')
-              +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>'
+              +(data.length > 1 ? '<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>' : '')
             +'</div>'
           +'</div>',
           success: function(layero, index){

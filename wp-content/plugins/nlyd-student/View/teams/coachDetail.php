@@ -19,7 +19,7 @@
                     <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12 have-abtn">
                         <div class="coachDetail-row width-padding width-margin-pc">
                             <div class="width-padding-pc">
-                                <div class="coachDetail-headImg img-box">
+                                <div class="coachDetail-headImg img-box"  id="imgBox">
                                     <img src="<?=$user_infos['user_head']?>">
                                 </div>
                                 <div class="coachDetail-coachInfo">
@@ -37,42 +37,18 @@
                                     <div class="coachDetail-infoRow coach-detail-footer">
                                         <?php foreach ($skill['category'] as $v){ ?>
                                             <?php if($v['is_current'] === false){?>
-<!--                                                <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> --><?//=$v['post_title']?><!--</div>-->
                                                 <div class="coach-type text_1 is_current"><?=$v['post_title']?></div>
-                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                             <?php }elseif($v['is_current'] === true && $v['is_apply'] == true && $v['is_my_coach'] === false){ ?>
-
                                                 <div class="coach-type text_1 is_current c_blue" style="color:#FF2300;">审核中...</div>
-                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                             <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === true){?>
-
                                                 <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                             <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === false){?>
-
                                                 <div class="coach-type text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                             <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === false && $v['is_my_major'] === false){?>
-
                                                 <div class="coach-type text_1 is_current c_blue"><?=$v['post_title']?></div>
-                                                <!-- <div class="coach-type fs_12 text_1"><?=$v['post_title']?></div> -->
                                             <?php }?>
                                         <?php } ?>
                                     </div>
-<!---->
-<!--                                    <div class="coachDetail-infoRow coach-detail-footer">-->
-<!---->
-<!--                                        <div class="coach-type text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> --><?//=$v['post_title']?><!--</div>-->
-<!--                                         <div class="coach-type fs_12 text_1">--><?//=$v['post_title']?><!--</div> -->
-<!---->
-<!--                                    </div>-->
-<!---->
-<!--                                    <div class="coachDetail-infoRow coach-detail-footer">-->
-<!---->
-<!--                                        <div class="coach-type text_1 is_current">--><?//=$v['post_title']?><!--</div>-->
-<!--                                         <div class="coach-type fs_12 text_1">--><?//=$v['post_title']?><!--</div> -->
-<!---->
-<!--                                    </div>-->
                                     <?php endif;?>
                                 </div>
                             </div>
@@ -170,6 +146,10 @@ jQuery(function($) {
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         
         var flow = layui.flow;//流加载
+        layer.photos({//图片预览
+            photos: '#imgBox',
+            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        })  
         flow.load({
             elem: '#flow-table' //流加载容器
             ,scrollElem: '#flow-table' //滚动条所在元素，一般不用填，此处只是演示需要。

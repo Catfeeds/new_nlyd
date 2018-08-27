@@ -47,8 +47,8 @@
     background: linear-gradient(#68AAFE, #4394F9);
 }
 tr.nl-me{
-    border: 1px dashed #2484FE;
-    background: rgb(36, 132, 254,0.1);
+    background: transparent url('./image/record/nl-me.png') no-repeat center center;
+    background-size: 100% 100%;
 }
 tr.nl-me td{
     color: #2484FE;
