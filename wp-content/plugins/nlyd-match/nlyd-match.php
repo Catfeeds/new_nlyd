@@ -34,7 +34,7 @@ if(!class_exists('MatchController')){
 //            unset($actions['inline hide-if-no-js']);
             unset($actions['trash']);
             unset($actions['view']);
-            $actions['student'] = '<span class="inline hide-if-no-js"><a href="?page=match_student&match_id='.$post->ID.'" class="" aria-label="报名学员“'.$post->post_title.'”">报名学员</a></span>';
+//            $actions['student'] = '<span class="inline hide-if-no-js"></span>';
             return $actions;
         }
         public function main(){
@@ -341,6 +341,7 @@ if(!class_exists('MatchController')){
             $columns['match_status'] = '状态';
             $columns['author'] = '发布人';
             $columns['students'] = '报名学员';
+            $columns['match_ranking'] = '比赛排名';
             $columns['slogan'] = '口号';
             $columns['times'] = '比赛时间';
             $columns['time_slot'] = '报名时间段';
@@ -390,7 +391,12 @@ if(!class_exists('MatchController')){
                     echo $row['match_cost'];
                     break;
                 case 'students':
-                    echo '<a>查看学员</a>';
+                    echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
+                    if($row['match_status'] == -3){
+                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
+                    }else{
+                        echo '比赛未结束';
+                    }
                     break;
                 case 'match_type':
                     $args = array(
@@ -404,6 +410,16 @@ if(!class_exists('MatchController')){
                         if($row['match_genre'] == $v->ID) $str = $v->post_title;
                     }
                     echo $str;
+                    break;
+                case 'match_ranking':
+
+                    echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+                    if($row['match_status'] == -3){
+                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+                    }else{
+                        echo '比赛未结束';
+                    }
+
                     break;
                 case 'options':
                     //删除比赛必须要先关闭比赛
