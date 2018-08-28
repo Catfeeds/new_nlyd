@@ -107,12 +107,12 @@
                         <!-- 单项排名 -->
                         <div class="layui-tab-item">
                             <?php if(!empty($default_category)): ?>
-                            <div class="btn-wrapper ">
+                            <div class="btn-wrapper one-rank">
                                 <div class="btn-zoo">
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
                                             <?php foreach ($default_category as $k =>$val){ ?>
-                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=$val['post_title']?></div>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@
                             </div>
                             <!-- <div class="btn-wrapper">
                                 <?php foreach ($default_category as $k =>$val){ ?>
-                                <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
+                                <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=$val['post_title']?></div>
                                 <?php } ?>
                             </div> -->
                             <?php endif;?>
@@ -452,10 +452,12 @@ $('.classify-btn').click(function(){//选择比赛项目
         _this.parents('.btn-wrapper').find('.classify-btn').removeClass('classify-active');
         _this.addClass('classify-active');
         if(_this.parents('.btn-wrapper').hasClass('one-rank')){//单项排名
+            console.log(1)
             var id=_this.attr('data-post-id');
             $('#flow-one').empty();
             initDanxiang(0,id,$('#show-type').attr('data-group'))
         }else{//分类排名
+            console.log(2)
             var id=_this.attr('data-post-id');
             $('#flow-fenlei').empty();
             initFenlei(0,id)

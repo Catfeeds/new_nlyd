@@ -338,6 +338,7 @@
     flex: 1;
     background: #39f;
     border-radius: 0;
+    cursor: pointer;
   }
   .nl-cropper-footer button:first-child{
     background: #fff;

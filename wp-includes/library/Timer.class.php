@@ -56,7 +56,7 @@ class Timer
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
             //var_dump($rows);
-            $new_time = date('Y-m-d H:i:s',time());
+            $new_time = get_the_time('Y-m-d H:i:s');
             foreach ($rows as $v){
 
                 //获取开赛的比赛项目

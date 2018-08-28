@@ -490,7 +490,13 @@ class Student_Matchs extends Student_Home
             }
 
             if( time() < $this->project_start_time ){
-                $this->get_404(array('message'=>'该比赛项目未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                $error_data = array(
+                                'message'=>'该比赛项目未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                                'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id),
+                                'start_count_down' => $this->project_start_time - time(),
+                            );
+                //var_dump($error_data);
+                $this->get_404($error_data);
                 return;
             }
 
@@ -550,7 +556,7 @@ class Student_Matchs extends Student_Home
                 $question = $posts[0];
                 //print_r($question);
 
-                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$count_down,json_encode($question));
+                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
 
                 //获取当前题目所有问题
                 $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -582,7 +588,7 @@ class Student_Matchs extends Student_Home
             }else{
 
                 $poker = poker_create();
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$count_down,json_encode($poker));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($poker));
 
                 $match_questions = $questions_answer = $poker;
             }
@@ -597,12 +603,12 @@ class Student_Matchs extends Student_Home
         }
         elseif ($this->project_alias == 'szzb'){
             if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
-                $rang_str = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID),true);
-                //var_dump($question);
-                $question = json_decode($rang_str,true);
+                $rang_str = $this->redis->get($this->project_alias.'_question'.$current_user->ID);
+                //var_dump($rang_str);
+                $question = !empty($rang_str) ? json_decode($rang_str,true) : '';
             }else{
                 $rang_array = rang_str_arr($this->project_str_len);
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$count_down,json_encode($rang_array));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($rang_array));
 
                 $match_questions = $questions_answer = $question = $rang_array;
             }
@@ -942,9 +948,9 @@ class Student_Matchs extends Student_Home
         }
 
         if($next){
-            if(empty($this->redis->get('next_count_down'.$current_user->ID))){
+            if(empty($this->redis->get('next_count_down'.$current_user->ID.$this->project_alias.'_'.$this->current_more))){
 
-                $this->redis->setex('next_count_down'.$current_user->ID,$next_count_down,time()+$next_count_down);
+                $this->redis->setex('next_count_down'.$current_user->ID.$this->project_alias.'_'.$this->current_more,$next_count_down,time()+$next_count_down);
             }
             $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$match_more);
         }else{
@@ -973,7 +979,7 @@ class Student_Matchs extends Student_Home
             'my_score'=>$row['my_score'],
             'project_title'=>$this->project_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'next_count_down'=>$this->redis->get('next_count_down'.$current_user->ID)-time(),
+            'next_count_down'=>$this->redis->get('next_count_down'.$current_user->ID.$this->project_alias.'_'.$this->current_more)-time(),
             'next_project_url'=>$next_project_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
@@ -1140,8 +1146,8 @@ class Student_Matchs extends Student_Home
              }
          }
          $match_category = empty($category) ? '' : $category;
-         $default_category = empty($this->default_category) ? '' : $this->default_category;
-
+         $default_category = empty($this->project_order_array) ? '' : $this->project_order_array;
+         //print_r($default_category);
          //判断是否报名该比赛
          $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
 
@@ -1611,76 +1617,6 @@ class Student_Matchs extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view,$data);
     }
-    /**
-     * 扑克接力
-     */
-     public function pokerRelay (){
-
-         if(empty($_GET['match_id']) || empty($_GET['project_id'])){
-             $this->get_404('参数错误');
-             return;
-         }
-
-         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
-         if(empty($row)){
-             $this->get_404('信息错误');
-             return;
-         }else{
-
-             //判断状态
-             if(!empty($row['answer_status'])){
-                 if($row['answer_status'] == 1){
-                     $this->get_404('答案已提交');
-                     return;
-                 }
-             }else{
-                 $this->get_404('请先进行记忆再答题');
-                 return;
-             }
-         }
-         $poker = poker_create(false);
-
-         if(!empty($poker)){
-             $list = array();
-             foreach ($poker as $v){
-                 $val = str2arr($v,'-');
-                 //'heart','club','diamond','spade'
-                 if($val[0] == 'heart'){
-
-                     $list['heart']['content'][] = $val[1];
-                     $list['heart']['color'] = '638;';
-
-                 }elseif ($val[0] == 'club'){
-
-                     $list['club']['content'][] = $val[1];
-                     $list['club']['color'] = '635';
-
-                 } elseif ($val[0] == 'diamond'){
-
-                     $list['diamond']['content'][] = $val[1];
-                     $list['diamond']['color'] = '634';
-
-                 }elseif ($val[0] == 'spade'){
-
-                     $list['spade']['content'][] = $val[1];
-                     $list['spade']['color'] = '636';
-
-                 }
-             }
-
-         }
-
-         $data = array(
-             'list'=>$list,
-             'match_title'=>$this->match_title,
-             'post_title'=>$this->match['post_title'],
-             'count_down'=>$this->default_count_down,
-             'list_keys'=>array_keys($list),
-         );
-
-         $view = student_view_path.CONTROLLER.'/matching-pokerRelay.php';
-         load_view_template($view,$data);
-     }
 
     /**
      * 判断进入哪一个比赛项目

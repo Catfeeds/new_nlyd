@@ -310,15 +310,29 @@ jQuery(document).ready(function($) {
             cropper = null;
     })
     document.getElementById('crop').addEventListener('click', function () {
-        var initialAvatarURL;
         var canvas;
         if (cropper) {
         canvas = cropper.getCroppedCanvas({
             width: 160,
             height: 160,
         });
-        initialAvatarURL = avatar.src;
         avatar.src = canvas.toDataURL();
+        if (!HTMLCanvasElement.prototype.toBlob) {//针对ios不兼容toBlob（）
+            Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
+            value: function (callback, type, quality) {
+
+                var binStr = atob( this.toDataURL(type, quality).split(',')[1] ),
+                    len = binStr.length,
+                    arr = new Uint8Array(len);
+
+                for (var i=0; i<len; i++ ) {
+                arr[i] = binStr.charCodeAt(i);
+                }
+
+                callback( new Blob( [arr], {type: type || 'image/png'} ) );
+            }
+            });
+        }
         canvas.toBlob(function (blob) {
             var formData = new FormData();
             formData.append('action','student_saveInfo');
