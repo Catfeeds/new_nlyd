@@ -445,10 +445,13 @@ if(!class_exists('MatchController')){
 
                     update_post_meta($post_ID,'default_str_length',$_POST['default_str_length']);
                 }
-                if(!empty($_POST['default_match_switch'])){
+                if(!empty($_POST['match_switch']) && $_POST['match_switch'] == 'ON'){
 
                     update_post_meta($post_ID,'default_match_switch',$_POST['match_switch']);
+                }else{
+                    update_post_meta($post_ID,'default_match_switch','OFF');
                 }
+
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];
@@ -622,7 +625,7 @@ if(!class_exists('MatchController')){
                     if($this->post_type == 'match'){
 
                         add_meta_box( 'switch_meta_box',
-                            '比赛发布开关',
+                            '自定义开赛开关',
                             array($this->match,'match_switch_meta_box'),
                             $this->post_type, 'side'
                         );

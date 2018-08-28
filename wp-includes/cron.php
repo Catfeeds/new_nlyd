@@ -98,6 +98,7 @@ function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array()) {
 		return false;
 
 	$event = (object) array( 'hook' => $hook, 'timestamp' => $timestamp, 'schedule' => $recurrence, 'args' => $args, 'interval' => $schedules[$recurrence]['interval'] );
+
 	/** This filter is documented in wp-includes/cron.php */
 	$event = apply_filters( 'schedule_event', $event );
 
