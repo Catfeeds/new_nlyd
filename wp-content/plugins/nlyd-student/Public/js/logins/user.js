@@ -66,19 +66,19 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(loginFormFastBtn)', function(data){//快速登录
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data.field)
                 return false;
             });
             form.on('submit(loginFormForgetBtn)', function(data){//重置密码
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data.field)
                 return false;
             });
             form.on('submit(loginFormPswBtn)', function(data){//账号密码登录
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data.field)
                 return false;
             });
             form.on('submit(registerBtn)', function(data){//注册
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data.field)
                 return false;
             });
             element.on('tab(tabs)', function(){//tabs
@@ -129,7 +129,7 @@ jQuery(function($) {
             if(layVerify=='phone'){//手机登录
                 if(phone.test(value)){
                     var formData=$(this).parents('form').serializeObject();
-                    var getTimestamp=new Date().getTime()
+                    var getTimestamp=new Date().getget_time()
                     var action='get_sms_code'
                     var data={
                         action:action,
@@ -137,7 +137,7 @@ jQuery(function($) {
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data)
                     var wait=60;  
                     time(wait,$(this))
                 }else{
@@ -149,7 +149,7 @@ jQuery(function($) {
                 message=allRules['phoneOrEmail'];
                 if(phone.test(value) || email.test(value)){
                     var formData=$(this).parents('form').serializeObject();
-                    var getTimestamp=new Date().getTime()
+                    var getTimestamp=new Date().getget_time()
                     var action='get_sms_code'
                     if(phone.test(value)){//手机号码登录
                         action='get_sms_code'
@@ -162,7 +162,7 @@ jQuery(function($) {
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getget_time(),data)
                     var wait=60;  
                     time(wait,$(this))
                     return false
