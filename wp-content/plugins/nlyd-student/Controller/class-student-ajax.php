@@ -1107,6 +1107,8 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>'参数错误'));
+        //不允许申请自己为教练
+        if($_POST['coach_id'] == $current_user->ID) wp_send_json_error(array('info'=>'不能申请自己为教练'));
         //是否同时设置为主训教练
         $major = intval($_POST['major']) == 1 ? 1 : 0;
 //        var_dump($_POST['category_id']);die;
