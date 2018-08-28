@@ -119,13 +119,13 @@ class Timer
                             $fixed_use_time = $project_use_time*$match_more + ($match_more-1)*$project_time_interval;
                             $match_end_time = strtotime($fixed['project_start_time']) + $fixed_use_time*60;
                         }
-                        $end_time = date('Y-m-d H:i:s',$match_end_time);
+                        $end_time = date_i18n('Y-m-d H:i:s',$match_end_time);
                         //var_dump($end_time);
                     }else{
 
                         $use_time = $v['match_use_time']*$v['match_more']*6 + 5*$v['match_project_interval'] + (($v['match_more']-1)*$v['match_subject_interval'])*6;
                         $match_end_time = strtotime($v['entry_start_time'])+$use_time*60;
-                        $end_time = date('Y-m-d H:i:s',$match_end_time);
+                        $end_time = date_i18n('Y-m-d H:i:s',$match_end_time);
                         //var_dump($end_time);
                     }
                     /*$end_time = date('Y-m-d H:i:s',$match_end_time);
@@ -142,6 +142,8 @@ class Timer
                     }else if($end_time < $new_time){
                         $save = array('match_status'=>-3);
                     }
+                    //var_dump($v['match_id']);
+                    //var_dump($save);
                     $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
                     //var_dump($a);
                 }

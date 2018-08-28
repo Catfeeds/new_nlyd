@@ -70,6 +70,9 @@ jQuery(document).ready(function($) {
                 }
             })
         },
+        down:function(){
+		  return false
+        },
         floatStyle: {
             'border': '1px solid #ccc',
             'background-color': '#fff'

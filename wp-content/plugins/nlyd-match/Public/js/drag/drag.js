@@ -50,6 +50,7 @@
 			}
  
 			that.on( 'mousedown.DDSort', settings.target, function( e ){
+
 				//只允许鼠标左键拖动
 				if( e.which != 1 ){
 					return;
@@ -57,7 +58,7 @@
 				
 				//防止表单元素失效
 				var tagName = e.target.tagName.toLowerCase();
-				if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' ){
+				if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' || tagName == 'i'){
 					return;
 				}
 				
@@ -82,7 +83,7 @@
 					upSpeed = thisOuterHeight,
 					downSpeed = thisOuterHeight,
 					maxSpeed = thisOuterHeight * 3;
-				
+					// console.log(upSpeed,downSpeed,maxSpeed)
 				settings.down.call( THIS );
 				
 				$doc.on( 'mousemove.DDSort', function( e ){
@@ -91,35 +92,34 @@
 							.css( 'width', $this[ width ]() )
 							.css( settings.floatStyle )
 							.appendTo( $this.parent() );
-							
+
 						hasClone = 0;
 					}
-					
+
 					var left = e.pageX - disX,
 						top = e.pageY - disY,
-						
+
 						prev = clone.prev(),
 						next = clone.next().not( $this );
-				
+
 					scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
- 
 					$this.css({
 						left: left,
 						top: top-scrollTop
 					});
-					
+
 					//向上排序
 					if( prev.length && top < prev.offset().top + prev.outerHeight()/2 ){
-							
+
 						clone.after( prev );
-						
+
 					//向下排序
 					}else if( next.length && top + thisOuterHeight > next.offset().top + next.outerHeight()/2 ){
-						
+
 						clone.before( next );
- 
+
 					}
- 
+
 					/**
 					 * 处理滚动条
 					 * that是带着滚动条的元素，这里默认以为that元素是这样的元素（正常情况就是这样），如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
@@ -127,31 +127,31 @@
 					var thatScrollTop = that.scrollTop(),
 						thatOffsetTop = that.offset().top,
 						scrollVal;
-					
+
 					//向上滚动
 					if( top < thatOffsetTop ){
- 
+
 						downSpeed = thisOuterHeight;
 						upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
 						scrollVal = thatScrollTop - upSpeed;
- 
+
 					//向下滚动
 					}else if( top + thisOuterHeight - thatOffsetTop > thatOuterHeight ){
- 
+
 						upSpeed = thisOuterHeight;
 						downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
 						scrollVal = thatScrollTop + downSpeed;
 					}
- 
+
 					that.scrollTop( scrollVal );
- 
+
 					settings.move.call( THIS );
- 
+
 				})
 				.on( 'mouseup.DDSort', function(){
-					
+
 					$doc.off( 'mousemove.DDSort mouseup.DDSort' );
-					
+
 					//click的时候也会触发mouseup事件，加上判断阻止这种情况
 					if( !hasClone ){
 						clone.before( $this.removeAttr( 'style' ) ).remove();
