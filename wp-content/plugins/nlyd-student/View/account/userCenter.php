@@ -146,7 +146,7 @@
                     <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
-                                <img src="<?=student_css_url.'image/userCenter/match.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/match.png'?>" class="menuImg"> -->
                             </div>
                             
                         </div>
@@ -155,7 +155,7 @@
                     <a href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
-                                <img src="<?=student_css_url.'image/userCenter/train.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/train.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的训练</div>
@@ -163,7 +163,7 @@
                     <a href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
-                                <img src="<?=student_css_url.'image/userCenter/course.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/course.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的课程</div>
@@ -171,7 +171,7 @@
                     <a href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-coach">
-                                <img src="<?=student_css_url.'image/userCenter/coach.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/coach.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的教练</div>
@@ -179,7 +179,7 @@
                     <a href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
-                                <img src="<?=student_css_url.'image/userCenter/order.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/order.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的订单</div>
@@ -187,7 +187,7 @@
                     <a>
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
-                                <img src="<?=student_css_url.'image/userCenter/kaoji.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/kaoji.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的考级</div>
@@ -195,7 +195,7 @@
                     <a>
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
-                                <img src="<?=student_css_url.'image/userCenter/tuiguang.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/tuiguang.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
@@ -211,23 +211,23 @@
                     <a href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
-                                <img src="<?=student_css_url.'image/userCenter/scure.png'?>" class="menuImg">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/scure.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
                     <a class="no_border" href="<?=home_url('/safety/setting');?>">
-                        <div class="userCenter-detail-head my-setting">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/userCenter/settings.png'?>" class="menuImg">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-setting">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/settings.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
                     <a class="no_border" href="<?=home_url('/teams');?>">
-                        <div class="userCenter-detail-head my-wallet">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/userCenter/wallet.png'?>" class="menuImg">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-wallet">
+                                <!-- <img src="<?=student_css_url.'image/userCenter/wallet.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的钱包</div>
