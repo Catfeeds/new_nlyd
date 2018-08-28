@@ -439,7 +439,7 @@ class Match_student {
 
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+//        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
         //TODO 判断比赛是否结束
 //        if(!$match || $match['match_status'] != -3){
 //            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
@@ -477,7 +477,7 @@ class Match_student {
 
                 $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
             }
-            //成绩数据
+            //每个项目每一轮比赛成绩
             foreach ($titleArr as $titleK => $titleV){
                 if($mqv['project_id'] == $titleK) {
                     if(isset($rankingArr[$mqv['user_id']]['project'][$titleK]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleK])){
@@ -504,7 +504,7 @@ class Match_student {
 
 
             <form method="get">
-
+                <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
                 <p class="search-box">
 <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
 <!--                    <input type="search" id="user-search-input" name="s" value="">-->
@@ -604,29 +604,11 @@ class Match_student {
                 <div class="tablenav bottom">
 
                     <div class="alignleft actions bulkactions">
-                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
-                            <option value="-1">批量操作</option>
-                            <option value="delete">删除</option>
-                        </select>
-                        <input type="submit" id="doaction2" class="button action" value="应用">
+
                     </div>
                     <div class="alignleft actions">
-                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>
-                        <select name="new_role2" id="new_role2">
-                            <option value="">将角色变更为…</option>
+                    </div>
 
-                            <option value="subscriber">学生</option>
-                            <option value="contributor">投稿者</option>
-                            <option value="author">作者</option>
-                            <option value="editor">教练</option>
-                            <option value="administrator">管理员</option>		</select>
-                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>
-                    <div class="tablenav-pages"><span class="displaying-num">29个项目</span>
-                        <span class="pagination-links"><span class="tablenav-pages-navspan" aria-hidden="true">«</span>
-<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
-<span class="screen-reader-text">当前页</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">第1页，共<span class="total-pages">2</span>页</span></span>
-<a class="next-page" href="http://127.0.0.1/nlyd/wp-admin/users.php?paged=2"><span class="screen-reader-text">下一页</span><span aria-hidden="true">›</span></a>
-<span class="tablenav-pages-navspan" aria-hidden="true">»</span></span></div>
                     <br class="clear">
                 </div>
             </form>
