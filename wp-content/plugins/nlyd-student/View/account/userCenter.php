@@ -252,7 +252,7 @@
     </div>
 </div>
 <script>
-<?php if(empty($user_info['user_real_name']) && time() < $_SESSION['login_time']){ ?>
+<?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
 layui.use('layer', function(){ //独立版的layer无需执行这一句
   layer.open({
         type: 1

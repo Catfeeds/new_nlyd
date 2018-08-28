@@ -107,11 +107,14 @@ class Match
     /**
      * 比赛开关控制
      */
-    public function match_switch_meta_box(){ ?>
+    public function match_switch_meta_box($post){
+        $match_switch = get_post_meta($post->ID,'default_match_switch')[0];
+        //var_dump($match_switch);
+    ?>
       <div class="layui-form-item" pane="">
-        <label class="layui-form-label" style="text-align:left">自动发布</label>
+        <label class="layui-form-label" style="text-align:left">自动开赛</label>
         <div class="layui-input-block">
-            <input type="checkbox" checked name="open" lay-skin="switch"  name="match_switch" value="on"  lay-text="是|否">
+            <input type="checkbox" <?=$match_switch=='ON' || empty($match_switch)?'checked':'';?> lay-skin="switch"  name="match_switch" value="ON"  lay-text="是|否">
         </div>
     </div>
         <!-- 自动发布 <input type="checkbox" value="on" name="match_switch" /> -->

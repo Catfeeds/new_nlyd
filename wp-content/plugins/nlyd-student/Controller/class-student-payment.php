@@ -73,7 +73,7 @@ class Student_Payment {
             $arr = explode("\r\n", $res);
             $filename = 'wxBill_';
             $filename .= $date."_";
-            $filename .= time().".xls";
+            $filename .= get_time().".xls";
             header('Content-Type:application/x-msexecl;name="'.$filename.'"');
             header('Content-Disposition:inline;filename="'.$filename.'"');
             require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';

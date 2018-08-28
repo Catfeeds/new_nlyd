@@ -445,6 +445,12 @@ if(!class_exists('MatchController')){
 
                     update_post_meta($post_ID,'default_str_length',$_POST['default_str_length']);
                 }
+                if(!empty($_POST['match_switch']) && $_POST['match_switch'] == 'ON'){
+
+                    update_post_meta($post_ID,'default_match_switch',$_POST['match_switch']);
+                }else{
+                    update_post_meta($post_ID,'default_match_switch','OFF');
+                }
 
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
@@ -619,7 +625,7 @@ if(!class_exists('MatchController')){
                     if($this->post_type == 'match'){
 
                         add_meta_box( 'switch_meta_box',
-                            '比赛发布开关',
+                            '自定义开赛开关',
                             array($this->match,'match_switch_meta_box'),
                             $this->post_type, 'side'
                         );
@@ -1110,10 +1116,13 @@ if(!class_exists('MatchController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
-            wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
-            wp_enqueue_script( 'admin_layui_js' );
-            wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
-            wp_enqueue_style( 'admin_layui_css' );
+            if(!in_array($this->post_type,array('post','question'))){
+
+                wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'admin_layui_js' );
+                wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
+                wp_enqueue_style( 'admin_layui_css' );
+            }
             wp_register_script( 'drag',match_js_url.'drag/drag.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'drag' );
             wp_register_script( 'admin_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );

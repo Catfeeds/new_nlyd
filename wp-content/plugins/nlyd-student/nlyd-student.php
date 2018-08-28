@@ -147,6 +147,7 @@ if(!class_exists('StudentController')){
                 //获取用户即将开赛的比赛信息
                 $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
                 left join {$wpdb->prefix}order b on a.match_id = b.match_id
+                left join {$wpdb->prefix}posts c on a.match_id = c.ID
                 WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status = 2 
                 ORDER BY match_start_time asc limit 1
                 ";
@@ -154,7 +155,7 @@ if(!class_exists('StudentController')){
                 $row = $wpdb->get_row($sql,ARRAY_A);
 
                 if(!empty($row)){
-                    $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-time();
+                    $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-get_time();
                     $this->wait_match['match_url'] = home_url('matchs/matching/match_id/'.$row['match_id']);
                     $this->wait_match['waiting_url'] = home_url('matchs/matchWaitting/match_id/'.$row['match_id']);
                     $this->wait_match['match_id'] = $row['match_id'];
