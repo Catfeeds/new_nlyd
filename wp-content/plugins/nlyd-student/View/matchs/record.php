@@ -49,11 +49,11 @@
                                         <td>
                                             <div class="nl-circle"><?=$my_ranking['ranking']?></div>
                                         </td>
-                                        <td><?=$my_ranking['user_name']?></td>
-                                        <td id="meid"><?=$my_ranking['ID']?></td>
-                                        <td><?=$my_ranking['city']?></td>
-                                        <td><?=$my_ranking['score']?></td>
-                                        <td><?=$my_ranking['group']?></td>
+                                        <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
+                                        <td id="meid"><div class="table_content"><?=$my_ranking['ID']?></div></td>
+                                        <td><div class="table_content"><?=$my_ranking['city']?></div></td>
+                                        <td><div class="table_content"><?=$my_ranking['score']?></div></td>
+                                        <td><div class="table_content"><?=$my_ranking['group']?></div></td>
                                     </tr>
                                     <?php endif;?>
                                 </thead>
@@ -64,11 +64,11 @@
                                         <td>
                                             <div class="nl-circle <?= $k<2 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                         </td>
-                                        <td><?=$v['user_name']?></td>
-                                        <td><?=$v['ID']?></td>
-                                        <td><?=$v['city']?></td>
-                                        <td><?=$v['score']?></td>
-                                        <td><?=$v['group']?></td>
+                                        <td><div class="table_content"><?=$v['user_name']?></div></td>
+                                        <td><div class="table_content"><?=$v['ID']?></div></td>
+                                        <td><div class="table_content"><?=$v['city']?></div></td>
+                                        <td><div class="table_content"><?=$v['score']?></div></td>
+                                        <td><div class="table_content"><?=$v['group']?></div></td>
                                     </tr>
                                     <?php } ?>
                                     <?php }?>
@@ -268,11 +268,11 @@ layui.use(['element','flow'], function(){
                                                 +'<td>'
                                                     +'<div class="nl-circle">'+value.ranking+'</div>'
                                                 +'</td>'
-                                                +'<td>'+value.user_name+'</td>'
-                                                +'<td>'+value.ID+'</td>'
-                                                +'<td>'+value.city+'</td>'
-                                                +'<td>'+value.score+'</td>'
-                                                +'<td>'+value.group+'</td>'
+                                                +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                                +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                                +'<td><div class="table_content">'+value.city+'</div></td>'
+                                                +'<td><div class="table_content">'+value.score+'</div></td>'
+                                                +'<td><div class="table_content">'+value.group+'</div></td>'
                                             +'</tr>'
                                     lis.push(dom)                           
                                 })
@@ -317,11 +317,11 @@ layui.use(['element','flow'], function(){
                             var Html='<td>'
                                         +'<div class="nl-circle">'+rows.ranking+'</div>'
                                     +'</td>'
-                                    +'<td>'+rows.user_name+'</td>'
-                                    +'<td>'+rows.ID+'</td>'
-                                    +'<td>'+rows.city+'</td>'
-                                    +'<td>'+rows.score+'</td>'
-                                    +'<td>'+rows.group+'</td>'
+                                    +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.group+'</div></td>'
                             // $('#fenlei_me').html(Html)
                         }
                         $.each(res.data.info,function(index,value){
@@ -339,11 +339,11 @@ layui.use(['element','flow'], function(){
                                         +'<td>'
                                             +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
                                         +'</td>'
-                                        +'<td>'+value.user_name+'</td>'
-                                        +'<td>'+value.ID+'</td>'
-                                        +'<td>'+value.city+'</td>'
-                                        +'<td>'+value.score+'</td>'
-                                        +'<td>'+value.group+'</td>'
+                                        +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                        +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                        +'<td><div class="table_content">'+value.city+'</div></td>'
+                                        +'<td><div class="table_content">'+value.score+'</div></td>'
+                                        +'<td><div class="table_content">'+value.group+'</div></td>'
                                     +'</tr>'
                             lis.push(dom)                           
                         })  
@@ -395,11 +395,11 @@ layui.use(['element','flow'], function(){
                               var Html='<td>'
                                             +'<div class="nl-circle">'+rows.ranking+'</div>'
                                         +'</td>'
-                                        +'<td>'+rows.user_name+'</td>'
-                                        +'<td>'+rows.ID+'</td>'
-                                        +'<td>'+rows.city+'</td>'
-                                        +'<td>'+rows.score+'</td>'
-                                        +'<td>'+rows.group+'</td>'
+                                        +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.group+'</div></td>'
                             // $('#danxiang_me').html(Html)
                         }
                         $.each(res.data.info,function(index,value){
@@ -417,11 +417,11 @@ layui.use(['element','flow'], function(){
                                         +'<td>'
                                             +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
                                         +'</td>'
-                                        +'<td>'+value.user_name+'</td>'
-                                        +'<td>'+value.ID+'</td>'
-                                        +'<td>'+value.city+'</td>'
-                                        +'<td>'+value.score+'</td>'
-                                        +'<td>'+value.group+'</td>'
+                                        +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                        +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                        +'<td><div class="table_content">'+value.city+'</div></td>'
+                                        +'<td><div class="table_content">'+value.score+'</div></td>'
+                                        +'<td><div class="table_content">'+value.group+'</div></td>'
                                     +'</tr>'
                             lis.push(dom)                           
                         })  

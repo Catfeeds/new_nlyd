@@ -145,7 +145,7 @@ class Student_Orders extends Student_Home
         $html = '<table style="text-align: center" border="1px solid #000000">'.$th.$td.'</table>';
         $filename = 'order_';
         $filename .= date('YmdHis',strtotime($start_date))."-".date('YmdHis',strtotime($end_date)).'_';
-        $filename .= time().".xls";
+        $filename .= get_time().".xls";
 
         file_put_contents('./download/'.$filename,$html);
 

@@ -486,6 +486,14 @@ p.share-font{
     font-size:0.12rem;
     padding:0;
 }
+.content .nl-table td div.table_content{
+    max-width: 80px;
+    text-align: center;
+    margin: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 /* 比赛页面 */
 .matching-sumbit{
     position: absolute;

@@ -45,7 +45,7 @@ class Student_Ajax
             $redis = new Redis();
             $redis->connect('127.0.0.1',6379,1);
             $redis->auth('leo626');
-            $new_time = time();
+            $new_time = current_time('timestamp');
             $default_count_down = $redis->get('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'])-1;
             $redis->setex('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'],$default_count_down-$new_time,$default_count_down);
             wp_send_json_error(array('info'=>$default_count_down-$new_time));
@@ -503,7 +503,7 @@ class Student_Ajax
             'address'=>$_POST['address'],
             'order_type'=>1,
             'pay_status'=>1,
-            'created_time'=>date('Y-m-d H:i:s',time()),
+            'created_time'=>date('Y-m-d H:i:s',current_time('timestamp')),
         );
         //TODO 测试时 订单价格为0
 //        $_POST['cost'] = 0;
@@ -619,9 +619,9 @@ class Student_Ajax
             $id = $wpdb->get_var("select id from {$wpdb->prefix}match_team where team_id = {$_POST['team_id']} and user_id = {$current_user->ID} and user_type = 1");
 
             if(empty($id)){
-                $result = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$current_user->ID,'user_type'=>1,'status'=>1,'created_time'=>date('Y-m-d H:i:s',time())));
+                $result = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$_POST['team_id'],'user_id'=>$current_user->ID,'user_type'=>1,'status'=>1,'created_time'=>date('Y-m-d H:i:s',current_time('timestamp'))));
             }else{
-                $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>1,'created_time'=>date('Y-m-d H:i:s',time())),array('id'=>$id,'team_id'=>$_POST['team_id'],'user_id'=>$current_user->ID));
+                $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>1,'created_time'=>date('Y-m-d H:i:s',current_time('timestamp'))),array('id'=>$id,'team_id'=>$_POST['team_id'],'user_id'=>$current_user->ID));
             }
             $msgTemplate = 11;
         }else{
@@ -1299,7 +1299,7 @@ class Student_Ajax
                 $rows[$k]['button_title'] = $button_title;
                 $rows[$k]['right_url'] = $url;
                 $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
-                $rows[$k]['new_time'] = str2arr(time_format(time(),'Y-m-d-H-i-s'),'-');
+                $rows[$k]['new_time'] = str2arr(time_format(current_time('timestamp'),'Y-m-d-H-i-s'),'-');
             }
         }
 
@@ -1558,7 +1558,7 @@ class Student_Ajax
         if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
         if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>'证件号格式不正确'));
         $sub_str = substr($_POST['real_ID'],6,4);
-        $now = date("Y",time());
+        $now = date("Y",current_time('timestamp'));
         $age = $now-$sub_str;
         $age = $age >0 ? $age : 1;
         if($age > 150){
@@ -1627,7 +1627,7 @@ class Student_Ajax
                     unset($_SESSION['sms']);
                     wp_send_json_error(array('info'=>'请先获取验证码'));
                 }
-                if(time() > $sms['time']){
+                if(current_time('timestamp') > $sms['time']){
                     unset($_SESSION['sms']);
                     wp_send_json_error(array('info'=>'验证码已过期,请重新获取'));
                 }
@@ -1661,7 +1661,7 @@ class Student_Ajax
                 'mobile' => $mobile,
                 'code' => md5($code),
                 'template' => md5($template),
-                'time' => time()+300,
+                'time' => current_time('timestamp')+300,
             );
             wp_send_json_success(array('info'=>'获取成功'));
         }else{
@@ -1694,7 +1694,7 @@ class Student_Ajax
                     unset($_SESSION['smtp']);
                     wp_send_json_error(array('info'=>'请先获取验证码'));
                 }
-                if(time() > $smtp['time']){
+                if(current_time('timestamp') > $smtp['time']){
                     unset($_SESSION['smtp']);
                     wp_send_json_error(array('info'=>'验证码已过期,请重新获取'));
                 }
@@ -1726,7 +1726,7 @@ class Student_Ajax
                 'email' => $email,
                 'code' => md5($code),
                 'template' => md5($template),
-                'time' => time()+300,
+                'time' => current_time('timestamp')+300,
             );
             wp_send_json_success(array('info'=>'获取成功'));
         }else{
@@ -1902,7 +1902,7 @@ class Student_Ajax
             //将图片保存到数据库
             M('Picture')->path = $file_dir.'/'.$filename;
             M('Picture')->status=1;
-            M('Picture')->create_time=time();
+            M('Picture')->create_time=current_time('timestamp');
             $result=M('Picture')->add();
             if($result){
                 return $result;
@@ -1949,8 +1949,8 @@ class Student_Ajax
     public function setUserCookie($user_id){
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
-        $_SESSION['login_time'] = time()+15;
-        //update_user_meta($user_id,'last_login_time',time());
+        $_SESSION['login_time'] = current_time('timestamp')+15;
+        //update_user_meta($user_id,'last_login_time',current_time('timestamp'));
     }
 
     /**
@@ -2466,7 +2466,7 @@ class Student_Ajax
      */
     public function autoCollectGoods(){
         global $wpdb;
-        $contrastTime = time()-86400*15;//15天
+        $contrastTime = current_time('timestamp')-86400*15;//15天
         $wpdb->query('UPDATE '.$wpdb->prefix.'order'.' SET pay_status=4 WHERE pay_status=3 AND send_goods_time<'.$contrastTime);
 
     }
