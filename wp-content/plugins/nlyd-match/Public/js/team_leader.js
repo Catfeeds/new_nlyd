@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
         });
     });
  
-	$( '.postbox').DDSort({//拖拽
+	$( '#project_meta_box').DDSort({//拖拽
 		target: '.match_project',		
         up:function(){
             $(this).parents('.postbox').find('input').each(function(){

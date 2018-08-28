@@ -29,7 +29,6 @@ font-size:0.14rem;
 .nl-foot-icon,.nl-foot-name{
     text-align: center;
     color: rgba(38, 38, 38, 0.6);
-    height: 25px;
 }
 .nl-foot-icon{
     line-height: 32px;
@@ -37,9 +36,55 @@ font-size:0.14rem;
 .nl-foot-icon i{
     font-size: 0.18rem;
 }
+.nl-foot-icon div{
+    height: 20px;
+    margin: 5px auto 5px auto;
+}
+.footer-home{
+    width: 25px;
+    background:url(./image/footer/home.png) no-repeat;
+    background-position: 0 0;
+}
+.footer-train{
+    width: 19px;
+    background:url(./image/footer/train.png) no-repeat;
+    background-position: 0 0;
+}
+.footer-match{
+    width: 19px;
+    background:url(./image/footer/match.png) no-repeat;
+    background-position: 0 0;
+}
+.footer-kaoji{
+    width: 17px;
+    background:url(./image/footer/kaoji.png) no-repeat;
+    background-position: 0 0;
+}
+.footer-user{
+    width: 18px;
+    background:url(./image/footer/user.png) no-repeat;
+    background-position: 0 0;
+}
+
+.active .nl-foot-icon .footer-home{
+    background-position: -25px 0;
+}
+.active .nl-foot-icon .footer-train{
+    background-position: -19px 0;
+}
+.active .nl-foot-icon .footer-match{
+    background-position: -19px 0;
+}
+.active .nl-foot-icon .footer-kaoji{
+    background-position: -17px 0;
+}
+.active .nl-foot-icon .footer-user{
+    background-position: -18px 0;
+}
 .nl-foot-name{
-    /* font-size: 11px; */
+    font-size: 12px;
     line-height: 19px;
+    color: #262626;
 }
 
 .nl-pc{

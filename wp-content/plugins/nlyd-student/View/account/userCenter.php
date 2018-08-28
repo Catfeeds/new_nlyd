@@ -16,31 +16,31 @@
 <div class="nl-foot-nav">
     <a class="nl-foot-item" href="<?=home_url();?>">
         <div class="nl-foot-icon">
-            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+            <div class="footer-home"></div>
         </div>
         <div class="nl-foot-name">首页</div>
     </a>
     <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
         <div class="nl-foot-icon">
-            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+            <div class="footer-train"></div>
         </div>
         <div class="nl-foot-name">训练</div>
     </a>
     <a class="nl-foot-item" href="<?=home_url('/matchs');?>">
         <div class="nl-foot-icon">
-            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+            <div class="footer-match"></div>
         </div>
         <div class="nl-foot-name">比赛</div>
     </a>
     <a class="nl-foot-item">
         <div class="nl-foot-icon">
-            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+            <div class="footer-kaoji"></div>
         </div>
         <div class="nl-foot-name">考级</div>
     </a>
     <a class="nl-foot-item active" href="<?=home_url('account')?>">
         <div class="nl-foot-icon">
-            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+            <div class="footer-user"></div>
         </div>
         <div class="nl-foot-name">我的</div>
     </a>
@@ -59,49 +59,58 @@
     <div class="layui-row">
         <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-bg-white have-footer">
             <div class="userCenter-info layui-row">
-                <div class='bubble bubble1 layui-hide-md layui-hide-lg'></div>
-                <div class='bubble bubble2 layui-hide-md layui-hide-lg'></div>
-                <div class='bubble bubble3 layui-hide-md layui-hide-lg'></div>
-                <div class='bubble bubble4 layui-hide-md layui-hide-lg'></div>
-                <div class='bubble bubble5 layui-hide-md layui-hide-lg'></div>
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-md layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-md layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
-                <!-- 头像 -->
-                <div class="userCenter-main isMobile layui-row img-box">
-                    <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
-                </div>
-                <!-- 用户名称 -->
-                <div class="userCenter-name layui-row"><div class="userCenter-names"><?=$user_info['nickname']?></div><?=$user_info['user_type'] ? '<div class="userCenter-type layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?></div>
-                <!-- 用户标签 -->
-                <div class="userCenter-describe layui-row layui-hide-md layui-hide-lg">
-                    <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
-                    <span class="userCenter-item"><?= !empty($user_info['user_gender']) ? $user_info['user_gender'] : '性别';?></span>
-                    <span class="userCenter-item"><?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '年龄';?></span>
-                    <span class="userCenter-item"><?= !empty($user_info['user_address']) ? $user_info['user_address']['city'].$user_info['user_address']['area'] : '所在地';?></span>
-                </div>
-                <!-- 战队信息 -->
-                <div class="userCenter-operations layui-hide-md layui-hide-lg">
-                    <?php if(!empty($my_team['mental'])): ?>
-                        <i class="iconfont">&#xe64a;</i> <?=$my_team['mental']?>
-                    <?php endif;?>
+                <div class="radius-zoo">
+                    <!-- 头像 -->
+                    <div class="userCenter-main isMobile layui-row img-box">
+                        <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
+                    </div>
+                    <!-- 用户名称 -->
+                    <div class="userCenter-name layui-row">
+                        <div class="userCenter-names">未登录</div>
+                        <div class="userCenter-names"><?=$user_info['nickname']?></div><?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                    </div>
+                    <!-- 用户标签 -->
+                    <div class="userCenter-describe layui-row layui-hide-md layui-hide-lg">
+                        <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
+                        <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
+                            <a class="userCenter-item c_black6" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
+                                <?=$my_team['my_team']?>
+                                <?php if($my_team['status'] != 2):?>
+                                <span>(<?=$my_team['status_cn']?>)</span>
+                                <?php endif;?>
+                            </a>
+                        <?php }else{ ?>
+                            <span class="userCenter-item">暂无战队</span>
+                        <?php }; ?>
+                        <!-- <span class="userCenter-item"><?= !empty($user_info['user_gender']) ? $user_info['user_gender'] : '性别';?></span>
+                        <span class="userCenter-item"><?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '年龄';?></span>
+                        <span class="userCenter-item"><?= !empty($user_info['user_address']) ? $user_info['user_address']['city'].$user_info['user_address']['area'] : '所在地';?></span> -->
+                    </div>
+                    <!-- 战队信息 -->
+                    <!-- <div class="userCenter-operations layui-hide-md layui-hide-lg">
+                        <?php if(empty($my_team['mental'])): ?>
+                            <i class="iconfont">&#xe64a;</i> <?=$my_team['mental']?>
+                        <?php endif;?>
+                    </div> -->
                 </div>
             </div>
             <div class="layui-row menu-wrapper">
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
-                    <span>
+                    <span class="fs_12">
                         中国<span class="c_orange">1</span>级记忆类脑力健将 | 记忆<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 | 
                         速读<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 | 
                         速算<span class="c_orange"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
                     </span>
                 </div>
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
-                    <span>登录后可查看认证脑力等级</span>
+                    <a class="c_black6" href="<?=home_url('/logins')?>">登录后可查看认证脑力等级</a>
                 </div>
-                <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
-                <!-- 我的战队 -->
+                <!-- <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                     <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
                         <span class="pull-left"><?=$my_team['my_team']?></span>
                         <?php if($my_team['status'] != 2):?>
@@ -111,13 +120,13 @@
                     </a>
                 <?php }else{ ?>
                     <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left no-team">暂无战队</span><span class="pull-right">加入战队</span></a>
-                <?php }; ?>
+                <?php }; ?> -->
                 <!-- 我的钱包 -->
-                <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('wallet')?>">
+                <!-- <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('wallet')?>">
                     <span class="pull-left">我的余额：<i class="iconfont">&#xe61e;</i>3200.00</span>
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
-                </a>
-                <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
+                </a> -->
+                <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
                     <!-- <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper bg1">
@@ -207,7 +216,7 @@
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a href="<?=home_url('/safety/setting');?>">
+                    <a class="no_border" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head my-setting">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/userCenter/settings.png'?>" class="menuImg">
@@ -215,7 +224,7 @@
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a href="<?=home_url('/teams');?>">
+                    <a class="no_border" href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head my-wallet">
                             <div class="menuImg-wrapper">
                                 <img src="<?=student_css_url.'image/userCenter/wallet.png'?>" class="menuImg">

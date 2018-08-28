@@ -26,11 +26,12 @@
 
 .userCenter-item{
     padding: 3px 8px;
-    color: #fff;
+    color: rgba(38, 38, 38, 0.6);
     font-size: 0.12rem;
-    margin-left: 3px;
+    /* margin-left: 3px; */
     border-radius: 2px;
-    background: #6fadfc;
+    font-weight: bold;
+    /* background: #6fadfc; */
 }
 .no-team{
     color:rgba(38, 38, 38, 0.6);;
@@ -39,6 +40,39 @@
 .menuImg-wrapper .menuImg{
     height: 100%;
     margin: auto;
+}
+.menuImg-wrapper{
+    /* background-image: url(./image/userCenter_icon.png) */
+}
+.my-match{
+
+}
+.my-train{
+
+}
+.my-course{
+
+}
+.my-coach{
+
+}
+.my-order{
+
+}
+.my-kaoji{
+
+}
+.my-tuiguang{
+
+}
+.my-secure{
+
+}
+.my-setting{
+
+}
+.my-wallet{
+
 }
 @media screen and (min-width: 992px){
 
@@ -58,8 +92,8 @@
         text-indent: 0.12rem;
     }
     .menuImg-wrapper{
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
         margin: auto;
         line-height: normal;
         margin-top: 12.5px;
@@ -114,7 +148,6 @@
     }
 
     .userCenter-main{
-        position: relative;
         background-color: #fff;
         width: 50px;
         height: 50px;
@@ -148,16 +181,11 @@
     }
 }
 @media screen and (max-width: 991px){
-    .userCenter-main{
-        position: relative;
-        background-color: #fff;
-        width: 80px;
-        height: 80px;
-        padding: 5px;
+    .menuImg-wrapper{
+        width: 30px;
+        height: 30px;
         margin: auto;
-        display: block;
-        border-radius: 50%;
-        overflow: hidden;
+        line-height: normal;
     }
     a.userCenter-row:hover{
         color: #2484FE;
@@ -174,7 +202,7 @@
         /* text-align: left; */
     }
     .userCenter-names{
-        width: 116px;
+        width: 145px;
         margin: auto;
         overflow: hidden;
         text-overflow:ellipsis;
@@ -182,10 +210,11 @@
     }
     .userCenter-name{
         position: relative;
+        padding-top: 50px;
         font-size: 0.16rem;
         line-height: 16px;
-        margin-top: 5px;
-        color: #fff;
+        color: #262626;
+        font-weight: bold;
         margin-bottom: 7px;
     }
     .userCenter-row i{
@@ -200,14 +229,13 @@
     /* 个人中心 */
     .userCenter-info{
         position: relative;
-        background: -webkit-linear-gradient(#4394F9, #68AAFE);
-        background: -o-linear-gradient(#4394F9, #68AAFE);
-        background: -moz-linear-gradient(#4394F9, #68AAFE);
-        background: linear-gradient(#4394F9, #68AAFE);
-        /* height: 262px; */
+        background-image: url(./image/userCenter/bg.png);
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-color:#fff;
         border: none;
         padding-top: 23px;
-        padding-bottom: 35px;
+        /* padding-bottom: 35px; */
         width: 100%;
         top: 0;
         left: 0;
@@ -215,46 +243,30 @@
         /* margin-bottom: 30px; */
         text-align: center;
     }
-    .userCenter-info .bubble{
+    .radius-zoo{
+        /* background: #fff; */
+        width: 100%;
+        /* border-top-left-radius: 50%;
+        border-top-right-radius: 50%; */
+        position: relative;
+        /* left: -5%; */
+        margin-top: 100px;
+        padding-bottom: 10px;
+    }
+    .userCenter-main{
         position: absolute;
-        border-radius: 50%;
-        background: #6FAFFF;
+        background-color: #fff;
+        width: 80px;
+        height: 80px;
+        padding: 5px;
+        margin: auto;
         display: block;
-    }
-    .bubble1{
-        width: 73px;
-        height: 73px;
-        left: 23px;
-        top: 132px;
-        opacity: 0.21;
-    }
-    .bubble2{
-        width: 24px;
-        height: 24px;
-        left: 56px;
-        top: 106px;
-        opacity: 0.5;
-    }
-    .bubble3{
-        width:34px;
-        height: 34px;
-        left: 70px;
-        top: 142px;
-        opacity: 0.37;
-    }
-    .bubble4{
-        width: 20px;
-        height: 20px;
-        left: 135px;
-        top: 151px;
-        opacity: 0.25;
-    }
-    .bubble5{
-        width: 73px;
-        height: 73px;
-        left: 292px;
-        top: 98px;
-        opacity: 0.16;
+        border-radius: 50%;
+        overflow: hidden;
+        left: 50%;
+        margin-left: -45px;
+        top: -45px;
+        z-index: 2;
     }
     .userCenter-describe{
         font-size: 0.14rem;
@@ -334,7 +346,8 @@
     .userCenter-detail{
         margin-top: 10px;
         margin-bottom: 10px;
-        padding-bottom: 20px;
+        padding-bottom: 15px;
+        padding-top: 15px;
         background-color: #fff;
         border: none;
         /* border-radius: 10px; */
@@ -345,17 +358,25 @@
         position: relative;
         line-height: 50px;
         text-align: center;
-        color: rgba(38, 38, 38, 0.6);;
+        color: rgba(38, 38, 38);
         border: none;
         display: block;
         float: left;
         height: 80px;
-        width: 25%;
+        width: -webkit-calc(25% - 0.5px);
+        width: calc(25% - 0.5px);
+        border-bottom: 0.5px solid #f5f5f5;
+        border-right: 0.5px solid #f5f5f5;
+    }
+    .userCenter-detail a:nth-child(4n){
+        border-right: none;
     }
     .userCenter-detail a:hover{
-        color: rgba(38, 38, 38, 0.6);
+        color: rgba(38, 38, 38);
     }
-
+    .userCenter-detail a.no_border{
+        border-bottom: none;
+    }
     .userCenter-detail-head{
         display: block;
         height: auto;
@@ -363,12 +384,7 @@
         margin-bottom: 5px;
         line-height: 35px;
     }
-    .menuImg-wrapper{
-        width: 25px;
-        height: 25px;
-        margin: auto;
-        line-height: normal;
-    }
+
     .userCenter-detail-foot{
         height: auto;
         line-height: 20px;
@@ -378,9 +394,9 @@
     }
     .userCenter-type{
         position: absolute;
-        left: -webkit-calc(50% + 58px);; 
-        left: calc(50% + 58px);
-        top: -3px;
+        left: -webkit-calc(50% + 75px);; 
+        left: calc(50% + 75px);
+        bottom: -4px;
         text-align: center;
         background-color: #FB8E8E;
         color: #fff;
