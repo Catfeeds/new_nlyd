@@ -42,37 +42,49 @@
     margin: auto;
 }
 .menuImg-wrapper{
-    /* background-image: url(./image/userCenter_icon.png) */
+    background-image: url(./image/userCenter_icon.png);
+    background-size: auto 100%;
+    background-repeat: no-repeat
 }
 .my-match{
-
+    width: 23px;
+    background-position: -153px 3px;
 }
 .my-train{
-
+    width: 26px;
+    background-position: -178px 3px;
 }
 .my-course{
-
+    width: 23px;
+    background-position: -46px 3px;
 }
 .my-coach{
-
+    width: 23px;
+    background-position: -100px 3px;
 }
 .my-order{
-
+    width: 23px;
+    background-position: 0 0;
 }
 .my-kaoji{
-
+    width: 23px;
+    background-position: -23px 3px;
 }
 .my-tuiguang{
-
+    width: 23px;
+    background-position: -206px 3px;
 }
 .my-secure{
-
+    width: 23px;
+    background-position: -74px 3px;
 }
 .my-setting{
-
+    width: 23px;
+    background-position: -233px 3px;
 }
 .my-wallet{
-
+    width: 23px;
+    background-position: -125px 3px;
 }
 @media screen and (min-width: 992px){
 
@@ -89,10 +101,10 @@
         padding-left: 10px;
         width: -webkit-calc(100% - 70px);
         width: calc(100% - 70px);
+        font-size: 0.15rem;
         text-indent: 0.12rem;
     }
     .menuImg-wrapper{
-        width: 30px;
         height: 30px;
         margin: auto;
         line-height: normal;
@@ -182,7 +194,6 @@
 }
 @media screen and (max-width: 991px){
     .menuImg-wrapper{
-        width: 30px;
         height: 30px;
         margin: auto;
         line-height: normal;
@@ -388,6 +399,7 @@
     .userCenter-detail-foot{
         height: auto;
         line-height: 20px;
+        font-size: 0.16rem;
     }
     .userCenter-detail a.nl-pc{
         display: none;

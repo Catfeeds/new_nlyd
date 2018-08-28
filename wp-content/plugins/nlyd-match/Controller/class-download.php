@@ -207,20 +207,7 @@ class Download
         foreach ($rows as $k => $row){
             $usermeta = get_user_meta($row['ID'], '', true);
             $age = unserialize($usermeta['user_real_name'][0])['real_age'];
-            switch ($age){
-                case $age > 59:
-                    $group = '老年组';
-                    break;
-                case $age > 18:
-                    $group = '成人组';
-                    break;
-                case $age > 13:
-                    $group = '少年组';
-                    break;
-                default:
-                    $group = '儿童组';
-                    break;
-            }
+            $group = $this->getAgeGroupNameByAge($age);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$usermeta['user_ID'][0]);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$row['user_login']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_name']);
@@ -236,7 +223,186 @@ class Download
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         return;
-        var_dump($rows);
+
+    }
+
+    /**
+     * 组别名称
+     */
+    public function getAgeGroupNameByAge($age){
+        switch ($age){
+            case $age > 59:
+                $group = '老年组';
+                break;
+            case $age > 18:
+                $group = '成人组';
+                break;
+            case $age > 13:
+                $group = '少年组';
+                break;
+            default:
+                $group = '儿童组';
+                break;
+        }
+        return $group;
+    }
+
+    /**
+     * 导出比赛排名
+     */
+    public function match_ranking(){
+        global $wpdb;
+
+        //首先获取当前比赛
+        $post = get_post(intval($_GET['match_id']));
+//        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        //TODO 判断比赛是否结束
+        //根据成绩排序查询比赛学员
+        $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
+        LEFT JOIN '.$wpdb->prefix.'order AS o ON o.match_id=mq.match_id AND o.user_id=mq.user_id 
+        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
+        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$post->ID,ARRAY_A);
+        //处理数据
+        $rankingArr = [];
+        $titleArr = [];
+        foreach ($matchQuestions as $mqk => $mqv){
+            $usermeta = get_user_meta($mqv['user_id'], '', true);
+
+            if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
+//            var_dump($usermeta);
+            //基础数据
+            if(!isset($rankingArr[$mqv['user_id']])){
+                $rankingArr[$mqv['user_id']] = [
+                    'user_ID' => $usermeta['user_ID'][0],
+                    'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
+                    'sex' => $usermeta['user_gender'][0],
+                    'birthday' => $usermeta['user_birthday'],
+                    'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['age']),
+                    'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
+                    'mobile' => $mqv['telephone'],
+                    'email' => $mqv['user_email'],
+                    'created_time' => $mqv['created_time'],
+                ];
+
+                $rankingArr[$mqv['user_id']]['total_score'] = $mqv['my_score'];
+            }else{
+
+                $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
+            }
+            //每个项目每一轮比赛成绩
+            foreach ($titleArr as $titleK => $titleV){
+                if($mqv['project_id'] == $titleK) {
+                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleK]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleK])){
+                        $rankingArr[$mqv['user_id']]['project'][$titleK] .= '/'.$mqv['my_score'];
+                    }else{
+                        $rankingArr[$mqv['user_id']]['project'][$titleK] = $mqv['my_score'];
+                    }
+                }else{
+                    $rankingArr[$mqv['user_id']]['project'][$titleK] .= '';
+                }
+            }
+
+        }
+
+
+        $filename = 'match_ranking_';
+        $filename .= strtotime(current_time('mysql')).".xls";
+//        $path = self::$downloadPath.$filename;
+//        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        $objPHPExcel = new \PHPExcel();
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $a = 'K';
+        foreach ($titleArr as $titleV){
+            ++$a;
+            $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(25);
+
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
+
+        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+        $a = 'K';
+        foreach ($titleArr as $titleV){
+            ++$a;
+            $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
+
+        }
+
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:'.--$a.'1');
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '学员ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '出生日期');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '手机');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '报名时间');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '总得分');
+        $a = 'L';
+         foreach ($titleArr as $titleV){
+             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV.'得分');
+             ++$a;
+         }
+
+
+        $k = 0;
+        foreach ($rankingArr as $raV){
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$usermeta['user_ID'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['real_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['sex']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['birthday']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['age']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['address']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['total_score']);
+            $a = 'L';
+            foreach ($raV['project'] as $ravV){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
+                ++$a;
+            }
+            ++$k;
+        }
+
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
 
     }
 }

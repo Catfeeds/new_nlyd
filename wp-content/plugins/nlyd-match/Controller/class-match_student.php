@@ -10,7 +10,7 @@ class Match_student {
     public function register_order_menu_page(){
         add_menu_page('报名学员', '报名学员', 'administrator', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
         add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
-//        add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
+        add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
 //        add_submenu_page('order','发货','发货','administrator','order-send',array($this,'sendGoods'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
@@ -119,7 +119,7 @@ class Match_student {
 
                         <?php foreach ($rows as $row){
                             $usermeta = get_user_meta($row['ID'], '', true);
-                            var_dump($usermeta);
+//                            var_dump($usermeta);
                          ?>
                             <tr id="user-<?=$row['ID']?>">
                                 <th scope="row" class="check-column">
@@ -431,6 +431,192 @@ class Match_student {
         <?php
     }
 
+    /**
+     * 比赛排名
+     */
+    public function matchRanking(){
+        global $wpdb;
+
+        //首先获取当前比赛
+        $post = get_post(intval($_GET['match_id']));
+//        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        //TODO 判断比赛是否结束
+//        if(!$match || $match['match_status'] != -3){
+//            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
+//            return;
+//        }
+        //根据成绩排序查询比赛学员
+        $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
+        LEFT JOIN '.$wpdb->prefix.'order AS o ON o.match_id=mq.match_id AND o.user_id=mq.user_id 
+        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
+        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$post->ID,ARRAY_A);
+        //处理数据
+        $rankingArr = [];
+        $titleArr = [];
+        foreach ($matchQuestions as $mqk => $mqv){
+            $usermeta = get_user_meta($mqv['user_id'], '', true);
+
+            if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
+//            var_dump($usermeta);
+            //基础数据
+            if(!isset($rankingArr[$mqv['user_id']])){
+                $rankingArr[$mqv['user_id']] = [
+                    'user_ID' => $usermeta['user_ID'][0],
+                    'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
+                    'sex' => $usermeta['user_gender'][0],
+                    'birthday' => $usermeta['user_birthday'],
+                    'age' => getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['age']),
+                    'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
+                    'mobile' => $mqv['telephone'],
+                    'email' => $mqv['user_email'],
+                    'created_time' => $mqv['created_time'],
+                ];
+
+                $rankingArr[$mqv['user_id']]['total_score'] = $mqv['my_score'];
+            }else{
+
+                $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
+            }
+            //每个项目每一轮比赛成绩
+            foreach ($titleArr as $titleK => $titleV){
+                if($mqv['project_id'] == $titleK) {
+                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleK]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleK])){
+                        $rankingArr[$mqv['user_id']]['project'][$titleK] .= '/'.$mqv['my_score'];
+                    }else{
+                        $rankingArr[$mqv['user_id']]['project'][$titleK] = $mqv['my_score'];
+                    }
+                }else{
+                    $rankingArr[$mqv['user_id']]['project'][$titleK] .= '';
+                }
+            }
+
+        }
+//        var_dump( get_time('mysql'));
+//        var_dump( get_time());
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline"><?=$post->post_title?>-比赛排名</h1>
+
+<!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
+
+            <hr class="wp-header-end">
+
+
+            <form method="get">
+                <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
+                <p class="search-box">
+<!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
+<!--                    <input type="search" id="user-search-input" name="s" value="">-->
+<!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
+                </p>
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+
+                    <div class="alignleft actions bulkactions">
+                    </div>
+                    <div class="alignleft actions">
+                    </div>
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <td id="cb" class="manage-column column-cb check-column">
+                            <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                            <input id="cb-select-all-1" type="checkbox">
+                        </td>
+
+                        <th scope="col" id="ID" class="manage-column column-ID">学员ID</th>
+                        <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="birthday" class="manage-column column-birthday">出生日期</th>
+                        <th scope="col" id="age" class="manage-column column-age">年龄组别</th>
+                        <th scope="col" id="address" class="manage-column column-address">所在地区</th>
+                        <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
+                        <th scope="col" id="email" class="manage-column column-email">邮箱</th>
+                        <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
+                        <th scope="col" id="total_score" class="manage-column column-total_score">总得分</th>
+                        <?php foreach ($titleArr as $titleV){ ?>
+
+                            <th scope="col" id="" class="manage-column column-"><?=$titleV?>得分</th>
+                        <?php } ?>
+<!--                        <th scope="col" id="" class="manage-column column-">扑克接力得分</th>-->
+<!--                        <th scope="col" id="" class="manage-column column-">快眼扫描得分</th>-->
+<!--                        <th scope="col" id="" class="manage-column column-">文章速读得分</th>-->
+<!--                        <th scope="col" id="" class="manage-column column-">正向运算得分</th>-->
+<!--                        <th scope="col" id="" class="manage-column column-">逆向运算得分</th>-->
+                    </tr>
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+
+                    <?php foreach ($rankingArr as $raV){?>
+                        <tr id="user-13">
+                            <th scope="row" class="check-column">
+                                <label class="screen-reader-text" for="user_13"></label>
+                                <input type="checkbox" name="users[]" id="" class="subscriber" value="">
+                            </th>
+
+                            <td class="name column-ID" data-colname="学员ID"><span aria-hidden="true"><?=$raV['user_ID']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
+                            <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['birthday']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-address" data-colname="所在地区"><span aria-hidden="true"><?=$raV['address']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['mobile']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-email" data-colname="邮箱"><span aria-hidden="true"><?=$raV['email']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-created_time" data-colname="报名时间"><span aria-hidden="true"><?=$raV['created_time']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-total_score" data-colname="总得分"><span aria-hidden="true"><?=$raV['total_score']?></span><span class="screen-reader-text">-</span></td>
+                            <?php foreach ($raV['project'] as $ravV){ ?>
+                                <td class="name column-total_score" data-colname=""><span aria-hidden="true"><?=$ravV?></span><span class="screen-reader-text">-</span></td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                  </tbody>
+
+                    <tfoot>
+
+
+                    <tr>
+                        <td class="manage-column column-cb check-column">
+                            <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                            <input id="cb-select-all-2" type="checkbox">
+                        </td>
+                        <th scope="col" class="manage-column column-ID">学员ID</th>
+                        <th scope="col" class="manage-column column-real_name">姓名</th>
+                        <th scope="col" class="manage-column column-sex">性别</th>
+                        <th scope="col" class="manage-column column-birthday">出生日期</th>
+                        <th scope="col" class="manage-column column-age">年龄组别</th>
+                        <th scope="col" class="manage-column column-address">所在地区</th>
+                        <th scope="col" class="manage-column column-mobile">手机</th>
+                        <th scope="col" class="manage-column column-email">邮箱</th>
+                        <th scope="col" class="manage-column column-created_time">报名时间</th>
+                        <th scope="col" class="manage-column column-total_score">总得分</th>
+                        <?php foreach ($titleArr as $titleV){ ?>
+                            <th scope="col"class="manage-column column-"><?=$titleV?>得分</th>
+                        <?php } ?>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                    <div class="alignleft actions bulkactions">
+
+                    </div>
+                    <div class="alignleft actions">
+                    </div>
+
+                    <br class="clear">
+                </div>
+            </form>
+
+            <br class="clear">
+        </div>
+        <?php
+    }
 
     /**
      * 引入当前页面css/js
