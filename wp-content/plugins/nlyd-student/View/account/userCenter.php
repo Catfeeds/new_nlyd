@@ -15,23 +15,33 @@
 </style>
 <div class="nl-foot-nav">
     <a class="nl-foot-item" href="<?=home_url();?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe62d;</i></div>
+        <div class="nl-foot-icon">
+            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+        </div>
         <div class="nl-foot-name">首页</div>
     </a>
     <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe631;</i></div>
+        <div class="nl-foot-icon">
+            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+        </div>
         <div class="nl-foot-name">训练</div>
     </a>
     <a class="nl-foot-item" href="<?=home_url('/matchs');?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe692;</i></div>
+        <div class="nl-foot-icon">
+            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+        </div>
         <div class="nl-foot-name">比赛</div>
     </a>
     <a class="nl-foot-item">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe630;</i></div>
+        <div class="nl-foot-icon">
+            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+        </div>
         <div class="nl-foot-name">考级</div>
     </a>
     <a class="nl-foot-item active" href="<?=home_url('account')?>">
-        <div class="nl-foot-icon"><i class="iconfont">&#xe632;</i></div>
+        <div class="nl-foot-icon">
+            <img src="<?=student_css_url.'image/userCenter/match.png'?>">
+        </div>
         <div class="nl-foot-name">我的</div>
     </a>
 </div>
@@ -58,22 +68,6 @@
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-md layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-md layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
-                <!-- 级别 -->
-                <div class="userCenter-level width-left layui-row layui-bg-white layui-hide-md layui-hide-lg">
-                    <div class="userCenter-level-item">
-                        <p><?=empty($my_skill['reading'])?0:$my_skill['reading']?>级</p>
-                        <p>速读级别</p>
-                    </div>
-                    <div class="userCenter-level-item">
-                        <p><?=empty($my_skill['memory'])?0:$my_skill['memory']?>级</p>
-                        <p>速记级别</p>
-                    </div>
-                    <div class="userCenter-level-item">
-                        <p><?=empty($my_skill['compute'])?0:$my_skill['compute']?>级</p>
-                        <p>速算级别</p>
-                        <!-- <span class="userCenter-level-info bold"><?=$user_info['mycred_default_total']?></span> -->
-                    </div>
-                </div>
                 <!-- 头像 -->
                 <div class="userCenter-main isMobile layui-row img-box">
                     <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
@@ -94,7 +88,18 @@
                     <?php endif;?>
                 </div>
             </div>
-            <div class="width-margin layui-row menu-wrapper">
+            <div class="layui-row menu-wrapper">
+                <!-- 级别 -->
+                <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
+                    <span>
+                        中国<span class="c_orange">1</span>级记忆类脑力健将 | 记忆<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 | 
+                        速读<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 | 
+                        速算<span class="c_orange"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
+                    </span>
+                </div>
+                <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
+                    <span>登录后可查看认证脑力等级</span>
+                </div>
                 <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                 <!-- 我的战队 -->
                     <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
@@ -113,11 +118,9 @@
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a>
                 <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-                    <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
+                    <!-- <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
                         <div class="userCenter-detail-head">
-                            <!-- <i class="iconfont">&#xe60f;</i> -->
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper bg1">
                             </div>
                             
                         </div>
@@ -126,100 +129,99 @@
                     <a href="<?=home_url('/account/messages');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
                             </div>
                             
                         </div>
                         <div class="userCenter-detail-foot">消 息</div>
-                    </a>
+                    </a> -->
                     <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-match">
+                                <img src="<?=student_css_url.'image/userCenter/match.png'?>" class="menuImg">
                             </div>
                             
                         </div>
-                        <div class="userCenter-detail-foot">比 赛</div>
+                        <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
                     <a href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/train-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-train">
+                                <img src="<?=student_css_url.'image/userCenter/train.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">训 练</div>
+                        <div class="userCenter-detail-foot">我的训练</div>
                     </a>
                     <a href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/course-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-course">
+                                <img src="<?=student_css_url.'image/userCenter/course.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">课 程</div>
+                        <div class="userCenter-detail-foot">我的课程</div>
                     </a>
                     <a href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/coach-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-coach">
+                                <img src="<?=student_css_url.'image/userCenter/coach.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">教 练</div>
+                        <div class="userCenter-detail-foot">我的教练</div>
                     </a>
                     <a href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/order-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-order">
+                                <img src="<?=student_css_url.'image/userCenter/order.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">订 单</div>
+                        <div class="userCenter-detail-foot">我的订单</div>
                     </a>
                     <a>
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/kaoji-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-kaoji">
+                                <img src="<?=student_css_url.'image/userCenter/kaoji.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">考 级</div>
+                        <div class="userCenter-detail-foot">我的考级</div>
                     </a>
                     <a>
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/tuiguang-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-tuiguang">
+                                <img src="<?=student_css_url.'image/userCenter/tuiguang.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">推 广</div>
+                        <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a>
-                        <div class="userCenter-detail-head">
+                    <!-- <a href="<?=home_url('/teams');?>">
+                        <div class="userCenter-detail-head my-team">
                             <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/zice-big.png'?>" class="menuImg">
+                                <img src="<?=student_css_url.'image/userCenter/setting-big.png'?>" class="menuImg">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">自 测</div>
-                    </a>
-                    <a href="<?=home_url('/safety/setting');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">设 置</div>
-                    </a>
-                    <a href="<?=home_url('/teams');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">战 队</div>
-                    </a>
+                        <div class="userCenter-detail-foot">我的战队</div>
+                    </a> -->
                     <a href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/secure-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-secure">
+                                <img src="<?=student_css_url.'image/userCenter/scure.png'?>" class="menuImg">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
+                    </a>
+                    <a href="<?=home_url('/safety/setting');?>">
+                        <div class="userCenter-detail-head my-setting">
+                            <div class="menuImg-wrapper">
+                                <img src="<?=student_css_url.'image/userCenter/settings.png'?>" class="menuImg">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot">其他设置</div>
+                    </a>
+                    <a href="<?=home_url('/teams');?>">
+                        <div class="userCenter-detail-head my-wallet">
+                            <div class="menuImg-wrapper">
+                                <img src="<?=student_css_url.'image/userCenter/wallet.png'?>" class="menuImg">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot">我的钱包</div>
                     </a>
                 </div>
             </div>
