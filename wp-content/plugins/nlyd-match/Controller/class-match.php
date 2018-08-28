@@ -109,12 +109,12 @@ class Match
      */
     public function match_switch_meta_box($post){
         $match_switch = get_post_meta($post->ID,'default_match_switch')[0];
-        //var_dump($match_switch);
+        //var_dump($post->post_title);
     ?>
       <div class="layui-form-item" pane="">
         <label class="layui-form-label" style="text-align:left">自动开赛</label>
         <div class="layui-input-block">
-            <input type="checkbox" <?=$match_switch=='ON' || empty($match_switch)?'checked':'';?> lay-skin="switch"  name="match_switch" value="ON"  lay-text="是|否">
+            <input type="checkbox" <?= $match_switch=='ON' || empty($post->post_title)?'checked':'';?> lay-skin="switch"  name="match_switch" value="ON"  lay-text="是|否">
         </div>
     </div>
         <!-- 自动发布 <input type="checkbox" value="on" name="match_switch" /> -->
@@ -578,9 +578,11 @@ class Match
         );
         $the_query = new WP_Query($args);
         $this->post_array = array_combine(array_column($the_query->posts,'ID'),$the_query->posts);
-
-        $default_array = array_unique(array_merge($this->temp_key,array_column($the_query->posts,'ID')));
-        $match_project = array_map(array($this,'mop_function'),$default_array);
+        $match_project = $the_query->posts;
+        if(!empty($this->temp_key)){
+            $default_array = array_unique(array_merge($this->temp_key,array_column($the_query->posts,'ID')));
+            $match_project = array_map(array($this,'mop_function'),$default_array);
+        }
         //var_dump($match_project);
 
         if (!empty($match_project)) {
