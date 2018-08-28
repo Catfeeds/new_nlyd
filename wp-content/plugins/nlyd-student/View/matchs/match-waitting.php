@@ -6,6 +6,7 @@
             <h1 class="mui-title">比赛等待</h1>
         </header>
             <div class="layui-row nl-border nl-content">
+                <?php if(!$midway_match){?>
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>
@@ -15,15 +16,16 @@
                     <?php }?>
                     <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=$project_title?>”，第1轮</p>
                 </div> 
+                <?php }else{ ?>
 
-
-                 <!--<div class="count-wrapper">
+                 <div class="count-wrapper">
                     <p class="tips fs_16">
-                        <span class="c_blue">快眼扫描第2轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
+                        <span class="c_blue"><?=$project_title?>第<?=$project_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                     </p>
                     <a class="a-btn wait">进入下一轮等待页面</a>
                     <a class="a-btn back">返回我的比赛列表</a>
-                </div>-->
+                </div>
+                <?php } ?>
             </div>           
         </div>
 
