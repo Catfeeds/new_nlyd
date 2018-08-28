@@ -587,6 +587,7 @@ class Match
 
         if (!empty($match_project)) {
             foreach ($match_project as $k => $v){
+                $v = (array)$v;
                 ?>
                 <div class="layui-inline match_project">
                     <div class="layui-input-inline title">
