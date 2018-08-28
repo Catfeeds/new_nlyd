@@ -61,7 +61,7 @@ class Timer
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
             //var_dump($rows);
-            $new_time = date('Y-m-d H:i:s',time());
+            $new_time = get_time('mysql');
             foreach ($rows as $v){
 
                 if($v['match_switch'] == 'ON'){
