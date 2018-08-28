@@ -195,6 +195,15 @@ a.c_black3:hover{
 .pointer{
     cursor: pointer;
 }
+.ta_c{
+    text-align: center;
+}
+.ta_l{
+    text-align: left;
+}
+.ta_r{
+    text-align: right;
+}
 @media screen and (min-width:992px) {
     html{font-size:625%!important;}
 }

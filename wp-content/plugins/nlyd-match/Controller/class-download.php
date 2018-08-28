@@ -127,5 +127,12 @@ class Download
         fclose ($file_temp);
         exit;
     }
+
+    /**
+     * 导出报名学员
+     */
+    public function matchStudent(){
+
+    }
 }
 new Download();
