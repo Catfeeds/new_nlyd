@@ -62,7 +62,7 @@ class Match_student {
 <!--                </p>-->
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
-                        <div><a class="button" href="?page=download&action=order&match_id=<?=$match->ID?>">导出成员</a></div>
+                    <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
 <!--                    <div class="alignleft actions bulkactions">-->
 <!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
 <!--                            <option value="-1">批量操作</option>-->
@@ -86,6 +86,7 @@ class Match_student {
                     <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
                     </div>
+
                     <br class="clear">
                 </div>
                 <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
@@ -97,7 +98,7 @@ class Match_student {
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
                         <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
-                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
+                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
@@ -118,7 +119,7 @@ class Match_student {
 
                         <?php foreach ($rows as $row){
                             $usermeta = get_user_meta($row['ID'], '', true);
-//                            var_dump($usermeta);
+                            var_dump($usermeta);
                          ?>
                             <tr id="user-<?=$row['ID']?>">
                                 <th scope="row" class="check-column">
@@ -143,7 +144,7 @@ class Match_student {
 
                                 <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
                                 <td class="role column-birthday" data-colname="出生日期"><?=$usermeta['user_birthday'][0]?></td>
-                                <td class="role column-age_group" data-colname="年龄组别"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
+                                <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
                                 <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
                                 <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone']?></a></td>
                                 <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
@@ -164,7 +165,7 @@ class Match_student {
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
                         <th scope="col" class="manage-column column-username column-primary sortable desc">
-                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
+                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
@@ -291,7 +292,7 @@ class Match_student {
                             ?>
                             <tr style="background-color: #b3b3b3;color: #ffffff">
                                 <th scope="row" class="check-column">
-                                    <label class="screen-reader-text" for="user_13">选择</label>
+                                                                      <label class="screen-reader-text" for="user_13">选择</label>
 
                                     <input type="checkbox" name="ids[]" class="subscriber" value="">
                                 </th>
@@ -369,7 +370,7 @@ class Match_student {
 
                                     <th scope="row" class="check-column">
                                     </th>
-                                        <td class="role column-project" data-colname="比赛项目">1</td>
+                                        <td class="role column-project" data-colname="比赛项目"></td>
 
                                         <td class="role column-match_more" data-colname="比赛轮数"></td>
                                         <td class="role column-match_questions" data-colname="比赛考题"><?=$match_questions_str?></td>

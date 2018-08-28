@@ -194,20 +194,7 @@ class Student_Ajax
                 $list[$k]['user_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                 if(!empty($user_info['user_age'])){
                     $age = $user_info['user_age'];
-                    switch ($age){
-                        case $age > 59:
-                            $group = '老年组';
-                            break;
-                        case $age > 18:
-                            $group = '成人组';
-                            break;
-                        case $age > 13:
-                            $group = '少年组';
-                            break;
-                        default:
-                            $group = '儿童组';
-                            break;
-                    }
+                    $group = getAgeGroupNameByAge($age);
 
                 }else{
                     $group = '-';

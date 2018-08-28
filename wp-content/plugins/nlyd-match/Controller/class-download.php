@@ -5,12 +5,17 @@ class Download
     private static $downloadPath;
     public function __construct()
     {
-        //配置自己的重写规则
+//        //配置自己的重写规则
         add_action( 'init', array($this,'custom_rewrite_basic'),10,0);
         self::$downloadPath = WP_PLUGIN_DIR.'/downloadFile/';
         if(!isset($_GET['action']) || !method_exists($this, $_GET['action'])) exit;
         $action = $_GET['action'];
         $this->$action();
+        exit;
+    }
+
+    public function custom_rewrite_basic(){
+
     }
 
     public function order(){
@@ -132,6 +137,106 @@ class Download
      * 导出报名学员
      */
     public function matchStudent(){
+        $match_id = intval($_GET['match_id']);
+        $match = get_post($match_id);
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone FROM '.$wpdb->prefix.'order AS o 
+        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
+        WHERE o.order_type=1 AND o.pay_status!=-2 AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
+
+
+
+
+        $filename = 'match_student_';
+        $filename .= time().".xls";
+//        $path = self::$downloadPath.$filename;
+//        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        $objPHPExcel = new \PHPExcel();
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title);
+
+        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+
+
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', 'ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '出生日期');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '手机');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '报名时间');
+        foreach ($rows as $k => $row){
+            $usermeta = get_user_meta($row['ID'], '', true);
+            $age = unserialize($usermeta['user_real_name'][0])['real_age'];
+            switch ($age){
+                case $age > 59:
+                    $group = '老年组';
+                    break;
+                case $age > 18:
+                    $group = '成人组';
+                    break;
+                case $age > 13:
+                    $group = '少年组';
+                    break;
+                default:
+                    $group = '儿童组';
+                    break;
+            }
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$usermeta['user_ID'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$usermeta['user_gender'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$usermeta['user_birthday'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$group);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$row['telephone']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['created_time']);
+        }
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        return;
+        var_dump($rows);
 
     }
 }
