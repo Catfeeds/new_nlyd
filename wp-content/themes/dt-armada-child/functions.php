@@ -16,6 +16,28 @@ function get_age_group(){
     return array('1'=>"儿童组",'2'=>"青年组",'3'=>"成年组",'4'=>"老年组");
 }
 
+/**
+ * @param $age 年龄
+ * 根据年龄获取组别名称
+ */
+function getAgeGroupNameByAge($age){
+    switch ($age){
+        case $age > 59:
+            $group = '老年组';
+            break;
+        case $age > 18:
+            $group = '成人组';
+            break;
+        case $age > 13:
+            $group = '少年组';
+            break;
+        default:
+            $group = '儿童组';
+            break;
+    }
+    return $group;
+}
+
 /*
  * 文章速读选项
  * $index 选项索引
