@@ -68,8 +68,8 @@ class Student_Ajax
                 //$_POST['my_answer'] = '(5+5)+5+9';
                 $my_answer = str_replace('×','*',$_POST['my_answer']);
                 $my_answer = str_replace('÷','/',$my_answer);
-
-                if(!preg_match("/[\+\-\*\/\.]{2}|[^\+\-\*\/\(\)\d\.]+/i", $my_answer)){
+                //var_dump(preg_match('/^((\d++(\.\d+)?|\((?1)\))((\+|\/|\*|-)(\d++(\.\d+)?|(?1)))*)$/', $my_answer));die;
+                if(preg_match('/^((\d++(\.\d+)?|\((?1)\))((\+|\/|\*|-)(\d++(\.\d+)?|(?1)))*)$/', $my_answer)){
 
                     $l_cont = substr_count($my_answer,"(");
                     $r_cont = substr_count($my_answer,")");
@@ -314,8 +314,7 @@ class Student_Ajax
                                 //$_POST['my_answer'] = '(5+5)+5+9';
                                 $answer_array = str_replace('×', '*', $val['yours']);
                                 $sub_answer_array = str_replace('÷', '/', $answer_array);
-
-                                if (!preg_match("/[\+\-\*\/\.]{2}|[^\+\-\*\/\(\)\d\.]+/i", $sub_answer_array)) {
+                                if (preg_match('/^((\d++(\.\d+)?|\((?1)\))((\+|\/|\*|-)(\d++(\.\d+)?|(?1)))*)$/', $sub_answer_array)) {
 
                                     $l_cont = substr_count($sub_answer_array, "(");
                                     $r_cont = substr_count($sub_answer_array, ")");

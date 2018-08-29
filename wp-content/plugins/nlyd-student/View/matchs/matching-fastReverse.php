@@ -87,8 +87,10 @@ jQuery(function($) {
         }
        var thisRow={question:select,yours:'',isRight:false}
         ajaxData.push(thisRow)
-        var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
-        $.SetSession('match',sessionData)
+        if(!$.Request('test')){
+            var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
+            $.SetSession('match',sessionData)
+        }
     }
     function nextQuestion() {
         var text=$('.answer').text();
