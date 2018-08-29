@@ -29,7 +29,7 @@
                             <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':' ';?>"><?=$match['post_title']?></span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':' ';?>"><?=$match['post_title']?></span>
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
@@ -61,7 +61,7 @@
                             <!-- 比赛项目 -->
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':'';?> ">比赛项目</span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> ">比赛项目</span>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
@@ -84,8 +84,8 @@
                             
                             <li class="nl-match">
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name <?=$match['match_status'] != 1?'finish':'';?>">报名列表</span>
-                                    <span class="nl-match-people <?=$match['match_status'] != 1?'finish':'';?>"><?=$total?>位选手已报名</span>
+                                    <span class="nl-match-name <?=$match['match_status'] != -3?'c_blue':'';?>">报名列表</span>
+                                    <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?=$total?>位选手已报名</span>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
