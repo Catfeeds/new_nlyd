@@ -5,7 +5,7 @@
 }
 @media screen and (max-width: 991px){  
     #content{
-        background: #eee;
+        background: #f6f6f6;
     }
     .layui-form{
         padding-bottom: 80px;
