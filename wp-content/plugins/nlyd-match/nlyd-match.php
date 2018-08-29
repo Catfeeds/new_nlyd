@@ -391,7 +391,6 @@ if(!class_exists('MatchController')){
                     echo $row['match_cost'];
                     break;
                 case 'students':
-                    echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
                     if($row['match_status'] == -3){
                         echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
                     }else{
@@ -412,8 +411,6 @@ if(!class_exists('MatchController')){
                     echo $str;
                     break;
                 case 'match_ranking':
-
-                    echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
                     if($row['match_status'] == -3){
                         echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
                     }else{
