@@ -59,10 +59,12 @@
     <div class="layui-row">
         <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-bg-white have-footer">
             <div class="userCenter-info layui-row">
+                <?php if(is_admin() && is_user_logged_in()): ?>
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-md layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-md layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
+                <?php endif;?>
                 <div class="radius-zoo">
                     <!-- 头像 -->
                     <div class="userCenter-main isMobile layui-row img-box">
@@ -73,6 +75,7 @@
                         <div class="userCenter-names">未登录</div>
                         <div class="userCenter-names"><?=$user_info['nickname']?></div><?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
                     </div>
+                    <?php if(is_admin() && is_user_logged_in()): ?>
                     <!-- 用户标签 -->
                     <div class="userCenter-describe layui-row layui-hide-md layui-hide-lg">
                         <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
@@ -86,19 +89,12 @@
                         <?php }else{ ?>
                             <span class="userCenter-item">暂无战队</span>
                         <?php }; ?>
-                        <!-- <span class="userCenter-item"><?= !empty($user_info['user_gender']) ? $user_info['user_gender'] : '性别';?></span>
-                        <span class="userCenter-item"><?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '年龄';?></span>
-                        <span class="userCenter-item"><?= !empty($user_info['user_address']) ? $user_info['user_address']['city'].$user_info['user_address']['area'] : '所在地';?></span> -->
                     </div>
-                    <!-- 战队信息 -->
-                    <!-- <div class="userCenter-operations layui-hide-md layui-hide-lg">
-                        <?php if(empty($my_team['mental'])): ?>
-                            <i class="iconfont">&#xe64a;</i> <?=$my_team['mental']?>
-                        <?php endif;?>
-                    </div> -->
+                    <?php endif;?>
                 </div>
             </div>
             <div class="layui-row menu-wrapper">
+                <?php if(is_admin() && is_user_logged_in()){ ?>
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
                     <span class="fs_12">
@@ -107,20 +103,11 @@
                         速算<span class="c_orange"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
                     </span>
                 </div>
+                <?php }else{ ?>
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
                     <a class="c_black6" href="<?=home_url('/logins')?>">登录后可查看认证脑力等级</a>
                 </div>
-                <!-- <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
-                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
-                        <span class="pull-left"><?=$my_team['my_team']?></span>
-                        <?php if($my_team['status'] != 2):?>
-                        <span>(<?=$my_team['status_cn']?>)</span>
-                        <?php endif;?>
-                        <span class="pull-right">查看</span>
-                    </a>
-                <?php }else{ ?>
-                    <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('/teams')?>"><span class="pull-left no-team">暂无战队</span><span class="pull-right">加入战队</span></a>
-                <?php }; ?> -->
+                <?php } ?>
                 <!-- 我的钱包 -->
                 <!-- <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('wallet')?>">
                     <span class="pull-left">我的余额：<i class="iconfont">&#xe61e;</i>3200.00</span>
