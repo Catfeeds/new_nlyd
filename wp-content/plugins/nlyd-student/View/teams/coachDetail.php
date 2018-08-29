@@ -28,6 +28,7 @@
                                         <span> <?=$user_infos['user_gender']?> </span>
                                         <?php endif;?>
                                         <span>ID <?=$user_infos['user_ID']?></span>
+                                        <span class="c_blue fs_12 pointer" id="see">&nbsp;&nbsp;查看教练证书</span>
                                     </div>
                                     <div class="coachDetail-infoRow">
                                         <span>国际脑力运动委员会（IISC） <?=$user_infos['user_coach_level']?></span>
@@ -111,17 +112,19 @@
                                 <div class="coachDetail-metal">学 员</div>
                                 <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
                                 <p>*M、R、A分别代表记忆、速读、心算</p>
-                                <table class="nl-table" id="flow-table">
-                                    <tr>
-                                        <td>头像</td>
-                                        <td>学员姓名</td>
-                                        <td>学员ID</td>
-                                        <td>M级别</td>
-                                        <td>R级别</td>
-                                        <td>A级别</td>
-                                        <td>脑力健将级别</td>
-                                    </tr>
-                                </table>
+                                <div class="nl-table-wapper">
+                                    <table class="nl-table" id="flow-table">
+                                        <tr>
+                                            <td>头像</td>
+                                            <td>学员姓名</td>
+                                            <td>学员ID</td>
+                                            <td>M级别</td>
+                                            <td>R级别</td>
+                                            <td>A级别</td>
+                                            <td>脑力健将级别</td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -149,6 +152,31 @@ jQuery(function($) {
             photos: '#imgBox',
             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
         })  
+        $('#see').click(function(){
+            var json={
+                "title": "教练证书", //相册标题
+                "id": "coach_see", //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": [   //相册包含的图片，数组格式
+                    {
+                    "alt": "",
+                    "pid": 1, //图片id
+                    "src":window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //原图地址
+                    "thumb": window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //缩略图地址
+                    },
+                    {
+                    "alt": "",
+                    "pid": 2, //图片id
+                    "src":window.plugins_url+'/nlyd-student/Public/css/image/nlyd-logo.png', //原图地址
+                    "thumb": window.plugins_url+'/nlyd-student/Public/css/image/nlyd-logo.png', //缩略图地址
+                    }
+                ]
+            }
+            layer.photos({//图片预览
+                photos: json,
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            })  
+        })
         flow.load({
             elem: '#flow-table' //流加载容器
             ,scrollElem: '#flow-table' //滚动条所在元素，一般不用填，此处只是演示需要。

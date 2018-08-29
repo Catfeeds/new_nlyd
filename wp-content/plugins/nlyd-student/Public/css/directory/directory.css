@@ -166,23 +166,7 @@ p.content-p{
 .content .nl-table td,.content table.nl-table{
     border-color:transparent;
 }
-.content table.nl-table{
-    border-bottom: none;
-    position: relative;
-    margin-top: 0;
-    margin-bottom: 87px;
-}
-.content table.nl-table tr td{
-    color: RGBA(38, 38, 38, 0.6);
-    flex: 1;
-    font-size: 0.12rem;
-    text-align: center;
-    padding:5px 0px;
-}
-.content table.nl-table tr td span{
-    display: block;
-    max-width: 120px;
-}
+
 .content table.nl-table tr:nth-child(odd){
     background: RGBA(246, 250, 255, 1);
 }

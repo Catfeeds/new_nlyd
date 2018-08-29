@@ -320,7 +320,7 @@ class Match
             <div class="layui-form-item">
                 <label class="layui-form-label post-attributes-label" for="parent_id">国籍</label>
                 <div class="layui-input-block">
-                    <select class="" name="team[team_world]">
+                    <select class="" name="team[team_world]" style="width:100%;display:block">
                     <option value="">(选择国籍)</option>
                     <?php
                     foreach ($rows as $v){
