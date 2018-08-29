@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info text_1 c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"></div>
+                                        <div class="nl-match-info text_1 c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
                                     </div>
                                 </div>
                             </li>

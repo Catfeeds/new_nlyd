@@ -126,7 +126,8 @@ class Student_Account extends Student_Home
         $sql = "select c.id
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and b.match_status in(2,1,-2) LIMIT 1";
+                  where user_id = {$current_user->ID} LIMIT 1";
+        //var_dump($sql);
         $row = $wpdb->get_row($sql);
         //var_dump($row);
         $view = student_view_path.CONTROLLER.'/recentMatch.php';
