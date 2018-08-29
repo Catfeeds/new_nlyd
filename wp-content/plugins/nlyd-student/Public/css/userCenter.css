@@ -203,22 +203,19 @@
         display: block;
         height: 55px;
         overflow: hidden;
-        /* border-radius: 5px; */
         font-size: 0.14rem;
         line-height: 55px;
-        margin-top: 5px;
-        /* color: #2484FE; */
-        /* text-align: left; */
+        margin-top: 10px;
     }
     .userCenter-names{
         display: inline-block;
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
+    }
+    .login{
+        margin-left: 55px;
     }
     .userCenter-name{
         position: relative;
-        padding-top: 50px;
+        padding-top: 65px;
         font-size: 0.16rem;
         line-height: 16px;
         color: #262626;
@@ -263,18 +260,27 @@
     }
     .userCenter-main{
         position: absolute;
-        background-color: #fff;
-        width: 80px;
-        height: 80px;
-        padding: 5px;
+        background-color:rgba(238, 238, 238, 0.15);
+        width: 120px;
+        height: 120px;
         margin: auto;
         display: block;
         border-radius: 50%;
         overflow: hidden;
         left: 50%;
-        margin-left: -45px;
-        top: -45px;
+        margin-left: -60px;
+        top: -60px;
         z-index: 2;
+    }
+    .userCenter-main div{
+        width: 100px;
+        height: 100px;
+        padding: 5px;
+        position: relative;
+        border-radius: 50%;
+        top: 5px;
+        left: 5px;
+        background-color: rgba(238, 238, 238, 0.30);
     }
     .userCenter-describe{
         font-size: 0.14rem;
@@ -352,13 +358,12 @@
     }
     /* 列表 */
     .userCenter-detail{
-        margin-top: 5px;
-        margin-bottom: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
         padding-bottom: 15px;
         padding-top: 15px;
         background-color: #fff;
         border: none;
-        /* border-radius: 10px; */
         background-color: #fff;
         overflow: hidden;
     }
@@ -366,21 +371,17 @@
         position: relative;
         line-height: 50px;
         text-align: center;
-        color: rgba(38, 38, 38);
         border: none;
         display: block;
         float: left;
         height: 80px;
         width: -webkit-calc(25% - 0.5px);
         width: calc(25% - 0.5px);
-        border-bottom: 0.5px solid #f5f5f5;
-        border-right: 0.5px solid #f5f5f5;
+        border-bottom: 0.5px solid rgba(38, 38, 38, 0.1);
+        border-right: 0.5px solid rgba(38, 38, 38, 0.1);
     }
     .userCenter-detail a:nth-child(4n){
         border-right: none;
-    }
-    .userCenter-detail a:hover{
-        color: rgba(38, 38, 38);
     }
     .userCenter-detail a.no_border{
         border-bottom: none;
@@ -403,11 +404,9 @@
         display: none;
     }
     .userCenter-type{
-        position: absolute;
-        left: -webkit-calc(50% + 75px);; 
-        left: calc(50% + 75px);
-        bottom: -4px;
+        display: inline-block;
         text-align: center;
+        margin-left: 10px;
         background-color: #FB8E8E;
         color: #fff;
         border-radius: 4px;

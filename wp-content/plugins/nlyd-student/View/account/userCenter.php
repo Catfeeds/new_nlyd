@@ -67,15 +67,17 @@
                 <?php endif;?>
                 <div class="radius-zoo">
                     <!-- 头像 -->
-                    <div class="userCenter-main isMobile layui-row img-box">
-                        <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
+                    <div class="userCenter-main layui-row">
+                        <div class="img-box">
+                            <img src="<?=$user_info['user_head'];?>" class="logoImg rounded" id="avatar">
+                        </div>
                     </div>
                     <!-- 用户名称 -->
                     <div class="userCenter-name layui-row">
                         <?php if(!is_user_logged_in()){ ?>
                         <div class="userCenter-names">未登录</div>
                         <?php }else{ ?>
-                        <div class="userCenter-names"><?=$user_info['nickname']?></div>
+                        <div class="userCenter-names login"><?=$user_info['nickname']?></div>
                         <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
                         <?php } ?>
                     </div>
@@ -118,7 +120,7 @@
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a> -->
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
-                    <a href="<?=home_url('/account/recentMatch');?>">
+                    <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
                             </div>
@@ -126,63 +128,63 @@
                         </div>
                         <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/matchList');?>">
+                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的训练</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/course');?>">
+                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的课程</div>
                     </a>
-                    <a href="<?=home_url('/teams/myCoach');?>">
+                    <a class="c_black8" href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-coach">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的教练</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('orders');?>">
+                    <a class="c_black8" data-tips="1" href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的订单</div>
                     </a>
-                    <a data-tips="1">
+                    <a class="c_black8" data-tips="1">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的考级</div>
                     </a>
-                    <a data-tips="1">
+                    <a class="c_black8" data-tips="1">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a class="no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8" class="no_border" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
+                    <a class="c_black8" data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
