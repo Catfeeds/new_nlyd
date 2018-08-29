@@ -211,8 +211,7 @@
         /* text-align: left; */
     }
     .userCenter-names{
-        width: 145px;
-        margin: auto;
+        display: inline-block;
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
