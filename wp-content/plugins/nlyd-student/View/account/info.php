@@ -19,7 +19,7 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <div class="main-header">
                 <header class="mui-bar mui-bar-nav main">
-                    <a class="mui-pull-left nl-goback static" href="<?=home_url('student/account/')?>">
+                    <a class="mui-pull-left nl-goback static" href="<?=home_url('account/')?>">
                         <i class="iconfont">&#xe610;</i>
                     </a>
                     <h1 class="mui-title">个人资料</h1>

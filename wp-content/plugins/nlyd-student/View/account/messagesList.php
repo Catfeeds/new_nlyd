@@ -17,7 +17,7 @@
         <?php if($is_show){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback static" href="<?=home_url('student/account/')?>">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <i class="iconfont">&#xe610;</i>
                 </a>
                 <h1 class="mui-title">我的消息</h1>
