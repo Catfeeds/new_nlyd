@@ -34,7 +34,7 @@
 		constructor: MobileSelect,
 		init: function(config){
 			var _this = this;
-			_this.keyMap = config.keyMap ? config.keyMap : {id:'code', value:'name', childs:'children'};
+			_this.keyMap = config.keyMap ? config.keyMap : {id:'id', value:'value', childs:'childs'};
 			_this.checkDataType();
 			_this.renderWheels(_this.wheelsData, config.cancelBtnText, config.ensureBtnText);
 			_this.trigger = document.querySelector(config.trigger);
