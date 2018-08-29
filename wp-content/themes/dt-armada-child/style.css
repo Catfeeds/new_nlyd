@@ -104,6 +104,12 @@ a.c_orange:hover{
 a.c_black:hover{
     color: #262626
 }
+.c_black8,a.c_black8{
+    color: rgba(38, 38, 38, 0.6);
+}
+a.c_black8:hover{
+    color: rgba(38, 38, 38, 0.6);
+}
 .c_black6,a.c_black6{
     color: rgba(38, 38, 38, 0.6);
 }
@@ -115,6 +121,9 @@ a.c_black6:hover{
 }
 a.c_black3:hover{
     color: rgba(38, 38, 38, 0.3);
+}
+.border{
+    border: 1px solid rgba(38, 38, 38, 0.1);
 }
 /* 背景 */
 .bg_blue{

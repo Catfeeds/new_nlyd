@@ -29,7 +29,7 @@
                             <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':' ';?>"><?=$match['post_title']?></span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':' ';?>"><?=$match['post_title']?></span>
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
@@ -61,7 +61,7 @@
                             <!-- 比赛项目 -->
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != 1?'c_blue':'';?> ">比赛项目</span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> ">比赛项目</span>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
@@ -84,8 +84,8 @@
                             
                             <li class="nl-match">
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name <?=$match['match_status'] != 1?'finish':'';?>">报名列表</span>
-                                    <span class="nl-match-people <?=$match['match_status'] != 1?'finish':'';?>"><?=$total?>位选手已报名</span>
+                                    <span class="nl-match-name <?=$match['match_status'] != -3?'c_blue':'';?>">报名列表</span>
+                                    <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?=$total?>位选手已报名</span>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
@@ -140,13 +140,17 @@ jQuery(function($) {
                     var end_time = new Date(domTime).getTime();//月份是实际月份-1
                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                     var sys_second = (parseInt(end_time)-parseInt(serverTimes))/1000;
-                    $('#time_count').attr('data-seconds',sys_second).countdown(function(s, d){//倒计时
-                        var D=d.day>0 ? d.day+'天' : '';
-                        var h=d.hour<10 ? '0'+d.hour : d.hour;
-                        var m=d.minute<10 ? '0'+d.minute : d.minute;
-                        var s=d.second<10 ? '0'+d.second : d.second;
-                        var time=D+h+':'+m+':'+s;
-                        $(this).text(time);
+                    $('#time_count').attr('data-seconds',sys_second).countdown(function(S, d){//倒计时
+                        if(S>0){
+                            var D=d.day>0 ? d.day+'天' : '';
+                            var h=d.hour<10 ? '0'+d.hour : d.hour;
+                            var m=d.minute<10 ? '0'+d.minute : d.minute;
+                            var s=d.second<10 ? '0'+d.second : d.second;
+                            var time=D+h+':'+m+':'+s;
+                            $(this).text(time);
+                        }else{
+                            $('#time_count').text('已截止')
+                        }
                     });
                         if(res.success){
                             $.each(res.data.info,function(i,v){
