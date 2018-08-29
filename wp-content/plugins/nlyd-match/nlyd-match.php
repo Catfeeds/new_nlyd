@@ -1132,7 +1132,8 @@ if(!class_exists('MatchController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
-            if(!in_array($this->post_type,array('post','question'))){
+            //var_dump($this->post_type);
+            if(!in_array($this->post_type,array('page','post','question'))){
 
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
