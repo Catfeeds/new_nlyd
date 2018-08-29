@@ -277,7 +277,7 @@ class Download
                     'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
                     'sex' => $usermeta['user_gender'][0],
                     'birthday' => $usermeta['user_birthday'],
-                    'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['age']),
+                    'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age']),
                     'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
                     'mobile' => $mqv['telephone'],
                     'email' => $mqv['user_email'],
@@ -332,10 +332,19 @@ class Download
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
+        //边框
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+
+        //居中显示
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
 
+        //行高
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(30);
+
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(40);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(25);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -375,22 +384,15 @@ class Download
 
         }
 
-
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$a.'1')->getBorders()->getAllBorders()->setBorderStyle('thin');
 
         $objPHPExcel->getActiveSheet()->mergeCells('A1:'.--$a.'1');
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$a.'1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
 
-        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-        $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+        for ($b = 'A'; $b <= 'J'; ++$b){
+            $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+        }
         $a = 'K';
         foreach ($titleArr as $titleV){
             $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
@@ -407,9 +409,15 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '邮箱');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '报名时间');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '总得分');
+
+        for ($b = 'A'; $b <= 'J'; ++$b){
+            $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        }
+
         $a = 'K';
          foreach ($titleArr as $titleV){
              $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV.'得分');
+             $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
              ++$a;
          }
 
@@ -427,9 +435,13 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['email']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['created_time']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['total_score']);
+            for ($b = 'A'; $b <= 'J'; ++$b){
+                $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
             $a = 'K';
             foreach ($raV['project'] as $ravV){
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
+                $objPHPExcel->getActiveSheet()->getStyle($a.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
                 ++$a;
             }
             ++$k;
