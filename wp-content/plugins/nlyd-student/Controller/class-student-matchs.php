@@ -200,6 +200,11 @@ class Student_Matchs extends Student_Home
         add_shortcode('match-home',array($this,$action));
     }
 
+    public function test(){
+        $a = new TwentyFour();
+        var_dump($a->calculate(array(5,5,5,9)));die;
+    }
+
     /**
      * 列表
      */
@@ -689,13 +694,13 @@ class Student_Matchs extends Student_Home
             }
         }
         elseif ($this->project_alias == 'szzb'){
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
-                $rang_str = $this->redis->get($this->project_alias.'_question'.$current_user->ID);
+            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
+                $rang_str = $this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
                 //var_dump($rang_str);
                 $question = !empty($rang_str) ? json_decode($rang_str,true) : '';
             }else{
                 $rang_array = rang_str_arr($this->project_str_len);
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($rang_array));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($rang_array));
 
                 $match_questions = $questions_answer = $question = $rang_array;
             }
