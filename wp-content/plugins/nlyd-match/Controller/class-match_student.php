@@ -445,6 +445,8 @@ class Match_student {
 //            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
 //            return;
 //        }
+
+
         //根据成绩排序查询比赛学员
         $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
         LEFT JOIN '.$wpdb->prefix.'order AS o ON o.match_id=mq.match_id AND o.user_id=mq.user_id 
@@ -453,11 +455,35 @@ class Match_student {
         //处理数据
         $rankingArr = [];
         $titleArr = [];
+        //是否选择组别分类
+        $group = 0;
+        if(is_post()){
+            $group = intval($_POST['age_group']);
+//            var_dump($group);
+        }
         foreach ($matchQuestions as $mqk => $mqv){
             $usermeta = get_user_meta($mqv['user_id'], '', true);
+            $age = unserialize($usermeta['user_real_name'][0])['real_age'];
+
+            switch ($group){
+                case 4://儿童组
+                    if($age > 13) continue 2;
+                    break;
+                case 3://少年组
+                    if($age <= 13 || $age > 18) continue 2;
+                    break;
+                case 2://成年组
+                    if($age <= 18 || $age > 59) continue 2;
+                    break;
+                case 1://老年组
+                    if($age <= 59) continue 2;
+                    break;
+                default://全部
+
+            }
 
             if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
-//            var_dump($usermeta);
+//            var_dump(unserialize($usermeta['user_real_name'][0]));
             //基础数据
             if(!isset($rankingArr[$mqv['user_id']])){
                 $rankingArr[$mqv['user_id']] = [
@@ -465,7 +491,7 @@ class Match_student {
                     'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
                     'sex' => $usermeta['user_gender'][0],
                     'birthday' => $usermeta['user_birthday'],
-                    'age' => getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['age']),
+                    'age' => getAgeGroupNameByAge($age),
                     'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
                     'mobile' => $mqv['telephone'],
                     'email' => $mqv['user_email'],
@@ -491,6 +517,22 @@ class Match_student {
             }
 
         }
+        $arr = [];
+        foreach ($rankingArr as $rv){
+            $arr[] = $rv;
+        }
+        $rankingArr = $arr;
+        //排序
+        for ($i = 0; $i < count($rankingArr)-1; ++$i){
+            for ($j = $i+1; $j < count($rankingArr); ++$j){
+                if($rankingArr[$i]['total_score'] < $rankingArr[$j]['total_score']){
+                    $a = $rankingArr[$i];
+                    $rankingArr[$i] = $rankingArr[$j];
+                    $rankingArr[$j] = $a;
+                }
+
+            }
+        }
 //        var_dump( get_time('mysql'));
 //        var_dump( get_time());
 
@@ -503,8 +545,7 @@ class Match_student {
             <hr class="wp-header-end">
 
 
-            <form method="get">
-                <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
+            <form method="post" action="">
                 <p class="search-box">
 <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
 <!--                    <input type="search" id="user-search-input" name="s" value="">-->
@@ -514,10 +555,24 @@ class Match_student {
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
+
+                        <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
                     </div>
                     <div class="alignleft actions">
+                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>
+                        <select name="age_group" id="age_group">
+
+                            <option value="0" <?=$group == 0 ? 'selected="selected"' : ''?>>全部</option>
+                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>老年组</option>
+                            <option value="2" <?=$group == 2 ? 'selected="selected"' : ''?>>成人组</option>
+                            <option value="3" <?=$group == 3 ? 'selected="selected"' : ''?>>少年组</option>
+                            <option value="4" <?=$group == 4 ? 'selected="selected"' : ''?>>儿童组</option>
+                        </select>
+                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">
+
                     </div>
                     <br class="clear">
+
                 </div>
                 <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
                     <thead>
