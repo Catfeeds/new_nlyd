@@ -127,43 +127,24 @@
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a> -->
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
-                    <!-- <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper bg1">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">个人资料</div>
-                    </a>
-                    <a href="<?=home_url('/account/messages');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">消 息</div>
-                    </a> -->
                     <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/match.png'?>" class="menuImg"> -->
                             </div>
                             
                         </div>
                         <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
-                    <a href="<?=home_url('/account/matchList');?>">
+                    <a data-tips="1" href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/train.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的训练</div>
                     </a>
-                    <a href="<?=home_url('/account/course');?>">
+                    <a data-tips="1" href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/course.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的课程</div>
@@ -171,47 +152,34 @@
                     <a href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-coach">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/coach.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的教练</div>
                     </a>
-                    <a href="<?=home_url('orders');?>">
+                    <a data-tips="1" href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/order.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的订单</div>
                     </a>
-                    <a>
+                    <a data-tips="1">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/kaoji.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的考级</div>
                     </a>
-                    <a>
+                    <a data-tips="1">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/tuiguang.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <!-- <a href="<?=home_url('/teams');?>">
-                        <div class="userCenter-detail-head my-team">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/userCenter/setting-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">我的战队</div>
-                    </a> -->
-                    <a href="<?=home_url('/account/secure');?>">
+                    <a data-tips="1" href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/scure.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
@@ -219,15 +187,13 @@
                     <a class="no_border" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/settings.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a class="no_border" href="<?=home_url('/teams');?>">
+                    <a data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
-                                <!-- <img src="<?=student_css_url.'image/userCenter/wallet.png'?>" class="menuImg"> -->
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的钱包</div>
@@ -282,7 +248,12 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
 });
 <?php } ?>
 jQuery(document).ready(function($) {
-
+    $('.userCenter-detail a').click(function(){
+        if($(this).attr('data-tips')){
+            $.alerts('当前功能暂未开放，敬请期待')
+            return false;
+        }
+    })
     $('.isMobile').click(function(){
         $("#file").click()
     })

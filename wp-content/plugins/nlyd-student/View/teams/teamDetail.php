@@ -64,35 +64,39 @@
                         <div class="layui-tab-content" style="padding: 0;">
                             <!-- 普通队员 -->
                             <div class="layui-tab-item layui-show" id="student">
-                                <table class="nl-table">
-                                    <tbody  id="flow-table">
-                                        <tr>
-                                            <td>头像</td>
-                                            <td>学员姓名</td>
-                                            <td>学员ID</td>
-                                            <td>M级别</td>
-                                            <td>R级别</td>
-                                            <td>A级别</td>
-                                            <td>脑力健将级别</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="nl-table-wapper">
+                                    <table class="nl-table">
+                                        <tbody  id="flow-table">
+                                            <tr>
+                                                <td>头像</td>
+                                                <td>学员姓名</td>
+                                                <td>学员ID</td>
+                                                <td>M级别</td>
+                                                <td>R级别</td>
+                                                <td>A级别</td>
+                                                <td>脑力健将级别</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <!-- 认证教练 -->
                             <div class="layui-tab-item"  id="coach">
-                                <table class="nl-table">
-                                    <tbody  id="flow-table1">
-                                        <tr>
-                                            <td>头像</td>
-                                            <td>学员姓名</td>
-                                            <td>学员ID</td>
-                                            <td>M级别</td>
-                                            <td>R级别</td>
-                                            <td>A级别</td>
-                                            <td>脑力健将级别</td>
-                                        </tr>
-                                    </tbody>   
-                                </table>
+                                <div class="nl-table-wapper">
+                                    <table class="nl-table">
+                                        <tbody  id="flow-table1">
+                                            <tr>
+                                                <td>头像</td>
+                                                <td>学员姓名</td>
+                                                <td>学员ID</td>
+                                                <td>M级别</td>
+                                                <td>R级别</td>
+                                                <td>A级别</td>
+                                                <td>脑力健将级别</td>
+                                            </tr>
+                                        </tbody>   
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

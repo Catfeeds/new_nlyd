@@ -88,10 +88,12 @@
                                     <span class="nl-match-people <?=$match['match_status'] != 1?'finish':'';?>"><?=$total?>位选手已报名</span>
                                 </div>
                                 <div class="nl-match-body">
-                                    <table class="nl-table"  id="flow-table">
-                                    
+                                    <div class="nl-table-wapper">
+                                        <table class="nl-table"  id="flow-table">
+                                        
 
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
@@ -152,10 +154,10 @@ jQuery(function($) {
                                             +'<td>'
                                                 +'<div class="player-img"><img src="'+v.user_head+'"></div>'
                                             +'</td>'
-                                            +'<td>'+v.nickname+'</td>'
-                                            +'<td>'+v.user_gender+'</td>'
-                                            +'<td>'+v.real_age+'岁</td>'
-                                            +'<td>'+v.created_time+'报名</td>'
+                                            +'<td><div class="table_content">'+v.nickname+'</div></td>'
+                                            +'<td><div class="table_content">'+v.user_gender+'</div></td>'
+                                            +'<td><div class="table_content">'+v.real_age+'岁</div></td>'
+                                            +'<td><div class="table_content">'+v.created_time+'报名</div></td>'
                                         +'<tr>'
                                 lis.push(dom) 
                             })

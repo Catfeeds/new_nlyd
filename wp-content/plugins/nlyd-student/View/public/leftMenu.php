@@ -23,112 +23,76 @@
         </div>
         <div class="width-margin layui-row menu-wrapper">
             <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-                    <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
+            <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-match">
                             </div>
                             
                         </div>
-                        <div class="userCenter-detail-foot">个人资料</div>
+                        <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
-                    <a href="<?=home_url('/account/messages');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
+                    <a data-tips="1" href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">消 息</div>
-                    </a>
-                    <a href="<?=home_url('/account/recentMatch');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/match-big.png'?>" class="menuImg">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">比 赛</div>
-                    </a>
-                    <a href="<?=home_url('/account/train');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/train-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-train">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">训 练</div>
+                        <div class="userCenter-detail-foot">我的训练</div>
                     </a>
-                    <a href="<?=home_url('/account/course');?>">
+                    <a data-tips="1" href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/course-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-course">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">课 程</div>
+                        <div class="userCenter-detail-foot">我的课程</div>
                     </a>
                     <a href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/coach-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-coach">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">教 练</div>
+                        <div class="userCenter-detail-foot">我的教练</div>
                     </a>
-                    <a href="<?=home_url('orders');?>">
+                    <a data-tips="1" href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/order-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">订 单</div>
+                        <div class="userCenter-detail-foot">我的订单</div>
                     </a>
-                    <a>
+                    <a data-tips="1">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/kaoji-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">考 级</div>
+                        <div class="userCenter-detail-foot">我的考级</div>
                     </a>
-                    <a>
+                    <a data-tips="1">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/tuiguang-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-tuiguang">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">推 广</div>
+                        <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a>
+                    <a data-tips="1" href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/zice-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">自 测</div>
-                    </a>
-                    <a href="<?=home_url('/safety/setting');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">设 置</div>
-                    </a>
-                    <a href="<?=home_url('/teams');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/setting-big.png'?>" class="menuImg">
-                            </div>
-                        </div>
-                        <div class="userCenter-detail-foot">战 队</div>
-                    </a>
-                    <a href="<?=home_url('/account/secure');?>">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                                <img src="<?=student_css_url.'image/icons/secure-big.png'?>" class="menuImg">
+                            <div class="menuImg-wrapper my-secure">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
+                    </a>
+                    <a class="no_border" href="<?=home_url('/safety/setting');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-setting">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot">其他设置</div>
+                    </a>
+                    <a data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-wallet">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot">我的钱包</div>
                     </a>
                 </div>
         </div>

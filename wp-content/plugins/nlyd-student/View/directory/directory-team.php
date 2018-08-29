@@ -23,17 +23,19 @@
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding width-padding-pc contentP-wrapper">
-                    <table class="nl-table">
-                        <tbody id="flow-table">
-                            <tr>
-                                <td>战队名称</td>
-                                <td>战队负责人</td>
-                                <td>战队口号</td>
-                                <td>战队成员</td>
-                            </tr>
-                        </tbody>
+                    <div class="nl-table-wapper">
+                        <table class="nl-table">
+                            <tbody id="flow-table">
+                                <tr>
+                                    <td>战队名称</td>
+                                    <td>战队负责人</td>
+                                    <td>战队口号</td>
+                                    <td>战队成员</td>
+                                </tr>
+                            </tbody>
 
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
