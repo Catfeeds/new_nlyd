@@ -6,7 +6,7 @@
 <style>
 @media screen and (max-width: 991px){
     .layui-fluid>.layui-row>.layui-bg-white:first-child,#page{
-        background-color:#eee!important;
+        background-color:#f6f6f6!important;
     }
     #page{
         top:0;

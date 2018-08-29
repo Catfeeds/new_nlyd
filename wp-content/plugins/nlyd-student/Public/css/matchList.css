@@ -132,7 +132,7 @@ p.long-name{
 }
 @media screen and (max-width: 991px){
     #content{
-        background:#eee;
+        background:#f6f6f6;
     }
     .nl-match{
         border-radius: 6px;

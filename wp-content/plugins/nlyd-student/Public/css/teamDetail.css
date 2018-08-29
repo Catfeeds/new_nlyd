@@ -97,14 +97,6 @@
     height: auto;
     margin :auto;
 }
-
-.content .nl-table td{
-    text-align: center;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    padding:5px 0px;
-}
 .content ul.flow-default{
     width: 100%;
     margin: auto;

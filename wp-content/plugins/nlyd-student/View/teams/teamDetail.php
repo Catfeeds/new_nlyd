@@ -1,7 +1,7 @@
 <style>
  @media screen and (max-width: 991px){
     #content,.detail-content-wrapper{
-        background:#eee;
+        background:#f6f6f6;
     }
 }
 </style>
