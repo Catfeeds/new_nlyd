@@ -7,18 +7,13 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Account
+class Student_Account extends Student_Home
 {
     private $ajaxControll;
     public function __construct($action)
     {
 
-        if($action != 'index'){
-
-            if(!is_admin() && !is_user_logged_in()){
-                wp_redirect(home_url('logins'));
-            }
-        }
+        parent::__construct();
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));

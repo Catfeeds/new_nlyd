@@ -59,7 +59,7 @@
     <div class="layui-row">
         <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-bg-white have-footer">
             <div class="userCenter-info layui-row">
-                <?php if(is_admin() && is_user_logged_in()): ?>
+                <?php if(is_user_logged_in()): ?>
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-md layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
@@ -72,10 +72,14 @@
                     </div>
                     <!-- 用户名称 -->
                     <div class="userCenter-name layui-row">
+                        <?php if(!is_user_logged_in()){ ?>
                         <div class="userCenter-names">未登录</div>
-                        <div class="userCenter-names"><?=$user_info['nickname']?></div><?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                        <?php }else{ ?>
+                        <div class="userCenter-names"><?=$user_info['nickname']?></div>
+                        <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                        <?php } ?>
                     </div>
-                    <?php if(is_admin() && is_user_logged_in()): ?>
+                    <?php if(is_user_logged_in()): ?>
                     <!-- 用户标签 -->
                     <div class="userCenter-describe layui-row layui-hide-md layui-hide-lg">
                         <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
@@ -94,7 +98,7 @@
                 </div>
             </div>
             <div class="layui-row menu-wrapper">
-                <?php if(is_admin() && is_user_logged_in()){ ?>
+                <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
                     <span class="fs_12">
