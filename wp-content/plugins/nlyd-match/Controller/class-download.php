@@ -277,7 +277,7 @@ class Download
                     'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
                     'sex' => $usermeta['user_gender'][0],
                     'birthday' => $usermeta['user_birthday'],
-                    'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['age']),
+                    'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age']),
                     'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
                     'mobile' => $mqv['telephone'],
                     'email' => $mqv['user_email'],
@@ -304,6 +304,23 @@ class Download
 
         }
 
+        $arr = [];
+        foreach ($rankingArr as $rv){
+            $arr[] = $rv;
+        }
+        $rankingArr = $arr;
+        //排序
+        for ($i = 0; $i < count($rankingArr)-1; ++$i){
+            for ($j = $i+1; $j < count($rankingArr); ++$j){
+                if($rankingArr[$i]['total_score'] < $rankingArr[$j]['total_score']){
+                    $a = $rankingArr[$i];
+                    $rankingArr[$i] = $rankingArr[$j];
+                    $rankingArr[$j] = $a;
+                }
+
+            }
+        }
+
 
         $filename = 'match_ranking_';
         $filename .= strtotime(current_time('mysql')).".xls";
@@ -315,25 +332,33 @@ class Download
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
+        //边框
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+
+        //居中显示
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
 
+        //行高
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(30);
+
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(40);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(25);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
-        $a = 'K';
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $a = 'J';
         foreach ($titleArr as $titleV){
             ++$a;
-            $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(25);
+            $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
 
         }
 
@@ -350,30 +375,49 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
-        $a = 'K';
+
+
+        $a = 'J';
         foreach ($titleArr as $titleV){
             ++$a;
             $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
 
         }
 
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$a.'1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+
         $objPHPExcel->getActiveSheet()->mergeCells('A1:'.--$a.'1');
 
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$a.'1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+
+        for ($b = 'A'; $b <= 'J'; ++$b){
+            $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+        }
+        $a = 'K';
+        foreach ($titleArr as $titleV){
+            $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+            ++$a;
+        }
+
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '学员ID');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '出生日期');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄组别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '所在地区');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '手机');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '邮箱');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '报名时间');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '总得分');
-        $a = 'L';
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '真实姓名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '出生日期');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '手机');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '报名时间');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '总得分');
+
+        for ($b = 'A'; $b <= 'J'; ++$b){
+            $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        }
+
+        $a = 'K';
          foreach ($titleArr as $titleV){
              $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV.'得分');
+             $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
              ++$a;
          }
 
@@ -382,19 +426,22 @@ class Download
         foreach ($rankingArr as $raV){
 
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$usermeta['user_ID'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['user_login']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['real_name']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['sex']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['birthday']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['age']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['address']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['mobile']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['email']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['created_time']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['total_score']);
-            $a = 'L';
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['real_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['sex']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['birthday']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['age']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['address']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['total_score']);
+            for ($b = 'A'; $b <= 'J'; ++$b){
+                $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
+            $a = 'K';
             foreach ($raV['project'] as $ravV){
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
+                $objPHPExcel->getActiveSheet()->getStyle($a.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
                 ++$a;
             }
             ++$k;
