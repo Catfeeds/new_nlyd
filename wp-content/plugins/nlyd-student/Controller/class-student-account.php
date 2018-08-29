@@ -30,12 +30,13 @@ class Student_Account extends Student_Home
     public function index(){
 
         global $user_info,$wpdb;
+        if($user_info){
 
-        //获取消息
-        $message_total = $wpdb->get_row("select if(count(id)>0,count(id),0) total from {$wpdb->prefix}messages where user_id = {$user_info['user_id']} and read_status = 1 ");
+            //获取消息
+            $message_total = $wpdb->get_row("select if(count(id)>0,count(id),0) total from {$wpdb->prefix}messages where user_id = {$user_info['user_id']} and read_status = 1 ");
 
-        //获取我的战队
-        $sql = "select b.ID,b.post_title my_team,a.status,
+            //获取我的战队
+            $sql = "select b.ID,b.post_title my_team,a.status,
                 case a.status
                 when -1 then '退队审核中'
                 when 1 then '入队审核中'
@@ -45,22 +46,28 @@ class Student_Account extends Student_Home
                 from {$wpdb->prefix}match_team a 
                 left join {$wpdb->prefix}posts b on a.team_id = b.ID 
                 where a.user_id = {$user_info['user_id']} and a.user_type = 1 and a.status > -2 ";
-        $my_team = $wpdb->get_row($sql,ARRAY_A);
-        //var_dump($my_team);
-        //print_r($sql);
-        //获取我的技能
-        $sql1 = "select mental,
+            $my_team = $wpdb->get_row($sql,ARRAY_A);
+            //var_dump($my_team);
+            //print_r($sql);
+            //获取我的技能
+            $sql1 = "select mental,
                 if(`read` >0,`read`,0) reading,
                 if(memory >0,memory,0) memory,
                 if(compute >0,compute,0) compute
                 from {$wpdb->prefix}user_skill_rank 
                 where user_id = {$user_info['user_id']}  ";
-        $my_skill = $wpdb->get_row($sql1,ARRAY_A);
-        //print_r($sql1);
-        //print_r($user_info);
+            $my_skill = $wpdb->get_row($sql1,ARRAY_A);
+            //print_r($sql1);
+            //print_r($user_info);
+            $data = array('user_info'=>$user_info,'message_total'=>$message_total->total,'my_team'=>$my_team,'my_skill'=>$my_skill);
+        }else{
+            $user_info['user_head'] = student_css_url.'image/nlyd.png';
+            $data = array('user_info'=>$user_info);
+        }
+
 
         $view = student_view_path.CONTROLLER.'/userCenter.php';
-        load_view_template($view,array('user_info'=>$user_info,'message_total'=>$message_total->total,'my_team'=>$my_team,'my_skill'=>$my_skill));
+        load_view_template($view,$data);
 
     }
 
@@ -119,7 +126,8 @@ class Student_Account extends Student_Home
         $sql = "select c.id
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and b.match_status in(2,1,-2) LIMIT 1";
+                  where user_id = {$current_user->ID} LIMIT 1";
+        //var_dump($sql);
         $row = $wpdb->get_row($sql);
         //var_dump($row);
         $view = student_view_path.CONTROLLER.'/recentMatch.php';

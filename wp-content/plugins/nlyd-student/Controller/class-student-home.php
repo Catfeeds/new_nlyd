@@ -12,12 +12,19 @@ class Student_Home
     public function __construct()
     {
 
-        //判断是否是管理员操作面板和是否登录
-        if(!is_admin() && !is_user_logged_in()){
+        if(CONTROLLER == 'account' && ACTION != 'index'){
+            //判断是否是管理员操作面板和是否登录
+            if(!is_user_logged_in()){
 
-            wp_redirect(home_url('logins'));
+                wp_redirect(home_url('logins'));
+            }
+
         }
+        $this->get_user_info();
+    }
 
+    //获取用户信息
+    public function get_user_info(){
         global $current_user,$wpdb,$user_info;
         $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID}",ARRAY_A);
         $user_info = array_column($rows,'meta_value','meta_key');

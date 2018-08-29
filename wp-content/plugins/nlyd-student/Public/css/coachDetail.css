@@ -95,14 +95,6 @@
     border-radius: 50%;
     margin: auto;
 }
-
-.content .nl-table td{
-    text-align: center;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    padding:5px 0px;
-}
 .content ul.flow-default{
     width: 100%;
     margin: auto;
@@ -186,7 +178,7 @@
 }
 @media screen and (max-width: 991px){
     #content{
-        background:#eee;
+        background:#f6f6f6;
     }
     .coachDetail-row{
         position: relative;

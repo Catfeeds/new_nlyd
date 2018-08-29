@@ -61,6 +61,10 @@ p.long-name{
     color: #2484FE;
     border: 1px solid #2484FE;
 }
+
+.nl-match-button a.onBtn{
+    width: 50%;
+}
 .nl-match-button a:hover{
     color: #2484FE;
 }
@@ -132,7 +136,7 @@ p.long-name{
 }
 @media screen and (max-width: 991px){
     #content{
-        background:#eee;
+        background:#f6f6f6;
     }
     .nl-match{
         border-radius: 6px;

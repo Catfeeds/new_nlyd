@@ -25,24 +25,26 @@
                         <?php } ?>
                         <?php endif; ?>
                     </div>
-                        <table class="nl-table">
-                            <thead>
-                                <tr class='table-head'>
-                                    <td>名次</td>
-                                    <td>学员姓名</td>
-                                    <td>ID</td>
-                                    <td>城市</td>
-                                    <td>项目总分</td>
-                                    <td>组别</td>
-                                </tr>  
-                                <tr class="nl-me" id="danxiang_me">
-                          
-                                </tr>  
-                            </thead>
-                            <tbody id="flow-one">
-                               
-                            </tbody>
-                        </table>
+                        <div class="nl-table-wapper">
+                            <table class="nl-table">
+                                <thead>
+                                    <tr class='table-head'>
+                                        <td>名次</td>
+                                        <td>学员姓名</td>
+                                        <td>ID</td>
+                                        <td>城市</td>
+                                        <td>项目总分</td>
+                                        <td>组别</td>
+                                    </tr>  
+                                    <tr class="nl-me" id="danxiang_me">
+                            
+                                    </tr>  
+                                </thead>
+                                <tbody id="flow-one">
+                                
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="a-btn"  href="<?=$answer_url?>">查看本轮我的答题记录</div>
                 </div> 

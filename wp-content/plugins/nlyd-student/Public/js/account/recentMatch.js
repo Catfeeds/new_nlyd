@@ -30,6 +30,10 @@ jQuery(function($) {
                                                     +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
                                                 +'</div>'
                                     }
+                                    var onBtn="" ;
+                                    if(rightBtn.length==0){
+                                        onBtn="onBtn"
+                                    }
                                     var end_time = new Date(v.entry_end_time).getTime();//月份是实际月份-1
                                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                     var sys_second = (end_time-serverTimes)/1000;
@@ -68,7 +72,7 @@ jQuery(function($) {
 
                                                     +'<div class="nl-match-footer">'
                                                         +'<div class="nl-match-button">'
-                                                            +'<a href="'+v.left_url+'">查看详情</a>'
+                                                            +'<a class="'+onBtn+'"  href="'+v.left_url+'">查看详情</a>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'

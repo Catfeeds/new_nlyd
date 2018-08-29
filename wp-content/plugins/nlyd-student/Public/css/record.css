@@ -102,13 +102,6 @@
     border-spacing: 0;
     position: relative;
 }
-.content .nl-table td{
-    padding: 5px 0;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
 .content .nl-table td.select-td{
     overflow: visible;
 }

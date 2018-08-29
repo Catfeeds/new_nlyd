@@ -86,7 +86,7 @@ p.address-detail{
         padding-bottom: 80px;
     }
     .detail-content-wrapper{
-        background: #eee;
+        background: #f6f6f6;
     }
 }
 @media screen and (min-width: 992px){
