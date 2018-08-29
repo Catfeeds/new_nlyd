@@ -1254,7 +1254,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and b.match_status in(2,1,-2) 
+                  where user_id = {$current_user->ID}  
                   order by b.match_status desc limit $start,$pageSize
                   ";
         //print_r($sql_);
