@@ -34,46 +34,48 @@
                     <div class="layui-tab-content" style="padding: 0;">
                         <!-- 总排名 -->
                         <div class="layui-tab-item layui-show">
-                            <table class="nl-table">
-                                <thead>
-                                    <tr class='table-head'>
-                                        <td>名次</td>
-                                        <td>学员姓名</td>
-                                        <td>ID</td>
-                                        <td>城市</td>
-                                        <td>项目总分</td>
-                                        <td>组别</td>
-                                    </tr>
-                                    <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
-                                    <tr class="nl-me" id="allRanking">
-                                        <td>
-                                            <div class="nl-circle"><?=$my_ranking['ranking']?></div>
-                                        </td>
-                                        <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
-                                        <td id="meid"><div class="table_content"><?=$my_ranking['ID']?></div></td>
-                                        <td><div class="table_content"><?=$my_ranking['city']?></div></td>
-                                        <td><div class="table_content"><?=$my_ranking['score']?></div></td>
-                                        <td><div class="table_content"><?=$my_ranking['group']?></div></td>
-                                    </tr>
-                                    <?php endif;?>
-                                </thead>
-                                <tbody id="flow">
-                                    <?php if(!empty($list)){ ?>
-                                    <?php foreach ($list as $k => $v){ ?>
-                                    <tr class="<?= $my_ranking['ranking']==$v['ranking'] ? 'nl-me' : '';?>">
-                                        <td>
-                                            <div class="nl-circle <?= $k<2 ? 'top3' : '';?>"><?=$v['ranking']?></div>
-                                        </td>
-                                        <td><div class="table_content"><?=$v['user_name']?></div></td>
-                                        <td><div class="table_content"><?=$v['ID']?></div></td>
-                                        <td><div class="table_content"><?=$v['city']?></div></td>
-                                        <td><div class="table_content"><?=$v['score']?></div></td>
-                                        <td><div class="table_content"><?=$v['group']?></div></td>
-                                    </tr>
-                                    <?php } ?>
-                                    <?php }?>
-                                </tbody>
-                            </table>
+                            <div class="nl-table-wapper">
+                                <table class="nl-table">
+                                    <thead>
+                                        <tr class='table-head'>
+                                            <td>名次</td>
+                                            <td>学员姓名</td>
+                                            <td>ID</td>
+                                            <td>城市</td>
+                                            <td>项目总分</td>
+                                            <td>组别</td>
+                                        </tr>
+                                        <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
+                                        <tr class="nl-me" id="allRanking">
+                                            <td>
+                                                <div class="nl-circle"><?=$my_ranking['ranking']?></div>
+                                            </td>
+                                            <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
+                                            <td id="meid"><div class="table_content"><?=$my_ranking['ID']?></div></td>
+                                            <td><div class="table_content"><?=$my_ranking['city']?></div></td>
+                                            <td><div class="table_content"><?=$my_ranking['score']?></div></td>
+                                            <td><div class="table_content"><?=$my_ranking['group']?></div></td>
+                                        </tr>
+                                        <?php endif;?>
+                                    </thead>
+                                    <tbody id="flow">
+                                        <?php if(!empty($list)){ ?>
+                                        <?php foreach ($list as $k => $v){ ?>
+                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] ? 'nl-me' : '';?>">
+                                            <td>
+                                                <div class="nl-circle <?= $k<2 ? 'top3' : '';?>"><?=$v['ranking']?></div>
+                                            </td>
+                                            <td><div class="table_content"><?=$v['user_name']?></div></td>
+                                            <td><div class="table_content"><?=$v['ID']?></div></td>
+                                            <td><div class="table_content"><?=$v['city']?></div></td>
+                                            <td><div class="table_content"><?=$v['score']?></div></td>
+                                            <td><div class="table_content"><?=$v['group']?></div></td>
+                                        </tr>
+                                        <?php } ?>
+                                        <?php }?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">
@@ -86,23 +88,25 @@
                                 <?php }?>
                                 <?php endif;?>
                             </div>
-                            <table class="nl-table">
-                                <thead>
-                                    <tr class='table-head'>
-                                        <td>名次</td>
-                                        <td>学员姓名</td>
-                                        <td>ID</td>
-                                        <td>城市</td>
-                                        <td>项目总分</td>
-                                        <td>组别</td>
-                                    </tr>
-                                    <tr class="nl-me" id="fenlei_me">
-                                    </tr>
-                                </thead>
-                                <tbody id="flow-fenlei">
-                                   
-                                </tbody>
-                            </table>
+                            <div class="nl-table-wapper">
+                                <table class="nl-table">
+                                    <thead>
+                                        <tr class='table-head'>
+                                            <td>名次</td>
+                                            <td>学员姓名</td>
+                                            <td>ID</td>
+                                            <td>城市</td>
+                                            <td>项目总分</td>
+                                            <td>组别</td>
+                                        </tr>
+                                        <tr class="nl-me" id="fenlei_me">
+                                        </tr>
+                                    </thead>
+                                    <tbody id="flow-fenlei">
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <!-- 单项排名 -->
                         <div class="layui-tab-item">
@@ -124,37 +128,39 @@
                                 <?php } ?>
                             </div> -->
                             <?php endif;?>
-                            <table class="nl-table">
-                                <thead>
-                                    <tr class='table-head'>
-                                        <td>名次</td>
-                                        <td>学员姓名</td>
-                                        <td>ID</td>
-                                        <td>城市</td>
-                                        <td>项目总分</td>
-                                        <td class="select-td">
-                                            <div class="td-type">
-                                                <div class="show-type" id="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></div>
-                                                <ul class="ul-select" >
-                                                    <li class="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></li>
-                                                    <?php
-                                                        $group = get_age_group();
-                                                        foreach ($group as $k =>$y){
-                                                    ?>
-                                                    <li class="show-type" data-group="<?=$k?>"><?=$y;?></li>
-                                                    <?php }?>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="nl-me"  id="danxiang_me">
-                                    
-                                    </tr>
-                                </thead>
-                                <tbody id="flow-one">
-                       
-                                </tbody>
-                            </table>
+                            <div class="nl-table-wapper">
+                                <table class="nl-table">
+                                    <thead>
+                                        <tr class='table-head'>
+                                            <td>名次</td>
+                                            <td>学员姓名</td>
+                                            <td>ID</td>
+                                            <td>城市</td>
+                                            <td>项目总分</td>
+                                            <td class="select-td">
+                                                <div class="td-type">
+                                                    <div class="show-type" id="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></div>
+                                                    <ul class="ul-select" >
+                                                        <li class="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></li>
+                                                        <?php
+                                                            $group = get_age_group();
+                                                            foreach ($group as $k =>$y){
+                                                        ?>
+                                                        <li class="show-type" data-group="<?=$k?>"><?=$y;?></li>
+                                                        <?php }?>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="nl-me"  id="danxiang_me">
+                                        
+                                        </tr>
+                                    </thead>
+                                    <tbody id="flow-one">
+                        
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="a-btn">查看本项目比赛详情</div>
                         </div>
                     </div>

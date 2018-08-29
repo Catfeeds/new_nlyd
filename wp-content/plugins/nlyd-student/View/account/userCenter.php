@@ -127,22 +127,6 @@
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a> -->
                 <div class="userCenter-detail width-padding layui-row layui-bg-white width-margin-pc">
-                    <!-- <a href="<?=home_url('/account/info');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper bg1">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">个人资料</div>
-                    </a>
-                    <a href="<?=home_url('/account/messages');?>" class="layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
-                        <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper">
-                            </div>
-                            
-                        </div>
-                        <div class="userCenter-detail-foot">消 息</div>
-                    </a> -->
                     <a href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">

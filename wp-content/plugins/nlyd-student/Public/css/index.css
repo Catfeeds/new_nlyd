@@ -527,16 +527,16 @@ p.share-font{
     color:#fff;
     font-size:0.16rem
 }
+.nl-table-wapper{
+    overflow-x: scroll;
+}
 .content .nl-table td{
     font-size:0.12rem;
-    padding:0;
+    white-space: nowrap;
 }
 .content .nl-table td div.table_content{
-    max-width: 80px;
     text-align: center;
     margin: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
 }
 /* 比赛页面 */
