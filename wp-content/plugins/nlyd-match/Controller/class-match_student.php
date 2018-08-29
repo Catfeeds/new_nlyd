@@ -11,7 +11,7 @@ class Match_student {
         add_menu_page('报名学员', '报名学员', 'administrator', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
         add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
         add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
-//        add_submenu_page('order','发货','发货','administrator','order-send',array($this,'sendGoods'));
+        add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
 
@@ -42,7 +42,7 @@ class Match_student {
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=$match->post_title?>-报名学员</h1>
 
-            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加报名学员</a>
+            <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
             <hr class="wp-header-end">
 
@@ -261,7 +261,8 @@ class Match_student {
                     </div>
                     <br class="clear">
                 </div>
-                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                <h2 class="screen-reader-text">用户列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column">
@@ -439,12 +440,12 @@ class Match_student {
 
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-//        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
         //TODO 判断比赛是否结束
-//        if(!$match || $match['match_status'] != -3){
-//            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
-//            return;
-//        }
+        if(!$match || $match['match_status'] != -3){
+            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
+            return;
+        }
 
 
         //根据成绩排序查询比赛学员
@@ -674,22 +675,168 @@ class Match_student {
     }
 
     /**
+     * 新增报名学员
+     */
+    public function addStudent(){
+        $match_id = intval($_GET['match_id']);
+        $post = get_post($match_id);
+        $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
+        $pageSize = 1;
+        $start = ($page - 1)*$pageSize;
+        $searchCode = '';
+        $rows = [];
+
+        if(is_post() || isset($_GET['searchCode'])){
+            $searchCode = isset($_GET['searchCode']) ? $_GET['searchCode'] : $_POST['searchCode'];
+            global $wpdb;
+            $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um2.meta_value AS user_level,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
+            LEFT JOIN '.$wpdb->usermeta.' AS um ON u.ID=um.user_id AND um.meta_key="user_ID" 
+            LEFT JOIN '.$wpdb->usermeta.' AS um2 ON u.ID=um2.user_id AND um2.meta_key="wp_user_level" 
+            LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
+            LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' 
+            WHERE um2.meta_value=0 AND o.id is NULL 
+            AND (u.user_login LIKE "%'.$searchCode.'%" 
+            OR u.user_mobile LIKE "%'.$searchCode.'%" 
+            OR u.user_email LIKE "%'.$searchCode.'%" 
+            OR um.meta_value LIKE "%'.$searchCode.'%") LIMIT '.$start.','.$pageSize, ARRAY_A);
+
+
+            $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+            $pageAll = ceil($count['count']/$pageSize);
+            $pageHtml = paginate_links( array(
+                'base' => add_query_arg( 'cpage', '%#%' ),
+                'format' => '',
+                'prev_text' => __('&laquo;'),
+                'next_text' => __('&raquo;'),
+                'total' => $pageAll,
+                'current' => $page,
+                'add_fragment' => '&searchCode='.$searchCode,
+            ));
+        }
+        ?>
+        <div class="wrap">
+            <h1 id="add-new-user"><?=$post->post_title?>-添加报名学员</h1>
+
+            <div id="ajax-response"></div>
+
+<!--            <p>新建用户，并将用户加入此站点。</p>-->
+            <form method="post" action="?page=match_student-add_student&match_id=<?=$match_id?>" name="createuser" id="createuser" class="validate" novalidate="novalidate">
+                <input name="action" type="hidden" value="createuser">
+                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="ce6b58ac15"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php">
+                <input type="hidden" id="getWpnonce" name="_wpnonce" value="<?=wp_create_nonce('student_join_match_code_nonce');?>" />
+                <table class="form-table">
+                    <tbody>
+
+
+                    <tr class="form-field">
+                        <th scope="row"><label for="url">输入学员信息</label></th>
+                        <td>
+                            <input name="searchCode" type="text" id="url" class="code" value="<?=$searchCode?>" placeholder="用户名/手机/邮箱/学员ID">
+                            <button type="submit" class="button">搜索学员</button>
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+            </form>
+
+
+
+
+            <div class="tablenav top">
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <span class="pagination-links">
+                        <?=$pageHtml?>
+                    </span>
+                </div>
+                <br class="clear">
+            </div>
+            <table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                        <input id="cb-select-all-1" type="checkbox">
+                    </td>
+                    <th scope="col" id="pruser_loginoject" class="manage-column column-user_login">用户名</th>
+                    <th scope="col" id="user_ID" class="manage-column column-user_ID">学员ID</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
+                    <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
+                    <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
+                    <th scope="col" id="addS" class="manage-column column-addS">添加到比赛学员</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+                   <?php foreach ($rows as $row) {
+                       ?>
+
+                       <tr>
+                           <th scope="row" class="check-column">
+                               <label class="screen-reader-text" for="user_13">选择</label>
+
+                               <input type="checkbox" name="ids[]" class="subscriber" value="">
+                           </th>
+                           <td class="role column-user_login" data-colname="用户名"><?=$row['user_login']?></td>
+
+                           <td class="role column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
+                           <td class="role column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
+                           <td class="role column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+                           <td class="role column-email" data-colname="电子邮件"><?=$row['user_email']?></td>
+                           <td class="role column-addS" data-colname="添加到比赛学员">
+                               <a href="javascript:;" class="joinMatch" data-id="<?=$post->ID?>" data-uid="<?=$row['uid']?>">加入比赛</a>
+                           </td>
+                       </tr>
+                   <?php } ?>
+
+
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column">
+                        <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                        <input id="cb-select-all-2" type="checkbox">
+                    </td>
+                    <th scope="col" class="manage-column column-user_login">用户名</th>
+                    <th scope="col" class="manage-column column-user_ID">学员ID</th>
+                    <th scope="col" class="manage-column column-real_name">姓名</th>
+                    <th scope="col" class="manage-column column-mobile">手机</th>
+                    <th scope="col" class="manage-column column-email">电子邮件</th>
+                    <th scope="col" class="manage-column column-addS">添加到比赛学员</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <span class="pagination-links">
+                        <?=$pageHtml?>
+                    </span>
+                </div>
+                <br class="clear">
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
      * 引入当前页面css/js
      */
     public function register_scripts(){
         switch ($_GET['page']){
-            case 'order':
-                wp_register_script('list-js',match_js_url.'order-lists.js');
+            case 'match_student-add_student':
+                wp_register_script('list-js',match_js_url.'match_student-lists.js');
                 wp_enqueue_script( 'list-js' );
-                wp_register_style('list-css',match_css_url.'order-lists.css');
-                wp_enqueue_style( 'list-css' );
+//                wp_register_style('list-css',match_css_url.'order-lists.css');
+//                wp_enqueue_style( 'list-css' );
                 break;
-            case 'order-refund':
-                wp_register_style('datum-css',match_css_url.'teacher-datum.css');
-                wp_enqueue_style( 'datum-css' );
-                wp_register_script('list-js',match_js_url.'order-lists.js');
-                wp_enqueue_script( 'list-js' );
-                break;
+
         }
         echo "<script>var ajax_url='".admin_url('admin-ajax.php' )."';</script>";
     }

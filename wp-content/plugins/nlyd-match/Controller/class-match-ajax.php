@@ -576,6 +576,74 @@ class Match_Ajax
             wp_send_json_error(['info' => '请先关闭比赛']);
         }
     }
+
+    /**
+     * 添加比赛报名学员
+     */
+    public function joinMatch(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_join_match_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        $match_id = intval($_POST['mid']);
+        $user_id = intval($_POST['uid']);
+        if($match_id < 1 || $user_id < 1) wp_send_json_error(array('info'=>'非法操作'));
+        global $wpdb;
+        //判断是否已报名该比赛
+        $orderRes = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'order WHERE user_id='.$user_id.' AND match_id='.$match_id.' AND order_type=1');
+        if($orderRes) wp_send_json_error(array('info'=>'此学员已报名该比赛'));
+        //判断是否有主训和默认收货地址
+        //主训
+        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+        foreach ($postsRows as $prow){
+            //每个类别得主训
+            $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE apply_status=2 AND major=1 AND category_id='.$prow['ID']);
+            if(!$res){
+                wp_send_json_error(array('info'=>'当前学员未设置'.$prow['post_title'].'主训教练!'));
+                return;
+            }
+        }
+        //默认收货地址
+        $addressRes = $wpdb->get_row('SELECT fullname,telephone,country,province,city,area,address FROM '.$wpdb->prefix.'my_address WHERE user_id='.$user_id.' AND is_default=1', ARRAY_A);
+        if(!$addressRes){
+            wp_send_json_error(array('info'=>'当前学员未设置默认收货地址!'));
+            return;
+        }
+        $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id);
+        //新增订单
+        $orderInsertData = [
+            'user_id' => $user_id,
+            'match_id'=>$match_id,
+            'cost'=> $cost,
+            'fullname'=>$addressRes['fullname'],
+            'telephone'=>$addressRes['telephone'],
+            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
+            'order_type'=>1,
+            'pay_status'=>2,
+            'created_time'=>get_time('mysql'),
+        ];
+
+
+        //开启事务
+        $wpdb->startTrans();
+        $insertRes = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
+
+        if(!$insertRes){
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '操作失败']);
+            return;
+        }
+        //生成流水号
+        $serialnumber = createNumber($user_id,$wpdb->insert_id);
+        $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
+        if($updateRes){
+            $wpdb->commit();
+            wp_send_json_success(['info' => '操作成功']);
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '操作失败']);
+        }
+    }
 }
 
 new Match_Ajax();
