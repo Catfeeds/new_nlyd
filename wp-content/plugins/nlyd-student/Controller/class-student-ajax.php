@@ -1278,7 +1278,7 @@ class Student_Ajax
                 //两个链接
                 if($val['match_status'] == 2){
                     //比赛中
-                    $url = home_url('/matchs/matching/match_id/'.$val['ID']);
+                    $url = home_url('/matchs/matchWaitting/match_id/'.$val['ID']);
                     $button_title = '进入比赛';
                 }else if ($val['match_status'] == 1){
                     //报名中

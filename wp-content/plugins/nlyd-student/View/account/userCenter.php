@@ -93,7 +93,7 @@
                                 <?php endif;?>
                             </a>
                         <?php }else{ ?>
-                            <span class="userCenter-item">暂无战队</span>
+                            <a class="userCenter-item c_blue" href="<?=home_url('teams')?>">加入战队</a>
                         <?php }; ?>
                     </div>
                     <?php endif;?>
@@ -247,7 +247,7 @@ jQuery(document).ready(function($) {
             return false;
         }
     })
-    $('.isMobile').click(function(){
+    $('.userCenter-main').click(function(){
         $("#file").click()
     })
     var avatar = $('#avatar');
