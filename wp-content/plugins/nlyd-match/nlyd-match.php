@@ -334,7 +334,7 @@ if(!class_exists('MatchController')){
          */
         public function add_new_match_columns($columns){
             if($this->post_type == 'team'){
-                $columns['students'] = '查看成员';
+                $columns['team_student'] = '查看成员';
                 return $columns;
             }
             unset( $columns['date'] );
@@ -429,6 +429,10 @@ if(!class_exists('MatchController')){
                     }
 
                     echo $str;
+                    break;
+                case 'team_student':
+                    //删除比赛必须要先关闭比赛
+                    echo '<a href="?post_type=team&page=team-student&id='.$id.'" class="">查看成员</a>';
                     break;
                 default:
                     break;
