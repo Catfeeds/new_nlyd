@@ -213,7 +213,7 @@ jQuery(function($) {
                                 var time=D+h+':'+m+':'+s;
                                 $(this).text(time);
                             }else{
-                                $(this).text("已截止");
+                                $(this).text("报名结束");
                             }
                         });
                 })       
