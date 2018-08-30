@@ -38,48 +38,52 @@ font-size:0.14rem;
 }
 .nl-foot-icon div{
     height: 20px;
-    margin:8px auto 0px auto
+    margin:8px auto 0px auto;
+    background-size: auto 100%;
 }
 .footer-home{
     width: 25px;
-    background:url(./image/footer/home.png) no-repeat;
-    background-position: 0 0;
+    background:url(./image/footer/footer_icon.png) no-repeat;
+    background-position: -163px 0;
 }
 .footer-train{
-    width: 19px;
-    background:url(./image/footer/train.png) no-repeat;
-    background-position: 0 0;
+    width: 18px;
+    background:url(./image/footer/footer_icon.png) no-repeat;
+    background-position: -86px 0;
 }
 .footer-match{
     width: 19px;
-    background:url(./image/footer/match.png) no-repeat;
-    background-position: 0 0;
+    background:url(./image/footer/footer_icon.png) no-repeat;
+    background-position: -67px 0;
 }
 .footer-kaoji{
-    width: 17px;
-    background:url(./image/footer/kaoji.png) no-repeat;
-    background-position: 0 0;
+    width: 16px;
+    background:url(./image/footer/footer_icon.png) no-repeat;
+    background-position: -33px 0;
 }
 .footer-user{
-    width: 18px;
-    background:url(./image/footer/user.png) no-repeat;
-    background-position: 0 0;
+    width: 17px;
+    background:url(./image/footer/footer_icon.png) no-repeat;
+    background-position: -50px 0;
 }
 
 .active .nl-foot-icon .footer-home{
-    background-position: -25px 0;
+    width: 22px;
+    background-position: -141px 0;
 }
 .active .nl-foot-icon .footer-train{
-    background-position: -19px 0;
+    background-position: -104px 0;
 }
 .active .nl-foot-icon .footer-match{
-    background-position: -19px 0;
+    background-position: -123px 0;
 }
 .active .nl-foot-icon .footer-kaoji{
-    background-position: -17px 0;
+    width: 17px;
+    background-position: -16px 0;
 }
 .active .nl-foot-icon .footer-user{
-    background-position: -18px 0;
+    width: 16px;
+    background-position: 0 0;
 }
 .nl-foot-name{
     font-size: 12px;
@@ -102,9 +106,9 @@ font-size:0.14rem;
 .a-btn{
     position: absolute;
     display: block;
-    width: 200px;
-    height: 40px;
-    line-height: 40px;
+    width: 250px;
+    height: 45px;
+    line-height: 45px;
     text-align: center;
     border-radius: 125px;
     background: -webkit-linear-gradient(#68AAFE, #2484FE);
@@ -112,7 +116,7 @@ font-size:0.14rem;
     background: -moz-linear-gradient(#68AAFE, #2484FE);
     background: linear-gradient(#68AAFE, #2484FE);
     left: 50%;
-    margin-left: -100px;
+    margin-left: -125px;
     font-size: 0.15rem;
     color: #fff;
     padding: 0;

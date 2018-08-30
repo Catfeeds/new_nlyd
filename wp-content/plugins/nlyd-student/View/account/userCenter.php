@@ -75,7 +75,7 @@
                     <!-- 用户名称 -->
                     <div class="userCenter-name layui-row">
                         <?php if(!is_user_logged_in()){ ?>
-                        <div class="userCenter-names">未登录</div>
+                        <a class="userCenter-names c_black" href="<?=home_url('/logins')?>">未登录</a>
                         <?php }else{ ?>
                         <div class="userCenter-names login"><?=$user_info['nickname']?></div>
                         <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
@@ -93,7 +93,7 @@
                                 <?php endif;?>
                             </a>
                         <?php }else{ ?>
-                            <span class="userCenter-item">暂无战队</span>
+                            <a class="userCenter-item c_blue" href="<?=home_url('teams')?>">加入战队</a>
                         <?php }; ?>
                     </div>
                     <?php endif;?>
@@ -177,14 +177,14 @@
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a class="c_black8" class="no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8 no_border" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a class="c_black8" data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
+                    <a class="c_black8 no_border" data-tips="1" href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
@@ -247,7 +247,7 @@ jQuery(document).ready(function($) {
             return false;
         }
     })
-    $('.isMobile').click(function(){
+    $('.userCenter-main').click(function(){
         $("#file").click()
     })
     var avatar = $('#avatar');

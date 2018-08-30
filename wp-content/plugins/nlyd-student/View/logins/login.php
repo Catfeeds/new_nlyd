@@ -17,14 +17,14 @@
         <ul style="margin-left: 0" class="layui-tab-title  ">
             <li class="layui-this">
                 <i class="iconfont iconLock display-hide">&#xe60a;</i>
-                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
             </li>
             <li>
-                <i class="iconfont icon-zhuce">&#xe642;</i>&nbsp;&nbsp;&nbsp;<span >注册</span>
+                <i class="iconfont icon-zhuce">&#xe642;</i>&nbsp;&nbsp<span >注册</span>
             </li>
             <div class="nl-transform">
                 <i class="iconfont iconLock display-hide">&#xe60a;</i>
-                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
             </div>
         </ul>
         <div class="layui-tab-content">
