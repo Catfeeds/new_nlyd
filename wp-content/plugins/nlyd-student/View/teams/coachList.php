@@ -10,12 +10,17 @@
         <header class="mui-bar mui-bar-nav">
             <?php
             if(isset($_GET['match_id'])){
+                $next_url = home_url('/teams/coachList/category_id/'.$category_id.'/match_id/'.$_GET['match_id'].'/back/1');
                 if(isset($_GET['back'])){
                     $back_u = home_url('teams/myCoach/match_id/'.intval($_GET['match_id']));
                 }else{
                     $back_u = home_url('matchs/confirm/match_id/'.intval($_GET['match_id']));
                 }
+            }elseif(isset($_GET['directory'])){
+                $next_url = home_url('/teams/coachList/category_id/'.$category_id.'/directory/1');
+                $back_u = home_url('directory/');
             }else{
+                $next_url = home_url('/teams/coachList/category_id/'.$category_id.'/back/1');
                 if(isset($_GET['back'])){
                     $back_u = home_url('teams/myCoach');
                 }else{
@@ -23,6 +28,8 @@
                 }
             }
             echo '<a class="mui-pull-left nl-goback static" href="'.$back_u.'">';
+
+
            ?>
         <i class="iconfont">&#xe610;</i>
         </a>
@@ -55,6 +62,7 @@
                             $set_url = home_url('/teams/coachList/category_id/'.$_GET['category_id']);
                             if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                             if(isset($_GET['match_id'])) $set_url .= '/match_id/'.$_GET['match_id'];
+                            if(isset($_GET['directory'])) $url .= '/directory/1';
                             if(isset($_GET['back'])){
                                 $url .= '/back/1';
                             }
@@ -580,7 +588,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 var flag='<?=$action ?>';
                                 if(flag.length>0){
                                     var text=$('.layui-this').text();
-                                    var dom='<a class="a-btn" href="<?=isset($_GET['match_id']) ? home_url('/teams/coachList/category_id/'.$category_id.'/match_id/'.$_GET['match_id'].'/back/1') : home_url('/teams/coachList/category_id/'.$category_id.'/back/1');?>">设置我的'+text+'教练</a>'
+                                    var dom='<a class="a-btn" href="<?=$next_url?>">设置我的'+text+'教练</a>'
                                 }
                                 lis.push(dom) 
                             }
