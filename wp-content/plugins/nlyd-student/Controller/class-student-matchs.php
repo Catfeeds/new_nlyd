@@ -484,53 +484,56 @@ class Student_Matchs extends Student_Home
              }
              else{
 
+                 $data = array();
                  foreach ($this->project_order_array as $k => $val){
-                     //print_r($val);
+                     //获取下一项目信息
+                     $next_key_array = $this->project_order_array[$k+1];
+                     //$next_key_array = '';
+                     if(empty($next_key_array)){
+                         $error_data = array(
+                             'message'=>'比赛结束',
+                             'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                         );
+                         $this->get_404($error_data);
+                         return;
+                         //break;
+                     }
+
                      $project_start_time = strtotime($val['project_start_time']);
                      $project_end_time = strtotime($val['project_end_time']);
-                     if($project_start_time < get_time() && get_time() < $project_end_time ){
 
-                         //计算出当前正在进行的比赛项目与轮数
-                         $project_match_more = $val['match_more'] > 0 ? $val['match_more'] : $this->match_more;
-                         $match_use_time = $val['project_use_time'] > 0 ? $val['project_use_time'] : $this->match_count_down;
-                         $more_interval = $val['project_time_interval'] > 0 ? $val['project_time_interval'] : $this->match_subject_interval;
+                     if($project_start_time < get_time() && get_time() < strtotime($next_key_array['project_start_time'])){
 
-                         /*print_r($this->match_subject_interval);
-                         print_r($this->match_count_down);*/
-
-                         for ($i=0;$i<$project_match_more;++$i){
-
-                             $project_more_start_time = $project_start_time + $i * ($match_use_time + $more_interval) * 60;
-                             $project_more_end_time = $project_more_start_time + ($match_use_time + $more_interval)*60 ;
-                             //print_r(date_i18n('Y-m-d H:i:s',$project_more_start_time).'----');
-                             //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time).'----'.date_i18n('Y-m-d H:i:s',$project_more_end_time).'****');
-                             if($project_more_start_time < get_time() && get_time() < $project_more_end_time){
-                                 $num = $i+1;   //第几轮比赛
-                                 break;
-                                 //var_dump($num);die;
-                             }
-
-                         }
-                         if($num == $project_match_more){
-                             $data['next_type'] = '下一项';
-                             $next_match_project = $this->project_order_array[$k+1];
-                             $project_title = $next_match_project['post_title'];
-                             $match_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/project_id/'.$next_match_project['match_project_id'].'/match_more/1');
+                         var_dump($next_key_array['project_start_time']);
+                         if($project_start_time < get_time() && get_time() < $project_end_time){
+                            //本项目轮数判别
+                             var_dump($val);
                          }else{
-
-                             $project_title = $val['post_title'];
-                             $match_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/project_id/'.$val['match_project_id'].'/match_more/'.$num);
-                             $data['next_type'] = '下一轮';
+                             //等待下一项开赛
+                             var_dump($next_key_array);
                          }
-                         $data['midway_match'] = true;
-                         break;
-                     }else if($project_end_time < get_time()){
-                         $data['next_type'] = '下一项';
-                         $next_match_project = $this->project_order_array[$k+1];
-                         $project_title = $next_match_project['post_title'];
-                         $match_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/project_id/'.$next_match_project['match_project_id'].'/match_more/1');
                      }
+
+
+
+                     /*print_r($val['project_start_time'].'========'.$val['project_end_time'].'**********'.get_time('mysql'));
+                     if($project_start_time < get_time() && get_time() < $project_end_time ){
+                         var_dump($val);
+                     }*/
+
+                     /*$count_down =
+                     var_dump($next_match_project);
+                     var_dump($num);*/
                  }
+
+                 /*if(empty($next_key_array)){
+                     $error_data = array(
+                         'message'=>'比赛结束',
+                         'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                     );
+                     $this->get_404($error_data);
+                     return;
+                 }*/
              }
          }
 
@@ -546,6 +549,13 @@ class Student_Matchs extends Student_Home
          //var_dump($data);
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
+    }
+
+    /**
+     * 设置下一项比赛项目
+     */
+    public function set_next_match_project(){
+
     }
 
     /*
@@ -583,7 +593,8 @@ class Student_Matchs extends Student_Home
 
             if( get_time() < $this->project_start_time ){
                 $error_data = array(
-                                'message'=>'该比赛项目未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                                'message'=>'该比赛项目未开始',
+                                'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
                                 'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id),
                                 'start_count_down' => $this->project_start_time - get_time(),
                             );

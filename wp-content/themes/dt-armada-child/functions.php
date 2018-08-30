@@ -697,4 +697,6 @@ if(!function_exists('is_ajax')){
 require_once(ABSPATH.'wp-includes/library/Autoloader.class.php');
 
 //引入定时器
-//require_once(ABSPATH.'wp-includes/library/Timer.class.php');
+require_once(ABSPATH.'wp-includes/library/Timer.class.php');
+$timer = new \library\Timer();
+$timer->autoTimer();
