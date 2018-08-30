@@ -127,14 +127,14 @@ class Match_Ajax
 
         if($status == -1){
             //退队
-            $statusName = '退队';
+            $statusName = '退出';
             if($type == 1)
                 $teamStatus = -3;
             else
                 $teamStatus = 2;
         }elseif($status == 1){
             //入队
-            $statusName = '入队';
+            $statusName = '加入';
             if($type == 1)
                 $teamStatus = 2;
             else
@@ -154,24 +154,32 @@ class Match_Ajax
             $id = intval($_POST['id']);
         }
 
-        $users = $wpdb->get_results('SELECT user_mobile FROM '.$wpdb->prefix.'match_team AS m 
+        $users = $wpdb->get_results('SELECT u.user_mobile,u.ID,u.display_name,m.team_id FROM '.$wpdb->prefix.'match_team AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
             WHERE m.id IN('.$id.') AND m.status='.$status, ARRAY_A);
 
         $sql = 'UPDATE '.$wpdb->prefix.'match_team SET status='.$teamStatus.' WHERE status='.$status.' AND id IN('.$id.')';
-
+        //战队名称
+        $post_title = get_post($users[0]['team_id'])->post_title;
         $bool = $wpdb->query($sql);
         if($bool){
             //TODO 发送通知
             $ali = new AliSms();
-            $mobileStr = '';
+
+            $sendErr = "\n";
             foreach ($users as $v){
-                $mobileStr .= $v['user_mobile'].',';
+                if(!$v['display_name'] || !$v['user_mobile']){
+                    $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$v['ID'], ARRAY_A);
+                    $real_name = $address['fullname'];
+                    $mobile = $address['telephone'];
+                }else{
+                    $real_name = explode(', ', $v['display_name'])[0].explode(', ', $v['display_name'])[1];
+                    $mobile = $v['user_mobile'];
+                }
+                $result = $ali->sendSms($mobile, 9, array('user'=>$real_name, 'applytype' => $statusName, 'team' => $post_title, 'type' => $typeName));
+                if(!$result) $sendErr .= $real_name.': '.$mobile."发送短信失败\n";
             }
-            $mobileStr = substr($mobileStr,0,strlen($mobileStr)-1);
-            $result = $ali->sendSms($mobileStr, 19, array('code'=>'您的'.$statusName.'申请已'.$typeName));
-            $senfStatusName = $result ? '成功' : '失败';
-            wp_send_json_success(array('info'=>'操作成功, 发送短信通知'.$senfStatusName));
+            wp_send_json_success(array('info'=>'操作成功'.$sendErr));
         }else{
             wp_send_json_error(array('info' => '操作失败'));
         }

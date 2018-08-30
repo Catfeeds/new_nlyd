@@ -89,6 +89,11 @@ class AliSms
                 $template['title'] = '同意和拒绝教练申请';
                 $template['text'] =  '尊敬的${user},您申请的${cate}教练${coach}已${type}';
                 break;
+            case 9:
+                $template['code'] =  'SMS_143715303';
+                $template['title'] = '入队和退队受理';
+                $template['text'] =  '尊敬的${user},您申请${applytype}战队${team}已${type}';
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $template['title'] = '短信测试';
