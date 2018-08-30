@@ -26,7 +26,7 @@ class Student_Teams
 
         $this->ajaxControll = new Student_Ajax();
         //添加短标签
-        add_shortcode('team-home',array($this,$action));
+        add_shortcode('teams-home',array($this,$action));
     }
 
 
