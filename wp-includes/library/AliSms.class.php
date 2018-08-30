@@ -84,6 +84,11 @@ class AliSms
                 $template['title'] = '加入战队申请';
                 $template['text'] =  '尊敬的${teams}您好，ID为${user_id}的学员向您发送了“加⼊战队”申请，请您尽快登录系统处理该申请。';
                 break;
+            case 10:
+                $template['code'] =  'SMS_143710292';
+                $template['title'] = '同意和拒绝教练申请';
+                $template['text'] =  '尊敬的${user},您申请的${cate}教练${coach}已${type}';
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $template['title'] = '短信测试';

@@ -56,7 +56,7 @@ class Match_Ajax
         global $wpdb;
         $status = intval($_POST['status']);
         if($status == 2){
-            $statusName = '通过';
+            $statusName = '通过审核';
         }elseif ($status == -1){
             $statusName = '被拒绝';
         }
@@ -71,8 +71,9 @@ class Match_Ajax
             $id = intval($_POST['id']);
             $idWhere = 'id='.$id;
         }
-        $user = $wpdb->get_results('SELECT u.user_mobile FROM '.$wpdb->prefix.'my_coach AS m 
+        $user = $wpdb->get_results('SELECT u.ID,u.user_mobile,u.display_name,m.category_id,mu.display_name AS coach_name FROM '.$wpdb->prefix.'my_coach AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON m.user_id=u.ID 
+            LEFT JOIN '.$wpdb->users.' AS mu ON m.coach_id=mu.ID 
             WHERE m.'.$idWhere.' AND m.`apply_status`=1',ARRAY_A);
 
         $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE '.$idWhere.' AND `apply_status`=1';
@@ -80,17 +81,36 @@ class Match_Ajax
             wp_send_json_error(array('info' => '操作失败,状态参数异常'));
         }
         $bool = $wpdb->query($sql);
+//        $bool = true;
         if($bool) {
             //TODO 发送通知
             $ali = new AliSms();
-            $mobileStr = '';
+            $sendErr = "\n";
+            $categoryArr = []; //post数据数组. 避免重复查询
             foreach ($user as $v){
-                $mobileStr .= $v['user_mobile'].',';
+                //如果display_name没有或者user_mobile没有就去寻找默认收货地址中的电话号码和收件人
+                if(!$v['display_name'] || !$v['user_mobile']){
+                    $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$v['ID'], ARRAY_A);
+                    $real_name = $address['fullname'];
+                    $mobile = $address['telephone'];
+                }else{
+                    $real_name = explode(', ', $v['display_name'])[0].explode(', ', $v['display_name'])[1];
+                    $mobile = $v['user_mobile'];
+                }
+                //查询类别名称
+                if(isset($categoryArr[$v['category_id']])){
+                    $post_title = $categoryArr[$v['category_id']];
+                }else{
+                    $post_title = get_post($v['category_id'])->post_title;
+                    $categoryArr[$v['category_id']] = $post_title;
+                }
+                $result = $ali->sendSms($mobile, 10, array('user'=>$real_name,'cate'=>$post_title, 'coach' => explode(', ', $v['coach_name'])[0].explode(', ', $v['coach_name'])[1], 'type' => $statusName));
+                if(!$result){
+                    $sendErr .= $real_name.': '.$mobile.'短信发送失败'."\n";
+                }
             }
-            $mobileStr = substr($mobileStr,0,strlen($mobileStr)-1);
-            $result = $ali->sendSms($mobileStr, 19, array('code'=>'您的设置教练申请已'.$statusName));
-            $sendType = $result ? '成功' : '失败';
-            wp_send_json_success(array('info'=>'操作成功, 发送短信通知'.$sendType));
+
+            wp_send_json_success(array('info'=>'操作成功'.$sendErr));
         } else{
             wp_send_json_error(array('info' => '操作失败'));
         }
