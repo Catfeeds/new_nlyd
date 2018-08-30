@@ -18,7 +18,7 @@ class Timer
         $this->setting = get_option('default_setting');
         add_filter('cron_schedules', array($this,'wpjam_more_reccurences'));
         $this->wpjam_more_reccurences();
-        $this->autoTimer();
+        //$this->autoTimer();
     }
 
 
@@ -50,6 +50,7 @@ class Timer
         $map = array();
         $map[] = ' a.post_type = "match" ';
         $map[] = ' a.post_status = "publish" ';
+        $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
         $filed = 'a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
@@ -149,7 +150,7 @@ class Timer
                 }
             }
         }
-        $myfile = file_put_contents(leo_user_interface_path.'log/timer-log.txt', date('Y-m-d H:i:s',time())."  This is a timer. \r\n", FILE_APPEND);
+        $myfile = file_put_contents(wp_upload_dir()['basedir'].'/timer-log/timer-log.txt', get_time('mysql')."  This is a timer. \r\n", FILE_APPEND);
         //$myfile = file_put_contents(leo_user_interface_path.'log/sql-log.txt', date('Y-m-d H:i:s',time())."  $sql \r\n", FILE_APPEND);
     }
 
@@ -161,4 +162,3 @@ class Timer
     }
 
 }
-new Timer();

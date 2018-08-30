@@ -1594,7 +1594,7 @@ class Student_Ajax
         $result = $wpdb->update($wpdb->users,array('user_pass'=>wp_hash_password( $_POST['password'] )),array('ID'=>$current_user->ID));
         if($result){
 
-            wp_send_json_success(array('info'=>'重置成功','url'=>home_url('/login')));
+            wp_send_json_success(array('info'=>'重置成功','url'=>home_url('/logins')));
         }else{
             wp_send_json_error(array('info'=>'重置失败'));
         }
