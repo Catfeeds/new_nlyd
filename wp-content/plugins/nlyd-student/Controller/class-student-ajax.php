@@ -2491,7 +2491,10 @@ class Student_Ajax
         //判断当前是否是已申请的教练
         $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
-        if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
+        if($row['apply_status'] != 2){
+            $post_title = get_post($row['category_id'])->post_title;
+            wp_send_json_error(array('该教练还不是你的'.$post_title.'教练'));
+        }
 
         //开启事务
         $wpdb->startTrans();
