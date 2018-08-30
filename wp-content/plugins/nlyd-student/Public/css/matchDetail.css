@@ -45,10 +45,9 @@
 .nl-match-people{
     position: absolute;
     top: 0;
-    right: 2px;
+    right: 0;
 }
 .nl-match-header,.nl-match-body{
-    /* padding: 0 17px; */
     padding: 0;
 }
 .nl-match-header{

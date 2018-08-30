@@ -75,7 +75,7 @@
                     <!-- 用户名称 -->
                     <div class="userCenter-name layui-row">
                         <?php if(!is_user_logged_in()){ ?>
-                        <div class="userCenter-names">未登录</div>
+                        <a class="userCenter-names c_black" href="<?=home_url('/logins')?>">未登录</a>
                         <?php }else{ ?>
                         <div class="userCenter-names login"><?=$user_info['nickname']?></div>
                         <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>

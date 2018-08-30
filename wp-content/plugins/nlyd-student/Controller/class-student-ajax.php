@@ -1787,7 +1787,7 @@ class Student_Ajax
 
                     $this->setUserCookie($result);
 
-                    wp_send_json_success( array('info'=>'登录成功','url'=>home_url('student/account')));
+                    wp_send_json_success( array('info'=>'登录成功','url'=>home_url('account')));
                 }else{
                     wp_send_json_error(array('info'=>'登录失败'));
                 }
@@ -1833,7 +1833,7 @@ class Student_Ajax
 
             $this->setUserCookie($result);
 
-            wp_send_json_success(array('info'=>'注册成功','url'=>home_url('student/account')));
+            wp_send_json_success(array('info'=>'注册成功','url'=>home_url('account')));
         }else{
             wp_send_json_error(array('info'=>'注册失败'));
         }
@@ -1872,7 +1872,7 @@ class Student_Ajax
         if($result){
             unset($_SESSION['sms']);
             unset($_SESSION['smtp']);
-            wp_send_json_success(array('info'=>'重置成功','url'=>home_url('/login')));
+            wp_send_json_success(array('info'=>'重置成功','url'=>home_url('/logins')));
         }else{
             wp_send_json_error(array('info'=>'重置失败'));
         }
@@ -1959,7 +1959,7 @@ class Student_Ajax
 
         wp_logout();
         unset($_SESSION['login_time']);
-        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('student/login')));
+        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins')));
     }
 
     /**

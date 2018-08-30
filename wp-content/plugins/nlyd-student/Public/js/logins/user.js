@@ -40,10 +40,9 @@ jQuery(function($) {
                     if(data.success){
                         // window.localStorage.removeItem(formData.user_login);//登陆成功删除记录
                         if(data.data.url){
-                            window.location.href=data.data.url
                             setTimeout(function(){
                                 window.location.href=data.data.url
-                            },300)
+                            },1600)
                         }                        
                     }else{//登陆失败。记录登录时间
                     }
