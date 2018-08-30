@@ -1,7 +1,7 @@
 
 
 <div class="nl-foot-nav">
-    <a class="nl-foot-item" href="<?=home_url();?>">
+    <a class="nl-foot-item" href="<?=home_url('/student/index');?>">
         <div class="nl-foot-icon">
             <div class="footer-home"></div>
         </div>

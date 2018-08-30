@@ -17,7 +17,7 @@
                 <!-- 头部导航 -->
                 <div class="layui-row width-padding">
                     <div class="top-nav">
-                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url();?>">首 页</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/student/index');?>">首 页</a></div>
                         <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('directory');?>">名 录</a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6">课 程</a></div>
                         <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('shops');?>">商 城</a></div>
