@@ -593,6 +593,8 @@ class Student_Ajax
         //$_POST['team_id'] = 407;
         if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
+        //判断是否登录
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
         //判断是否有战队
         $sql = "select id,team_id,user_id,status from {$wpdb->prefix}match_team where user_id = {$current_user->ID} ";
         //开启事务,发送短信失败回滚
@@ -1091,6 +1093,8 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }
         global $wpdb,$current_user;
+        //判断是否登录
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
 
         if(empty($_POST['category_id']) || empty($_POST['coach_id'])) wp_send_json_error(array('info'=>'参数错误'));
         //不允许申请自己为教练
@@ -1137,6 +1141,8 @@ class Student_Ajax
         if( empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
+        //判断是否登录
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
 
         //获取教练信息
         $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
@@ -2479,6 +2485,9 @@ class Student_Ajax
         }
         if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
+        //判断是否登录
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
+
         //判断当前是否是已申请的教练
         $row = $wpdb->get_row("select id,user_id,category_id,apply_status,major from {$wpdb->prefix}my_coach where coach_id = {$_POST['coach_id']} and user_id = $current_user->ID and category_id = {$_POST['category_id']} and apply_status=2",ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
@@ -2513,6 +2522,9 @@ class Student_Ajax
         }
         if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
+        //判断是否登录
+        if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
+
         //判断当前是否是已申请的教练
         $row = $wpdb->get_row("select mc.id,mc.apply_status,mc.major,u.user_mobile,p.post_title,display_name,u.ID as uid from {$wpdb->prefix}my_coach as mc 
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
