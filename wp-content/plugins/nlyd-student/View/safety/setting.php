@@ -60,7 +60,11 @@
                     console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
-                       window.location.reload()
+                        if(data.data.url){
+                            setTimeout(() => {
+                                window.location.href=data.data.url
+                            }, 1600);
+                        }
                     }
                     return false;
                 }

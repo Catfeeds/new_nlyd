@@ -28,7 +28,7 @@
                         <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入<?=!empty($next_type)?$next_type:'下一轮'?>比赛
                     </p>
                     <a href="<?=$match_url?>" class="a-btn wait">进入<?=!empty($next_type)?$next_type:'下一轮'?>等待页面</a>
-                    <a class="a-btn back" href="<?=home_url('/account/matchList');?>">返回我的比赛列表</a>
+                    <a class="a-btn back" href="<?=home_url('account/recentMatch');?>">返回我的比赛列表</a>
                 </div>
                 <?php } ?>
             </div>           

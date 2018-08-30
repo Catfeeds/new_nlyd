@@ -84,7 +84,7 @@
                             
                             <li class="nl-match">
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name <?=$match['match_status'] != -3?'c_blue':'';?>">报名列表</span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?>">报名列表</span>
                                     <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?=$total?>位选手已报名</span>
                                 </div>
                                 <div class="nl-match-body">
