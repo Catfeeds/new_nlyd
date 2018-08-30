@@ -94,6 +94,16 @@ class AliSms
                 $template['title'] = '入队和退队受理';
                 $template['text'] =  '尊敬的${user},您申请${applytype}战队${team}已${type}';
                 break;
+            case 8:
+                $template['code'] =  'SMS_143711215';
+                $template['title'] = '退款时发送短信';
+                $template['text'] =  '尊敬的${user}, 您的订单号为${order}的订单已退款,退款金额${cost},请注意查收';
+                break;
+            case 7:
+                $template['code'] =  'SMS_143716094';
+                $template['title'] = '后台解除教学关系';
+                $template['text'] =  '尊敬的${user}您好，您的${cate}教练${coach}解除了与您的教学关系，您可登录系统查看';
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $template['title'] = '短信测试';
