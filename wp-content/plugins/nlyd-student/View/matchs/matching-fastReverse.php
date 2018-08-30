@@ -113,6 +113,7 @@ jQuery(function($) {
             match_action:'subjectFastReverse',
             surplus_time:time,
         }
+        console.log(data)
         //console.log(data)
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             $.DelSession('match')

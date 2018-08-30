@@ -1,5 +1,5 @@
 <?php
-
+use library\Timer;
 /**
  * Redis测试
  * Created by PhpStorm.
@@ -7,7 +7,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Account_Redis
+class Student_Timer
 {
     public function __construct($shortCode)
     {
@@ -15,12 +15,25 @@ class Student_Account_Redis
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
-
         //添加短标签
-        add_shortcode('student-account',array($this,'index'));
+        add_shortcode('timer-index',array($this,'index'));
     }
 
+    /**
+     * 比赛状态自动化
+     */
     public function index(){
+
+        $switch = get_option('default_setting')['default_timer'];
+        if($switch == 1){
+            $timer = new Timer();
+            $timer->wpjam_daily_function();
+        }
+        $view = student_view_path.'/public/timer.php';
+        load_view_template($view);
+    }
+
+    public function redis(){
         $redis = new Redis();
         $redis->connect('127.0.0.1',6379,1);
         $redis->auth('leo626');

@@ -182,17 +182,6 @@ if(!class_exists('StudentController')){
          */
         public function scripts_default(){
 
-            if(is_home()){
-                wp_register_style( 'my-student-home', student_css_url.'home-student.css' );
-                wp_enqueue_style( 'my-student-home' );
-                wp_register_script( 'student-swiper',student_js_url.'swiper/swiper-4.3.3.min.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-swiper' );
-                wp_register_style( 'my-student-swiper', student_css_url.'swiper/swiper-4.3.3.min.css',array('my-student') );
-                wp_enqueue_style( 'my-student-swiper' );
-                wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-                wp_enqueue_style( 'my-student-userCenter' );
-            }
-
             wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-cookie' );
             //引入layui

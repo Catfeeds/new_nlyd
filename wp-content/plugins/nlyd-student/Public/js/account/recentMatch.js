@@ -37,6 +37,7 @@ jQuery(function($) {
                                     var end_time = new Date(v.entry_end_time).getTime();//月份是实际月份-1
                                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                     var sys_second = (end_time-serverTimes)/1000;
+                                    var sys_second_text=sys_second>0 ? '' :  "报名结束";
                                     var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
@@ -62,7 +63,7 @@ jQuery(function($) {
                                                             +'<span>报名截止倒计时：</span>'
                                                             +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
                                                             
-                                                            +'报名结束</span>'
+                                                            +sys_second_text+'</span>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail">'
                                                             +'<span>已报选手：</span>'
@@ -95,13 +96,17 @@ jQuery(function($) {
                                 // }
                                 next(lis.join(''),false)
                             }
-                            $('.getTimes').countdown(function(s, d){//倒计时
-                                var D=d.day>0 ? d.day+'天' : '';
-                                var h=d.hour<10 ? '0'+d.hour : d.hour;
-                                var m=d.minute<10 ? '0'+d.minute : d.minute;
-                                var s=d.second<10 ? '0'+d.second : d.second;
-                                var time=D+h+':'+m+':'+s;
-                                var items = $(this).text(time);
+                            $('.getTimes').countdown(function(S, d){//倒计时
+                                if(S>0){
+                                    var D=d.day>0 ? d.day+'天' : '';
+                                    var h=d.hour<10 ? '0'+d.hour : d.hour;
+                                    var m=d.minute<10 ? '0'+d.minute : d.minute;
+                                    var s=d.second<10 ? '0'+d.second : d.second;
+                                    var time=D+h+':'+m+':'+s;
+                                    $(this).text(time);
+                                }else{
+                                    $(this).text("报名结束");
+                                }
                             });
                     })   
             }

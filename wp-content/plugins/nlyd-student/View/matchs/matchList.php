@@ -1,7 +1,7 @@
 
 
 <div class="nl-foot-nav">
-    <a class="nl-foot-item" href="<?=home_url();?>">
+    <a class="nl-foot-item" href="<?=home_url('/student/index');?>">
         <div class="nl-foot-icon">
             <div class="footer-home"></div>
         </div>
@@ -213,7 +213,7 @@ jQuery(function($) {
                                 var time=D+h+':'+m+':'+s;
                                 $(this).text(time);
                             }else{
-                                $(this).text("已截止");
+                                $(this).text("报名结束");
                             }
                         });
                 })       
