@@ -14,8 +14,8 @@
             <h1 class="mui-title">设置</h1>
         </header>  
             <div class="layui-row nl-border nl-content">
-                <div class="main-page">
-                    <div class="nl-page-form width-margin-pc">
+                <div class="have-bottom">
+                    <div class="nl-page-form width-margin-pc ">
                         <div class="form-inputs">
                             <a class="form-input-row a" href="<?=home_url('/safety/userAgreement');?>">
                                 <div class="form-input-label">用户协议</div>
@@ -57,7 +57,6 @@
                 dataType:'json',
                 timeout:3000,
                 success: function(data, textStatus, jqXHR){
-                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
                         if(data.data.url){
