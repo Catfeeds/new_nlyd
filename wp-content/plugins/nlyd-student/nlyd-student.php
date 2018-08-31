@@ -21,9 +21,6 @@ if(!class_exists('StudentController')){
         public function __construct()
         {
 
-            //设置时区
-//            date_default_timezone_set('Asia/Shanghai');
-
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );

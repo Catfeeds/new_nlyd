@@ -6337,4 +6337,13 @@ if(!function_exists('is_qq')){
     }
 }
 
+function get_time($type='timestamp'){
+
+    if($type == 'mysql'){
+        return current_time('mysql');
+    }else{
+        return strtotime(current_time('mysql'));
+    }
+}
+
 

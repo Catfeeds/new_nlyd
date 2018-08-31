@@ -15,6 +15,7 @@
 .layui-tab-brief>.layui-tab-title .layui-this{
     color: #fff;
     border: 0.5px solid transparent;
+    border-top: 0.5px solid #68AAFE;
     background: -webkit-linear-gradient(#68AAFE, #4394F9);
     background: -o-linear-gradient(#68AAFE, #4394F9);
     background: -moz-linear-gradient(#68AAFE, #4394F9);
@@ -161,9 +162,8 @@ overflow: hidden;
 .coach-type{
     flex:1;
     text-align: center;
-    height: 15px;
-    line-height: 15px;
-    margin-top: 5px;
+    height: 20px;
+    line-height: 20px;
     border-right: 1px solid #2484FE;
 }
 
@@ -171,11 +171,7 @@ overflow: hidden;
     display: flex;
 }
 .coach-detail-footer .coach-type:last-child{
-    text-align: right;
     border-right: none;
-}
-.coach-detail-footer .coach-type:first-child{
-    text-align:left;
 }
 .coach-row-footer{
     padding-top: 15px;

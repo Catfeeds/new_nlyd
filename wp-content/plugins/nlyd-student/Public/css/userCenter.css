@@ -375,10 +375,10 @@
         display: block;
         float: left;
         height: 80px;
-        width: -webkit-calc(25% - 0.5px);
-        width: calc(25% - 0.5px);
-        border-bottom: 0.5px solid rgba(38, 38, 38, 0.1);
-        border-right: 0.5px solid rgba(38, 38, 38, 0.1);
+        width: -webkit-calc(25% - 0.75px);
+        width: calc(25% - 0.75px);
+        border-bottom: 1px solid rgba(38, 38, 38, 0.1);
+        border-right: 1px solid rgba(38, 38, 38, 0.1);
     }
     .userCenter-detail a:nth-child(4n){
         border-right: none;

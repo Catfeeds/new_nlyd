@@ -9,12 +9,15 @@
 //date_default_timezone_set('Asia/Shanghai');
 
 //获取当前时间
-function get_time($type='timestamp'){
+if(!function_exists('get_time')){
 
-    if($type == 'mysql'){
-        return current_time('mysql');
-    }else{
-        return strtotime(current_time('mysql'));
+    function get_time($type='timestamp'){
+
+        if($type == 'mysql'){
+            return current_time('mysql');
+        }else{
+            return strtotime(current_time('mysql'));
+        }
     }
 }
 

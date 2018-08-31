@@ -31,8 +31,8 @@
     color:rgba(116, 116, 116, 1);
     height: 40px;
     margin-left: 12px;
-    width: -webkit-calc(100%/3 - 9px);
-    width: calc(100%/3 - 9px);
+    width: -webkit-calc(100%/3 - 10px);
+    width: calc(100%/3 - 10px);
     line-height: 40px;
     padding: 0;
     transition: none;
@@ -246,6 +246,7 @@ border-bottom-right-radius: 8px;
     position: absolute;
     top: 100%;
     width: 100%;
+    z-index: 1;
     display: none;
 }
 .td-type .ul-select.ul-select-show{

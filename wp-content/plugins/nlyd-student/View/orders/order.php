@@ -273,7 +273,6 @@ layui.use(['element','flow'], function(){
     var isClick={all:true,apply:false,send:false,accept:false}
     flow.load({
         elem: '#all'
-        ,scrollElem: '#all'
         ,isAuto: false
         ,isLazyimg: true
         ,done: function(page, next){ //加载下一页
@@ -347,7 +346,6 @@ layui.use(['element','flow'], function(){
         if(!isClick[data_id]){
             flow.load({
                 elem: '#'+data_id
-                ,scrollElem: '#'+data_id
                 ,isAuto: false
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页

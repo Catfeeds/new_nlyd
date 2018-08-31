@@ -65,7 +65,7 @@ class Match
                                   b.post_title
                                   from {$wpdb->prefix}match_project a
                                   left join {$wpdb->prefix}posts b on a.match_project_id = b.ID
-                                  where a.post_id = {$_GET['post']} order by a.id asc
+                                  where a.post_id = {$_GET['post']} order by a.project_start_time ASC ,a.id asc
                                ";
                         //print_r($sql);
                         $rows = $wpdb->get_results($sql,ARRAY_A);

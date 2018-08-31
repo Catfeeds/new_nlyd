@@ -94,7 +94,6 @@ layui.use(['element','flow'], function(){
     initDanxiang=function(fenleiPage){
        flow.load({
             elem: '#flow-one' //流加载容器
-            ,scrollElem: '#flow-one' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页

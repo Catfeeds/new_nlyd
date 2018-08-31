@@ -77,9 +77,9 @@
                         <?php endif;?>
                         <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
                         <div class="layui-tab-content" style="padding:0">
-                            <div class="layui-tab-item layui-show layui-row layui-col-space20 flow-default" id="flow-zoo">
+                            <ul class="layui-tab-item layui-show layui-row layui-col-space20 flow-default" id="flow-zoo">
                                 
-                            </div>
+                            </ul>
                         </div>
                     </div>
                 <?php }else{ ?>
@@ -253,7 +253,7 @@ layui.use(['element','flow','layer','form'], function(){
                         if(res.success){
                             $.alerts(res.data.info)
                             if(res.data.url&&res.data.url.length>0){
-                                setTimeout(() => {
+                                setTimeout(function() {
                                     window.location.href=res.data.url
                                 }, 1600);
                                 
@@ -477,7 +477,6 @@ layui.use(['element','flow','layer','form'], function(){
  //--------------------分页--------------------------
     flow.load({
         elem: '#flow-zoo' //流加载容器
-        ,scrollElem: '#flow-zoo' //滚动条所在元素，一般不用填，此处只是演示需要。
         ,isAuto: false
         ,isLazyimg: true
         ,done: function(page, next){//加载下一页
