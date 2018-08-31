@@ -26,7 +26,7 @@
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一轮等待页面</a>
                     <?php }else{ ?>
                         <p class="tips fs_16">
-                            <span class="c_blue"><?=$last_title?>第<?=$last_more?>轮</span>已经结束，您可等待本轮排名统计完成后进入下一项比赛
+                            <span class="c_blue"><?=$last_title?>第<?=$last_more?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
                         </p>
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一项等待页面</a>
                     <?php } ?>
