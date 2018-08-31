@@ -43,20 +43,15 @@
 .coach-type{
     flex:1;
     text-align: center;
-    height: 15px;
-    line-height: 15px;
-    margin-top: 5px;
+    height: 20px;
+    line-height: 20px;
     border-right: 1px solid #2484FE;
 }
 .coach-detail-footer{
     display: flex;
 }
 .coach-detail-footer .coach-type:last-child{
-    text-align: right;
     border-right: none;
-}
-.coach-detail-footer .coach-type:first-child{
-    text-align:left;
 }
 .nl-badge{
     position: relative;
