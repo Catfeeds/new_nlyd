@@ -490,7 +490,7 @@ class Match_student {
                     'user_ID' => $usermeta['user_ID'][0],
                     'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
                     'sex' => $usermeta['user_gender'][0],
-                    'birthday' => $usermeta['user_birthday'],
+                    'birthday' => $usermeta['user_birthday'][0],
                     'age' => getAgeGroupNameByAge($age),
                     'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
                     'mobile' => $mqv['telephone'],
@@ -607,7 +607,8 @@ class Match_student {
                     <tbody id="the-list" data-wp-lists="list:user">
 
 
-                    <?php foreach ($rankingArr as $raV){?>
+                    <?php foreach ($rankingArr as $raV){
+                        ?>
                         <tr id="user-13">
                             <th scope="row" class="check-column">
                                 <label class="screen-reader-text" for="user_13"></label>
