@@ -370,7 +370,7 @@ jQuery(function($) {
             thisAjaxRow['isRight']=false;
             $('#answer').removeClass('answer').addClass('error-fast')
         }
-        setTimeout(() => {
+        setTimeout(function() {
             $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
             inItFastCalculation(level,type);
             nextQuestion()
@@ -402,7 +402,7 @@ jQuery(function($) {
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
-        setTimeout(() => {
+        setTimeout(function() {
             submit(0)
         }, 1000);
     }
@@ -421,7 +421,7 @@ jQuery(function($) {
             }else{
                 $.alerts('比赛结束')
             }
-            setTimeout(() => {
+            setTimeout(function() {
                 submit(S)
             }, 1000);
         }
