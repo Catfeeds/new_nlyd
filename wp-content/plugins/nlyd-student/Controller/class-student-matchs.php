@@ -172,35 +172,32 @@ class Student_Matchs extends Student_Home
         /**********************获取比赛信息end********************************/
 
         /*******************获取当前比赛项目配置******************************/
+        if(isset($_GET['project_id'])){
 
-        if(!empty($this->next_project)){
-
-            $project_id = $this->next_project['match_project_id'];
-
-            if (empty($this->project_key_array[$project_id])){
+            if (empty($this->project_key_array[$_GET['project_id']])){
                 $this->get_404('比赛项目错误');
                 return;
             }
-            /*var_dump($project_id);
-            die;*/
-            //print_r($match_project);
-            $this->project_id = $this->next_project['match_project_id'];
-            $this->project_title = $this->next_project['post_title'];
-            $this->project_alias = $this->next_project['project_alias'];
-            $this->project_match_more = $this->next_project['match_more'];
-            $this->project_time_interval = $this->next_project['project_time_interval'];
-            //print_r($this->next_project);
-            $this->project_start_time = strtotime($this->next_project['project_start_time']);
-            //print_r($this->next_project['project_end_time']);
-            $this->project_end_time = strtotime($this->next_project['project_end_time']);
+            $match_project = $this->project_key_array[$_GET['project_id']];
 
-            //print_r($this->project_end_time);
+            $this->project_id = $match_project['match_project_id'];
+            $this->project_title = $match_project['post_title'];
+            $this->project_alias = $match_project['project_alias'];
+            $this->project_match_more = $match_project['match_more'];
+            $this->project_count_down = $match_project['child_count_down'];
+            $this->project_str_len = $match_project['str_bit'];
+            /*print_r($this->current_project);
+            print_r($this->next_project);*/
+            $this->project_start_time = strtotime($this->current_project['project_start_time']);
 
+            $this->project_end_time = $this->current_project['match_project_id'] != $this->next_project['match_project_id'] ? strtotime($this->current_project['match_project_id']) : strtotime($this->current_project['project_end_time']);
+
+            //print_r($this->current_project);
             /**********************初始配置********************************/
-
-            $this->setting_default_config($this->next_project);
-
+            $this->setting_default_config($match_project);
         }
+
+
         /**********************获取当前比赛项目end********************************/
 
         //print_r($this->default_count_down);
@@ -481,7 +478,8 @@ class Student_Matchs extends Student_Home
 
         //正式时取消此test
         if(empty($_GET['test'])){
-
+            /*var_dump(($this->current_project['match_more'] == $_GET['match_more']));
+            var_dump(($this->current_project['match_project_id'] == $_GET['project_id']));*/
             if(($this->current_project['match_more'] == $_GET['match_more']) && $this->current_project['match_project_id'] == $_GET['project_id']){
 
                 if( get_time() > strtotime($this->current_project['project_end_time'])){
@@ -524,7 +522,7 @@ class Student_Matchs extends Student_Home
         /*****测试使用*****/
         if($_GET['test'] == 1){
             $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
-            $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+            //$this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
         }
 
         $count_down_redis = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
@@ -537,7 +535,7 @@ class Student_Matchs extends Student_Home
 
         $match_questions = '';
         $questions_answer = '';
-
+        //var_dump($this->project_alias);die;
         if($this->project_alias == 'wzsd'){
             //var_dump('wzsd_question'.$current_user->ID.'_'.$this->current_more);
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID.'_'.$this->current_more));
@@ -590,15 +588,16 @@ class Student_Matchs extends Student_Home
         elseif ($this->project_alias == 'pkjl'){
             //$this->redis->del('wzsd_question'.$current_user->ID);
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID));
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID))){
-                $poker = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID),true);
-                //var_dump($question);
+            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
+                $poker = json_decode($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,true);
+                //var_dump($poker);
             }else{
 
                 $poker = poker_create();
                 $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($poker));
 
                 $match_questions = $questions_answer = $poker;
+                //var_dump($match_questions);
             }
 
             if(!empty($poker)){
@@ -913,6 +912,7 @@ class Student_Matchs extends Student_Home
         //判断是否有新的比赛轮次或者新的项目
 
         if(!empty($this->project_end_time)){
+
             $match_more = !empty($this->next_project['next_more_num']) ? $this->next_project['next_more_num'] : 1;
             $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['match_project_id'].'/match_more/'.$match_more);
             $next_type = !empty($this->next_project['next_more_num']) ? 1 : 2;
@@ -1404,6 +1404,11 @@ class Student_Matchs extends Student_Home
 
         }
 
+        //print_r($rows);die;
+        $this->project_order_array = $rows;
+        $this->match_project_total = count($rows);
+        $this->project_id_array = array_column($rows,'match_project_id');
+
         if(in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog')) ){
 
             $start = reset($rows);
@@ -1508,6 +1513,7 @@ class Student_Matchs extends Student_Home
                             $next_project = $rows[$key+1];
                         }
                         $this->current_project['match_project_id'] = $value['match_project_id'];
+                        $this->current_project['project_alias'] = $value['project_alias'];
                         $this->current_project['match_more'] = empty($more_num) ? 1 : $more_num;
                         break;
                     }
@@ -1519,10 +1525,6 @@ class Student_Matchs extends Student_Home
             //var_dump($next_project);
             $this->next_project = $next_project;
         }
-        //print_r($rows);die;
-        $this->project_order_array = $rows;
-        $this->match_project_total = count($rows);
-        $this->project_id_array = array_column($rows,'match_project_id');
     }
 
     /*
