@@ -41,4 +41,23 @@ jQuery(document).ready(function($) {
             })
         }
     })
+
+
+
+
+
+
+
+    layui.use(['laydate','form',], function(){
+        var laydate = layui.laydate;
+        var form = layui.form
+        //日期时间选择器
+        $('.date-picker').each(function(){
+            var id=$(this).attr('id');
+            laydate.render({
+                elem: '#'+id
+                ,type: 'datetime'
+            });
+        })
+    })
 })
