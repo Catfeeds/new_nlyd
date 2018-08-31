@@ -58,7 +58,7 @@ if(!class_exists('Team')){
             ));
         ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline">战队成员</h1>
+                <h1 class="wp-heading-inline"><?=get_post($id)->post_title?>-战队成员</h1>
 
 
                 <form method="get" onsubmit="return false;">
