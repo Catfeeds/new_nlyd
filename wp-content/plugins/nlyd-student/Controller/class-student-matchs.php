@@ -136,6 +136,7 @@ class Student_Matchs extends Student_Home
     /*************************************************************/
 
     public $next_project = array();         //即将开赛的项目初始
+    public $current_project = array();      //正在开赛的项目初始
 
     public $default_match_more = 1;         //初始比赛轮数
     public $default_count_down;             //比赛初始倒计时
@@ -475,24 +476,23 @@ class Student_Matchs extends Student_Home
                 return;
             }
         }
+
         //正式时取消此test
         if(empty($_GET['test'])){
-            //var_dump($this->project_end_time);
-            //$project_array =
 
-            if($this->next_project['more_num'] == $_GET['match_more']){
+            if(($this->next_project['more_num'] == $_GET['match_more']) && $this->next_project['match_project_id'] == $_GET['project_id']){
 
-                if( get_time() > $this->project_end_time){
+                if( get_time() > strtotime($this->current_project['project_end_time'])){
 
                     $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
                     return;
                 }
 
-                if( get_time() < $this->project_start_time ){
+                if( get_time() < strtotime($this->current_project['project_start_time'])){
                     $error_data = array(
                         'message'=>'该轮比赛未开始',
                         'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
-                        'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id),
+                        'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
                         'start_count_down' => $this->project_start_time - get_time(),
                     );
                     //var_dump($error_data);
@@ -502,7 +502,7 @@ class Student_Matchs extends Student_Home
 
             }else{
 
-                $this->get_404(array('message'=>'该轮比赛未开始','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                $this->get_404(array('message'=>'非法操作','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
                 return;
             }
 
@@ -1430,6 +1430,9 @@ class Student_Matchs extends Student_Home
 
                     if($next_start_time <= get_time() && get_time() < $next_end_time){
 
+                        $this->current_project['project_start_time'] = date_i18n('Y-m-d H:i:s',$next_start_time);
+                        $this->current_project['project_end_time'] = date_i18n('Y-m-d H:i:s',$next_end_time);
+
                         /*
                             * 计算出每一轮的初始
                             */
@@ -1487,6 +1490,8 @@ class Student_Matchs extends Student_Home
                                     $next_project['next_more_num'] = $more_num+1;
                                     $next_project['project_start_time'] = date_i18n('Y-m-d H:i:s',$project_more_start_time);
                                     $next_project['project_end_time'] = date_i18n('Y-m-d H:i:s',$project_more_end_time);
+                                    $this->current_project['project_start_time'] = $next_project['project_start_time'];
+                                    $this->current_project['project_end_time'] = $next_project['project_end_time'];
                                     break;
                                     //var_dump($num);die;
                                 }
@@ -1508,10 +1513,9 @@ class Student_Matchs extends Student_Home
                 $next_project['last_more'] = $project_match_more;
                 //print_r($next_project);
             }
-
+            //var_dump($next_project);
             $this->next_project = $next_project;
         }
-
         //print_r($rows);die;
         $this->project_order_array = $rows;
         $this->match_project_total = count($rows);
