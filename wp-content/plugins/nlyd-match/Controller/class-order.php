@@ -528,7 +528,7 @@ class Order {
         global $wpdb;
         if(is_post()){
             $id = intval($_POST['id']);
-            $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 3, 'send_goods_time' => time(), 'express_number' => trim($_POST['express_number']), 'express_company' => trim($_POST['express_company'])], ['id' => $id]);
+            $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 3, 'send_goods_time' => current_time('timestamp'), 'express_number' => trim($_POST['express_number']), 'express_company' => trim($_POST['express_company'])], ['id' => $id]);
             if($bool) echo '<script type="text/javascript">alert("操作成功,快递数据已修改");</script>';
             else echo '<script type="text/javascript">alert("操作失败");</script>';
         }else{

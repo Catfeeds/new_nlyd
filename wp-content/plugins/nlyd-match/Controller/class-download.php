@@ -21,8 +21,8 @@ class Download
     public function order(){
         global $wpdb;
         if(empty($_POST['start_date']) || empty($_POST['end_date'])) exit('请选择日期');
-        $start = date('Y-m-d H:i:s', strtotime($_POST['start_date']));
-        $end = date('Y-m-d H:i:s', strtotime($_POST['end_date'].' +1 day'));
+        $start = date_i18n('Y-m-d H:i:s', strtotime($_POST['start_date']));
+        $end = date_i18n('Y-m-d H:i:s', strtotime($_POST['end_date'].' +1 day'));
         $rows = $wpdb->get_results('SELECT
         o.serialnumber,
         o.cost,
@@ -47,7 +47,7 @@ class Download
         $date = $_POST['start_date'].'-'.$_POST['end_date'];
         $filename = 'order_';
         $filename .= $date."_";
-        $filename .= time().".xls";
+        $filename .= current_time('timestamp').".xls";
 //        $path = self::$downloadPath.$filename;
 //        file_put_contents($path,$html);
         header('Pragma:public');
@@ -152,7 +152,7 @@ class Download
 
 
         $filename = 'match_student_';
-        $filename .= time().".xls";
+        $filename .= current_time('timestamp').".xls";
 //        $path = self::$downloadPath.$filename;
 //        file_put_contents($path,$html);
         header('Pragma:public');

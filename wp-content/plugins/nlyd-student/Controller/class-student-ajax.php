@@ -2205,7 +2205,7 @@ class Student_Ajax
         global $wpdb, $current_user;
         $contact = $_POST['contact'];//联系方式
         $content = $_POST['content'];//内容41
-        $date = date('Y m');
+        $date = date_i18n('Y m', get_time());
         $upload_dir = wp_upload_dir();
         $dateArr = explode(' ',$date);
         $dir = '/'.$dateArr[0].'/'.$dateArr[1].'/';
@@ -2222,7 +2222,7 @@ class Student_Ajax
             'content' => $content,
             'images' => serialize($imagePathArr),
             'contact' => $contact,
-            'created_time' => date('Y-m-d H:i:s')
+            'created_time' => current_time('mysql')
         ];
 
         if($wpdb->insert($wpdb->prefix.'feedback', $data)){
@@ -2406,7 +2406,7 @@ class Student_Ajax
                 'express_company' => '',
                 'cost' => $allPrice,
                 'pay_status' => 1,
-                'created_time' => date('Y-m-d H:i:s'),
+                'created_time' => current_time('mysql'),
             ];
 
             $bool = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);

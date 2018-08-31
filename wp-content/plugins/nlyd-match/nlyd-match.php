@@ -521,7 +521,7 @@ if(!class_exists('MatchController')){
                     }else{
                         $match_use_time = (($match_meta['match_use_time'] * $match_meta['match_more'] + $match_meta['match_subject_interval'] + $match_meta['match_project_interval'])*6 - $match_meta['match_project_interval'])*60;
                     }
-                    $match_end_time = date('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
+                    $match_end_time = date_i18n('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
                     //计算比赛状态
                     /*var_dump($current_time);
                     var_dump($match_meta['entry_end_time']);*/
