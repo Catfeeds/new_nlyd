@@ -50,15 +50,16 @@ class Student_Account extends Student_Home
             //var_dump($my_team);
             //print_r($sql);
             //获取我的技能
-            $sql1 = "select mental,
+            $sql1 = "select 
                 if(`read` >0,`read`,0) reading,
                 if(memory >0,memory,0) memory,
-                if(compute >0,compute,0) compute
+                if(compute >0,compute,0) compute,
+                nationality,mental_lv,mental_type
                 from {$wpdb->prefix}user_skill_rank 
                 where user_id = {$user_info['user_id']}  ";
             $my_skill = $wpdb->get_row($sql1,ARRAY_A);
             //print_r($sql1);
-            //print_r($user_info);
+            //var_dump($my_skill);
             $data = array('user_info'=>$user_info,'message_total'=>$message_total->total,'my_team'=>$my_team,'my_skill'=>$my_skill);
         }else{
             $user_info['user_head'] = student_css_url.'image/nlyd.png';

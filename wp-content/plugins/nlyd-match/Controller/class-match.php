@@ -188,7 +188,7 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">项目别名</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>?>" name="project_alias" class="layui-input" placeholder="项目别名">
+                <input type="text" value="<?=!empty($project_alias[0])?$project_alias[0]:'';?>" name="project_alias" class="layui-input" placeholder="项目别名">
             </div>
         </div>
 
