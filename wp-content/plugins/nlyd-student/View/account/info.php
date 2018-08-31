@@ -33,7 +33,7 @@
             </div> 
             <div class="layui-row nl-border nl-content">
                 <div class="main-page">
-                    <form class="nl-page-form layui-form width-margin-pc" lay-filter='nicenameForm'>   
+                    <form class="nl-page-form layui-form width-margin-pc have-bottom" lay-filter='nicenameForm'>   
                     
                         <div class="nl-form-tips width-padding width-padding-pc">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
                         <div class="form-inputs">
@@ -82,7 +82,7 @@
                 </div>
                 <!-- 实名认证 -->
                     <div id="certification" class="form-page">
-                        <form class="layui-form nl-page-form width-margin-pc" lay-filter='certificationForm'>
+                        <form class="layui-form nl-page-form width-margin-pc have-bottom" lay-filter='certificationForm'>
                             <div class="form-inputs">
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件类型</div>

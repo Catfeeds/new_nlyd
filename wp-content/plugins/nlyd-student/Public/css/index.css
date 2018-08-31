@@ -665,6 +665,9 @@ p.share-font{
     .have-footer{
         margin-bottom: 50px;
     }
+    .have-bottom{
+        padding-bottom: 80px;
+    }
     .mui-bar {
         position: fixed;
         border:1px solid #f3f3f3;

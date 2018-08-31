@@ -7,7 +7,7 @@
         </div>
         <div class="nl-foot-name">首页</div>
     </a>
-    <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
+    <a class="nl-foot-item disabled_a" href="<?=home_url('/account/matchList');?>">
         <div class="nl-foot-icon">
             <div class="footer-train"></div>
         </div>
@@ -19,7 +19,7 @@
         </div>
         <div class="nl-foot-name">比赛</div>
     </a>
-    <a class="nl-foot-item">
+    <a class="nl-foot-item disabled_a">
         <div class="nl-foot-icon">
             <div class="footer-kaoji"></div>
         </div>

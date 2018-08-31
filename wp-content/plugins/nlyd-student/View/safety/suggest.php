@@ -14,7 +14,7 @@
             <h1 class="mui-title">意见反馈</h1>
             </header>
             <div class="layui-row nl-border nl-content">
-                <div class="main-page">
+                <div class="have-bottom">
                     <form class="layui-form nl-page-form width-margin-pc" lay-filter='suggestions'>
                         <div class="form-inputs">
                             <div class="layui-bg-white suggest-row">
