@@ -15,11 +15,44 @@ jQuery(document).ready(function($) {
         }
         lastTouchEnd = now;
         }, false);
+        $("body").on("touchstart",'.layui-layer-phimg', function(e) {
+            // 判断默认行为是否可以被禁用
+            if (e.cancelable) {
+                // 判断默认行为是否已经被禁用
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
+            }   
+            startX = e.originalEvent.changedTouches[0].pageX,
+            startY = e.originalEvent.changedTouches[0].pageY;
+        });
+        $("body").on("touchend",'.layui-layer-phimg', function(e) {//图片滑动     
+            // 判断默认行为是否可以被禁用
+            if (e.cancelable) {
+                // 判断默认行为是否已经被禁用
+                if (!e.defaultPrevented) {
+                    e.preventDefault();
+                }
+            }               
+            moveEndX = e.originalEvent.changedTouches[0].pageX,
+            moveEndY = e.originalEvent.changedTouches[0].pageY,
+            X = moveEndX - startX,
+            Y = moveEndY - startY;
+            //左滑
+            if ( X > 0 ) {
+                $('.layui-layer-imgnext').click()              
+            }
+            //右滑
+            else if ( X < 0 ) {
+                $('.layui-layer-imgprev').click()  
+            }
+        });
     }
     addcamera=function(){
         var u = navigator.userAgent;
         var isAndroid = u.indexOf('Android') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
+        var isMQQ= u.indexOf('MQQBrowser') > -1; //QQ网页浏览器，华为浏览器
          if(navigator.userAgent.indexOf('UCBrowser') > -1) { 
             if(isAndroid){//
                 // alert('isAndroid UC')
@@ -29,8 +62,10 @@ jQuery(document).ready(function($) {
             }
          }else{
             if(isAndroid){
-                // alert('isAndroid')
-                $("input[type='file']").attr('capture','camera');
+                if(!isMQQ){
+                    $("input[type='file']").attr('capture','camera');
+                }
+                
             }
             if(isiOS){
                 // alert('isiOS')
@@ -120,7 +155,9 @@ jQuery(document).ready(function($) {
         }
     }
     function isSafari() {
-        if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
+        var u=navigator.userAgent
+        //Safari                      Chrome            傲游              
+        if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
             return true;
         }else{
             return false;
@@ -151,10 +188,14 @@ jQuery(document).ready(function($) {
             $('body').on('click','.shareContent',function(){
                 var _this=$(this);
                 _this.parents('.selectBottom').removeClass('selectBottom-show');
-                
+                var u = navigator.userAgent;
+               
                 if(isSafari()){//Safari
-                        var dom='点击正下方<i class="iconfont" style="font-size:0.20rem">&#xe68d;</i>按钮分享给好友或朋友圈'
+                    // var dom='点击正下方<i class="iconfont" style="font-size:0.20rem">&#xe68d;</i>按钮分享给好友或朋友圈'
+                    var dom='请使用浏览器自带分享功能'
+                    $.alerts(dom)
                 }else if(isWeiXin()){
+                    $.alerts(2)
                     $(this).parents('.selectBottom').removeClass('selectBottom-show');
                     if($('.share-bg').length>0){
                         $('.share-bg').css('display','block')
@@ -169,48 +210,17 @@ jQuery(document).ready(function($) {
                         $('body').append(dom)
                     }
                 }else{
+                    // $.alerts(1)
                     var id=_this.attr('data-id');
                     call(id)
                 }
-                
+                // alert(u)
             })
             $('body').on('click','.share-bg',function(){
                 $('.share-bg').css('display','none')
             })
         }
     }
-    $("body").on("touchstart",'.layui-layer-phimg', function(e) {
-        // 判断默认行为是否可以被禁用
-        if (e.cancelable) {
-            // 判断默认行为是否已经被禁用
-            if (!e.defaultPrevented) {
-                e.preventDefault();
-            }
-        }   
-        startX = e.originalEvent.changedTouches[0].pageX,
-        startY = e.originalEvent.changedTouches[0].pageY;
-    });
-    $("body").on("touchend",'.layui-layer-phimg', function(e) {//图片滑动     
-        // 判断默认行为是否可以被禁用
-        if (e.cancelable) {
-            // 判断默认行为是否已经被禁用
-            if (!e.defaultPrevented) {
-                e.preventDefault();
-            }
-        }               
-        moveEndX = e.originalEvent.changedTouches[0].pageX,
-        moveEndY = e.originalEvent.changedTouches[0].pageY,
-        X = moveEndX - startX,
-        Y = moveEndY - startY;
-        //左滑
-        if ( X > 0 ) {
-            $('.layui-layer-imgnext').click()              
-        }
-        //右滑
-        else if ( X < 0 ) {
-            $('.layui-layer-imgprev').click()  
-        }
-    });
     //屏幕改变时tabs标签页动画的初始位置初始化
     window.onresize = function(){
         $('.nl-transform').each(function(){
