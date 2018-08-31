@@ -128,8 +128,7 @@ layui.use(['element','layer','flow'], function(){
     })
 //-----------------------普通队员分页-------------------
     flow.load({
-        elem: '#flow-table' //流加载容器
-        ,scrollElem: '#flow-table' //滚动条所在元素，一般不用填，此处只是演示需要。
+        elem: '#flow-table' //流加载容器。
         ,isAuto: false
         ,isLazyimg: true
         ,done: function(page, next){ //加载下一页
@@ -179,7 +178,6 @@ layui.use(['element','layer','flow'], function(){
 //-----------------------认证教练分页-------------------
     flow.load({
         elem: '#flow-table1' //流加载容器
-        ,scrollElem: '#flow-table1' //滚动条所在元素，一般不用填，此处只是演示需要。
         ,isAuto: false
         ,isLazyimg: true
         ,done: function(page, next){ //加载下一页

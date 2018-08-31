@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
         }, false);
     }
     addcamera=function(){
-        var u = navigator.userAgent, app = navigator.appVersion;  
+        var u = navigator.userAgent;
         var isAndroid = u.indexOf('Android') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
          if(navigator.userAgent.indexOf('UCBrowser') > -1) { 
@@ -154,7 +154,6 @@ jQuery(document).ready(function($) {
                 
                 if(isSafari()){//Safari
                         var dom='点击正下方<i class="iconfont" style="font-size:0.20rem">&#xe68d;</i>按钮分享给好友或朋友圈'
-                        $.alerts(dom)
                 }else if(isWeiXin()){
                     $(this).parents('.selectBottom').removeClass('selectBottom-show');
                     if($('.share-bg').length>0){
@@ -176,11 +175,42 @@ jQuery(document).ready(function($) {
                 
             })
             $('body').on('click','.share-bg',function(){
-                $.alerts(1)
                 $('.share-bg').css('display','none')
             })
         }
     }
+    $("body").on("touchstart",'.layui-layer-phimg', function(e) {
+        // 判断默认行为是否可以被禁用
+        if (e.cancelable) {
+            // 判断默认行为是否已经被禁用
+            if (!e.defaultPrevented) {
+                e.preventDefault();
+            }
+        }   
+        startX = e.originalEvent.changedTouches[0].pageX,
+        startY = e.originalEvent.changedTouches[0].pageY;
+    });
+    $("body").on("touchend",'.layui-layer-phimg', function(e) {//图片滑动     
+        // 判断默认行为是否可以被禁用
+        if (e.cancelable) {
+            // 判断默认行为是否已经被禁用
+            if (!e.defaultPrevented) {
+                e.preventDefault();
+            }
+        }               
+        moveEndX = e.originalEvent.changedTouches[0].pageX,
+        moveEndY = e.originalEvent.changedTouches[0].pageY,
+        X = moveEndX - startX,
+        Y = moveEndY - startY;
+        //左滑
+        if ( X > 0 ) {
+            $('.layui-layer-imgnext').click()              
+        }
+        //右滑
+        else if ( X < 0 ) {
+            $('.layui-layer-imgprev').click()  
+        }
+    });
     //屏幕改变时tabs标签页动画的初始位置初始化
     window.onresize = function(){
         $('.nl-transform').each(function(){

@@ -128,7 +128,7 @@
                                 <?php } ?>
                             </div> -->
                             <?php endif;?>
-                            <div class="nl-table-wapper">
+                            <div class="nl-table-wapper" style="min-height:145px;">
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head'>
@@ -241,7 +241,6 @@ layui.use(['element','flow'], function(){
     })
     flow.load({
             elem: '#flow' //流加载容器
-            ,scrollElem: '#flow' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
@@ -302,7 +301,6 @@ layui.use(['element','flow'], function(){
   initFenlei=function(fenleiPage,category_id) {
         flow.load({
             elem: '#flow-fenlei' //流加载容器
-            ,scrollElem: '#flow-fenlei' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
@@ -376,7 +374,6 @@ layui.use(['element','flow'], function(){
        
        flow.load({
             elem: '#flow-one' //流加载容器
-            ,scrollElem: '#flow-one' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
@@ -458,12 +455,10 @@ $('.classify-btn').click(function(){//选择比赛项目
         _this.parents('.btn-wrapper').find('.classify-btn').removeClass('classify-active');
         _this.addClass('classify-active');
         if(_this.parents('.btn-wrapper').hasClass('one-rank')){//单项排名
-            console.log(1)
             var id=_this.attr('data-post-id');
             $('#flow-one').empty();
             initDanxiang(0,id,$('#show-type').attr('data-group'))
         }else{//分类排名
-            console.log(2)
             var id=_this.attr('data-post-id');
             $('#flow-fenlei').empty();
             initFenlei(0,id)

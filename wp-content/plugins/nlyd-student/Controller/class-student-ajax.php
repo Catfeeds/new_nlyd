@@ -643,8 +643,9 @@ class Student_Ajax
             /***短信通知战队负责人****/
             $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
+            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
             $ali = new AliSms();
-            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $director['uid']), '国际脑力运动');
+            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
             /***********end************/
             if($result){
                 $wpdb->commit();
@@ -1105,6 +1106,8 @@ class Student_Ajax
         //查询以前是否进行过申请
         $id = $wpdb->get_var("select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} and coach_id = {$_POST['coach_id']}");
         //开启事务,发送短信失败回滚
+
+
         $wpdb->startTrans();
         if(empty($id)){
             $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1, 'major' => $major);
@@ -1113,13 +1116,16 @@ class Student_Ajax
             $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1,'major'=>$major),array('id'=>$id,'category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
         }
 
+
+
         if($result){
             /***********发送短信通知教练*************/
             //获取教练信息
             $coach = $wpdb->get_row('SELECT user_mobile,display_name,ID AS uid FROM '.$wpdb->users.' WHERE ID='.$_POST['coach_id'], ARRAY_A);
             $post_title = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID='.$_POST['category_id']);
+            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
             $ali = new AliSms();
-            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $coach['uid'] ,'cate' => $post_title), '国际脑力运动');
+            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title), '国际脑力运动');
             /******************end*******************/
             if($result){
                 $wpdb->commit();
@@ -2205,7 +2211,7 @@ class Student_Ajax
         global $wpdb, $current_user;
         $contact = $_POST['contact'];//联系方式
         $content = $_POST['content'];//内容41
-        $date = date('Y m');
+        $date = date_i18n('Y m', get_time());
         $upload_dir = wp_upload_dir();
         $dateArr = explode(' ',$date);
         $dir = '/'.$dateArr[0].'/'.$dateArr[1].'/';
@@ -2222,7 +2228,7 @@ class Student_Ajax
             'content' => $content,
             'images' => serialize($imagePathArr),
             'contact' => $contact,
-            'created_time' => date('Y-m-d H:i:s')
+            'created_time' => current_time('mysql')
         ];
 
         if($wpdb->insert($wpdb->prefix.'feedback', $data)){
@@ -2406,7 +2412,7 @@ class Student_Ajax
                 'express_company' => '',
                 'cost' => $allPrice,
                 'pay_status' => 1,
-                'created_time' => date('Y-m-d H:i:s'),
+                'created_time' => current_time('mysql'),
             ];
 
             $bool = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
@@ -2535,7 +2541,7 @@ class Student_Ajax
         where mc.coach_id = {$_POST['coach_id']} and mc.user_id = $current_user->ID and mc.category_id = {$_POST['category_id']} and mc.apply_status=2",ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
-
+        $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
         //开启事务,如果短信未发送成功则回滚
         $wpdb->startTrans();
         //改变状态
@@ -2543,7 +2549,7 @@ class Student_Ajax
         if($update){
             //TODO 发送短信通知教练 ===================================
             $ali = new AliSms();
-            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $row['uid'] ,'cate' => $row['post_title']), '国际脑力运动');
+            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             if($result){
                 $wpdb->commit();
                 wp_send_json_success(['info' => '解除教学关系成功']);

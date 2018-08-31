@@ -254,7 +254,7 @@ class Match_Ajax
         if($refundFee > $order['cost']) wp_send_json_error(array('info' => '退款金额不能超过订单金额'));
 
         $wpdb->startTrans();
-        $refund_no = $order['serialnumber'].date('dHis').rand(000,999);
+        $refund_no = $order['serialnumber'].date_i18n('dHis',current_time('timestamp')).rand(000,999);
 //        var_dump(['order_id' => $order['id'], 'refund_no' => $refund_no, 'created_time' => date('Y-m-d H:i:s')]);die;
         //更新订单状态
         if(!$wpdb->update($wpdb->prefix.'order', ['pay_status' => -2], ['id' => $order['id'], 'pay_status' => -1])){
@@ -263,7 +263,7 @@ class Match_Ajax
         }
 
         //创建退款单
-        if(!$wpdb->insert($wpdb->prefix.'order_refund',['order_id' => $order['id'], 'refund_no' => $refund_no, 'refund_cost' => $refundFee,  'created_time' => date('Y-m-d H:i:s')])){
+        if(!$wpdb->insert($wpdb->prefix.'order_refund',['order_id' => $order['id'], 'refund_no' => $refund_no, 'refund_cost' => $refundFee,  'created_time' => date_i18n('Y-m-d H:i:s', current_time('timestamp'))])){
             $wpdb->rollback();
             wp_send_json_error(array('info'=>'生成退款单失败'));
         }

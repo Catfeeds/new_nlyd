@@ -179,7 +179,6 @@ jQuery(function($) {
         })
         flow.load({
             elem: '#flow-table' //流加载容器
-            ,scrollElem: '#flow-table' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页

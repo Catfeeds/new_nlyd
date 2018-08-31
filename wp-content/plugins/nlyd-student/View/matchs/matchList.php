@@ -108,7 +108,6 @@ jQuery(function($) {
         });
         flow.load({
             elem: '#flow-match1' //流加载容器
-            ,scrollElem: '#flow-match1' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
@@ -221,7 +220,6 @@ jQuery(function($) {
         });
         flow.load({//往期比赛
             elem: '#flow-match2' //流加载容器
-            ,scrollElem: '#flow-match2' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
