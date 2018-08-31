@@ -21,8 +21,9 @@ class Download
     public function order(){
         global $wpdb;
         if(empty($_POST['start_date']) || empty($_POST['end_date'])) exit('请选择日期');
-        $start = date('Y-m-d H:i:s', strtotime($_POST['start_date']));
-        $end = date('Y-m-d H:i:s', strtotime($_POST['end_date'].' +1 day'));
+        $start = date_i18n('Y-m-d H:i:s', strtotime($_POST['start_date']));
+        $end = date_i18n('Y-m-d H:i:s', strtotime($_POST['end_date']));
+
         $rows = $wpdb->get_results('SELECT
         o.serialnumber,
         o.cost,
@@ -44,10 +45,10 @@ class Download
         WHERE o.created_time BETWEEN "'.$start.'" AND "'.$end.'"', ARRAY_A);
 
 
-        $date = $_POST['start_date'].'-'.$_POST['end_date'];
+        $date = date_i18n('YmdHis', strtotime($_POST['start_date'])).'-'.date_i18n('YmdHis', strtotime($_POST['end_date']));
         $filename = 'order_';
         $filename .= $date."_";
-        $filename .= time().".xls";
+        $filename .= current_time('timestamp').".xls";
 //        $path = self::$downloadPath.$filename;
 //        file_put_contents($path,$html);
         header('Pragma:public');
@@ -57,8 +58,15 @@ class Download
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
 
-        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
 
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(25);
+
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $start.'至'.$end.'订单');
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(35);//第一行行高
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:M1');
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
@@ -74,33 +82,50 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
 
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', '订单流水');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B1', '用户名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C1', '比赛');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D1', '收件人');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E1', '联系电话');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F1', '收获地址');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G1', '订单类型');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H1', '快递单号');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I1', '快递公司');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J1', '支付类型');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K1', '订单总价');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L1', '支付状态');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M1', '创建时间');
+        //加粗
+        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'M2')->getFont()->setBold(true);
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '订单流水');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '比赛');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '收件人');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '联系电话');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '收获地址');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '订单类型');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '快递单号');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '快递公司');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '支付类型');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '订单总价');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '支付状态');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', '创建时间');
         foreach ($rows as $k => $row){
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+2),' '.$row['serialnumber']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+2),' '.$row['user_login']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+2),' '.$row['post_title']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+2),' '.$row['funllname']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+2),' '.$row['telephone']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+2),' '.$row['address']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+2),' '.$row['order_type']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+2),' '.$row['express_number']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+2),' '.$row['express_company']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+2),' '.$row['pay_type']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+2),' '.$row['cost']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+2),' '.$row['pay_title']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.($k+2),' '.$row['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['serialnumber']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$row['post_title']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$row['funllname']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$row['telephone']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$row['address']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$row['order_type']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$row['express_number']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['express_company']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['pay_type']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['cost']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),' '.$row['pay_title']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.($k+3),' '.$row['created_time']);
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -152,7 +177,7 @@ class Download
 
 
         $filename = 'match_student_';
-        $filename .= time().".xls";
+        $filename .= current_time('timestamp').".xls";
 //        $path = self::$downloadPath.$filename;
 //        file_put_contents($path,$html);
         header('Pragma:public');
@@ -364,6 +389,7 @@ class Download
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
 
+        //加粗
         $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);

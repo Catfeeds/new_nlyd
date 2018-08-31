@@ -662,7 +662,7 @@ class Teacher
                     <tbody>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_login">用户名 <span class="description">（必填）</span></label></th>
-                        <td><input name="user_login" type="text" id="user_login" value="<?=isset($_POST['user_login']) ? $_POST['user_login'] : ''?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></td>
+                        <td><input placeholder="不可使用中文" name="user_login" type="text" id="user_login" value="<?=isset($_POST['user_login']) ? $_POST['user_login'] : ''?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60"></td>
                     </tr>
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_mobile">手机号码 <span class="description">（必填）</span></label></th>

@@ -247,14 +247,14 @@ class Match_Ajax
         $serial = intval($_POST['serial']);
         global $wpdb;
         $refundFee = $_POST['refund_fee'];
-        $order = $wpdb->get_row('SELECT id,serialnumber,pay_lowdown,cost,pay_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serial.' AND pay_status=-1', ARRAY_A);
+        $order = $wpdb->get_row('SELECT id,serialnumber,pay_lowdown,cost,pay_type,funllname,telephone FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serial.' AND pay_status=-1', ARRAY_A);
 
         if(!$order) wp_send_json_error(array('info' => '未找到订单或此订单不是待退款订单'));
 
         if($refundFee > $order['cost']) wp_send_json_error(array('info' => '退款金额不能超过订单金额'));
 
         $wpdb->startTrans();
-        $refund_no = $order['serialnumber'].date('dHis').rand(000,999);
+        $refund_no = $order['serialnumber'].date_i18n('dHis',current_time('timestamp')).rand(000,999);
 //        var_dump(['order_id' => $order['id'], 'refund_no' => $refund_no, 'created_time' => date('Y-m-d H:i:s')]);die;
         //更新订单状态
         if(!$wpdb->update($wpdb->prefix.'order', ['pay_status' => -2], ['id' => $order['id'], 'pay_status' => -1])){
@@ -263,7 +263,7 @@ class Match_Ajax
         }
 
         //创建退款单
-        if(!$wpdb->insert($wpdb->prefix.'order_refund',['order_id' => $order['id'], 'refund_no' => $refund_no, 'refund_cost' => $refundFee,  'created_time' => date('Y-m-d H:i:s')])){
+        if(!$wpdb->insert($wpdb->prefix.'order_refund',['order_id' => $order['id'], 'refund_no' => $refund_no, 'refund_cost' => $refundFee,  'created_time' => date_i18n('Y-m-d H:i:s', current_time('timestamp'))])){
             $wpdb->rollback();
             wp_send_json_error(array('info'=>'生成退款单失败'));
         }
@@ -302,10 +302,19 @@ class Match_Ajax
 
         if($result){
             if($result['status'] == true){
-                //TODO
+                //保存第三方信息
                 $wpdb->update($wpdb->prefix.'order_refund', ['refund_lowdown' => serialize($result['data'])], ['id' => $orderRefundId]);
+                //发送短信
+                $ali = new AliSms();
+
+                $result = $ali->sendSms($order['telephone'], 8, array('user'=> $order['funllname'], 'order' => $order['serialnumber'], 'cost' => $refundFee));
+                if($result){
+                    $sendMsg = ', 已发送短信通知';
+                }else{
+                    $sendMsg = ', 短信发送失败';
+                }
                 $wpdb->commit();
-                wp_send_json_success(array('info'=> '申请退款成功'));
+                wp_send_json_success(array('info'=> '申请退款成功'.$sendMsg));
             }else{
                 $wpdb->rollback();
                 wp_send_json_error(array('info' => $result['data']));
@@ -537,19 +546,50 @@ class Match_Ajax
         if($id < 1) wp_send_json_error(['info' => '参数错误']);
         //查询是否是战队成员
         global $wpdb;
-        $res = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE id='.$id.' AND apply_status=2');
+        $res = $wpdb->get_row('SELECT id,user_id,category_id,coach_id FROM '.$wpdb->prefix.'my_coach WHERE id='.$id.' AND apply_status=2', ARRAY_A);
         //不存在或已解除
         if(!$res) wp_send_json_error(['info' => '该学员不存在或已解除']);
+
+        //获取用户信息
+        $user = $wpdb->get_row('SELECT ID,user_mobile,display_name FROM '.$wpdb->users.' WHERE ID='.$res['user_id'], ARRAY_A);
+
+        //获取教练名字
+        $coach = $wpdb->get_row('SELECT ID,display_name FROM '.$wpdb->users.' WHERE ID='.$res['coach_id'], ARRAY_A);
+
+        if(!$user) wp_send_json_error(['info' => '该学员不存在']);
+
+        //学员名字和手机
+        if(!$user['display_name'] || !$user['user_mobile']){
+            $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$user['ID'], ARRAY_A);
+            $real_name = $address['fullname'];
+            $mobile = $address['telephone'];
+        }else{
+            $real_name = explode(', ', $user['display_name'])[0].explode(', ', $user['display_name'])[1];
+            $mobile = $user['user_mobile'];
+        }
+
+
+        //教练名字
+        $coach_real_name = explode(', ', $user['display_name'])[0].explode(', ', $user['display_name'])[1];
 
         //开始解除
         $wpdb->startTrans();
         $bool = $wpdb->update($wpdb->prefix.'my_coach', ['apply_status' => 3], ['id' => $id]);
         if($bool){
             //TODO 发送短信通知学员
+            //类别名称
+            $post_title = get_post($res['category_id'])->post_title;
 
+            $ali = new AliSms();
+            $result = $ali->sendSms($mobile, 7, array('user'=> $real_name, 'cate' => $post_title, 'coach' => $coach_real_name));
+            if($result){
+                $wpdb->commit();
+                wp_send_json_success(['info' => '已解除教学关系']);
+            }else{
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '解除失败, 短信发送失败']);
+            }
 
-            $wpdb->commit();
-            wp_send_json_success(['info' => '已解除教学关系']);
         }else{
             $wpdb->rollback();
             wp_send_json_error(['info' => '解除失败']);

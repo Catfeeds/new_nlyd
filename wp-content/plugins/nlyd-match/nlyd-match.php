@@ -482,59 +482,63 @@ if(!class_exists('MatchController')){
                     }
                     $match_meta['entry_start_time'] = $current_time = current_time('mysql'); //当前时间 == 发布时间 == 开始报名时间
                     //var_dump($match_meta);
-                    //根据时间计算状态
-                    if(!empty($match_meta['match_project'])){
-                        $match_use_time = 0;
-                        foreach ($match_meta['match_project'] as $v){
-                            $project_alias = get_post_meta($v['match_project_id'],'project_alias');
-                            if($project_alias == 'zxss'){
+                    if($post_data->post_type == 'match'){
 
-                                $child_count_down = get_post_meta($project_alias,'child_count_down')[0];
-                                if($v['child_count_down'] > 0){
-                                    $child_count_down['even_add'] = $v['child_count_down'];
-                                    $child_count_down['add_and_subtract'] = $v['child_count_down'];
-                                    $child_count_down['wax_and_wane'] = $v['child_count_down'];
-                                }elseif (!empty($child_count_down)){
+                        //根据时间计算状态
+                        if(!empty($match_meta['match_project'])){
+                            $match_use_time = 0;
+                            foreach ($match_meta['match_project'] as $v){
+                                $project_alias = get_post_meta($v['match_project_id'],'project_alias');
+                                if($project_alias == 'zxss'){
 
-                                    $child_count_down['even_add'] *= 1;
-                                    $child_count_down['add_and_subtract'] *= 1;
-                                    $child_count_down['wax_and_wane'] *= 1;
+                                    $child_count_down = get_post_meta($project_alias,'child_count_down')[0];
+                                    if($v['child_count_down'] > 0){
+                                        $child_count_down['even_add'] = $v['child_count_down'];
+                                        $child_count_down['add_and_subtract'] = $v['child_count_down'];
+                                        $child_count_down['wax_and_wane'] = $v['child_count_down'];
+                                    }elseif (!empty($child_count_down)){
+
+                                        $child_count_down['even_add'] *= 1;
+                                        $child_count_down['add_and_subtract'] *= 1;
+                                        $child_count_down['wax_and_wane'] *= 1;
+                                    }else{
+
+                                        $child_count_down['even_add'] = 3;
+                                        $child_count_down['add_and_subtract'] = 3;
+                                        $child_count_down['wax_and_wane'] = 3;
+                                    }
+                                    $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+                                    //print_r($project_use_time);
                                 }else{
-
-                                    $child_count_down['even_add'] = 3;
-                                    $child_count_down['add_and_subtract'] = 3;
-                                    $child_count_down['wax_and_wane'] = 3;
+                                    $project_use_time = $v['project_use_time'] > 0 ? $v['project_use_time'] : $match_meta['match_use_time'];
                                 }
-                                $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-                                //print_r($project_use_time);
-                            }else{
-                                $project_use_time = $v['project_use_time'] > 0 ? $v['project_use_time'] : $match_meta['match_use_time'];
+
+                                $match_more = $v['match_more'] > 0 ? $v['match_more'] : $match_meta['match_more'];
+                                $project_time_interval = $v['project_time_interval'] > 0 ? $v['project_time_interval'] : $match_meta['match_subject_interval'];
+
+                                $match_use_time += $project_use_time*$match_more + ($match_more-1)*$project_time_interval + $match_meta['match_project_interval'];
                             }
 
-                            $match_more = $v['match_more'] > 0 ? $v['match_more'] : $match_meta['match_more'];
-                            $project_time_interval = $v['project_time_interval'] > 0 ? $v['project_time_interval'] : $match_meta['match_subject_interval'];
-
-                            $match_use_time += $project_use_time*$match_more + ($match_more-1)*$project_time_interval + $match_meta['match_project_interval'];
+                            //var_dump(date('Y-m-d H:i:s',$match_end_time));die;
+                        }else{
+                            //var_dump($match_meta);die;
+                            $match_use_time = (($match_meta['match_use_time'] * $match_meta['match_more'] + $match_meta['match_subject_interval'] + $match_meta['match_project_interval'])*6 - $match_meta['match_project_interval'])*60;
                         }
-
-                        //var_dump(date('Y-m-d H:i:s',$match_end_time));die;
-                    }else{
-                        $match_use_time = (($match_meta['match_use_time'] * $match_meta['match_more'] + $match_meta['match_subject_interval'] + $match_meta['match_project_interval'])*6 - $match_meta['match_project_interval'])*60;
+                        $match_end_time = date_i18n('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
+                        //计算比赛状态
+                        /*var_dump($current_time);
+                        var_dump($match_meta['entry_end_time']);*/
+                        if($current_time > $match_end_time){
+                            $status = -3;
+                        }elseif ($match_meta['match_start_time'] < $current_time && $current_time < $match_end_time){
+                            $status = 2;
+                        }elseif ($match_meta['entry_end_time'] < $current_time && $current_time < $match_meta['match_start_time']){
+                            $status = -2;
+                        }elseif ($current_time < $match_meta['entry_end_time']){
+                            $status = 1;
+                        }
+                        $match_meta['match_status'] = $status;
                     }
-                    $match_end_time = date('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
-                    //计算比赛状态
-                    /*var_dump($current_time);
-                    var_dump($match_meta['entry_end_time']);*/
-                    if($current_time > $match_end_time){
-                        $status = -3;
-                    }elseif ($match_meta['match_start_time'] < $current_time && $current_time < $match_end_time){
-                        $status = 2;
-                    }elseif ($match_meta['entry_end_time'] < $current_time && $current_time < $match_meta['match_start_time']){
-                        $status = -2;
-                    }elseif ($current_time < $match_meta['entry_end_time']){
-                        $status = 1;
-                    }
-                    $match_meta['match_status'] = $status;
 
                     unset($match_meta['match_project']);
 

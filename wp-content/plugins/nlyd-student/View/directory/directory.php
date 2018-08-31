@@ -28,7 +28,7 @@
                 <div class="layui-row width-padding  layui-bg-white">
                     <ul style="margin:0">
                     <li>
-                        <a class="system-list system-course small" href="<?=home_url('teams/coachList/');?>">
+                        <a class="system-list system-course small" href="<?=home_url('teams/coachList/directory/1');?>">
                             <div class="item-wrapper">
                                 <div class="left-font">
                                     01

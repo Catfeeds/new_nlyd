@@ -134,9 +134,9 @@ class Order {
                     <div class="alignleft actions">
                         <form action="?page=download&action=order" method="post">
 
-                            <label class="" for="">导出订单</label>
-                            <input type="date" name="start_date" /> -
-                            <input type="date" name="end_date" />
+                            <label class="" for="" style="height: 28px;line-height: 28px;display: inline-block;vertical-align: top">导出订单</label>
+                            <input class="date-picker" style="height: 28px" type="text" id="start_date" name="start_date" /> -
+                            <input style="height: 28px" type="text" name="end_date" class="date-picker"  id="end_date" />
                             <input type="submit" name="changeit" id="changeit" class="button" value="导出">
                         </form>
                     </div>
@@ -282,13 +282,13 @@ class Order {
 <!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
                     </div>
                     <div class="alignleft actions">
-                        <form action="?page=download&action=order" method="post">
-
-                            <label class="" for="">导出订单</label>
-                            <input type="date" name="start_date" /> -
-                            <input type="date" name="end_date" />
-                            <input type="submit" name="changeit" id="changeit2" class="button" value="导出">
-                        </form>
+<!--                        <form action="?page=download&action=order" method="post">-->
+<!---->
+<!--                            <label class="" for="">导出订单</label>-->
+<!--                            <input type="date" name="start_date" /> --->
+<!--                            <input type="date" name="end_date" />-->
+<!--                            <input type="submit" name="changeit" id="changeit2" class="button" value="导出">-->
+<!--                        </form>-->
                     </div>
                     <div class="tablenav-pages one-page">
                         <?=$pageHtml?>
@@ -528,7 +528,7 @@ class Order {
         global $wpdb;
         if(is_post()){
             $id = intval($_POST['id']);
-            $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 3, 'send_goods_time' => time(), 'express_number' => trim($_POST['express_number']), 'express_company' => trim($_POST['express_company'])], ['id' => $id]);
+            $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 3, 'send_goods_time' => current_time('timestamp'), 'express_number' => trim($_POST['express_number']), 'express_company' => trim($_POST['express_company'])], ['id' => $id]);
             if($bool) echo '<script type="text/javascript">alert("操作成功,快递数据已修改");</script>';
             else echo '<script type="text/javascript">alert("操作失败");</script>';
         }else{
@@ -640,6 +640,10 @@ class Order {
     public function register_scripts(){
         switch ($_GET['page']){
             case 'order':
+                wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'admin_layui_js' );
+                wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
+                wp_enqueue_style( 'admin_layui_css' );
                 wp_register_script('list-js',match_js_url.'order-lists.js');
                 wp_enqueue_script( 'list-js' );
                 wp_register_style('list-css',match_css_url.'order-lists.css');
