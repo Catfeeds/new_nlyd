@@ -234,7 +234,7 @@ jQuery(function($) {
                 $('.count_downs').removeClass('hide')
                 isMatching=!isMatching
             }else{
-                setTimeout(() => {
+                setTimeout(function() {
                     $('.answer').addClass('hide');
                     $('#selectWrapper').removeClass('hide')
                     $('.count_downs').removeClass('hide')
@@ -264,7 +264,7 @@ jQuery(function($) {
             }
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
             initBuild(itemLen,items,nandu,isFalse)
-            setTimeout(() => {
+            setTimeout(function(){
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
             }, 300);
             clearTimeout(timer);
@@ -294,7 +294,7 @@ jQuery(function($) {
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
-        setTimeout(() => {
+        setTimeout(function(){
             submit($('.count_down').attr('data-seconds'))
         }, 1000);
     }
@@ -312,7 +312,7 @@ jQuery(function($) {
             }else{
                 $.alerts('比赛结束')
             }
-            setTimeout(() => {
+            setTimeout(function() {
                 submit(S)
             }, 1000);
         }

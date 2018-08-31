@@ -301,7 +301,7 @@ class Download
                     'user_ID' => $usermeta['user_ID'][0],
                     'real_name' => unserialize($usermeta['user_real_name'][0])['real_name'],
                     'sex' => $usermeta['user_gender'][0],
-                    'birthday' => $usermeta['user_birthday'],
+                    'birthday' => $usermeta['user_birthday'][0],
                     'age' => $this->getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age']),
                     'address' => unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'],
                     'mobile' => $mqv['telephone'],

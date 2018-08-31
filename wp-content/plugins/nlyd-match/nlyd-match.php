@@ -391,11 +391,12 @@ if(!class_exists('MatchController')){
                     echo $row['match_cost'];
                     break;
                 case 'students':
-                    if($row['match_status'] == -3){
-                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
-                    }else{
-                        echo '比赛未结束';
-                    }
+                    echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
+//                    if($row['match_status'] == -3){
+//                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
+//                    }else{
+//                        echo '比赛未结束';
+//                    }
                     break;
                 case 'match_type':
                     $args = array(

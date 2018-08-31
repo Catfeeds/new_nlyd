@@ -335,7 +335,7 @@ jQuery(function($) {
                         }
                         ajaxData[ajaxData.length-1]['isRight']=isRight
                         // ajaxData.push(thisRow);
-                        setTimeout(() => {
+                        setTimeout(function() {
                             initQuestion()
                             nextQuestion()
                         }, 500);

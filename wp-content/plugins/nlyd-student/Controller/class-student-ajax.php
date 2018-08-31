@@ -637,9 +637,7 @@ class Student_Ajax
             $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>-1),array('user_id'=>$current_user->ID,'team_id'=>$_POST['team_id']));
             $msgTemplate = 12;
         }
-
         if($result){
-
             /***短信通知战队负责人****/
             $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
@@ -650,6 +648,9 @@ class Student_Ajax
             if($result){
                 $wpdb->commit();
                 wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
+            }else{
+                $wpdb->rollback();
+                wp_send_json_error(array('info'=>'操作失败,短信未发送成功'));
             }
         }
         $wpdb->rollback();

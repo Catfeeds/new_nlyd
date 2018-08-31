@@ -185,7 +185,7 @@ jQuery(function($) {
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{
                         $.alerts(res.data.info)
-                        setTimeout(() => {
+                        setTimeout(function() {
                             window.location.href=res.data.url;
                         }, 300);
                     }

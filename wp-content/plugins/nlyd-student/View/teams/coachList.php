@@ -253,7 +253,7 @@ layui.use(['element','flow','layer','form'], function(){
                         if(res.success){
                             $.alerts(res.data.info)
                             if(res.data.url&&res.data.url.length>0){
-                                setTimeout(() => {
+                                setTimeout(function() {
                                     window.location.href=res.data.url
                                 }, 1600);
                                 

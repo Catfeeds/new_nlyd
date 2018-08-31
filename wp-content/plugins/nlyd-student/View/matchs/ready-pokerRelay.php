@@ -95,7 +95,7 @@ jQuery(function($) {
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
-        setTimeout(() => {
+        setTimeout(function() {
             submit($('.count_down').attr('data-seconds'))
         }, 1000);
     }
@@ -112,7 +112,7 @@ jQuery(function($) {
             }else{
                 $.alerts('比赛结束')
             }
-            setTimeout(() => {
+            setTimeout(function() {
                 submit(S)
             }, 1000);
         }
