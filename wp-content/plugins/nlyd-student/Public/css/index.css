@@ -228,13 +228,14 @@ a.a-btn:hover{
     text-align: center;
     line-height: 40px;
     color: #fff;
-    background: -webkit-linear-gradient(#2484FE, #68aafe7d);
-    background: -o-linear-gradient(#2484FE, #68aafe7d);
-    background: -moz-linear-gradient(#2484FE, #68aafe7d);
-    background: linear-gradient(#2484FE, #68aafe7d);
     margin: auto;
     border-radius: 5px;
+    background:url(./image/share/share.png)  no-repeat;
+    background-size: auto 100%;
 }
+.wechatTimeline{background-position:0 0;}
+.wechatFriend{background-position:-40px 0;}
+.qqFriend{background-position:-80px 0;}
 .shareTop i{
     font-size: 0.30rem;
 }

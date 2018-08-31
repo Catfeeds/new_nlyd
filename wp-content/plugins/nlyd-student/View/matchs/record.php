@@ -176,19 +176,25 @@
         <img class="share-bgs" src="<?=student_css_url.'image/share/share-bg.png'?>">
         <div class="shareItem">
             <div class="shareContent shareLeft" data-id="wechatFriend">
-                <div class="shareTop"><i class="iconfont">&#xe695;</i></div>
+                <div class="shareTop wechatFriend">
+                    <!-- <i class="iconfont">&#xe695;</i> -->
+                </div>
                 <div class="shareBottom">微信好友</div>
             </div>
         </div>
         <div class="shareItem">
             <div class="shareContent shareMid" data-id="wechatTimeline">
-                <div class="shareTop"><i class="iconfont">&#xe639;</i></div>
+                <div class="shareTop wechatTimeline">
+                    <!-- <i class="iconfont">&#xe639;</i> -->
+                </div>
                 <div class="shareBottom">朋友圈</div>
             </div>
         </div>
         <div class="shareItem">
             <div class="shareContent shareRight" data-id="qqFriend">
-                <div class="shareTop"><i class="iconfont">&#xe603;</i></div>
+                <div class="shareTop qqFriend">
+                    <!-- <i class="iconfont">&#xe603;</i> -->
+                </div>
                 <div class="shareBottom">QQ</div>
             </div>
         </div>
