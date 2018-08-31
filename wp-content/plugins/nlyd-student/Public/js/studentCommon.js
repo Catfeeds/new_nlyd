@@ -104,6 +104,11 @@ jQuery(document).ready(function($) {
         }
 
     })
+    $('body').on('click','.disabled_a',function(){//当前功能暂未开放，敬请期待
+        $.alerts('当前功能暂未开放，敬请期待')
+        return false;
+        
+    })
     function count_down(_count_time,waiting_url){
             _count_time--
             if(_count_time<=120){
