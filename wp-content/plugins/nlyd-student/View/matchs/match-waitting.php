@@ -6,7 +6,7 @@
             <h1 class="mui-title">比赛等待</h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <?php if(!$midway_match ){?>
+                <?php if( $first_time > get_time() || isset($_GET['wait'])){?>
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>
@@ -14,20 +14,22 @@
                     <?php }else{ ?>
                     <a class="a-btn wait" href="<?=$match_url?>">进入比赛</a>
                     <?php }?>
-                    <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=$project_title?>”，第<?=$more_num>1?$more_num:1;?>轮</p>
+                    <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=$project_title?>”，第<?=$next_more_num?>轮</p>
 
                 </div> 
                 <?php }else{ ?>
-
-                    <!--<p class="match-name c_blue"><?/*=$match_title*/?></p>
-                    <div class="a-btn wait">倒计时<span class="count_down" data-seconds="<?/*=$count_down*/?>">初始中...</span></div>
-                    <p class="match-detail c_black fs_16">第<?/*=$project_num*/?>个项目“<?/*=$project_title*/?>”，第1轮</p>-->
-
                  <div class="count-wrapper">
-                    <p class="tips fs_16">
-                        <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入<?=!empty($next_type)?$next_type:'下一轮'?>比赛
-                    </p>
-                    <a href="<?=$match_url?>" class="a-btn wait">进入<?=!empty($next_type)?$next_type:'下一轮'?>等待页面</a>
+                    <?php if($more_num > 0){ ?>
+                        <p class="tips fs_16">
+                            <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
+                        </p>
+                        <a href="<?=$wait_url?>" class="a-btn wait">进入下一轮等待页面</a>
+                    <?php }else{ ?>
+                        <p class="tips fs_16">
+                            <span class="c_blue"><?=$last_title?>第<?=$last_more?>轮</span>已经结束，您可等待本轮排名统计完成后进入下一项比赛
+                        </p>
+                        <a href="<?=$wait_url?>" class="a-btn wait">进入下一项等待页面</a>
+                    <?php } ?>
                     <a class="a-btn back" href="<?=home_url('account/recentMatch');?>">返回我的比赛列表</a>
                 </div>
                 <?php } ?>
