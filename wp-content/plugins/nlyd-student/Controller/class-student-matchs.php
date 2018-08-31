@@ -190,7 +190,7 @@ class Student_Matchs extends Student_Home
             print_r($this->next_project);*/
             $this->project_start_time = strtotime($this->current_project['project_start_time']);
 
-            $this->project_end_time = $this->current_project['match_project_id'] != $this->next_project['match_project_id'] ? strtotime($this->current_project['match_project_id']) : strtotime($this->current_project['project_end_time']);
+            $this->project_end_time = $this->current_project['match_project_id'] != $this->next_project['match_project_id'] ? strtotime($this->next_project['project_start_time']) : strtotime($this->current_project['project_end_time']);
 
             //print_r($this->current_project);
             /**********************初始配置********************************/
@@ -478,8 +478,8 @@ class Student_Matchs extends Student_Home
 
         //正式时取消此test
         if(empty($_GET['test'])){
-            /*var_dump(($this->current_project['match_more'] == $_GET['match_more']));
-            var_dump(($this->current_project['match_project_id'] == $_GET['project_id']));*/
+            var_dump(($this->current_project['match_more'] == $_GET['match_more']));
+            var_dump(($this->current_project['match_project_id'] == $_GET['project_id']));
             if(($this->current_project['match_more'] == $_GET['match_more']) && $this->current_project['match_project_id'] == $_GET['project_id']){
 
                 if( get_time() > strtotime($this->current_project['project_end_time'])){
