@@ -174,6 +174,7 @@ class Student_Matchs extends Student_Home
         /*******************获取当前比赛项目配置******************************/
 
         if(!empty($this->next_project)){
+
             $project_id = $this->next_project['match_project_id'];
 
             if (empty($this->project_key_array[$project_id])){
@@ -198,6 +199,7 @@ class Student_Matchs extends Student_Home
             /**********************初始配置********************************/
 
             $this->setting_default_config($this->next_project);
+
         }
         /**********************获取当前比赛项目end********************************/
 
@@ -480,7 +482,7 @@ class Student_Matchs extends Student_Home
         //正式时取消此test
         if(empty($_GET['test'])){
 
-            if(($this->next_project['more_num'] == $_GET['match_more']) && $this->next_project['match_project_id'] == $_GET['project_id']){
+            if(($this->current_project['match_more'] == $_GET['match_more']) && $this->current_project['match_project_id'] == $_GET['project_id']){
 
                 if( get_time() > strtotime($this->current_project['project_end_time'])){
 
@@ -1505,7 +1507,8 @@ class Student_Matchs extends Student_Home
                         else{
                             $next_project = $rows[$key+1];
                         }
-
+                        $this->current_project['match_project_id'] = $value['match_project_id'];
+                        $this->current_project['match_more'] = empty($more_num) ? 1 : $more_num;
                         break;
                     }
                 }
