@@ -1145,6 +1145,8 @@ if(!class_exists('MatchController')){
          */
         public function scripts_default(){
             //var_dump($this->post_type);
+            wp_register_style( 'admin_index_css',match_css_url.'index.css','', leo_match_version  );
+            wp_enqueue_style( 'admin_index_css' );
             if(!in_array($this->post_type,array('page','post','question'))){
 
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
