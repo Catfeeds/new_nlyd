@@ -361,11 +361,29 @@ jQuery(function($) {
             }
         }
         var thisAjaxRow=ajaxData[ajaxData.length-1]
-        var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
+        var yours=$('#answer').text()
+        var flag=true;
+        if(yours.length>0){
+            for(var i=0;i< yours.length;i++){
+                if(yours.charAt(i)=="-"){
+                    if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
+                        flag=false;
+                        break;
+                    }
+                }
+            } 
+            
+        }
+
         thisAjaxRow['yours']=yours;
-        if(yours==thisAjaxRow['rights']){
-            thisAjaxRow['isRight']=true;
-            $('#answer').removeClass('answer').addClass('right-fast')
+        if(flag){//符合parseInt函数
+            if(parseInt(yours)==thisAjaxRow['rights']){
+                thisAjaxRow['isRight']=true;
+                $('#answer').removeClass('answer').addClass('right-fast')
+            }else{
+                thisAjaxRow['isRight']=false;
+                $('#answer').removeClass('answer').addClass('error-fast')
+            }
         }else{
             thisAjaxRow['isRight']=false;
             $('#answer').removeClass('answer').addClass('error-fast')
