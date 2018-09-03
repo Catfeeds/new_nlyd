@@ -149,11 +149,11 @@
                     <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
 
                         <?php if($orderStatus['status'] == 1){ ?>
-                            <div class="a-btn" id="" lay-filter="pay-formbtn" lay-submit="">查看订单 </div>
+                            <a class="a-btn">查看订单</a>
                         <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <div class="a-btn" id="" lay-filter="pay-formbtn" lay-submit="">已报名 </div>
+                            <div class="a-btn">已报名 </div>
                         <?php }elseif($orderStatus['status'] == 0){ ?>
-                            <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付 </div>
+                            <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</div>
                         <?php } ?>
 
 
