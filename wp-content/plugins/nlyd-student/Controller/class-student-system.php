@@ -84,7 +84,7 @@ class Student_System
      * 合作联系
      */
     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUs.php';
+        $view = student_view_path.CONTROLLER.'/concatUS.php';
         load_view_template($view);
     }
 
@@ -101,8 +101,8 @@ class Student_System
         wp_enqueue_style( 'my-student-system' );
 
         if($this->action == 'concatUs'){
-            wp_register_style( 'my-student-concatUs', student_css_url.'concatUs/concatUs.css' );
-            wp_enqueue_style( 'my-student-concatUs' );
+            wp_register_style( 'my-student-concatUS', student_css_url.'concatUS/concatUS.css' );
+            wp_enqueue_style( 'my-student-concatUS' );
         }
     }
 }
