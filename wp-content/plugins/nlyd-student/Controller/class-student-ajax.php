@@ -1272,7 +1272,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID}  
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) 
                   order by b.match_status desc limit $start,$pageSize
                   ";
         //print_r($sql_);

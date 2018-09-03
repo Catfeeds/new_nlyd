@@ -232,7 +232,7 @@ class Student_Matchs extends Student_Home
 
         //获取比赛详情
         $sql = "select a.ID,a.post_title,a.post_content,b.match_start_time,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_address,b.match_cost,
-                b.match_address,b.entry_end_time,b.match_category_order,b.str_bit,b.match_status,c.user_id,
+                b.match_address,b.entry_end_time,b.match_category_order,b.str_bit,b.match_status,c.user_id,c.pay_status,
                 case b.match_status 
                     when -3 then '已结束' 
                     when -2 then '等待开赛' 
@@ -242,7 +242,7 @@ class Student_Matchs extends Student_Home
                     end match_status_cn
                 from {$wpdb->prefix}posts a 
                 left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
-                left join {$wpdb->prefix}order c on a.ID = c.match_id
+                left join {$wpdb->prefix}order c on a.ID = c.match_id and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where a.ID = {$match_id}
                 ";
         //print_r($sql);
