@@ -480,6 +480,10 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id'])  || !isset($_POST['cost'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
+        if($current_user->ID < 1 || !$current_user->ID){
+            wp_send_json_error(array('info'=>'请登录'));
+        }
+
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
             wp_send_json_error(array('info'=>'请先实名认证'));
         }
