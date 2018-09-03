@@ -346,8 +346,9 @@ class Student_Matchs extends Student_Home
         //print_r($project);
 
         //获取报名选手列表
-        $sql2 = "select user_id,created_time from {$wpdb->prefix}order where match_id = {$_GET['match_id']} order by id desc limit 0,10";
+        $sql2 = "select user_id,created_time from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and (pay_status=2 or pay_status=3 or pay_status=4) order by id desc limit 0,10";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
+
         $order_total = !empty($orders) ? count($orders) : 0;
         if (!empty($orders)){
             //print_r($orders);
@@ -365,7 +366,6 @@ class Student_Matchs extends Student_Home
                 }
             }
         }
-        //print_r($match);
 
         $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';

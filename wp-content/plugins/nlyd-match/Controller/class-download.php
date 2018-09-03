@@ -325,7 +325,7 @@ class Download
                         $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] = $mqv['my_score'];
                     }
                 }else{
-                    $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '';
+                    if($rankingArr[$mqv['user_id']]['project'][$titleV['ID']] != '0') $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '0';
                 }
             }
 
