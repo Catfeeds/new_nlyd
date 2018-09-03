@@ -109,7 +109,7 @@ jQuery(document).ready(function($) {
         return false;
         
     })
-    function count_down(_count_time,waiting_url){
+    count_down= function(_count_time,waiting_url){
             _count_time--
             if(_count_time<=120){
                 clearTimeout(count_down_timer)
