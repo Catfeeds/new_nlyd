@@ -76,6 +76,14 @@ p.long-name{
     background: linear-gradient(#68AAFE, #4394F9);
     border: none;
 }
+.nl-match-footer .last-btn a.bg_gradient_grey{
+    color: #fff;
+    background: -webkit-linear-gradient(#b8bcbe,#919191);
+    background: -o-linear-gradient(#b8bcbe,#919191);
+    background: -moz-linear-gradient(#b8bcbe,#919191);
+    background: linear-gradient(#b8bcbe,#919191);
+    border: none;
+}
 .nl-match-footer .last-btn a:hover{
     color: #fff;
 }

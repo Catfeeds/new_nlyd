@@ -647,6 +647,7 @@ class Student_Ajax
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
             $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
             $ali = new AliSms();
+//            print_r($director);die;
             $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
             /***********end************/
             if($result){
@@ -1271,7 +1272,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID}  
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) 
                   order by b.match_status desc limit $start,$pageSize
                   ";
         //print_r($sql_);
@@ -1370,7 +1371,7 @@ class Student_Ajax
                 end) match_status_cn
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
-                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID}
+                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by b.match_status desc,b.match_start_time asc limit $start,$pageSize;
                 ";
         //print_r($sql);

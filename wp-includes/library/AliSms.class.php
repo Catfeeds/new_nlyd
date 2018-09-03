@@ -82,7 +82,7 @@ class AliSms
             case 11:
                 $template['code'] =  'SMS_142946275';
                 $template['title'] = '加入战队申请';
-                $template['text'] =  '尊敬的${teams}您好，ID为${user_id}的学员向您发送了“加⼊战队”申请，请您尽快登录系统处理该申请。';
+                $template['text'] =  '尊敬的${teams}您好，ID为${user_id}的学员向您发送了“加入战队”申请，请您尽快登录系统处理该申请。';
                 break;
             case 10:
                 $template['code'] =  'SMS_143710292';
