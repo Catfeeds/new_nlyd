@@ -71,7 +71,7 @@ jQuery(function($) {
     // var wax_and_wane_time = 2000; //乘除
     var level={number:2,symbol:1},//题目难度
     n_type=<?=$child_type?>,
-    child_type_down=<?=!empty($child_type_down) ? $child_type_down - 1 : ''?>,
+    child_type_down=<?=!empty($child_type_down) ? $child_type_down -1 : ''?>,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
@@ -137,11 +137,11 @@ jQuery(function($) {
                     nextBtn_click=0;
                 }else if(n_type==1){
                     type="加减运算" 
-                    sys_second=add_and_subtract_time;
+                    sys_second=add_and_subtract_time -1 ;
                     nextBtn_click=0;
                 }else if(n_type==2){
                     type="乘除运算" 
-                    sys_second=wax_and_wane_time;
+                    sys_second=wax_and_wane_time -1 ;
                     nextBtn_click=0;
                 }else{
                     clearInterval(timer);
