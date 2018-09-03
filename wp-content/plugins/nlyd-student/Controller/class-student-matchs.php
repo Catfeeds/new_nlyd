@@ -422,23 +422,27 @@ class Student_Matchs extends Student_Home
          }
 
          /*print_r($this->next_project);
-
          print_r($this->current_project);*/
 
          if(!empty($this->next_project)){
-             $data['project_title'] = $this->next_project['post_title'];
+
+
+             $data['project_title'] = $this->next_project['project_title'];
              $data['project_id'] = $this->next_project['match_project_id'];
              $data['first_time'] = $this->next_project['first_time'];
+             $data['wait_type'] = $this->next_project['wait_type'];
+             $data['count_down'] = $this->next_project['project_start_time']-get_time();
+
              $data['next_more_num'] = 1;
-             $data['count_down'] = !empty($this->next_project['first_time']) ? strtotime($this->next_project['project_start_time'])-get_time() : strtotime($this->next_project['project_end_time'])-get_time();
-             $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->next_project['match_id'].'/project_id/'.$this->next_project['match_project_id'].'/match_more/1');
-             $data['project_num'] = array_search($this->next_project['match_project_id'],$this->project_id_array)+1;
-             $data['next_project'] = true;
+             $data['more_num'] = $this->next_project['match_more'];
+             $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->next_project['match_id'].'/project_id/'.$this->next_project['project_id'].'/match_more/1');
+             $data['project_num'] = array_search($this->next_project['project_id'],$this->project_id_array)+1;
+             $data['wait_type'] = $this->next_project['wait_type'];
              //print_r($this->next_project);
 
          }else{
-
-             $data['match_type'] = '';
+             $data['wait_type'] = 5;
+             $data['match_type'] = false;
              $data['match_title'] = $this->match_title;
              $data['project_title'] = $this->current_project['project_title'];
              $data['project_id'] = $this->current_project['project_id'];
@@ -447,6 +451,7 @@ class Student_Matchs extends Student_Home
              $data['next_more_num'] = $this->current_project['match_more']+1;
              $data['project_num'] = array_search($this->current_project['project_id'],$this->project_id_array)+1;
              $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->current_project['match_id'].'/wait/1');
+             //$data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->next_project['match_id'].'/project_id/'.$this->next_project['match_project_id'].'/match_more/1'.$data['more_num'].'/wait/1');
          }
 
          /*$data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->next_project['match_id'].'/wait/1');
@@ -1500,8 +1505,14 @@ class Student_Matchs extends Student_Home
             $end = end($rows);
             //print_r($end);
             if(strtotime($start['project_start_time']) > get_time()){
-                $start['first_time'] = strtotime($start['project_start_time']);
-                $next_project = $start;
+                $next_project = array(
+                    'project_title'=>$start['post_title'],
+                    'match_id'=>$start['match_id'],
+                    'project_id'=>$start['match_project_id'],
+                    'project_start_time'=>strtotime($start['project_start_time']),
+                    'project_start_time_format'=>$start['project_start_time'],
+                    'wait_type'=>1,
+                );
             }
             else if (strtotime($end['project_end_time']) < get_time()){
                 //var_dump(111111);
@@ -1608,8 +1619,10 @@ class Student_Matchs extends Student_Home
                                             'project_title'=>$rows[$key+1]['post_title'],
                                             'match_id'=>$rows[$key+1]['match_id'],
                                             'project_id'=>$rows[$key+1]['match_project_id'],
-                                            'project_start_time_format'=>$rows[$key+1]['project_start_time'],
                                             'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
+                                            'project_start_time_format'=>$rows[$key+1]['project_start_time'],
+                                            'match_more'=>$more_num,
+                                            'wait_type'=>2,
                                         );
                                     }
 
@@ -1623,11 +1636,13 @@ class Student_Matchs extends Student_Home
                         else{
 
                             $next_project = array(
+                                'match_more'=>1,
                                 'project_title'=>$rows[$key+1]['post_title'],
                                 'match_id'=>$rows[$key+1]['match_id'],
                                 'project_id'=>$rows[$key+1]['match_project_id'],
                                 'project_start_time_format'=>$rows[$key+1]['project_start_time'],
                                 'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
+                                'wait_type'=>3,
                             );
                         }
 

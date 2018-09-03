@@ -6,7 +6,7 @@
             <h1 class="mui-title">比赛等待</h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <?php if( $first_time > get_time() || isset($_GET['wait'])){?>
+                <?php if( $first_time > get_time() || $wait_type >0){?>
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>
@@ -19,7 +19,7 @@
                 </div> 
                 <?php }else{ ?>
                  <div class="count-wrapper">
-                    <?php if($next_project){ ?>
+                    <?php if($match_type){ ?>
                         <p class="tips fs_16">
                             <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                         </p>
