@@ -26,17 +26,18 @@ input[type=text].c_black{
 .nl-match-header{
     position: relative;
 }
-
-.nl-match-rz{
-    background-color: #FB8E8E;
-    border-radius: 4px;
-    line-height: 22px;
-    text-align: center;
-    color: #fff;
-    font-size: 0.12rem;
+.rz span{
     display: inline-block;
-    margin-left: 13.5px;
 }
+.nl-match-rz{
+    width: 45px;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
 a.nl-see-link{
     color: #2484FE;
     font-size: 0.12rem;

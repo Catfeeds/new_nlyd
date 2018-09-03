@@ -13,6 +13,7 @@
                         <span class="c_blue ml_10">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                            <!-- <span><?=$count_down?></span> -->
                         </span>
                         <div class="matching-sumbit" id="sumbit">提交</div>
                     </div>
@@ -21,6 +22,7 @@
                         <p class="count_p c_black">
                             <span id="type"></span>
                             <span class="count_downs" data-seconds="10">初始中...</span>
+                            <!-- <span><?=!empty($child_type_down) ? $child_type_down : ''?></span> -->
                             <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
                             <input type="hidden"id="add_and_subtract_time" value="<?=$child_count_down['add_and_subtract'] ?>">
                             <input type="hidden"id="wax_and_wane_time" value="<?=$child_count_down['wax_and_wane'] ?>">
