@@ -3,7 +3,7 @@ class Import {
     public function __construct()
     {
         add_action( 'admin_menu', array($this,'register_order_menu_page') );
-        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+//        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
     }
 
     public function register_order_menu_page(){
