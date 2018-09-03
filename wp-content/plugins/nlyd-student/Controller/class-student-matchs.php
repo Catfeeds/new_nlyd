@@ -528,70 +528,7 @@ class Student_Matchs extends Student_Home
         print_r($this->project_key_array[$this->project_id]);*/
 
         //子项倒计时
-        if(in_array($this->project_alias,array('zxss','kysm'))){
-
-            $child_count_down = get_post_meta($this->project_id,'child_count_down')[0];
-
-            if($this->project_alias == 'zxss'){
-
-                if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
-                    $child_count_down['even_add'] = $this->project_count_down * 60;
-                    $child_count_down['add_and_subtract'] = $this->project_count_down * 60;
-                    $child_count_down['wax_and_wane'] = $this->project_count_down * 60;
-                }elseif (!empty($child_count_down)){
-
-                    $child_count_down['even_add'] *= 60;
-                    $child_count_down['add_and_subtract'] *= 60;
-                    $child_count_down['wax_and_wane'] *= 60;
-                }else{
-
-                    $child_count_down['even_add'] = 180;
-                    $child_count_down['add_and_subtract'] = 180;
-                    $child_count_down['wax_and_wane'] = 180;
-                }
-
-                $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-
-                global $current_user;
-                $new_time = get_time();
-                $first_child = $child_count_down['even_add'];
-                $two_child = $first_child+$child_count_down['add_and_subtract'];
-                $three_child = $two_child+$child_count_down['wax_and_wane'];
-                //if($_GET['test'] == 1){
-                    $this->redis->del('even_add'.$current_user->ID.'_'.$this->current_more);
-                    $this->redis->del('add_and_subtract'.$current_user->ID.'_'.$this->current_more);
-                    $this->redis->del('wax_and_wane'.$current_user->ID.'_'.$this->current_more);
-                //}
-                if(empty($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more)) ){
-                    $this->redis->setex('even_add'.$current_user->ID.'_'.$this->current_more,$first_child,$first_child+$new_time);
-                    $first = true;
-                }
-                if($first){
-                    $this->redis->setex('add_and_subtract'.$current_user->ID.'_'.$this->current_more,$two_child,$two_child+$new_time);
-                    $two = true;
-                }
-                if($two){
-                    $this->redis->setex('wax_and_wane'.$current_user->ID.'_'.$this->current_more,$three_child,$three_child+$new_time);
-                }
-                /*var_dump($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more));
-                var_dump($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more));
-                var_dump($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more));*/
-
-                //leo_dump($this->default_count_down);die;
-            }else if($this->project_alias == 'kysm'){
-
-                if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
-                    $child_count_down = $this->project_key_array[$this->project_id]['child_count_down'];
-                }elseif (!empty($child_count_down)){
-                    $child_count_down = $child_count_down;
-                }else{
-                    $child_count_down = 5;
-                }
-
-            }
-            //var_dump($child_count_down);
-            $this->child_count_down = $child_count_down;
-        }
+        $this->set_child_count_down();
 
         /*leo_dump(date('Y-m-d H:i:s',get_time()));
         leo_dump(date('Y-m-d H:i:s',$this->project_start_time));
@@ -782,6 +719,73 @@ class Student_Matchs extends Student_Home
         $view = student_view_path.'matchs/match-initial.php';
         load_view_template($view,$data);
 
+    }
+
+    public function set_child_count_down(){
+        if(in_array($this->project_alias,array('zxss','kysm'))){
+
+            $child_count_down = get_post_meta($this->project_id,'child_count_down')[0];
+
+            if($this->project_alias == 'zxss'){
+
+                if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
+                    $child_count_down['even_add'] = $this->project_count_down * 60;
+                    $child_count_down['add_and_subtract'] = $this->project_count_down * 60;
+                    $child_count_down['wax_and_wane'] = $this->project_count_down * 60;
+                }elseif (!empty($child_count_down)){
+
+                    $child_count_down['even_add'] *= 60;
+                    $child_count_down['add_and_subtract'] *= 60;
+                    $child_count_down['wax_and_wane'] *= 60;
+                }else{
+
+                    $child_count_down['even_add'] = 180;
+                    $child_count_down['add_and_subtract'] = 180;
+                    $child_count_down['wax_and_wane'] = 180;
+                }
+
+                $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+
+                global $current_user;
+                $new_time = get_time();
+                $first_child = $child_count_down['even_add'];
+                $two_child = $first_child+$child_count_down['add_and_subtract'];
+                $three_child = $two_child+$child_count_down['wax_and_wane'];
+                //if($_GET['test'] == 1){
+                $this->redis->del('even_add'.$current_user->ID.'_'.$this->current_more);
+                $this->redis->del('add_and_subtract'.$current_user->ID.'_'.$this->current_more);
+                $this->redis->del('wax_and_wane'.$current_user->ID.'_'.$this->current_more);
+                //}
+                if(empty($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more)) ){
+                    $this->redis->setex('even_add'.$current_user->ID.'_'.$this->current_more,$first_child,$first_child+$new_time);
+                    $first = true;
+                }
+                if($first){
+                    $this->redis->setex('add_and_subtract'.$current_user->ID.'_'.$this->current_more,$two_child,$two_child+$new_time);
+                    $two = true;
+                }
+                if($two){
+                    $this->redis->setex('wax_and_wane'.$current_user->ID.'_'.$this->current_more,$three_child,$three_child+$new_time);
+                }
+                /*var_dump($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more));
+                var_dump($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more));
+                var_dump($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more));*/
+
+                //leo_dump($this->default_count_down);die;
+            }else if($this->project_alias == 'kysm'){
+
+                if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
+                    $child_count_down = $this->project_key_array[$this->project_id]['child_count_down'];
+                }elseif (!empty($child_count_down)){
+                    $child_count_down = $child_count_down;
+                }else{
+                    $child_count_down = 5;
+                }
+
+            }
+            //var_dump($child_count_down);
+            $this->child_count_down = $child_count_down;
+        }
     }
 
     /*
@@ -986,18 +990,50 @@ class Student_Matchs extends Student_Home
         }
 
         //判断是否有新的比赛轮次或者新的项目
+        print_r($this->current_project);
+        print_r($this->next_project);
+        print_r($this->project_end_time);
+        print_r(date_i18n('Y-m-d,H:i:s'));
 
-        if(!empty($this->project_end_time)){
-
-            $match_more = !empty($this->next_project['next_more_num']) ? $this->next_project['next_more_num'] : 1;
-            $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['match_project_id'].'/match_more/'.$match_more);
-            $next_type = !empty($this->next_project['next_more_num']) ? 1 : 2;
+        if(empty($this->next_project)){
+            $match_more = $this->current_project['match_more']+1;
+            $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
+            $next_type = 1;
+            $next_count_down = $this->current_project['project_end_time']-get_time();
         }else{
 
-            $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
-            $next_type = 4;
+            if($this->next_project['project_start_time'] < get_time()){
+                $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
+                $next_type = 4;
+            }else{
+                $match_more = 1;
+                $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['project_id'].'/match_more/'.$match_more);
+                $next_type = 2;
+                $next_count_down = $this->next_project['project_start_time']-get_time();
+            }
         }
         //print_r($this->next_project);
+        if($this->project_alias == 'zxss'){
+
+            if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
+                $child_count_down['even_add'] = $this->project_count_down * 60;
+                $child_count_down['add_and_subtract'] = $this->project_count_down * 60;
+                $child_count_down['wax_and_wane'] = $this->project_count_down * 60;
+            }elseif (!empty($child_count_down)){
+
+                $child_count_down['even_add'] *= 60;
+                $child_count_down['add_and_subtract'] *= 60;
+                $child_count_down['wax_and_wane'] *= 60;
+            }else{
+
+                $child_count_down['even_add'] = 180;
+                $child_count_down['add_and_subtract'] = 180;
+                $child_count_down['wax_and_wane'] = 180;
+            }
+
+            $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+        }
+
 
         $data = array(
             'project_alias'=>$this->project_alias,
@@ -1016,7 +1052,7 @@ class Student_Matchs extends Student_Home
             'project_title'=>$this->project_title,
             'match_title'=>$this->match_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'next_count_down'=>$this->project_end_time-get_time(),
+            'next_count_down'=>$next_count_down,
             'next_project_url'=>$next_project_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
@@ -1555,6 +1591,7 @@ class Student_Matchs extends Student_Home
                             //var_dump($more_num);
                         }
                         else{
+
                             $next_project = array(
                                 'project_title'=>$rows[$key+1]['post_title'],
                                 'match_id'=>$rows[$key+1]['match_id'],
