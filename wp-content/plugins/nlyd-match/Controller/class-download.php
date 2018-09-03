@@ -282,6 +282,10 @@ class Download
         $post = get_post(intval($_GET['match_id']));
 //        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
         //TODO 判断比赛是否结束
+
+        //查询比赛项目
+        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
+
         //根据成绩排序查询比赛学员
         $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
         LEFT JOIN '.$wpdb->prefix.'order AS o ON o.match_id=mq.match_id AND o.user_id=mq.user_id 
@@ -289,11 +293,9 @@ class Download
         LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$post->ID,ARRAY_A);
         //处理数据
         $rankingArr = [];
-        $titleArr = [];
         foreach ($matchQuestions as $mqk => $mqv){
             $usermeta = get_user_meta($mqv['user_id'], '', true);
 
-            if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
 //            var_dump($usermeta);
             //基础数据
             if(!isset($rankingArr[$mqv['user_id']])){
@@ -315,15 +317,15 @@ class Download
                 $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
             }
             //每个项目每一轮比赛成绩
-            foreach ($titleArr as $titleK => $titleV){
-                if($mqv['project_id'] == $titleK) {
-                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleK]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleK])){
-                        $rankingArr[$mqv['user_id']]['project'][$titleK] .= '/'.$mqv['my_score'];
+            foreach ($projectArr as $titleK => $titleV){
+                if($mqv['project_id'] == $titleV['ID']) {
+                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleV['ID']]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleV['ID']])){
+                        $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '/'.$mqv['my_score'];
                     }else{
-                        $rankingArr[$mqv['user_id']]['project'][$titleK] = $mqv['my_score'];
+                        $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] = $mqv['my_score'];
                     }
                 }else{
-                    $rankingArr[$mqv['user_id']]['project'][$titleK] .= '';
+                    if($rankingArr[$mqv['user_id']]['project'][$titleV['ID']] != '0') $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '0';
                 }
             }
 
@@ -381,7 +383,7 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
         $a = 'J';
-        foreach ($titleArr as $titleV){
+        foreach ($projectArr as $titleV){
             ++$a;
             $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
 
@@ -404,7 +406,7 @@ class Download
 
 
         $a = 'J';
-        foreach ($titleArr as $titleV){
+        foreach ($projectArr as $titleV){
             ++$a;
             $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
 
@@ -420,7 +422,7 @@ class Download
             $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
         }
         $a = 'K';
-        foreach ($titleArr as $titleV){
+        foreach ($projectArr as $titleV){
             $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
             ++$a;
         }
@@ -441,8 +443,8 @@ class Download
         }
 
         $a = 'K';
-         foreach ($titleArr as $titleV){
-             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV.'得分');
+         foreach ($projectArr as $titleV){
+             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV['post_title'].'得分');
              $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
              ++$a;
          }

@@ -446,6 +446,9 @@ class Match_student {
             return;
         }
 
+        //查询比赛项目
+        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
+
 
         //根据成绩排序查询比赛学员
         $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
@@ -482,7 +485,7 @@ class Match_student {
 
             }
 
-            if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
+//            if(!isset($titleArr[$mqv['project_id']])) $titleArr[$mqv['project_id']] = $mqv['post_title'];
 //            var_dump(unserialize($usermeta['user_real_name'][0]));
             //基础数据
             if(!isset($rankingArr[$mqv['user_id']])){
@@ -504,15 +507,15 @@ class Match_student {
                 $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
             }
             //每个项目每一轮比赛成绩
-            foreach ($titleArr as $titleK => $titleV){
-                if($mqv['project_id'] == $titleK) {
-                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleK]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleK])){
-                        $rankingArr[$mqv['user_id']]['project'][$titleK] .= '/'.$mqv['my_score'];
+            foreach ($projectArr as $titleK => $titleV){
+                if($mqv['project_id'] == $titleV['ID']) {
+                    if(isset($rankingArr[$mqv['user_id']]['project'][$titleV['ID']]) && !empty($rankingArr[$mqv['user_id']]['project'][$titleV['ID']])){
+                        $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '/'.$mqv['my_score'];
                     }else{
-                        $rankingArr[$mqv['user_id']]['project'][$titleK] = $mqv['my_score'];
+                        $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] = $mqv['my_score'];
                     }
                 }else{
-                    $rankingArr[$mqv['user_id']]['project'][$titleK] .= '';
+                    if($rankingArr[$mqv['user_id']]['project'][$titleV['ID']] != '0') $rankingArr[$mqv['user_id']]['project'][$titleV['ID']] .= '0';
                 }
             }
 
@@ -574,25 +577,6 @@ class Match_student {
                     </div>
 
                     <br class="clear">
-                    <br class="clear">
-                    <div class="alignleft actions">
-                        <label class="screen-reader-text" for="new_role">脑力健将</label>
-                        <select name="age_group" id="age_group">
-
-                            <option value="0" <?=$group == 0 ? 'selected="selected"' : ''?>>速记类</option>
-                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>速度类</option>
-                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>速算类</option>
-                        </select>
-                        <select name="age_group" id="age_group">
-
-                            <option value="0" <?=$group == 0 ? 'selected="selected"' : ''?>>百分比</option>
-                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>人数</option>
-                        </select>
-
-
-                        数值: <input type="text" id>
-                        <input type="button" name="changeit" id="enterBrainpower" class="button" value="确定脑力健将">
-                    </div>
 
                 </div>    <br class="clear">
                 <h2 class="screen-reader-text">用户列表</h2>
@@ -614,9 +598,9 @@ class Match_student {
                         <th scope="col" id="email" class="manage-column column-email">邮箱</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
                         <th scope="col" id="total_score" class="manage-column column-total_score">总得分</th>
-                        <?php foreach ($titleArr as $titleV){ ?>
+                        <?php foreach ($projectArr as $titleV){ ?>
 
-                            <th scope="col" id="" class="manage-column column-"><?=$titleV?>得分</th>
+                            <th scope="col" id="" class="manage-column column-"><?=$titleV['post_title']?>得分</th>
                         <?php } ?>
 <!--                        <th scope="col" id="" class="manage-column column-">扑克接力得分</th>-->
 <!--                        <th scope="col" id="" class="manage-column column-">快眼扫描得分</th>-->
@@ -672,8 +656,8 @@ class Match_student {
                         <th scope="col" class="manage-column column-email">邮箱</th>
                         <th scope="col" class="manage-column column-created_time">报名时间</th>
                         <th scope="col" class="manage-column column-total_score">总得分</th>
-                        <?php foreach ($titleArr as $titleV){ ?>
-                            <th scope="col"class="manage-column column-"><?=$titleV?>得分</th>
+                        <?php foreach ($projectArr as $titleV){ ?>
+                            <th scope="col"class="manage-column column-"><?=$titleV['post_title']?>得分</th>
                         <?php } ?>
                     </tr>
                     </tfoot>

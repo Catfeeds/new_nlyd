@@ -1223,7 +1223,7 @@ class Student_Ajax
         $pageSize = 15;
         $start = ($page-1)*$pageSize;
 
-        $sql2 = "select SQL_CALC_FOUND_ROWS user_id,created_time from {$wpdb->prefix}order where match_id = {$_POST['match_id']} limit {$start},{$pageSize}";
+        $sql2 = "select SQL_CALC_FOUND_ROWS user_id,created_time from {$wpdb->prefix}order where match_id = {$_POST['match_id']} and (pay_status=2 or pay_status=3 or pay_status=4) limit {$start},{$pageSize}";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         //print_r($orders);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
