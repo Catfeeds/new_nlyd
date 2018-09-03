@@ -25,17 +25,38 @@ class Brainpower
      * 加入名录
      */
     public function joinDirectory(){
+//        $project_id_arr = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id, ARRAY_A);
+//        for ($i = 2; $i < 15; ++$i){
+//            foreach ($project_id_arr as $v){
+//                unset($v['id']);
+//                $v['user_id'] = $i;
+//                $wpdb->insert($wpdb->prefix.'match_questions', $v);
+//            }
+//        }
+
         global $wpdb;
         $match_id = intval($_GET['match_id']);
 
-        //根据比赛id查询比赛每一项目得前十名
-        $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'match_questions');
+        //1.根据比赛id查询比赛每一项目得前十名
+        //1.1 查询比赛类别, 用于分组
+        $projectGroup = $wpdb->get_results('SELECT mq.project_id,p.post_title FROM '.$wpdb->prefix.'match_questions AS mq 
+        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$match_id.' GROUP BY mq.project_id', ARRAY_A);
 
-        //查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
+        //1.2查询每一组的前十名
+        foreach ($projectGroup as $pgk => $pgv){
+            $projectGroup[$pgk]['student'] = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,SUM(mq.my_score) AS my_score FROM '.$wpdb->prefix.'match_questions AS mq 
+            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
+            WHERE mq.match_id='.$match_id.' AND mq.project_id='.$pgv['project_id'].' GROUP BY mq.user_id ORDER BY my_score DESC limit 0,10', ARRAY_A);
+        }
+        echo '<pre />';
+        print_r($projectGroup);
 
-        //插入数据数组生成
+        //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
 
-        //开始插入数据
+
+        //3.插入数据数组生成
+
+        //4.开始插入数据
 
 
         ?>
