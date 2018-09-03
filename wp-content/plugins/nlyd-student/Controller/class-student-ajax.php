@@ -480,6 +480,10 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id'])  || !isset($_POST['cost'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
+        if($current_user->ID < 1 || !$current_user->ID){
+            wp_send_json_error(array('info'=>'请登录'));
+        }
+
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
             wp_send_json_error(array('info'=>'请先实名认证'));
         }
@@ -1126,7 +1130,7 @@ class Student_Ajax
             $post_title = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID='.$_POST['category_id']);
             $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
             $ali = new AliSms();
-            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title), '国际脑力运动');
+            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
             /******************end*******************/
             if($result){
                 $wpdb->commit();
@@ -2157,6 +2161,10 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }
         global $wpdb,$current_user;
+        if($current_user->ID < 1 || !$current_user->ID){
+            wp_send_json_error(['info' => '您暂未登录', 'url' => home_url('logins')]);
+        }
+
         $otderSn = trim($_POST['serialnumber']);
         $payType = $_POST['pay_type'];
 
@@ -2170,7 +2178,8 @@ class Student_Ajax
         require_once 'class-student-payment.php';
         switch ($payType){
             case 'wxh5pay':
-
+                //TODO 微信支付暂未开放
+                wp_send_json_error(array('info'=>'微信支付暂未开放'));
                 //请求数据
                 //1.统一下单方法
                 $params['notify_url'] = home_url('payment/wxpay/'); //商品描述
@@ -2580,6 +2589,30 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'当前已存在主训教练'));
         }
     }
+
+    /**
+     * 脑力健将名录
+     */
+//    public function userSkillRank(){
+//        global $wpdb;
+//        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+//        $page < 1 && $page = 1;
+//        $pageSize = 20;
+//        $start = ($page-1)*$pageSize;
+//        $rows = $wpdb->get_results('SELECT usr.mental_lv,usr.mental_type,usr.nationality,um.meta_value AS user_ID,um2.meta_value AS user_real_name FROM '.$wpdb->prefix.'user_skill_rank AS usr
+//        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=usr.user_id
+//        LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID"
+//        LEFT JOIN '.$wpdb->usermeta.' AS um2 ON um2.user_id=u.ID AND um2.meta_key="user_real_name" LIMIT '.$start.','.$pageSize);
+//        foreach ($rows as $k => $row){
+//            $rows[$k]->user_real_name = unserialize( $row->user_real_name );
+//        }
+//
+//        if($rows){
+//            wp_send_json_success(['info' => $rows]);
+//        }else{
+//            wp_send_json_error(['info' => '没有数据']);
+//        }
+//    }
 
     /**
      * 战绩排名

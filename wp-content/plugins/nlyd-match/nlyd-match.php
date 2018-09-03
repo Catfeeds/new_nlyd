@@ -97,6 +97,13 @@ if(!class_exists('MatchController')){
             //添加参赛学员菜单
             include_once(match_controller_path.'class-match_student.php');
 
+            //添加脑力健将菜单
+            include_once(match_controller_path.'class-brainpower.php');
+
+            //添加导入数据菜单
+            include_once(match_controller_path.'class-import.php');
+
+
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }
@@ -342,6 +349,7 @@ if(!class_exists('MatchController')){
             $columns['author'] = '发布人';
             $columns['students'] = '报名学员';
             $columns['match_ranking'] = '比赛排名';
+            $columns['match_brainpower'] = '脑力健将';
             $columns['slogan'] = '口号';
             $columns['times'] = '比赛时间';
             $columns['time_slot'] = '报名时间段';
@@ -414,6 +422,14 @@ if(!class_exists('MatchController')){
                 case 'match_ranking':
                     if($row['match_status'] == -3){
                         echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+                    }else{
+                        echo '比赛未结束';
+                    }
+
+                    break;
+                case 'match_brainpower':
+                    if($row['match_status'] == -3){
+                        echo '<a href="admin.php?page=brainpower-join_directory&match_id='.$id.'">管理名录</a>';
                     }else{
                         echo '比赛未结束';
                     }
@@ -1139,6 +1155,8 @@ if(!class_exists('MatchController')){
          */
         public function scripts_default(){
             //var_dump($this->post_type);
+            wp_register_style( 'admin_index_css',match_css_url.'index.css','', leo_match_version  );
+            wp_enqueue_style( 'admin_index_css' );
             if(!in_array($this->post_type,array('page','post','question'))){
 
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );

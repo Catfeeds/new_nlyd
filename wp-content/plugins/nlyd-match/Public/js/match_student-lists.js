@@ -15,4 +15,13 @@ jQuery(document).ready(function($) {
         });
 
     });
+    /**
+     * 确认脑力健将
+     */
+    $('#enterBrainpower').on('click', function () {
+        var type = $('#brainpowerType').val(); //类型
+        var category = $('#brainpowerCate').val(); //类别
+        var val = $('#brainpowerVal').val(); // 数值
+
+    });
 })

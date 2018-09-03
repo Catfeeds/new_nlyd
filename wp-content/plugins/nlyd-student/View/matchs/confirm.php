@@ -185,9 +185,12 @@ jQuery(function($) {
                         $('.selectBottom').addClass('selectBottom-show')
                     }else{
                         $.alerts(res.data.info)
-                        setTimeout(function() {
-                            window.location.href=res.data.url;
-                        }, 300);
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url;
+                            }, 300);
+                        }
+
                     }
                 })
                 return false;

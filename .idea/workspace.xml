@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e60e5c82-12c8-404e-b743-36e7c17071ea" name="默认" comment="逆向速算扣秒处理">
+    <list default="true" id="e60e5c82-12c8-404e-b743-36e7c17071ea" name="默认" comment="教练详情新增">
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/log/timer-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/log/timer-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/Alipay/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/Alipay/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-includes/library/Vendor/Wxpay/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/wp-includes/library/Vendor/Wxpay/log.txt" afterDir="false" />
     </list>
     <ignored path="wp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,151 +27,104 @@
     <favorites_list name="wp" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="vertical" split-proportion="0.21691543">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="class-student-ajax.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="41">
-                  <caret line="417" column="18" selection-start-line="417" selection-start-column="18" selection-end-line="417" selection-end-column="18" />
-                  <folding>
-                    <element signature="e#707#3213#0#PHP" />
-                    <element signature="e#3250#9074#0#PHP" />
-                    <element signature="e#11601#15158#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="class-student-matchs.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="297">
-                  <caret line="574" column="9" lean-forward="true" selection-start-line="574" selection-start-column="9" selection-end-line="574" selection-end-column="9" />
-                  <folding>
-                    <element signature="e#16709#20765#0#PHP" />
-                    <element signature="e#18335#18768#0#PHP" />
-                    <element signature="e#18802#19769#0#PHP" />
-                    <element signature="e#19778#20444#0#PHP" />
-                    <element signature="e#19831#20434#0#PHP" />
-                    <element signature="e#20804#21749#0#PHP" />
-                    <element signature="e#21472#21749#0#PHP" />
-                    <element signature="e#65360#66054#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-fastReverse.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastReverse.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="247">
-                  <caret line="79" column="30" lean-forward="true" selection-start-line="74" selection-start-column="16" selection-end-line="79" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-fastCalculation.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="100">
-                  <caret line="79" column="30" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="matching-fastReverse.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="171">
-                  <caret line="384" column="3" lean-forward="true" selection-start-line="384" selection-start-column="3" selection-end-line="384" selection-end-column="3" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="match-waitting.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-waitting.php">
-              <provider selected="true" editor-type-id="text-editor" />
-            </entry>
-          </file>
-          <file leaf-file-name="nlyd-match.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="380">
-                  <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="nlyd-interface.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-interface/nlyd-interface.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-57">
-                  <caret line="22" column="90" lean-forward="true" selection-start-line="22" selection-start-column="90" selection-end-line="22" selection-end-column="90" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="class-student-matchs.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="326">
-                  <caret line="937" column="43" lean-forward="true" selection-start-line="937" selection-start-column="43" selection-end-line="937" selection-end-column="43" />
-                  <folding>
-                    <element signature="e#18802#19769#0#PHP" />
-                    <element signature="e#19778#20444#0#PHP" />
-                    <element signature="e#20804#21749#0#PHP" />
-                    <element signature="e#21472#21749#0#PHP" />
-                    <element signature="e#26017#27141#0#PHP" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-reading.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="494">
-                  <caret line="104" column="30" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-pokerRelay.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="171">
-                  <caret line="153" column="30" selection-start-line="153" selection-start-column="30" selection-end-line="153" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-numberBattle.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="475">
-                  <caret line="82" column="30" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="subject-fastScan.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="399">
-                  <caret line="78" column="30" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="class-match_student.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="351">
+              <caret line="13" column="98" selection-start-line="13" selection-start-column="88" selection-end-line="13" selection-end-column="98" />
+              <folding>
+                <element signature="n#style#0;n#h2#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-brainpower.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="891">
+              <caret line="33" column="34" selection-start-line="33" selection-start-column="34" selection-end-line="33" selection-end-column="34" />
+              <folding>
+                <element signature="e#8700#8722#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-import.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-import.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="25" column="21" lean-forward="true" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-order.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-order.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="14310">
+              <caret line="530" column="34" selection-start-line="530" selection-start-column="29" selection-end-line="530" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-teacher.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-teacher.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6075">
+              <caret line="225" column="38" selection-start-line="225" selection-start-column="33" selection-end-line="225" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-team.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-team.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1215">
+              <caret line="45" column="35" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nlyd-match.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="348">
+              <caret line="431" column="79" selection-start-line="431" selection-start-column="65" selection-end-line="431" selection-end-column="79" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-ajax.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="402">
+              <caret line="483" column="49" selection-start-line="483" selection-start-column="49" selection-end-line="483" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-match-ajax.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="402">
+              <caret line="690" column="37" selection-start-line="690" selection-start-column="32" selection-end-line="690" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-feedback.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-feedback.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4860">
+              <caret line="180" lean-forward="true" selection-start-line="180" selection-end-line="180" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -184,36 +135,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>user-new</find>
-      <find>post</find>
-      <find>当前无</find>
-      <find>login(</find>
-      <find>user_info</find>
-      <find>coac</find>
-      <find>teams</find>
-      <find>查看</find>
-      <find>is_my_major$my_coach_id</find>
-      <find>skill</find>
-      <find>获取教练</find>
       <find>解除</find>
-      <find>match_more_cn</find>
-      <find>info()</find>
-      <find>matchWaitting</find>
-      <find>answer_submit</find>
-      <find>24</find>
-      <find>initialMatch(</find>
-      <find>get_24_result</find>
-      <find>$this-&gt;redis-&gt;get('wax_an</find>
-      <find>get('even_add'.$curr</find>
-      <find>del('even_add'</find>
-      <find>get('even_add'.$current_us</find>
-      <find>var_dump($this-&gt;redis-&gt;get('even_add'.$current_user-&gt;ID.'_'.$this-&gt;current_more));</find>
-      <find>n_type</find>
-      <find>content</find>
-      <find>count_down</find>
-      <find>记忆</find>
-      <find>-&gt;get('coun</find>
-      <find>answerLog</find>
+      <find>manage_match_columns</find>
+      <find>比赛类型</find>
+      <find>获取教练</find>
+      <find>比赛 记录</find>
+      <find>申请</find>
+      <find>get_user_meta</find>
+      <find>add_new_match_columns</find>
+      <find>年龄</find>
+      <find>成人组</find>
+      <find>_pai</find>
+      <find>ranking</find>
+      <find>HORIZONTAL_CENTER</find>
+      <find>centerVERTICAL_CENTER</find>
+      <find>VERTICAL_CENTER</find>
+      <find>FILL_SOLID</find>
+      <find>BORDER_THIN</find>
+      <find>学员</find>
+      <find>_</find>
+      <find>_w-</find>
+      <find>订单</find>
+      <find>报名支付</find>
+      <find>发送</find>
+      <find>info,</find>
+      <find>date</find>
+      <find>time(</find>
+      <find>time()</find>
+      <find>date(</find>
+      <find>支付</find>
+      <find>import</find>
     </findStrings>
     <replaceStrings>
       <replace>$title</replace>
@@ -236,8 +187,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/record.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/singleRecord.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/info.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-news.php" />
@@ -245,7 +196,6 @@
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/news/news-detail.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-feedback.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/view/banner.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-logins.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/logins/login.php" />
         <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/index.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-goods/Controller/class-goods.php" />
@@ -256,36 +206,37 @@
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-shops.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-goods/nlyd-goods.php" />
         <option value="$PROJECT_DIR$/wp-includes/library/Vendor/Wxpay/wxpay.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php" />
         <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/content-single.php" />
         <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/single.php" />
         <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/archive.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/address.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-order.php" />
-        <option value="$PROJECT_DIR$/wp-includes/library/AliSms.class.php" />
         <option value="$PROJECT_DIR$/wp-admin/user-new.php" />
         <option value="$PROJECT_DIR$/wp-admin/includes/user.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachDetail.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-teacher.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-team.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/teacher-student.js" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-teacher.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/alert.js" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/match-lists.js" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-index.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/match_student-lists.js" />
+        <option value="$PROJECT_DIR$/wp-includes/library/AliSms.class.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-logins.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-download.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-order.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-import.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php" />
-        <option value="$PROJECT_DIR$/wp-includes/wp-db.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastReverse.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastCalculation.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php" />
       </list>
     </option>
   </component>
@@ -304,10 +255,10 @@
     <servers />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2551" />
-    <option name="y" value="-9" />
-    <option name="width" value="2578" />
-    <option name="height" value="1420" />
+    <option name="x" value="-423" />
+    <option name="y" value="237" />
+    <option name="width" value="2576" />
+    <option name="height" value="1426" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -338,7 +289,39 @@
               <item name="nlyd" type="462c0819:PsiDirectoryNode" />
               <item name="wp-content" type="462c0819:PsiDirectoryNode" />
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="nlyd-interface" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-goods" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-goods" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-goods" type="462c0819:PsiDirectoryNode" />
+              <item name="Public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-goods" type="462c0819:PsiDirectoryNode" />
+              <item name="Public" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-home" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
@@ -346,6 +329,31 @@
               <item name="wp-content" type="462c0819:PsiDirectoryNode" />
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="nlyd-match" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-match" type="462c0819:PsiDirectoryNode" />
+              <item name="Controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-match" type="462c0819:PsiDirectoryNode" />
+              <item name="Public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-match" type="462c0819:PsiDirectoryNode" />
+              <item name="Public" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
@@ -377,34 +385,16 @@
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
               <item name="View" type="462c0819:PsiDirectoryNode" />
+              <item name="directory" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
+              <item name="View" type="462c0819:PsiDirectoryNode" />
               <item name="logins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="matchs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="shops" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
-              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
-              <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="teams" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
@@ -443,13 +433,37 @@
               <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
               <item name="library" type="462c0819:PsiDirectoryNode" />
               <item name="Vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="Wxpay" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
               <item name="nlyd" type="462c0819:PsiDirectoryNode" />
               <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
-              <item name="pomo" type="462c0819:PsiDirectoryNode" />
+              <item name="library" type="462c0819:PsiDirectoryNode" />
+              <item name="Vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="Classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
+              <item name="library" type="462c0819:PsiDirectoryNode" />
+              <item name="Vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="Classes" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-includes" type="462c0819:PsiDirectoryNode" />
+              <item name="library" type="462c0819:PsiDirectoryNode" />
+              <item name="Vendor" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="Classes" type="462c0819:PsiDirectoryNode" />
+              <item name="PHPExcel" type="462c0819:PsiDirectoryNode" />
+              <item name="Style" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -491,6 +505,8 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/css/index.css</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -678,71 +694,15 @@
       <workItem from="1534812164123" duration="25177000" />
       <workItem from="1534898322731" duration="8203000" />
       <workItem from="1534984560516" duration="32328000" />
-      <workItem from="1535070768553" duration="26862000" />
-      <workItem from="1535158457625" duration="10351000" />
-    </task>
-    <task id="LOCAL-00124" summary="比赛">
-      <created>1534145672898</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1534145672898</updated>
-    </task>
-    <task id="LOCAL-00125" summary="比赛">
-      <created>1534145950958</created>
-      <option name="number" value="00125" />
-      <option name="presentableId" value="LOCAL-00125" />
-      <option name="project" value="LOCAL" />
-      <updated>1534145950958</updated>
-    </task>
-    <task id="LOCAL-00126" summary="比赛">
-      <created>1534149495875</created>
-      <option name="number" value="00126" />
-      <option name="presentableId" value="LOCAL-00126" />
-      <option name="project" value="LOCAL" />
-      <updated>1534149495875</updated>
-    </task>
-    <task id="LOCAL-00127" summary="比赛">
-      <created>1534153252538</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1534153252538</updated>
-    </task>
-    <task id="LOCAL-00128" summary="比赛">
-      <created>1534153423690</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1534153423690</updated>
-    </task>
-    <task id="LOCAL-00129" summary="比赛">
-      <created>1534296804484</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1534296804484</updated>
-    </task>
-    <task id="LOCAL-00130" summary="比赛">
-      <created>1534301572674</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1534301572674</updated>
-    </task>
-    <task id="LOCAL-00131" summary="咨询详情">
-      <created>1534412723595</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1534412723595</updated>
-    </task>
-    <task id="LOCAL-00132" summary="商品模块">
-      <created>1534473705890</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1534473705891</updated>
+      <workItem from="1535070768553" duration="33525000" />
+      <workItem from="1535158460892" duration="17418000" />
+      <workItem from="1535330605942" duration="27382000" />
+      <workItem from="1535364933521" duration="2297000" />
+      <workItem from="1535415576243" duration="23917000" />
+      <workItem from="1535503682392" duration="29372000" />
+      <workItem from="1535590504113" duration="12644000" />
+      <workItem from="1535676398795" duration="4209000" />
+      <workItem from="1535934973904" duration="6373000" />
     </task>
     <task id="LOCAL-00133" summary="注册修改">
       <created>1534476921485</created>
@@ -989,46 +949,109 @@
       <option name="project" value="LOCAL" />
       <updated>1535102840960</updated>
     </task>
-    <task id="LOCAL-00168" summary="正向速算子项倒计时">
-      <created>1535158543465</created>
+    <task id="LOCAL-00168" summary="教练解除教学关系">
+      <created>1535103618409</created>
       <option name="number" value="00168" />
       <option name="presentableId" value="LOCAL-00168" />
       <option name="project" value="LOCAL" />
-      <updated>1535158543465</updated>
+      <updated>1535103618409</updated>
     </task>
-    <task id="LOCAL-00169" summary="正向速算子项倒计时">
-      <created>1535158688208</created>
+    <task id="LOCAL-00169" summary="拒绝教练存在学员的类别">
+      <created>1535107163181</created>
       <option name="number" value="00169" />
       <option name="presentableId" value="LOCAL-00169" />
       <option name="project" value="LOCAL" />
-      <updated>1535158688208</updated>
+      <updated>1535107163181</updated>
     </task>
-    <task id="LOCAL-00170" summary="逆向速算扣秒处理">
-      <created>1535162351305</created>
+    <task id="LOCAL-00170" summary="比赛列表增加字段">
+      <created>1535110012624</created>
       <option name="number" value="00170" />
       <option name="presentableId" value="LOCAL-00170" />
       <option name="project" value="LOCAL" />
-      <updated>1535162351305</updated>
+      <updated>1535110012624</updated>
     </task>
-    <task id="LOCAL-00171" summary="正向速算子项倒计时出来">
-      <created>1535166429715</created>
+    <task id="LOCAL-00171" summary="减少教练列表和详情查询类别查询语句">
+      <created>1535159916645</created>
       <option name="number" value="00171" />
       <option name="presentableId" value="LOCAL-00171" />
       <option name="project" value="LOCAL" />
-      <updated>1535166429715</updated>
+      <updated>1535159916645</updated>
     </task>
-    <task id="LOCAL-00172" summary="文章速读">
-      <created>1535168732711</created>
+    <task id="LOCAL-00172" summary="1">
+      <created>1535166402778</created>
       <option name="number" value="00172" />
       <option name="presentableId" value="LOCAL-00172" />
       <option name="project" value="LOCAL" />
-      <updated>1535168732711</updated>
+      <updated>1535166402778</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <task id="LOCAL-00173" summary="1">
+      <created>1535331574543</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1535331574543</updated>
+    </task>
+    <task id="LOCAL-00174" summary="1">
+      <created>1535332711419</created>
+      <option name="number" value="00174" />
+      <option name="presentableId" value="LOCAL-00174" />
+      <option name="project" value="LOCAL" />
+      <updated>1535332711419</updated>
+    </task>
+    <task id="LOCAL-00175" summary="比赛成绩答题记录">
+      <created>1535415716528</created>
+      <option name="number" value="00175" />
+      <option name="presentableId" value="LOCAL-00175" />
+      <option name="project" value="LOCAL" />
+      <updated>1535415716528</updated>
+    </task>
+    <task id="LOCAL-00176" summary="导出报名学员">
+      <created>1535425922812</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1535425922812</updated>
+    </task>
+    <task id="LOCAL-00177" summary="排名组别">
+      <created>1535520950024</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1535520950025</updated>
+    </task>
+    <task id="LOCAL-00178" summary="导出排名文件样式">
+      <created>1535524928541</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1535524928541</updated>
+    </task>
+    <task id="LOCAL-00179" summary="日常">
+      <created>1535938423847</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1535938423847</updated>
+    </task>
+    <task id="LOCAL-00180" summary="import">
+      <created>1535938654689</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1535938654689</updated>
+    </task>
+    <task id="LOCAL-00181" summary="返回支付地址时判断登录">
+      <created>1535942793744</created>
+      <option name="number" value="00181" />
+      <option name="presentableId" value="LOCAL-00181" />
+      <option name="project" value="LOCAL" />
+      <updated>1535942793744</updated>
+    </task>
+    <option name="localTasksCounter" value="182" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1004113000" />
+    <option name="totallyTimeSpent" value="1124037000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1040,10 +1063,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="2553" y="-7" width="2062" height="1136" extended-state="6" />
+    <frame x="-8" y="-8" width="2576" height="1426" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.97313434" visible="true" weight="0.18962076" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.9709924" visible="true" weight="0.1546105" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.26412213" />
       <window_info anchor="bottom" id="调试" order="7" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
@@ -1051,7 +1074,7 @@
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info id="Structure" order="1" sideWeight="0.026865672" side_tool="true" visible="true" weight="0.18962076" />
+      <window_info id="Structure" order="1" sideWeight="0.029007634" side_tool="true" weight="0.15117188" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="运行" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -1067,26 +1090,26 @@
       <window_info anchor="bottom" id="Find" order="1" />
     </layout>
     <layout-to-restore>
-      <window_info anchor="bottom" id="找到" order="14" />
+      <window_info anchor="bottom" id="找到" order="14" weight="0.32977098" />
       <window_info anchor="bottom" id="运行" order="10" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18463074" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.9709924" visible="true" weight="0.15117188" />
+      <window_info id="Structure" order="1" sideWeight="0.029007634" side_tool="true" visible="true" weight="0.15117188" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.22189055" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.26412213" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32935324" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32900763" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="调试" order="13" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
     </layout-to-restore>
@@ -1106,15 +1129,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="新闻列表图片和详情截取" />
-    <MESSAGE value="前台商品列表,加入购物车接口" />
-    <MESSAGE value="提交商品订单" />
-    <MESSAGE value="提交订单收货地址" />
-    <MESSAGE value="商品列表接口搜索商品" />
-    <MESSAGE value="支付宝微信回调修改" />
-    <MESSAGE value="wxpay.php" />
-    <MESSAGE value="qqqq" />
-    <MESSAGE value="支付成功页面修复" />
     <MESSAGE value="收货地址返回路径,订单非未支付和已退款和失效订单都可以退款" />
     <MESSAGE value="申请教练同时设置为主训" />
     <MESSAGE value="教练列表分类" />
@@ -1127,363 +1141,361 @@
     <MESSAGE value="教练详情" />
     <MESSAGE value="教练详情类别" />
     <MESSAGE value="不允许取消有学员的教练类别" />
-    <MESSAGE value="正向速算子项倒计时" />
-    <MESSAGE value="逆向速算扣秒处理" />
-    <MESSAGE value="正向速算子项倒计时出来" />
-    <MESSAGE value="文章速读" />
-    <option name="LAST_COMMIT_MESSAGE" value="文章速读" />
+    <MESSAGE value="教练解除教学关系" />
+    <MESSAGE value="拒绝教练存在学员的类别" />
+    <MESSAGE value="比赛列表增加字段" />
+    <MESSAGE value="减少教练列表和详情查询类别查询语句" />
+    <MESSAGE value="1" />
+    <MESSAGE value="教练详情新增" />
+    <MESSAGE value="比赛成绩答题记录" />
+    <MESSAGE value="导出报名学员" />
+    <MESSAGE value="排名组别" />
+    <MESSAGE value="导出排名文件样式" />
+    <MESSAGE value="日常" />
+    <MESSAGE value="import" />
+    <MESSAGE value="返回支付地址时判断登录" />
+    <option name="LAST_COMMIT_MESSAGE" value="返回支付地址时判断登录" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="12" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/teacher-student.js</url>
+          <line>40</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="15" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wp-includes/library/Vendor/Wxpay/wxpay.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/alert.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="896">
-          <caret line="591" column="37" selection-start-line="591" selection-start-column="27" selection-end-line="591" selection-end-column="37" />
+        <state relative-caret-position="324">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-goods/nlyd-goods.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1404">
-          <caret line="59" column="32" selection-start-line="59" selection-start-column="32" selection-end-line="59" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-news.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="19" selection-start-line="19" selection-end-line="19" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4752">
-          <caret line="176" column="33" selection-start-line="176" selection-start-column="33" selection-end-line="176" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-startMatch.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3078">
-          <caret line="125" column="90" selection-start-line="125" selection-start-column="90" selection-end-line="125" selection-end-column="128" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/content-single.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="119" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/single.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1107">
-          <caret line="46" column="65" lean-forward="true" selection-end-line="98" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/archive.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="39" column="16" lean-forward="true" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-order.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7047">
-          <caret line="184" column="107" selection-start-line="184" selection-start-column="106" selection-end-line="184" selection-end-column="107" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/team.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/teamDetail.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/shops/shop.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1404">
-          <caret line="52" column="74" selection-start-line="52" selection-start-column="74" selection-end-line="52" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/messagesList.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/addAddress.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/address.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
-          <caret line="13" column="132" lean-forward="true" selection-start-line="13" selection-start-column="132" selection-end-line="13" selection-end-column="132" />
+          <caret line="13" column="112" selection-start-line="13" selection-start-column="112" selection-end-line="13" selection-end-column="112" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-includes/library/AliSms.class.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/match-lists.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="744">
-          <caret line="82" column="53" selection-start-line="82" selection-start-column="53" selection-end-line="82" selection-end-column="53" />
+        <state relative-caret-position="1350">
+          <caret line="50" column="35" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-admin/users.php">
+    <entry file="file://$PROJECT_DIR$/wp-includes/meta.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="492" column="44" selection-start-line="492" selection-start-column="36" selection-end-line="492" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-admin/user-new.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1264">
-          <caret line="115" column="80" selection-start-line="115" selection-start-column="80" selection-end-line="115" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-includes/pluggable.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="1186" column="41" selection-start-line="1186" selection-start-column="41" selection-end-line="1186" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_9.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="110" column="9" selection-start-line="110" selection-start-column="9" selection-end-line="110" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_8.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="919" column="9" selection-start-line="919" selection-start-column="9" selection-end-line="919" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-admin/includes/user.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="29" column="9" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
+        <state relative-caret-position="420">
+          <caret line="459" column="39" lean-forward="true" selection-start-line="459" selection-start-column="39" selection-end-line="459" selection-end-column="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-includes/user.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="636">
-          <caret line="2041" column="31" lean-forward="true" selection-start-line="2041" selection-start-column="31" selection-end-line="2041" selection-end-column="31" />
+        <state relative-caret-position="528">
+          <caret line="558" column="5" selection-start-line="558" selection-start-column="5" selection-end-line="558" selection-end-column="5" />
           <folding>
             <element signature="e#51#59#1" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/pluggable.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2484">
+          <caret line="97" column="33" selection-start-line="97" selection-start-column="33" selection-end-line="97" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-redis.php" />
+    <entry file="file://$PROJECT_DIR$/wp-includes/general-template.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63450">
+          <caret line="2355" column="16" selection-start-line="2355" selection-start-column="16" selection-end-line="2355" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Alignment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="50" column="49" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Fill.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="58" column="57" selection-start-line="58" selection-start-column="47" selection-end-line="58" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Border.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="51" column="43" selection-start-line="51" selection-start-column="39" selection-end-line="51" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/match.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" selection-start-line="1" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/directory/directory-calculation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2133">
+          <caret line="79" column="57" selection-start-line="79" selection-start-column="57" selection-end-line="79" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/match_student-lists.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" column="2" lean-forward="true" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/post.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="47088">
+          <caret line="1749" column="34" lean-forward="true" selection-start-line="1749" selection-start-column="34" selection-end-line="1749" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/library/AliSms.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4023">
+          <caret line="154" column="28" lean-forward="true" selection-start-line="154" selection-start-column="28" selection-end-line="154" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1755">
+          <caret line="132" lean-forward="true" selection-start-line="132" selection-end-line="132" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="96" column="26" selection-start-line="96" selection-start-column="21" selection-end-line="96" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-account-startMatch.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-directory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-logins.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="597" column="22" selection-start-line="597" selection-start-column="17" selection-end-line="597" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-news.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="614">
+          <caret line="85" column="7" lean-forward="true" selection-start-line="85" selection-start-column="7" selection-end-line="85" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-orders.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1100">
+          <caret line="172" column="5" lean-forward="true" selection-start-line="172" selection-start-column="5" selection-end-line="172" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="88" column="48" lean-forward="true" selection-start-line="88" selection-start-column="48" selection-end-line="88" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-payment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="75" column="35" selection-start-line="75" selection-start-column="29" selection-end-line="75" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-register.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-reset.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachList.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-safety.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10070">
-          <caret line="530" column="86" selection-start-line="530" selection-start-column="86" selection-end-line="530" selection-end-column="86" />
-        </state>
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-shops.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-student.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-system.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-timer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-29" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-teams.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="703">
-          <caret line="37" column="35" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
+        <state relative-caret-position="968">
+          <caret line="38" column="35" lean-forward="true" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/teams/coachDetail.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-wallet.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2470">
-          <caret line="130" column="38" lean-forward="true" selection-start-line="130" selection-start-column="38" selection-end-line="130" selection-end-column="38" />
+        <state relative-caret-position="540">
+          <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-download.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4158">
+          <caret line="154" column="30" selection-start-line="154" selection-start-column="30" selection-end-line="154" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1053">
+          <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-order.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14310">
+          <caret line="530" column="34" selection-start-line="530" selection-start-column="29" selection-end-line="530" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-teacher.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9956">
-          <caret line="524" column="96" selection-start-line="524" selection-start-column="89" selection-end-line="524" selection-end-column="96" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/team-student.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1482">
-          <caret line="78" column="6" lean-forward="true" selection-start-line="78" selection-start-column="6" selection-end-line="78" selection-end-column="6" />
+        <state relative-caret-position="6075">
+          <caret line="225" column="38" selection-start-line="225" selection-start-column="33" selection-end-line="225" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-team.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2413">
-          <caret line="127" column="54" lean-forward="true" selection-start-line="127" selection-start-column="54" selection-end-line="127" selection-end-column="54" />
+        <state relative-caret-position="1215">
+          <caret line="45" column="35" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Public/js/teacher-student.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="60" column="41" lean-forward="true" selection-start-line="60" selection-start-column="41" selection-end-line="60" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-directory.php">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="506" column="36" selection-start-line="506" selection-start-column="36" selection-end-line="506" selection-end-column="36" />
+        <state relative-caret-position="402">
+          <caret line="690" column="37" selection-start-line="690" selection-start-column="32" selection-end-line="690" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="13" column="98" selection-start-line="13" selection-start-column="88" selection-end-line="13" selection-end-column="98" />
+          <folding>
+            <element signature="n#style#0;n#h2#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-feedback.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4860">
+          <caret line="180" lean-forward="true" selection-start-line="180" selection-end-line="180" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
+        <state relative-caret-position="348">
+          <caret line="431" column="79" selection-start-line="431" selection-start-column="65" selection-end-line="431" selection-end-column="79" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-interface/nlyd-interface.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-import.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-57">
-          <caret line="22" column="90" lean-forward="true" selection-start-line="22" selection-start-column="90" selection-end-line="22" selection-end-column="90" />
+        <state relative-caret-position="675">
+          <caret line="25" column="21" lean-forward="true" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-newmatch.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="670" column="37" selection-start-line="670" selection-start-column="29" selection-end-line="670" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="101" column="85" selection-start-line="101" selection-start-column="85" selection-end-line="101" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-includes/wp-db.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="2092" column="10" selection-start-line="2092" selection-start-column="10" selection-end-line="2092" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-waitting.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastReverse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="384" column="3" lean-forward="true" selection-start-line="384" selection-start-column="3" selection-end-line="384" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-fastCalculation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="73" column="74" lean-forward="true" selection-start-line="73" selection-start-column="74" selection-end-line="73" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-answer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matching-reading.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="82" column="10" selection-start-line="82" selection-start-column="10" selection-end-line="82" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="937" column="43" lean-forward="true" selection-start-line="937" selection-start-column="43" selection-end-line="937" selection-end-column="43" />
+        <state relative-caret-position="891">
+          <caret line="33" column="34" selection-start-line="33" selection-start-column="34" selection-end-line="33" selection-end-column="34" />
           <folding>
-            <element signature="e#18802#19769#0#PHP" />
-            <element signature="e#19778#20444#0#PHP" />
-            <element signature="e#20804#21749#0#PHP" />
-            <element signature="e#21472#21749#0#PHP" />
-            <element signature="e#26017#27141#0#PHP" />
+            <element signature="e#8700#8722#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="417" column="18" selection-start-line="417" selection-start-column="18" selection-end-line="417" selection-end-column="18" />
-          <folding>
-            <element signature="e#707#3213#0#PHP" />
-            <element signature="e#3250#9074#0#PHP" />
-            <element signature="e#11601#15158#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastReverse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="79" column="30" lean-forward="true" selection-start-line="74" selection-start-column="16" selection-end-line="79" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastCalculation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="79" column="30" selection-start-line="79" selection-start-column="30" selection-end-line="79" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-reading.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="104" column="30" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-pokerRelay.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="153" column="30" selection-start-line="153" selection-start-column="30" selection-end-line="153" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-numberBattle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="82" column="30" selection-start-line="82" selection-start-column="30" selection-end-line="82" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/subject-fastScan.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="78" column="30" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
+        <state relative-caret-position="402">
+          <caret line="483" column="49" selection-start-line="483" selection-start-column="49" selection-end-line="483" selection-end-column="49" />
         </state>
       </provider>
     </entry>

@@ -712,6 +712,13 @@ class Match_Ajax
             wp_send_json_error(['info' => '操作失败']);
         }
     }
+
+    /**
+     * 录入脑力健将
+     */
+    public function insertBrainpower(){
+
+    }
 }
 
 new Match_Ajax();
