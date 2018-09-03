@@ -993,8 +993,23 @@ class Student_Matchs extends Student_Home
         $where = join(' and ',$where);
         $sql1 = "select fullname,telephone,concat_ws('',country,province,city,area,address) user_address from {$wpdb->prefix}my_address where {$where}";
         $address = $wpdb->get_row($sql1,ARRAY_A);
-        //print_r($sql1);
-        $data = array('match'=>$match,'match_project'=>$project,'player'=>$player,'address'=>$address);
+        //查询是否已经支付/已经存在订单
+        $order = $wpdb->get_row('SELECT id,pay_status FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' AND match_id='.$_GET['match_id'], ARRAY_A);
+        if($order){
+            if($order['pay_status'] == 2  || $order['pay_status'] == 3  || $order['pay_status'] == 4){
+                //已支付或待收货或已完成
+                $orderStatus['status'] = 2;
+            }elseif ($order['pay_status'] == 1){
+                //未支付
+                $orderStatus['status'] = 1;
+            }
+            $orderStatus['order_id'] = $order['id'];
+        }else{
+            $orderStatus['status'] = 0;
+            $orderStatus['order_id'] = 0;
+        }
+//        print_r($order);
+        $data = array('match'=>$match,'match_project'=>$project,'player'=>$player,'address'=>$address, 'orderStatus' => $orderStatus);
 
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
