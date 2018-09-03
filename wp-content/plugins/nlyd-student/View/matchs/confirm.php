@@ -147,7 +147,16 @@
                     <input type="hidden" name="action" value="entry_pay">
                     <input type="hidden" name="_wpnonce" id="payForm" value="<?=wp_create_nonce('student_go_pay_code_nonce');?>">
                     <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
-                    <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</div>
+
+                        <?php if($orderStatus['status'] == 1){ ?>
+                            <div class="a-btn" id="" lay-filter="pay-formbtn" lay-submit="">查看订单 </div>
+                        <?php }elseif($orderStatus['status'] == 2){ ?>
+                            <div class="a-btn" id="" lay-filter="pay-formbtn" lay-submit="">已报名 </div>
+                        <?php }elseif($orderStatus['status'] == 0){ ?>
+                            <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付 </div>
+                        <?php } ?>
+
+
                 </form>
             </div>
         </div>           
