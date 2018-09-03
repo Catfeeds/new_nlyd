@@ -87,7 +87,7 @@
                                     <span >选手姓名：</span>
                                     <?php if(!empty($player['real_name'])){?>
                                     <span class="c_black"><?=$player['real_name']?></span>
-                                    <span class="nl-match-rz">已认证</span>
+                                    <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
                                     <?php }else{?>
                                         <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
                                     <?php }?>
