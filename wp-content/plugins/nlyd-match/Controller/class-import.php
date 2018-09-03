@@ -7,7 +7,7 @@ class Import {
     }
 
     public function register_order_menu_page(){
-        add_menu_page('导入user', '导入user', 'administrator', 'Import',array($this,'users'),'dashicons-businessman',99);
+        add_menu_page('导入user', '导入user', 'administrator', 'import',array($this,'users'),'dashicons-businessman',99);
 //        add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
 //        add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
 //        add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));

@@ -97,11 +97,12 @@ if(!class_exists('MatchController')){
             //添加参赛学员菜单
             include_once(match_controller_path.'class-match_student.php');
 
+            //添加脑力健将菜单
+            include_once(match_controller_path.'class-brainpower.php');
+
             //添加导入数据菜单
             include_once(match_controller_path.'class-import.php');
 
-            //添加脑力健将菜单
-            include_once(match_controller_path.'class-brainpower.php');
 
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
@@ -348,6 +349,7 @@ if(!class_exists('MatchController')){
             $columns['author'] = '发布人';
             $columns['students'] = '报名学员';
             $columns['match_ranking'] = '比赛排名';
+            $columns['match_brainpower'] = '脑力健将';
             $columns['slogan'] = '口号';
             $columns['times'] = '比赛时间';
             $columns['time_slot'] = '报名时间段';
@@ -420,6 +422,14 @@ if(!class_exists('MatchController')){
                 case 'match_ranking':
                     if($row['match_status'] == -3){
                         echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+                    }else{
+                        echo '比赛未结束';
+                    }
+
+                    break;
+                case 'match_brainpower':
+                    if($row['match_status'] == -3){
+                        echo '<a href="admin.php?page=brainpower-join_directory&match_id='.$id.'">管理名录</a>';
                     }else{
                         echo '比赛未结束';
                     }

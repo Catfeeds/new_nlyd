@@ -10,93 +10,144 @@ class Brainpower
 
     public function register_order_menu_page(){
 
-        add_menu_page('脑力健将', '意见反馈', 'administrator', 'brainpower',array($this,'index'),'dashicons-businessman',99);
-        add_submenu_page('brainpower','查看详情','查看详情','administrator','brainpower-intro',array($this,'intro'));
+        add_menu_page('脑力健将', '脑力健将', 'administrator', 'brainpower',array($this,'index'),'dashicons-businessman',99);
+        add_submenu_page('brainpower','加入名录','加入名录','administrator','brainpower-join_directory',array($this,'joinDirectory'));
 //        add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
 //        add_submenu_page('order','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
     public function index(){
+        die;
+    }
+
+
+    /**
+     * 加入名录
+     */
+    public function joinDirectory(){
         global $wpdb;
-        $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
-        $pageSize = 20;
-        $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS id,content,contact FROM '.$wpdb->prefix.'feedback ORDER BY created_time DESC LIMIT '.$start.','.$pageSize ,ARRAY_A);
-        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
-        $pageAll = ceil($count['count']/$pageSize);
-        $pageHtml = paginate_links( array(
-            'base' => add_query_arg( 'cpage', '%#%' ),
-            'format' => '',
-            'prev_text' => __('&laquo;'),
-            'next_text' => __('&raquo;'),
-            'total' => $pageAll,
-            'current' => $page
-        ));
+        $match_id = intval($_GET['match_id']);
+
+        //根据比赛id查询比赛每一项目得前十名
+        $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'match_questions');
+
+        //查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
+
+        //插入数据数组生成
+
+        //开始插入数据
+
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">意见反馈</h1>
+            <h1 class="wp-heading-inline">用户</h1>
 
-                <input type="hidden" id="_wpnonce" name="_wpnonce" value="23f0952b96"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>
 
-<!--                    <div class="alignleft actions bulkactions">-->
-<!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
-<!--                    </div>-->
-<!--                    <div class="alignleft actions">-->
-<!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
-<!--                        <select name="new_role" id="new_role">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">		</div>-->
-                    <div class="tablenav-pages one-page">
-                        <?=$pageHtml?>
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤用户列表</h2><ul class="subsubsub">
+                <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（10）</span></a> |</li>
+                <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>
+                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（6）</span></a> |</li>
+                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（3）</span></a></li>
+            </ul>
+            <form method="get">
+
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="user-search-input" name="s" value="">
+                    <input type="submit" id="search-submit" class="button" value="搜索用户"></p>
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="437465374e"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+
+                    <div class="alignleft actions bulkactions">
+                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="delete">删除</option>
+                        </select>
+                        <input type="submit" id="doaction" class="button action" value="应用">
                     </div>
+                    <div class="alignleft actions">
+                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>
+                        <select name="new_role" id="new_role">
+                            <option value="">将角色变更为…</option>
+
+                            <option value="subscriber">学生</option>
+                            <option value="contributor">投稿者</option>
+                            <option value="author">作者</option>
+                            <option value="editor">教练</option>
+                            <option value="administrator">管理员</option>		</select>
+                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">		</div>
+                    <div class="tablenav-pages one-page"><span class="displaying-num">11个项目</span>
+                        <span class="pagination-links"><span class="tablenav-pages-navspan" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+<span class="paging-input">第<label for="current-page-selector" class="screen-reader-text">当前页</label><input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="1" aria-describedby="table-paging"><span class="tablenav-paging-text">页，共<span class="total-pages">1</span>页</span></span>
+<span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">»</span></span></div>
                     <br class="clear">
                 </div>
                 <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column">
-                            <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                            <label class="screen-reader-text" for="cb-select-all-1">全选</label
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="" class="manage-column column-username column-primary sortable desc">
-                            <a href="javascript:;"><span>联系方式</span><span class="sorting-indicator"></span></a>
+                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" id="" class="manage-column column-name">内容</th>
+                        <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="email" class="manage-column column-email sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=email&amp;order=asc"><span>电子邮件</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" id="role" class="manage-column column-role">角色</th>
+                        <th scope="col" id="posts" class="manage-column column-posts num">文章</th>
+                        <th scope="col" id="mycred_default" class="manage-column column-mycred_default sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=mycred_default&amp;order=asc"><span>积分</span><span class="sorting-indicator"></span></a>
+                        </th>
+                    </tr>
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                        <?php foreach ($rows as $row){ ?>
-                            <tr id="user-5" data-id="<?=$row['id']?>">
-                                <th scope="row" class="check-column">
-                                    <label class="screen-reader-text" for="user_5"></label>
-                                    <input type="checkbox" name="" id="" class="subscriber" value="">
-                                </th>
-                                <td class="username column-username has-row-actions column-primary" data-colname="联系方式">
-                                    <strong><a href="<?php if(is_mobile()){ ?>tel:<?=$row['contact']?><?php }else{ ?> javascript:; <?php } ?>"><?=$row['contact']?></a></strong><br>
-                                    <div class="row-actions">
-                                        <span class="delete"><a class="submitdelete rem" href="javascript:;">删除</a> | </span>
-                                        <span class="view"><a href="?page=feedback-intro&id=<?=$row['id']?>" aria-label="阅读魏, 海东的文章">查看</a></span>
-                                    </div>
-                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
-                                </td>
-                                <td class="name column-name" data-colname="内容"><span aria-hidden="true"><?=$row['content']?></span><span class="screen-reader-text"></span></td>
 
-                            </tr>
+                    <tr id="user-12">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="user_12">选择1111111111</label>
+                            <input type="checkbox" name="users[]" id="user_12" class="editor" value="12">
+                        </th>
+                        <td class="username column-username has-row-actions column-primary" data-colname="用户名">
+                            <img alt="" src="http://2.gravatar.com/avatar/b697aceb6d93a06b47ed9eabdd504985?s=32&amp;d=mm&amp;r=g" srcset="http://2.gravatar.com/avatar/b697aceb6d93a06b47ed9eabdd504985?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32">
+                            <strong>
+                                <a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=12&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">1111111111</a>
+                            </strong><br>
+                            <div class="row-actions">
+                                <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=12&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>
+                                <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=12&amp;_wpnonce=437465374e">删除</a> | </span>
+                                <span class="view"><a href="http://127.0.0.1/nlyd/author/1111111111/" aria-label="阅读66, dd的文章">查看</a></span>
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="name column-name" data-colname="姓名">dd 66</td>
+                        <td class="email column-email" data-colname="电子邮件">
+                            <a href="mailto:456789@qq.coms">456789@qq.coms</a>
+                        </td>
+                        <td class="role column-role" data-colname="角色">教练</td>
+                        <td class="posts column-posts num" data-colname="文章">0</td>
+                        <td class="mycred_default column-mycred_default" data-colname="积分">
+                            <div id="mycred-user-12-balance-mycred_default"> <span>10</span> </div>
+                            <div id="mycred-user-12-balance-mycred_default"><small style="display:block;"><strong>Total</strong>: <span>10</span></small></div>
+                            <div class="row-actions">
+                                <span class="history"><a href="http://127.0.0.1/nlyd/wp-admin/admin.php?page=mycred&amp;user=12">历史记录</a> | </span>
+                                <span class="adjust">
+                                    <a href="javascript:void(0)" class="mycred-open-points-editor" data-userid="12" data-current="10" data-total="10" data-type="mycred_default" data-username="66, dd" data-zero="0">调整</a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                  </tbody>
 
-                        <?php } ?>
 
-                    </tbody>
                     <tfoot>
                     <tr>
                         <td class="manage-column column-cb check-column">
@@ -104,111 +155,55 @@ class Brainpower
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
                         <th scope="col" class="manage-column column-username column-primary sortable desc">
-                            <a href="javascript:;"><span>联系方式</span><span class="sorting-indicator"></span></a>
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" class="manage-column column-name">内容</th>
+                        <th scope="col" class="manage-column column-name">姓名</th>
+                        <th scope="col" class="manage-column column-email sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=email&amp;order=asc"><span>电子邮件</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" class="manage-column column-role">角色</th>
+                        <th scope="col" class="manage-column column-posts num">文章</th>
+                        <th scope="col" class="manage-column column-mycred_default sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=mycred_default&amp;order=asc"><span>积分</span><span class="sorting-indicator"></span></a>
+                        </th>
                     </tr>
                     </tfoot>
 
                 </table>
                 <div class="tablenav bottom">
-<!---->
-<!--                    <div class="alignleft actions bulkactions">-->
-<!--                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
-<!--                    </div>-->
-<!--                    <div class="alignleft actions">-->
-<!--                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>-->
-<!--                        <select name="new_role2" id="new_role2">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>-->
-<!--                    <br class="clear">-->
-<!--                </div>-->
-                    <div class="tablenav-pages one-page">
-                        <?=$pageHtml?>
+
+                    <div class="alignleft actions bulkactions">
+                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
+                            <option value="-1">批量操作</option>
+                            <option value="delete">删除</option>
+                        </select>
+                        <input type="submit" id="doaction2" class="button action" value="应用">
                     </div>
+                    <div class="alignleft actions">
+                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>
+                        <select name="new_role2" id="new_role2">
+                            <option value="">将角色变更为…</option>
+
+                            <option value="subscriber">学生</option>
+                            <option value="contributor">投稿者</option>
+                            <option value="author">作者</option>
+                            <option value="editor">教练</option>
+                            <option value="administrator">管理员</option>		</select>
+                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>
+                    <div class="tablenav-pages one-page"><span class="displaying-num">11个项目</span>
+                        <span class="pagination-links"><span class="tablenav-pages-navspan" aria-hidden="true">«</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>
+<span class="screen-reader-text">当前页</span><span id="table-paging" class="paging-input"><span class="tablenav-paging-text">第1页，共<span class="total-pages">1</span>页</span></span>
+<span class="tablenav-pages-navspan" aria-hidden="true">›</span>
+<span class="tablenav-pages-navspan" aria-hidden="true">»</span></span></div>
+                    <br class="clear">
+                </div>
+            </form>
+
             <br class="clear">
         </div>
         <?php
     }
-
-    /**
-     * 详情
-     */
-    public function intro(){
-        global $wpdb;
-        $id = intval($_GET['id']);
-        $row = $wpdb->get_row('SELECT contact,content,images FROM '.$wpdb->prefix.'feedback WHERE id='.$id, ARRAY_A);
-//        var_dump($row);
-        ?>
-            <div id="wpbody-content" aria-label="主内容" tabindex="0">
-                <div class="wrap" id="profile-page">
-
-                    <h1 class="wp-heading-inline">反馈详情</h1>
-
-
-
-                    <p>
-                    <input type="hidden" name="from" value="profile">
-                    <input type="hidden" name="checkuser_id" value="1">
-                    </p>
-
-                    <table class="form-table">
-                    </table>
-
-                    <table class="form-table">
-                    <tbody>
-                    <tr class="user-description-wrap">
-                        <th><label for="">联系方式</label></th>
-                        <td>
-
-                               <?=$row['contact']?>
-                        </td>
-                    </tr>
-                    <tr class="user-description-wrap">
-                        <th><label for="description">内容</label></th>
-                        <td>
-                            <div name="description" id="description">
-
-                               <?=$row['content']?>
-                            </div>
-                            <p class="description"></p>
-                        </td>
-                    </tr>
-
-                    <tr class="user-profile-picture">
-                        <th>资料图片</th>
-                        <td>
-                        <?php foreach (unserialize($row['images']) as $img){ ?>
-                            <img alt="" src="<?=$img?>" srcset="" class="avatar avatar-96 photo avatar-default" width="<?php if (is_mobile()){ ?><?php echo '90%'; }else{ ?><?php echo '60%'; } ?>">		<p class="description"></p>
-
-                        <?php } ?>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                    </table>
-
-
-
-
-
-                    <input type="hidden" name="action" value="update">
-                    <input type="hidden" name="user_id" id="user_id" value="3">
-                </div>
-            <div class="clear"></div></div>
-        <?php
-    }
-
 
 
     /**

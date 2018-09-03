@@ -2157,6 +2157,10 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }
         global $wpdb,$current_user;
+        if($current_user->ID < 1 || !$current_user->ID){
+            wp_send_json_error(['info' => '您暂未登录', 'url' => home_url('logins')]);
+        }
+
         $otderSn = trim($_POST['serialnumber']);
         $payType = $_POST['pay_type'];
 
@@ -2170,7 +2174,8 @@ class Student_Ajax
         require_once 'class-student-payment.php';
         switch ($payType){
             case 'wxh5pay':
-
+                //TODO 微信支付暂未开放
+                wp_send_json_error(array('info'=>'微信支付暂未开放'));
                 //请求数据
                 //1.统一下单方法
                 $params['notify_url'] = home_url('payment/wxpay/'); //商品描述
