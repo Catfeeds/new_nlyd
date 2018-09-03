@@ -39,28 +39,86 @@ class Brainpower
 
         //1.根据比赛id查询比赛每一项目得前十名
         //1.1 查询比赛类别, 用于分组
-        $projectGroup = $wpdb->get_results('SELECT mq.project_id,p.post_title FROM '.$wpdb->prefix.'match_questions AS mq 
+        $projectGroup = $wpdb->get_results('SELECT mq.project_id,p.post_title,post_parent FROM '.$wpdb->prefix.'match_questions AS mq 
         LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$match_id.' GROUP BY mq.project_id', ARRAY_A);
 
-        //1.2查询每一组的前十名
+        //1.2查询每个类别每个学员的分数
+        $cateData = [];
         foreach ($projectGroup as $pgk => $pgv){
-            $projectGroup[$pgk]['student'] = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,SUM(mq.my_score) AS my_score FROM '.$wpdb->prefix.'match_questions AS mq 
+            $res = $wpdb->get_results('SELECT u.ID AS user_id,u.user_login,u.display_name,u.user_mobile,SUM(mq.my_score) AS my_score,mc.coach_id,mq.surplus_time FROM '.$wpdb->prefix.'match_questions AS mq 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
-            WHERE mq.match_id='.$match_id.' AND mq.project_id='.$pgv['project_id'].' GROUP BY mq.user_id ORDER BY my_score DESC limit 0,10', ARRAY_A);
-        }
-//        echo '<pre />';
-//        print_r($projectGroup);
+            LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=mq.user_id AND mc.major=1 AND mc.apply_status=2  
+            WHERE mq.match_id='.$match_id.' AND mq.project_id='.$pgv['project_id'].' GROUP BY mq.user_id', ARRAY_A);
 
+            foreach ($res as $rv){
+                if(isset($cateData[$pgv['post_parent']][$rv['user_id']])){
+                    $cateData[$pgv['post_parent']][$rv['user_id']]['my_score']  += $rv['my_score'];
+
+                }else{
+                    $cateData[$pgv['post_parent']][$rv['user_id']] = [
+                        'user_id' => $rv['user_id'],
+                        'project_id' => $pgv['post_parent'],
+                        'coach_id' => $rv['coach_id'],
+                        'my_score' => $rv['my_score'],
+                        'match' => serialize(['match_id' => $match_id, 'match_level' => 1]),
+                    ];
+                }
+            }
+        }
+
+        //1.3 根据分数排序,并且截取前十
+        $dataArr = [];
+        foreach ($cateData as $k => $v){
+            //索引变为自增,方便排序
+            foreach ($v as $v2){
+                $dataArr[$k][] = $v2;
+            }
+            //开始排名
+            for ($i = 0; $i < count($dataArr[$k]); ++$i){
+                for ($j = $i+1; $j <= count($dataArr[$k]); ++$j){
+                    if($dataArr[$k][$i]['my_score'] < $dataArr[$k][$j]['my_score']){
+                        $a = $dataArr[$k][$i];
+                        $dataArr[$k][$i] = $dataArr[$k][$j];
+                        $dataArr[$k][$j] = $a;
+                    }elseif($dataArr[$k][$i]['my_score'] == $dataArr[$k][$j]['my_score']){
+                        //分数相同,算时间
+                        if($dataArr[$k][$i]['surplus_time'] < $dataArr[$k][$j]['surplus_time']){
+                            $a = $dataArr[$k][$i];
+                            $dataArr[$k][$i] = $dataArr[$k][$j];
+                            $dataArr[$k][$j] = $a;
+                        }elseif ($dataArr[$k][$i]['surplus_time'] == $dataArr[$k][$j]['surplus_time']){
+                            //时间相同,算正确率
+
+
+                            //正确率相同,看脸
+                        }
+                    }
+                }
+            }
+            $dataArr[$k] = array_slice($dataArr[$k], 0, 10);
+        }
+
+
+
+
+
+        echo '<pre />';
+        print_r($dataArr);
+        die;
         //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别 TODO 级别怎么来的
 
 
-        //3.插入数据数组生成
-
-
-        'insert  into `sckm_ads`(`id`,`ad_position_id`,`title`,`image`,`image1`,`thumb`,`link`,`content`,`is_verify`,`list_order`) values (15,1,\'成词高与英国驻华大使吴百纳女爵士\',\'upload/Ad/201806/15488660155b18d9b78026b.jpg\',NULL,\'\',\'\',NULL,1,2),(14,1,\'IMAT国际记忆水平测试在青岛启动\',\'upload/Ad/201805/6907480375af2ab47f0d5a.png\',NULL,\'\',\'  http://news.xinhuanetqy.com/politics/2018-05/07/c_21908.html\',NULL,1,1),(3,2,\'be seen\',\'upload/Ad/201702/15250056658acf4137a671.jpg\',NULL,\'\',\'\',NULL,1,3),(4,2,\'be heard\',\'upload/Ad/201702/35440681858acf45d1a81b.jpg\',NULL,\'\',\'\',NULL,1,2),(5,2,\'be relevant\',\'upload/Ad/201702/128407073558acf479294d8.jpg\',NULL,\'\',\'\',NULL,1,1),(6,2,\'be informed\',\'upload/Ad/201702/144758823058acf4a21f21f.jpg\',NULL,\'\',\'\',NULL,1,0),(7,3,\'第一张\',\'upload/Ad/201702/111309358958ad246b9bf68.jpg\',NULL,\'\',\'\',NULL,1,NULL),(8,4,\'第一张\',\'upload/Ad/201705/1015397977591fa2edb11a4.jpg\',NULL,\'\',\'\',NULL,1,NULL),(9,4,\'品牌简介\',\'upload/Ad/201705/55399597591fa2f3d1e73.jpg\',NULL,\'\',\'\',NULL,1,NULL),(10,5,\'第一张\',\'upload/Ad/201702/20090666258b51f439b81e.jpg\',NULL,\'\',\'\',NULL,1,NULL),(11,1,\'脑力中国获脑力运动史上最大单笔投资\',\'upload/Ad/201712/18847057795a463648db5f4.jpg\',NULL,\'\',\'http://m.gjnlyd.com/info/43\',NULL,1,0);'
-
+        //3.插入数据sql生成
+        $sql = 'INSERT INTO '.$wpdb->prefix.'brainpower (user_id,category_id,major_coach_id,`level`,`match`,`range`) VALUES ';
+        foreach ($projectGroup as $pgv){
+            $match = serialize(['match_id' => $match_id, 'match_level' => 3]);
+            foreach ($pgv['student'] as $sv){
+                $sql .= "('{$sv['ID']}','{$pgv['project_id']}','{$sv['coach_id']}','2','{$match}','1'),";
+            }
+        }
+        $sql = substr($sql,0,strlen($sql)-1);
         //4.开始插入数据
-
+        $wpdb->query($sql);
 
         ?>
         <div class="wrap">
