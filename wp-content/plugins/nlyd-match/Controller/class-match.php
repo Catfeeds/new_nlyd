@@ -470,25 +470,31 @@ class Match
                 switch ($this->meta['match_status']) {
                     case -3:
                         $text = '已结束';
+                        $className = '';
                         break;
                     case -2:
                         $text = '等待开赛';
+                        $className = 'c_blue';
                         break;
                     case -1:
                         $text = '未开始';
+                        $className = '';
                         break;
                     case 1:
                         $text = '报名中';
+                        $className = 'c_blue';
                         break;
                     case 2:
                         $text = '进行中';
+                        $className = 'c_orange';
                         break;
                     default:
                         $text = '未开始';
+                        $className = '';
                         break;
                 }
                 ?>
-                <span class="layui-input"><?=$text?></span>
+                <span class="layui-input <?=$className?>"><?=$text?></span>
                 <!--<input title="已结束" type="radio" name="match[match_status]" value="-3" <?/*=$this->meta['match_status'] == -3?'checked':'';*/?> >
                 <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?/*=$this->meta['match_status'] == -2?'checked':'';*/?> >
                 <input title="未开始" type="radio" name="match[match_status]" value="-1" <?/*=$this->meta['match_status'] == -1 || empty($this->meta['match_status'])?'checked':'';*/?> >
