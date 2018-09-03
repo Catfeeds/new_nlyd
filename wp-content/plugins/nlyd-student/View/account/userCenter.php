@@ -20,7 +20,7 @@
         </div>
         <div class="nl-foot-name">首页</div>
     </a>
-    <a class="nl-foot-item" href="<?=home_url('/account/matchList');?>">
+    <a class="nl-foot-item disabled_a" href="<?=home_url('/account/matchList');?>">
         <div class="nl-foot-icon">
             <div class="footer-train"></div>
         </div>
@@ -32,7 +32,7 @@
         </div>
         <div class="nl-foot-name">比赛</div>
     </a>
-    <a class="nl-foot-item">
+    <a class="nl-foot-item disabled_a">
         <div class="nl-foot-icon">
             <div class="footer-kaoji"></div>
         </div>
@@ -131,14 +131,14 @@
                         </div>
                         <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
-                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/matchList');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的训练</div>
                     </a>
-                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/course');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>
@@ -152,28 +152,28 @@
                         </div>
                         <div class="userCenter-detail-foot">我的教练</div>
                     </a>
-                    <a class="c_black8" data-tips="1" href="<?=home_url('orders');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的订单</div>
                     </a>
-                    <a class="c_black8" data-tips="1">
+                    <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的考级</div>
                     </a>
-                    <a class="c_black8" data-tips="1">
+                    <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a class="c_black8" data-tips="1" href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
@@ -187,7 +187,7 @@
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a class="c_black8 no_border" data-tips="1" href="<?=home_url('/teams');?>">
+                    <a class="c_black8 no_border disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
@@ -244,12 +244,6 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
 });
 <?php } ?>
 jQuery(document).ready(function($) {
-    $('.userCenter-detail a').click(function(){
-        if($(this).attr('data-tips')){
-            $.alerts('当前功能暂未开放，敬请期待')
-            return false;
-        }
-    })
     $('.userCenter-main').click(function(){
         $("#file").click()
     })

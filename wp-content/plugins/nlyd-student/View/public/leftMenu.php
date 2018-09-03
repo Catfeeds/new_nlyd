@@ -23,7 +23,7 @@
         </div>
         <div class="width-margin layui-row menu-wrapper">
             <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-            <a href="<?=home_url('/account/recentMatch');?>">
+                <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
                             </div>
@@ -31,63 +31,63 @@
                         </div>
                         <div class="userCenter-detail-foot">我的比赛</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/matchList');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的训练</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/course');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的课程</div>
                     </a>
-                    <a href="<?=home_url('/teams/myCoach');?>">
+                    <a class="c_black8" href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-coach">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的教练</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('orders');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的订单</div>
                     </a>
-                    <a data-tips="1">
+                    <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的考级</div>
                     </a>
-                    <a data-tips="1">
+                    <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a data-tips="1" href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a class="no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8 no_border" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a data-tips="1" class="no_border" href="<?=home_url('/teams');?>">
+                    <a class="c_black8 no_border disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
