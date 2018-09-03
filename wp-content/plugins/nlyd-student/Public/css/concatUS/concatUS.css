@@ -37,6 +37,6 @@ p.concat-info span{
 }
 .img-detail{
     float: left;
-    margin-left: 17px;
+    text-indent: 0.10rem;
     margin-top: 15px;
 }
