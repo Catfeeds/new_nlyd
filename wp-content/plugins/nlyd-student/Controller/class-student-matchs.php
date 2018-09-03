@@ -421,10 +421,11 @@ class Student_Matchs extends Student_Home
              $this->match_id = $row['match_id'];
          }
 
+         /*print_r($this->next_project);
 
+         print_r($this->current_project);*/
 
          if(!empty($this->next_project)){
-
              $data['project_title'] = $this->next_project['post_title'];
              $data['project_id'] = $this->next_project['match_project_id'];
              $data['first_time'] = $this->next_project['first_time'];
@@ -432,16 +433,19 @@ class Student_Matchs extends Student_Home
              $data['count_down'] = !empty($this->next_project['first_time']) ? strtotime($this->next_project['project_start_time'])-get_time() : strtotime($this->next_project['project_end_time'])-get_time();
              $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->next_project['match_id'].'/project_id/'.$this->next_project['match_project_id'].'/match_more/1');
              $data['project_num'] = array_search($this->next_project['match_project_id'],$this->project_id_array)+1;
+             $data['next_project'] = true;
              //print_r($this->next_project);
 
          }else{
 
              $data['match_type'] = '';
              $data['match_title'] = $this->match_title;
-             $data['project_title'] = $this->current_project['post_title'];
+             $data['project_title'] = $this->current_project['project_title'];
              $data['project_id'] = $this->current_project['project_id'];
              $data['count_down'] = $this->current_project['project_end_time']-get_time();
-             $data['more_num'] = $this->current_project['match_more']+1;
+             $data['more_num'] = $this->current_project['match_more'];
+             $data['next_more_num'] = $this->current_project['match_more']+1;
+             $data['project_num'] = array_search($this->current_project['project_id'],$this->project_id_array)+1;
              $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->current_project['match_id'].'/wait/1');
          }
 
@@ -582,8 +586,10 @@ class Student_Matchs extends Student_Home
                     )
                 );
                 $question = $posts[0];
-                //print_r($question);
-
+                if(empty($question)){
+                    $this->get_404('暂无比赛题目,联系管理员录题');
+                    return;
+                }
                 $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
 
                 //获取当前题目所有问题
@@ -700,12 +706,15 @@ class Student_Matchs extends Student_Home
                 $data['child_type_down'] = $this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more) - get_time();
                 $data['child_type'] = 0;
 
-            }elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more))){
+            }
+            elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more))){
 
                 $data['child_type_down'] = $this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more) - get_time();
                 $data['child_type'] = 1;
 
-            }elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more))){
+
+            }
+            elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more))){
 
                 $data['child_type_down'] = $this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more) - get_time();
                 $data['child_type'] = 2;
@@ -751,11 +760,11 @@ class Student_Matchs extends Student_Home
                 $first_child = $child_count_down['even_add'];
                 $two_child = $first_child+$child_count_down['add_and_subtract'];
                 $three_child = $two_child+$child_count_down['wax_and_wane'];
-                //if($_GET['test'] == 1){
+                if($_GET['test'] == 1){
                 $this->redis->del('even_add'.$current_user->ID.'_'.$this->current_more);
                 $this->redis->del('add_and_subtract'.$current_user->ID.'_'.$this->current_more);
                 $this->redis->del('wax_and_wane'.$current_user->ID.'_'.$this->current_more);
-                //}
+                }
                 if(empty($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more)) && empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more)) ){
                     $this->redis->setex('even_add'.$current_user->ID.'_'.$this->current_more,$first_child,$first_child+$new_time);
                     $first = true;
@@ -773,7 +782,7 @@ class Student_Matchs extends Student_Home
 
                 //leo_dump($this->default_count_down);die;
             }else if($this->project_alias == 'kysm'){
-
+                //print_r($this->project_alias);
                 if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
                     $child_count_down = $this->project_key_array[$this->project_id]['child_count_down'];
                 }elseif (!empty($child_count_down)){
@@ -948,21 +957,27 @@ class Student_Matchs extends Student_Home
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
         if(in_array($this->project_alias,array('wzsd'))){
-            $len = count($questions_answer);
-            $success_len = 0;
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
 
-            foreach ($questions_answer as $k=>$val){
-                $arr = array();
-                $answerArr = array();
-                foreach ($val['problem_answer'] as $key => $v){
-                    if($v == 1){
-                        $arr[] = $key;
-                        $answerArr[] = $key;
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
                     }
-                }
-                $questions_answer[$k]['problem_answer'] = $answerArr;
-                if(isset($my_answer[$k])){
-                    if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
                 }
             }
 
@@ -990,10 +1005,10 @@ class Student_Matchs extends Student_Home
         }
 
         //判断是否有新的比赛轮次或者新的项目
-        print_r($this->current_project);
+        /*print_r($this->current_project);
         print_r($this->next_project);
         print_r($this->project_end_time);
-        print_r(date_i18n('Y-m-d,H:i:s'));
+        print_r(date_i18n('Y-m-d,H:i:s'));*/
 
         if(empty($this->next_project)){
             $match_more = $this->current_project['match_more']+1;

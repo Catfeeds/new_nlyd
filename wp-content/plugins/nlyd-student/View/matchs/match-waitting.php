@@ -19,14 +19,14 @@
                 </div> 
                 <?php }else{ ?>
                  <div class="count-wrapper">
-                    <?php if(!empty($next_project)){ ?>
+                    <?php if($next_project){ ?>
                         <p class="tips fs_16">
                             <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                         </p>
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一轮等待页面</a>
                     <?php }else{ ?>
                         <p class="tips fs_16">
-                            <span class="c_blue"><?=$last_title?>第<?=$last_more?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
+                            <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
                         </p>
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一项等待页面</a>
                     <?php } ?>
