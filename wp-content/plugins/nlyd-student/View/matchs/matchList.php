@@ -119,6 +119,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
+                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签
@@ -134,12 +135,24 @@ jQuery(function($) {
                                     }
                                     if(v.user_id==null){//未报名（未登录）
                                         rightBtn=""
+                                    }else{
+                                        if(v.right_url.length>0){
+                                            rightBtn='<div class="nl-match-button last-btn">'
+                                                        +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                    +'</div>'
+                                        }
                                     }
                                 }else{
                                     if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                                +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
-                                            +'</div>'
+                                                    +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                +'</div>'
+                                        if(v.match_status==1 && v.user_id!=null){//报名中已报名
+                                            rightBtn='<div class="nl-match-button last-btn">'
+                                                        +'<a class="bg_gradient_grey">已报名参赛</a>'
+                                                    +'</div>'
+                                            
+                                        }
                                     }
                                 }
                                 var onBtn="" ;
