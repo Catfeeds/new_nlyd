@@ -97,6 +97,12 @@ if(!class_exists('MatchController')){
             //添加参赛学员菜单
             include_once(match_controller_path.'class-match_student.php');
 
+            //添加导入数据菜单
+            include_once(match_controller_path.'class-import.php');
+
+            //添加脑力健将菜单
+            include_once(match_controller_path.'class-brainpower.php');
+
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }

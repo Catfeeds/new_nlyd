@@ -11,7 +11,7 @@ class Match_student {
         add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
         add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
         add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));
-//        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
+//        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
 
 
@@ -554,10 +554,7 @@ class Match_student {
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
-                    <div class="alignleft actions bulkactions">
 
-                        <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
-                    </div>
                     <div class="alignleft actions">
                         <label class="screen-reader-text" for="new_role">将角色变更为…</label>
                         <select name="age_group" id="age_group">
@@ -571,10 +568,35 @@ class Match_student {
                         <input type="submit" name="changeit" id="changeit" class="button" value="更改">
 
                     </div>
-                    <br class="clear">
+                    <div class="alignleft actions bulkactions">
 
-                </div>
-                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                        <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
+                    </div>
+
+                    <br class="clear">
+                    <br class="clear">
+                    <div class="alignleft actions">
+                        <label class="screen-reader-text" for="new_role">脑力健将</label>
+                        <select name="age_group" id="age_group">
+
+                            <option value="0" <?=$group == 0 ? 'selected="selected"' : ''?>>速记类</option>
+                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>速度类</option>
+                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>速算类</option>
+                        </select>
+                        <select name="age_group" id="age_group">
+
+                            <option value="0" <?=$group == 0 ? 'selected="selected"' : ''?>>百分比</option>
+                            <option value="1" <?=$group == 1 ? 'selected="selected"' : ''?>>人数</option>
+                        </select>
+
+
+                        数值: <input type="text" id>
+                        <input type="button" name="changeit" id="enterBrainpower" class="button" value="确定脑力健将">
+                    </div>
+
+                </div>    <br class="clear">
+                <h2 class="screen-reader-text">用户列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column">
@@ -830,7 +852,7 @@ class Match_student {
      */
     public function register_scripts(){
         switch ($_GET['page']){
-            case 'match_student-add_student':
+            case 'match_student-add_student' or 'match_student-ranking':
                 wp_register_script('list-js',match_js_url.'match_student-lists.js');
                 wp_enqueue_script( 'list-js' );
 //                wp_register_style('list-css',match_css_url.'order-lists.css');
