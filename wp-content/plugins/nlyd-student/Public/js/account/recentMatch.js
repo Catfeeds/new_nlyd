@@ -14,20 +14,26 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
+                    console.log(res)
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    var isMe='';//标签
+                                    var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
                                     var match_status='c_blue';//比赛中高亮
                                     var rightBtn='';   
-                                    if(v.user_id!=null){//我报名参加的赛事
-                                        isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
-                                    }
                                     if(v.match_status==2){//比赛进行中
                                         match_status='c_orange';   
                                     }
-                                    if(v.right_url.length>0 && (v.match_status==2 || v.user_id==null)){
+                                    var className="";
+                                    if(v.match_status==1){//报名中
+                                        className='bg_gradient_grey';
+                                    }
+                                    if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                                    +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                            +'<a class="'+className+'" href="'+v.right_url+'">'+v.button_title+'</a>'
+                                        +'</div>'
+                                    }else{
+                                        rightBtn='<div class="nl-match-button last-btn">'
+                                                    +'<a class="'+className+'">'+v.button_title+'</a>'
                                                 +'</div>'
                                     }
                                     var onBtn="" ;
@@ -62,7 +68,6 @@ jQuery(function($) {
                                                         +'<div class="nl-match-detail">'
                                                             +'<span>报名截止倒计时：</span>'
                                                             +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
-                                                            
                                                             +sys_second_text+'</span>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail">'

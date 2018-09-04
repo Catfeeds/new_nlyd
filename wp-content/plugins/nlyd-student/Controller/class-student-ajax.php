@@ -1300,18 +1300,20 @@ class Student_Ajax
                     $button_title = '进入比赛';
                 }else if ($val['match_status'] == 1){
                     //报名中
-                    $url = home_url('matchs/confirm/match_id/'.$val['ID']);
-                    $button_title = '参赛报名';
+                    $url = '';
+                    $button_title = '已报名参赛';
                 }
                 else if ($val['match_status'] == -1){
                     //未开始
                     $url = '';
                 }else if($val['match_status'] == -3){
                     //已结束
-                    $url = home_url('matchs/matching/match_id/'.$val['ID']);
+                    $button_title = '查看战绩';
+                    $url = home_url('matchs/record/match_id/'.$val['ID']);
                 }else{
                     //等待开赛
-                    $url = '';
+                    $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                    $button_title = '等待开赛';
                 }
                 $rows[$k]['button_title'] = $button_title;
                 $rows[$k]['right_url'] = $url;

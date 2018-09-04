@@ -189,28 +189,54 @@ jQuery(function($) {
                             dataIndex.push(_this.attr('data-index'))
                         }
                     }else{//符号
-                        var flag=false
-                        if(len>0){
-                            if(_this.hasClass('operator')){//运算符
-                                if(x===')'){
-                                    flag=true
-                                }
-                                if (_this.hasClass('reduce')) {//减号
-                                   if(x==='(' || !isNaN(parseInt(x))){
-                                       flag=true   
-                                   }
-                                }else{
-                                    if(!isNaN(parseInt(x))){
-                                        flag=true  
+                        if(flag){//数字没有全部按下
+                            var flag1=false
+                            if(len>0){
+                                if(_this.hasClass('operator')){//运算符
+                                    if(x===')'){
+                                        flag1=true
+                                    }
+                                    if (_this.hasClass('reduce')) {//减号
+                                    if(x==='(' || !isNaN(parseInt(x))){
+                                        flag1=true   
+                                    }
+                                    }else{
+                                        if(!isNaN(parseInt(x))){
+                                            flag1=true  
+                                        }
                                     }
                                 }
+                                if(_this.hasClass('leftBrackets')){//左括号
+                                    if(isNaN(parseInt(x)) && x!==")"){
+                                        flag1=true
+                                    }   
+                                }
+                                if(_this.hasClass('rightBrackets')){//右括号
+                                    var leftBracket = 0, rightBracket = 0;
+                                    for (var i = 0; i < text.length; i++) {
+                                        if (text.charAt(i) === "(") {
+                                            leftBracket++;
+                                        } else if(text.charAt(i) === ")") {
+                                            rightBracket++;
+                                        }
+                                    }
+                                    if(leftBracket>rightBracket){
+                                        if(!isNaN(parseInt(x)) || x=== ")"){
+                                            flag1=true
+                                        }
+                                            
+                                    } 
+                                }
+                            }else{
+                                if (_this.hasClass('reduce') || _this.hasClass('leftBrackets')) {//减号//左括号
+                                    flag1=true  
+                                }
                             }
-                            if(_this.hasClass('leftBrackets')){//左括号
-                                if(isNaN(parseInt(x)) && x!==")"){
-                                        flag=true
-                                }   
+                            if(flag1){
+                                $('.answer').text(text+number) 
                             }
-                            if(_this.hasClass('rightBrackets')){//右括号
+                        }else{//数字键盘全部按下且有（
+                            if(_this.hasClass('rightBrackets')){//点击右括号
                                 var leftBracket = 0, rightBracket = 0;
                                 for (var i = 0; i < text.length; i++) {
                                     if (text.charAt(i) === "(") {
@@ -220,19 +246,9 @@ jQuery(function($) {
                                     }
                                 }
                                 if(leftBracket>rightBracket){
-                                    if(!isNaN(parseInt(x)) || x=== ")"){
-                                        flag=true
-                                    }
-                                        
+                                    $('.answer').text(text+number)  
                                 } 
                             }
-                        }else{
-                            if (_this.hasClass('reduce') || _this.hasClass('leftBrackets')) {//减号//左括号
-                                flag=true  
-                            }
-                        }
-                        if(flag){
-                            $('.answer').text(text+number) 
                         }
                     }
                 }
@@ -267,12 +283,9 @@ jQuery(function($) {
                 }else{
                     news=text.substring(0,len-1);
                 }
-                
-
             }
             $('.answer').text(news)
         }
-
     });
     //下一题tap事件
     var hammertime2 = new Hammer($('#next')[0]);
@@ -311,7 +324,6 @@ jQuery(function($) {
                     match_more:$.Request('match_more') ? $.Request('match_more') : 1,
                     project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
                 }
-                //console.log(data);
                 $.ajax({
                     type: "POST",
                     url: window.admin_ajax,
@@ -334,7 +346,6 @@ jQuery(function($) {
                             $('.answer').addClass('error-fast')
                         }
                         ajaxData[ajaxData.length-1]['isRight']=isRight
-                        // ajaxData.push(thisRow);
                         setTimeout(function() {
                             initQuestion()
                             nextQuestion()

@@ -83,7 +83,7 @@
                                 <span class="fs_16 c_blue">选手信息</span>
                             </div>
                             <div class="nl-match-body ">
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail rz">
                                     <span >选手姓名：</span>
                                     <?php if(!empty($player['real_name'])){?>
                                     <span class="c_black"><?=$player['real_name']?></span>
