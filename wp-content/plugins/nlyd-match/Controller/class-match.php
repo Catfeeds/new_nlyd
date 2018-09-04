@@ -148,11 +148,25 @@ class Match
     /**
      * 去绑定题目设置box
      */
-    public function go_problem_meta_box(){
+    public function go_problem_meta_box($post){
+
+        //获取当前文章的所有题目
+        global $wpdb;
+        $sql = "select * from {$wpdb->prefix}posts where post_type = 'problem' and post_status = 'publish' and post_parent = {$post->ID}";
+        //var_dump($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
         $url = admin_url('post-new.php?post_type=problem&question_id='.$_GET['post']);
         ?>
-
-        <p><a href="<?=$url?>">问题设置 Go</a></p>
+        <?php if(!empty($rows)):?>
+        <?php foreach ($rows as $v){
+            $href = admin_url('post.php?action=edit&post='.$v['ID']);
+        ?>
+        <p>
+            <a href="<?=$href?>"><?=$v['post_title']?></a>
+        </p>
+        <?php } ?>
+        <?php endif;?>
+        <p><a href="<?=$url?>">新增问题 Go</a></p>
 
     <?php }
 
@@ -382,7 +396,8 @@ class Match
             'order' => 'DESC',
         );
         $the_query = new WP_Query( $args );
-        if ( ! empty($the_query->posts) ) :
+        //print_r($the_query);die;
+        if ( !empty($the_query->posts) ) :
             ?>
             <p class="post-attributes-label-wrapper"><label class="post-attributes-label" for="parent_id">父级</label></p>
             <select name="parent_id">
