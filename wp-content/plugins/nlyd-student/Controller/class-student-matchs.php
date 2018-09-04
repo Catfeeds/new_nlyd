@@ -424,6 +424,7 @@ class Student_Matchs extends Student_Home
              $data['project_title'] = $this->next_project['project_title'];
              $data['project_id'] = $this->next_project['match_project_id'];
              $data['project_start_time'] = $this->next_project['project_start_time'];
+             $data['first_time'] = $this->next_project['first_time'];
              $data['wait_type'] = $this->next_project['wait_type'];
              $data['count_down'] = $this->next_project['project_start_time']-get_time();
 
@@ -434,7 +435,9 @@ class Student_Matchs extends Student_Home
              $data['wait_type'] = $this->next_project['wait_type'];
              //print_r($this->next_project);
 
-             if(!empty($this->next_project)){
+             if(!empty($this->current_project) && !isset($_GET['wait'])){
+                 $data['project_title'] = $this->current_project['project_title'];
+                 $data['match_more'] = $this->current_project['match_more'];
                  $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->current_project['match_id'].'/wait/1');
              }
 
@@ -1500,6 +1503,7 @@ class Student_Matchs extends Student_Home
                     'match_id'=>$start['match_id'],
                     'project_id'=>$start['match_project_id'],
                     'project_start_time'=>strtotime($start['project_start_time']),
+                    'first_time'=>strtotime($start['project_start_time']),
                     'project_start_time_format'=>$start['project_start_time'],
                     'wait_type'=>1,
                     'match_more'=>1,
