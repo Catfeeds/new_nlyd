@@ -6,7 +6,7 @@
             <h1 class="mui-title">比赛等待</h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <?php if( $first_time > get_time() || $wait_type >0){?>
+                <?php if( $project_start_time > get_time() || isset($_GET['wait'])){?>
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>

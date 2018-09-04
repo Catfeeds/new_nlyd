@@ -95,7 +95,7 @@ switch ($project_alias){
                     <a class="a-btn" href="<?=$next_project_url?>">下一项已开赛,等待开赛</a>
                 <?php endif;?>
                 <?php if($next_type == 4):?>
-                    <a class="a-btn" href="<?=$next_project_url?>">比赛结束,查看详情</a>
+                    <a class="a-btn" href="<?=$next_project_url?>">所有答题结束,查看详情</a>
                 <?php endif;?>
             </div>
         </div>

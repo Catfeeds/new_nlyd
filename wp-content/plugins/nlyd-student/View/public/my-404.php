@@ -1,3 +1,4 @@
+<?php get_header();?>
 <style>
 .a-btn.wait{
     position: relative;
@@ -88,3 +89,4 @@ jQuery(function($) {
     }
 })
 </script>
+

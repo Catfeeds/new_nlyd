@@ -245,7 +245,7 @@ if(!class_exists('Team')){
 
 
 }
-define( 'leo_user_interface_path', plugin_dir_path( __FILE__ ) );
-define( 'leo_user_interface_version','1.0' );//样式版本
+//define( 'leo_user_interface_path', plugin_dir_path( __FILE__ ) );
+//define( 'leo_user_interface_version','1.0' );//样式版本
 
 new Team();
