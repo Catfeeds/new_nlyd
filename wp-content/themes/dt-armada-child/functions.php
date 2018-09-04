@@ -693,6 +693,12 @@ if(!function_exists('is_ajax')){
 
 }
 
+add_action("user_register", "set_user_admin_bar_false_by_default", 10, 1);
+function set_user_admin_bar_false_by_default($user_id) {
+    update_user_meta( $user_id, 'show_admin_bar_front', 'false' );
+    update_user_meta( $user_id, 'show_admin_bar_admin', 'false');
+}
+
 //引入url重写规则
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');
 

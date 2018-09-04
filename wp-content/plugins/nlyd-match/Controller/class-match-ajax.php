@@ -573,25 +573,16 @@ class Match_Ajax
         $coach_real_name = explode(', ', $user['display_name'])[0].explode(', ', $user['display_name'])[1];
 
         //开始解除
-        $wpdb->startTrans();
         $bool = $wpdb->update($wpdb->prefix.'my_coach', ['apply_status' => 3], ['id' => $id]);
         if($bool){
             //TODO 发送短信通知学员
             //类别名称
             $post_title = get_post($res['category_id'])->post_title;
-
             $ali = new AliSms();
             $result = $ali->sendSms($mobile, 7, array('user'=> $real_name, 'cate' => $post_title, 'coach' => $coach_real_name));
-            if($result){
-                $wpdb->commit();
-                wp_send_json_success(['info' => '已解除教学关系']);
-            }else{
-                $wpdb->rollback();
-                wp_send_json_error(['info' => '解除失败, 短信发送失败']);
-            }
+            wp_send_json_success(['info' => '已解除教学关系']);
 
         }else{
-            $wpdb->rollback();
             wp_send_json_error(['info' => '解除失败']);
         }
     }
