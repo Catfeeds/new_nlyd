@@ -23,18 +23,16 @@ jQuery(function($) {
                                     if(v.match_status==2){//比赛进行中
                                         match_status='c_orange';   
                                     }
-                                    var className="";
-                                    if(v.match_status==1){//报名中
-                                        className='bg_gradient_grey';
-                                    }
                                     if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                            +'<a class="'+className+'" href="'+v.right_url+'">'+v.button_title+'</a>'
+                                            +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
                                         +'</div>'
-                                    }else{
+                                    }
+                                    if(v.match_status==1){//报名中
+                                        className='bg_gradient_grey';
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                                    +'<a class="'+className+'">'+v.button_title+'</a>'
-                                                +'</div>'
+                                            +'<a class="'+className+'">'+v.button_title+'</a>'
+                                        +'</div>'
                                     }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
