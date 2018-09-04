@@ -213,6 +213,12 @@ a.c_black3:hover{
 .ta_r{
     text-align: right;
 }
+.pull-right{
+    float: right;
+}
+.pull-left{
+    float: left;
+}
 @media screen and (min-width:992px) {
     html{font-size:625%!important;}
 }

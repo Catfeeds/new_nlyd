@@ -15,8 +15,7 @@
 }
 .box-logo{
     margin: auto;
-    width: 100px;
-    height: 100px;
+    width: 80px;
     display: flex;
     align-items: center;
     border-radius: 50%;
@@ -100,11 +99,15 @@
 .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
     border-bottom:none;
 }
+.layui-tab{
+    margin: 0;
+    padding: 10px 0;
+}
 .layui-input:focus{
     border:1px solid #60a5fc!important;
 }
 .layui-input{
-    height: 45px;
+    height: 45px!important;
     text-indent: 10px;
     border-radius: 25px!important;
     color: #b8bcbe;
@@ -251,19 +254,14 @@ input[type=tel].layui-input{
     }
 }
 @media screen and (max-width: 991px){
-    
-    .wrapper_content {
-        width: 75%;
-        padding: 0;
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: inherit;
-        height: 100%;
-        box-shadow: none;
-        border: none;
+    .wrapper_content{
+        width: 250px;
         min-height: 645px;
-        margin: auto;
+        position: relative;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        padding: 0;
     }
     #content,#main .wf-wrap, .page-title .wf-wra{
         padding: 0!important;
@@ -277,4 +275,19 @@ input[type=tel].layui-input{
     #page{
         top: 0;
     }
+}
+@media screen and (min-width: 321px) and (max-width: 991px){
+    .wrapper_content{
+        width: 300px;
+        min-height: 645px;
+        position: relative;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        padding: 0;
+    }
+}
+@media screen and (max-width: 320px){
+/* iphone5以下 */
+
 }

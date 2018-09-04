@@ -2,8 +2,8 @@
 <!-- 登陆 -->
 <div class="wrapper_content">
     <p class="titleLanguage">
-        <span>切换语言</span>
-        <span class="c_blue pointer">中文</span>
+        <!-- <span>切换语言</span>
+        <span class="c_blue pointer">中文</span> -->
     </p>
     <div class="login-box-top">
         <div class="box-logo ">
@@ -156,7 +156,7 @@
             </div> 
         </div> 
         <div class="nl-agreement">登录或注册即同意<span class="c_blue pointer">【脑力中国用户协议】</span></div>
-        <ul style="margin-left: 0"  class="login-type">
+        <!-- <ul style="margin-left: 0"  class="login-type">
             <li class="login-type-wrapper">
                 <div class="login-type-logo">
                     <i class="iconfont">&#xe695;</i>
@@ -169,7 +169,7 @@
                 </div>
                 <div class="login-type-name">QQ登录</div>
             </li>
-        </ul>
+        </ul> -->
     </div>  
         <div class="width-margin width-margin-pc userAgreement" style='display:none'>
             <div class="head-tips">特别提示</div>
