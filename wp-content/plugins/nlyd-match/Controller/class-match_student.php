@@ -451,7 +451,7 @@ class Match_student {
 
 
         //根据成绩排序查询比赛学员
-        $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone FROM '.$wpdb->prefix.'match_questions AS mq 
+        $matchQuestions = $wpdb->get_results('SELECT u.user_email,mq.user_id,mq.project_id,mq.match_more,mq.my_score,mq.answer_status,p.post_title,o.created_time,o.telephone,mq.surplus_time FROM '.$wpdb->prefix.'match_questions AS mq 
         LEFT JOIN '.$wpdb->prefix.'order AS o ON o.match_id=mq.match_id AND o.user_id=mq.user_id 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
         LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$post->ID,ARRAY_A);
@@ -502,9 +502,11 @@ class Match_student {
                 ];
 
                 $rankingArr[$mqv['user_id']]['total_score'] = $mqv['my_score'];
+                $rankingArr[$mqv['user_id']]['surplus_time'] = $mqv['surplus_time'];
             }else{
 
                 $rankingArr[$mqv['user_id']]['total_score'] += $mqv['my_score'];
+                $rankingArr[$mqv['user_id']]['surplus_time'] += $mqv['surplus_time'];
             }
             //每个项目每一轮比赛成绩
             foreach ($projectArr as $titleK => $titleV){
@@ -532,6 +534,13 @@ class Match_student {
                     $a = $rankingArr[$i];
                     $rankingArr[$i] = $rankingArr[$j];
                     $rankingArr[$j] = $a;
+                }elseif ($rankingArr[$i]['total_score'] == $rankingArr[$j]['total_score']){
+                    //分数相同根据剩余时间
+                    if($rankingArr[$i]['surplus_time'] < $rankingArr[$j]['surplus_time']){
+                        $a = $rankingArr[$i];
+                        $rankingArr[$i] = $rankingArr[$j];
+                        $rankingArr[$j] = $a;
+                    }
                 }
 
             }
