@@ -74,7 +74,6 @@ class Brainpower
         LEFT JOIN '.$wpdb->posts.' AS p2 ON p2.post_parent=p1.ID AND p2.post_status="publish" AND p2.post_type="project" 
         WHERE p1.post_status="publish" AND p1.post_type="match-category" GROUP BY parent_ID', ARRAY_A);
 
-        echo '<pre />';
         //1.根据比赛id查询比赛每一项目得前十五名,当分数相同时重新排名,然后去除后5名
         //1.1 查询比赛类别, 用于分组
         foreach ($cateArr as $cak => $cav){
@@ -111,7 +110,6 @@ class Brainpower
                         }
                     }
                 }
-
             }
             $cateArr[$cak]['data'] = array_slice($res, 0, 10);//截取前十
         }
