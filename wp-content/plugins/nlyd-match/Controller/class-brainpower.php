@@ -20,11 +20,44 @@ class Brainpower
         die;
     }
 
+    /**
+     * 获取正确率
+     */
+    public function getCorrect($answer,$title){
+        $correct = 0;
+        foreach ($answer as &$av){
+            $av['my_answer'] = $my_answer = json_decode($av['my_answer'], true);
+            $av['questions_answer'] = $questions_answer = json_decode($av['questions_answer'], true);
+            $abc = 0;
+            $bcd = count($questions_answer);
+            foreach ($my_answer as $k => $avv){
+                if(is_array($avv) && isset($questions_answer[$k]['problem_answer'])){
+                    //速度类选项题
+                    foreach ($questions_answer[$k]['problem_answer'] as $pak => $pav){
+                        if($pav == true && $avv[$pak] == true){
+                            ++$abc;
+                        }
+                    }
+                }else{
+                    if($avv == 'unsolvable' || (preg_match('/[\+\*\/\-\×\÷]/', $avv) && preg_match('/逆向/', $title))){
+                        //逆向速算,总分除十=正确题目数
+                        $abc += $av['my_score'] / 10;
+                    }elseif($avv == $questions_answer[$k]){
+                        ++$abc;
+                    }
+                }
+            }
+            $correct += $abc/$bcd;
+        }
+        return $correct;
+    }
 
     /**
      * 加入名录
      */
     public function joinDirectory(){
+//        global $wpdb;
+//        $match_id = intval($_GET['match_id']);
 //        $project_id_arr = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id, ARRAY_A);
 //        for ($i = 2; $i < 15; ++$i){
 //            foreach ($project_id_arr as $v){
@@ -36,89 +69,81 @@ class Brainpower
 
         global $wpdb;
         $match_id = intval($_GET['match_id']);
+        //查询大类以及附属小类
+        $cateArr = $wpdb->get_results('SELECT p1.post_title AS parent_title,p1.ID AS parent_ID,GROUP_CONCAT(p2.ID) AS child_ID,GROUP_CONCAT(p2.post_title) AS child_title FROM '.$wpdb->posts.' AS p1 
+        LEFT JOIN '.$wpdb->posts.' AS p2 ON p2.post_parent=p1.ID AND p2.post_status="publish" AND p2.post_type="project" 
+        WHERE p1.post_status="publish" AND p1.post_type="match-category" GROUP BY parent_ID', ARRAY_A);
 
-        //1.根据比赛id查询比赛每一项目得前十名
+        //1.根据比赛id查询比赛每一项目得前十五名,当分数相同时重新排名,然后去除后5名
         //1.1 查询比赛类别, 用于分组
-        $projectGroup = $wpdb->get_results('SELECT mq.project_id,p.post_title,post_parent FROM '.$wpdb->prefix.'match_questions AS mq 
-        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id WHERE mq.match_id='.$match_id.' GROUP BY mq.project_id', ARRAY_A);
-
-        //1.2查询每个类别每个学员的分数
-        $cateData = [];
-        foreach ($projectGroup as $pgk => $pgv){
-            $res = $wpdb->get_results('SELECT u.ID AS user_id,u.user_login,u.display_name,u.user_mobile,SUM(mq.my_score) AS my_score,mc.coach_id,mq.surplus_time FROM '.$wpdb->prefix.'match_questions AS mq 
+        foreach ($cateArr as $cak => $cav){
+            //每个大类的学员总分数
+            $res = $wpdb->get_results('SELECT u.ID AS user_ID,SUM(mq.my_score) AS my_score,u.user_login,u.display_name,u.user_mobile,SUM(mq.surplus_time) AS surplus_time,mc.coach_id FROM '.$wpdb->prefix.'match_questions AS mq 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
-            LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=mq.user_id AND mc.major=1 AND mc.apply_status=2  
-            WHERE mq.match_id='.$match_id.' AND mq.project_id='.$pgv['project_id'].' GROUP BY mq.user_id', ARRAY_A);
-
-            foreach ($res as $rv){
-                if(isset($cateData[$pgv['post_parent']][$rv['user_id']])){
-                    $cateData[$pgv['post_parent']][$rv['user_id']]['my_score']  += $rv['my_score'];
-
-                }else{
-                    $cateData[$pgv['post_parent']][$rv['user_id']] = [
-                        'user_id' => $rv['user_id'],
-                        'project_id' => $pgv['post_parent'],
-                        'coach_id' => $rv['coach_id'],
-                        'my_score' => $rv['my_score'],
-                        'match' => serialize(['match_id' => $match_id, 'match_level' => 1]),
-                    ];
-                }
-            }
-        }
-
-        //1.3 根据分数排序,并且截取前十
-        $dataArr = [];
-        foreach ($cateData as $k => $v){
-            //索引变为自增,方便排序
-            foreach ($v as $v2){
-                $dataArr[$k][] = $v2;
-            }
-            //开始排名
-            for ($i = 0; $i < count($dataArr[$k]); ++$i){
-                for ($j = $i+1; $j <= count($dataArr[$k]); ++$j){
-                    if($dataArr[$k][$i]['my_score'] < $dataArr[$k][$j]['my_score']){
-                        $a = $dataArr[$k][$i];
-                        $dataArr[$k][$i] = $dataArr[$k][$j];
-                        $dataArr[$k][$j] = $a;
-                    }elseif($dataArr[$k][$i]['my_score'] == $dataArr[$k][$j]['my_score']){
+            LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=u.ID AND mc.major=1 
+            WHERE mq.project_id IN('.$cav['child_ID'].') AND mq.match_id='.$match_id.' GROUP BY user_ID ORDER BY my_score DESC LIMIT 0,15', ARRAY_A);
+            //排序
+            for ($i = 0; $i < count($res); ++$i){
+                for ($j = $i+1; $j <= count($res); ++$j){
+                    if($res[$i]['my_score'] == $res[$j]['my_score']){
                         //分数相同,算时间
-                        if($dataArr[$k][$i]['surplus_time'] < $dataArr[$k][$j]['surplus_time']){
-                            $a = $dataArr[$k][$i];
-                            $dataArr[$k][$i] = $dataArr[$k][$j];
-                            $dataArr[$k][$j] = $a;
-                        }elseif ($dataArr[$k][$i]['surplus_time'] == $dataArr[$k][$j]['surplus_time']){
+                        if($res[$i]['surplus_time'] < $res[$j]['surplus_time']){
+                            $a = $res[$i];
+                            $res[$i] = $res[$j];
+                            $res[$j] = $a;
+                        }elseif ($res[$i]['surplus_time'] == $res[$j]['surplus_time']){
                             //时间相同,算正确率
-
-
+                            //查询答案
+                            $answer = $wpdb->get_results('SELECT questions_answer,my_answer,my_score FROM '.$wpdb->prefix.'match_questions WHERE project_id IN('.$cav['child_ID'].') AND match_id='.$match_id.' AND user_id='.$res[$i]['user_ID'], ARRAY_A);
+                            $answer2 = $wpdb->get_results('SELECT questions_answer,my_answer,my_score FROM '.$wpdb->prefix.'match_questions WHERE project_id IN('.$cav['child_ID'].') AND match_id='.$match_id.' AND user_id='.$res[$j]['user_ID'], ARRAY_A);
+                            $correct1 = $this->getCorrect($answer,$cav['child_title']);
+                            $correct2 = $this->getCorrect($answer2,$cav['child_title']);
+                            $res[$i]['correct'] = $correct1;
+                            $res[$j]['correct'] = $correct2;
+//                            $res[$j]['answer'] = $answer2;
+                            if($correct2 > $correct1){
+                                $a = $res[$i];
+                                $res[$i] = $res[$j];
+                                $res[$j] = $a;
+                            }
                             //正确率相同,看脸
                         }
                     }
                 }
             }
-            $dataArr[$k] = array_slice($dataArr[$k], 0, 10);
+            $cateArr[$cak]['data'] = array_slice($res, 0, 10);//截取前十
         }
 
-
-
-
-
-        echo '<pre />';
-        print_r($dataArr);
-        die;
-        //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别 TODO 级别怎么来的
+//        echo '<pre />';
+//        print_r($cateArr);
+//        die;
 
 
         //3.插入数据sql生成
         $sql = 'INSERT INTO '.$wpdb->prefix.'brainpower (user_id,category_id,major_coach_id,`level`,`match`,`range`) VALUES ';
-        foreach ($projectGroup as $pgv){
-            $match = serialize(['match_id' => $match_id, 'match_level' => 3]);
-            foreach ($pgv['student'] as $sv){
-                $sql .= "('{$sv['ID']}','{$pgv['project_id']}','{$sv['coach_id']}','2','{$match}','1'),";
+        $insertValue = '';
+        foreach ($cateArr as $pgv){
+            $match = serialize(['1' => ['match_id' => $match_id, 'match_level' => 1]]);
+            foreach ($pgv['data'] as $sv){
+                //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
+                $oldId = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'brainpower WHERE category_id='.$pgv['parent_ID'].' AND user_id='.$sv['user_ID']);
+                if($oldId){
+                    $match = unserialize($oldId->match);
+                    $match[$oldId->level+1] = ['match_id' => $match_id, 'match_level' => $oldId->level+1];
+                    $wpdb->update($wpdb->prefix.'brainpower', ['level' => $oldId->level+1, 'match' => serialize($match), 'major_coach_id' => $sv['coach_id']], ['id' => $oldId->id]);
+                }else{
+                    $insertValue .= "('{$sv['user_ID']}','{$pgv['parent_ID']}','{$sv['coach_id']}','1','{$match}','1'),";
+                }
             }
         }
-        $sql = substr($sql,0,strlen($sql)-1);
-        //4.开始插入数据
-        $wpdb->query($sql);
+        if($insertValue == ''){
+
+        }else{
+            $sql .= $insertValue;
+            $sql = substr($sql,0,strlen($sql)-1);
+            //4.开始插入数据
+            $res = $wpdb->query($sql);
+        }
 
         ?>
         <div class="wrap">

@@ -343,21 +343,22 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'team'){
                 $columns['team_student'] = '查看成员';
                 return $columns;
+            }elseif ($this->post_type == 'match'){
+                unset( $columns['date'] );
+                $columns['match_status'] = '状态';
+                $columns['author'] = '发布人';
+                $columns['students'] = '报名学员';
+                $columns['match_ranking'] = '比赛排名';
+                $columns['match_brainpower'] = '脑力健将';
+                $columns['slogan'] = '口号';
+                $columns['times'] = '比赛时间';
+                $columns['time_slot'] = '报名时间段';
+                $columns['match_address'] = '比赛地点';
+                $columns['cost'] = '报名费用';
+                $columns['match_type'] = '比赛类型';
+                $columns['date'] = '创建日期';
+                $columns['options'] = '操作';
             }
-            unset( $columns['date'] );
-            $columns['match_status'] = '状态';
-            $columns['author'] = '发布人';
-            $columns['students'] = '报名学员';
-            $columns['match_ranking'] = '比赛排名';
-            $columns['match_brainpower'] = '脑力健将';
-            $columns['slogan'] = '口号';
-            $columns['times'] = '比赛时间';
-            $columns['time_slot'] = '报名时间段';
-            $columns['match_address'] = '比赛地点';
-            $columns['cost'] = '报名费用';
-            $columns['match_type'] = '比赛类型';
-            $columns['date'] = '创建日期';
-            $columns['options'] = '操作';
 
             return $columns;
 

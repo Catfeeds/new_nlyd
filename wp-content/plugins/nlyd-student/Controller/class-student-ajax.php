@@ -642,6 +642,7 @@ class Student_Ajax
             $msgTemplate = 12;
         }
         if($result){
+            $wpdb->commit();
             /***短信通知战队负责人****/
             $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
@@ -650,13 +651,7 @@ class Student_Ajax
 //            print_r($director);die;
             $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
             /***********end************/
-            if($result){
-                $wpdb->commit();
-                wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
-            }else{
-                $wpdb->rollback();
-                wp_send_json_error(array('info'=>'操作失败,短信未发送成功'));
-            }
+            wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
         }
         $wpdb->rollback();
         wp_send_json_error(array('info'=>'操作失败'));
@@ -1114,7 +1109,6 @@ class Student_Ajax
         //开启事务,发送短信失败回滚
 
 
-        $wpdb->startTrans();
         if(empty($id)){
             $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1, 'major' => $major);
             $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
@@ -1133,12 +1127,8 @@ class Student_Ajax
             $ali = new AliSms();
             $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
             /******************end*******************/
-            if($result){
-                $wpdb->commit();
-                wp_send_json_success(array('info'=>'申请成功,请等待教练同意'));
-            }
+            wp_send_json_success(array('info'=>'申请成功,请等待教练同意'));
         }
-        $wpdb->rollback();
         wp_send_json_error(array('info'=>'申请失败'));
     }
 
@@ -2555,20 +2545,14 @@ class Student_Ajax
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
         $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
-        //开启事务,如果短信未发送成功则回滚
-        $wpdb->startTrans();
         //改变状态
         $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id']);
         if($update){
             //TODO 发送短信通知教练 ===================================
             $ali = new AliSms();
             $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
-            if($result){
-                $wpdb->commit();
-                wp_send_json_success(['info' => '解除教学关系成功']);
-            }
+            wp_send_json_success(['info' => '解除教学关系成功']);
         }
-        $wpdb->rollback();
         wp_send_json_error(array('info'=>'解除教学关系失败'));
     }
 
