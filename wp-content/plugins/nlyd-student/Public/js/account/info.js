@@ -22,6 +22,12 @@ jQuery(document).ready(function($) {
             });
 
         })
+        $('.nicenameFormBtn').click(function(){
+            $('#nicenameFormBtn').click()
+        })
+        $('.certificationFormBtn').click(function(){
+            $('#certificationFormBtn').click()
+        })
         $('.form-input-row').click(function(){//展示子页面
             var _this=$(this);
             if(!_this.hasClass('a')){
@@ -38,6 +44,9 @@ jQuery(document).ready(function($) {
                     $('#'+target).css({
                         'transform':'translate3d(0px, 0px, 0px)'
                     }).delay('200').fadeIn('200')
+
+                    $('.nicenameFormBtn').css('zIndex','2')
+                    $('.certificationFormBtn').css('zIndex','3')
                 }
             }
         })
@@ -54,6 +63,9 @@ jQuery(document).ready(function($) {
             $('#'+target).css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).delay('200').fadeOut('200')
+
+            $('.nicenameFormBtn').css('zIndex','3')
+            $('.certificationFormBtn').css('zIndex','2')
         })
         //模拟手机下拉列表，选择证件类型
         var certificationSelectData= [
@@ -216,6 +228,50 @@ jQuery(document).ready(function($) {
                 }
             });
         }
+        $('.img-zoos').on('click','.add-zoo',function(){//上传图片
+            $('#img').click()
+        })
+        var imgs=[]
+        $("#img").change(function(e) {
+            var file=e.target.files[0];
+            imgs.unshift(file)
+            var reader = new FileReader();
+            var src='';
+            //读取File对象的数据
+            reader.onload = function(evt){
+                //data:img base64 编码数据显示
+                var dom='<div class="post-img no-dash">'
+                        +'<div class="img-zoo img-box">'
+                            +'<img src="'+evt.target.result+'"/>'
+                        +'</div>'
+                        +'<div class="del">'
+                            +'<i class="iconfont">&#xe633;</i>'
+                        +'</div>'
+                    +'</div>'
+                $('.tps').after(dom)
+                layer.photos({//图片预览
+                    photos: '.img-zoos',
+                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                }) 
+            }
+            reader.readAsDataURL(file);
+            if(imgs.length==3){
+                $('#add-img').css('display','none')
+            }
+            $(e.target).val('')
+    
+        });
+        $('.img-zoos').on('click','.del',function(){//删除图片
+            var _this=$(this);
+            var index =_this.parents('.post-img').index();
+            imgs.splice(index, 1);
+            _this.parents('.post-img').remove()
+            $('#add-img').css('display','block');
+            layer.photos({//图片预览
+                photos: '.img-zoos',
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            }) 
+        })
         layui.use(['form'], function(){
             var form = layui.form
             form.render();
@@ -224,102 +280,141 @@ jQuery(document).ready(function($) {
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
+                // sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                var fd = new FormData();
+                fd.append('action',data.field.action);
+                fd.append('_wpnonce',data.field._wpnonce);
+                fd.append('meta_key',data.field.meta_key);
+                fd.append('meta_val[real_type]',data.field['meta_val[real_type]']);
+                fd.append('meta_val[real_name]',data.field['meta_val[real_name]']);
+                fd.append('meta_val[real_ID]',data.field['meta_val[real_ID]']);
+                fd.append('user_gender',data.field.user_gender);
+                fd.append('meta_val[real_age]',data.field['meta_val[real_age]']);
+                fd.append('user_address[area]',data.field['user_address[area]']);
+                fd.append('user_address[city]',data.field['user_address[city]']);
+                fd.append('user_address[province]',data.field['user_address[province]']);
                 if(match_id!=null){
-                    data.field.match_id=match_id
+                    fd.append('match_id',match_id);
                 }else{
-                    data.field.match_id=''
+                    fd.append('match_id','');
                 }
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
-                return false;
-            });
-            form.on('submit(nicenameFormBtn)', function(data){//昵称
-                console.log(data.field)
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
-                return false;
-            });
+                $.each(imgs, function (i, v) {
+                    fd.append('images[]',v);
+                })
 
-            layer.photos({//图片预览
-                photos: '.imgBox',
-                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-            })   
-        });
-    $('.Mobile').click(function(){
-        $("#file").click()
-    })
-    var avatar = $('#avatar');
-    var image = $('#image');
-    var input = $('#file');
-    var bg=$('.nl-cropper-bg');
-    var cropper;
-    input.change(function (e) {
-        var files = e.target.files;
-        var done = function (url) {
-            input.val('');
-            image.attr('src',url);
-            bg.addClass('bg-show')
-            cropper = new Cropper(image[0], {
-                aspectRatio: 1,
-            });
-        };
-        var reader;
-        var file;
-        var url;
-
-        if (files && files.length > 0) {
-            file = files[0];
-            reader = new FileReader();
-            reader.onload = function (ev) {
-                done(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    $('body').on('click','#crop-cancel',function(){
-            bg.removeClass('bg-show')
-            cropper.destroy();
-            cropper = null;
-    })
-    document.getElementById('crop').addEventListener('click', function () {
-        var initialAvatarURL;
-        var canvas;
-        if (cropper) {
-        canvas = cropper.getCroppedCanvas({
-            width: 160,
-            height: 160,
-        });
-        initialAvatarURL = avatar.src;
-        avatar.src = canvas.toDataURL();
-        canvas.toBlob(function (blob) {
-            var formData = new FormData();
-            formData.append('action','student_saveInfo');
-            formData.append('_wpnonce',$("#inputImg").val());
-            formData.append('meta_key','user_head');
-            formData.append('meta_val',blob);
-            $.ajax({
-                type: "POST",
+                $.ajax({
+                    type: "POST",
                     url: window.admin_ajax+"?date="+new Date().getTime(),
-                    data: formData,
+                    data: fd,
                     dataType:'json',
                     timeout:3000,
                     contentType : false,
                     processData : false,
                     cache : false,
-                    success: function(data, textStatus, jqXHR){
-                        console.log(data)
-                        $.alerts(data.data.info)
-                        if(data.data.head_url){
-                            $('.logoImg').attr('src',data.data.head_url)
+                    success: function(res, textStatus, jqXHR){
+                        if(res.success){
+                            $.alerts(res.data.info)
+                            if(res.data.url){
+                                window.location.href=res.data.url
+                            }
+                            return false;
+                           
+                        }else{
+                            $.alerts(res.data.info)
                         }
-                        bg.removeClass('bg-show')
-                        cropper.destroy();
-                        cropper = null;
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    },
+                        
+                    }
                 })
-            }); 
-        }
-    });
+                return false;
+            });
+            form.on('submit(nicenameFormBtn)', function(data){//昵称
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                return false;
+            });
+            layer.photos({//图片预览
+                photos: '.img-zoos',
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            }) 
+  
+        });
+
+    // $('.Mobile').click(function(){
+    //     $("#file").click()
+    // })
+    // var avatar = $('#avatar');
+    // var image = $('#image');
+    // var input = $('#file');
+    // var bg=$('.nl-cropper-bg');
+    // var cropper;
+    // input.change(function (e) {
+    //     var files = e.target.files;
+    //     var done = function (url) {
+    //         input.val('');
+    //         image.attr('src',url);
+    //         bg.addClass('bg-show')
+    //         cropper = new Cropper(image[0], {
+    //             aspectRatio: 1,
+    //         });
+    //     };
+    //     var reader;
+    //     var file;
+    //     var url;
+
+    //     if (files && files.length > 0) {
+    //         file = files[0];
+    //         reader = new FileReader();
+    //         reader.onload = function (ev) {
+    //             done(reader.result);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // });
+
+    // $('body').on('click','#crop-cancel',function(){
+    //         bg.removeClass('bg-show')
+    //         cropper.destroy();
+    //         cropper = null;
+    // })
+    // document.getElementById('crop').addEventListener('click', function () {
+    //     var initialAvatarURL;
+    //     var canvas;
+    //     if (cropper) {
+    //     canvas = cropper.getCroppedCanvas({
+    //         width: 160,
+    //         height: 160,
+    //     });
+    //     initialAvatarURL = avatar.src;
+    //     avatar.src = canvas.toDataURL();
+    //     canvas.toBlob(function (blob) {
+    //         var formData = new FormData();
+    //         formData.append('action','student_saveInfo');
+    //         formData.append('_wpnonce',$("#inputImg").val());
+    //         formData.append('meta_key','user_head');
+    //         formData.append('meta_val',blob);
+    //         $.ajax({
+    //             type: "POST",
+    //                 url: window.admin_ajax+"?date="+new Date().getTime(),
+    //                 data: formData,
+    //                 dataType:'json',
+    //                 timeout:3000,
+    //                 contentType : false,
+    //                 processData : false,
+    //                 cache : false,
+    //                 success: function(data, textStatus, jqXHR){
+    //                     console.log(data)
+    //                     $.alerts(data.data.info)
+    //                     if(data.data.head_url){
+    //                         $('.logoImg').attr('src',data.data.head_url)
+    //                     }
+    //                     bg.removeClass('bg-show')
+    //                     cropper.destroy();
+    //                     cropper = null;
+    //                 },
+    //                 error: function (data) {
+    //                     console.log(data)
+    //                 },
+    //             })
+    //         }); 
+    //     }
+    // });
 })

@@ -23,7 +23,6 @@ font-size:0.14rem;
     -webkit-touch-callout:none;
     -moz-touch-callout:none;
     -ms-touch-callout:none;
-    touch-callout:none;
     -webkit-user-select:none; /*webkit浏览器*/
     -khtml-user-select:none; /*早期浏览器*/
     -moz-user-select:none; /*火狐*/
@@ -386,6 +385,7 @@ a.form-input-row:hover{
 
 .main-page{
     position: absolute;
+    overflow: scroll;
     left: 0;
     right: 0;
     top: 0;
@@ -399,6 +399,7 @@ a.form-input-row:hover{
 }
 .form-page{
     position: absolute;
+    overflow: scroll;
     left: 0;
     right: 0;
     top: 0;

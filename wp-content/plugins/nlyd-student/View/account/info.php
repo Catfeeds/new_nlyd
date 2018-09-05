@@ -95,7 +95,7 @@
                                         
                                 </div>
                             </a>
-                            <div class="a-btn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</div>
+                            <div class="a-btn" style="display:none;" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</div>
                         </div>
                 
                     </form>
@@ -109,24 +109,24 @@
                                     <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="选择证件类型" class="nl-input" lay-verify="required">
                                     <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
                                     <input  type="hidden" name="action" value="student_saveInfo"/>
-                                    <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
+                                    <input type="hidden" name="_wpnonce" id="student_saveInfo_code_nonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                     <input  type="hidden" name="meta_key" value="user_real_name"/>
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件姓名</div>
-                                    <input type="text" name="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="required" class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="required" class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件号码</div>
-                                    <input type="text" name="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="输入证件上的真实证件号" lay-verify="required"  class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="输入证件上的真实证件号" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">性 别</div>
-                                    <input name='user_gender'  value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
+                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">年龄</div>
-                                    <input type="text" name="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_age]" id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">所在城市</div>
@@ -135,22 +135,25 @@
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
-                                <div class="form-input-row">
-                                    <div class="form-input-label">上传证件</div>
-                                    <span class="Mobile form-input-right">修改</span>
-                                    <div id="imgBox" class="imgBox">
-                                        <img class="logoImg" src="<?=$user_info['user_head'];?>">
+                                <div class="layui-bg-white img-zoos">
+                                    <p class="tps">上传身份证(正面和反面,手持照片，最多上传3张)</p>
+                                    <div class="post-img" id="add-img">
+                                        <div class="add-zoo">
+                                            <div class="transverse"></div>
+                                            <div class="vertical"></div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="a-btn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</div>
+                                <div class="a-btn" style="display:none;" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</div>
                             </div>
-                            
                         </form>
                     </div>
+                    <div class="a-btn nicenameFormBtn" style="z-index:3">更新个人资料</div>
+                    <div class="a-btn certificationFormBtn" style="z-index:2">更新实名认证</div>
             </div>
         </div>           
     </div>
-
+<input style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/>
 <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple/>
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 
