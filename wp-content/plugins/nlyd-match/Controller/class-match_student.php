@@ -102,7 +102,7 @@ class Match_student {
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
-                        <th scope="col" id="birthday" class="manage-column column-birthday">出⽣⽇期</th>
+                        <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
                         <th scope="col" id="age_group" class="manage-column column-age_group">年龄组别</th>
                         <th scope="col" id="address" class="manage-column column-address">所在地区</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">电话</th>
@@ -142,7 +142,7 @@ class Match_student {
                                 <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
 
                                 <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
-                                <td class="role column-birthday" data-colname="出生日期"><?=$usermeta['user_birthday'][0]?></td>
+                                <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
                                 <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
                                 <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
                                 <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone']?></a></td>
@@ -169,7 +169,7 @@ class Match_student {
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
                         <th scope="col" class="manage-column column-sex">性别</th>
-                        <th scope="col" class="manage-column column-birthday">出⽣⽇期</th>
+                        <th scope="col" class="manage-column column-birthday">年龄</th>
                         <th scope="col" class="manage-column column-age_group">年龄组别</th>
                         <th scope="col" class="manage-column column-address">所在地区</th>
                         <th scope="col" class="manage-column column-mobile">电话</th>
@@ -572,7 +572,8 @@ class Match_student {
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
             $age = $user_real_name['real_age'];
             $user_real_name = $user_real_name['real_name'];
-            $trv['age'] = getAgeGroupNameByAge($age);
+            $trv['age'] = $age;
+            $trv['ageGroup'] = getAgeGroupNameByAge($age);
             $trv['userID'] = $usermeta['user_ID'][0];
             $trv['real_name'] = $user_real_name;
             $trv['sex'] = $usermeta['user_gender'][0];
@@ -635,7 +636,7 @@ class Match_student {
                         <th scope="col" id="ID" class="manage-column column-ID">学员ID</th>
                         <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
-                        <th scope="col" id="birthday" class="manage-column column-birthday">出生日期</th>
+                        <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
                         <th scope="col" id="age" class="manage-column column-age">年龄组别</th>
                         <th scope="col" id="address" class="manage-column column-address">所在地区</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
@@ -669,8 +670,8 @@ class Match_student {
                             <td class="name column-ID" data-colname="学员ID"><span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
                             <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
-                            <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['birthday']?></span><span class="screen-reader-text">-</span></td>
-                            <td class="name column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['ageGroup']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-address" data-colname="所在地区"><span aria-hidden="true"><?=$raV['address']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['telephone']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-email" data-colname="邮箱"><span aria-hidden="true"><?=$raV['user_email']?></span><span class="screen-reader-text">-</span></td>
@@ -694,7 +695,7 @@ class Match_student {
                         <th scope="col" class="manage-column column-ID">学员ID</th>
                         <th scope="col" class="manage-column column-real_name">姓名</th>
                         <th scope="col" class="manage-column column-sex">性别</th>
-                        <th scope="col" class="manage-column column-birthday">出生日期</th>
+                        <th scope="col" class="manage-column column-birthday">年龄</th>
                         <th scope="col" class="manage-column column-age">年龄组别</th>
                         <th scope="col" class="manage-column column-address">所在地区</th>
                         <th scope="col" class="manage-column column-mobile">手机</th>
