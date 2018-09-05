@@ -101,9 +101,9 @@ jQuery(function($) {
             }
         }
     });
-    var even_add_time = $('#even_add_time').val(); //连加
-    var add_and_subtract_time = $('#add_and_subtract_time').val(); //加减
-    var wax_and_wane_time = $('#wax_and_wane_time').val(); //乘除
+    var even_add_time = parseInt($('#even_add_time').val()); //连加
+    var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
+    var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
     // var even_add_time = 2; //连加
     // var add_and_subtract_time = 2; //加减
     // var wax_and_wane_time = 2000; //乘除
@@ -116,7 +116,6 @@ jQuery(function($) {
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
-
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
     if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
@@ -128,14 +127,18 @@ jQuery(function($) {
     }
     if(n_type==0){
         type="连加运算" 
-        even_add_time=child_type_down
+        even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
+        // even_add_time=child_type_down
     }else if(n_type==1){
         type="加减运算" 
-        add_and_subtract_time=child_type_down
+        add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
+        // add_and_subtract_time=child_type_down
     }else{
         type='乘除运算'
-        wax_and_wane_time=child_type_down
+        wax_and_wane_time=<?=$count_down?>
+        // wax_and_wane_time=child_type_down
     }
+    console.log(even_add_time,add_and_subtract_time,wax_and_wane_time,)
     $('#type').text(type)
     if(!isMatching){
         inItFastCalculation(level,type);
@@ -444,7 +447,6 @@ jQuery(function($) {
             match_action:'subjectFastCalculation',
             surplus_time:time,
         }
-
          $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
              $.DelSession('match')
              $.DelSession('leavePage')
@@ -470,7 +472,7 @@ jQuery(function($) {
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
-        $(this).text(text).attr('data-seconds',S)
+        $(this).text(time).attr('data-seconds',S)
         if(S<=0){//本轮比赛结束
             if(S==0){
                 $.alerts('倒计时结束，即将提交答案')
