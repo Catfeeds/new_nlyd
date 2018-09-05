@@ -430,7 +430,7 @@ if(!class_exists('MatchController')){
                     break;
                 case 'match_brainpower':
                     if($row['match_status'] == -3){
-                        echo '<a href="admin.php?page=brainpower-join_directory&match_id='.$id.'">管理名录</a>';
+                        echo '<a href="admin.php?page=brainpower-join_directory&match_id='.$id.'">查看名录</a>';
                     }else{
                         echo '比赛未结束';
                     }
