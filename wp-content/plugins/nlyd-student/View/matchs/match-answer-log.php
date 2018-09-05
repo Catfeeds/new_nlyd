@@ -110,6 +110,10 @@ switch ($project_alias){
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';

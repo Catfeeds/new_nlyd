@@ -19,6 +19,17 @@ color:#b8bcbe;
 font-size:0.14rem;
 }
 
+.noCopy{
+    -webkit-touch-callout:none;
+    -moz-touch-callout:none;
+    -ms-touch-callout:none;
+    touch-callout:none;
+    -webkit-user-select:none; /*webkit浏览器*/
+    -khtml-user-select:none; /*早期浏览器*/
+    -moz-user-select:none; /*火狐*/
+    -ms-user-select:none;  /*IE10*/
+    user-select:none;
+}
 /* mobile footer */
 .nl-foot-nav{
     display: none;

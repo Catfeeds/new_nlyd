@@ -654,7 +654,7 @@ class Teacher
 
             <p>新建教练，并将教练加入此站点。</p>
             <div style="color: #A90000;">
-                <?=$errStr?>
+                <?=isset($errStr) ? $errStr : '';?>
             </div>
             <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate">
                 <input name="action" type="hidden" value="createuser">
