@@ -12,6 +12,7 @@ class Student_Timer
     public function __construct($shortCode)
     {
 
+
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
