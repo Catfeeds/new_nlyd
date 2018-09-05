@@ -421,7 +421,6 @@ class Student_Matchs extends Student_Home
          $data['next_project'] = $this->next_project;
          $data['current_project'] = $this->current_project;
          $data['count_down'] = $this->current_project['project_end_time']-get_time();
-         $next_more_num = 1;
          $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
          if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
          $data['next_more_num'] = $next_more_num;
@@ -985,13 +984,13 @@ class Student_Matchs extends Student_Home
                 $next_type = 1;
                 $next_count_down = $this->current_project['project_end_time']-get_time();
             }else{
-                $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
+                $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
             }
         }else{
 
             if($this->next_project['project_start_time'] < get_time()){
-                $next_project_url = home_url('/matchs/info/match_id/'.$this->match_id);
+                $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
             }else{
                 $match_more = 1;
@@ -1592,16 +1591,19 @@ class Student_Matchs extends Student_Home
                 );
             }
             else if (strtotime($end['project_end_time']) <= get_time()){
-                //修改比赛状态
-                $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
+                if(ACTION != 'answerLog'){
 
-                $error_data = array(
-                    'status'=>-1,
-                    'message'=>'比赛结束',
-                    'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
-                );
-                $this->get_404($error_data);
-                die;
+                    //修改比赛状态
+                    $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
+
+                    $error_data = array(
+                        'status'=>-1,
+                        'message'=>'比赛结束',
+                        'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                    );
+                    $this->get_404($error_data);
+                    die;
+                }
             }
             else{
 

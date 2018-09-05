@@ -1531,8 +1531,9 @@ class Student_Ajax
                         unset($_POST['user_gender']);
                     }
                     if(!empty($_POST['meta_val']['real_age'])){
-                        update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['user_age']) && $user_age_update = true;
+                        update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['real_age']) && $user_age_update = true;
                     }
+                    //var_dump($_POST['meta_val']);die;
 //                    $_POST['user_address'] = array(
 //                        'province'=>'四川省',
 //                        'city'=>'成都市',
