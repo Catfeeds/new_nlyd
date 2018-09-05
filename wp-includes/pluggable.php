@@ -1981,6 +1981,7 @@ function wp_verify_nonce( $nonce, $action = -1 ) {
 	$nonce = (string) $nonce;
 	$user = wp_get_current_user();
 	$uid = (int) $user->ID;
+
 	if ( ! $uid ) {
 		/**
 		 * Filters whether the user who generated the nonce is logged out.

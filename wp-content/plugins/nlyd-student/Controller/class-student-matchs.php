@@ -415,45 +415,20 @@ class Student_Matchs extends Student_Home
              $this->match_id = $row['match_id'];
          }
 
-         /*print_r($this->next_project);
-         print_r($this->current_project);*/
+         //print_r($this->next_project);
+         //print_r($this->current_project);
 
-         if(!empty($this->next_project)){
-
-
-             $data['project_title'] = $this->next_project['project_title'];
-             $data['project_id'] = $this->next_project['match_project_id'];
-             $data['project_start_time'] = $this->next_project['project_start_time'];
-             $data['first_time'] = $this->next_project['first_time'];
-             $data['wait_type'] = $this->next_project['wait_type'];
-             $data['count_down'] = $this->next_project['project_start_time']-get_time();
-
-             $data['next_more_num'] = 1;
-             $data['more_num'] = $this->next_project['match_more'];
-             $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->next_project['match_id'].'/project_id/'.$this->next_project['project_id'].'/match_more/1');
-             $data['project_num'] = array_search($this->next_project['project_id'],$this->project_id_array)+1;
-             $data['wait_type'] = $this->next_project['wait_type'];
-             //print_r($this->next_project);
-
-             if(!empty($this->current_project) && !isset($_GET['wait'])){
-                 $data['project_title'] = $this->current_project['project_title'];
-                 $data['match_more'] = $this->current_project['match_more'];
-                 $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->current_project['match_id'].'/wait/1');
-             }
-
-         }else{
-             $data['wait_type'] = 0;
-             $data['match_type'] = true;
-             $data['match_title'] = $this->match_title;
-             $data['project_title'] = $this->current_project['project_title'];
-             $data['project_id'] = $this->current_project['project_id'];
-             $data['count_down'] = $this->current_project['project_end_time']-get_time();
-             $data['more_num'] = $this->current_project['match_more'];
-             $data['next_more_num'] = $this->current_project['match_more']+1;
-             $data['project_num'] = array_search($this->current_project['project_id'],$this->project_id_array)+1;
-             $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->current_project['match_id'].'/wait/1');
-             $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->current_project['match_id'].'/project_id/'.$this->current_project['project_id'].'/match_more/'.$data['next_more_num']);
-         }
+         $data['next_project'] = $this->next_project;
+         $data['current_project'] = $this->current_project;
+         $data['count_down'] = $this->current_project['project_end_time']-get_time();
+         $next_more_num = 1;
+         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
+         if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
+         $data['next_more_num'] = $next_more_num;
+         $project_id = !empty($this->next_project['project_id']) ? $this->next_project['project_id'] : $this->current_project['project_id'];
+         $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$data['next_more_num']);
+         $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
+         $data['project_num'] = !empty($this->next_project) ? $this->next_project['project_num'] : $this->current_project['project_num'];
 
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
@@ -547,6 +522,7 @@ class Student_Matchs extends Student_Home
         $count_down_redis = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
         //print_r($count_down);
         //var_dump($this->current_project);
+
         if(empty($count_down_redis)){
             $count_down = get_time()+$this->default_count_down;
             $this->redis->setex('count_down'.$current_user->ID.$this->project_alias.$this->current_more,$this->default_count_down,$count_down);
@@ -680,7 +656,7 @@ class Student_Matchs extends Student_Home
             'questions'=>$question,
             'match_title'=>$this->match_title,
             'match_more_cn'=>chinanum($this->current_more),
-            'count_down'=> $this->project_end_time - get_time()+300,
+            'count_down'=> $this->project_end_time - get_time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
         );
@@ -1604,19 +1580,21 @@ class Student_Matchs extends Student_Home
             $end = end($rows);
             //print_r($end);
             if(strtotime($start['project_start_time']) > get_time()){
-                $next_project = array(
+
+                $current_project = array(
+                    'match_type'=>'first',
                     'project_title'=>$start['post_title'],
-                    'match_id'=>$start['match_id'],
                     'project_id'=>$start['match_project_id'],
-                    'project_start_time'=>strtotime($start['project_start_time']),
-                    'first_time'=>strtotime($start['project_start_time']),
-                    'project_start_time_format'=>$start['project_start_time'],
-                    'wait_type'=>1,
                     'match_more'=>1,
+                    'project_num'=>array_search($start['match_project_id'],$this->project_id_array)+1,
+                    'project_end_time'=>strtotime($start['project_start_time']),
+                    'project_end_time_format'=>$start['project_start_time'],
                 );
             }
             else if (strtotime($end['project_end_time']) <= get_time()){
-                //var_dump(111111);
+                //修改比赛状态
+                $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
+
                 $error_data = array(
                     'status'=>-1,
                     'message'=>'比赛结束',
@@ -1626,6 +1604,9 @@ class Student_Matchs extends Student_Home
                 die;
             }
             else{
+
+                //修改比赛状态
+                $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>2),array('match_id'=>$this->match_id));
 
                 //判断当前时间应该进行哪个项目
 
@@ -1660,92 +1641,67 @@ class Student_Matchs extends Student_Home
                         //下一轮比赛项目信息
                         $next_project = array();
 
-                        if($next_start_time <= get_time() && get_time() < strtotime($value['project_end_time'])){
-                            //var_dump($value);
+                        for ($i=1;$i<=$project_match_more;++$i){
 
-                            /*var_dump($match_more);
-                            var_dump($match_use_time);
-                            var_dump($more_interval);*/
+                            if($value['project_alias'] == 'zxss'){
 
-                            for ($i=0;$i<$project_match_more;++$i){
+                                $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
+                                if($value['child_count_down'] > 0){
+                                    $even_add = $value['child_count_down'];
+                                    $add_and_subtract = $value['child_count_down'];
+                                    $wax_and_wane = $value['child_count_down'];
+                                }elseif (!empty($child_count_down)){
 
-                                $end_interval = $i == ($project_match_more-1) ? $this->match_project_interval : $more_interval;
-
-                                if($value['project_alias'] == 'zxss'){
-
-                                    $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
-                                    if($value['child_count_down'] > 0){
-                                        $even_add = $value['child_count_down'];
-                                        $add_and_subtract = $value['child_count_down'];
-                                        $wax_and_wane = $value['child_count_down'];
-                                    }elseif (!empty($child_count_down)){
-
-                                        $even_add = $child_count_down['even_add'];
-                                        $add_and_subtract = $child_count_down['add_and_subtract'];
-                                        $wax_and_wane = $child_count_down['wax_and_wane'];
-                                    }else{
-
-                                        $even_add = 3;
-                                        $add_and_subtract = 3;
-                                        $wax_and_wane = 3;
-                                    }
-                                    $zxss_use_time = $even_add+$add_and_subtract+$wax_and_wane;
-
-                                    $project_more_start_time = $next_start_time + $i * ($zxss_use_time + $more_interval) * 60;
-                                    $project_more_end_time = $project_more_start_time + ($zxss_use_time + $end_interval)*60 ;
-
+                                    $even_add = $child_count_down['even_add'];
+                                    $add_and_subtract = $child_count_down['add_and_subtract'];
+                                    $wax_and_wane = $child_count_down['wax_and_wane'];
                                 }else{
-                                    $project_more_start_time = $next_start_time + $i * ($match_use_time + $more_interval) * 60;
-                                    $project_more_end_time = $project_more_start_time + ($match_use_time + $end_interval)*60 ;
+
+                                    $even_add = 3;
+                                    $add_and_subtract = 3;
+                                    $wax_and_wane = 3;
                                 }
+                                $zxss_use_time = $even_add+$add_and_subtract+$wax_and_wane;
 
-                                //print_r(date_i18n('Y-m-d H:i:s',$project_more_start_time).'----');
-                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time).'----'.date_i18n('Y-m-d H:i:s',$project_more_end_time).'****');
-                                if($project_more_start_time <= get_time() && get_time() < $project_more_end_time){
-                                    //var_dump($project_match_more);
-                                    $more_num = $i+1;   //第几轮比赛
-                                    $current_project = array(
-                                                        'project_title'=>$value['post_title'],
-                                                        'match_more'=>$more_num,
-                                                        'project_alias'=>$value['project_alias'],
-                                                        'match_id'=>$value['match_id'],
-                                                        'project_id'=>$value['match_project_id'],
-                                                        'project_start_time'=>$project_more_start_time,
-                                                        'project_end_time'=>$project_more_end_time,
-                                                        'project_more_end_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_start_time),
-                                                        'project_start_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_end_time),
-                                                    );
-                                    if($more_num == $project_match_more && $this->match_project_total-1 != $key){
+                                $project_more_start_time = $next_start_time + ($i-1) * ($zxss_use_time + $more_interval) * 60;
+                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time));
 
-                                        $next_project = array(
-                                            'project_title'=>$rows[$key+1]['post_title'],
-                                            'match_id'=>$rows[$key+1]['match_id'],
-                                            'project_id'=>$rows[$key+1]['match_project_id'],
-                                            'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
-                                            'project_start_time_format'=>$rows[$key+1]['project_start_time'],
-                                            'match_more'=>1,
-                                            'wait_type'=>2,
-                                        );
-                                    }
+                            }else{
 
-                                    break;
-                                    //var_dump($next_project);die;
-                                }
-
+                                $project_more_start_time = $next_start_time + ($i-1) * ($match_use_time + $more_interval) * 60;
+                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time));
                             }
-                            //var_dump($more_num);
-                        }
-                        else{
+                            $interval = $i < $project_match_more ? $more_interval : $this->match_project_interval ;
+                            $project_more_end_time = $project_more_start_time + ($match_use_time + $interval) * 60;
+                            //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_end_time));
 
-                            $next_project = array(
-                                'match_more'=>1,
-                                'project_title'=>$rows[$key+1]['post_title'],
-                                'match_id'=>$rows[$key+1]['match_id'],
-                                'project_id'=>$rows[$key+1]['match_project_id'],
-                                'project_start_time_format'=>$rows[$key+1]['project_start_time'],
-                                'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
-                                'wait_type'=>3,
-                            );
+                            if($project_more_start_time <= get_time() && get_time() < $project_more_end_time){
+                                //print_r($value);
+                                $current_project = array(
+                                                    'project_title'=>$value['post_title'],
+                                                    'project_id'=>$value['match_project_id'],
+                                                    'match_more'=>$i,
+                                                    'project_num'=>array_search($value['match_project_id'],$this->project_id_array)+1,
+                                                    'project_start_time'=>$project_more_start_time,
+                                                    'project_start_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_start_time),
+                                                    'project_end_time'=>$project_more_end_time,
+                                                    'project_end_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_end_time),
+                                                );
+                                //print_r($current_project);
+                                if($i == $project_match_more){
+                                    $next_project = array(
+                                        'project_title'=>$rows[$key+1]['post_title'],
+                                        'project_id'=>$rows[$key+1]['match_project_id'],
+                                        'match_more'=>1,
+                                        'project_num'=>array_search($rows[$key+1]['match_project_id'],$this->project_id_array)+1,
+                                        'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
+                                        'project_start_time_format'=>$rows[$key+1]['project_start_time'],
+                                    );
+                                }
+                                //print_r($next_project);
+                                break;
+                            }
+
                         }
 
                         break;

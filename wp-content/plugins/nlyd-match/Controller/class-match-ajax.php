@@ -459,7 +459,7 @@ class Match_Ajax
         $left_join = "left join {$wpdb->prefix}match_team b on a.user_id = b.user_id
                       left join {$wpdb->prefix}users c on a.user_id = c.ID";
 
-        $where = " where a.meta_key = 'wp_user_level' AND a.meta_value = {$user_role} ";
+        $where = " where a.meta_key = '{$wpdb->prefix}user_level' AND a.meta_value = {$user_role} ";
         $where_ = " AND b.status = 2 AND b.user_type = {$user_type} AND b.team_id = {$team_id} ";
         if(!empty($_GET['term'])){
             $where .= "  and (c.user_login like '%{$_GET['term']}%' or c.user_nicename like '%{$_GET['term']}%' or c.user_email like '%{$_GET['term']}%' or c.display_name like '%{$_GET['term']}%') ";
@@ -467,6 +467,7 @@ class Match_Ajax
         $limit = " limit 0,10 ";
 
         $sql = $select.$left_join.$where.$where_.$limit;
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         if(empty($rows)){

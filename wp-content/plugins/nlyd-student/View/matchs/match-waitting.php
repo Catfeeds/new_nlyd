@@ -6,7 +6,7 @@
             <h1 class="mui-title">比赛等待</h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <?php if( $first_time > get_time() || isset($_GET['wait']) ){?>
+                <?php if( $current_project['match_type'] == 'first' || isset($_GET['wait']) ){?>
                 <div class="count-wrapper">
                     <p class="match-name c_blue"><?=$match_title?></p>
                     <?php if($count_down > 0 ){ ?>
@@ -14,7 +14,7 @@
                     <?php }else{ ?>
                     <a class="a-btn wait" href="<?=$match_url?>">进入比赛</a>
                     <?php }?>
-                    <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=$project_title?>”，第<?=$next_more_num?>轮</p>
+                    <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮</p>
 
                 </div> 
                 <?php }else{ ?>
@@ -26,7 +26,7 @@
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一轮等待页面</a>
                     <?php }else{ ?>
                         <p class="tips fs_16">
-                            <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
+                            <span class="c_blue"><?=$current_project['project_title']?>第<?=$current_project['match_more']?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
                         </p>
                         <a href="<?=$wait_url?>" class="a-btn wait">进入下一项等待页面</a>
                     <?php } ?>

@@ -706,7 +706,7 @@ class Match_student {
             global $wpdb;
             $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um2.meta_value AS user_level,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
             LEFT JOIN '.$wpdb->usermeta.' AS um ON u.ID=um.user_id AND um.meta_key="user_ID" 
-            LEFT JOIN '.$wpdb->usermeta.' AS um2 ON u.ID=um2.user_id AND um2.meta_key="wp_user_level" 
+            LEFT JOIN '.$wpdb->usermeta.' AS um2 ON u.ID=um2.user_id AND um2.meta_key="'.$wpdb->prefix.'user_level" 
             LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
             LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' 
             WHERE um2.meta_value=0 AND o.id is NULL 
