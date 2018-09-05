@@ -88,8 +88,8 @@ class Brainpower
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
         WHERE mq.project_id IN('.$cav['child_ID'].') AND mq.match_id='.$match_id.' GROUP BY user_ID ORDER BY my_score DESC LIMIT 0,15', ARRAY_A);
             //排序
-            for ($i = 0; $i < count($res); ++$i){
-                for ($j = $i+1; $j <= count($res); ++$j){
+            for ($i = 0; $i < count($res)-1; ++$i){
+                for ($j = $i+1; $j < count($res); ++$j){
                     if($res[$i]['my_score'] == $res[$j]['my_score']){
                         //分数相同,算时间
                         if($res[$i]['surplus_time'] < $res[$j]['surplus_time']){
