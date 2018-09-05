@@ -19,7 +19,7 @@
                 </div> 
                 <?php }else{ ?>
                  <div class="count-wrapper">
-                    <?php if($match_type){ ?>
+                    <?php if(empty($next_project)){ ?>
                         <p class="tips fs_16">
                             <span class="c_blue"><?=$project_title?>第<?=$more_num?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                         </p>
