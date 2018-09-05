@@ -492,7 +492,8 @@ class Download
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
             $age = $user_real_name['real_age'];
             $user_real_name = $user_real_name['real_name'];
-            $trv['age'] = $this->getAgeGroupNameByAge($age);
+            $trv['age'] = $age;
+            $trv['ageGroup'] = $this->getAgeGroupNameByAge($age);
             $trv['userID'] = $usermeta['user_ID'][0];
             $trv['real_name'] = $user_real_name;
             $trv['sex'] = $usermeta['user_gender'][0];
@@ -587,7 +588,7 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '学员ID');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '真实姓名');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '出生日期');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '年龄');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '年龄组别');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '所在地区');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '手机');
@@ -613,8 +614,8 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['userID']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['real_name']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['sex']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['birthday']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['age']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['age']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['ageGroup']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['address']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['telephone']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['user_email']);
