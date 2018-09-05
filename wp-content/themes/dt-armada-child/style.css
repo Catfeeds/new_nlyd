@@ -48,6 +48,18 @@ a{
     background-size: contain!important;
     border-radius:0 !important;
 }
+.spinner-loader .load-wrap{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -65px;
+    margin-top: -65px;
+    width: 130px;
+    height: 130px;
+    background: #fff url(./css/image/loading.gif) no-repeat center center !important;
+    background-size: contain!important;
+    border-radius:0 !important;
+}
 .accent-gradient #load,#load{
     background: #fff!important;
     
@@ -105,10 +117,10 @@ a.c_black:hover{
     color: #262626
 }
 .c_black8,a.c_black8{
-    color: rgba(38, 38, 38, 0.6);
+    color: rgba(38, 38, 38, 0.8);
 }
 a.c_black8:hover{
-    color: rgba(38, 38, 38, 0.6);
+    color: rgba(38, 38, 38, 0.8);
 }
 .c_black6,a.c_black6{
     color: rgba(38, 38, 38, 0.6);
@@ -136,22 +148,22 @@ a.c_black3:hover{
     background: #F8BF36;
 }
 .bg_gradient_orange{
-    background: -webkit-linear-gradient(#F9A9B8, #FB8E8E);
-    background: -o-linear-gradient(#F9A9B8, #FB8E8E);
-    background: -moz-linear-gradient(#F9A9B8, #FB8E8E);
-    background: linear-gradient(#F9A9B8, #FB8E8E);
+    background: -webkit-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: -o-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: -moz-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: linear-gradient(90deg,#F9A9B8, #FB8E8E);
 }
 .bg_gradient_blue{
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
 }
 .bg_gradient_grey{
-    background: -webkit-linear-gradient(#b8bcbe,#919191);
-    background: -o-linear-gradient(#b8bcbe,#919191);
-    background: -moz-linear-gradient(#b8bcbe,#919191);
-    background: linear-gradient(#b8bcbe,#919191);
+    background: -webkit-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -o-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -moz-linear-gradient(90deg,#b8bcbe,#919191);
+    background: linear-gradient(90deg,#b8bcbe,#919191);
 }
 
 /*  间距*/
@@ -213,6 +225,12 @@ a.c_black3:hover{
 .ta_r{
     text-align: right;
 }
+.pull-right{
+    float: right;
+}
+.pull-left{
+    float: left;
+}
 @media screen and (min-width:992px) {
     html{font-size:625%!important;}
 }
@@ -268,6 +286,12 @@ a.c_black3:hover{
     }
     #footer{
         display: none;
+    }
+    .page-title{
+        display: none!important;
+    }
+    .mobile-header-bar{
+        display: none!important;
     }
     .scroll-top.on{
         bottom: 70px;

@@ -70,18 +70,18 @@ p.long-name{
 }
 .nl-match-footer .last-btn a{
     color: #fff;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
     border: none;
 }
 .nl-match-footer .last-btn a.bg_gradient_grey{
     color: #fff;
-    background: -webkit-linear-gradient(#b8bcbe,#919191);
-    background: -o-linear-gradient(#b8bcbe,#919191);
-    background: -moz-linear-gradient(#b8bcbe,#919191);
-    background: linear-gradient(#b8bcbe,#919191);
+    background: -webkit-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -o-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -moz-linear-gradient(90deg,#b8bcbe,#919191);
+    background: linear-gradient(90deg,#b8bcbe,#919191);
     border: none;
 }
 .nl-match-footer .last-btn a:hover{
@@ -95,10 +95,10 @@ p.long-name{
     left: 2%;
     line-height: 20px;
     text-align: center;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
     color: #fff;
     border-radius: 50%;
 }
@@ -131,9 +131,6 @@ p.long-name{
     .layui-tab-brief>.layui-tab-title .layui-this{
         color: #262626;
         border:none;
-    }
-    .mui-bar{
-        padding: 0;
     }
     .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
         border-bottom:none;
@@ -204,14 +201,36 @@ p.long-name{
         border-style: none;
         background: #a5ccff;
     }
-    .mui-bar{
-        padding-left: 0;
-        padding-right: 0;
-    }
     .countdown-time{
         padding-bottom: 10px;
     }
     .layui-tab-brief[overflow]>.layui-tab-title .layui-this:after{
         top: auto;
     }
+}
+@media screen and (min-width: 375px) and (max-width: 991px){
+    .nl-match-button{
+        text-align: right;
+    }
+    .nl-match-button.last-btn{
+        text-align: left;
+    }
+    .nl-match-button a{
+        width: 160px;
+        margin-right: 5px;
+    }
+    .nl-match-button.last-btn a{
+        margin-right: 0;
+        margin-left: 5px;
+    }
+    .nl-match-button a.onBtn{
+        display: block;
+        width: 160px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media screen and (max-width: 320px){
+    /* iphone5以下 */
+
 }

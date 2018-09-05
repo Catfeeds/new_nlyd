@@ -1,5 +1,5 @@
 
-<div class="layui-fluid">
+<div class="layui-fluid noCopy">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
@@ -65,12 +65,45 @@
 
 <script>
 jQuery(function($) {
-    var even_add_time = $('#even_add_time').val(); //连加
-    var add_and_subtract_time = $('#add_and_subtract_time').val(); //加减
-    var wax_and_wane_time = $('#wax_and_wane_time').val(); //乘除
-    // var even_add_time = 2; //连加
-    // var add_and_subtract_time = 2; //加减
-    // var wax_and_wane_time = 2000; //乘除
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+    $(window).on("blur",function(){
+        var leavePage = $.GetSession('leavePage','1');
+        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            leavePage['leavePage']+=1;
+        }else{
+            var sessionData={
+                match_id:$.Request('match_id'),
+                project_id:$.Request('project_id'),
+                match_more:$.Request('match_more'),
+                leavePage:1
+            }
+            leavePage= sessionData
+        }
+        $.SetSession('leavePage',leavePage)
+    })  
+    $(window).on("focus", function(e) {
+        var leavePage= $.GetSession('leavePage','1');
+        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            var leveTimes=parseInt(leavePage['leavePage'])
+            if(leveTimes>0 && leveTimes<3){
+                $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
+            }
+            if(leveTimes>=3){
+                $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
+                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                setTimeout(function() {
+                    submit(time);
+                }, 1000);
+                submit(time);
+            }
+        }
+    });
+    var even_add_time = parseInt($('#even_add_time').val()); //连加
+    var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
+    var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
     var level={number:2,symbol:1},//题目难度
     n_type=<?=$child_type?>,
     child_type_down=<?=!empty($child_type_down) ? $child_type_down : ''?>,
@@ -79,7 +112,6 @@ jQuery(function($) {
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
-
 
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
@@ -92,13 +124,13 @@ jQuery(function($) {
     }
     if(n_type==0){
         type="连加运算" 
-        even_add_time=child_type_down
+        even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
     }else if(n_type==1){
         type="加减运算" 
-        add_and_subtract_time=child_type_down
+        add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
     }else{
         type='乘除运算'
-        wax_and_wane_time=child_type_down
+        wax_and_wane_time=<?=$count_down?>
     }
     $('#type').text(type)
     if(!isMatching){
@@ -157,14 +189,15 @@ jQuery(function($) {
                         thisAjaxRow['isRight']=false;
                         $('#answer').removeClass('answer').addClass('error-fast')
                     }
-                    submit(0)
+                    // submit(0)
                 }
-                
-                $('.count_downs').text('初始中...').attr('data-seconds',sys_second)
-                $('#type').text(type)
-                $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
-                inItFastCalculation(level,type);  
-                nextQuestion()
+                if(n_type<=2){
+                    $('.count_downs').text('初始中...').attr('data-seconds',sys_second)
+                    $('#type').text(type)
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                    inItFastCalculation(level,type);  
+                    nextQuestion()
+                }
             }
 
         }, 1000);
@@ -408,9 +441,9 @@ jQuery(function($) {
             match_action:'subjectFastCalculation',
             surplus_time:time,
         }
-
          $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
              $.DelSession('match')
+             $.DelSession('leavePage')
              if(res.success){
                  if(res.data.url){
                      window.location.href=res.data.url
@@ -433,8 +466,7 @@ jQuery(function($) {
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
-        var html="<span data-time='"+S+"' id='dataTime'>"+time+"</span>"
-         $(this).html(html);
+        $(this).text(time).attr('data-seconds',S)
         if(S<=0){//本轮比赛结束
             if(S==0){
                 $.alerts('倒计时结束，即将提交答案')
@@ -449,7 +481,7 @@ jQuery(function($) {
 layui.use('layer', function(){
     var hammertime4 = new Hammer($('#sumbit')[0]);
     hammertime4.on("tap", function (e) {
-        var time=$("#dataTime").attr('data-time')?$("#dataTime").attr('data-time'):0;
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1
                 ,maxWidth:300

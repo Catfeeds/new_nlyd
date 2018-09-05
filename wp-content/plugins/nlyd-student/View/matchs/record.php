@@ -48,7 +48,7 @@
                                         <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
                                         <tr class="nl-me" id="allRanking">
                                             <td>
-                                                <div class="nl-circle"><?=$my_ranking['ranking']?></div>
+                                                <div class="nl-circle <?= $my_ranking['ranking'] <= 3 ? 'top3' : '';?>"><?=$my_ranking['ranking']?></div>
                                             </td>
                                             <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
                                             <td id="meid"><div class="table_content"><?=$my_ranking['ID']?></div></td>
@@ -63,7 +63,7 @@
                                         <?php foreach ($list as $k => $v){ ?>
                                         <tr class="<?= $my_ranking['ranking']==$v['ranking'] ? 'nl-me' : '';?>">
                                             <td>
-                                                <div class="nl-circle <?= $k<2 ? 'top3' : '';?>"><?=$v['ranking']?></div>
+                                                <div class="nl-circle <?= $k < 3 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                             </td>
                                             <td><div class="table_content"><?=$v['user_name']?></div></td>
                                             <td><div class="table_content"><?=$v['ID']?></div></td>
@@ -324,8 +324,9 @@ layui.use(['element','flow'], function(){
                     if(res.success){ 
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
+                            var top3=rows.ranking<=3 ? "top3" : ''
                             var Html='<td>'
-                                        +'<div class="nl-circle">'+rows.ranking+'</div>'
+                                        +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                     +'</td>'
                                     +'<td><div class="table_content">'+rows.user_name+'</div></td>'
                                     +'<td><div class="table_content">'+rows.ID+'</div></td>'
@@ -401,8 +402,9 @@ layui.use(['element','flow'], function(){
                     if(res.success){ 
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
-                              var Html='<td>'
-                                            +'<div class="nl-circle">'+rows.ranking+'</div>'
+                            var top3=rows.ranking<=3 ? "top3" : ''
+                            var Html='<td>'
+                                            +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                         +'</td>'
                                         +'<td><div class="table_content">'+rows.user_name+'</div></td>'
                                         +'<td><div class="table_content">'+rows.ID+'</div></td>'
@@ -477,7 +479,6 @@ $('.show-type').click(function(){//下拉
     var select= $(this).parents('td').find('.show-type').eq(0).html()
     var thisHtml=_this.html();
     _this.parents('td').find('.ul-select').toggleClass("ul-select-show");
-    console.log(select,thisHtml)
     if(select!=thisHtml){
         var data_group=_this.attr('data-group')
         $('#flow-one').empty();

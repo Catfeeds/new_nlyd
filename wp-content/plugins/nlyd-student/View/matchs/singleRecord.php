@@ -110,17 +110,18 @@ layui.use(['element','flow'], function(){
                 }
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
                     if(res.success){
+                        var Html="";
                         if(res.data.my_ranking!=null){//我的成绩
                             var rows=res.data.my_ranking
-                              var Html='<td>'
-                                            +'<div class="nl-circle">'+rows.ranking+'</div>'
-                                        +'</td>'
-                                        +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.ID+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.score+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.group+'</div></td>'
-                            // $('#danxiang_me').html(Html)
+                            var top3=rows.ranking<=3 ? "top3" : ''
+                            Html='<td>'
+                                        +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
+                                    +'</td>'
+                                    +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                    +'<td><div class="table_content">'+rows.group+'</div></td>'
                         }
                         $.each(res.data.info,function(index,value){
                             var top3=value.ranking<=3 ? 'top3' : '';
@@ -129,7 +130,7 @@ layui.use(['element','flow'], function(){
                                 if(value.ranking==res.data.my_ranking.ranking){
                                     nl_me='nl-me'
                                     if(value.ranking!=1){
-                                        $('#fenlei_me').html(Html).css('display','table-row');
+                                        $('#danxiang_me').html(Html).css('display','table-row');
                                     }
                                 }
                             }  

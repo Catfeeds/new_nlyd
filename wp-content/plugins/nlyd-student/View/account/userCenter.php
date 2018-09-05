@@ -105,7 +105,7 @@
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
                     <span class="fs_12">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
-                        <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
+                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
                         <?php endif;?>
                         记忆<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 |
                         速读<span class="c_orange"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span>级 |
@@ -180,14 +180,14 @@
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a class="c_black8 no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a class="c_black8 no_border disabled_a"  href="<?=home_url('/teams');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>

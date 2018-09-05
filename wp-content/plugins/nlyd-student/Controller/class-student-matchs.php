@@ -1230,7 +1230,7 @@ class Student_Matchs extends Student_Home
                 $orderStatus['status'] = 2;
             }elseif ($order['pay_status'] == 1){
                 //未支付
-                $orderStatus['status'] = 1;
+                $orderStatus['status'] = 0;
             }
             $orderStatus['order_id'] = $order['id'];
         }else{

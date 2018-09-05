@@ -494,8 +494,16 @@ class Student_Ajax
         if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
 
-        $row = $wpdb->get_row("select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
-        if(!empty($row)) wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+        $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
+
+        if(!empty($row)) {
+            if($row->pay_status == 2 || $row->pay_status==3 || $row->pay_status==4){
+                wp_send_json_error(array('info'=>'你已报名该比赛','url'=>home_url('matchs/info/match_id/'.$_POST['match_id'])));
+            }else{
+                //如果是未支付订单删除订单重新下单
+                $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
+            }
+        }
         $data = array(
             'user_id'=>$current_user->ID,
             'match_id'=>$_POST['match_id'],

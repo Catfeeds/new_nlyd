@@ -15,8 +15,7 @@
 }
 .box-logo{
     margin: auto;
-    width: 100px;
-    height: 100px;
+    width: 80px;
     display: flex;
     align-items: center;
     border-radius: 50%;
@@ -66,10 +65,10 @@
     font-weight: 500;
     text-transform: uppercase;
     -webkit-font-smoothing: subpixel-antialiased;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
     transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
     transform: translate3d(0px, 0px, 0px);
 }
@@ -100,11 +99,15 @@
 .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
     border-bottom:none;
 }
+.layui-tab{
+    margin: 0;
+    padding: 10px 0;
+}
 .layui-input:focus{
     border:1px solid #60a5fc!important;
 }
 .layui-input{
-    height: 45px;
+    height: 45px!important;
     text-indent: 10px;
     border-radius: 25px!important;
     color: #b8bcbe;
@@ -142,10 +145,10 @@ line-height:45px;
     border-radius: 25px!important;
 }
 .layui-btn:focus{
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
     opacity: 1;
 }
 .layui-form-item{
@@ -165,6 +168,7 @@ line-height:45px;
     height: 45px;
     line-height: 45px;
     padding: 0;
+    border: none;
 }
 .login-type{
     width: 100%;
@@ -203,6 +207,7 @@ line-height:45px;
 input[type=text].layui-input,
 input[type=password].layui-input,
 input[type=tel].layui-input{
+    color: rgba(38, 38, 38, 0.8);
     border:1px solid #e2e3e2;
     background: #fff;
     line-height: 45px;
@@ -251,19 +256,14 @@ input[type=tel].layui-input{
     }
 }
 @media screen and (max-width: 991px){
-    
-    .wrapper_content {
-        width: 75%;
-        padding: 0;
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: inherit;
-        height: 100%;
-        box-shadow: none;
-        border: none;
+    .wrapper_content{
+        width: 250px;
         min-height: 645px;
-        margin: auto;
+        position: relative;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        padding: 0;
     }
     #content,#main .wf-wrap, .page-title .wf-wra{
         padding: 0!important;
@@ -277,4 +277,19 @@ input[type=tel].layui-input{
     #page{
         top: 0;
     }
+}
+@media screen and (min-width: 321px) and (max-width: 991px){
+    .wrapper_content{
+        width: 300px;
+        min-height: 645px;
+        position: relative;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        padding: 0;
+    }
+}
+@media screen and (max-width: 320px){
+/* iphone5以下 */
+
 }
