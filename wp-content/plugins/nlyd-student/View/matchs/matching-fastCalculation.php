@@ -104,9 +104,6 @@ jQuery(function($) {
     var even_add_time = parseInt($('#even_add_time').val()); //连加
     var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
     var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
-    // var even_add_time = 2; //连加
-    // var add_and_subtract_time = 2; //加减
-    // var wax_and_wane_time = 2000; //乘除
     var level={number:2,symbol:1},//题目难度
     n_type=<?=$child_type?>,
     child_type_down=<?=!empty($child_type_down) ? $child_type_down : ''?>,
@@ -128,17 +125,13 @@ jQuery(function($) {
     if(n_type==0){
         type="连加运算" 
         even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
-        // even_add_time=child_type_down
     }else if(n_type==1){
         type="加减运算" 
         add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
-        // add_and_subtract_time=child_type_down
     }else{
         type='乘除运算'
         wax_and_wane_time=<?=$count_down?>
-        // wax_and_wane_time=child_type_down
     }
-    console.log(even_add_time,add_and_subtract_time,wax_and_wane_time,)
     $('#type').text(type)
     if(!isMatching){
         inItFastCalculation(level,type);
@@ -196,14 +189,15 @@ jQuery(function($) {
                         thisAjaxRow['isRight']=false;
                         $('#answer').removeClass('answer').addClass('error-fast')
                     }
-                    submit(0)
+                    // submit(0)
                 }
-                
-                $('.count_downs').text('初始中...').attr('data-seconds',sys_second)
-                $('#type').text(type)
-                $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
-                inItFastCalculation(level,type);  
-                nextQuestion()
+                if(n_type<=2){
+                    $('.count_downs').text('初始中...').attr('data-seconds',sys_second)
+                    $('#type').text(type)
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                    inItFastCalculation(level,type);  
+                    nextQuestion()
+                }
             }
 
         }, 1000);

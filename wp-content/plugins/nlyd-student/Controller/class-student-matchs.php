@@ -680,7 +680,7 @@ class Student_Matchs extends Student_Home
             'questions'=>$question,
             'match_title'=>$this->match_title,
             'match_more_cn'=>chinanum($this->current_more),
-            'count_down'=> $this->project_end_time - get_time()+300,
+            'count_down'=> $this->project_end_time - get_time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
         );
