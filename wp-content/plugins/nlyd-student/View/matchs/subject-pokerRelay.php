@@ -161,7 +161,7 @@
 <input  type="hidden" name="meta_key" value="user_head"/>
 <input  type="hidden" name="action" value="student_saveInfo"/>
 <input type="hidden" name="_wpnonce" value="<?/*=wp_create_nonce('student_saveInfo_code_nonce');*/?>">
-
+-->
 <script>
 jQuery(function($) { 
     //设置扑克窗口宽度
@@ -179,20 +179,6 @@ jQuery(function($) {
         $('.right-answer .poker-wrapper').css('width',W1);
     }
     initWidth();
-    <?php /*if(!isset($_GET['type'])): */?>
-    $('.count_down').countdown(function(S, d){//倒计时
-        var _this=$(this);
-        var D=d.day>0 ? d.day+'天' : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-         _this.text(time);
-        if(S<=0){
-            window.location.href=_this.parents('.a-btn').attr('href')
-        }
-    });
-    <?php /*endif;*/?>
     $('.your-answer .poker-window').scroll(function(){
         var left=$(this).children('.poker-wrapper').position().left;
         $('.right-answer .poker-window').scrollLeft(-left)
@@ -203,4 +189,4 @@ jQuery(function($) {
     })
  
 })
-</script>-->
+</script>
