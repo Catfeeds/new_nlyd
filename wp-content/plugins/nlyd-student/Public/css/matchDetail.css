@@ -84,11 +84,8 @@ p.long-name{
     display: flex;
     text-align: left;
 }
-.one-item{
-    flex: 1;
-    white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.nl-match-info .one-item:last-child{
+    text-indent: 0.10rem;
 }
 .nl-match-footer{
   height:43px;
@@ -112,5 +109,15 @@ p.long-name{
 @media screen and (max-width: 991px){
     #page{
         padding-bottom: 100px;
+    }
+}
+@media screen and (max-width: 374px){
+    /* iphone6以下 */
+    .nl-match-info{
+        display:block;
+    }
+
+    .nl-match-info .one-item:last-child{
+        text-indent: 0;
     }
 }

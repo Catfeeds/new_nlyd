@@ -38,10 +38,10 @@
     /* font-size: 12px; */
     margin-left: 6px;
     margin-bottom: 4px;
-    background: -webkit-linear-gradient(#4394F9,#68AAFE);
-    background: -o-linear-gradient(#4394F9,#68AAFE);
-    background: -moz-linear-gradient(#4394F9,#68AAFE);
-    background: linear-gradient(#4394F9,#68AAFE);
+    background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: linear-gradient(90deg,#4394F9,#68AAFE);
 }
 /* 扑克展示区 */
 .matching-number-zoo{

@@ -2,18 +2,12 @@
 <style>
 .a-btn.wait{
     position: relative;
-    top: 0;
-    left: 0;
-    margin-left: 0;
-    width: 100%;
+    top:0;
 }
 .a-btn.back{
     position: relative;
     top: 0;
-    left: 0;
     margin-top: 15px;
-    margin-left: 0;
-    width: 100%;
     border: 1px solid #2484FE;
     color: #2484FE;
     background: #fff;

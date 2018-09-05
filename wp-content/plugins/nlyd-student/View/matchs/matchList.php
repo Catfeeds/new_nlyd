@@ -41,15 +41,9 @@
 
         <?php if($row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
-            <!-- <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
-                    <i class="iconfont">&#xe610;</i>
-                </a>
-                <h1 class="mui-title">比赛列表</h1>
-            </header> -->
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
-                        <ul style="margin-left: 0" class="mui-bar mui-bar-nav layui-tab-title">
+                        <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
                             <li class="layui-this">近期比赛</li>
                             <li>往期比赛</li>
                             <div class="nl-transform" data-y="-5">近期比赛</div>
@@ -119,7 +113,6 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
-                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签
