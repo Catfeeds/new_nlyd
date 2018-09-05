@@ -121,7 +121,7 @@ switch ($project_alias){
             var m=d.minute<10 ? '0'+d.minute : d.minute;
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
-            _this.text(time);
+            $(this).attr('data-seconds',S).text(time)
             if(S<=0){
                 window.location.href=_this.parents('.a-btn').attr('href')
             }

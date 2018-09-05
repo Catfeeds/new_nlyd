@@ -135,13 +135,13 @@
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
-                                <!-- <div class="form-input-row">
+                                <div class="form-input-row">
                                     <div class="form-input-label">上传证件</div>
                                     <span class="Mobile form-input-right">修改</span>
                                     <div id="imgBox" class="imgBox">
                                         <img class="logoImg" src="<?=$user_info['user_head'];?>">
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="a-btn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</div>
                             </div>
                             

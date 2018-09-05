@@ -122,7 +122,7 @@ jQuery(function($) {
             }
             if(leveTimes>=3){
                 $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                var time=$("#dataTime").attr('data-time')?$("#dataTime").attr('data-time'):0;
+                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
                 setTimeout(function() {
                     submit(time);
                 }, 1000);
@@ -133,7 +133,7 @@ jQuery(function($) {
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
-            submit($('.count_down').attr('data-seconds'))
+            submit(0)
         }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
@@ -142,7 +142,7 @@ jQuery(function($) {
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
-        var items = $(this).text(time);
+        $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
                 $.alerts('倒计时结束，即将提交答案')
@@ -194,7 +194,6 @@ jQuery(function($) {
         for(var i = page*oneItems ;i < endData; i++){
             pageData.push(data[i])
         }
-        // console.log(pageData)
         return {left:left,right:right,showData:pageData}
     }
 
