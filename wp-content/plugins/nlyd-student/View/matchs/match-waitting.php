@@ -41,10 +41,10 @@
 
 <script>
 jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
+    // history.pushState(null, null, document.URL);
+    // window.addEventListener('popstate', function () {
+    //     history.pushState(null, null, document.URL);
+    // });
     if($('.count_down').attr('data-seconds')<=0){
         window.location.href="<?=$match_url?>"
     }

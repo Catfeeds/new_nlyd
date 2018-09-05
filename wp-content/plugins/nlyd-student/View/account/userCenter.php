@@ -180,14 +180,14 @@
                         </div>
                         <div class="userCenter-detail-foot">安全中心</div>
                     </a>
-                    <a class="c_black8 no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">其他设置</div>
                     </a>
-                    <a class="c_black8 no_border disabled_a"  href="<?=home_url('/teams');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>

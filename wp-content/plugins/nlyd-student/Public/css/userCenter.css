@@ -240,21 +240,15 @@
         background-color:#fff;
         border: none;
         padding-top: 23px;
-        /* padding-bottom: 35px; */
         width: 100%;
         top: 0;
         left: 0;
         z-index: 999;
-        /* margin-bottom: 30px; */
         text-align: center;
     }
     .radius-zoo{
-        /* background: #fff; */
         width: 100%;
-        /* border-top-left-radius: 50%;
-        border-top-right-radius: 50%; */
         position: relative;
-        /* left: -5%; */
         margin-top: 100px;
         padding-bottom: 10px;
     }
@@ -367,25 +361,6 @@
         background-color: #fff;
         overflow: hidden;
     }
-    .userCenter-detail a{
-        position: relative;
-        line-height: 50px;
-        text-align: center;
-        border: none;
-        display: block;
-        float: left;
-        height: 80px;
-        width: -webkit-calc(25% - 0.75px);
-        width: calc(25% - 0.75px);
-        border-bottom: 1px solid rgba(38, 38, 38, 0.1);
-        border-right: 1px solid rgba(38, 38, 38, 0.1);
-    }
-    .userCenter-detail a:nth-child(4n){
-        border-right: none;
-    }
-    .userCenter-detail a.no_border{
-        border-bottom: none;
-    }
     .userCenter-detail-head{
         display: block;
         height: auto;
@@ -414,5 +389,51 @@
         height: 22px;
         line-height: 25px;
         font-size: 0.12rem;
+    }
+}
+@media screen and (min-width: 375px) and (max-width: 991px){
+    .userCenter-detail a{
+        position: relative;
+        line-height: 50px;
+        text-align: center;
+        border: none;
+        display: block;
+        float: left;
+        height: 80px;
+        width: -webkit-calc(25% - 0.75px);
+        width: calc(25% - 0.75px);
+        border-bottom: 1px solid rgba(38, 38, 38, 0.1);
+        border-right: 1px solid rgba(38, 38, 38, 0.1);
+    }
+    .userCenter-detail a:nth-child(4n){
+        border-right: none;
+    }
+    .userCenter-detail a:nth-last-child(1){
+        border-bottom: none;
+    }
+    .userCenter-detail a:nth-last-child(2){
+        border-bottom: none;
+    }
+}
+@media screen and (max-width: 374px){
+/* iphone5以下 */
+    .userCenter-detail a{
+        position: relative;
+        line-height: 50px;
+        text-align: center;
+        border: none;
+        display: block;
+        float: left;
+        height: 80px;
+        width: -webkit-calc(100% / 3 - 2px / 3);
+        width: calc(100% / 3 - 2px / 3);
+        border-bottom: 1px solid rgba(38, 38, 38, 0.1);
+        border-right: 1px solid rgba(38, 38, 38, 0.1);
+    }
+    .userCenter-detail a:nth-child(3n){
+        border-right: none;
+    }
+    .userCenter-detail a:nth-last-child(1){
+        border-bottom: none;
     }
 }

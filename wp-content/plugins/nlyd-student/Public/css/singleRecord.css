@@ -8,10 +8,13 @@
 .content .nl-table td,.content table.nl-table{
     border:none;
 }
-
 .content table.nl-table{
-    border-bottom: none;
+    border-collapse: separate;
+    border-spacing: 0;
     position: relative;
+    width: -webkit-calc(100% - 2px);
+    width: calc(100% - 2px);
+    margin: auto;
 }
 .content .nl-table td.select-td{
     overflow: visible;
@@ -26,25 +29,46 @@
     text-align: center;
     /* font-size: 12px; */
     border-radius: 50%;
-    border: 1px solid #2484FE;;  
-    color: #2484FE;;  
+    border: 1px solid rgba(38, 38, 38, 0.6);
+    color:rgba(38, 38, 38, 0.6);  
     background: #fff;
     margin: auto;
 }
 .top3{
     color: #fff;
     border:none;
-    background: -webkit-linear-gradient(#68AAFE, #4394F9);
-    background: -o-linear-gradient(#68AAFE, #4394F9);
-    background: -moz-linear-gradient(#68AAFE, #4394F9);
-    background: linear-gradient(#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
+}
+.nl-table tbody tr:nth-child(1) td{
+    color: #2484FE;
+}
+.nl-table tbody tr:nth-child(2) td{
+    color: #2484FE;
+}
+.nl-table tbody tr:nth-child(3) td{
+    color: #2484FE;
 }
 tr.nl-me{
-    background: transparent url('./image/record/nl-me.png') no-repeat center center;
-    background-size: 100% 100%;
+    border:1px dashed #2484FE;
 }
-tr.nl-me td{
+.content .nl-table tr.nl-me td{
+    background: #eff6ff;
+    border-top:1px dashed #2484FE;
+    border-bottom:1px dashed #2484FE;
     color: #2484FE;
+}
+tr.nl-me td:first-child{
+    border-left:1px dashed #2484FE;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+tr.nl-me td:last-child{
+    border-right:1px dashed#2484FE;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 .match-title{
     font-size: 0.16rem;
