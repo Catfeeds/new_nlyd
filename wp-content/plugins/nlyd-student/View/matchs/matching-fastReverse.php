@@ -87,7 +87,7 @@ jQuery(function($) {
             }
             if(leveTimes>=3){
                 $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                var time=$("#dataTime").attr('data-time')?$("#dataTime").attr('data-time'):0;
+                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
                 setTimeout(function() {
                     submit(time);
                 }, 1000);
@@ -404,7 +404,7 @@ jQuery(function($) {
 layui.use('layer', function(){
     var hammertime4 = new Hammer($('#sumbit')[0]);
     hammertime4.on("tap", function (e) {
-        var time=$(".count_down").attr('data-seconds')?$(".count_down").attr('data-seconds'):0;
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1
                 ,maxWidth:300
