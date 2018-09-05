@@ -654,7 +654,7 @@ class Student_Ajax
             /***短信通知战队负责人****/
             $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
-            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+            $userID = get_user_meta($current_user->ID, 'user_ID')[0];
             $ali = new AliSms();
 //            print_r($director);die;
             $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));

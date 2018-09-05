@@ -9,6 +9,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <form class="nl-page-form layui-form" lay-filter='addAdress'>
+                <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>"/>
                 <header class="mui-bar mui-bar-nav">
                     <?php
                         $url = home_url('account/address');

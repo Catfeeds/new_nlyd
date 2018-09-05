@@ -37,8 +37,12 @@
                             </div>
                             <p class="address-detail"><?=$val['user_address']?></p>
                         </div>
+                        <?php
+                            $save_url = home_url('/account/addAddress/address_id/'.$val['id']);
+                            if(isset($_GET['match_id'])) $save_url .= '/match_id/'.$_GET['match_id'];
+                        ?>
                         <div  class="address-right">
-                            <a class="address-btn bg_gradient_blue c_white" href="<?=home_url('/account/addAddress/address_id/'.$val['id']);?>">修改</a>
+                            <a class="address-btn bg_gradient_blue c_white" href="<?=$save_url;?>">修改</a>
                             <div class="address-btn del bg_gradient_grey c_white" data-id="<?=$val['id']?>">删除</div>
                         </div>
                     </div>
