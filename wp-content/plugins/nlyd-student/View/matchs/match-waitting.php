@@ -41,24 +41,27 @@
 <?=$match_status;?>
 <script>
     jQuery(function($) {
-    // history.pushState(null, null, document.URL);
-    // window.addEventListener('popstate', function () {
-    //     history.pushState(null, null, document.URL);
-    // });
+        <?php if($match_status == 2 || $count_down <= 120): ?>
 
-    $(window).on("blur",function(){
-        var sessionData={
-            match_id:$.Request('match_id')
-        }
-        $.SetSession('leavePageWaitting',sessionData)
-    })  
-    $(window).on("focus", function(e) {
-        var leavePageWaitting= $.GetSession('leavePageWaitting','1');
-        if(leavePageWaitting && leavePageWaitting['match_id']===$.Request('match_id')){
-            window.location.reload()
-            $.DelSession('leavePageWaitting')
-        }
-    });
+         history.pushState(null, null, document.URL);
+         window.addEventListener('popstate', function () {
+             history.pushState(null, null, document.URL);
+         });
+
+        $(window).on("blur",function(){
+            var sessionData={
+                match_id:$.Request('match_id')
+            }
+            $.SetSession('leavePageWaitting',sessionData)
+        })
+        $(window).on("focus", function(e) {
+            var leavePageWaitting= $.GetSession('leavePageWaitting','1');
+            if(leavePageWaitting && leavePageWaitting['match_id']===$.Request('match_id')){
+                window.location.reload()
+                $.DelSession('leavePageWaitting')
+            }
+        });
+        <?php endif;?>
         if($('.count_down').attr('data-seconds')<=0){
             $.DelSession('leavePageWaitting')
             window.location.href="<?=$match_url?>"

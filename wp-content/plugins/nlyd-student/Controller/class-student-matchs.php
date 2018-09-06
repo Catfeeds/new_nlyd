@@ -362,9 +362,11 @@
                 }
             }
             if($match['is_me'] != 'y' && $match['match_status'] == -2){
-
+                $start = reset($this->project_order_array);
+                //print_r($this->project_order_array);
                 $match['down_time'] = strtotime($match['match_start_time'])-get_time();
-                //var_dump($match['down_time']);
+                $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$start['match_project_id'].'/match_more/1');
+                //var_dump($data['match_url']);
             }
 
             $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
