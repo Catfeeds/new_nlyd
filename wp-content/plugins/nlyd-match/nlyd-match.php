@@ -146,7 +146,7 @@ if(!class_exists('MatchController')){
                     $d = $reader->getActiveSheet()->getCell("D1")->getValue();//获取D列的值
                     $e = $reader->getActiveSheet()->getCell("E1")->getValue();//获取E列的值
                     $f = $reader->getActiveSheet()->getCell("F1")->getValue();//获取F列的值
-                    if($a!='文章序号' || $b != '文章标题' || $c != '文章内容' || $d != '问题列表' || $e != '选项列表' || $f != '答案'){
+                    if($a!='文章序号' || $b != '文章标题' || $c != '文章内容' || $d != '问题列表' || $e != '答案选项列表' || $f != '正确答案序号'){
                         echo '文件格式错误，请核对是否为最新题库模板';
                         return false;
                     }
@@ -155,6 +155,8 @@ if(!class_exists('MatchController')){
                     $index = 0;
                     $errStr = '';
                     $errNum = 0;
+                    $titleB = '';
+                    $titleRepeat = '';//重复题目
                     for($page = 1; $page <= $highestRow;$page++){
                         $a = $reader->getActiveSheet()->getCell("A".$page)->getValue();//获取A列的值
                         $b = $reader->getActiveSheet()->getCell("B".$page)->getValue();//获取B列的值
@@ -162,13 +164,24 @@ if(!class_exists('MatchController')){
                         $d = $reader->getActiveSheet()->getCell("D".$page)->getValue();//获取D列的值
                         $e = $reader->getActiveSheet()->getCell("E".$page)->getValue();//获取E列的值
                         $f = $reader->getActiveSheet()->getCell("F".$page)->getValue();//获取F列的值
+                        if($b != false) {
+                            $token = 0;
+                            $titleB = $b;
+                        }else{
+                            $b = $titleB;
+                        }
+                        if($token == 1) continue;//已存在题目
                         if(intval($a) < 1 && $a != false) continue;//过滤文本标题
-//                        print_r(explode("\n", $e));
-//                        die;
-//                        echo '<pre />';
-//                        print_r($dataArr);
-//                        die;
-                        if(!$d || !$e || !$f || empty($problemArr = explode("##", $e)) || ($correct = intval($f)) < 1){
+
+                        //去除已存在的题目
+                        if($wpdb->get_var('SELECT ID FROM '.$wpdb->posts.' WHERE post_title="'.$b.'" AND post_type="question"')){
+                            $token = 1;
+                            $titleRepeat = "\\n{$b}: 已存在";
+                            $titleRepeat .= "\\n{$b}: 已存在";
+                            continue;
+                        }
+
+                        if(!$d || !$e || !$f || empty($problemArr = explode("##", $e)) || empty($correct = explode("#", $f))){
                             $errNum++;
                             $errStr .= "第{$page}行发 生错误<br />";
                             continue;
@@ -193,9 +206,11 @@ if(!class_exists('MatchController')){
                         echo '导入失败, 导入文件发生了'.$errNum.'个错误<hr />'.$errStr;
                         return false;
                     }
+
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
+
                     $wpdb->startTrans();
                     foreach ($dataArr as $k => $data){
                         $id = wp_insert_post([
@@ -233,10 +248,20 @@ if(!class_exists('MatchController')){
                                 echo '致命错误: '.$data['title'].'-> '.$problem['title'].'存入数据库失败';
                                 return false;
                             }
-
+//                            echo '<pre />';
+//                            print_r($problem);
+//                            die;
                             foreach ($problem['answer'] as $ansK => $answer){
                                 if(empty($answer)) continue;
-                                $problem_answer = $ansK == $problem['correct'] ? 1 : 0;
+                                foreach ($problem['correct'] as $correctV){
+                                    $problem_answer = 0;
+                                    if($ansK == $correctV){
+                                        $problem_answer = 1;
+                                        break;
+                                    }
+
+                                }
+//                                $problem_answer = $ansK == $problem['correct'] ? 1 : 0;
                                 $bool = $wpdb->insert($wpdb->prefix.'problem_meta',['problem_id' => $problemId, 'problem_select' => $answer, 'problem_answer' => $problem_answer]);
                                 if(!$bool){
                                     //选项插入数据库失败
@@ -249,7 +274,7 @@ if(!class_exists('MatchController')){
                         }
                     }
                     $wpdb->commit();
-                    echo '<script>alert("导入成功")</script>';
+                    echo "<script type='text/javascript'>alert('导入成功 {$titleRepeat}')</script>";
                 }
             }
             ?>
