@@ -124,8 +124,6 @@ if(!class_exists('MatchController')){
          * 导入题库
          */
         public function questionImport(){
-
-
             if(is_post()){
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
                 $excelClass = new PHPExcel();
