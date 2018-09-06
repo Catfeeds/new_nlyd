@@ -18,8 +18,8 @@
                     <div class="matching-row">
                         <div class="matching-row-label">辅助操作</div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev">前插一位</div>
-                            <div class="matching-btn" id="next">后插一位</div>
+                            <a class="matching-btn c_white" id="prev">前插一位</a>
+                            <a class="matching-btn c_white" id="next">后插一位</a>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -30,23 +30,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="1">1</div>
-                            <div class="matching-key number" date-number="2">2</div>
-                            <div class="matching-key number" date-number="3">3</div>
+                            <a class="matching-key fs_18 c_white number" date-number="1">1</a>
+                            <a class="matching-key fs_18 c_white number" date-number="2">2</a>
+                            <a class="matching-key fs_18 c_white number" date-number="3">3</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="4">4</div>
-                            <div class="matching-key number" date-number="5">5</div>
-                            <div class="matching-key number" date-number="6">6</div>
+                            <a class="matching-key fs_18 c_white number" date-number="4">4</a>
+                            <a class="matching-key fs_18 c_white number" date-number="5">5</a>
+                            <a class="matching-key fs_18 c_white number" date-number="6">6</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key number" date-number="7">7</div>
-                            <div class="matching-key number" date-number="8">8</div>
-                            <div class="matching-key number" date-number="9">9</div>
+                            <a class="matching-key fs_18 c_white number" date-number="7">7</a>
+                            <a class="matching-key fs_18 c_white number" date-number="8">8</a>
+                            <a class="matching-key fs_18 c_white number" date-number="9">9</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key" id="del">删除</div>
-                            <div class="matching-key number" date-number="0">0</div>
+                            <a class="matching-key fs_16 c_white" id="del">删除</a>
+                            <a class="matching-key fs_18 c_white number" date-number="0">0</a>
                         </div>
                     </div>
                 </div> 

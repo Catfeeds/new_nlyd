@@ -405,26 +405,49 @@ layui.define('layer', function(exports){
           var check = $(this);
           
           //勾选
-          reElem.on('click', function(){
-            var filter = check.attr('lay-filter') //获取过滤器
-            ,text = (check.attr('lay-text')||'').split('|');
+          if('ontouchstart' in window){
+              reElem.on('tap', function(){
+                var filter = check.attr('lay-filter') //获取过滤器
+                ,text = (check.attr('lay-text')||'').split('|');
 
-            if(check[0].disabled) return;
-            
-            check[0].checked ? (
-              check[0].checked = false
-              ,reElem.removeClass(RE_CLASS[1]).find('em').text(text[1])
-            ) : (
-              check[0].checked = true
-              ,reElem.addClass(RE_CLASS[1]).find('em').text(text[0])
-            );
-            
-            layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
-              elem: check[0]
-              ,value: check[0].value
-              ,othis: reElem
+                if(check[0].disabled) return;
+                
+                check[0].checked ? (
+                  check[0].checked = false
+                  ,reElem.removeClass(RE_CLASS[1]).find('em').text(text[1])
+                ) : (
+                  check[0].checked = true
+                  ,reElem.addClass(RE_CLASS[1]).find('em').text(text[0])
+                );
+                
+                layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
+                  elem: check[0]
+                  ,value: check[0].value
+                  ,othis: reElem
+                });
+              });
+          }else{
+            reElem.on('click', function(){
+              var filter = check.attr('lay-filter') //获取过滤器
+              ,text = (check.attr('lay-text')||'').split('|');
+
+              if(check[0].disabled) return;
+              
+              check[0].checked ? (
+                check[0].checked = false
+                ,reElem.removeClass(RE_CLASS[1]).find('em').text(text[1])
+              ) : (
+                check[0].checked = true
+                ,reElem.addClass(RE_CLASS[1]).find('em').text(text[0])
+              );
+              
+              layui.event.call(check[0], MOD_NAME, RE_CLASS[2]+'('+ filter +')', {
+                elem: check[0]
+                ,value: check[0].value
+                ,othis: reElem
+              });
             });
-          });
+          }
         }
         
         checks.each(function(index, check){

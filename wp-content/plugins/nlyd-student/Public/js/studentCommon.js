@@ -200,7 +200,6 @@ jQuery(document).ready(function($) {
                     var dom='请使用浏览器自带分享功能'
                     $.alerts(dom)
                 }else if(isWeiXin()){
-                    $.alerts(2)
                     $(this).parents('.selectBottom').removeClass('selectBottom-show');
                     if($('.share-bg').length>0){
                         $('.share-bg').css('display','block')
@@ -215,7 +214,6 @@ jQuery(document).ready(function($) {
                         $('body').append(dom)
                     }
                 }else{
-                    // $.alerts(1)
                     var id=_this.attr('data-id');
                     call(id)
                 }
