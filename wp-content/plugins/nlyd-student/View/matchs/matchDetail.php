@@ -149,7 +149,7 @@ jQuery(function($) {
                             var time=D+h+':'+m+':'+s;
                             $(this).text(time);
                         }else{
-                            $('#time_count').text('已截止')
+                            window.location.reload()
                         }
                     });
                         if(res.success){
@@ -162,7 +162,7 @@ jQuery(function($) {
                                             +'<td><div class="table_content">'+v.user_gender+'</div></td>'
                                             +'<td><div class="table_content">'+v.real_age+'岁</div></td>'
                                             +'<td><div class="table_content">'+v.created_time+'报名</div></td>'
-                                        +'<tr>'
+                                        +'</tr>'
                                 lis.push(dom) 
                             })
                             if (res.data.info.length<10) {
@@ -171,12 +171,6 @@ jQuery(function($) {
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            // if(page==1){
-                            //     var dom='<tr><td colspan="5">无记录</td><tr>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
                 })       

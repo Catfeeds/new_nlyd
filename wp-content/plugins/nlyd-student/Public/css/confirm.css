@@ -23,7 +23,6 @@ input[type=text].c_black{
     top: 0;
     right: 2px;
 }
-
 .nl-match-header{
     position: relative;
 }
@@ -54,4 +53,13 @@ a.nl-see-link{
     left: 0;
     border-radius: 0;
     margin-left: 0;
+}
+.layui-form-checkbox[lay-skin=primary] i{
+    width: 25px;
+    height: 25px;
+}
+.layui-icon-ok:before {
+    top: 4px;
+    position: absolute;
+    left: 7px;
 }

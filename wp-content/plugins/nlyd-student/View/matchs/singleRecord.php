@@ -46,7 +46,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="a-btn"  href="<?=$answer_url?>">查看本轮我的答题记录</div>
+                    <a class="a-btn"  data-href="<?=$answer_url?>">查看本轮我的答题记录</a>
                 </div> 
             </div>
         </div>           
@@ -83,7 +83,7 @@ jQuery(function($) {
 share();
 $('.a-btn').click(function(){
     var _this=$(this);
-    var hrefs=_this.attr('href');
+    var hrefs=_this.attr('data-href');
     var match_more=$('.lun-active').attr('data-post-id');
     var newHref=hrefs+"/match_more/"+match_more;
     window.location.href=newHref;

@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="a-btn" id="complete">记忆完成</div>
+                <a class="a-btn" id="complete">记忆完成</a>
             </div>
         </div>           
     </div>

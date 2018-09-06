@@ -7,11 +7,11 @@
     </p>
     <div class="login-box-top">
         <div class="box-logo ">
-            <img src="<?=student_css_url.'image/nlyd-big.png'?>" class="logoImg">
+            <img src="<?=student_css_url.'image/login-logo.png'?>" class="logoImg">
         </div>
-        <div class="box-logo-name">
+        <!-- <div class="box-logo-name">
             <img src="<?=student_css_url.'image/InternationalIntellectualSports.png'?>" class="logoImg">
-        </div>
+        </div> -->
     </div>
     <div class="layui-tab layui-tab-brief" lay-filter="tabs">
         <ul style="margin-left: 0" class="layui-tab-title  ">
@@ -44,15 +44,15 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <button type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</button>
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</span>
+                            <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                            <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</button>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</a>
                             </div>
                         </div>
                     </form>
@@ -74,12 +74,12 @@
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</span>
-                            <span data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</span>
+                            <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
+                            <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</button>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</a>
                             </div>
                         </div>
                     </form>
@@ -97,7 +97,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <button type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</button>
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</a>
                             </div>
                         </div>
                         <div class="layui-form-item" >
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <p class="row-margin">
-                            <span data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</span>
+                            <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
@@ -135,7 +135,7 @@
                     <div class="layui-form-item">
                         <div class="layui-input-inline">
                             <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                            <button type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</button>
+                            <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -145,17 +145,17 @@
                     </div>
                                         
                     <p class="row-margin">
-                        <span data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</span>
+                        <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
                     </p>
                     <div class="layui-form-item">
                         <div class="layui-input-inline">
-                            <button type="button" class="layui-btn submitBtn  bg_gradient_blue" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</button>
+                            <a class="layui-btn submitBtn  bg_gradient_blue fs_16" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</a>
                         </div>
                     </div>
                 </form>
             </div> 
         </div> 
-        <div class="nl-agreement">登录或注册即同意<span class="c_blue pointer">【脑力中国用户协议】</span></div>
+        <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
         <!-- <ul style="margin-left: 0"  class="login-type">
             <li class="login-type-wrapper">
                 <div class="login-type-logo">

@@ -45,8 +45,8 @@ jQuery(document).ready(function($) {
                         'transform':'translate3d(0px, 0px, 0px)'
                     }).delay('200').fadeIn('200')
 
-                    $('.nicenameFormBtn').css('zIndex','2')
-                    $('.certificationFormBtn').css('zIndex','3')
+                    $('.nicenameFormBtn').css('display','none')
+                    $('.certificationFormBtn').css('display','block')
                 }
             }
         })
@@ -64,8 +64,8 @@ jQuery(document).ready(function($) {
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).delay('200').fadeOut('200')
 
-            $('.nicenameFormBtn').css('zIndex','3')
-            $('.certificationFormBtn').css('zIndex','2')
+            $('.nicenameFormBtn').css('display','block')
+            $('.certificationFormBtn').css('display','none')
         })
         //模拟手机下拉列表，选择证件类型
         var certificationSelectData= [

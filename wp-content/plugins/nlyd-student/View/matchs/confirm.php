@@ -149,11 +149,11 @@
                     <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
 
                         <?php if($orderStatus['status'] == 1){ ?>
-                            <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</div>
+                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</a>
                         <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <div class="a-btn">已报名 </div>
+                            <a class="a-btn">已报名 </a>
                         <?php }elseif($orderStatus['status'] == 0){ ?>
-                            <div class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</div>
+                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</a>
                         <?php } ?>
 
 
@@ -194,7 +194,6 @@ jQuery(function($) {
             // 监听提交
             form.on('submit(pay-formbtn)', function(data){
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),data.field,function(res){
-                    console.log(res)
                     if(res.success){
                         //不需要支付
                         if(res.data.is_pay == 0){
@@ -205,9 +204,9 @@ jQuery(function($) {
                         var total=<?=$match['match_cost']?>
                         // $('.selectBottom').addClass('selectBottom-show')
                         var content='<div class="box-conent-wrapper">本次共需支付￥'+total+'</div>'
-                                    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_12"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;微信</div>'
-                                    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_12"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;支付宝</div>'
-                                    //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_12 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;银联支付</div>'
+                                    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;微信</div>'
+                                    +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;支付宝</div>'
+                                    //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
                         layer.open({
                             type: 1
                             ,maxWidth:300

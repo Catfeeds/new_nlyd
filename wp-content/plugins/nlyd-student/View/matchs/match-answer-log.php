@@ -28,7 +28,7 @@
                         <div class="subject-title">
                             <div class="c_black"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10">您的得分<?=$my_score?>分</div>
-                            <div class="subject-title-info"><a <?= !empty($ranking) ? "href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
+                            <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                         </div>
                         <div class="subject-row">
                             <div class="one-info">
@@ -92,7 +92,7 @@ switch ($project_alias){
                     <a href="<?=$next_project_url?>">下一项目</a>
                 <?php endif;?>
                 <?php if($next_type == 3):?>
-                    <a class="a-btn" href="<?=$next_project_url?>">下一项已开赛,等待开赛</a>
+                    <a class="a-btn" href="<?=$next_project_url?>">下一项已开赛,进入比赛</a>
                 <?php endif;?>
                 <?php if($next_type == 4):?>
                     <a class="a-btn" href="<?=$next_project_url?>">所有答题结束,查看详情</a>
@@ -114,6 +114,21 @@ switch ($project_alias){
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
         });
+        $(window).on("blur",function(){
+            var sessionData={
+                    match_id:$.Request('match_id'),
+                    project_id:$.Request('project_id'),
+                    match_more:$.Request('match_more')
+                }
+            $.SetSession('leavePageWaits',sessionData)
+        })  
+        $(window).on("focus", function(e) {
+            var leavePageWaits= $.GetSession('leavePageWaits','1');
+            if(leavePageWaits && leavePageWaits['match_id']===$.Request('match_id') && leavePageWaits['project_id']===$.Request('project_id') && leavePageWaits['match_more']===$.Request('match_more')){
+                window.location.reload()
+                $.DelSession('leavePageWaits')
+            }
+        });
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';
@@ -123,6 +138,7 @@ switch ($project_alias){
             var time=D+h+':'+m+':'+s;
             $(this).attr('data-seconds',S).text(time)
             if(S<=0){
+                $.DelSession('leavePageWaits')
                 window.location.href=_this.parents('.a-btn').attr('href')
             }
         });

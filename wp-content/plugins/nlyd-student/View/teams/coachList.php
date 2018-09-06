@@ -316,7 +316,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                             var this_coach_name=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
                                                             var this_coach_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
                                                             var this_category_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
-                                                            var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</div></div>';
+                                                            var coach_btn='<div class="right_c"><a class="coach-btn text_1  bg_gradient_orange setCoach c_blue" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</a></div>';
                                                             __this.removeClass('c_orange').addClass('c_blue')
                                                             __this.children('.nl-badge').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
                                                             __this.parents('.coach-row').find('.left_c .ta_l').text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
@@ -398,7 +398,7 @@ layui.use(['element','flow','layer','form'], function(){
                             if(res.data.url.length>0){
                                 window.location.href=res.data.url
                             }else{
-                                var coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</div></div>';
+                                var coach_btn='<div class="right_c"><a class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</a></div>';
                                 _this.text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
                                 _this.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
                                 _this.parents('.coach-row').find('.coach-type').each(function(){
@@ -538,17 +538,17 @@ layui.use(['element','flow','layer','form'], function(){
                                             isLeft="ta_l"
                                         }else if(v.apply_status==2){//1，申请中，2我的教练
                                             if(v.my_major_coach=='y'){//主训教练
-                                                clear_btn='<span class="clearMain text_1 ta_l"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</span>'
+                                                clear_btn='<a class="clearMain text_1 ta_l c_black6"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</a>'
                                             }else{
-                                                coach_btn='<div class="right_c"><div class="coach-btn text_1  bg_gradient_orange setCoach" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</div></div>';
-                                                clear_btn='<span class="clearCoach text_1 ta_l" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</span>'
+                                                coach_btn='<div class="right_c"><a class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</a></div>';
+                                                clear_btn='<a class="clearCoach text_1 ta_l c_black6" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</a>'
                                             }
                                         }else{
-                                            coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
+                                            coach_btn='<div class="right_c"><a class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</a></div>';//不是我的教练
                                             isLeft="ta_l"
                                         }
                                     }else{
-                                        coach_btn='<div class="right_c"><div class="coach-btn bg_gradient_blue text_1 setTeacher" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</div></div>';//不是我的教练
+                                        coach_btn='<div class="right_c"><a class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</a></div>';//不是我的教练
                                         isLeft="ta_l"
                                     }
                                     var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
@@ -607,12 +607,12 @@ layui.use(['element','flow','layer','form'], function(){
     element.on('tab(tabs)', function(){//tabs
         var left=$(this).position().left+parseInt($(this).css('marginLeft'));
         var html=$(this).html();
-        var category_id=$(this).attr('data-id')
+        var id=$(this).attr('data-id')
         $('.nl-transform').css({
             'transform':'translate3d('+left+'px, 0px, 0px)'
         }).html(html)
-        if(!isClick[category_id]){
-            pagation(category_id)
+        if(!isClick[id]){
+            pagation(id)
         }
     })
 });

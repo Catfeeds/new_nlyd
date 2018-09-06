@@ -34,7 +34,7 @@
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="预留手机号">
                         </div>
                     </div>
-                    <div class="a-btn" lay-filter="addAccount" lay-submit="">保存</div>
+                    <a class="a-btn" lay-filter="addAccount" lay-submit="">保存</a>
                 </form>
             </div>
         </div>           

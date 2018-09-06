@@ -25,7 +25,7 @@
                         <div class="teamDetail-infoRow">
                             <span class="nl-team-name"><?=$team['post_title']?></span>
                             <?php if($team['status'] == 2){?>
-                            <span class="nl-team-btn" id="team-leave" data-id="<?=$team['ID']?>">退出战队</span>
+                            <a class="nl-team-btn" id="team-leave" data-id="<?=$team['ID']?>">退出战队</a>
                             <?php }elseif($team['status'] == 1){?>
                                 <span class="nl-team-step">战队申请审核中</span>
                             <?php }elseif ($team['status'] == -1){?>
@@ -108,7 +108,7 @@
                 </div>
 
                 <?php if(!in_array($team['status'],array(-1,1,2))): ?>
-                <div class="a-btn" id="team-join" data-id="<?=$team['ID']?>">加入战队</div>
+                <a class="a-btn" id="team-join" data-id="<?=$team['ID']?>">加入战队</a>
                 <?php endif;?>
             </div>
         </div>

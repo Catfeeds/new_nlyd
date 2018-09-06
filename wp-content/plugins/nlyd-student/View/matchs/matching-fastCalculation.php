@@ -35,25 +35,25 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key number" date-number="1">1</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="2">2</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="3">3</div>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="1">1</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="2">2</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="3">3</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key number" date-number="4">4</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="5">5</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="6">6</div>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="4">4</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="5">5</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="6">6</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key number" date-number="7">7</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="8">8</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="9">9</div>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="7">7</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="8">8</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9">9</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key bg_orange" id="del">删除</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="-">-</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="0">0</div>
-                            <div class="matching-key bg_orange" id="next">下一题</div>
+                            <a class="matching-key c_white fs_16 bg_orange" id="del">删除</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</a>
+                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</a>
+                            <a class="matching-key c_white fs_16 bg_orange" id="next">下一题</a>
                         </div>
                     </div>
                 </div> 
@@ -474,7 +474,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(S)
+                submit(0)
             }, 1000);
         }
     });  

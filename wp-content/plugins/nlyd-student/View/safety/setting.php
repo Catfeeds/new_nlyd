@@ -36,7 +36,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label">清除缓存</div>
                             </div>
-                            <div class="a-btn" id="loginOut">退出登录</div>  
+                            <a class="a-btn" id="loginOut">退出登录</a>  
                         </div>
                     </div>
                 </div>

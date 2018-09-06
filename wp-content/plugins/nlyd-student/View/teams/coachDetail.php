@@ -28,7 +28,7 @@
                                         <span> <?=$user_infos['user_gender']?> </span>
                                         <?php endif;?>
                                         <span>ID <?=$user_infos['user_ID']?></span>
-                                        <span class="c_blue fs_12 pointer" id="see">&nbsp;&nbsp;查看教练证书</span>
+                                        <a class="c_blue fs_12 pointer" id="see">&nbsp;&nbsp;查看教练证书</a>
                                     </div>
                                     <div class="coachDetail-infoRow">
                                         <span>国际脑力运动委员会（IISC） <?=$user_infos['user_coach_level']?></span>
@@ -103,7 +103,7 @@
 <!--                            </div>-->
 <!--                        </div>-->
                         <?php if(empty($my_coach_id)): ?>
-<!--                        <div class="a-btn">请TA当教练</div>-->
+<!--                        <a class="a-btn">请TA当教练</a>-->
                         <?php endif;?>
                     </div>
                     <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
@@ -163,24 +163,22 @@ jQuery(function($) {
                 "id": "coach_see", //相册id
                 "start": 0, //初始显示的图片序号，默认0
                 "data": [   //相册包含的图片，数组格式
-                    {
-                    "alt": "",
-                    "pid": 1, //图片id
-                    "src":window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //原图地址
-                    "thumb": window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //缩略图地址
-                    },
-                    {
-                    "alt": "",
-                    "pid": 2, //图片id
-                    "src":window.plugins_url+'/nlyd-student/Public/css/image/nlyd-logo.png', //原图地址
-                    "thumb": window.plugins_url+'/nlyd-student/Public/css/image/nlyd-logo.png', //缩略图地址
-                    }
+                    // {
+                    // "alt": "",
+                    // "pid": 1, //图片id
+                    // "src":window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //原图地址
+                    // "thumb": window.plugins_url+'/nlyd-student/Public/css/image/loading.gif', //缩略图地址
+                    // }
                 ]
             }
-            layer.photos({//图片预览
-                photos: json,
-                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-            })  
+            if(json['data'].length==0){
+                $.alerts('当前教练未上传证书')
+            }else{
+                layer.photos({//图片预览
+                    photos: json,
+                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                })  
+            }
         })
         flow.load({
             elem: '#flow-table' //流加载容器

@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn" id="complete">阅读完成</div>
+                <a class="a-btn" id="complete">阅读完成</a>
             </div>
         </div>
     </div>
