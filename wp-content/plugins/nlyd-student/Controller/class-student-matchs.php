@@ -423,6 +423,7 @@
              //print_r($this->next_project);
              //print_r($this->current_project);
 
+             $data['match_status'] = $this->match['match_status'];
              $data['next_project'] = $this->next_project;
              $data['current_project'] = $this->current_project;
              $data['count_down'] = $this->current_project['project_end_time']-get_time();
