@@ -22,14 +22,16 @@ class Student_Weixin
      * 微信网页授权登录
      */
     public function webLogin(){
-        $this->getWebCode(true);
-//        if(is_user_logged_in()){
-//            global $current_user;
-//            print_r($current_user);
-//        }else{
-//            $this->getWebCode(true);
-//
-//        }
+//            wp_logout();
+
+//        $this->getWebCode(true);
+        if(is_user_logged_in()){
+            global $current_user;
+        }else{
+            if($this->getWebCode(true)){
+                wp_redirect(home_url('account'));
+            }
+        }
     }
 
     /**\
@@ -55,7 +57,7 @@ class Student_Weixin
             header('Location:'.$url);
             exit;
         }else{
-            $this->getWebAccessToken(true);
+            return $this->getWebAccessToken(true);
         }
     }
 
@@ -108,10 +110,14 @@ class Student_Weixin
         //打印用户信息
 //        session('lfs_WeChat',$res);
         // var_dump($res);die;
-        if($type){
-            $this->indexs($res,$type);
-        }
 
+
+        if (!$this->indexs($res,$type)) {
+            echo '<h1>错误：</h1>存入用户信息失败';
+//            echo '<br/><h2>错误信息：</h2>'.$res->errmsg;
+            exit;
+        }
+        return true;
         //return $res;
         /*echo '<pre>';
         print_r($res);
@@ -123,49 +129,42 @@ class Student_Weixin
      * 微信授权登录页
     */
     public function indexs($res,$type=''){
-        echo '<pre />';
-        print_r($res);
-        exit;
-
         $openid = $res['openid'];
 
         /*判断是否为平台用户*/
         global $wpdb;
-        $users = $wpdb->get_row('SELECT id FROM '.$wpdb->users.' WHERE weChat_openid='.$res['openid'].' AND weChat_openid != ""');
-
+        $users = $wpdb->get_row('SELECT ID FROM '.$wpdb->users.' WHERE weChat_openid="'.$res['openid'].'" AND weChat_openid != ""');
         if(empty($users)){
+
             /*保存用户信息*/
+
+            $wpdb->startTrans();
+            $user_id = wp_create_user($res['openid'],$res['openid'].'_'.get_time());
             $auth = array(
                 'user_nicename'        => $res['nickname'],
                 'weChat_openid'        => $res['openid'],
-                'user_login'        => $res['openid'],
+                'weChat_union_id'        => $res['unionid'],
+                'user_registered'        => get_time('mysql'),
                 //'token'           => $row[4],
                 //'last_login_time' => $row['last_login_time'],
             );
-
-            $wpdb->insert($wpdb->users,$auth);
-            $user_id = $wpdb->insert_id;
-            $user_real_name = ['real_name' => '微信用户', 'real_age' => $res['age']];
-            switch ($res['sex']){
-                case 1:
-                    $sex = '男';
-                    break;
-                case 2:
-                    $sex = '女';
-                    break;
-                default:
-                    $sex = '未知';
+            $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
+            if(!$bool) {
+                $wpdb->rollback();
+                return false;
             }
-            $sql = 'INSERT  INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
-            ('.$user_id.',"user_gender", "'.$sex.'"),
-            ()';
+            if($this->insertUsermeta($res,$user_id)){
+                $wpdb->commit();
+            }else{
+                $wpdb->rollback();
+                return false;
+            }
 //            if($type!=='no'){
 //
 //            }
         }else{
-
             $user_id = $users->ID;
-
+            if(!get_user_meta($user_id)) $this->insertUsermeta($res,$user_id);
         }
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
@@ -174,35 +173,30 @@ class Student_Weixin
     }
 
     /**
-     * 微信网页授权根据access_token获取用户信息
+     * usermeta数据
      */
-    public function getUserInfoByAccessToken($data){
-        $access_token = $data['access_token'];
-        $openid = $data['openid'];
-        $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
-
-        $ch = curl_init();
-        curl_setopt($ch,CURLOPT_URL,$get_user_info_url);
-        curl_setopt($ch,CURLOPT_HEADER,0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-        $res = curl_exec($ch);
-        curl_close($ch);
-        //返回的是一个数组，里面存放用户的信息
-        $res = json_decode($res,true);
-        print_r($res);
-        if (isset($res->errcode)) {
-            echo '<h1>错误：</h1>'.$res->errcode;
-            echo '<br/><h2>错误信息：</h2>'.$res->errmsg;
-            exit;
+    public function insertUsermeta($res,$user_id){
+        global $wpdb;
+        $user_address = ['country' => $res['country'], 'province' => $res['province'], 'city' => $res['city']];
+        switch ($res['sex']){
+            case 1:
+                $sex = '男';
+                break;
+            case 2:
+                $sex = '女';
+                break;
+            default:
+                $sex = '未知';
         }
-        //打印用户信息
-        session('lfs_WeChat',$res);
-        // var_dump($res);die;
-        if($type){
-            $this->indexs($res,$type);
-        }
+        $sql = 'INSERT INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
+            ('.$user_id.',"user_gender", "'.$sex.'"),
+            ('.$user_id.',"user_address",\''.serialize($user_address).'\'),
+            ('.$user_id.',"nickname","'.$res['nickname'].'"),
+            ('.$user_id.',"user_head","'.$res['headimgurl'].'")';
+        echo $sql;
+        return $wpdb->query($sql);
     }
+
 
     /**
      * 获取access_token
