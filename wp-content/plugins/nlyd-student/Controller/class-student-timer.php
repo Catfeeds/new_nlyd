@@ -25,6 +25,11 @@ class Student_Timer
      */
     public function index(){
 
+        /*var_dump('leo-timer');
+        var_dump(file_exists('/data/log.txt'));
+        $myfile = file_put_contents('/data/log.txt', get_time('mysql')."  This is a timer. \r\n", FILE_APPEND);
+        var_dump($myfile);die;*/
+
         $switch = get_option('default_setting')['default_timer'];
         if($switch == 1){
             $timer = new Timer();
