@@ -25,13 +25,15 @@
                 <div class="width-padding width-padding-pc contentP-wrapper">
                     <div class="nl-table-wapper">
                         <table class="nl-table">
-                            <tbody id="flow-table">
+                            <thead>
                                 <tr>
                                     <td>战队名称</td>
                                     <td>战队负责人</td>
                                     <td>战队口号</td>
                                     <td>战队成员</td>
                                 </tr>
+                            </thead>
+                            <tbody id="flow-table">
                             </tbody>
 
                         </table>

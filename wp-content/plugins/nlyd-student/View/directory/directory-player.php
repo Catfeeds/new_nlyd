@@ -24,32 +24,35 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding width-padding-pc contentP-wrapper">
                     <div class="nl-table-wapper">
-                        <table class="nl-table" id="flow-table">
-                            <tr>
-                                <td><div class="table_content">头像 </div></td>
-                                <td><div class="table_content">学员姓名 </div></td>
-                                <td><div class="table_content">ID </div></td>
-                                <td><div class="table_content">性别 </div></td>
-                                <td><div class="table_content">类别 </div></td>
-                                <td><div class="table_content">级别 </div></td>
-                                <td><div class="table_content">主训教练 </div></td>
-                                <td><div class="table_content">国籍 </div></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="player-img img-box">
-                                        <img src="<?=student_css_url.'image/icons/match-big.png'?>">
-                                    </div>
-                                </td>
-                                <td><div class="table_content">学员姓名 </div></td>
-                                <td><div class="table_content">ID </div></td>
-                                <td><div class="table_content">性别 </div></td>
-                                <td><div class="table_content">类别 </div></td>
-                                <td><div class="table_content">级别 </div></td>
-                                <td><div class="table_content">主训教练 </div></td>
-                                <td><div class="table_content">国籍 </div></td>
-                            </tr>
-                          
+                        <table class="nl-table" >
+                            <thead>
+                                <tr>
+                                    <td><div class="table_content">头像 </div></td>
+                                    <td><div class="table_content">学员姓名 </div></td>
+                                    <td><div class="table_content">ID </div></td>
+                                    <td><div class="table_content">性别 </div></td>
+                                    <td><div class="table_content">类别 </div></td>
+                                    <td><div class="table_content">级别 </div></td>
+                                    <td><div class="table_content">主训教练 </div></td>
+                                    <td><div class="table_content">国籍 </div></td>
+                                </tr>
+                            </thead>
+                            <tbody id="flow-table">
+                                <tr>
+                                    <td>
+                                        <div class="player-img img-box">
+                                            <img src="<?=student_css_url.'image/icons/match-big.png'?>">
+                                        </div>
+                                    </td>
+                                    <td><div class="table_content">学员姓名 </div></td>
+                                    <td><div class="table_content">ID </div></td>
+                                    <td><div class="table_content">性别 </div></td>
+                                    <td><div class="table_content">类别 </div></td>
+                                    <td><div class="table_content">级别 </div></td>
+                                    <td><div class="table_content">主训教练 </div></td>
+                                    <td><div class="table_content">国籍 </div></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

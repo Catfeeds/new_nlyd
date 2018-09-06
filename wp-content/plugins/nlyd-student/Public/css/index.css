@@ -550,6 +550,9 @@ p.share-font{
     padding-bottom: 35px;
     width: 100%;
 }
+.content .nl-table tbody tr:nth-child(odd){
+    background-color: rgba(246, 250, 255, 1);
+}
 .content .nl-table td{
     text-align: center;
     font-size:0.12rem;

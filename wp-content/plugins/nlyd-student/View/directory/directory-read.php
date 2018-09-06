@@ -24,51 +24,31 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding width-padding-pc contentP-wrapper">
                     <div class="nl-table-wapper">
-                        <table class="nl-table" id="flow-table">
-                            <tr>
-                                <td>头像</td>
-                                <td>学员姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>速读级别</td>
-                                <td>主训教练</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="player-img img-box">
-                                        <img src="<?=student_css_url.'image/icons/match-big.png'?>">
-                                    </div>
-                                </td>
-                                <td>学员姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>速算级别</td>
-                                <td>主训教练</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="player-img img-box">
-                                        <img src="<?=student_css_url.'image/icons/match-big.png'?>">
-                                    </div>
-                                </td>
-                                <td>学员姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>速算级别</td>
-                                <td>主训教练</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="player-img img-box">
-                                        <img src="<?=student_css_url.'image/icons/match-big.png'?>">
-                                    </div>
-                                </td>
-                                <td>学员姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>速算级别</td>
-                                <td>主训教练</td>
-                            </tr>
+                        <table class="nl-table">
+                            <thead>
+                                <tr>
+                                    <td>头像</td>
+                                    <td>学员姓名</td>
+                                    <td>ID</td>
+                                    <td>性别</td>
+                                    <td>速读级别</td>
+                                    <td>主训教练</td>
+                                </tr>
+                            </thead>
+                            <tbody id="flow-table">
+                                <tr>
+                                    <td>
+                                        <div class="player-img img-box">
+                                            <img src="<?=student_css_url.'image/icons/match-big.png'?>">
+                                        </div>
+                                    </td>
+                                    <td>学员姓名</td>
+                                    <td>ID</td>
+                                    <td>性别</td>
+                                    <td>速算级别</td>
+                                    <td>主训教练</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

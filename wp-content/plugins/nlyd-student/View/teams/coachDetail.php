@@ -113,16 +113,21 @@
                                 <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
                                 <p>*M、R、A分别代表记忆、速读、心算</p>
                                 <div class="nl-table-wapper">
-                                    <table class="nl-table" id="flow-table">
-                                        <tr>
-                                            <td>头像</td>
-                                            <td>学员姓名</td>
-                                            <td>学员ID</td>
-                                            <td>M级别</td>
-                                            <td>R级别</td>
-                                            <td>A级别</td>
-                                            <td>脑力健将级别</td>
-                                        </tr>
+                                    <table class="nl-table">
+                                        <thead>
+                                            <tr>
+                                                <td>头像</td>
+                                                <td>学员姓名</td>
+                                                <td>学员ID</td>
+                                                <td>M级别</td>
+                                                <td>R级别</td>
+                                                <td>A级别</td>
+                                                <td>脑力健将级别</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="flow-table">
+
+                                        </tbody> 
                                     </table>
                                 </div>
                             </div>
