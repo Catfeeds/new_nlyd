@@ -89,9 +89,10 @@
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
-                                        <table class="nl-table"  id="flow-table">
-                                        
+                                        <table class="nl-table">
+                                            <tbody id="flow-table">
 
+                                            </tbody>    
                                         </table>
                                     </div>
                                 </div>

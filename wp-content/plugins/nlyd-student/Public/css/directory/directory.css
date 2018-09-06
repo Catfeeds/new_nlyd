@@ -167,9 +167,9 @@ p.content-p{
     border-color:transparent;
 }
 
-.content table.nl-table tr:nth-child(odd){
+/* .content table.nl-table tr:nth-child(odd){
     background: RGBA(246, 250, 255, 1);
-}
+} */
 .content table.nl-table tr:first-child td{
     color: RGBA(38, 38, 38, 1);
 }

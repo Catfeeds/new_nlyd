@@ -31,9 +31,9 @@
                                     <tr class='table-head'>
                                         <td>名次</td>
                                         <td>学员姓名</td>
-                                        <td>ID</td>
+                                        <td><span>ID</span></td>
                                         <td>城市</td>
-                                        <td>项目总分</td>
+                                        <td><span>项目总分</span></td>
                                         <td>组别</td>
                                     </tr>  
                                     <tr class="nl-me" id="danxiang_me">
@@ -118,9 +118,9 @@ layui.use(['element','flow'], function(){
                                         +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                     +'</td>'
                                     +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                    +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
                                     +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                    +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
                                     +'<td><div class="table_content">'+rows.group+'</div></td>'
                         }
                         $.each(res.data.info,function(index,value){
@@ -139,9 +139,9 @@ layui.use(['element','flow'], function(){
                                             +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
                                         +'</td>'
                                         +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                        +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
                                         +'<td><div class="table_content">'+value.city+'</div></td>'
-                                        +'<td><div class="table_content">'+value.score+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
                                         +'<td><div class="table_content">'+value.group+'</div></td>'
                                     +'</tr>'
                             lis.push(dom)                           

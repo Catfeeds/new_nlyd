@@ -38,7 +38,6 @@ jQuery(function($) {
                     // console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
-                        // window.localStorage.removeItem(formData.user_login);//登陆成功删除记录
                         if(data.data.url){
                             setTimeout(function(){
                                 window.location.href=data.data.url
@@ -53,7 +52,7 @@ jQuery(function($) {
                     // 通常 textStatus 和 errorThrown 之中
                     // 只有一个会包含信息
                     // 调用本次AJAX请求时传递的options参数
-                    console.log(XMLHttpRequest, textStatus, errorThrown)
+                    // console.log(XMLHttpRequest, textStatus, errorThrown)
                 }
             });
         } 
@@ -115,7 +114,6 @@ jQuery(function($) {
             }  
         }
         $('.getCode').click(function(){//获取验证码
-            // var value=$("#loginForm input[name='user_login']").val()
             var dom=$(this).parents('form').find("input[name='user_login']")
             var value=dom.val()
             var allRules=$.validationLayui.allRules;//全局正则配置
@@ -166,7 +164,6 @@ jQuery(function($) {
                     time(wait,$(this))
                     return false
                 }else{
-                    // $(this).parents('form').find("input[name='user_login']").focus()
                     $.alerts(message)
                     return false
                 }
@@ -180,8 +177,6 @@ jQuery(function($) {
             $('.formName').text('手机快速登录')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-            // $('.login-by').removeClass('display-block').addClass('display-hide');
-            // $('.login-by-psw').removeClass('display-hide').addClass('display-block');
         })
         $('.login-by-psw').click(function(){//密码登录
             $('#loginFormFast')[0].reset();//重置表单
@@ -201,8 +196,6 @@ jQuery(function($) {
             $('.formName').text('重置密码')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-            // $('.login-by').removeClass('display-block').addClass('display-hide');
-            // $('.login-by-psw').removeClass('display-hide').addClass('display-block');
         })
         
         $('.login-fast').click(function(){//注册tab页返回快速登录
@@ -217,8 +210,6 @@ jQuery(function($) {
 
             //tabs切换
             $('.layui-tab-title li').eq(0).click()
-            // $('.login-by').removeClass('display-block').addClass('display-hide');
-            // $('.login-by-psw').removeClass('display-hide').addClass('display-block');
         })
         $('.nl-agreement .pointer').click(function(){
                 var html=$('.userAgreement').html(); 

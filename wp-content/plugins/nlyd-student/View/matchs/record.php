@@ -40,9 +40,9 @@
                                         <tr class='table-head'>
                                             <td>名次</td>
                                             <td>学员姓名</td>
-                                            <td>ID</td>
+                                            <td><span>ID</span></td>
                                             <td>城市</td>
-                                            <td>项目总分</td>
+                                            <td><span>项目总分</span></td>
                                             <td>组别</td>
                                         </tr>
                                         <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
@@ -51,9 +51,9 @@
                                                 <div class="nl-circle <?= $my_ranking['ranking'] <= 3 ? 'top3' : '';?>"><?=$my_ranking['ranking']?></div>
                                             </td>
                                             <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
-                                            <td id="meid"><div class="table_content"><?=$my_ranking['ID']?></div></td>
+                                            <td id="meid"><div class="table_content c_orange"><?=$my_ranking['ID']?></div></td>
                                             <td><div class="table_content"><?=$my_ranking['city']?></div></td>
-                                            <td><div class="table_content"><?=$my_ranking['score']?></div></td>
+                                            <td><div class="table_content c_orange"><?=$my_ranking['score']?></div></td>
                                             <td><div class="table_content"><?=$my_ranking['group']?></div></td>
                                         </tr>
                                         <?php endif;?>
@@ -66,9 +66,9 @@
                                                 <div class="nl-circle <?= $k < 3 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                             </td>
                                             <td><div class="table_content"><?=$v['user_name']?></div></td>
-                                            <td><div class="table_content"><?=$v['ID']?></div></td>
+                                            <td><div class="table_content c_orange"><?=$v['ID']?></div></td>
                                             <td><div class="table_content"><?=$v['city']?></div></td>
-                                            <td><div class="table_content"><?=$v['score']?></div></td>
+                                            <td><div class="table_content c_orange"><?=$v['score']?></div></td>
                                             <td><div class="table_content"><?=$v['group']?></div></td>
                                         </tr>
                                         <?php } ?>
@@ -94,9 +94,9 @@
                                         <tr class='table-head'>
                                             <td>名次</td>
                                             <td>学员姓名</td>
-                                            <td>ID</td>
+                                            <td><span>ID</span></td>
                                             <td>城市</td>
-                                            <td>项目总分</td>
+                                            <td><span>项目总分</span></td>
                                             <td>组别</td>
                                         </tr>
                                         <tr class="nl-me" id="fenlei_me">
@@ -134,9 +134,9 @@
                                         <tr class='table-head'>
                                             <td>名次</td>
                                             <td>学员姓名</td>
-                                            <td>ID</td>
+                                            <td><span>ID</span></td>
                                             <td>城市</td>
-                                            <td>项目总分</td>
+                                            <td><span>项目总分</span></td>
                                             <td class="select-td">
                                                 <div class="td-type">
                                                     <div class="show-type" id="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></div>
@@ -280,9 +280,9 @@ layui.use(['element','flow'], function(){
                                                     +'<div class="nl-circle">'+value.ranking+'</div>'
                                                 +'</td>'
                                                 +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
                                                 +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                +'<td><div class="table_content">'+value.score+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
                                                 +'<td><div class="table_content">'+value.group+'</div></td>'
                                             +'</tr>'
                                     lis.push(dom)                           
@@ -329,9 +329,9 @@ layui.use(['element','flow'], function(){
                                         +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                     +'</td>'
                                     +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                    +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
                                     +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                    +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
                                     +'<td><div class="table_content">'+rows.group+'</div></td>'
                             // $('#fenlei_me').html(Html)
                         }
@@ -351,9 +351,9 @@ layui.use(['element','flow'], function(){
                                             +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
                                         +'</td>'
                                         +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                        +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
                                         +'<td><div class="table_content">'+value.city+'</div></td>'
-                                        +'<td><div class="table_content">'+value.score+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
                                         +'<td><div class="table_content">'+value.group+'</div></td>'
                                     +'</tr>'
                             lis.push(dom)                           
@@ -407,9 +407,9 @@ layui.use(['element','flow'], function(){
                                             +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                         +'</td>'
                                         +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.ID+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
                                         +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                        +'<td><div class="table_content">'+rows.score+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
                                         +'<td><div class="table_content">'+rows.group+'</div></td>'
                             // $('#danxiang_me').html(Html)
                         }
@@ -429,9 +429,9 @@ layui.use(['element','flow'], function(){
                                             +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
                                         +'</td>'
                                         +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                        +'<td><div class="table_content">'+value.ID+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
                                         +'<td><div class="table_content">'+value.city+'</div></td>'
-                                        +'<td><div class="table_content">'+value.score+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
                                         +'<td><div class="table_content">'+value.group+'</div></td>'
                                     +'</tr>'
                             lis.push(dom)                           

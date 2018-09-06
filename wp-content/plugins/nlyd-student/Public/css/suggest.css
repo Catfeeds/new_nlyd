@@ -43,6 +43,7 @@ textarea.suggest-textarea{
     position: relative;
     margin-right: 8px;
     float: left;
+    margin-bottom: 5px;
 }
 .post-img.no-dash{
     border: 1px solid #eee;
@@ -50,16 +51,19 @@ textarea.suggest-textarea{
 .suggest-row .post-img:last-child{
     margin-right: 0;
 }
-.add-zoo,.img-zoo{
+.add-zoo{
     position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
 }
+.img-zoo{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 .img-zoo img{
-    width: 100%;
-    height: 100%;
     z-index: 2;
 }
 .vertical{

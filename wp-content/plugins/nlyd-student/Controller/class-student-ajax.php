@@ -944,7 +944,8 @@ class Student_Ajax
         }
         //$user_id = 3;
         if(!empty($_POST['user_id'])){
-            $wap[] = " a.user_id = {$_POST['user_id']} ";
+            $user_id = $_POST['user_id'];
+            $wap[] = " a.user_id = {$user_id} ";
             $wap[] = " a.apply_status = 2 ";
         }
         if(!empty($wap)){
@@ -1531,8 +1532,9 @@ class Student_Ajax
                         unset($_POST['user_gender']);
                     }
                     if(!empty($_POST['meta_val']['real_age'])){
-                        update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['user_age']) && $user_age_update = true;
+                        update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['real_age']) && $user_age_update = true;
                     }
+                    //var_dump($_POST['meta_val']);die;
 //                    $_POST['user_address'] = array(
 //                        'province'=>'四川省',
 //                        'city'=>'成都市',

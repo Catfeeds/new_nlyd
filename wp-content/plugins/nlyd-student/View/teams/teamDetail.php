@@ -66,7 +66,7 @@
                             <div class="layui-tab-item layui-show" id="student">
                                 <div class="nl-table-wapper">
                                     <table class="nl-table">
-                                        <tbody  id="flow-table">
+                                        <thead>
                                             <tr>
                                                 <td>头像</td>
                                                 <td>学员姓名</td>
@@ -76,6 +76,8 @@
                                                 <td>A级别</td>
                                                 <td>脑力健将级别</td>
                                             </tr>
+                                        </thead>
+                                        <tbody  id="flow-table">
                                         </tbody>
                                     </table>
                                 </div>
@@ -84,7 +86,7 @@
                             <div class="layui-tab-item"  id="coach">
                                 <div class="nl-table-wapper">
                                     <table class="nl-table">
-                                        <tbody  id="flow-table1">
+                                        <thead>
                                             <tr>
                                                 <td>头像</td>
                                                 <td>学员姓名</td>
@@ -94,6 +96,9 @@
                                                 <td>A级别</td>
                                                 <td>脑力健将级别</td>
                                             </tr>
+                                        </thead>
+                                        <tbody  id="flow-table1">
+
                                         </tbody>   
                                     </table>
                                 </div>
