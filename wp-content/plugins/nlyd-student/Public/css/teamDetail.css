@@ -68,6 +68,9 @@
     background: -moz-linear-gradient(90deg,#fc8989,#ff6a6a);
     background: linear-gradient(90deg,#fc8989,#ff6a6a);
 }
+a.nl-team-btn:hover{
+    color: #fff;
+}
 .teamDetail-top{
     padding-top: 10px;
     font-size: 0.12rem

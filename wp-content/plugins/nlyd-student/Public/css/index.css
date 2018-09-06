@@ -100,7 +100,27 @@ font-size:0.14rem;
     line-height: 19px;
     color: #262626;
 }
-
+.nl-foot-item:active .nl-foot-name{
+    color: #2484FE;
+}
+.nl-foot-item:active .nl-foot-icon .footer-home{
+    width: 22px;
+    background-position: -141px 0;
+}
+.nl-foot-item:active .nl-foot-icon .footer-train{
+    background-position: -104px 0;
+}
+.nl-foot-item:active .nl-foot-icon .footer-match{
+    background-position: -123px 0;
+}
+.nl-foot-item:active .nl-foot-icon .footer-kaoji{
+    width: 17px;
+    background-position: -16px 0;
+}
+.nl-foot-item:active .nl-foot-icon .footer-user{
+    width: 16px;
+    background-position: 0 0;
+}
 .nl-pc{
     display: block;
 }

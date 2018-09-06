@@ -41,10 +41,24 @@
 
 <script>
     jQuery(function($) {
-        // history.pushState(null, null, document.URL);
-        // window.addEventListener('popstate', function () {
-        //     history.pushState(null, null, document.URL);
-        // });
+    // history.pushState(null, null, document.URL);
+    // window.addEventListener('popstate', function () {
+    //     history.pushState(null, null, document.URL);
+    // });
+
+    $(window).on("blur",function(){
+        var sessionData={
+            match_id:$.Request('match_id')
+        }
+        $.SetSession('leavePageWait',sessionData)
+    })  
+    $(window).on("focus", function(e) {
+        var leavePageWait= $.GetSession('leavePageWait','1');
+        if(leavePageWait && leavePageWait['match_id']===$.Request('match_id')){
+            window.location.reload()
+            $.DelSession('leavePageWait')
+        }
+    });
         if($('.count_down').attr('data-seconds')<=0){
             window.location.href="<?=$match_url?>"
         }
@@ -55,7 +69,7 @@
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
             $(this).text(time);
-            if(S<=0){//本轮比赛结束
+            if(S<=0){//
                 window.location.href="<?=$match_url?>"
             }
         });

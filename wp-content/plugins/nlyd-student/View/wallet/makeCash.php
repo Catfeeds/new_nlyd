@@ -29,7 +29,7 @@
                             
                         </div>
                     </div>
-                    <div class="a-btn" lay-filter="makeCash" lay-submit="">保存</div>
+                    <a class="a-btn" lay-filter="makeCash" lay-submit="">保存</a>
                 </form>
             </div>
         </div>           

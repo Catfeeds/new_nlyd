@@ -123,7 +123,6 @@ jQuery(function($) {
                     var lis = [];
                     $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
                         isClick[id]=true
-                        console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 // 已结束-3
@@ -261,81 +260,6 @@ jQuery(function($) {
             })
             if(!isClick[id]){
                 pagation(id)
-            }
-        });
-        flow.load({//往期比赛
-            elem: '#flow-match3' //流加载容器
-            ,isAuto: false
-            ,isLazyimg: true
-            ,done: function(page, next){ //加载下一页
-                var postData={
-                    action:'get_match_list',
-                    _wpnonce:$('#inputMatch').val(),
-                    page:page,
-                    match_type:'history',
-                }
-                var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    console.log(res)
-                        if(res.success){
-                            $.each(res.data.info,function(i,v){
-                                var isMe='';//标签
-                                var rightBtn='<div class="nl-match-button last-btn">'
-                                                +'<a href="'+v.right_url+'">查看战绩</a>'
-                                            +'</div>';   
-                                if(v.user_id!=null){//我报名参加的赛事
-                                    isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
-                                }
-                                var onBtn="" ;
-                                if(rightBtn.length==0){
-                                    onBtn="onBtn"
-                                }
-                                var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
-                                            +'<div class="nl-match">'
-                                                +'<div class="nl-match-header">'
-                                                    +'<span class="nl-match-name  fs_16 c_blue">'+v.post_title+'</span>'
-                                                    +isMe
-                                                    +'<p class="long-name fs_12 c_black3">'+v.post_title+'</p>'
-                                                +'</div>'
-                                                +'<div class="nl-match-body">'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>开赛日期：</span>'
-                                                        +'<span class="c_black">'+v.match_start_time+'</span>'
-                                                        +'<span class="nl-match-type c_blue">'+v.match_status_cn+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>比赛地点：</span>'
-                                                        +'<span class="c_black">'+v.match_address+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>报名费用：</span>'
-                                                        +'<span class="c_black">¥'+v.match_cost+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>已报选手：</span>'
-                                                        +'<span class="c_black">'+v.entry_total+'人</span>'
-                                                    +'</div>' 
-                                                +'</div>'
-
-                                                +'<div class="nl-match-footer">'
-                                                    +'<div class="nl-match-button">'
-                                                        +'<a class="'+onBtn+'"  href="'+v.left_url+'">查看详情</a>'
-                                                    +'</div>'
-                                                    +rightBtn
-                                                +'</div>'
-                                            +'</div>'
-                                        +'</li>'
-                                lis.push(dom) 
-                            })
-                            if (res.data.info.length<10) {
-                                next(lis.join(''),false) 
-                            }else{
-                                next(lis.join(''),true) 
-                            }
-                        }else{
-                            next(lis.join(''),false)
-                        }
-                }) 
             }
         });
     })

@@ -25,7 +25,7 @@ jQuery(function($) {
                                 }
                                 var url=window.home_url+'/account/messageDetail/messages_id/'+value.id;
 
-                                var dom='<a class="message-row '+type+'" href="'+url+'">'
+                                var dom='<a class="message-row active_bg '+type+'" href="'+url+'">'
                                             +'<div class="message-title">'
                                                 +'<span class="accept-name">'+value.title+'</span>'
 
@@ -41,12 +41,6 @@ jQuery(function($) {
                                 next(lis.join(''),true)
                             }
                         }else{
-                            // if(page==1){
-                            //     var dom='<div class="no-info">暂无消息</div>'
-                            //     lis.push(dom)
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
                 })

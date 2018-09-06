@@ -161,7 +161,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="a-btn">查看本项目比赛详情</div>
+                            <a class="a-btn">查看本项目比赛详情</a>
                         </div>
                     </div>
                 </div>

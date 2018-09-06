@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="a-btn" lay-filter="addAdressBtn" lay-submit="">保存更改</div>
+                <a class="a-btn" lay-filter="addAdressBtn" lay-submit="">保存更改</a>
             </form>
         </div>           
     </div>

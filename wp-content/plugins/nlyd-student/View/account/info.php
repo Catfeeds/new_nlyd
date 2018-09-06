@@ -95,7 +95,7 @@
                                         
                                 </div>
                             </a>
-                            <div class="a-btn" style="display:none;" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</div>
+                            <a class="a-btn" style="display:none;" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</a>
                         </div>
                 
                     </form>
@@ -144,12 +144,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="a-btn" style="display:none;" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</div>
+                                <a class="a-btn" style="display:none;" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</a>
                             </div>
                         </form>
                     </div>
-                    <div class="a-btn nicenameFormBtn" style="z-index:3">更新个人资料</div>
-                    <div class="a-btn certificationFormBtn" style="z-index:2">更新实名认证</div>
+                    <a class="a-btn nicenameFormBtn" style="display:block">更新个人资料</a>
+                    <a class="a-btn certificationFormBtn" style="display:none">更新实名认证</a>
             </div>
         </div>           
     </div>
