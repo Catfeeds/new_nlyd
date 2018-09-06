@@ -607,12 +607,12 @@ layui.use(['element','flow','layer','form'], function(){
     element.on('tab(tabs)', function(){//tabs
         var left=$(this).position().left+parseInt($(this).css('marginLeft'));
         var html=$(this).html();
-        var category_id=$(this).attr('data-id')
+        var id=$(this).attr('data-id')
         $('.nl-transform').css({
             'transform':'translate3d('+left+'px, 0px, 0px)'
         }).html(html)
-        if(!isClick[category_id]){
-            pagation(category_id)
+        if(!isClick[id]){
+            pagation(id)
         }
     })
 });

@@ -154,7 +154,8 @@ p.long-name{
     .layui-tab-title li{
         color:#262626;
         height: 44px;
-        width: 50%;
+        width: -webkit-calc(100% / 3);
+        width: calc(100% / 3);
         line-height: 44px;
         padding: 0;
         position: relative;
@@ -170,7 +171,8 @@ p.long-name{
         transform: translate3d(0px, -5px, 0px);
         transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
         height: 5px;
-        width: 50%;
+        width: -webkit-calc(100% / 3);
+        width: calc(100% / 3);
         background: #2484FE;
     }
     .layui-tab-brief>.layui-tab-more li:after, .layui-tab-brief>.layui-tab-title li:after{

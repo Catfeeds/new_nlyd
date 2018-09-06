@@ -44,23 +44,30 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this">近期比赛</li>
-                            <li>往期比赛</li>
+                            <li class="layui-this" data-id="1">比赛中</li>
+                            <li data-id="2">报名中</li>
+                            <li data-id="3">往期比赛</li>
                             <div class="nl-transform" data-y="-5">近期比赛</div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
-                            <!-- 近期比赛 -->
+                            <!-- 比赛中 -->
                             <div class="layui-tab-item layui-show">
                                 <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;最新比赛倒计时
                                     <span class="getTime" id="getTimes">00:00:00</span>        
                                 </div>
-                                <ul class="flow-default layui-row layui-col-space20" id="flow-match1">
+                                <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
                                     
+                                </ul>
+                            </div>
+                            <!-- 报名中 -->
+                            <div class="layui-tab-item">
+                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
+
                                 </ul>
                             </div>
                             <!-- 往期比赛 -->
                             <div class="layui-tab-item">
-                                <ul class="flow-default layui-row layui-col-space20" id="flow-match2" style="margin:0">
+                                <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
 
                                 </ul>
                             </div>
@@ -94,32 +101,46 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
-        element.on('tab(tabs)', function(){//tabs
-            var left=$(this).position().left;
-            $('.nl-transform').css({
-                'transform':'translate3d('+left+'px, -5px, 0px)'
-            })
-        });
-        flow.load({
-            elem: '#flow-match1' //流加载容器
-            ,isAuto: false
-            ,isLazyimg: true
-            ,done: function(page, next){ //加载下一页
-                var postData={
-                    action:'get_match_list',
-                    _wpnonce:$('#inputMatch').val(),
-                    page:page,
-                    match_type:'now',
-                }
-                var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
+        function pagation(id){
+            flow.load({
+                elem: '#'+id //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    var postData={
+                        action:'get_match_list',
+                        _wpnonce:$('#inputMatch').val(),
+                        page:page,
+                        match_type:'',
+                    }
+                    if(parseInt(id)==1){//比赛
+                        postData['match_type']="matching";
+                    }else if(parseInt(id)==2){//报名
+                        postData['match_type']="signUp";
+                    }else{//往期
+                        postData['match_type']="history";
+                    }
+                    var lis = [];
+                    $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
+                        isClick[id]=true
+                        console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
+                                // 已结束-3
+                                // 等待开赛-2
+                                // 未开始-1
+                                // 报名中1
+                                // 进行中2
                                 var isMe='';//标签
                                 var match_status='c_blue';//比赛中高亮
                                 var rightBtn='';  
+                                var endTime="";//报名截止
+                                var domTime=v.entry_end_time.replace(/-/g,'/');
+                                var end_time = new Date(domTime).getTime();//月份是实际月份-1
+                                var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
+                                var sys_second = (end_time-serverTimes)/1000;
+                                var sys_second_text=sys_second>0 ? '' :  "报名结束";
                                 if(v.user_id!=null){//我报名参加的赛事
-                                    // isMe='<div class="nl-match-metal">我</div>'
                                     isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                 }
                                 if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
@@ -135,6 +156,15 @@ jQuery(function($) {
                                                     +'</div>'
                                         }
                                     }
+                                    endTime='<div class="nl-match-detail">'
+                                                +'<span>报名截止：</span>'
+                                                +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                +sys_second_text+'</span>'
+                                            +'</div>'
+                                }else if(v.match_status==-3){//已结束
+                                    rightBtn='<div class="nl-match-button last-btn">'
+                                                +'<a href="'+v.right_url+'">查看战绩</a>'
+                                            +'</div>';   
                                 }else{
                                     if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button last-btn">'
@@ -147,16 +177,16 @@ jQuery(function($) {
                                             
                                         }
                                     }
+                                    endTime='<div class="nl-match-detail">'
+                                                +'<span>报名截止：</span>'
+                                                +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                +sys_second_text+'</span>'
+                                            +'</div>'
                                 }
                                 var onBtn="" ;
                                 if(rightBtn.length==0){
                                     onBtn="onBtn"
                                 }
-                                var domTime=v.entry_end_time.replace(/-/g,'/');
-                                var end_time = new Date(domTime).getTime();//月份是实际月份-1
-                                var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-                                var sys_second = (end_time-serverTimes)/1000;
-                                var sys_second_text=sys_second>0 ? '' :  "报名结束";
                                 var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
                                             +'<div class="nl-match">'
                                                 +'<div class="nl-match-header">'
@@ -178,18 +208,12 @@ jQuery(function($) {
                                                         +'<span>报名费用：</span>'
                                                         +'<span class="c_black">¥'+v.match_cost+'</span>'
                                                     +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>报名截止：</span>'
-                                                        +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
-                                                        
-                                                        +sys_second_text+'</span>'
-                                                    +'</div>'
+                                                    +endTime
                                                     +'<div class="nl-match-detail">'
                                                         +'<span>已报选手：</span>'
                                                         +'<span class="c_black">'+v.entry_total+'人</span>'
                                                     +'</div>'
                                                 +'</div>'
-
                                                 +'<div class="nl-match-footer">'
                                                     +'<div class="nl-match-button">'
                                                         +'<a class="'+onBtn+'" href="'+v.left_url+'">查看详情</a>'
@@ -207,15 +231,10 @@ jQuery(function($) {
                             }
                             
                         }else{
-                            // if(page==1){
-                            //     var dom='<div class="no-info">近期比赛无记录</div>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
-                        $('.getTimes').countdown(function(S, d){//倒计时
+                    
+                        $('.getTimes'+id).countdown(function(S, d){//倒计时
                             if(S>0){
                                 var D=d.day>0 ? d.day+'天' : '';
                                 var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -227,11 +246,25 @@ jQuery(function($) {
                                 $(this).text("报名结束");
                             }
                         });
-                })       
+                        
+                    })       
+                }
+            });
+        }
+        var isClick={}
+        pagation($('.layui-this').attr('data-id'))
+        element.on('tab(tabs)', function(){//tabs
+            var left=$(this).position().left;
+            var id=$(this).attr('data-id')
+            $('.nl-transform').css({
+                'transform':'translate3d('+left+'px, -5px, 0px)'
+            })
+            if(!isClick[id]){
+                pagation(id)
             }
         });
         flow.load({//往期比赛
-            elem: '#flow-match2' //流加载容器
+            elem: '#flow-match3' //流加载容器
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
@@ -243,6 +276,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                    console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(i,v){
                                 var isMe='';//标签
@@ -299,12 +333,6 @@ jQuery(function($) {
                                 next(lis.join(''),true) 
                             }
                         }else{
-                            // if(page==1){
-                            //     var dom='<div class="no-info">往期比赛无记录</div>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
                 }) 
