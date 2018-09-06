@@ -54,15 +54,15 @@ $wpdb->update($wpdb->postmeta, ['meta_value' => ++$readNum], ['meta_id' => $meta
 										<div class="layui-row">
 
 											<?php if(get_next_post(true)->ID){ ?>
-												<a class="news-prev" href="<?=get_next_post(true)->guid?>">上一篇</a>
+												<a class="news-prev c_blue" href="<?=get_next_post(true)->guid?>">上一篇</a>
 											<?php }else{ ?>
-												<a class="news-prev" href="javascript:;">无上篇</a>
+												<a class="news-prev c_blue" href="javascript:;">无上篇</a>
 											<?php }?>
 											<p class="news-name"><?=$post->post_title?></p>
 											<?php if(get_previous_post(true)->ID){ ?>
-												<a class="news-next" href="<?=get_previous_post(true)->guid?>">下一篇</a>
+												<a class="news-next c_blue" href="<?=get_previous_post(true)->guid?>">下一篇</a>
 											<?php }else{ ?>
-												<a class="news-next" href="javascript:;">无下篇</a>
+												<a class="news-next c_blue" href="javascript:;">无下篇</a>
 											<?php }?>
 										</div>
 										<div class="layui-row">

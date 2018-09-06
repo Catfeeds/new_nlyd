@@ -6,6 +6,9 @@
     padding: 10px 15px;
     margin-top: 10px;
 }
+a.message-row:active{
+    background: #e7ebf1; 
+}
 .message-row .accept-name{
     color: #2484FE;
 }
