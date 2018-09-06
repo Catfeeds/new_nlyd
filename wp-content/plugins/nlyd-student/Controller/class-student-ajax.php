@@ -1340,8 +1340,12 @@ class Student_Ajax
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.match_status = -3 ";     //历史
             $match_type = 'history';
-        }else{
-            $map[] = " b.match_status != -3 ";    //近期
+        }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
+            $map[] = " b.match_status = 1 ";     //报名中
+            $match_type = 'signUp';
+        }
+        else{
+            $map[] = " b.match_status != -3  and b.match_status != 1 ";    //近期
             $match_type = 'recent';
         }
         //获取最新比赛倒计时
