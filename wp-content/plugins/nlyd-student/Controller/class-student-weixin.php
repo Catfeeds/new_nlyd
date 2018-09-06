@@ -27,6 +27,7 @@ class Student_Weixin
 //        $this->getWebCode(true);
         if(is_user_logged_in()){
             global $current_user;
+            wp_redirect(home_url('account'));
         }else{
             if($this->getWebCode(true)){
                 wp_redirect(home_url('account'));
@@ -128,44 +129,61 @@ class Student_Weixin
     /**
      * 微信授权登录页
     */
-    public function indexs($res,$type=''){
+    public function indexs($res = [],$type=''){
         $openid = $res['openid'];
+        if($res == [] && !is_post()) return false;
 
         /*判断是否为平台用户*/
         global $wpdb;
-        $users = $wpdb->get_row('SELECT ID FROM '.$wpdb->users.' WHERE weChat_openid="'.$res['openid'].'" AND weChat_openid != ""');
-        if(empty($users)){
-
-            /*保存用户信息*/
-
-            $wpdb->startTrans();
-            $user_id = wp_create_user($res['openid'],$res['openid'].'_'.get_time());
+        $users = $wpdb->get_row('SELECT ID,user_mobile FROM '.$wpdb->users.' WHERE weChat_openid="'.$res['openid'].'" AND weChat_openid != ""');
+        if(empty($users) || !$users->user_mobile){
+            $users_id = $users->user_mobile == true ? $users->ID : 0;
+            //TODO 绑定手机
             $auth = array(
                 'user_nicename'        => $res['nickname'],
                 'weChat_openid'        => $res['openid'],
                 'weChat_union_id'        => $res['unionid'],
                 'user_registered'        => get_time('mysql'),
-                //'token'           => $row[4],
-                //'last_login_time' => $row['last_login_time'],
             );
-            $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
-            if(!$bool) {
-                $wpdb->rollback();
-                return false;
-            }
-            if($this->insertUsermeta($res,$user_id)){
-                $wpdb->commit();
-            }else{
-                $wpdb->rollback();
-                return false;
-            }
-//            if($type!=='no'){
-//
-//            }
+            //TODO 显示绑定手机页面
+
+            exit;
         }else{
             $user_id = $users->ID;
-            if(!get_user_meta($user_id)) $this->insertUsermeta($res,$user_id);
         }
+
+        if(is_post()){
+            $user_id = $_POST['user_id'];
+            if($_POST['user_id'] < 1){
+                /*保存用户信息*/
+                $wpdb->startTrans();
+                $user_id = wp_create_user($_POST['weChat_openid'],$_POST['weChat_openid'].'_'.get_time());
+                $bool = $wpdb->update($wpdb->users,$_POST['auth'],['ID' => $user_id]);
+                if(!$bool) {
+                    $wpdb->rollback();
+                    echo '<h1>错误：</h1>存入用户信息失败';
+                    exit;
+                }
+                if($this->insertUsermeta($_POST['res'],$user_id)){
+                    $wpdb->commit();
+                }else{
+                    $wpdb->rollback();
+                    echo '<h1>错误：</h1>存入用户信息失败';
+                    exit;
+                }
+            }else{
+                $bool = $wpdb->update($wpdb->users,['user_mobile' => $_POST['mobile']],['ID' => $user_id]);
+                if(!get_user_meta($user_id)) $this->insertUsermeta($_POST['res'],$user_id);
+                if(!$bool) {
+                    echo '<h1>错误：</h1>存入用户信息失败';
+                    exit;
+                }
+            }
+
+        }
+
+
+
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
 
