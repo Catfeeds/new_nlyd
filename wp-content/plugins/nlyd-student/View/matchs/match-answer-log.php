@@ -28,7 +28,7 @@
                         <div class="subject-title">
                             <div class="c_black"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10">您的得分<?=$my_score?>分</div>
-                            <div class="subject-title-info"><a <?= !empty($ranking) ? "href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
+                            <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                         </div>
                         <div class="subject-row">
                             <div class="one-info">
