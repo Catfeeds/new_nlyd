@@ -20,9 +20,9 @@
                     <div class="matching-fastScan">
                         <div class="item-wrapper">
                             <span class="blue-font fs-14">
-                                <span class="count_downs" ><?=$child_count_down?></span>
+                                <span class="count_downs"></span>
                             </span>
-                            <div class="fastScan-item answer"></div>
+                            <div class="fastScan-item answer">开始答题</div>
                             <div id="selectWrapper" class="hide">
                                 <div class="fastScan-item"></div>
                                 <div class="fastScan-item"></div>
@@ -120,9 +120,15 @@ jQuery(function($) {
         nandu=matchSession['nandu'];
     }
     if(!isMatching){
-        initBuild(itemLen,items,nandu,true)
+        $('body').one('click','.answer',function(){
+            initBuild(itemLen,items,nandu,true)
+            showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+        })
+    }else{
+        showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
     }
-    showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+        
+    
     function getHZ() {//生成随即汉字
         return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
     }

@@ -63,7 +63,7 @@
             reader.onload = function(evt){
                 //data:img base64 编码数据显示
                 var dom='<div class="post-img no-dash">'
-                        +'<div class="img-zoo">'
+                        +'<div class="img-zoo img-box">'
                             +'<img src="'+evt.target.result+'"/>'
                         +'</div>'
                         +'<div class="del">'
@@ -71,6 +71,10 @@
                         +'</div>'
                     +'</div>'
                 $('.tps').after(dom)
+                layer.photos({//图片预览
+                    photos: '.img-zoos',
+                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                }) 
             }
             reader.readAsDataURL(file);
            if(imgs.length==4){
@@ -85,6 +89,10 @@
             imgs.splice(index, 1);
             _this.parents('.post-img').remove()
             $('#add-img').css('display','block');
+            layer.photos({//图片预览
+                photos: '.img-zoos',
+                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            }) 
         })
         sendloginAjax=function(url,formData){
             //type：确定回调函数
@@ -114,7 +122,7 @@
             // 自定义验证规则
             form.verify($.validationLayui.allRules);
             // 监听提交
-            form.on('submit(suggestionBtn)', function(data){//实名认证提交
+            form.on('submit(suggestionBtn)', function(data){
                 var fd = new FormData();
                 var contact=$('#contact').val()
                 var content=$('#contents').val()
