@@ -692,9 +692,9 @@
                 //$data['child_count_down'] = 700;
             }
 
-            //print_r($data);die;
-            $view = student_view_path.'matchs/match-initial.php';
-            load_view_template($view,$data);
+        //print_r($data);die;
+        $view = student_view_path.'matchs/match-initial.php';
+        load_view_template($view,$data);
 
         }
 
@@ -1659,29 +1659,32 @@
                                         $wax_and_wane = $child_count_down['wax_and_wane'];
                                     }else{
 
-                                        $even_add = 3;
-                                        $add_and_subtract = 3;
-                                        $wax_and_wane = 3;
-                                    }
-                                    $match_use_time = $even_add+$add_and_subtract+$wax_and_wane;
-
-                                    $project_more_start_time = $next_start_time + ($i-1) * ($match_use_time + $more_interval) * 60;
-                                    //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time));
-
-                                }else{
-
-                                    $project_more_start_time = $next_start_time + ($i-1) * ($match_use_time + $more_interval) * 60;
-                                    //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time));
+                                    $even_add = 3;
+                                    $add_and_subtract = 3;
+                                    $wax_and_wane = 3;
                                 }
-                                $interval = $i < $project_match_more ? $more_interval : $this->match_project_interval ;
-                                $project_more_end_time = $project_more_start_time + ($match_use_time + $interval) * 60;
-                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_end_time));
+                                $match_use_time = $even_add+$add_and_subtract+$wax_and_wane;
+                                //print_r($zxss_use_time);
+                                $project_more_start_time = $next_start_time + ($i-1) * ($match_use_time + $more_interval) * 60;
+
+                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time).'*********');
+
+                            }else{
+
+                                $project_more_start_time = $next_start_time + ($i-1) * ($match_use_time + $more_interval) * 60;
+                                //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time).'*********');
+                            }
+                            $interval = $i < $project_match_more ? $more_interval : $this->match_project_interval ;
+                            //var_dump($match_use_time);
+                            $project_more_end_time = $project_more_start_time + ($match_use_time + $interval) * 60;
+                            //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_end_time));
 
                                 if($project_more_start_time <= get_time() && get_time() < $project_more_end_time){
                                     //print_r($value);
                                     $current_project = array(
                                                         'project_title'=>$value['post_title'],
                                                         'project_id'=>$value['match_project_id'],
+                                                        'match_use_time'=>$match_use_time * 60,
                                                         'match_more'=>$i,
                                                         'project_num'=>array_search($value['match_project_id'],$this->project_id_array)+1,
                                                         'project_start_time'=>$project_more_start_time,
