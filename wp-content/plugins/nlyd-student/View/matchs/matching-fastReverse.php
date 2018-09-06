@@ -32,23 +32,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="bg_yellow matching-key number rand" date-number="" data-index='1'></div>
-                            <div class="bg_yellow matching-key number rand" date-number="" data-index='2'></div>
-                            <div class="bg_yellow matching-key number rand" date-number="" data-index='3'></div>
-                            <div class="bg_yellow matching-key number rand" date-number="" data-index='4'></div>
-                            <div class="bg_gradient_blue matching-key number leftBrackets" date-number="(">(</div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='1'></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='2'></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='3'></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='4'></div>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="(">(</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key number operator" date-number="+">+</div>
-                            <div class="bg_gradient_blue matching-key number operator reduce" date-number="-">-</div>
-                            <div class="bg_gradient_blue matching-key number operator" date-number="*">×</div>
-                            <div class="bg_gradient_blue matching-key number operator" date-number="/">÷</div>
-                            <div class="bg_gradient_blue matching-key number rightBrackets" date-number=")">)</div>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="+">+</a>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator reduce" date-number="-">-</a>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="*">×</a>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="/">÷</a>
+                            <a class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</a>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key" id="del">删除</div>
-                            <div class="bg_gradient_blue matching-key number" date-number="本题无解">本题无解</div>
-                            <div class="bg_orange matching-key" id="next">下一题</div>
+                            <a class="bg_orange matching-key c_white fs_16" id="del">删除</a>
+                            <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a>
+                            <div class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 

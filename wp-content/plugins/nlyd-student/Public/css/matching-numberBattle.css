@@ -35,7 +35,6 @@
     background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
     background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
     background: linear-gradient(90deg,#4394F9,#68AAFE);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
     color: #fff;
     border-bottom: 1px solid transparent;
 }
@@ -57,16 +56,13 @@
     height: 28px;
     line-height: 28px;
     text-align: center;
-    color: #fff;
     border-radius: 3px;
-    /* font-size: 12px; */
     margin-left: 6px;
     margin-bottom: 4px;
     background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
     background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
     background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
     background: linear-gradient(90deg,#4394F9,#68AAFE);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
 }
 .matching-keyboard{
     margin-top: 25px;
@@ -81,19 +77,17 @@
     width: calc(50% - 6px);
 }
 .matching-key{
+    display: block;
     float: left;
     width: calc(100% / 3 - 8px);
     height: 50px;
     line-height: 50px;
     text-align: center;
-    color: #fff;
-    font-size: 0.16rem;
     border-radius: 6px;
     background: -webkit-linear-gradient(90deg,#4394F9,#4A94F2);
     background: -o-linear-gradient(90deg,#4394F9,#4A94F2);
     background: -moz-linear-gradient(90deg,#4394F9,#4A94F2);
     background: linear-gradient(90deg,#4394F9,#4A94F2);
-    box-shadow: 0 3px 6px rgba(59, 142, 246, 0.36);
     margin-left: 12px;
 }
 .matching-keyboard-row .matching-key:first-child{

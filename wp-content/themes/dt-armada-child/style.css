@@ -79,6 +79,9 @@ a:hover {
     font-family:'Arial'!important;
 }
 /* 字体大小 */
+.fs_18{
+    font-size: 0.18rem;
+}
 .fs_16{
     font-size: 0.16rem;
 }

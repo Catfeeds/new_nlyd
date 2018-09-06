@@ -150,8 +150,10 @@ class Timer
                 }
             }
         }
-        $myfile = file_put_contents(wp_upload_dir()['basedir'].'/timer-log/timer-log.txt', get_time('mysql')."  This is a timer. \r\n", FILE_APPEND);
-        //$myfile = file_put_contents(leo_user_interface_path.'log/sql-log.txt', date('Y-m-d H:i:s',time())."  $sql \r\n", FILE_APPEND);
+        //测试时放出
+        //$type = !empty(ACTION) ? ACTION : '';
+        //$myfile = file_put_contents(wp_upload_dir()['basedir'].'/timer-log/timer-log.txt', get_time('mysql')."  This is a timer ".$type." \r\n", FILE_APPEND);
+
     }
 
     public function wpjam_more_reccurences() {

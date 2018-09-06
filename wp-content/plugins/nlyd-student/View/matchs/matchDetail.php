@@ -107,6 +107,10 @@
                         <?php if($match['match_status'] == -3):?>
                             <a class="a-btn" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
                         <?php endif;?>
+                        <?php if($match['is_me'] != 'y' && $match['match_status'] == -2):?>
+                        <!--倒计时-->
+                            <div class="a-btn count_down" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -118,6 +122,21 @@
 
 <script>
 jQuery(function($) { 
+    if($('.count_down').attr('data-seconds')<=0){
+        $.DelSession('leavePageWaitting')
+        window.location.href=$(this).attr('href')
+    }
+    $('.count_down').countdown(function(S, d){//倒计时
+        var D=d.day>0 ? d.day+'天' : '';
+        var h=d.hour<10 ? '0'+d.hour : d.hour;
+        var m=d.minute<10 ? '0'+d.minute : d.minute;
+        var s=d.second<10 ? '0'+d.second : d.second;
+        var time=D+h+':'+m+':'+s;
+        $(this).text(time);
+        if(S<=0){//
+            window.location.href=$(this).attr('href')
+        }
+    });
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载

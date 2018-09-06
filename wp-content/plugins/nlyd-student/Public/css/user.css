@@ -15,10 +15,9 @@
 }
 .box-logo{
     margin: auto;
-    width: 80px;
+    width: 195px;
     display: flex;
     align-items: center;
-    border-radius: 50%;
 }
 .logoImg{
     width: 100%;

@@ -38,7 +38,7 @@
 
     </div>
 </div>
-
+<?=$match_status;?>
 <script>
     jQuery(function($) {
     // history.pushState(null, null, document.URL);
@@ -50,16 +50,17 @@
         var sessionData={
             match_id:$.Request('match_id')
         }
-        $.SetSession('leavePageWait',sessionData)
+        $.SetSession('leavePageWaitting',sessionData)
     })  
     $(window).on("focus", function(e) {
-        var leavePageWait= $.GetSession('leavePageWait','1');
-        if(leavePageWait && leavePageWait['match_id']===$.Request('match_id')){
+        var leavePageWaitting= $.GetSession('leavePageWaitting','1');
+        if(leavePageWaitting && leavePageWaitting['match_id']===$.Request('match_id')){
             window.location.reload()
-            $.DelSession('leavePageWait')
+            $.DelSession('leavePageWaitting')
         }
     });
         if($('.count_down').attr('data-seconds')<=0){
+            $.DelSession('leavePageWaitting')
             window.location.href="<?=$match_url?>"
         }
         $('.count_down').countdown(function(S, d){//倒计时
@@ -70,6 +71,7 @@
             var time=D+h+':'+m+':'+s;
             $(this).text(time);
             if(S<=0){//
+                $.DelSession('leavePageWaitting')
                 window.location.href="<?=$match_url?>"
             }
         });

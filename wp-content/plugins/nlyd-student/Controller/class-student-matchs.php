@@ -361,6 +361,11 @@
                     }
                 }
             }
+            if($match['is_me'] != 'y' && $match['match_status'] == -2){
+
+                $match['down_time'] = strtotime($match['match_start_time'])-get_time();
+                //var_dump($match['down_time']);
+            }
 
             $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
             $view = student_view_path.CONTROLLER.'/matchDetail.php';
@@ -418,6 +423,7 @@
              //print_r($this->next_project);
              //print_r($this->current_project);
 
+             $data['match_status'] = $this->match['match_status'];
              $data['next_project'] = $this->next_project;
              $data['current_project'] = $this->current_project;
              $data['count_down'] = $this->current_project['project_end_time']-get_time();
