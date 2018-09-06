@@ -944,7 +944,8 @@ class Student_Ajax
         }
         //$user_id = 3;
         if(!empty($_POST['user_id'])){
-            $wap[] = " a.user_id = {$_POST['user_id']} ";
+            $user_id = $_POST['user_id'];
+            $wap[] = " a.user_id = {$user_id} ";
             $wap[] = " a.apply_status = 2 ";
         }
         if(!empty($wap)){
