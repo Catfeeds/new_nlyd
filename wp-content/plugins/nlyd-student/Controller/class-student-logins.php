@@ -14,11 +14,26 @@ class Student_Logins
 
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
+        if($this->is_weixin()){
+            wp_redirect(home_url('weixin/webLogin'));
+            exit;
+        }
+
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
         add_shortcode('student-login',array($this,$action));
+    }
+
+    /**
+     * 判断是否是微信浏览器
+     */
+    public function is_weixin(){
+        if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+            return true;
+        }
+        return false;
     }
 
     public function index(){
