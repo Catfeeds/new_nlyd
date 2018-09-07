@@ -711,6 +711,68 @@ class Match_Ajax
     public function delQuestion(){
         $id = intval($_POST['id']);
         if($id < 1) wp_send_json_error(['info' => '操作失败']);
+        //判断是否是回收站里面的数据
+        $post = get_post($id);
+        if($post->post_status != 'trash') wp_send_json_error(['info' => '请先将题目移入回收站']);
+        global $wpdb;
+        //获取答案和答案选项
+        $answers = $wpdb->get_results('SELECT ID FROM '.$wpdb->posts.' WHERE post_parent='.$id);
+        $answerIdStr = '';
+        foreach ($answers as $anv){
+            $answerIdStr .= $anv->ID.',';
+        }
+
+        $answerIdStr = '('.substr($answerIdStr, 0, strlen($answerIdStr)-1).')';
+
+        //开始删除
+        $wpdb->startTrans();
+        $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id.' OR post_parent='.$id);
+        $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id IN'.$answerIdStr);
+
+        if(!$questionBool || (!$correctBool && $answerIdStr != '()')){
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '操作失败']);
+        }else{
+            $wpdb->commit();
+            wp_send_json_success(['info' => '题目已删除']);
+        }
+    }
+    /**
+     * 永久删除问题
+     */
+    public function delAnswer(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '操作失败']);
+        //判断是否是回收站里面的数据
+        $post = get_post($id);
+        if($post->post_status != 'trash') wp_send_json_error(['info' => '请先将题目移入回收站']);
+        global $wpdb;
+        //判断是否是最后一个问题 //如果是已确认不再判断
+        if(intval($_POST['type']) == 0){
+            $post = get_post($id);
+            $answerArr = $wpdb->get_results('SELECT ID FROM '.$wpdb->posts.' WHERE post_parent='.$post->post_parent.' GROUP BY ID', ARRAY_A);
+            if(count($answerArr) < 2){
+                wp_send_json_success(['info' => 9527]);
+            }
+        }
+
+        //开始删除
+        $wpdb->startTrans();
+        $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id);
+        $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id);
+        if(!$questionBool || !$correctBool){
+            //是否是答案不存在
+            if(!$correctBool && $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id)){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '操作失败']);
+            }else{
+                $wpdb->commit();
+                wp_send_json_success(['info' => '问题已删除']);
+            }
+        }else{
+            $wpdb->commit();
+            wp_send_json_success(['info' => '问题已删除']);
+        }
     }
 
 }

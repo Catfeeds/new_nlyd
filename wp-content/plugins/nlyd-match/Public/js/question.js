@@ -43,7 +43,7 @@ jQuery(document).ready(function($) {
      */
     $('.del_question').on('click', function () {
         var id = $(this).closest('tr').find('input[type="checkbox"]').val();
-        if(confirm('是否确定删除题目? 所属答案将全部删除')){
+        if(confirm('是否确定删除题目? 所属问题以及答案将全部删除')){
             $.ajax({
                 type : 'post',
                 dataType : 'json',
@@ -60,4 +60,37 @@ jQuery(document).ready(function($) {
             });
         }
     });
+    /**
+     * 删除问题答案
+     */
+    $('.del_answer').on('click', function () {
+        var id = $(this).closest('tr').find('input[type="checkbox"]').val();
+        if(confirm('是否确定删除问题? 所属答案将全部删除')){
+            answerAjax(id,0)
+        }
+    });
+    function answerAjax(id,type) {
+        if(type == 1){
+            if(!confirm('当前问题是此题目最后一个问题,真的要删除吗?')) return false;
+        }
+        $.ajax({
+            type : 'post',
+            dataType : 'json',
+            data : {'action' : 'delAnswer', 'id' : id, 'type':type},
+            url : ajaxurl,
+            success : function (response) {
+                if(response['data']['info'] == 9527) {
+                    answerAjax(id,1);
+                    return false;
+                }
+
+                alert(response['data']['info']);
+                if(response['success']){
+                    window.location.reload();
+                }
+            },error : function () {
+                alert('请求失败!')
+            }
+        });
+    }
 })
