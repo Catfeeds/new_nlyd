@@ -717,17 +717,19 @@ class Match_Ajax
         global $wpdb;
         //获取答案和答案选项
         $answers = $wpdb->get_results('SELECT ID FROM '.$wpdb->posts.' WHERE post_parent='.$id);
-        $answerIdStr = '(';
+        $answerIdStr = '';
         foreach ($answers as $anv){
             $answerIdStr .= $anv->ID.',';
         }
-        $answerIdStr = substr($answerIdStr, 0, strlen($answerIdStr)-1).')';
+
+        $answerIdStr = '('.substr($answerIdStr, 0, strlen($answerIdStr)-1).')';
 
         //开始删除
         $wpdb->startTrans();
         $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id.' OR post_parent='.$id);
         $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id IN'.$answerIdStr);
-        if(!$questionBool || !$correctBool){
+
+        if(!$questionBool || (!$correctBool && $answerIdStr != '()')){
             $wpdb->rollback();
             wp_send_json_error(['info' => '操作失败']);
         }else{
@@ -759,8 +761,14 @@ class Match_Ajax
         $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id);
         $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id);
         if(!$questionBool || !$correctBool){
-            $wpdb->rollback();
-            wp_send_json_error(['info' => '操作失败']);
+            //是否是答案不存在
+            if(!$correctBool && $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id)){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '操作失败']);
+            }else{
+                $wpdb->commit();
+                wp_send_json_success(['info' => '问题已删除']);
+            }
         }else{
             $wpdb->commit();
             wp_send_json_success(['info' => '问题已删除']);
