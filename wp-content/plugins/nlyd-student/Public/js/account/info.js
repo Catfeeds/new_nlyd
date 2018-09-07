@@ -232,6 +232,9 @@ jQuery(document).ready(function($) {
             $('#img').click()
         })
         var imgs=[]
+        if($('.post-img.no-dash').length>=3){
+            $('#add-img').css('display','none')
+        }
         $("#img").change(function(e) {
             var file=e.target.files[0];
             imgs.unshift(file)
@@ -252,13 +255,14 @@ jQuery(document).ready(function($) {
                 layer.photos({//图片预览
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                }) 
+                })
+                if($('.post-img.no-dash').length>=3){
+                    $('#add-img').css('display','none')
+                }
             }
             reader.readAsDataURL(file);
-            if(imgs.length==3){
-                $('#add-img').css('display','none')
-            }
             $(e.target).val('')
+
     
         });
         $('.img-zoos').on('click','.del',function(){//删除图片
@@ -301,7 +305,9 @@ jQuery(document).ready(function($) {
                 $.each(imgs, function (i, v) {
                     fd.append('images[]',v);
                 })
-
+                $('.post-img.no-dash input').each(function () {
+                    fd.append('user_ID_Card[]',$(this).val());
+                })
                 $.ajax({
                     type: "POST",
                     url: window.admin_ajax+"?date="+new Date().getTime(),
@@ -337,84 +343,4 @@ jQuery(document).ready(function($) {
             }) 
   
         });
-
-    // $('.Mobile').click(function(){
-    //     $("#file").click()
-    // })
-    // var avatar = $('#avatar');
-    // var image = $('#image');
-    // var input = $('#file');
-    // var bg=$('.nl-cropper-bg');
-    // var cropper;
-    // input.change(function (e) {
-    //     var files = e.target.files;
-    //     var done = function (url) {
-    //         input.val('');
-    //         image.attr('src',url);
-    //         bg.addClass('bg-show')
-    //         cropper = new Cropper(image[0], {
-    //             aspectRatio: 1,
-    //         });
-    //     };
-    //     var reader;
-    //     var file;
-    //     var url;
-
-    //     if (files && files.length > 0) {
-    //         file = files[0];
-    //         reader = new FileReader();
-    //         reader.onload = function (ev) {
-    //             done(reader.result);
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-
-    // $('body').on('click','#crop-cancel',function(){
-    //         bg.removeClass('bg-show')
-    //         cropper.destroy();
-    //         cropper = null;
-    // })
-    // document.getElementById('crop').addEventListener('click', function () {
-    //     var initialAvatarURL;
-    //     var canvas;
-    //     if (cropper) {
-    //     canvas = cropper.getCroppedCanvas({
-    //         width: 160,
-    //         height: 160,
-    //     });
-    //     initialAvatarURL = avatar.src;
-    //     avatar.src = canvas.toDataURL();
-    //     canvas.toBlob(function (blob) {
-    //         var formData = new FormData();
-    //         formData.append('action','student_saveInfo');
-    //         formData.append('_wpnonce',$("#inputImg").val());
-    //         formData.append('meta_key','user_head');
-    //         formData.append('meta_val',blob);
-    //         $.ajax({
-    //             type: "POST",
-    //                 url: window.admin_ajax+"?date="+new Date().getTime(),
-    //                 data: formData,
-    //                 dataType:'json',
-    //                 timeout:3000,
-    //                 contentType : false,
-    //                 processData : false,
-    //                 cache : false,
-    //                 success: function(data, textStatus, jqXHR){
-    //                     console.log(data)
-    //                     $.alerts(data.data.info)
-    //                     if(data.data.head_url){
-    //                         $('.logoImg').attr('src',data.data.head_url)
-    //                     }
-    //                     bg.removeClass('bg-show')
-    //                     cropper.destroy();
-    //                     cropper = null;
-    //                 },
-    //                 error: function (data) {
-    //                     console.log(data)
-    //                 },
-    //             })
-    //         }); 
-    //     }
-    // });
 })

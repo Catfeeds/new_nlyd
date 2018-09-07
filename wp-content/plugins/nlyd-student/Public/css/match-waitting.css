@@ -6,8 +6,7 @@
 .count-wrapper{
     width: 100%;
     position: absolute;
-    margin-top: -130px;
-    top: 50%;
+    top: 100px;
 }
 p.match-name{
     text-align: center;

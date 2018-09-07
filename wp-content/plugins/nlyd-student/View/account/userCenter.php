@@ -67,7 +67,7 @@
                 <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
-                    <span class="fs_12">
+                    <span class="fs_14">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
                             <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
                         <?php endif;?>
@@ -137,7 +137,7 @@
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>

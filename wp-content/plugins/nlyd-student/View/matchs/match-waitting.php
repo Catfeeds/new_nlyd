@@ -6,8 +6,13 @@
                 <h1 class="mui-title">比赛等待</h1>
             </header>
             <div class="layui-row nl-border nl-content">
+  
                 <?php if( $current_project['match_type'] == 'first' || isset($_GET['wait']) ){?>
                     <div class="count-wrapper">
+                    <p class="ta_c fs_16 c_black">赛前提示：</p>
+                    <p class="c_black8" style="padding-left:15px;padding-right:15px">比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为；
+                    比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目；
+                    请调整好心态准备比赛，脑力中国预祝您取得优异的比赛成绩！</p>
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <?php if($count_down > 0 ){ ?>
                             <div class="a-btn wait">倒计时<span class="count_down" data-seconds="<?=$count_down?>">初始中...</span></div>

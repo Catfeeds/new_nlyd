@@ -1556,6 +1556,26 @@ class Student_Ajax
                         unset($_POST['user_address']);
                     }
 
+
+                    if(!empty($_FILES['images'])){
+                        //var_dump($_FILES['images']);
+                        $upload_dir = wp_upload_dir();
+                        $dir = '/user/'.$current_user->ID.'/';
+                        $imagePathArr = [];
+                        $num = 0;
+                        foreach ($_FILES['images']['tmp_name'] as $upd){
+                            $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+                            if($file){
+                                $_POST['user_ID_Card'][] = $upload_dir['baseurl'].$dir.$file;
+                                ++$num;
+                            }
+                        }
+                    }
+
+                    if(!empty($_POST['user_ID_Card'])){
+                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']) && $user_ID_Card_update = true;
+                    }
+
                     break;
                 case 'user_sign':
                     if(mb_strlen($_POST['meta_val'],'utf-8') > 40) wp_send_json_error(array('info'=>'昵称不能超过40个字符'));
@@ -1566,7 +1586,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false;
+            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false || isset($user_ID_Card_update) ? true : false;
 
         }
         if($resul){
