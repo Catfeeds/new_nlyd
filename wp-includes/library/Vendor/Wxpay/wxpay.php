@@ -197,7 +197,7 @@ class wxpay
     public function writeLog($result, $intro = ''){
         $fileRes = fopen(self::LOG_PATH, 'a+');
         $fileInfo = [
-            'write_time' => date('Y-m-d H:i:s'),
+            'write_time' => get_time('mysql'),
             'intro' => $intro,
             'data' => $result
         ];
@@ -473,7 +473,7 @@ class wxpay
         $inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
         $inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
         $inputObj->SetUser_ip($_SERVER['REMOTE_ADDR']);//终端ip
-        $inputObj->SetTime(date("YmdHis"));//商户上报时间
+        $inputObj->SetTime(date("YmdHis",get_time()));//商户上报时间
         $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 
         $inputObj->SetSign();//签名
@@ -501,7 +501,7 @@ class wxpay
 
         $inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
         $inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
-        $inputObj->SetTime_stamp(time());//时间戳
+        $inputObj->SetTime_stamp(get_time());//时间戳
         $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 
         $inputObj->SetSign();//签名
@@ -553,9 +553,9 @@ class wxpay
     public function notify($xml, $signCallback)
     {
         $data = $this->xml_to_data($xml);
-        $data['write_time'] = date('Y-m-d H:i:s');
+        $data['write_time'] = get_time('mysql');
         $logInfo = [
-            'write_time' => date('Y-m-d H:i:s'),
+            'write_time' => get_time('mysql'),
             'write_intro' => '微信支付回调',
             'data' => $data
         ];
@@ -565,26 +565,32 @@ class wxpay
             //判断签名
             $orderParam = $signCallback($data['out_trade_no']);//商户参数
 
-            $inputObj = new WxPayUnifiedOrder();
-            $inputObj->SetAppid($this->appid);//公众账号ID
-            $inputObj->SetMch_id($this->mch_id);//商户号
-            $inputObj->SetSpbill_create_ip($this->get_client_ip());//终端ip
-            $inputObj->SetNonce_str('lx2wzbd7fstehtjj5gim79o7wglww3p5');//随机字符串
-            $inputObj->SetBody($orderParam['body']);
-            $inputObj->SetAttach($orderParam['attach']);//附加数据在查询api和支付通知中远洋返回.
-            $inputObj->SetOut_trade_no($orderParam['serialnumber']); //商户订单号
-            $inputObj->SetTotal_fee($orderParam['price']*100);//总金额
-            $inputObj->SetNotify_url($orderParam['notify_url']);
-            $inputObj->SetTrade_type('MWEB');
-            $inputObj->SetScene_info('{"h5_info": {"type":"Wap","wap_url": '.home_url().',"wap_name": "国际脑力运动"}}');
+//            $inputObj = new WxPayUnifiedOrder();
+//            $inputObj->SetAppid($this->appid);//公众账号ID
+//            $inputObj->SetMch_id($this->mch_id);//商户号
+//            $inputObj->SetSpbill_create_ip($this->get_client_ip());//终端ip
+//            $inputObj->SetNonce_str('lx2wzbd7fstehtjj5gim79o7wglww3p5');//随机字符串
+//            $inputObj->SetBody($orderParam['body']);
+//            $inputObj->SetAttach($orderParam['attach']);//附加数据在查询api和支付通知中远洋返回.
+//            $inputObj->SetOut_trade_no($orderParam['serialnumber']); //商户订单号
+//            $inputObj->SetTotal_fee($orderParam['price']*100);//总金额
+//            $inputObj->SetNotify_url($orderParam['notify_url']);
+//            $inputObj->SetTrade_type('MWEB');
+//            $inputObj->SetScene_info('{"h5_info": {"type":"Wap","wap_url": '.home_url().',"wap_name": "国际脑力运动"}}');
+            if($orderParam){
+                if($orderParam['price']*100 != $data['cash_fee']){
+                    $this->writeLog(json_encode($orderParam), '异步回调订单价格不匹配, : 订单参数');
+                    return false;
+                }
+            }
 
             //签名
-            $inputObj->SetSign($this->key);
-            $sign = $inputObj->MakeSign($this->key);
-            if($sign != $data['sign']) {
-                $this->writeLog($data, '异步回调验证签名错误');
-                return false;
-            }
+//            $inputObj->SetSign($this->key);
+//            $sign = $inputObj->MakeSign($this->key);
+//            if($sign != $data['sign']) {
+//                $this->writeLog($data, '异步回调验证签名错误');
+//                return false;
+//            }
             // TODO 查询订单,判断订单真实性
             $queryRes = $this->orderQuery([$data['transaction_id'], $data['out_trade_no']]);
 

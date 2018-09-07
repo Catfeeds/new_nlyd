@@ -155,7 +155,7 @@ class Student_Weixin
                 if(!$mobileUser){
                     $auth['user_nicename'] = $res['nickname'];
                     $auth['user_mobile'] = $res['mobile'];
-                    $user_id = wp_create_user($res['openid'],$res['openid'].'_'.get_time());
+                    $user_id = wp_create_user('wx_'.$res['openid'],$res['openid'].'_'.get_time());
                 }else{
                     //已存在
                     $user_id = $mobileUser->ID;

@@ -6,6 +6,7 @@ class Student_Payment {
     public function __construct($action)
     {
 
+
         if($action == 'success') $action = 'zfb_returnUrl';
         if($action != 'zfb_returnUrl'){
             if(isset($_GET['type'])){
@@ -14,26 +15,28 @@ class Student_Payment {
                 $type = $action;
             }
             $interface_config = get_option('interface_config');
-            if($type == 'wxpay' || $type == 'wxpay/'){
+            if($type == 'wxpay' || $type == 'wxpay/' || $type == 'wx_notifyUrl' || $type == 'wx_notifyUrl/'){
 
                 require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
                 //TODO 脑力运动
-//                $interface_config['wx']['api'] = 'wxaee5846345bca60d';
-//                $interface_config['wx']['merchant'] = '1494311232';
-//                $interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
+                $interface_config['wx']['api'] = 'wxaee5846345bca60d';
+                $interface_config['wx']['merchant'] = '1494311232';
+                $interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
 
                 //TODO 测试
-                $interface_config['wx']['api'] = 'wx4b9c68ca93325828';
-                $interface_config['wx']['merchant'] = '1495185102';
-                $interface_config['wx']['secret_key'] = 'qweQ61234Hjkasdiosd73Odcdsar72pz';
+//                $interface_config['wx']['api'] = 'wx4b9c68ca93325828';
+//                $interface_config['wx']['merchant'] = '1495185102';
+//                $interface_config['wx']['secret_key'] = 'qweQ61234Hjkasdiosd73Odcdsar72pz';
 
                 //var_dump($interface_config['wx']);exit;
                 self::$payClass = new wxpay($interface_config['wx']['api'], $interface_config['wx']['merchant'], $interface_config['wx']['secret_key']);
 
-                if($action == 'wx_downloadBill'){
-                    $this->wx_downloadBill();
+
+                if($type == 'wx_downloadBill' || $type == 'wx_notifyUrl' || $type == 'wx_downloadBill/' || $type == 'wx_notifyUrl/'){
+                    $this->$type();
                     exit;
                 }
+
             }else{
                 require_once INCLUDES_PATH.'library/Vendor/Alipay/alipay.php';
                 self::$payClass =  new alipay('2017123001371219',
@@ -113,6 +116,7 @@ class Student_Payment {
 //        var_dump($result);return;
         if($result != false){
             if($result['status']){
+
                 echo '<script>window.location.href="'.$result['data'].'&redirect_url='.urlencode(home_url('payment/success/type/wxpay/serialnumber/'.$order['serialnumber'])).'"</script>';
             }else{
                 echo $result['data'];
@@ -130,7 +134,7 @@ class Student_Payment {
      * 微信H5支付回调
      */
     public function wx_notifyUrl(){
-        file_put_contents('wxNofity.txt', date_i18n('Y-m-d H:i:s', current_time('timestamp')).'执行微信支付回调');
+//        file_put_contents('wxNofity.txt', date_i18n('Y-m-d H:i:s', current_time('timestamp')).'执行微信支付回调');
         //返回结果示例
 //        $foo = '<xml>
 //  <appid><![CDATA[wx2421b1c4370ec43b]]></appid>
@@ -156,20 +160,23 @@ class Student_Payment {
 //  <trade_type><![CDATA[JSAPI]]></trade_type>
 //  <transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id>
 //</xml>';
+
         global $wpdb;
         $queryRes = self::$payClass->notify(file_get_contents("php://input"), function ($out_trade_no){
             //获取订单信息回调,用于验证签名
             global $wpdb;
             $order = $wpdb->get_row(
                 'SELECT serialnumber,match_id,user_id,fullname,telephone,order_type,address,pay_type,cost,pay_status,created_time FROM '
-                .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no, ARRAY_A);
+                .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no.' AND pay_status=1', ARRAY_A);
             if($order){
+
                 return $this->getWxParam($order);
             }else{
                 return false;
             }
         });
-        if($queryRes && $queryRes['trade_state'] === 'SUCCESS'){
+
+        if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS'){
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
             $updateData = [
