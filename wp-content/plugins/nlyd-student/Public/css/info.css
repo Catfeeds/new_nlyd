@@ -72,6 +72,7 @@ width: 90%;
 }
 .post-img.no-dash{
     border: 1px solid #eee;
+    overflow: hidden;
 }
 .suggest-row .post-img:last-child{
     margin-right: 0;
