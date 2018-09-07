@@ -16,7 +16,7 @@ class Student_Logins
 
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
-        if($this->is_weixin() && !isset($_GET['access'])){
+        if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
 
             wp_redirect(home_url('weixin/webLogin'));
             exit;

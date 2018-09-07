@@ -1990,7 +1990,7 @@ class Student_Ajax
 
         wp_logout();
         unset($_SESSION['login_time']);
-        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins')));
+        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins/index/login_type/out')));
     }
 
     /**
