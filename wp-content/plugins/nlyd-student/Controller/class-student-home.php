@@ -51,6 +51,8 @@ class Student_Home
 
         $user_info['user_address'] = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
         $user_info['user_real_name'] = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
+        $user_info['user_ID_Card'] = isset($user_info['user_ID_Card']) ? unserialize($user_info['user_ID_Card']) : '';
+
         if(!empty($user_info['user_real_name']['real_type'])){
             switch ($user_info['user_real_name']['real_type']){
                 case 'sf':

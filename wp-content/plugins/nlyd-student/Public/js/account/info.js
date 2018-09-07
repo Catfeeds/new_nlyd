@@ -232,6 +232,9 @@ jQuery(document).ready(function($) {
             $('#img').click()
         })
         var imgs=[]
+        if($('.post-img.no-dash').length>=3){
+            $('#add-img').css('display','none')
+        }
         $("#img").change(function(e) {
             var file=e.target.files[0];
             imgs.unshift(file)
@@ -252,13 +255,14 @@ jQuery(document).ready(function($) {
                 layer.photos({//图片预览
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                }) 
+                })
+                if($('.post-img.no-dash').length>=3){
+                    $('#add-img').css('display','none')
+                }
             }
             reader.readAsDataURL(file);
-            if(imgs.length==3){
-                $('#add-img').css('display','none')
-            }
             $(e.target).val('')
+
     
         });
         $('.img-zoos').on('click','.del',function(){//删除图片
@@ -301,7 +305,9 @@ jQuery(document).ready(function($) {
                 $.each(imgs, function (i, v) {
                     fd.append('images[]',v);
                 })
-
+                $('.post-img.no-dash input').each(function () {
+                    fd.append('user_ID_Card[]',$(this).val());
+                })
                 $.ajax({
                     type: "POST",
                     url: window.admin_ajax+"?date="+new Date().getTime(),
@@ -337,4 +343,8 @@ jQuery(document).ready(function($) {
             }) 
   
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4405c74e74fedd91b4a09a8d9cd74017a1dde5dd
 })
