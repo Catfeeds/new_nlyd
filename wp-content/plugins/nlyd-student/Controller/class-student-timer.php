@@ -1,5 +1,6 @@
 <?php
 use library\Timer;
+use library\AliSms;
 /**
  * Redis测试
  * Created by PhpStorm.
@@ -72,6 +73,14 @@ class Student_Timer
         //查看队列
         $res = $redis->lrange('queue_name',0,-1);
         print_r($res);*/
+    }
+
+    public function send_sms(){
+        //$ali = new AliSms();
+        //$result = $ali->sendSms('15882484638,13666723810,18368349933,15067331988,13957339686,13004198439,15372368001,13700617776', 99, '');
+        //var_dump($result);
+        $view = student_view_path.'/public/timer.php';
+        load_view_template($view);
     }
 
     /**

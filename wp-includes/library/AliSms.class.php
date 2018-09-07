@@ -104,6 +104,11 @@ class AliSms
                 $template['title'] = '后台解除教学关系';
                 $template['text'] =  '尊敬的${user}您好，您的${cate}教练${coach}解除了与您的教学关系，您可登录系统查看';
                 break;
+            case 99:
+                $template['code'] =  'SMS_144150453';
+                $template['title'] = '临时通知';
+                $template['text'] =  '.....';
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $template['title'] = '短信测试';
