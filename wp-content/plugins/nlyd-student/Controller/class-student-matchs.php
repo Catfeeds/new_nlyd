@@ -961,7 +961,20 @@
                     }
                 }
 
-            }else{
+            }
+            elseif ($this->project_alias == 'nxss'){
+                $data['answer_array'] = $questions_answer;
+                if(!empty($match_questions)){
+                    $twentyfour = new TwentyFour();
+                    foreach ($match_questions as $val){
+                        $results = $twentyfour->calculate($val);
+                        //print_r($results);
+                        $arr[] = !empty($results) ? $results[0] : 'unsolvable';
+                    }
+                    $questions_answer = $arr;
+                }
+            }
+            else{
 
                 if(!empty($questions_answer)){
                     $len = count($questions_answer);
@@ -1140,7 +1153,25 @@
                     }
                 }
 
-            }else{
+            }
+            elseif ($this->project_alias == 'nxss'){
+
+                $answer_array = $questions_answer;
+                $count_value = array_count_values($questions_answer);
+                $success_len = $count_value['true'];
+                $len = count($questions_answer);
+                //var_dump($len);
+                if(!empty($match_questions)){
+                    $twentyfour = new TwentyFour();
+                    foreach ($match_questions as $val){
+                        $results = $twentyfour->calculate($val);
+                        //print_r($results);
+                        $arr[] = !empty($results) ? $results[0] : 'unsolvable';
+                    }
+                    $questions_answer = $arr;
+                }
+            }
+            else{
 
                 if(!empty($questions_answer)){
                     $len = count($questions_answer);
@@ -1177,6 +1208,7 @@
                 'match_questions'=>$match_questions,
                 'questions_answer'=>$questions_answer,
                 'my_answer'=>$my_answer,
+                'answer_array'=>$answer_array,
                 'my_score'=>$row['my_score'],
                 'project_title'=>$this->project_title,
                 'match_title'=>$this->match_title,

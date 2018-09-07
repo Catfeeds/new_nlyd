@@ -1,6 +1,7 @@
 <?php
 use library\Timer;
 use library\AliSms;
+use library\TwentyFour;
 /**
  * Redis测试
  * Created by PhpStorm.
@@ -81,6 +82,18 @@ class Student_Timer
         //var_dump($result);
         $view = student_view_path.'/public/timer.php';
         load_view_template($view);
+    }
+
+    public function TwentyFour(){
+        $b = 0;
+        $str = '$b = (9-6)*4+12;';
+        eval($str);
+        var_dump($b);
+
+        $twentyfour = new TwentyFour();
+        $data = array(11,11,2,4);
+        $results = $twentyfour->calculate($data);
+        var_dump($results);
     }
 
     /**

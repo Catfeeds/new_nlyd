@@ -291,7 +291,9 @@ class Student_Ajax
                     $my_answer = array_column($data_arr,'yours');
                 }
                 if($_POST['match_action'] == 'subjectFastReverse'){
-                    //print_r($_POST);die;
+
+                    $questions_answer = array_column($data_arr,'isRight');
+
                     $twentyfour = new TwentyFour();
                     $success_len = 0;
 
@@ -337,9 +339,9 @@ class Student_Ajax
                             }
                         }
                         /*********************************************/
-                        $results = $twentyfour->calculate($val['question']);
+                        //$results = $twentyfour->calculate($val['question']);
                         //print_r($results);
-                        $questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
+                        //$questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
 
                     }
                     //print_r($success_len);die;
@@ -357,7 +359,7 @@ class Student_Ajax
                     $my_score = ($len-$error_len)*10;
                 }
 
-                //print_r($my_score);die;
+                //print_r($questions_answer);die;
                 $update_arr['match_questions'] = json_encode($match_questions);
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
