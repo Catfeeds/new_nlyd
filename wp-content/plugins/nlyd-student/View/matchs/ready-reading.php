@@ -34,10 +34,7 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
+
     $('body').on('click','#complete',function(){//记忆完成
         var data={
             action:'memory_complete',
@@ -82,39 +79,45 @@ jQuery(function($) {
             }
         })
     }
-    $(window).on("blur",function(){
-        var leavePage = $.GetSession('leavePage','1');
-        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-            leavePage['leavePage']+=1;
-        }else{
-            var sessionData={
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
-                leavePage:1
+    if(window.location.host!='ydbeta.gjnlyd.com'){
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+        $(window).on("blur",function(){
+            var leavePage = $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                leavePage['leavePage']+=1;
+            }else{
+                var sessionData={
+                    match_id:$.Request('match_id'),
+                    project_id:$.Request('project_id'),
+                    match_more:$.Request('match_more'),
+                    leavePage:1
+                }
+                leavePage= sessionData
             }
-            leavePage= sessionData
-        }
-        
-        $.SetSession('leavePage',leavePage)
-    })  
-    $(window).on("focus", function(e) {
-        var leavePage= $.GetSession('leavePage','1');
-        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-            var leveTimes=parseInt(leavePage['leavePage'])
-            if(leveTimes>0 && leveTimes<3){
-                $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-            }
-            if(leveTimes>=3){
-                $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                setTimeout(function() {
+            
+            $.SetSession('leavePage',leavePage)
+        })  
+        $(window).on("focus", function(e) {
+            var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                var leveTimes=parseInt(leavePage['leavePage'])
+                if(leveTimes>0 && leveTimes<3){
+                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
+                }
+                if(leveTimes>=3){
+                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
+                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                    setTimeout(function() {
+                        submit(time);
+                    }, 1000);
                     submit(time);
-                }, 1000);
-                submit(time);
+                }
             }
-        }
-    });
+        });
+    }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {

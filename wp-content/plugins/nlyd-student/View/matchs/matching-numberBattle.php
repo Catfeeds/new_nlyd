@@ -58,36 +58,38 @@
 
 <script>
 jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
+    if(window.location.host!='ydbeta.gjnlyd.com'){
         history.pushState(null, null, document.URL);
-    });
-    submit=function(time){//提交答案
-        var my_answer=[];
-        $('.matching-number-zoo .matching-number').each(function(){
-            var answer=$(this).text();
-            my_answer.push(answer)
-        })
-        var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=$_GET['match_more']?>,
-            my_answer:my_answer,
-            match_action:'subjectNumberBattle',
-            surplus_time:time,
-        }
-        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-            $.DelSession('leavePage')
-            if(res.success){
-                if(res.data.url){
-                    window.location.href=res.data.url
-                }   
-            }else{
-                $.alerts(res.data.info)
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+        submit=function(time){//提交答案
+            var my_answer=[];
+            $('.matching-number-zoo .matching-number').each(function(){
+                var answer=$(this).text();
+                my_answer.push(answer)
+            })
+            var data={
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:<?=$_GET['match_more']?>,
+                my_answer:my_answer,
+                match_action:'subjectNumberBattle',
+                surplus_time:time,
             }
-        })
+            $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+                $.DelSession('leavePage')
+                if(res.success){
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }   
+                }else{
+                    $.alerts(res.data.info)
+                }
+            })
+        }
     }
     $(window).on("blur",function(){
         var leavePage = $.GetSession('leavePage','1');
