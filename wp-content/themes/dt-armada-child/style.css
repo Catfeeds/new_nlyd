@@ -293,10 +293,10 @@ a.c_black3:hover{
     #footer{
         display: none;
     }
-    .page-title{
-        display: none!important;
+    .masthead,.mobile-header-space,.mobile-header-bar{
+         display: none!important;
     }
-    .mobile-header-bar{
+    .page-title{
         display: none!important;
     }
     .scroll-top.on{

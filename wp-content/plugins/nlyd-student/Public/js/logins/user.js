@@ -66,6 +66,7 @@ jQuery(function($) {
             element.on('tab(tabs)', function(){//tabs
                 var left=$(this).position().left;
                 var html=$(this).html();
+                console.log(html)
                 var css=''
                 if($(this).index()==0){
                     css='22.5px 0 0 22.5px'
@@ -76,6 +77,9 @@ jQuery(function($) {
                     'transform':'translate3d('+left+'px, 0px, 0px)',
                     'border-radius':css
                 }).html(html)
+                $('.nl-transform .login_icon.phone_blue').removeClass('phone_blue').addClass('phone_white')
+                $('.nl-transform .login_icon.lock_blue').removeClass('lock_blue').addClass('lock_white')
+                $('.nl-transform .login_icon.user_blue').removeClass('user_blue').addClass('user_white')
             });
         });
 
@@ -177,8 +181,8 @@ jQuery(function($) {
         $('.login-by-reset').click(function(){//忘记密码
             $('#loginFormFast')[0].reset();//重置表单
             $('#loginFormPsw')[0].reset();//重置表单
-            $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
-            $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
+            $('.iconLock').removeClass('display-hide').addClass('display-block');//icon
+            $('.iconPhone').removeClass('display-block').addClass('display-hide');//icon
             $('.formName').text('重置密码')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');

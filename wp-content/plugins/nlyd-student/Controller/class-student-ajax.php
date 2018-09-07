@@ -291,7 +291,9 @@ class Student_Ajax
                     $my_answer = array_column($data_arr,'yours');
                 }
                 if($_POST['match_action'] == 'subjectFastReverse'){
-                    //print_r($_POST);die;
+
+                    $questions_answer = array_column($data_arr,'isRight');
+
                     $twentyfour = new TwentyFour();
                     $success_len = 0;
 
@@ -337,9 +339,9 @@ class Student_Ajax
                             }
                         }
                         /*********************************************/
-                        $results = $twentyfour->calculate($val['question']);
+                        //$results = $twentyfour->calculate($val['question']);
                         //print_r($results);
-                        $questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
+                        //$questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
 
                     }
                     //print_r($success_len);die;
@@ -357,7 +359,7 @@ class Student_Ajax
                     $my_score = ($len-$error_len)*10;
                 }
 
-                //print_r($my_score);die;
+                //print_r($questions_answer);die;
                 $update_arr['match_questions'] = json_encode($match_questions);
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
@@ -913,7 +915,7 @@ class Student_Ajax
         if($a && $result){
             $wpdb->commit();
             $url = home_url('account/address');
-            if(empty($match_id)) $url .= '/match_id/'.$match_id;
+            if(!empty($match_id)) $url .= '/match_id/'.$match_id;
             $data['info'] = '保存成功';
             $data['url'] = $url;
             wp_send_json_success($data);
@@ -1341,13 +1343,17 @@ class Student_Ajax
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.match_status = -3 ";     //历史
             $match_type = 'history';
+            $order = ' b.match_start_time desc ';
+
         }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
             $map[] = " b.match_status = 1 ";     //报名中
             $match_type = 'signUp';
+            $order = ' b.entry_end_time asc ';
         }
         else{
             $map[] = " b.match_status != -3  and b.match_status != 1 ";    //近期
             $match_type = 'recent';
+            $order = ' b.match_start_time asc ';
         }
         //获取最新比赛倒计时
         $sql1 = "select match_start_time from {$wpdb->prefix}match_meta where match_status = -2 order by match_start_time desc ";
@@ -1378,7 +1384,7 @@ class Student_Ajax
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
-                where {$where} order by b.match_status desc,b.match_start_time asc limit $start,$pageSize;
+                where {$where} order by {$order} limit $start,$pageSize;
                 ";
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -1390,7 +1396,7 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
             //获取报名人数
-            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} ";
+            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status = 2";
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
             //前端需要的数组

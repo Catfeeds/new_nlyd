@@ -46,10 +46,10 @@
                             </div> -->
                             <div class="form-input-row">
                                 <div class="form-input-label">用户账号</div>
-                                <div class="nl-input"></div>
+                                <div class="nl-input"><?=$user_info['contact']?></div>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label">姓 名</div>
+                                <div class="form-input-label"><?php _e('姓 名')?></div>
                                 <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
                             </div>
                             <div class="form-input-row">

@@ -38,7 +38,6 @@
 
     </div>
 </div>
-<?=$match_status;?>
 <script>
     jQuery(function($) {
         <?php if($match_status == 2 || $count_down <= 120): ?>

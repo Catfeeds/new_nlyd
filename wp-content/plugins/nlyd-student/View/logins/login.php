@@ -13,15 +13,15 @@
     <div class="layui-tab layui-tab-brief" lay-filter="tabs">
         <ul style="margin-left: 0" class="layui-tab-title  ">
             <li class="layui-this">
-                <i class="iconfont iconLock display-hide">&#xe60a;</i>
-                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                <div class="login_icon iconLock lock_blue display-hide"></div>
+                <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
             </li>
             <li>
-                <i class="iconfont icon-zhuce">&#xe642;</i>&nbsp;&nbsp;<span >注册</span>
+                <div class="login_icon icon-zhuce user_blue"></div>&nbsp;&nbsp;<span >注册</span>
             </li>
             <div class="nl-transform">
-                <i class="iconfont iconLock display-hide">&#xe60a;</i>
-                <i class="iconfont iconPhone">&#xe61c;</i>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                <div class="login_icon iconLock user_white display-hide"></div>
+                <div class="login_icon iconPhone phone_white"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
             </div>
         </ul>
         <div class="layui-tab-content">

@@ -8,6 +8,7 @@
 //设置时区
 //date_default_timezone_set('Asia/Shanghai');
 
+
 //获取当前时间
 if(!function_exists('get_time')){
 
@@ -698,6 +699,7 @@ function set_user_admin_bar_false_by_default($user_id) {
     update_user_meta( $user_id, 'show_admin_bar_front', 'false' );
     update_user_meta( $user_id, 'show_admin_bar_admin', 'false');
 }
+
 
 //引入url重写规则
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');
