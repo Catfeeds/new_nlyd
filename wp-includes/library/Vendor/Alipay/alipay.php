@@ -308,7 +308,7 @@ class alipay {
      */
     public function writeLog($result, $intro){
         $data = [
-            'write_time' => date('Y-m-d H:i:s'),
+            'write_time' => get_time('mysql'),
             'write_intro' => $intro,
             'data' => $result
         ];

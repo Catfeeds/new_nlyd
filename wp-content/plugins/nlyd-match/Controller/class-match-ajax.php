@@ -706,11 +706,13 @@ class Match_Ajax
     }
 
     /**
-     * 录入脑力健将
+     * 永久删除题目
      */
-    public function insertBrainpower(){
-
+    public function delQuestion(){
+        $id = intval($_POST['id']);
+        if($id < 1) wp_send_json_error(['info' => '操作失败']);
     }
+
 }
 
 new Match_Ajax();

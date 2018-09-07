@@ -2010,7 +2010,7 @@ class Student_Ajax
 
         wp_logout();
         unset($_SESSION['login_time']);
-        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins')));
+        wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins/index/login_type/out')));
     }
 
     /**
@@ -2213,10 +2213,10 @@ class Student_Ajax
         switch ($payType){
             case 'wxh5pay':
                 //TODO 微信支付暂未开放
-                wp_send_json_error(array('info'=>'微信支付暂未开放'));
+//                wp_send_json_error(array('info'=>'微信支付暂未开放'));
                 //请求数据
                 //1.统一下单方法
-                $params['notify_url'] = home_url('payment/wxpay/'); //商品描述
+                $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl'); //商品描述
                 $params['body'] = '脑力运动'; //商品描述
                 $params['serialnumber'] = $order['serialnumber']; // TODO 商户自定义的订单号
                 $params['price'] = $order['cost']; //订单金额 只能为整数 单位为分
@@ -2637,7 +2637,7 @@ class Student_Ajax
         $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile);
 
         if($res){
-            wp_send_json_success(array('info'=>home_url('account')));
+            wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
         }else{
             wp_send_json_error(array('info'=>'绑定失败'));
         }

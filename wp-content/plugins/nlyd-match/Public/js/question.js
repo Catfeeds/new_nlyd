@@ -38,4 +38,26 @@ jQuery(document).ready(function($) {
         })
        
     })
+    /**
+     * 删除题库
+     */
+    $('.del_question').on('click', function () {
+        var id = $(this).closest('tr').find('input[type="checkbox"]').val();
+        if(confirm('是否确定删除题目? 所属答案将全部删除')){
+            $.ajax({
+                type : 'post',
+                dataType : 'json',
+                data : {'action' : 'delQuestion', 'id' : id},
+                url : ajaxurl,
+                success : function (response) {
+                    alert(response['data']['info']);
+                    if(response['success']){
+                        window.location.reload();
+                    }
+                },error : function () {
+                    alert('请求失败!')
+                }
+            });
+        }
+    });
 })

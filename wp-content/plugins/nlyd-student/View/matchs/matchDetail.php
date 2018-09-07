@@ -71,7 +71,7 @@
                                             <div class="nl-match-info">
                                             <?php foreach ($val['project'] as $v ){ ?>
                                             
-                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">查看比赛规则</a>&nbsp;&nbsp;
+                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">比赛规则</a>&nbsp;&nbsp;
                                                 
                                             
                                             <?php } ?>
