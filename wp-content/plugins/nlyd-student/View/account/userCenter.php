@@ -137,7 +137,7 @@
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>

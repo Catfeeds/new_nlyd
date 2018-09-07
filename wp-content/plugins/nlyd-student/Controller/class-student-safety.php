@@ -51,8 +51,6 @@ class Student_Safety extends Student_Home
         $view = student_view_path.CONTROLLER.'/suggest.php';
         load_view_template($view);
     }
-
-
     /**
      *
      *用户协议
@@ -60,6 +58,15 @@ class Student_Safety extends Student_Home
      **/
     public function userAgreement(){
         $view = student_view_path.CONTROLLER.'/userAgreement.php';
+        load_view_template($view);
+    }
+
+    /**
+     *安全设置详细项目
+     *
+     **/
+     public function safetySetting(){
+        $view = student_view_path.CONTROLLER.'/safety-settings.php';
         load_view_template($view);
     }
 

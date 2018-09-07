@@ -182,7 +182,7 @@ class Student_Account extends Student_Home
 
         $data = array('category'=>$category);
 
-        $view = student_view_path.CONTROLLER.'/course.php';
+        $view = student_view_path.CONTROLLER.'/secure.php';
         load_view_template($view,$data);
     }
 
