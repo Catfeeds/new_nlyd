@@ -2592,6 +2592,28 @@ class Student_Ajax
         }
     }
 
+    /**
+     * 微信授权登录绑定手机
+     */
+    public function wxWebLoginBindMobile(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+
+        $mobile = $_POST['mobile'];
+        $user_id = $_POST['user_id'];
+        $access_token = $_POST['access'];
+        $open_id = $_POST['open'];
+        $weiLogin = new Student_Weixin('getUserInfo');
+        $res = $weiLogin->getUserInfo($access_token, $open_id, false, $user_id, $mobile);
+
+        if($res){
+            wp_send_json_success(array('info'=>'绑定成功'));
+        }else{
+            wp_send_json_error(array('info'=>'绑定失败'));
+        }
+    }
+
 }
 
 new Student_Ajax();
