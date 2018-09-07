@@ -35,6 +35,9 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 unset($actions['trash']);
                 unset($actions['view']);
+
+            }elseif ($this->post_type == 'question'){
+                $actions['delete'] = '<span class="del_question" style="color: #a00; cursor: pointer;">永久删除</span>';
             }
 //            $actions['student'] = '<span class="inline hide-if-no-js"></span>';
             return $actions;
