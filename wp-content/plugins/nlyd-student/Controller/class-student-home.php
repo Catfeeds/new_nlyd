@@ -47,6 +47,7 @@ class Student_Home
         }
         $user_info['user_id'] = $current_user->ID;
         $user_info['user_head'] = isset($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+        $user_info['contact'] = !empty($current_user->user_mobile) ? hideStar($current_user->user_mobile) : hideStar($current_user->user_email);
 
         $user_info['user_address'] = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
         $user_info['user_real_name'] = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
