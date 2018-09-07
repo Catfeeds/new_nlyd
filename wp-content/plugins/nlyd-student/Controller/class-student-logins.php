@@ -9,9 +9,10 @@
  */
 class Student_Logins
 {
+    
+    public $action;
     public function __construct($action)
     {
-
 
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
@@ -19,7 +20,7 @@ class Student_Logins
             wp_redirect(home_url('weixin/webLogin'));
             exit;
         }
-
+        $this->action = $action;
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 

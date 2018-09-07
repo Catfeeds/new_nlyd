@@ -23,26 +23,25 @@
                         <!-- 使用手机验证码快速登录 -->
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="hidden" name="action" value="student_login">
-                                <input type="hidden" name="login_type" value="mobile">
-                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce');?>">
+                                <input type="hidden" name="action" value="wxWebLoginBindMobile">
+                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_current_wx_web_login_nonce');?>">
                                 <div class="input-icon "><i class="iconfont">&#xe61c;</i></div>
-                                <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input hasIcon">
+                                <input type="tel" name="mobile" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input hasIcon">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <div class="input-icon "><i class="iconfont">&#xe645;</i></div>
-                                <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input hasIcon">
-                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
+                                <input type="tel" name="send_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input hasIcon">
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="hidden" name="uid" value="<?=$data['uid']?>">
+                                <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
-                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">绑定手机号</a>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定手机号</a>
                             </div>
                         </div>
                     </form>

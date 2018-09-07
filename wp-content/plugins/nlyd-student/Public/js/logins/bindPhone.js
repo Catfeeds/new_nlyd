@@ -43,7 +43,7 @@ jQuery(function($) {
             // 自定义验证规则
             form.verify($.validationLayui.allRules); 
             // 监听提交
-            form.on('submit(loginFormFastBtn)', function(data){//快速登录
+            form.on('submit(bindPhone)', function(data){//快速登录
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
@@ -69,7 +69,7 @@ jQuery(function($) {
     }
     $('.getCode').click(function(){//获取验证码
         if(!$(this).hasClass('disabled')){
-            var dom=$(this).parents('form').find("input[name='user_login']")
+            var dom=$(this).parents('form').find("input[name='mobile']")
             var value=dom.val()
             var allRules=$.validationLayui.allRules;//全局正则配置
             var phone=allRules['phone'][0];
@@ -85,7 +85,7 @@ jQuery(function($) {
                     var action='get_sms_code'
                     var data={
                         action:action,
-                        mobile:formData.user_login,
+                        mobile:formData.mobile,
                         template:template,
                         tamp:getTimestamp,
                     }
