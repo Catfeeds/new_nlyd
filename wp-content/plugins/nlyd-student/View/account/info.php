@@ -78,7 +78,7 @@
                             <div class="form-input-row" href="certification">
                                 <div class="form-input-label">实名认证</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                                <div class="nl-input"></div>
+                                <div class="nl-input"><?=$user_info['real_ID']?></div>
                             </div>
                             <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                                 <div class="form-input-label">收货地址</div>
@@ -150,12 +150,7 @@
                                             </div>
                                         </div>
                                         <?php } ?>
-                                        <?php }else{ ?>
-                                        <div class="add-zoo">
-                                            <div class="transverse"></div>
-                                            <div class="vertical"></div>
-                                        </div>
-                                        <?php }?>
+                                        <?php } ?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>

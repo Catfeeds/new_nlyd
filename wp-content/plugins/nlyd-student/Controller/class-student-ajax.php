@@ -1572,9 +1572,8 @@ class Student_Ajax
                         }
                     }
 
-                    if(!empty($_POST['user_ID_Card'])){
-                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']) && $user_ID_Card_update = true;
-                    }
+                    update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
+                    $user_ID_Card_update = true;
 
                     break;
                 case 'user_sign':
@@ -1586,7 +1585,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false || isset($user_ID_Card_update) ? true : false;
+            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_ID_Card_update) ? true : false ;
 
         }
         if($resul){

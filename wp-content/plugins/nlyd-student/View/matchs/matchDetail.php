@@ -109,7 +109,7 @@
                         <?php endif;?>
                         <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>
                         <!--倒计时-->
-                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
+                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match['match_url']?>"></div>
                         <?php endif;?>
                     </div>
                 </div>
