@@ -137,6 +137,25 @@
                                 </div>
                                 <div class="layui-bg-white img-zoos">
                                     <p class="tps">上传身份证(正面和反面,手持照片，最多上传3张)</p>
+
+                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
+                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                        <div class="post-img no-dash">
+                                            <div class="img-zoo img-box">
+                                                <img src="<?=$val?>"/>
+                                            </div>
+                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                            <div class="del">
+                                                <i class="iconfont">&#xe633;</i>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
+                                        <?php }else{ ?>
+                                        <div class="add-zoo">
+                                            <div class="transverse"></div>
+                                            <div class="vertical"></div>
+                                        </div>
+                                        <?php }?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>
