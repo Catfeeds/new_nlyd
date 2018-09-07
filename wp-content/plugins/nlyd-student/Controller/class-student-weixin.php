@@ -6,7 +6,11 @@ class Student_Weixin
     public function __construct($action = '')
     {
         if($action) $this->$action();
-        return;
+        if($action != ''){
+            exit;
+        }else{
+            return;
+        }
         //添加短标签
 //        add_shortcode('student-weixin',array($this,$action));
     }
@@ -40,6 +44,7 @@ class Student_Weixin
 
         if(empty($_GET['code'])){
             $redirect_url = home_url().$_SERVER["REQUEST_URI"];
+
             //$redirect_uri = 'http://.miss4ever.com'.$_SERVER['REQUEST_URI'];
             //$response_type = 'wixin_return_code';
             //$scope = 'snsapi_userinfo';
@@ -58,6 +63,7 @@ class Student_Weixin
         }else{
             return $this->getWebAccessToken(true);
         }
+        exit;
     }
 
     /**
@@ -96,11 +102,13 @@ class Student_Weixin
         if(empty($users) || !$users->user_mobile){
             //TODO 显示绑定手机页面
             $users_id = $users->user_mobile == true ? $users->ID : 0;
-            wp_redirect(home_url('account/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
+
+            wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
             exit;
         }
 
         $this->getUserInfo($access_token,$openid, false,$users->ID);
+        exit;
     }
 
     /**
@@ -125,15 +133,14 @@ class Student_Weixin
         }
         //保存用户信息
         $res['mobile'] = $mobile;
-        $this->save_user($res,$type,$user_id);
-
+        return $this->save_user($res,$type,$user_id);
+        exit;
     }
 
     /**
      * 微信授权登录页,保存用户信息
     */
     public function save_user($res = [],$type='',$user_id=0){
-
         global $wpdb;
         if($type == true){
             //绑定手机后执行
@@ -166,11 +173,11 @@ class Student_Weixin
                 if(!$bool) return false;
             }
         }
-        $this->insertUsermeta($_POST['res'],$user_id,true);
+        $this->insertUsermeta($res,$user_id,true);
 
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
-        if($type) {
+        if($type == false) {
             wp_redirect(home_url('account'));//跳转到用户中心
             exit;
         }
@@ -210,6 +217,7 @@ class Student_Weixin
             $result = $wpdb->query($sql);
         }
         return $result;
+
     }
 
 

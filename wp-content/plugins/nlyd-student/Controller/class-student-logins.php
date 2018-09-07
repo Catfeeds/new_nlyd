@@ -16,7 +16,8 @@ class Student_Logins
 
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
-        if($this->is_weixin()){
+        if($this->is_weixin() && !isset($_GET['access'])){
+
             wp_redirect(home_url('weixin/webLogin'));
             exit;
         }
@@ -44,9 +45,9 @@ class Student_Logins
     }
     public function bindPhone(){
         $data = [
-            'user_id' => $_GET['uid'],
+            'uid' => $_GET['uid'],
             'access' => $_GET['access'],
-            'open' => $_GET['open'],
+            'open' => $_GET['oid'],
         ];
         $view = student_view_path.CONTROLLER.'/bindPhone.php';
         load_view_template($view,$data);
