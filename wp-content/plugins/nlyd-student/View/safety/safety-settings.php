@@ -8,7 +8,7 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback static" onclick='window.location.href = "<?=home_url('account')?>"'>
+            <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
             <h1 class="mui-title">重置密码/更换手机号/绑定手机号/绑定邮箱</h1>
@@ -20,47 +20,47 @@
                             <!-- 重置密码 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
-                                <div class="nl-input">**********</div>
+                                <input name='meta_val' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">新密码</div>
-                                <div class="nl-input">luolan12345</div>
+                                <input name='meta_val' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">再次输入</div>
-                                <div class="nl-input">13982242710</div>
+                                <input name='meta_val' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <!-- 更换手机号 -->
-
-
+                            <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
+                            <div class="form-input-row">
+                                <div class="form-input-label">手机号码</div>
+                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                            </div>
+                            <div class="form-input-row">
+                                <div class="form-input-label">验证码</div>
+                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                            </div>
                             <!-- 绑定手机号 -->
-
-
+                            <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
+                            <div class="form-input-row">
+                                <div class="form-input-label">手机号码</div>
+                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                            </div>
+                            <div class="form-input-row">
+                                <div class="form-input-label">验证码</div>
+                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                            </div>
                             <!-- 绑定更换邮箱 -->
                             <div class="form-input-row">
-                                <div class="form-input-label">登陆密码</div>
-                                <div class="nl-input">**********</div>
-                                <a class="form-input-right c_blue">修改</a>
+                                <div class="form-input-label">邮箱地址</div>
+                                <input name='meta_val' value="" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label">绑定手机</div>
-                                <div class="nl-input">13982242710</div>
-                                <a class="form-input-right c_blue">修改</a>
-                            </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label">绑定邮箱</div>
-                                <div class="nl-input">821831825@qq.com</div>
-                                <a class="form-input-right c_blue">修改</a>
-                            </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label">绑定微信</div>
-                                <div class="nl-input">不听不听</div>
-                                <a class="form-input-right c_blue">解绑</a>
-                            </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label">绑定QQ</div>
-                                <div class="nl-input">一时发疯，回不了神</div>
-                                <a class="form-input-right c_blue">解绑</a>
+                                <div class="form-input-label">验证码</div>
+                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <a class="a-btn" style="display:none;" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
                         </div>
@@ -109,5 +109,77 @@
                 return false;
             });
         });
+
+            //-----------------获取验证码-------------------- 
+            
+    function time(wait,o){//倒计时
+        if (wait == 0) {  
+            o.removeClass("disabled");            
+            o.text("获取短信验证码")  
+            wait = 60;  
+        } else {  
+            o.addClass("disabled");  
+            o.text("重新发送(" + wait + ")")
+
+            wait--;  
+            setTimeout(function() {  
+                time(wait,o)  
+            },  
+            1000)  
+        }  
+    }
+    $('.getCode').click(function(){//获取验证码
+        if(!$(this).hasClass('disabled')){
+            var dom=$(this).parents('.form-input-row').find("input")
+            var value=dom.val()
+            var allRules=$.validationLayui.allRules;//全局正则配置
+            var phone=allRules['phone'][0];
+            var email=allRules['email'][0];
+            var layVerify=dom.attr('lay-verify')
+            var message=allRules[layVerify][1];
+            var template=parseInt($(this).attr('data-sendCodeCase'));
+            if(layVerify=='phone'){//手机登录
+                if(phone.test(value)){
+                    var formData=$(this).parents('form').serializeObject();
+                    var getTimestamp=new Date().getTime()
+                    var action='get_sms_code'
+                    var data={
+                        action:action,
+                        mobile:value,
+                        template:template,
+                        tamp:getTimestamp,
+                    }
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    var wait=60;  
+                    time(wait,$(this))
+                }else{
+                    // $(this).parents('form').find("input[name='user_login']").focus()
+                    $.alerts(message)
+                    return false
+                }
+            }else if(layVerify=='email'){//手机或邮箱登录
+                message=allRules['phoneOrEmail'];
+                if( email.test(value)){
+                    var formData=$(this).parents('form').serializeObject();
+                    var getTimestamp=new Date().getTime()
+                    var action='get_smtp_code'   
+                    
+                    var data={
+                        action:action,
+                        user_login:value,
+                        template:template,
+                        tamp:getTimestamp,
+                    }
+                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    var wait=60;  
+                    time(wait,$(this))
+                    return false
+                }else{
+                    $.alerts(message)
+                    return false
+                }
+            }
+        }
+    })
     })
 </script>

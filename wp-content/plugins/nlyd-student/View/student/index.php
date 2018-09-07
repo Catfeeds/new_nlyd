@@ -130,7 +130,7 @@ get_header(); ?>
                         </div>
 
 
-                        <div class="head-info layui-row  width-padding">
+                        <!-- <div class="head-info layui-row  width-padding">
                             <span class="pull-left c_blue fs_14">最新资讯</span>
                             <span class="pull-right fs_14" onclick="window.location.href='<?= home_url('category/new-news/'); ?>'">全部资讯 <i class="iconfont">&#xe640;</i></span>
                         </div>
@@ -152,7 +152,7 @@ get_header(); ?>
                         <?php
                                 }
                             }
-                        ?>
+                        ?> -->
                     </div>
                 </div>
                 <!-- 视频 -->

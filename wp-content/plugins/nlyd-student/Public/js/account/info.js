@@ -343,8 +343,4 @@ jQuery(document).ready(function($) {
             }) 
   
         });
-<<<<<<< HEAD
-=======
-
->>>>>>> 4405c74e74fedd91b4a09a8d9cd74017a1dde5dd
 })

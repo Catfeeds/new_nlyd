@@ -150,12 +150,6 @@
                                             </div>
                                         </div>
                                         <?php } ?>
-                                        <?php }else{ ?>
-                                        <div class="add-zoo">
-                                            <div class="transverse"></div>
-                                            <div class="vertical"></div>
-                                        </div>
-                                        <?php }?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>

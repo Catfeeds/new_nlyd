@@ -170,9 +170,9 @@ p.content-p{
 /* .content table.nl-table tr:nth-child(odd){
     background: RGBA(246, 250, 255, 1);
 } */
-.content table.nl-table tr:first-child td{
+/* .content table.nl-table tr:first-child td{
     color: RGBA(38, 38, 38, 1);
-}
+} */
 .player-img{
     width: 30px;
     height: 30px;

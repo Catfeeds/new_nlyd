@@ -576,8 +576,14 @@ p.share-font{
 }
 .content .nl-table td{
     text-align: center;
-    font-size:0.14rem;
+    font-size:0.13rem;
     white-space: nowrap;
+}
+.content .nl-table thead tr td{
+    color: rgba(38, 38, 38, 1);
+}
+.content .nl-table tbody tr td{
+    color: rgba(38, 38, 38, 0.8);
 }
 .content .nl-table td div.table_content{
     text-align: center;
