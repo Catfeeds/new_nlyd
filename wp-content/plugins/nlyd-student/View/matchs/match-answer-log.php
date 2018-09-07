@@ -113,7 +113,7 @@ switch ($project_alias){
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
-        if(window.location.host!='ydbeta.gjnlyd.com'){
+        if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);

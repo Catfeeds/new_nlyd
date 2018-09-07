@@ -59,7 +59,7 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
-    if(window.location.host!='ydbeta.gjnlyd.com'){
+    if(window.location.host=='ydbeta.gjnlyd.com'){
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);

@@ -344,6 +344,7 @@
     padding: 0;
     text-align: center;
     line-height: 47px;
+    border: none;
   }
   .nl-cropper-footer button:first-child{
     background: #fff;
