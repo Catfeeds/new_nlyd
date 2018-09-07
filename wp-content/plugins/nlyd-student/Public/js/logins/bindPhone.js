@@ -49,25 +49,26 @@ jQuery(function($) {
             });
         });
 
-//-----------------获取验证码-------------------- 
-        
-        function time(wait,o){//倒计时
-            if (wait == 0) {  
-                o.removeAttr("disabled");            
-                o.text("获取短信验证码")  
-                wait = 60;  
-            } else {  
-                o.attr("disabled", true);  
-                o.text("重新发送(" + wait + ")")
+    //-----------------获取验证码-------------------- 
+            
+    function time(wait,o){//倒计时
+        if (wait == 0) {  
+            o.removeClass("disabled");            
+            o.text("获取短信验证码")  
+            wait = 60;  
+        } else {  
+            o.addClass("disabled");  
+            o.text("重新发送(" + wait + ")")
 
-                wait--;  
-                setTimeout(function() {  
-                    time(wait,o)  
-                },  
-                1000)  
-            }  
-        }
-        $('.getCode').click(function(){//获取验证码
+            wait--;  
+            setTimeout(function() {  
+                time(wait,o)  
+            },  
+            1000)  
+        }  
+    }
+    $('.getCode').click(function(){//获取验证码
+        if(!$(this).hasClass('disabled')){
             var dom=$(this).parents('form').find("input[name='user_login']")
             var value=dom.val()
             var allRules=$.validationLayui.allRules;//全局正则配置
@@ -122,7 +123,6 @@ jQuery(function($) {
                     return false
                 }
             }
-        })
-
-
+        }
+    })
 })
