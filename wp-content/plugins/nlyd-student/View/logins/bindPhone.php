@@ -39,6 +39,9 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
+                                <input type="hidden" name="uid" value="<?=$data['uid']?>">
+                                <input type="hidden" name="access" value="<?=$data['access']?>">
+                                <input type="hidden" name="open" value="<?=$data['open']?>">
                                 <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">绑定手机号</a>
                             </div>
                         </div>

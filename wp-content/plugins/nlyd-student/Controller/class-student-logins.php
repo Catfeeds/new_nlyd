@@ -12,6 +12,7 @@ class Student_Logins
     public function __construct($action)
     {
 
+
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
         if($this->is_weixin()){
@@ -41,8 +42,13 @@ class Student_Logins
         load_view_template($view);
     }
     public function bindPhone(){
+        $data = [
+            'user_id' => $_GET['uid'],
+            'access' => $_GET['access'],
+            'open' => $_GET['open'],
+        ];
         $view = student_view_path.CONTROLLER.'/bindPhone.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 默认公用js/css引入
