@@ -9,9 +9,6 @@
         <div class="box-logo ">
             <img src="<?=student_css_url.'image/login-logo.png'?>" class="logoImg">
         </div>
-        <!-- <div class="box-logo-name">
-            <img src="<?=student_css_url.'image/InternationalIntellectualSports.png'?>" class="logoImg">
-        </div> -->
     </div>
     <div class="layui-tab layui-tab-brief" lay-filter="tabs">
         <ul style="margin-left: 0" class="layui-tab-title  ">
@@ -47,7 +44,7 @@
                                 <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
                         </p>
                         <div class="layui-form-item">
@@ -73,7 +70,7 @@
                                 <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
                             <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
                         </p>
@@ -110,7 +107,7 @@
                                 <input type="password" name="confirm_password" lay-verify="required" placeholder="输入新密码" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
                         </p>
                         <div class="layui-form-item">
@@ -144,7 +141,7 @@
                         </div>
                     </div>
                                         
-                    <p class="row-margin">
+                    <p class="no-margin">
                         <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
                     </p>
                     <div class="layui-form-item">
@@ -156,7 +153,7 @@
             </div> 
         </div> 
         <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
-        <!-- <ul style="margin-left: 0"  class="login-type">
+        <ul style="margin-left: 0"  class="login-type">
             <li class="login-type-wrapper">
                 <div class="login-type-logo">
                     <i class="iconfont">&#xe695;</i>
@@ -169,7 +166,7 @@
                 </div>
                 <div class="login-type-name">QQ登录</div>
             </li>
-        </ul> -->
+        </ul>
     </div>  
         <div class="width-margin width-margin-pc userAgreement" style='display:none'>
             <div class="head-tips">特别提示</div>

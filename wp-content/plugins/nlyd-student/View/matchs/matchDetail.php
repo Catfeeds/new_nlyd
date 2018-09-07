@@ -71,7 +71,7 @@
                                         <?php foreach ($val['project'] as $v ){ ?>
                                         
                                             <div class="one-item"><?=$v['post_title']?>
-                                                &nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue fs_12 ">查看规则</a>
+                                                &nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">查看规则</a>
                                              </div>
                                         
                                         <?php } ?>

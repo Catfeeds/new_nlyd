@@ -3,10 +3,10 @@ class Student_Weixin
 {
     public $appid = 'wxb70e5bd97a67bb51';
     public $appsecret = '9c846264ee2169c34882e71ccc0f5935';
-    public function __construct($action)
+    public function __construct($action = '')
     {
         if($action) $this->$action();
-        exit;
+        return;
         //添加短标签
 //        add_shortcode('student-weixin',array($this,$action));
     }
@@ -29,9 +29,7 @@ class Student_Weixin
             global $current_user;
             wp_redirect(home_url('account'));
         }else{
-            if($this->getWebCode(true)){
-                wp_redirect(home_url('account'));
-            }
+            $this->getWebCode(true);
         }
     }
 
@@ -92,6 +90,23 @@ class Student_Weixin
 
         $access_token = $data['access_token'];
         $openid = $data['openid'];
+        //是否存在用户
+        global $wpdb;
+        $users = $wpdb->get_row('SELECT ID,user_mobile FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
+        if(empty($users) || !$users->user_mobile){
+            //TODO 显示绑定手机页面
+            $users_id = $users->user_mobile == true ? $users->ID : 0;
+            wp_redirect(home_url('account/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
+            exit;
+        }
+
+        $this->getUserInfo($access_token,$openid, false,$users->ID);
+    }
+
+    /**
+     * 网页授权登录根据access_token和openid获取用户信息
+     */
+    public function getUserInfo($access_token,$openid,$type = true,$user_id = 0,$mobile=''){
         $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
 
         $ch = curl_init();
@@ -108,94 +123,66 @@ class Student_Weixin
             echo '<br/><h2>错误信息：</h2>'.$res->errmsg;
             exit;
         }
-        //打印用户信息
-//        session('lfs_WeChat',$res);
-        // var_dump($res);die;
-
-
-        if (!$this->indexs($res,$type)) {
-            echo '<h1>错误：</h1>存入用户信息失败';
-//            echo '<br/><h2>错误信息：</h2>'.$res->errmsg;
-            exit;
-        }
-        return true;
-        //return $res;
-        /*echo '<pre>';
-        print_r($res);
-        echo '</pre>';*/
+        //保存用户信息
+        $res['mobile'] = $mobile;
+        $this->save_user($res,$type,$user_id);
 
     }
 
     /**
-     * 微信授权登录页
+     * 微信授权登录页,保存用户信息
     */
-    public function indexs($res = [],$type=''){
-        $openid = $res['openid'];
-        if($res == [] && !is_post()) return false;
+    public function save_user($res = [],$type='',$user_id=0){
 
-        /*判断是否为平台用户*/
         global $wpdb;
-        $users = $wpdb->get_row('SELECT ID,user_mobile FROM '.$wpdb->users.' WHERE weChat_openid="'.$res['openid'].'" AND weChat_openid != ""');
-        if(empty($users) || !$users->user_mobile){
-            $users_id = $users->user_mobile == true ? $users->ID : 0;
-            //TODO 绑定手机
-            $auth = array(
-                'user_nicename'        => $res['nickname'],
-                'weChat_openid'        => $res['openid'],
-                'weChat_union_id'        => $res['unionid'],
-                'user_registered'        => get_time('mysql'),
-            );
-            //TODO 显示绑定手机页面
-
-            exit;
-        }else{
-            $user_id = $users->ID;
-        }
-
-        if(is_post()){
-            $user_id = $_POST['user_id'];
-            if($_POST['user_id'] < 1){
+        if($type == true){
+            //绑定手机后执行
+            if($user_id < 1){
                 /*保存用户信息*/
+                //当前手机是否已注册
+                $mobileUser = $wpdb->get_row('SELECT ID FROM '.$wpdb->users.' WHERE user_mobile='.$res['mobile']);
+                $auth = array(
+                    'weChat_openid'        => $res['openid'],
+                    'weChat_union_id'        => $res['unionid'],
+                );
                 $wpdb->startTrans();
-                $user_id = wp_create_user($_POST['weChat_openid'],$_POST['weChat_openid'].'_'.get_time());
-                $bool = $wpdb->update($wpdb->users,$_POST['auth'],['ID' => $user_id]);
-                if(!$bool) {
-                    $wpdb->rollback();
-                    echo '<h1>错误：</h1>存入用户信息失败';
-                    exit;
-                }
-                if($this->insertUsermeta($_POST['res'],$user_id)){
-                    $wpdb->commit();
+                if(!$mobileUser){
+                    $auth['user_nicename'] = $res['nickname'];
+                    $auth['user_mobile'] = $res['mobile'];
+                    $user_id = wp_create_user($res['openid'],$res['openid'].'_'.get_time());
                 }else{
-                    $wpdb->rollback();
-                    echo '<h1>错误：</h1>存入用户信息失败';
-                    exit;
+                    //已存在
+                    $user_id = $mobileUser->ID;
                 }
-            }else{
-                $bool = $wpdb->update($wpdb->users,['user_mobile' => $_POST['mobile']],['ID' => $user_id]);
-                if(!get_user_meta($user_id)) $this->insertUsermeta($_POST['res'],$user_id);
+                $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
                 if(!$bool) {
-                    echo '<h1>错误：</h1>存入用户信息失败';
-                    exit;
+                    $wpdb->rollback();
+                    return false;
                 }
+                $wpdb->commit();
+            }else{
+                //已存在用户绑定手机
+                $bool = $wpdb->update($wpdb->users,['user_mobile' => $res['mobile']],['ID' => $user_id]);
+                if(!$bool) return false;
             }
-
         }
-
-
+        $this->insertUsermeta($_POST['res'],$user_id,true);
 
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
-
+        if($type) {
+            wp_redirect(home_url('account'));//跳转到用户中心
+            exit;
+        }
         return true;
     }
+
 
     /**
      * usermeta数据
      */
-    public function insertUsermeta($res,$user_id){
+    public function insertUsermeta($res,$user_id,$type = false){
         global $wpdb;
-        $user_address = ['country' => $res['country'], 'province' => $res['province'], 'city' => $res['city']];
         switch ($res['sex']){
             case 1:
                 $sex = '男';
@@ -206,13 +193,23 @@ class Student_Weixin
             default:
                 $sex = '未知';
         }
-        $sql = 'INSERT INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
+        $user_address = ['country' => $res['country'], 'province' => $res['province'], 'city' => $res['city']];
+        if($type == true){
+            //更新.
+            $result = true;
+            update_user_meta($user_id, 'user_gender', $sex);
+            update_user_meta($user_id, 'user_address', $user_address);
+            update_user_meta($user_id, 'nickname', $res['nickname']);
+            update_user_meta($user_id, 'user_head', $res['headimgurl']);
+        }else{
+            $sql = 'INSERT INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
             ('.$user_id.',"user_gender", "'.$sex.'"),
             ('.$user_id.',"user_address",\''.serialize($user_address).'\'),
             ('.$user_id.',"nickname","'.$res['nickname'].'"),
             ('.$user_id.',"user_head","'.$res['headimgurl'].'")';
-        echo $sql;
-        return $wpdb->query($sql);
+            $result = $wpdb->query($sql);
+        }
+        return $result;
     }
 
 
