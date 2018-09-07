@@ -1,37 +1,5 @@
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
-
-<div class="nl-foot-nav">
-    <a class="nl-foot-item" href="<?=home_url('/student/index');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-home"></div>
-        </div>
-        <div class="nl-foot-name">首页</div>
-    </a>
-    <a class="nl-foot-item disabled_a" href="<?=home_url('/account/matchList');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-train"></div>
-        </div>
-        <div class="nl-foot-name">训练</div>
-    </a>
-    <a class="nl-foot-item active" href="<?=home_url('/matchs');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-match"></div>
-        </div>
-        <div class="nl-foot-name">比赛</div>
-    </a>
-    <a class="nl-foot-item disabled_a">
-        <div class="nl-foot-icon">
-            <div class="footer-kaoji"></div>
-        </div>
-        <div class="nl-foot-name">考级</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('account')?>">
-        <div class="nl-foot-icon">
-            <div class="footer-user"></div>
-        </div>
-        <div class="nl-foot-name">我的</div>
-    </a>
-</div>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

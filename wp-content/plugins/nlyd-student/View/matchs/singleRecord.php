@@ -1,4 +1,4 @@
-
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -46,7 +46,7 @@
                             </table>
                         </div>
                     </div>
-                    <a class="a-btn"  data-href="<?=$answer_url?>">查看本轮我的答题记录</a>
+                    <a class="a-btn get_footer"  data-href="<?=$answer_url?>">查看本轮我的答题记录</a>
                 </div> 
             </div>
         </div>           

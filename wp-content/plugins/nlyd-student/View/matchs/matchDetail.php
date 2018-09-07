@@ -6,6 +6,7 @@
         }
     }
 </style>
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
     <div class="layui-row">
@@ -99,17 +100,17 @@
                             </li>
                         </ul>
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
-                        <a class="a-btn" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>">报名参赛</a>
+                        <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>">报名参赛</a>
                         <?php endif; ?>
                         <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                            <a class="a-btn" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
+                            <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
                         <?php endif;?>
                         <?php if($match['match_status'] == -3):?>
-                            <a class="a-btn" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                            <a class="a-btn get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
                         <?php endif;?>
                         <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>
                         <!--倒计时-->
-                            <div class="a-btn count_down" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
+                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
                         <?php endif;?>
                     </div>
                 </div>
