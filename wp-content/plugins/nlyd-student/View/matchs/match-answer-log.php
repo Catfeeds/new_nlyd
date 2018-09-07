@@ -8,6 +8,9 @@
  */
 ?>
 <!--头部-->
+<?php if(isset($_GET['type'])): ?>
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
+<?php endif;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

@@ -81,11 +81,7 @@ p.long-name{
     float: left;
     width: -webkit-calc(100% - 70px);
     width: calc(100% - 70px);
-    display: flex;
     text-align: left;
-}
-.nl-match-info .one-item:last-child{
-    text-indent: 0.10rem;
 }
 .nl-match-footer{
   height:43px;

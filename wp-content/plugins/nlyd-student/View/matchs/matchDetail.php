@@ -68,14 +68,13 @@
                                     <?php foreach ($match_project as $val){ ?>
                                     <div class="nl-match-detail layui-row">
                                         <div class="nl-match-label"><?=$val['parent_title']?>：</div>
-                                        <div class="nl-match-info text_1 c_black">
-                                        <?php foreach ($val['project'] as $v ){ ?>
-                                        
-                                            <div class="one-item"><?=$v['post_title']?>
-                                                &nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">查看规则</a>
-                                             </div>
-                                        
-                                        <?php } ?>
+                                            <div class="nl-match-info">
+                                            <?php foreach ($val['project'] as $v ){ ?>
+                                            
+                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">查看比赛规则</a>&nbsp;&nbsp;
+                                                
+                                            
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <?php } ?>
