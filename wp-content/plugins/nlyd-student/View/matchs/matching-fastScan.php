@@ -323,17 +323,17 @@ jQuery(function($) {
             match_action:'subjectfastScan',
             surplus_time:time,
         }
-        // $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-        //     $.DelSession('match')
-        //     $.DelSession('leavePage')
-        //     if(res.success){
-        //         if(res.data.url){
-        //             window.location.href=res.data.url
-        //         }
-        //     }else{
-        //         $.alerts(res.data.info)
-        //     }
-        // })
+        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
+            $.DelSession('match')
+            $.DelSession('leavePage')
+            if(res.success){
+                if(res.data.url){
+                    window.location.href=res.data.url
+                }
+            }else{
+                $.alerts(res.data.info)
+            }
+        })
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
