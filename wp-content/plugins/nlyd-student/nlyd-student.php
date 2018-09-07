@@ -49,18 +49,8 @@ if(!class_exists('StudentController')){
 
         private function main(){
 
-            /*//引入配置文件
-            if(is_file(leo_student_path.'conf/config.php')){
-
-                $config = include(leo_student_path.'conf/config.php');
-
-                //判断是否需要页面生成
-                if(!empty($config['page'])){
-
-                    $this->ashu_add_page($config['page']);
-
-                }
-            }*/
+            //引入配置文件
+            register_activation_hook(__FILE__, array($this,'plugin_activation_cretable'));
 
             //引入学生端公用css/js
             add_action('wp_enqueue_scripts', array($this,'scripts_default'));
@@ -69,7 +59,24 @@ if(!class_exists('StudentController')){
             include_once(leo_student_path.'Controller/class-student-ajax.php');
         }
 
+        //插件启动时加载
+        public function plugin_activation_cretable(){
 
+            if(is_file(leo_student_path.'conf/config.php')){
+
+                $config = include(leo_student_path.'conf/config.php');
+                //判断是否需要页面生成
+                if(!empty($config['page'])){
+
+                    $this->ashu_add_page($config['page']);
+
+                }
+            }
+
+            if(is_file(leo_student_path.'conf/create_table.php')){
+                include(leo_student_path.'conf/create_table.php');
+            }
+        }
 
         /**
          * 添加URL重定向规则

@@ -101,12 +101,10 @@ class Student_Weixin
         $users = $wpdb->get_row('SELECT ID,user_mobile FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
         if(empty($users) || !$users->user_mobile){
             //TODO 显示绑定手机页面
-            $users_id = $users->user_mobile == true ? $users->ID : 0;
-
+            $users_id = $users->ID == true ? $users->ID : 0;
             wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
             exit;
         }
-
         $this->getUserInfo($access_token,$openid, false,$users->ID);
         exit;
     }
@@ -142,6 +140,7 @@ class Student_Weixin
     */
     public function save_user($res = [],$type='',$user_id=0){
         global $wpdb;
+
         if($type == true){
             //绑定手机后执行
             if($user_id < 1){
