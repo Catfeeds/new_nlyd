@@ -35,7 +35,7 @@
 <script>
 jQuery(function($) { 
 
-    $('body').on('click','#complete',function(){//记忆完成
+    mTouch('body').on('tap','#complete',function(){//记忆完成
         var data={
             action:'memory_complete',
             _wpnonce:$('#inputComplete').val(),

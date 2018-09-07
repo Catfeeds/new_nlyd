@@ -1818,9 +1818,8 @@
             //比赛初始页面
             if(ACTION == 'initialMatch'){
 
-                wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-Hammer' );
-
+                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-mTouch' );
                 if($this->project_alias=='nxss'){//逆向速算初始页
                     wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
                     wp_enqueue_style( 'my-student-fastReverse' );
@@ -1858,8 +1857,8 @@
 
             //比赛记忆后答题页面
             if(ACTION == 'answerMatch'){
-                wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-Hammer' );
+                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-mTouch' );
 
                 if($this->project_alias=='wzsd'){//文章速读
                     wp_register_style( 'my-student-matchDetail', student_css_url.'matching-reading.css',array('my-student') );

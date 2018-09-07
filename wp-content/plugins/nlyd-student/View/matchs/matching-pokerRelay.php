@@ -167,8 +167,9 @@ jQuery(function($) {
 
 
 //提交tap事件
-var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
+// var hammertime4 = new Hammer($('#sumbit')[0]);
+//     hammertime4.on("tap", function (e) {
+mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
             type: 1
@@ -241,37 +242,47 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
         }
     }
     initWidth();//设置扑克窗口宽度
-    $('.poker-wrapper .poker').each(function(i){//扑克展示区tap事件
-        var _this=$(this)
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        $(this).css('touch-action','auto');//允许默认浏览器tap事件，水平滚动
-        hammertime.on("tap", function (e) {
-            $('.poker-wrapper .poker').removeClass('active');
-            _this.addClass('active');
-        });
-    })
-    $('.porker-color .choose-color').each(function(i){//选择图片花色tap事件
+    mTouch('.porker-color').on('tap','.choose-color',function(e){
         var _this=$(this);
-        var dom=$(this)[0]
-        var hammertime1 = new Hammer(dom);
-        hammertime1.on("tap", function (e) {
-            var id=_this.attr('id')
-            $('.porker-color .choose-color').removeClass('active');
-            _this.addClass('active');
+        var id=_this.attr('id')
+        $('.porker-color .choose-color').removeClass('active');
+        _this.addClass('active');
 
-            $('.choose-wrapper').removeClass('active');
-            $('.choose-wrapper.'+id).addClass('active');
-        });
+        $('.choose-wrapper').removeClass('active');
+        $('.choose-wrapper.'+id).addClass('active');
     })
-    $('body').on('click','.poker-wrapper .poker',function (e) {
+    // $('.poker-wrapper .poker').each(function(i){//扑克展示区tap事件
+    //     var _this=$(this)
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     $(this).css('touch-action','auto');//允许默认浏览器tap事件，水平滚动
+    //     hammertime.on("tap", function (e) {
+    //         $('.poker-wrapper .poker').removeClass('active');
+    //         _this.addClass('active');
+    //     });
+    // })
+    // $('.porker-color .choose-color').each(function(i){//选择图片花色tap事件
+    //     var _this=$(this);
+    //     var dom=$(this)[0]
+    //     var hammertime1 = new Hammer(dom);
+    //     hammertime1.on("tap", function (e) {
+    //         var id=_this.attr('id')
+    //         $('.porker-color .choose-color').removeClass('active');
+    //         _this.addClass('active');
+
+    //         $('.choose-wrapper').removeClass('active');
+    //         $('.choose-wrapper.'+id).addClass('active');
+    //     });
+    // })
+    mTouch('.poker-wrapper').on('tap','.poker',function (e) {
         var _this=$(this)
         var active=$('.poker-wrapper .poker.active')
         active.removeClass('active');
         _this.addClass('active');
     })
+    
     // $('.choose-wrapper .choose-poker').each(function(i){//扑克选择区tap事件
-    $('body').on('click','.choose-wrapper .choose-poker',function (e) {
+    mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {
 
         var _this=$(this);
            var text=_this.attr('data-text');
@@ -314,8 +325,9 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
         });
     // })
     //删除tap事件
-    var hammerDel = new Hammer($('#del')[0]);
-    hammerDel.on("tap", function (e) {
+    // var hammerDel = new Hammer($('#del')[0]);
+    // hammerDel.on("tap", function (e) {
+    mTouch('body').on('tap','#del',function(e){
         if($('.poker-wrapper .poker.active').length>0){
             var active=$('.poker-wrapper .poker.active');
             var color=active.attr('data-color');
@@ -336,8 +348,9 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
         }
     });
     //前移tap事件
-    var hammerPrev = new Hammer($('#prev')[0]);
-    hammerPrev.on("tap", function (e) {
+    // var hammerPrev = new Hammer($('#prev')[0]);
+    // hammerPrev.on("tap", function (e) {
+    mTouch('body').on('tap','#prev',function(e){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();
         var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
@@ -357,8 +370,9 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
         }
     });
     //后移tap事件
-    var hammerNext = new Hammer($('#next')[0]);
-    hammerNext.on("tap", function (e) {
+    // var hammerNext = new Hammer($('#next')[0]);
+    // hammerNext.on("tap", function (e) {
+    mTouch('body').on('tap','#next',function(e){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();
         var colorActive=$('.poker-wrapper .poker.active').attr('data-color')

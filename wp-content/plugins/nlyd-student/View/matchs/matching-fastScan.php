@@ -122,7 +122,7 @@ jQuery(function($) {
         nandu=matchSession['nandu'];
     }
     if(!isMatching){
-        $('body').one('click','.answer',function(){
+        $('body').on('click','.answer',function(){
             initBuild(itemLen,items,nandu,true)
             showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
         })
@@ -292,7 +292,7 @@ jQuery(function($) {
     }
 
 
-    $('#selectWrapper').on('tap','.fastScan-item',function(){
+    mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
         var _this=$(this);
         var isFalse=true;
         if(!_this.hasClass('noClick')){
@@ -362,8 +362,9 @@ jQuery(function($) {
         }
     });
 layui.use('layer', function(){
-    var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
+    // var hammertime4 = new Hammer($('#sumbit')[0]);
+    // hammertime4.on("tap", function (e) {
+    mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1

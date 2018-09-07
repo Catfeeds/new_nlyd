@@ -47,7 +47,7 @@
 <script>
 jQuery(function($) { 
 
-    $('body').on('click','#complete',function(){//记忆完成
+    mTouch('body').on('tap','#complete',function(){//记忆完成
         var data={
             action:'memory_complete',
             _wpnonce:$('#inputComplete').val(),
@@ -157,21 +157,35 @@ jQuery(function($) {
             }, 1000);
         }
     });
-    $('.matching-btn').each(function(i){
-        var hammertime = new Hammer($('.matching-btn')[i]);
-        hammertime.on("tap", function (e) {
-            $('.matching-btn').removeClass('active');
-            $(e.target).addClass('active')
-            var text=parseInt($(e.target).text())
-            $('.matching-number').removeClass('border-right');
-            if(text!='NAN'){
-                $('.matching-number').each(function(j){
-                    if((j+1)%text==0){
-                        $(this).addClass('border-right')
-                    }
-                })
-            }
-        });
+    // $('.matching-btn').each(function(i){
+    //     var hammertime = new Hammer($('.matching-btn')[i]);
+    //     hammertime.on("tap", function (e) {
+    //         $('.matching-btn').removeClass('active');
+    //         $(e.target).addClass('active')
+    //         var text=parseInt($(e.target).text())
+    //         $('.matching-number').removeClass('border-right');
+    //         if(text!='NAN'){
+    //             $('.matching-number').each(function(j){
+    //                 if((j+1)%text==0){
+    //                     $(this).addClass('border-right')
+    //                 }
+    //             })
+    //         }
+    //     });
+    // })
+    mTouch('body').on('tap','.matching-btn',function(e){
+        var _this=$(this);
+        $('.matching-btn').removeClass('active');
+        _this.addClass('active')
+        var text=parseInt(_this.text())
+        $('.matching-number').removeClass('border-right');
+        if(text!='NAN'){
+            $('.matching-number').each(function(j){
+                if((j+1)%text==0){
+                    $(this).addClass('border-right')
+                }
+            })
+        }
     })
 })
 </script>

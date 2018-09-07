@@ -67,13 +67,13 @@
                 <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
-                    <span class="fs_14">
+                    <span class="fs_14 c_black">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
                             <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
                         <?php endif;?>
-                        记忆<span class="c_orange"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 |
-                        速读<span class="c_orange"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span>级 |
-                        速算<span class="c_orange"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
+                        记忆<span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 |
+                        速读<span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span>级 |
+                        速算<span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
                     </span>
                 </div>
                 <?php }else{ ?>

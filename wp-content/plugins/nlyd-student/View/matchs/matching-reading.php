@@ -158,8 +158,9 @@ jQuery(function($) {
 
 
 //提交tap事件
-var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
+// var hammertime4 = new Hammer($('#sumbit')[0]);
+//     hammertime4.on("tap", function (e) {
+    mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
             type: 1
@@ -190,8 +191,9 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
 })
 
     var n=0;
-    var hammertime1 = new Hammer($('.a-two.left')[0]);
-    hammertime1.on("tap", function (e) {//上一题
+    // var hammertime1 = new Hammer($('.a-two.left')[0]);
+    // hammertime1.on("tap", function (e) {//上一题
+    mTouch('body').on('tap','.a-two.left',function(e){
         var left=$('.a-two.left');
         var len=$('.matching-reading').length-1;
         if(!left.hasClass('disabled')){
@@ -216,9 +218,10 @@ var hammertime4 = new Hammer($('#sumbit')[0]);
         }
         
     });
-    var hammertime2 = new Hammer($('.a-two.right')[0]);
+    // var hammertime2 = new Hammer($('.a-two.right')[0]);
     
-    hammertime2.on("tap", function (e) {//下一题
+    // hammertime2.on("tap", function (e) {//下一题
+    mTouch('body').on('tap','.a-two.right',function(e){
         var right=$('.a-two.right');
         var len=$('.matching-reading').length-1;
         if(!right.hasClass('disabled')){

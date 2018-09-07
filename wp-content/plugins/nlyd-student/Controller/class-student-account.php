@@ -258,8 +258,8 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION=='address'){//地址列表
-            wp_register_script( 'student-hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-hammer' );
+            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mTouch' );
             wp_register_script( 'student-address',student_js_url.'account/address.js',array('jquery'), leo_student_version ,true );
             wp_enqueue_script( 'student-address' );
             wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
@@ -286,8 +286,8 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION == 'course'){//我的课程
-            wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-Hammer' );
+            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mTouch' );
             wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-cookie' );
         }
