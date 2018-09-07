@@ -2599,12 +2599,14 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+        $this->get_sms_code($_POST['mobile'],19,true,$_POST['send_code']);
 
         $mobile = $_POST['mobile'];
         $user_id = $_POST['user_id'];
         $access_token = $_POST['access'];
         $open_id = $_POST['open'];
-        $weiLogin = new Student_Weixin('getUserInfo');
+        require_once 'class-student-weixin.php';
+        $weiLogin = new Student_Weixin();
         $res = $weiLogin->getUserInfo($access_token, $open_id, false, $user_id, $mobile);
 
         if($res){
