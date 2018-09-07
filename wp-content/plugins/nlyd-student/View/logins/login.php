@@ -44,7 +44,7 @@
                                 <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
                         </p>
                         <div class="layui-form-item">
@@ -70,7 +70,7 @@
                                 <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
                             <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
                         </p>
@@ -107,7 +107,7 @@
                                 <input type="password" name="confirm_password" lay-verify="required" placeholder="输入新密码" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
-                        <p class="row-margin">
+                        <p class="no-margin">
                             <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
                         </p>
                         <div class="layui-form-item">
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                                         
-                    <p class="row-margin">
+                    <p class="no-margin">
                         <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
                     </p>
                     <div class="layui-form-item">

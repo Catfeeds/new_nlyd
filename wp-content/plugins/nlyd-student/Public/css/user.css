@@ -162,6 +162,7 @@ line-height:45px;
 }
 .submitBtn{
     width: 100%;
+    margin-top: 10px;
 }
 .getCodeBtn{
     position: absolute;
@@ -193,10 +194,9 @@ line-height:45px;
 .login-type-name{
     text-align: center;
 }
-.row-margin{
-    margin-bottom: 15px;
+p.no-margin{
+    margin-bottom:0; 
 }
-
 .nl-agreement{
     margin-top: 15px;
     text-align: center;
