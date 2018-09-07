@@ -32,8 +32,10 @@ if(!class_exists('MatchController')){
         public function Yct_Row_actions( $actions, $post )
         {
 //            unset($actions['inline hide-if-no-js']);
-            unset($actions['trash']);
-            unset($actions['view']);
+            if($this->post_type == 'match'){
+                unset($actions['trash']);
+                unset($actions['view']);
+            }
 //            $actions['student'] = '<span class="inline hide-if-no-js"></span>';
             return $actions;
         }
