@@ -3,10 +3,10 @@ class Student_Weixin
 {
     public $appid = 'wxb70e5bd97a67bb51';
     public $appsecret = '9c846264ee2169c34882e71ccc0f5935';
-    public function __construct($action)
+    public function __construct($action = '')
     {
         if($action) $this->$action();
-        exit;
+        return;
         //添加短标签
 //        add_shortcode('student-weixin',array($this,$action));
     }
