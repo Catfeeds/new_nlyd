@@ -1,4 +1,4 @@
-
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -161,7 +161,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="a-btn">查看本项目比赛详情</a>
+                            <a class="a-btn get_footer">查看本项目比赛详情</a>
                         </div>
                     </div>
                 </div>
