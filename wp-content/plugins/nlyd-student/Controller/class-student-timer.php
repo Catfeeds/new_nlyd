@@ -9,7 +9,7 @@ use library\Timer;
  */
 class Student_Timer
 {
-    public function __construct($shortCode)
+    public function __construct($action)
     {
 
 
@@ -17,7 +17,7 @@ class Student_Timer
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
-        add_shortcode('timer-index',array($this,'index'));
+        add_shortcode('timer-index',array($this,$action));
     }
 
     /**

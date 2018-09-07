@@ -27,6 +27,7 @@ class Student_Weixin
 //        $this->getWebCode(true);
         if(is_user_logged_in()){
             global $current_user;
+            wp_redirect(home_url('account'));
         }else{
             if($this->getWebCode(true)){
                 wp_redirect(home_url('account'));

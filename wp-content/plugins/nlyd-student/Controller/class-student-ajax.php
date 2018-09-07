@@ -1794,7 +1794,7 @@ class Student_Ajax
 
             $this->setUserCookie($user->ID);
 
-            do_action( 'wp_login', $user->user_login, $user );
+            //do_action( 'wp_login', $user->user_login, $user );
 
             wp_send_json_success( array('info'=>'登录成功','url'=>home_url('/account/')));
 
