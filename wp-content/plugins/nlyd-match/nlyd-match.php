@@ -37,7 +37,13 @@ if(!class_exists('MatchController')){
                 unset($actions['view']);
 
             }elseif ($this->post_type == 'question'){
-                $actions['delete'] = '<span class="del_question" style="color: #a00; cursor: pointer;">永久删除</span>';
+                if($post->post_status == 'trash'){
+                    $actions['delete'] = '<span class="del_question" style="color: #a00; cursor: pointer;">永久删除</span>';
+                }
+            }elseif ($this->post_type == 'problem'){
+                if($post->post_status == 'trash'){
+                    $actions['delete'] = '<span class="del_answer" style="color: #a00; cursor: pointer;">永久删除</span>';
+                }
             }
 //            $actions['student'] = '<span class="inline hide-if-no-js"></span>';
             return $actions;
