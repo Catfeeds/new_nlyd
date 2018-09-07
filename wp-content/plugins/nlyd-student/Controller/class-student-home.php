@@ -11,7 +11,8 @@ class Student_Home
 {
     public function __construct()
     {
-
+//        wp_logout();
+//        die;
         if(CONTROLLER != 'account'){
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){

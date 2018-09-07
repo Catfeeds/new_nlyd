@@ -1,8 +1,3 @@
-<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-<!--[if lt IE 9]>
-  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
 <style>
 @media screen and (max-width: 991px){
     .layui-fluid>.layui-row>.layui-bg-white:first-child,#page{
@@ -13,38 +8,7 @@
     }
 }
 </style>
-<div class="nl-foot-nav">
-    <a class="nl-foot-item" href="<?=home_url('/student/index');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-home"></div>
-        </div>
-        <div class="nl-foot-name">首页</div>
-    </a>
-    <a class="nl-foot-item disabled_a" href="<?=home_url('/account/matchList');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-train"></div>
-        </div>
-        <div class="nl-foot-name">训练</div>
-    </a>
-    <a class="nl-foot-item" href="<?=home_url('/matchs');?>">
-        <div class="nl-foot-icon">
-            <div class="footer-match"></div>
-        </div>
-        <div class="nl-foot-name">比赛</div>
-    </a>
-    <a class="nl-foot-item disabled_a">
-        <div class="nl-foot-icon">
-            <div class="footer-kaoji"></div>
-        </div>
-        <div class="nl-foot-name">考级</div>
-    </a>
-    <a class="nl-foot-item active" href="<?=home_url('account')?>">
-        <div class="nl-foot-icon">
-            <div class="footer-user"></div>
-        </div>
-        <div class="nl-foot-name">我的</div>
-    </a>
-</div>
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="nl-cropper-bg">
     <div class="img-container">
         <img id="image" src="">

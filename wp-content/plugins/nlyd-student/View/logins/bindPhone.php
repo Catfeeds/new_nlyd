@@ -32,6 +32,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <div class="input-icon "><i class="iconfont">&#xe645;</i></div>
+<!--                                <input type="tel" name="send_code" placeholder="输入验证码" autocomplete="off" class="layui-input hasIcon">-->
                                 <input type="tel" name="send_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input hasIcon">
                                 <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
                             </div>

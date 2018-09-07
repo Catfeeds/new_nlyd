@@ -236,7 +236,9 @@ border-bottom-right-radius: 8px;
 }
 .td-type{
     position: relative;
-    width: 49px;
+    width: 60px;
+    display: block;
+    margin: auto;
 }
 .td-type .ul-select{
     position: absolute;
