@@ -1200,8 +1200,8 @@ class Student_Matchs extends Student_Home
             $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} group by my_score desc,surplus_time desc";
             $rows = $wpdb->get_results($sql,ARRAY_A);
 
-            $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
-        }
+                $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
+            }
 
 
 
@@ -1857,12 +1857,11 @@ class Student_Matchs extends Student_Home
         //比赛初始页面
         if(ACTION == 'initialMatch'){
 
-            wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-Hammer' );
-
-            if($this->project_alias=='nxss'){//逆向速算初始页
-                wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-                wp_enqueue_style( 'my-student-fastReverse' );
+                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-mTouch' );
+                if($this->project_alias=='nxss'){//逆向速算初始页
+                    wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+                    wp_enqueue_style( 'my-student-fastReverse' );
 
             }
 
@@ -1895,10 +1894,10 @@ class Student_Matchs extends Student_Home
             }
         }
 
-        //比赛记忆后答题页面
-        if(ACTION == 'answerMatch'){
-            wp_register_script( 'student-Hammer',student_js_url.'Mobile/Hammer.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-Hammer' );
+            //比赛记忆后答题页面
+            if(ACTION == 'answerMatch'){
+                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-mTouch' );
 
             if($this->project_alias=='wzsd'){//文章速读
                 wp_register_style( 'my-student-matchDetail', student_css_url.'matching-reading.css',array('my-student') );

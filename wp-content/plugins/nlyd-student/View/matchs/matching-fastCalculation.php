@@ -65,7 +65,7 @@
 
 <script>
 jQuery(function($) {
-    if(window.location.host!='ydbeta.gjnlyd.com'){
+    if(window.location.host=='ydbeta.gjnlyd.com'){
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
@@ -108,7 +108,6 @@ jQuery(function($) {
     var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
     var level={number:2,symbol:1},//题目难度
     n_type=<?=$child_type > 0 ? $child_type : 0?>,
-    child_type_down=<?=!empty($child_type_down) ? $child_type_down : ''?>,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
@@ -350,30 +349,45 @@ jQuery(function($) {
     function nextQuestion() {
         $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
-    $('.number').each(function(i){//键盘数字tap事件
+    mTouch('body').on('tap','.number',function(){
         var _this=$(this);
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("tap", function (e) {
-            var number=_this.attr('date-number');
-            var text=$('.answer').text()
-            $('.answer').text(text+number)
-        });
+        var number=_this.attr('date-number');
+        var text=$('.answer').text()
+        $('.answer').text(text+number)
     })
+    // $('.number').each(function(i){//键盘数字tap事件
+    //     var _this=$(this);
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     hammertime.on("tap", function (e) {
+    //         var number=_this.attr('date-number');
+    //         var text=$('.answer').text()
+    //         $('.answer').text(text+number)
+    //     });
+    // })
     //删除tap事件
-    var hammertime1 = new Hammer($('#del')[0]);
-    hammertime1.on("tap", function (e) {
+    // var hammertime1 = new Hammer($('#del')[0]);
+    // hammertime1.on("tap", function (e) {
+    //     var text=$('.answer').text()
+    //     var len=text.length;
+    //     if(len>0){
+    //         var news=text.substring(0,len-1)
+    //         $('.answer').text(news)
+    //     }
+
+    // });
+    mTouch('body').on('tap','#del',function(){
         var text=$('.answer').text()
         var len=text.length;
         if(len>0){
             var news=text.substring(0,len-1)
             $('.answer').text(news)
         }
-
-    });
+    })
     //下一题tap事件
-    var hammertime2 = new Hammer($('#next')[0]);
-    hammertime2.on("tap", function (e) {
+    // var hammertime2 = new Hammer($('#next')[0]);
+    // hammertime2.on("tap", function (e) {
+    mTouch('body').on('tap','#next',function(e){
         nextBtn_click++
         if (type=='乘除运算') {
             if(nextBtn_click%cx_interval_times==0){//难度控制
@@ -481,8 +495,9 @@ jQuery(function($) {
         }
     });  
 layui.use('layer', function(){
-    var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
+    // var hammertime4 = new Hammer($('#sumbit')[0]);
+    // hammertime4.on("tap", function (e) {
+    mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1

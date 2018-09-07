@@ -58,12 +58,7 @@
 
 <script>
 jQuery(function($) { 
-    if(window.location.host!='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        submit=function(time){//提交答案
+    submit=function(time){//提交答案
             var my_answer=[];
             $('.matching-number-zoo .matching-number').each(function(){
                 var answer=$(this).text();
@@ -90,39 +85,44 @@ jQuery(function($) {
                 }
             })
         }
-    }
-    $(window).on("blur",function(){
-        var leavePage = $.GetSession('leavePage','1');
-        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-            leavePage['leavePage']+=1;
-        }else{
-            var sessionData={
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
-                leavePage:1
+    if(window.location.host=='ydbeta.gjnlyd.com'){
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
+        $(window).on("blur",function(){
+            var leavePage = $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                leavePage['leavePage']+=1;
+            }else{
+                var sessionData={
+                    match_id:$.Request('match_id'),
+                    project_id:$.Request('project_id'),
+                    match_more:$.Request('match_more'),
+                    leavePage:1
+                }
+                leavePage= sessionData
             }
-            leavePage= sessionData
-        }
-        $.SetSession('leavePage',leavePage)
-    })   
-    $(window).on("focus", function(e) {
-        var leavePage= $.GetSession('leavePage','1');
-        if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-            var leveTimes=parseInt(leavePage['leavePage'])
-            if(leveTimes>0 && leveTimes<3){
-                $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-            }
-            if(leveTimes>=3){
-                $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                setTimeout(function() {
+            $.SetSession('leavePage',leavePage)
+        })   
+        $(window).on("focus", function(e) {
+            var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                var leveTimes=parseInt(leavePage['leavePage'])
+                if(leveTimes>0 && leveTimes<3){
+                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
+                }
+                if(leveTimes>=3){
+                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
+                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                    setTimeout(function() {
+                        submit(time);
+                    }, 1000);
                     submit(time);
-                }, 1000);
-                submit(time);
+                }
             }
-        }
-    });
+        });
+    }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
@@ -147,66 +147,91 @@ jQuery(function($) {
             }, 1000);
         }
     });
-    $('.matching-number').each(function(i){//数字展示区tap事件
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("tap", function (e) {
-            $('.matching-number').removeClass('active');
-            $(e.target).addClass('active');
-        });
+    // $('.matching-number').each(function(i){//数字展示区tap事件
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     hammertime.on("tap", function (e) {
+    //         $('.matching-number').removeClass('active');
+    //         $(e.target).addClass('active');
+    //     });
+    // })
+    mTouch('body').on('tap','.matching-number',function(e){
+        $('.matching-number').removeClass('active');
+        $(this).addClass('active');
     })
-    $('.number').each(function(i){//键盘数字tap事件
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("tap", function (e) {
-            var number=$(e.target).attr('date-number');
-            var active=$('.matching-number.active');
-            var len=$('.matching-number').length;
-            if(!$('.matching-number').eq(len-1).hasClass('active')){
-                active.text(number).removeClass('active').next('.matching-number').addClass('active');
-            }else{
-                active.text(number);
-            }
-        });
+    // $('.number').each(function(i){//键盘数字tap事件
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     hammertime.on("tap", function (e) {
+    //         var number=$(e.target).attr('date-number');
+    //         var active=$('.matching-number.active');
+    //         var len=$('.matching-number').length;
+    //         if(!$('.matching-number').eq(len-1).hasClass('active')){
+    //             active.text(number).removeClass('active').next('.matching-number').addClass('active');
+    //         }else{
+    //             active.text(number);
+    //         }
+    //     });
+    // })
+    mTouch('body').on('tap','.number',function(e){
+        var number=$(this).attr('date-number');
+        var active=$('.matching-number.active');
+        var len=$('.matching-number').length;
+        if(!$('.matching-number').eq(len-1).hasClass('active')){
+            active.text(number).removeClass('active').next('.matching-number').addClass('active');
+        }else{
+            active.text(number);
+        }
     })
     //删除tap事件
-    var hammertime1 = new Hammer($('#del')[0]);
-    hammertime1.on("tap", function (e) {
+    // var hammertime1 = new Hammer($('#del')[0]);
+    // hammertime1.on("tap", function (e) {
+    //     var active=$('.matching-number.active');
+    //     if(active.text().length<1){//已经为空
+    //         if(!$('.matching-number').eq(0).hasClass('active')){
+    //         active.removeClass('active').prev('.matching-number').addClass('active')
+    //         }
+
+    //     }else{
+
+    //         active.text('');
+    //     }
+    // });
+    mTouch('body').on('tap','#del',function(e){
         var active=$('.matching-number.active');
         if(active.text().length<1){//已经为空
             if(!$('.matching-number').eq(0).hasClass('active')){
             active.removeClass('active').prev('.matching-number').addClass('active')
             }
-
         }else{
-
             active.text('');
         }
-    });
+    })
     //前插tap事件
-    var hammertime2 = new Hammer($('#prev')[0]);
-    hammertime2.on("tap", function (e) {
+    // var hammertime2 = new Hammer($('#prev')[0]);
+    // hammertime2.on("tap", function (e) {
+    mTouch('body').on('tap','#prev',function(e){
         var len=$('.matching-number').length;
         if(!$('.matching-number').eq(len-1).hasClass('active')){
-            
             var active=$('.matching-number.active');
             var dom='<div class="matching-number active"></div>';
             active.removeClass('active').before(dom);
             $('.matching-number-zoo .matching-number').last().remove()
             //新增dom绑定事件
-            var hammerdom = new Hammer(active.prev('.matching-number')[0]);
-            hammerdom.on("tap", function (ev) {
-                $('.matching-number').removeClass('active');
-                $(ev.target).addClass('active');
-            });
+            // var hammerdom = new Hammer(active.prev('.matching-number')[0]);
+            // hammerdom.on("tap", function (ev) {
+            //     $('.matching-number').removeClass('active');
+            //     $(ev.target).addClass('active');
+            // });
         }else{
             $('.matching-number.active').text('')
         }
        
     });
     //后插tap事件
-    var hammertime3 = new Hammer($('#next')[0]);
-    hammertime3.on("tap", function (e) {
+    // var hammertime3 = new Hammer($('#next')[0]);
+    // hammertime3.on("tap", function (e) {
+    mTouch('body').on('tap','#next',function(e){
         $('.matching-number').each(function(i){
             if(i!=$('.matching-number').length-1){//如果不是最后一位
                 if($(this).hasClass('active')){
@@ -214,18 +239,19 @@ jQuery(function($) {
                     $(this).removeClass('active').after(dom);
                     $('.matching-number-zoo .matching-number').last().remove()
                     //新增dom绑定事件
-                    var hammerdom = new Hammer($(this).next('.matching-number')[0]);
-                    hammerdom.on("tap", function (ev) {
-                        $('.matching-number').removeClass('active');
-                        $(ev.target).addClass('active');
-                    });
+                    // var hammerdom = new Hammer($(this).next('.matching-number')[0]);
+                    // hammerdom.on("tap", function (ev) {
+                    //     $('.matching-number').removeClass('active');
+                    //     $(ev.target).addClass('active');
+                    // });
                 }
             }
         })
     });
 layui.use('layer', function(){
-    var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
+    // var hammertime4 = new Hammer($('#sumbit')[0]);
+    // hammertime4.on("tap", function (e) {
+    mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1

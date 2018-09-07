@@ -59,7 +59,7 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
-    if(window.location.host!='ydbeta.gjnlyd.com'){
+    if(window.location.host=='ydbeta.gjnlyd.com'){
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
@@ -190,11 +190,13 @@ jQuery(function($) {
 
         }, 1000);
     }
-    $('.number').each(function(i){//键盘数字tap事件
-        var _this=$(this);
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("tap", function (e) {
+    // $('.number').each(function(i){//键盘数字tap事件
+        // var _this=$(this);
+        // var dom=$(this)[0]
+        // var hammertime = new Hammer(dom);
+        // hammertime.on("tap", function (e) {
+        mTouch('body').on('tap','.number',function(e){
+            var _this=$(this);
             var flag=false;
             $('.rand').each(function(){//所有数字按钮都已使用后
                 if(!$(this).hasClass('disabled')){
@@ -293,10 +295,11 @@ jQuery(function($) {
                 }
             }
         });
-    })
+    // })
     //删除tap事件
-    var hammertime1 = new Hammer($('#del')[0]);
-    hammertime1.on("tap", function (e) {
+    // var hammertime1 = new Hammer($('#del')[0]);
+    // hammertime1.on("tap", function (e) {
+    mTouch('body').on('tap','#del',function(e){
         var text=$('.answer').text()
         var len=text.length;
         var news='';
@@ -327,9 +330,10 @@ jQuery(function($) {
         }
     });
     //下一题tap事件
-    var hammertime2 = new Hammer($('#next')[0]);
-    hammertime2.on("tap", function (e) {
-        var _this=$('#next');
+    // var hammertime2 = new Hammer($('#next')[0]);
+    // hammertime2.on("tap", function (e) {
+    mTouch('body').on('tap','#next',function(e){
+        var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
             var text=$('.answer').text()
@@ -403,37 +407,38 @@ jQuery(function($) {
                 });
             }
     });
-layui.use('layer', function(){
-    var hammertime4 = new Hammer($('#sumbit')[0]);
-    hammertime4.on("tap", function (e) {
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        layer.open({
-                type: 1
-                ,maxWidth:300
-                ,title: '提示' //不显示标题栏
-                ,skin:'nl-box-skin'
-                ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: ['提交', '按错了', ]
-                ,success: function(layero, index){
-                }
-                ,yes: function(index, layero){
-                    layer.closeAll();
-                    var thisAjaxRow=ajaxData[ajaxData.length-1]
-                    var text=$('.answer').text()
-                    thisAjaxRow.yours=text;
-                    submit(time);    
-                }
-                ,btn2: function(index, layero){
-                }
-                ,closeBtn:2
-                ,btnAagn: 'c' //按钮居中
-                ,shade: 0.3 //遮罩
-                ,isOutAnim:true//关闭动画
-            });
-            
+    layui.use('layer', function(){
+        // var hammertime4 = new Hammer($('#sumbit')[0]);
+        // hammertime4.on("tap", function (e) {
+        mTouch('body').on('tap','#sumbit',function(e){
+            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+            layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: '提示' //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certification' //防止重复弹出
+                    ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                    ,btn: ['提交', '按错了', ]
+                    ,success: function(layero, index){
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                        var thisAjaxRow=ajaxData[ajaxData.length-1]
+                        var text=$('.answer').text()
+                        thisAjaxRow.yours=text;
+                        submit(time);    
+                    }
+                    ,btn2: function(index, layero){
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
+                
+        });
     });
-});
 
     
 })

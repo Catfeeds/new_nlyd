@@ -52,7 +52,7 @@
 <script>
 jQuery(function($) { 
 
-    $('body').on('click','#complete',function(){//记忆完成
+    mTouch('body').on('tap','#complete',function(){//记忆完成
         var data={
             action:'memory_complete',
             _wpnonce:$('#inputComplete').val(),
@@ -95,7 +95,7 @@ jQuery(function($) {
             }
         })
     }
-    if(window.location.host!='ydbeta.gjnlyd.com'){
+    if(window.location.host=='ydbeta.gjnlyd.com'){
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
@@ -243,13 +243,27 @@ jQuery(function($) {
         initWidth()
     }
     initPagation()
-    $('.matching-btn').each(function(i){
-        var hammertime = new Hammer($('.matching-btn')[i]);
-        hammertime.on("tap", function (e) {
+    // $('.matching-btn').each(function(i){
+    //     var hammertime = new Hammer($('.matching-btn')[i]);
+    //     hammertime.on("tap", function (e) {
+    //         nowPage=1;
+    //         $('.matching-btn').removeClass('active');
+    //         $(e.target).addClass('active');
+    //         var text=parseInt($(e.target).text())
+    //         if(text!='NAN'){
+    //             onePageItems=text;
+                
+    //         }else{
+    //             onePageItems=false
+    //         }
+    //         initPagation()
+    //     });
+    // })
+    mTouch('body').on('tap','.matching-btn',function(e){
             nowPage=1;
             $('.matching-btn').removeClass('active');
-            $(e.target).addClass('active');
-            var text=parseInt($(e.target).text())
+            $(this).addClass('active');
+            var text=parseInt($(this).text())
             if(text!='NAN'){
                 onePageItems=text;
                 
@@ -257,12 +271,12 @@ jQuery(function($) {
                 onePageItems=false
             }
             initPagation()
-        });
     })
     //左翻页
-    var hammerleft = new Hammer($('.left')[0]);
-    hammerleft.on("tap", function (e) {
-        if($(e.target).hasClass('disabled')){
+    // var hammerleft = new Hammer($('.left')[0]);
+    // hammerleft.on("tap", function (e) {
+    mTouch('body').on('tap','.left',function(e){
+        if($(this).hasClass('disabled')){
             return false;
         }else{
             nowPage--;
@@ -270,9 +284,10 @@ jQuery(function($) {
         }
     });
     //右翻页
-    var hammerright = new Hammer($('.right')[0]);
-    hammerright.on("tap", function (e) {
-        if($(e.target).hasClass('disabled')){
+    // var hammerright = new Hammer($('.right')[0]);
+    // hammerright.on("tap", function (e) {
+    mTouch('body').on('tap','.right',function(e){
+        if($(this).hasClass('disabled')){
             return false;
         }else{
             nowPage++;

@@ -343,5 +343,4 @@ jQuery(document).ready(function($) {
             }) 
   
         });
-
 })

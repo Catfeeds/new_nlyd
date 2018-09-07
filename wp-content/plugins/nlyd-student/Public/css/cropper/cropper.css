@@ -333,12 +333,18 @@
   }
   .nl-cropper-footer{
     display: flex;
+    height: 47px;
   }
   .nl-cropper-footer button{
     flex: 1;
     background: #39f;
     border-radius: 0;
     cursor: pointer;
+    height: 47px;
+    padding: 0;
+    text-align: center;
+    line-height: 47px;
+    border: none;
   }
   .nl-cropper-footer button:first-child{
     background: #fff;
