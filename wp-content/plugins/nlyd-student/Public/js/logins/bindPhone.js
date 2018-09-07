@@ -27,16 +27,12 @@ jQuery(function($) {
                                 window.location.href=data.data.url
                             },1600)
                         }                        
-                    }else{//登陆失败。记录登录时间
                     }
-
-
                 },
                 error:function (XMLHttpRequest, textStatus, errorThrown) {
                     // 通常 textStatus 和 errorThrown 之中
                     // 只有一个会包含信息
                     // 调用本次AJAX请求时传递的options参数
-                    // console.log(XMLHttpRequest, textStatus, errorThrown)
                 }
             });
         } 
@@ -50,32 +46,6 @@ jQuery(function($) {
             form.on('submit(loginFormFastBtn)', function(data){//快速登录
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
-            });
-            form.on('submit(loginFormForgetBtn)', function(data){//重置密码
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
-                return false;
-            });
-            form.on('submit(loginFormPswBtn)', function(data){//账号密码登录
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
-                return false;
-            });
-            form.on('submit(registerBtn)', function(data){//注册
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
-                return false;
-            });
-            element.on('tab(tabs)', function(){//tabs
-                var left=$(this).position().left;
-                var html=$(this).html();
-                var css=''
-                if($(this).index()==0){
-                    css='22.5px 0 0 22.5px'
-                }else{
-                    css='0px 22.5px 22.5px 0'
-                }
-                $('.nl-transform').css({
-                    'transform':'translate3d('+left+'px, 0px, 0px)',
-                    'border-radius':css
-                }).html(html)
             });
         });
 
@@ -153,70 +123,6 @@ jQuery(function($) {
                 }
             }
         })
-        $('.login-by-code').click(function(){//快速登录
-            $('#loginFormFast')[0].reset();//重置表单
-            $('#loginFormPsw')[0].reset();//重置表单
-            $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
-            $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
-            $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
-            $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-        })
-        $('.login-by-psw').click(function(){//密码登录
-            $('#loginFormFast')[0].reset();//重置表单
-            $('#loginFormPsw')[0].reset();//重置表单
-            $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
-            $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-            $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
-            $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
-        })
-        
-        $('.login-by-reset').click(function(){//忘记密码
-            $('#loginFormFast')[0].reset();//重置表单
-            $('#loginFormPsw')[0].reset();//重置表单
-            $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
-            $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('重置密码')
-            $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
-            $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-        })
-        
-        $('.login-fast').click(function(){//注册tab页返回快速登录
-            $('#loginFormFast')[0].reset();//重置表单
-            $('#loginFormPsw')[0].reset();//重置表单
-            
-            $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
-            $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
-            $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
-            $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
 
-            //tabs切换
-            $('.layui-tab-title li').eq(0).click()
-        })
-        $('.nl-agreement .pointer').click(function(){
-                var html=$('.userAgreement').html(); 
-                layer.open({
-                    type: 1
-                    ,title: false //不显示标题栏
-                    ,closeBtn: false
-                    ,area: '300px;'
-                    ,shade: 0.8
-                    ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                    ,btn: ['知道了']
-                    ,btnAlign: 'c'
-                    ,moveType: 1 //拖拽模式，0或者1
-                    ,content: '<div class="width-margin width-margin-pc userAgreement-content">'+html+'</div>'
-                    ,success: function(layero){
-                        
-                    },
-                    cancel: function(index, layero){
-                    layer.closeAll();
-                    }
-                    ,yes: function(index, layero){
-                        layer.closeAll();
-                    }
-                });
-            })
+
 })

@@ -44,23 +44,23 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1">比赛中</li>
-                            <li data-id="2">报名中</li>
+                            <li class="layui-this" data-id="1">报名中</li>
+                            <li data-id="2">比赛中</li>
                             <li data-id="3">往期比赛</li>
                             <div class="nl-transform" data-y="-5">近期比赛</div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
-                            <!-- 比赛中 -->
+                            <!-- 报名中 -->
                             <div class="layui-tab-item layui-show">
-                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;最新比赛倒计时
-                                    <span class="getTime" id="getTimes">00:00:00</span>        
-                                </div>
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
                                     
                                 </ul>
                             </div>
-                            <!-- 报名中 -->
+                            <!-- 比赛中 -->
                             <div class="layui-tab-item">
+                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;最新比赛倒计时
+                                    <span class="getTime" id="getTimes">00:00:00</span>        
+                                </div>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
 
                                 </ul>
@@ -113,10 +113,10 @@ jQuery(function($) {
                         page:page,
                         match_type:'',
                     }
-                    if(parseInt(id)==1){//比赛
-                        postData['match_type']="matching";
-                    }else if(parseInt(id)==2){//报名
+                    if(parseInt(id)==1){//报名
                         postData['match_type']="signUp";
+                    }else if(parseInt(id)==2){//比赛
+                        postData['match_type']="matching";
                     }else{//往期
                         postData['match_type']="history";
                     }

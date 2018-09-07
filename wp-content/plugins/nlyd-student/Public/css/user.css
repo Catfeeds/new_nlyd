@@ -217,8 +217,7 @@ input[type=tel].layui-input{
     color: rgba(38, 38, 38, 0.8);
     border:1px solid #e2e3e2;
     background: #fff;
-    line-height: 45px;
-    line-height: normal;
+    line-height: normal!important;
     padding: 0 15px!important;
 }
 
