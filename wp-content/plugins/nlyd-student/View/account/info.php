@@ -149,7 +149,7 @@
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>
                                         </div>
-                                        <?php } ?>
+                                        <?php } } ?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>
