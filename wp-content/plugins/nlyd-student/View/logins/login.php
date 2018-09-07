@@ -9,9 +9,6 @@
         <div class="box-logo ">
             <img src="<?=student_css_url.'image/login-logo.png'?>" class="logoImg">
         </div>
-        <!-- <div class="box-logo-name">
-            <img src="<?=student_css_url.'image/InternationalIntellectualSports.png'?>" class="logoImg">
-        </div> -->
     </div>
     <div class="layui-tab layui-tab-brief" lay-filter="tabs">
         <ul style="margin-left: 0" class="layui-tab-title  ">
