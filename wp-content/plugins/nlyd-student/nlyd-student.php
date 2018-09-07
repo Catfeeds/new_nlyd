@@ -49,6 +49,12 @@ if(!class_exists('StudentController')){
 
         private function main(){
 
+            // 屏蔽后台页脚 WordPress 版权及版本号
+            function change_footer_admin () {return '';}
+            add_filter('admin_footer_text', 'change_footer_admin', 9999);
+            function change_footer_version() {return '';}
+            add_filter( 'update_footer', 'change_footer_version', 9999);
+
             //引入配置文件
             register_activation_hook(__FILE__, array($this,'plugin_activation_cretable'));
 
@@ -62,6 +68,7 @@ if(!class_exists('StudentController')){
         //插件启动时加载
         public function plugin_activation_cretable(){
 
+            //页面配置
             if(is_file(leo_student_path.'conf/config.php')){
 
                 $config = include(leo_student_path.'conf/config.php');
@@ -73,9 +80,11 @@ if(!class_exists('StudentController')){
                 }
             }
 
+            //数据表配置
             if(is_file(leo_student_path.'conf/create_table.php')){
                 include(leo_student_path.'conf/create_table.php');
             }
+
         }
 
         /**
