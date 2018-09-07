@@ -335,6 +335,11 @@
                 $this->get_404('参数错误');
                 return;
             }
+            if(strtotime($match['entry_end_time']) < get_time() && get_time() < strtotime($match['match_start_time'])){
+                //修改比赛状态
+                $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            }
+
             //print_r($match);
             //获取比赛项目
             $project = $this->get_match_project($_GET['match_id']);
@@ -361,10 +366,12 @@
                     }
                 }
             }
-            if($match['is_me'] != 'y' && $match['match_status'] == -2){
-
+            if($match['is_me'] == 'y' && $match['match_status'] == -2){
+                $start = reset($this->project_order_array);
+                //print_r($this->project_order_array);
                 $match['down_time'] = strtotime($match['match_start_time'])-get_time();
-                //var_dump($match['down_time']);
+                $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$start['match_project_id'].'/match_more/1');
+                //var_dump($data['match_url']);
             }
 
             $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);

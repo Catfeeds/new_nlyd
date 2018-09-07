@@ -887,7 +887,8 @@ class Student_Ajax
         if(isset($_POST['is_default']) && $total > 0){
             $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
         }
-
+        $match_id = $_POST['match_id'];
+        unset($_POST['match_id']);
         if(empty($_POST['id']) || $_POST['id'] < 1){
 
             unset($_POST['action']);
@@ -908,11 +909,11 @@ class Student_Ajax
                 'is_default' => isset($_POST['is_default']) ? 1 : 0,
             ],array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
         }
-
+        //var_dump($a.'---'.$result);die;
         if($a && $result){
             $wpdb->commit();
             $url = home_url('account/address');
-            if(empty($_POST['match_id'])) $url .= '/match_id/'.$_POST['match_id'];
+            if(empty($match_id)) $url .= '/match_id/'.$match_id;
             $data['info'] = '保存成功';
             $data['url'] = $url;
             wp_send_json_success($data);
@@ -1794,7 +1795,7 @@ class Student_Ajax
 
             $this->setUserCookie($user->ID);
 
-            do_action( 'wp_login', $user->user_login, $user );
+            //do_action( 'wp_login', $user->user_login, $user );
 
             wp_send_json_success( array('info'=>'登录成功','url'=>home_url('/account/')));
 

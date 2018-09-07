@@ -107,7 +107,7 @@
                         <?php if($match['match_status'] == -3):?>
                             <a class="a-btn" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
                         <?php endif;?>
-                        <?php if($match['is_me'] != 'y' && $match['match_status'] == -2):?>
+                        <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>
                         <!--倒计时-->
                             <div class="a-btn count_down" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
                         <?php endif;?>
