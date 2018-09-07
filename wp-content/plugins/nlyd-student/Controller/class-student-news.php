@@ -7,14 +7,13 @@
  * Date: 2018/7/16
  * Time: 14:38
  */
-class Student_News extends Student_Home
+class Student_News
 {
 
     public $ajaxControll;
     public function __construct($action)
     {
 
-        parent::__construct();
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
