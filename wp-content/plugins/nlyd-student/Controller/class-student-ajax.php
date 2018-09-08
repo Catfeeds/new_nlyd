@@ -1427,7 +1427,7 @@ class Student_Ajax
             }
             $rows[$k]['button_title'] = $button_title;
             $rows[$k]['right_url'] = $url;
-            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
+            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID'].'/type/111');
 
             if($_POST['match_type'] =='history'){
                 $button_title = '查看排名';

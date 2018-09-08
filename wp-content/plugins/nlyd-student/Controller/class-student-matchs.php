@@ -335,6 +335,7 @@ class Student_Matchs extends Student_Home
             $this->get_404('参数错误');
             return;
         }
+
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
             $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
@@ -372,6 +373,12 @@ class Student_Matchs extends Student_Home
             $match['down_time'] = strtotime($match['match_start_time'])-get_time();
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
+        }
+        $end = end($this->project_order_array);
+        $match['match_end_time'] = $end['project_end_time'];
+        if(strtotime($end['project_end_time']) <= get_time()){
+            //修改比赛状态
+            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
         }
 
         $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
@@ -1637,22 +1644,19 @@ class Student_Matchs extends Student_Home
 
         if(in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog')) ){
 
-
-
-
             $start = reset($rows);
             $end = end($rows);
             //print_r($end);
             if(strtotime($start['project_start_time']) > get_time()){
 
-                if($value['project_alias'] == 'zxss'){
+                if($row['project_alias'] == 'zxss'){
 
-                    $child_count_down = get_post_meta($value['match_project_id'],'child_count_down')[0];
+                    $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
                     //var_dump($child_count_down);
-                    if($value['child_count_down'] > 0){
-                        $even_add = $value['child_count_down'];
-                        $add_and_subtract = $value['child_count_down'];
-                        $wax_and_wane = $value['child_count_down'];
+                    if($row['child_count_down'] > 0){
+                        $even_add = $row['child_count_down'];
+                        $add_and_subtract = $row['child_count_down'];
+                        $wax_and_wane = $row['child_count_down'];
                     }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
 
                         $even_add = $child_count_down['even_add'];
@@ -1665,8 +1669,6 @@ class Student_Matchs extends Student_Home
                         $wax_and_wane = 3;
                     }
                     $match_use_time = $even_add+$add_and_subtract+$wax_and_wane;
-                    //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_start_time).'*********');
-
                 }
 
 

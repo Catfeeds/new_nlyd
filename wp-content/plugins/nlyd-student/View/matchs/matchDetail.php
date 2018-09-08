@@ -45,6 +45,12 @@
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
+                                        <div class="nl-match-label">结束时间：</div>
+                                        <div class="nl-match-info text_1 c_black">
+                                            <?=$match['match_end_time']?>
+                                        </div>
+                                    </div>
+                                    <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛地点：</div>
                                         <div class="nl-match-info text_1 c_black"><?=$match['match_address']?></div>
                                     </div>
@@ -124,7 +130,7 @@
 jQuery(function($) { 
     if($('.count_down').attr('data-seconds')<=120){
         $.DelSession('leavePageWaitting')
-        window.location.href=$(this).attr('href')
+        //window.location.href=$(this).attr('href')
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
@@ -134,7 +140,7 @@ jQuery(function($) {
         var time=D+h+':'+m+':'+s;
         $(this).text(time);
         if(S<=120){//
-            window.location.href=$(this).attr('href')
+            //window.location.href=$(this).attr('href')
         }
     });
     layui.use(['element','flow'], function(){
