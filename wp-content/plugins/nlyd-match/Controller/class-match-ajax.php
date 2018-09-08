@@ -728,6 +728,7 @@ class Match_Ajax
         $wpdb->startTrans();
         $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id.' OR post_parent='.$id);
         $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id IN'.$answerIdStr);
+        $wpdb->query('DELETE FROM '.$wpdb->prefix.'term_relationships WHERE object_id='.$id);
 
         if(!$questionBool || (!$correctBool && $answerIdStr != '()')){
             $wpdb->rollback();

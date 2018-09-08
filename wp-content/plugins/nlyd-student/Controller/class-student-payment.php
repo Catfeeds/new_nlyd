@@ -179,8 +179,16 @@ class Student_Payment {
         if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS'){
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
+            switch ($queryRes['order']['order_type']){
+                case 1://比赛订单
+                    $pay_status = 4;
+                    break;
+                case 2://s商品订单
+                    $pay_status = 2;
+                    break;
+            }
             $updateData = [
-                'pay_status' => 2,
+                'pay_status' => $pay_status,
                 'pay_type' => 'wx',
                 'pay_lowdown' => serialize($queryRes['notifyData'])
             ];
@@ -389,8 +397,16 @@ class Student_Payment {
             //file_put_contents('aaa.txt', json_decode($order, JSON_UNESCAPED_UNICODE));
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
+                switch ($order['order_type']){
+                    case 1://比赛订单
+                        $pay_status = 4;
+                        break;
+                    case 2://商品订单
+                        $pay_status = 2;
+                        break;
+                }
                 $updateData = [
-                    'pay_status' => 2,
+                    'pay_status' => $pay_status,
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];
