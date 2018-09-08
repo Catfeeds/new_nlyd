@@ -571,7 +571,7 @@ class Student_Ajax
                 where a.apply_status = 2 and a.coach_id = {$coach_id} GROUP BY a.user_id 
                 limit {$start},{$pageSize}
                 ";
-        //print_r($sql);
+        print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );

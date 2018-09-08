@@ -370,7 +370,7 @@ class Student_Matchs extends Student_Home
             $start = reset($this->project_order_array);
             //print_r($this->project_order_array);
             $match['down_time'] = strtotime($match['match_start_time'])-get_time();
-            $match['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$start['match_project_id'].'/match_more/1');
+            $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
         }
 

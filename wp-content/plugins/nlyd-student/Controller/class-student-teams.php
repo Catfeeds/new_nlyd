@@ -108,9 +108,9 @@ class Student_Teams
             ";
         $content = $wpdb->get_row($sql1,ARRAY_A);
         //print_r($content);
-        /*//获取学员列表
-        $_POST['coach_id'] = $_GET['coach_id'];
-        $rows_ = $this->ajaxControll->get_cocah_member(false);*/
+        //获取学员列表
+        //$_POST['coach_id'] = $_GET['coach_id'];
+        //$rows_ = $this->ajaxControll->get_cocah_member(false);
         //print_r($rows_);
         //判断是否为我的教练
         $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$_GET['coach_id']} and apply_status != 2 category_id=".$_GET['category_id'];

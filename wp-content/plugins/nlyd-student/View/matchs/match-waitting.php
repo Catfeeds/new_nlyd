@@ -27,7 +27,7 @@
                             <?php endif;?>
                         </p>
                         <p class="match-detail c_black fs_16">
-                            即将开赛第<?=$project_num?>个项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮
+                            即将开赛<?= empty($current_project['match_type']) ? '下一个' : '第'.$project_num.'个';?>项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮
                         </p>
                         <p class="ta_c fs_16 c_black">赛前提示：</p>
                         <p class="c_black8" style="padding-left:30px;padding-right:30px;margin-bottom:0;">1、比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为；</p>
