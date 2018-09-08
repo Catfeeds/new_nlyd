@@ -231,6 +231,8 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_answer_submit_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+        ini_set('post_max_size','10M');
+
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) || empty($_POST['match_action']) || !isset($_POST['surplus_time'])) wp_send_json_error(array('info'=>'参数错误'));
 
@@ -564,14 +566,13 @@ class Student_Ajax
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.apply_status,
                 IFNULL (b.read, '-') as `read`,
                 IFNULL(b.memory,'-') as memory, 
-                IFNULL(b.compute,'-') as `compute`, 
-                IFNULL(b.mental,'-') as `mental` 
+                IFNULL(b.compute,'-') as `compute`
                 from {$wpdb->prefix}my_coach a
                 left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id 
                 where a.apply_status = 2 and a.coach_id = {$coach_id} GROUP BY a.user_id 
                 limit {$start},{$pageSize}
                 ";
-        print_r($sql);
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -587,6 +588,7 @@ class Student_Ajax
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
                 $rows[$k]['nickname'] = $user_info['nickname'];
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+                $rows[$k]['mental'] = '待定';
             }
         }
         if(is_ajax()){
