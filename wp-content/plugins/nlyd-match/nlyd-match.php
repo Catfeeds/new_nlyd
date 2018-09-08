@@ -135,10 +135,11 @@ if(!class_exists('MatchController')){
          * 导入题库
          */
         public function questionImport(){
+            global $wpdb;
             if(is_post()){
+                $questionTypeId = $_POST['question_type'];
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
                 $excelClass = new PHPExcel();
-                global $wpdb;
 
 
                 $inputFileType = PHPExcel_IOFactory::identify($_FILES['import']['tmp_name']);
@@ -168,6 +169,7 @@ if(!class_exists('MatchController')){
                     $errNum = 0;
                     $titleB = '';
                     $titleRepeat = '';//重复题目
+
                     for($page = 1; $page <= $highestRow;$page++){
                         $a = $reader->getActiveSheet()->getCell("A".$page)->getValue();//获取A列的值
                         $b = $reader->getActiveSheet()->getCell("B".$page)->getValue();//获取B列的值
@@ -213,6 +215,7 @@ if(!class_exists('MatchController')){
 
                     }
 
+
                     if($errNum > 0){
                         echo '导入失败, 导入文件发生了'.$errNum.'个错误<hr />'.$errStr;
                         return false;
@@ -221,7 +224,6 @@ if(!class_exists('MatchController')){
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
-
                     $wpdb->startTrans();
                     foreach ($dataArr as $k => $data){
                         $id = wp_insert_post([
@@ -237,7 +239,14 @@ if(!class_exists('MatchController')){
                             echo '致命错误: '.$data['title'].'存入数据库失败';
                             return false;
                         }
-
+                        //插入比赛类型
+                        $termRes = $wpdb->insert($wpdb->prefix.'term_relationships', ['object_id' => $id,'term_taxonomy_id' => $questionTypeId]);
+                        if(!$termRes){
+                            //问题插入数据库失败
+                            $wpdb->rollback();
+                            echo '致命错误: '.$data['title'].'-> 存入题目类型失败';
+                            return false;
+                        }
                         foreach ($data['problem'] as $problem){
                             if(empty($problem['answer'])){
                                 //问题无答案选项
@@ -288,6 +297,18 @@ if(!class_exists('MatchController')){
                     echo "<script type='text/javascript'>alert('导入成功 {$titleRepeat}')</script>";
                 }
             }
+
+            //查询题目类型
+            $questionType = $wpdb->get_results('SELECT term_id,`name`,slug FROM '.$wpdb->prefix.'terms', ARRAY_A);
+            $questionTypeArr = [];
+            foreach ($questionType as $qtv){
+                foreach (explode('-', $qtv['slug']) as $slug){
+                    if($slug == 'question'){
+                        $questionTypeArr[] = $qtv;
+                        continue 2;
+                    }
+                }
+            }
             ?>
 
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
@@ -315,6 +336,23 @@ if(!class_exists('MatchController')){
                             <tbody>
                             <tr>
                                 <th>
+                                    <a class="button" type="button" href="?page=download&action=question">下载模板</a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="upload">选择题目类型：</label>
+                                </th>
+                                <td>
+                                    <select name="question_type" id="">
+                                        <?php foreach ($questionTypeArr as $question){ ?>
+                                            <option value="<?=$question['term_id']?>"><?=$question['name']?></option>
+                                        <?php } ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
                                     <label for="upload">从您的电脑中选择一个文件：</label>
                                 </th>
                                 <td>
@@ -323,7 +361,7 @@ if(!class_exists('MatchController')){
                                     <input type="hidden" name="max_file_size" value="2097152">
 <!--                                    <small>最大尺寸：2 MB</small>-->
 
-                                    <a class="button" type="button" href="?page=download&action=question">下载模板</a>
+
                                 </td>
                             </tr>
 <!--                            <tr>-->

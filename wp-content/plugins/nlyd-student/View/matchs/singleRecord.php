@@ -16,9 +16,9 @@
         </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin width-margin-pc">
-                    <div class="match-title c_black"><?=$post_title?><div class="share" id="shareBtn">分享我的战绩</div></div>
+                    <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn">分享我的战绩</div></div>
                     <div class="single-match-title">
-                        <div class="single-match-name"><?=$match_title?></div>
+                        <div class="single-match-name"><?=$project_title?></div>
                         <?php if($match_more > 0):?>
                         <?php for ($i=0;$i<$match_more;++$i){?>
                         <div class="single-match-lun <?=$i==0?'lun-active':'';?>" data-post-id="<?=$i+1?>">第<?=chinanum($i+1)?>轮</div>

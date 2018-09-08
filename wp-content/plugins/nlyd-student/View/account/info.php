@@ -48,10 +48,15 @@
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                 <input  type="hidden" name="meta_key" value="user_nicename"/>
                             </div>
-                            <!-- <div class="form-input-row no_edit">
+                            <!-- <div class="form-input-row" href="certification">
+                                <div class="form-input-label">实名认证</div>
+                                <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
+                                <div class="nl-input"><?=$user_info['real_ID']?></div>
+                            </div>
+                            <div class="form-input-row">
                                 <div class="form-input-label"><?php _e('姓 名')?></div>
                                 <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
-                            </div>
+                            </div> -->
                             
                             <div class="form-input-row no_edit">
                                 <div class="form-input-label">性 别</div>
@@ -132,7 +137,8 @@
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>
                                         </div>
-                                        <?php } } ?>
+                                        <?php } ?>
+                                        <?php } ?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>

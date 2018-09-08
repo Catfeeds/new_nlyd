@@ -52,6 +52,7 @@ class Student_Home
         $user_info['user_address'] = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
         $user_info['user_real_name'] = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
         $user_info['user_ID_Card'] = isset($user_info['user_ID_Card']) ? unserialize($user_info['user_ID_Card']) : '';
+        $user_info['real_ID'] = isset($user_info['user_real_name']['real_ID']) ? hideStar($user_info['user_real_name']['real_ID']) : '';
 
         if(!empty($user_info['user_real_name']['real_type'])){
             switch ($user_info['user_real_name']['real_type']){
