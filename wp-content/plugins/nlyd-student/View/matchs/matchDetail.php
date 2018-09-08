@@ -122,7 +122,7 @@
 
 <script>
 jQuery(function($) { 
-    if($('.count_down').attr('data-seconds')<=0){
+    if($('.count_down').attr('data-seconds')<=120){
         $.DelSession('leavePageWaitting')
         window.location.href=$(this).attr('href')
     }
@@ -133,7 +133,7 @@ jQuery(function($) {
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
         $(this).text(time);
-        if(S<=0){//
+        if(S<=120){//
             window.location.href=$(this).attr('href')
         }
     });
