@@ -210,15 +210,18 @@ if(!class_exists('StudentController')){
 
             wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-common' );
+            //引入layui
+            wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'));
+            wp_enqueue_style( 'my-layui-css' );
 
             wp_register_style( 'my-student', student_css_url.'index.css',array('style'));
             wp_enqueue_style( 'my-student' );
-            //新闻列表css
-            wp_register_style( 'my-student-news-list', student_css_url.'news/news-list.css',array('my-student') );
-            wp_enqueue_style( 'my-student-news-list' );
-            //新闻详情css
-            wp_register_style( 'my-student-news-detail', student_css_url.'news/news-detail.css',array('my-student') );
-            wp_enqueue_style( 'my-student-news-detail' );
+            // //新闻列表css
+            // wp_register_style( 'my-student-news-list', student_css_url.'news/news-list.css',array('my-student') );
+            // wp_enqueue_style( 'my-student-news-list' );
+            // //新闻详情css
+            // wp_register_style( 'my-student-news-detail', student_css_url.'news/news-detail.css',array('my-student') );
+            // wp_enqueue_style( 'my-student-news-detail' );
 
             ?>
             <script>window.admin_ajax  = '<?= admin_url('admin-ajax.php' );?>';</script>
