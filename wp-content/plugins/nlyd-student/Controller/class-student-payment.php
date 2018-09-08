@@ -99,6 +99,33 @@ class Student_Payment {
 
     }
 
+    /**
+     * 微信公众号支付
+     */
+    public function wx_jsApiPay(){
+        $id = intval($_GET['id']);
+        global $wpdb,$current_user;
+        $order = $wpdb->get_row(
+            'SELECT serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
+            .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
+        if(!$order) return false;
+        //请求数据
+        //1.统一下单方法
+        $result = self::$payClass->h5UnifiedOrder($this->getWxParam($order));
+//        var_dump($result);return;
+        if($result != false){
+            if($result['status']){
+                echo $result['data'];
+//                echo '<script>window.location.href="'.$result['data'].'&redirect_url='.urlencode(home_url('payment/success/type/wxpay/serialnumber/'.$order['serialnumber'])).'"</script>';
+            }else{
+                echo $result['data'];
+            }
+        }else{
+            //发起支付失败
+            return false;
+        }
+    }
+
 
     /**
      * 微信H5支付
