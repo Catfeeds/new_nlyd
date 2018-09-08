@@ -139,9 +139,9 @@
                                             <td><span>项目总分</span></td>
                                             <td class="select-td">
                                                 <div class="td-type">
-                                                    <div class="show-type" id="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></div>
+                                                    <div class="show-type" id="show-type" data-group=""><span id="show_text">全部</span><i class="iconfont">&#xe644;</i></div>
                                                     <ul class="ul-select" >
-                                                        <li class="show-type" data-group="">全部<i class="iconfont">&#xe644;</i></li>
+                                                        <li class="show-type" data-group="">全部</li>
                                                         <?php
                                                             $group = get_age_group();
                                                             foreach ($group as $k =>$y){
@@ -476,14 +476,16 @@ $('.classify-btn').click(function(){//选择比赛项目
 })
 $('.show-type').click(function(){//下拉
     var _this=$(this);
-    var select= $(this).parents('td').find('.show-type').eq(0).html()
-    var thisHtml=_this.html();
+    var select= $("#show_text").text()
+    var thisText=_this.text();
     _this.parents('td').find('.ul-select').toggleClass("ul-select-show");
-    if(select!=thisHtml){
-        var data_group=_this.attr('data-group')
-        $('#flow-one').empty();
-        $('#show-type').html(thisHtml).attr('data-group',data_group)
-        initDanxiang(0,$('.one-rank .classify-active').attr('data-post-id'),data_group)
+    if(select!=thisText){
+        if(_this.attr('id')!='show-type' || !_this.attr('id')){
+            var data_group=_this.attr('data-group')
+            $('#flow-one').empty();
+            $('#show_text').text(thisText).attr('data-group',data_group)
+            initDanxiang(0,$('.one-rank .classify-active').attr('data-post-id'),data_group)
+        }
     }
 })
 

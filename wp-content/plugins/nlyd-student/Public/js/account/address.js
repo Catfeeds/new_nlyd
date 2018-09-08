@@ -84,21 +84,29 @@ jQuery(function($) {
             window.location.href=$(this).attr('href')
         }
     })
-    $('.address-row').each(function(i){//左滑动
+    // $('.address-row').each(function(i){//左滑动
+    //     var _this=$(this)
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     hammertime.on("swipeleft", function (e) {
+    //         _this.addClass('swipeleft')
+    //     });
+    // })
+    mTouch('body').on('swipeleft', '.address-row', function (e) {
         var _this=$(this)
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("swipeleft", function (e) {
-            _this.addClass('swipeleft')
-        });
+        _this.addClass('swipeleft')
     })
-    $('.address-row').each(function(i){//右滑动
+    mTouch('body').on('swiperight', '.address-row', function (e) {
         var _this=$(this)
-        var dom=$(this)[0]
-        var hammertime = new Hammer(dom);
-        hammertime.on("swiperight", function (e) {
-            _this.removeClass('swipeleft')
-        });
+        _this.removeClass('swipeleft')
     })
+    // $('.address-row').each(function(i){//右滑动
+    //     var _this=$(this)
+    //     var dom=$(this)[0]
+    //     var hammertime = new Hammer(dom);
+    //     hammertime.on("swiperight", function (e) {
+    //         _this.removeClass('swipeleft')
+    //     });
+    // })
 
 })

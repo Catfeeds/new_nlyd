@@ -7,9 +7,6 @@ Author URI:     http: //example.com/about/
 Template:       dt-armada
 Version:        0.1.0
 */
-
-@import url("../dt-armada/style.css");
-@import url("css/layui.css");
 html, body, body.page, .wf-container > *{
     font:normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
     color: rgba(38, 38, 38, 0.6);

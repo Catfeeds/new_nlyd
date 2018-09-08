@@ -37,37 +37,10 @@
                     
                         <div class="nl-form-tips width-padding width-padding-pc">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
                         <div class="form-inputs">
-                            <!-- <div class="form-input-row">
-                                <div class="form-input-label">账户头像</div>
-                                <span class="Mobile form-input-right">修改</span>
-                                <div id="imgBox" class="imgBox">
-                                    <img class="logoImg" src="<?=$user_info['user_head'];?>">
-                                </div>
-                            </div> -->
                             <div class="form-input-row">
                                 <div class="form-input-label">用户账号</div>
                                 <div class="nl-input"><?=$user_info['contact']?></div>
                             </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label"><?php _e('姓 名')?></div>
-                                <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
-                            </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label">性 别</div>
-                                <div class="nl-input"><?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?></div>
-                            </div>
-                            <!-- <div class="form-input-row">
-                                <div class="form-input-label">姓 名</div>
-                                <input type="text" name="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="required" class="nl-input nl-foucs">
-                            </div>
-                            <div class="form-input-row">
-                                <div class="form-input-label">性 别</div>
-                                <input name='user_gender'  value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
-                            </div> -->
-                            <!-- <div class="form-input-row">
-                                <div class="form-input-label">账户ID</div>
-                                <div class="nl-input"><?=isset($user_info['user_ID']) ? $user_info['user_ID'] : '暂无ID';?></div>
-                            </div> -->
                             <div class="form-input-row">
                                 <div class="form-input-label">账户昵称</div>
                                 <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="账户昵称" class="nl-input nl-foucs" lay-verify="required">
@@ -79,6 +52,14 @@
                                 <div class="form-input-label">实名认证</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                                 <div class="nl-input"></div>
+                            </div>
+                            <div class="form-input-row">
+                                <div class="form-input-label"><?php _e('姓 名')?></div>
+                                <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
+                            </div>
+                            <div class="form-input-row">
+                                <div class="form-input-label">性 别</div>
+                                <div class="nl-input"><?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?></div>
                             </div>
                             <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                                 <div class="form-input-label">收货地址</div>
