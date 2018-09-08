@@ -174,7 +174,9 @@ jQuery(function($) {
                             var time=D+h+':'+m+':'+s;
                             $(this).text(time);
                         }else{
-                            window.location.reload()
+                            setTimeout(function() {
+                                window.location.reload()
+                            }, 1000);
                         }
                     });
                         if(res.success){

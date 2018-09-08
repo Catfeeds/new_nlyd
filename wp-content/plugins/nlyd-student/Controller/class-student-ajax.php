@@ -494,9 +494,9 @@ class Student_Ajax
 
         if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
         if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
-        if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
-        if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
-        if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
+        //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
+        //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
+        //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
@@ -513,9 +513,9 @@ class Student_Ajax
             'match_id'=>$_POST['match_id'],
 //            'cost'=>intval($_POST['cost']),
             'cost'=> $_POST['cost'],
-            'fullname'=>$_POST['fullname'],
-            'telephone'=>$_POST['telephone'],
-            'address'=>$_POST['address'],
+            'fullname'=>!empty($_POST['fullname']) ? $_POST['fullname'] : '' ,
+            'telephone'=>!empty($_POST['telephone']) ? $_POST['telephone'] : '',
+            'address'=>!empty($_POST['address']) ? $_POST['address'] : '',
             'order_type'=>1,
             'pay_status'=>1,
             'created_time'=>get_time('mysql'),
@@ -1576,7 +1576,7 @@ class Student_Ajax
 
                     update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     $user_ID_Card_update = true;
-
+                    
                     break;
                 case 'user_sign':
                     if(mb_strlen($_POST['meta_val'],'utf-8') > 40) wp_send_json_error(array('info'=>'昵称不能超过40个字符'));
@@ -1587,7 +1587,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_ID_Card_update) ? true : false ;
+            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false || isset($user_ID_Card_update) ? true : false;
 
         }
         if($resul){
@@ -2223,8 +2223,15 @@ class Student_Ajax
                 $params['price'] = $order['cost']; //订单金额 只能为整数 单位为分
                 $params['attach'] = 'serialnumber='.$order['serialnumber']; //附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
                 $wxpay = new Student_Payment('wxpay');
-                $result = $wxpay::$payClass->h5UnifiedOrder($params);
 
+                //判断是否是微信浏览器
+                if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
+                }else{
+//                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
+                    echo 111111111111111111111;
+                    $result = $wxpay::$payClass->h5UnifiedOrder($params);
+                }
 
                 break;
             case 'alipay':

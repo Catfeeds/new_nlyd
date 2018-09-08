@@ -361,7 +361,7 @@ if(!class_exists('MatchController')){
                                     <input type="hidden" name="max_file_size" value="2097152">
 <!--                                    <small>最大尺寸：2 MB</small>-->
 
-
+                                    <a class="button" type="button" href="?page=download&action=question">下载模板</a>
                                 </td>
                             </tr>
 <!--                            <tr>-->
