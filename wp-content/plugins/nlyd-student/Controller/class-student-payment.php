@@ -197,7 +197,9 @@ class Student_Payment {
                 .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no.' AND pay_status=1', ARRAY_A);
             if($order){
 
-                return $this->getWxParam($order);
+                $param = $this->getWxParam($order);
+                $param['order_type'] = $order['order_type'];
+                return $param;
             }else{
                 return false;
             }
@@ -206,11 +208,13 @@ class Student_Payment {
         if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS'){
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
+//            file_put_contents('aax.txt',json_encode($queryRes['order']));
+            $pay_status = 2;
             switch ($queryRes['order']['order_type']){
-                case 1://比赛订单
+                case '1' or 1://比赛订单
                     $pay_status = 4;
                     break;
-                case 2://s商品订单
+                case '2' or 2://s商品订单
                     $pay_status = 2;
                     break;
             }
@@ -425,10 +429,10 @@ class Student_Payment {
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
                 switch ($order['order_type']){
-                    case 1://比赛订单
+                    case '1'://比赛订单
                         $pay_status = 4;
                         break;
-                    case 2://商品订单
+                    case '2'://s商品订单
                         $pay_status = 2;
                         break;
                 }
