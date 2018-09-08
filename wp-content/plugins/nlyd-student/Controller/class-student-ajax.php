@@ -1576,7 +1576,7 @@ class Student_Ajax
 
                     update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
                     $user_ID_Card_update = true;
-                    
+
                     break;
                 case 'user_sign':
                     if(mb_strlen($_POST['meta_val'],'utf-8') > 40) wp_send_json_error(array('info'=>'昵称不能超过40个字符'));
@@ -2223,15 +2223,13 @@ class Student_Ajax
                 $params['price'] = $order['cost']; //订单金额 只能为整数 单位为分
                 $params['attach'] = 'serialnumber='.$order['serialnumber']; //附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
                 $wxpay = new Student_Payment('wxpay');
-
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
                     $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
                 }else{
-//                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
-                    echo 111111111111111111111;
                     $result = $wxpay::$payClass->h5UnifiedOrder($params);
                 }
+
 
                 break;
             case 'alipay':
