@@ -121,7 +121,8 @@ p.long-name{
         font-size: 0.16rem;
         color:#fff;
         height: 91px;
-        width: 50%;
+        width: -webkit-calc(100% / 3);
+        width: calc(100% / 3);
         line-height: 91px;
         padding: 0;
         position: relative;

@@ -160,7 +160,7 @@ jQuery(function($) {
                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                     var sys_second = (parseInt(end_time)-parseInt(serverTimes))/1000;
                     $('#time_count').attr('data-seconds',sys_second).countdown(function(S, d){//倒计时
-                        if(S>=0){
+                        if(S>0){
                             var D=d.day>0 ? d.day+'天' : '';
                             var h=d.hour<10 ? '0'+d.hour : d.hour;
                             var m=d.minute<10 ? '0'+d.minute : d.minute;
