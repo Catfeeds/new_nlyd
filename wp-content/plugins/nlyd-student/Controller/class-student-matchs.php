@@ -1002,14 +1002,7 @@ class Student_Matchs extends Student_Home
                 $len = 0;
             }
         }
-        $ranking = '';
-        if($this->project_end_time < get_time()){
-            //获取本轮排名
-            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} group by my_score desc,surplus_time desc";
-            $rows = $wpdb->get_results($sql,ARRAY_A);
 
-            $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
-        }
 
         //判断是否有新的比赛轮次或者新的项目
         /*print_r($this->current_project);
@@ -1061,6 +1054,14 @@ class Student_Matchs extends Student_Home
             $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
         }
 
+        $ranking = '';
+        if(($this->project_start_time + $this->default_count_down) < get_time()){
+            //获取本轮排名
+            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} group by my_score desc,surplus_time desc";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+
+            $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
+        }
 
         $data = array(
             'project_alias'=>$this->project_alias,
