@@ -41,7 +41,7 @@ p.tips{
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">404</h1>
+            <h1 class="mui-title">国际脑力运动</h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
 

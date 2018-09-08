@@ -231,6 +231,8 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_answer_submit_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+        ini_set('post_max_size','10M');
+
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) || empty($_POST['match_action']) || !isset($_POST['surplus_time'])) wp_send_json_error(array('info'=>'参数错误'));
 
@@ -564,8 +566,7 @@ class Student_Ajax
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.apply_status,
                 IFNULL (b.read, '-') as `read`,
                 IFNULL(b.memory,'-') as memory, 
-                IFNULL(b.compute,'-') as `compute`, 
-                IFNULL(b.mental,'-') as `mental` 
+                IFNULL(b.compute,'-') as `compute`
                 from {$wpdb->prefix}my_coach a
                 left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id 
                 where a.apply_status = 2 and a.coach_id = {$coach_id} GROUP BY a.user_id 
@@ -587,6 +588,7 @@ class Student_Ajax
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
                 $rows[$k]['nickname'] = $user_info['nickname'];
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+                $rows[$k]['mental'] = '待定';
             }
         }
         if(is_ajax()){
@@ -1425,7 +1427,7 @@ class Student_Ajax
             }
             $rows[$k]['button_title'] = $button_title;
             $rows[$k]['right_url'] = $url;
-            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
+            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID'].'/type/111');
 
             if($_POST['match_type'] =='history'){
                 $button_title = '查看排名';
@@ -1572,9 +1574,8 @@ class Student_Ajax
                         }
                     }
 
-                    if(!empty($_POST['user_ID_Card'])){
-                        update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']) && $user_ID_Card_update = true;
-                    }
+                    update_user_meta($current_user->ID,'user_ID_Card',$_POST['user_ID_Card']);
+                    $user_ID_Card_update = true;
 
                     break;
                 case 'user_sign':
@@ -1586,7 +1587,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_age_update) ? true : false || isset($user_ID_Card_update) ? true : false;
+            $resul = update_user_meta($current_user->ID,$_POST['meta_key'],$_POST['meta_val']) || isset($user_gender_update) ? true : false || isset($user_address_update) ? true : false || isset($user_ID_Card_update) ? true : false ;
 
         }
         if($resul){

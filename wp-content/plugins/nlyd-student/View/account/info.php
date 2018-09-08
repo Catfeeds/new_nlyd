@@ -37,7 +37,7 @@
                     
                         <div class="nl-form-tips width-padding width-padding-pc">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
                         <div class="form-inputs">
-                            <div class="form-input-row">
+                            <div class="form-input-row no_edit">
                                 <div class="form-input-label">用户账号</div>
                                 <div class="nl-input"><?=$user_info['contact']?></div>
                             </div>
@@ -48,18 +48,24 @@
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                 <input  type="hidden" name="meta_key" value="user_nicename"/>
                             </div>
-                            <div class="form-input-row" href="certification">
+                            <!-- <div class="form-input-row" href="certification">
                                 <div class="form-input-label">实名认证</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                                <div class="nl-input"></div>
+                                <div class="nl-input"><?=$user_info['real_ID']?></div>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><?php _e('姓 名')?></div>
                                 <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
-                            </div>
-                            <div class="form-input-row">
+                            </div> -->
+                            
+                            <div class="form-input-row no_edit">
                                 <div class="form-input-label">性 别</div>
                                 <div class="nl-input"><?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?></div>
+                            </div> -->
+                            <div class="form-input-row" href="certification">
+                                <div class="form-input-label">实名认证</div>
+                                <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
+                                <div class="nl-input"><?=$user_info['real_ID']?></div>
                             </div>
                             <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                                 <div class="form-input-label">收货地址</div>
@@ -76,6 +82,7 @@
                                         
                                 </div>
                             </a>
+  
                             <a class="a-btn" style="display:none;" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</a>
                         </div>
                 
@@ -117,7 +124,7 @@
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
                                 <div class="layui-bg-white img-zoos">
-                                    <p class="tps">上传身份证(正面和反面,手持照片，最多上传3张)</p>
+                                    <p class="tps">上传身份证</p>
 
                                         <?php if(!empty($user_info['user_ID_Card'])){ ?>
                                         <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
@@ -130,7 +137,8 @@
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>
                                         </div>
-                                        <?php } } ?>
+                                        <?php } ?>
+                                        <?php } ?>
                                     <div class="post-img" id="add-img">
                                         <div class="add-zoo">
                                             <div class="transverse"></div>

@@ -45,6 +45,12 @@
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
+                                        <div class="nl-match-label">结束时间：</div>
+                                        <div class="nl-match-info text_1 c_black">
+                                            <?=$match['match_end_time']?>
+                                        </div>
+                                    </div>
+                                    <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛地点：</div>
                                         <div class="nl-match-info text_1 c_black"><?=$match['match_address']?></div>
                                     </div>
@@ -109,7 +115,7 @@
                         <?php endif;?>
                         <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>
                         <!--倒计时-->
-                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match_url?>"></div>
+                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match['match_url']?>"></div>
                         <?php endif;?>
                     </div>
                 </div>
@@ -122,9 +128,9 @@
 
 <script>
 jQuery(function($) { 
-    if($('.count_down').attr('data-seconds')<=0){
+    if($('.count_down').attr('data-seconds')<=120){
         $.DelSession('leavePageWaitting')
-        window.location.href=$(this).attr('href')
+        //window.location.href=$(this).attr('href')
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
@@ -133,8 +139,8 @@ jQuery(function($) {
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
         $(this).text(time);
-        if(S<=0){//
-            window.location.href=$(this).attr('href')
+        if(S<=120){//
+            //window.location.href=$(this).attr('href')
         }
     });
     layui.use(['element','flow'], function(){
