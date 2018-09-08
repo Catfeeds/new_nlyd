@@ -3,6 +3,11 @@
 
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
+                <?php if($current_project['match_type'] == 'first'): ?>
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs/')?>">
+                    <i class="iconfont">&#xe610;</i>
+                </a>
+                <?php endif;?>
                 <h1 class="mui-title">比赛等待</h1>
             </header>
             <div class="layui-row nl-border nl-content">
@@ -16,7 +21,7 @@
                         <?php }else{ ?>
                             <a class="a-btn wait" href="<?=$match_url?>">进入比赛</a>
                         <?php }?>
-                        <p class="match-detail c_black fs_16">第<?=$project_num?>个项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮</p>
+                        <p class="match-detail c_black fs_16">即将开赛第<?=$project_num?>个项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮</p>
                         <p class="ta_c fs_16 c_black">赛前提示：</p>
                         <p class="c_black8" style="padding-left:30px;padding-right:30px;margin-bottom:0;">1、比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为；</p>
                         <p class="c_black8" style="padding-left:30px;padding-right:30px;margin-bottom:0;">2、比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目；</p>

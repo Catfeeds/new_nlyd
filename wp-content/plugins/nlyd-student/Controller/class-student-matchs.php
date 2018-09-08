@@ -335,7 +335,7 @@ class Student_Matchs extends Student_Home
             $this->get_404('参数错误');
             return;
         }
-        if(strtotime($match['entry_end_time']) < get_time() && get_time() < strtotime($match['match_start_time'])){
+        if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
             $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
         }
@@ -430,6 +430,7 @@ class Student_Matchs extends Student_Home
         //print_r($this->next_project);
         //print_r($this->current_project);
 
+        $data['match_title'] = $this->match_title;
         $data['match_status'] = $this->match['match_status'];
         $data['next_project'] = $this->next_project;
         $data['current_project'] = $this->current_project;
@@ -489,7 +490,7 @@ class Student_Matchs extends Student_Home
                     return;
                 }
 
-                if( get_time() < strtotime($this->current_project['project_start_time'])){
+                if( get_time() < $this->current_project['project_start_time']){
                     $error_data = array(
                         'message'=>'该轮比赛未开始',
                         'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
@@ -568,7 +569,12 @@ class Student_Matchs extends Student_Home
                 );
                 $question = $posts[0];
                 if(empty($question)){
-                    $this->get_404('暂无比赛题目,联系管理员录题');
+                    $error_data = array(
+                        'status'=>-1,
+                        'message'=>'暂无比赛题目,联系管理员录题',
+                        'match_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
+                    );
+                    $this->get_404($error_data);
                     return;
                 }
                 //print_r($question);
