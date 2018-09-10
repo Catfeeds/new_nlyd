@@ -115,27 +115,7 @@ switch ($project_alias){
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
-        if(window.location.host=='ydbeta.gjnlyd.com'){
-            history.pushState(null, null, document.URL);
-            window.addEventListener('popstate', function () {
-                history.pushState(null, null, document.URL);
-            });
-            $(window).on("blur",function(){
-                var sessionData={
-                        match_id:$.Request('match_id'),
-                        project_id:$.Request('project_id'),
-                        match_more:$.Request('match_more')
-                    }
-                $.SetSession('leavePageWaits',sessionData)
-            })  
-            $(window).on("focus", function(e) {
-                var leavePageWaits= $.GetSession('leavePageWaits','1');
-                if(leavePageWaits && leavePageWaits['match_id']===$.Request('match_id') && leavePageWaits['project_id']===$.Request('project_id') && leavePageWaits['match_more']===$.Request('match_more')){
-                    window.location.reload()
-                    $.DelSession('leavePageWaits')
-                }
-            });
-        }
+        leavePageLoad(url)
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';
