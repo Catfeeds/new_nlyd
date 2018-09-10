@@ -7,6 +7,8 @@ class Import {
     }
 
     public function register_order_menu_page(){
+
+        // sckm_searches
         add_menu_page('导入user', '导入user', 'administrator', 'imports',array($this,'users'),'dashicons-businessman',99);
 //        add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
 //        add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
@@ -18,8 +20,106 @@ class Import {
      * 导入用户
      */
     public function users(){
+
         require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
         $excelClass = new PHPExcel();
+        global $wpdb;
+
+//        $wpdb->delete($wpdb->users,['1' => '1']);
+//        exit;
+        $fileName = 'user.sql';
+//        file_put_contents('user.sql', '');
+//        $tmp = fopen($fileName, 'w+');
+
+//        $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
+//        echo '<pre />';
+//        print_r($res);
+//        die;
+        set_time_limit(0);//0表示不限时
+
+
+
+        $errStr = '';
+            $result = $wpdb->get_results('SELECT * FROM sckm_members');
+
+            foreach ($result as $res){
+
+                $regirestTime = date('Y-m-d H:i:s', $res->register_time);
+                $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
+                $display_name = $display_name == ',' ? '' : addslashes($display_name);
+                $res->nickname = addslashes($res->nickname);
+                $values = "('$res->id','$res->mem_mobile','$res->nickname','$res->mem_mobile','$res->openid','$regirestTime','$display_name','123456','$res->email')";
+                $userSql = 'INSERT INTO '.$wpdb->users.'(`ID`,user_login,user_nicename,user_mobile,weChat_openid,user_registered,display_name,user_pass,user_email) VALUES'.$values;
+                $usersBool = $wpdb->query($userSql);
+                //usermeta
+                if($res->birthday){
+                    $age = get_time('mysql') - explode('-',$res->birthday)[0];
+                }else{
+                    $age = 0;
+                }
+
+                $user_real_name = serialize(['real_type' => '','real_name' => $res->truename, 'real_ID' => '', 'real_age' => $age]);
+                $user_address = serialize(['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist]);
+                $metaSql = 'INSERT INTO '.$wpdb->usermeta.'(`user_id`,`meta_key`,`meta_value`) 
+            VALUES ("'.$res->id.'","user_real_name",\''.$user_real_name.'\'),
+            ("'.$res->id.'","user_address",\''.$user_address.' \'),
+            ("'.$res->id.'","user_birthday","'.$res->birthday.'"),
+            ("'.$res->id.'","user_head","'.$res->headimgurl.'")';
+                $meatBool = $wpdb->query($metaSql);
+
+                //脑力认证
+                $searchsRes = $wpdb->get_results('SELECT * FROM sckm_searches WHERE member_id='.$res->id);
+                $searchsSql = 'INSERT INTO '.$wpdb->prefix.'directories(`user_id`,`level`,`range`,`type`) VALUES ';
+                $searchsSql2 = '';
+                foreach ($searchsRes as $sv){
+                    $level = $sv->level;
+                    $range = 1;
+                    if(preg_match('/一/',$level)) $level = 1;
+                    if(preg_match('/国际/',$level)) $range = 2;
+                    $type = 0;
+                    switch ($sv->search_type_id){
+                        case 3:
+                            $type = 4;
+                            break;
+                        case 4:
+                            $type = 5;
+                            break;
+                        case 5:
+                            $type = 2;
+                            break;
+                        case 6:
+                            $type = 3;
+                            break;
+                        case 7:
+                            $type = 1;
+                            break;
+                    }
+                    $searchsSql2 = "('$res->id','$level','$range','$type'),";
+
+                }
+                if(!$searchsSql2 == ''){
+                    $searchsSql2 = substr($searchsSql2,0,strlen($searchsSql2)-1);
+                    $searchsBool = $wpdb->query($searchsSql.$searchsSql2);
+                    if(!$searchsBool){
+                        $errStr .= $res->id.'->认证: 插入失败<br /> sql: '.$searchsSql.$searchsSql2.'<br />';
+                    }
+                }
+
+
+                if(!$usersBool){
+                    $errStr .= $res->id.':插入失败<br /> sql: '.$userSql.'<br />';
+                }
+                if(!$meatBool){
+                    $errStr .= $res->id.'->usermeta: 插入失败<br /> sql: '.$metaSql.'<br />';
+                }
+                if(!$usersBool || !$meatBool){
+                    $errStr .= '<hr>';
+                }
+            }
+        echo $errStr;
+//        fwrite($tmp,)
+
+
 //        ini_set('memory_limit','3072M');    // 临时设置最大内存占用为3G
 //        set_time_limit(0);   // 设置脚本最大执行时间 为0 永不过期
 //
