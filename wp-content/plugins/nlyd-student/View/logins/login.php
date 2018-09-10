@@ -154,18 +154,22 @@
         </div> 
         <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
         <ul style="margin-left: 0"  class="login-type">
+            <?php if($default_wechat_login): ?>
             <li class="login-type-wrapper">
                 <div class="login-type-logo">
                     <i class="iconfont">&#xe695;</i>
                 </div>
                 <div class="login-type-name">微信登录</div>
             </li>
+            <?php endif;?>
+            <?php if($default_qq_login): ?>
             <li class="login-type-wrapper">
                 <div class="login-type-logo">
                     <i class="iconfont">&#xe603;</i>
                 </div>
                 <div class="login-type-name">QQ登录</div>
             </li>
+            <?php endif;?>
         </ul>
     </div>  
         <div class="width-margin width-margin-pc userAgreement" style='display:none'>
