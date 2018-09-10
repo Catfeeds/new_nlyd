@@ -492,11 +492,21 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'请先实名认证'));
         }
 
-        if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
-        if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
+        //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
+        //if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
         //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
+
+        $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta where match_id = {$_POST['match_id']} ";
+        $match_meta = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($match_meta)) wp_send_json_error(array('info'=>'比赛信息错误'));
+        if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>'当前比赛已禁止报名'));
+        $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
+
+        if(!empty($total)){
+            if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>'已达到最大报名数,请联系管理员'));
+        }
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
@@ -1998,6 +2008,7 @@ class Student_Ajax
      * @param $user_id
      */
     public function setUserCookie($user_id){
+        update_user_meta($user_id,'user_session_id',session_id());
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;

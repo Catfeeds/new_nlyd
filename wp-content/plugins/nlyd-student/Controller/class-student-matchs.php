@@ -168,7 +168,7 @@ class Student_Matchs extends Student_Home
         /**********************获取比赛信息end********************************/
 
         /*******************获取当前比赛项目配置******************************/
-        if(isset($_GET['project_id'])){
+        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog')) ){
 
             if (empty($this->project_key_array[$_GET['project_id']])){
                 $this->get_404('比赛项目错误');
@@ -308,8 +308,8 @@ class Student_Matchs extends Student_Home
                         $project[$k]['coach_id'] = $row->coach_id;
                     }
                 }
-
-                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$val['post_id'].'/project_id/'.$val['match_project_id']);
+                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
+                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
                 $project[$k]['project'][] = $val;
 
             }
