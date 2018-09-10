@@ -1252,16 +1252,15 @@ class Student_Ajax
         if(empty($orders)) wp_send_json_error(array('info'=>'暂无选手报名'));
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
-            //print_r($user);
-            $orders[$k]['nickname'] = $user['nickname'][0];
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
             $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);
                 $orders[$k]['real_age'] = $user_real['real_age'];
-
+                $orders[$k]['nickname'] = $user_real['real_name'];
             }else{
                 $orders[$k]['real_age'] = '--';
+                $orders[$k]['nickname'] = $user['nickname'][0];
             }
         }
         //print_r($orders);
@@ -1553,9 +1552,11 @@ class Student_Ajax
 
                     //验证格式
                     if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'请选择证件类型'));
-                    if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
-                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
+                    //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
+                    //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
                     if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'证件号格式不正确'));
+                    if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
+
                     if(!empty($_POST['user_gender'])){
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
                         unset($_POST['user_gender']);
