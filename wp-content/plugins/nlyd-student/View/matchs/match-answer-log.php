@@ -115,6 +115,7 @@ switch ($project_alias){
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
+        var url=false;
         leavePageLoad(url)
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);

@@ -301,7 +301,6 @@ jQuery(function($) {
             _this.addClass('disabled')
             var text=$('.answer').text()
             var flag=false;
-            var isRight=false;//是否是正确答案
             var text=$('.answer').text()
             ajaxData[ajaxData.length-1].yours=text;
             var new_text=text.replace(/×/g,'*');
@@ -317,10 +316,10 @@ jQuery(function($) {
                 //     text='unsolvable';
                 //      if(ajaxData[ajaxData.length-1].rights=="本题无解"){
                 //         $('.answer').addClass('right-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']='right';
+                //         ajaxData[ajaxData.length-1]['isRight']=true;
                 //      }else{
                 //         $('.answer').addClass('error-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']='false';
+                //         ajaxData[ajaxData.length-1]['isRight']=false;
                 //      }
                 // }else{
                     if(flag){
@@ -329,11 +328,11 @@ jQuery(function($) {
                     }else{
                         if(calculateResult(new_text)==24){
                             $('.answer').addClass('right-fast')
-                            ajaxData[ajaxData.length-1]['isRight']='right';
+                            ajaxData[ajaxData.length-1]['isRight']=true;
                             
                         }else{
                             $('.answer').addClass('error-fast')
-                            ajaxData[ajaxData.length-1]['isRight']='false';
+                            ajaxData[ajaxData.length-1]['isRight']=false;
                         }
                     }
                 // }
@@ -345,7 +344,7 @@ jQuery(function($) {
             }else{
                 //跳过2s
                 $('.answer').addClass('error-fast')
-                ajaxData[ajaxData.length-1]['isRight']='false';
+                ajaxData[ajaxData.length-1]['isRight']=false;
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
                 var data={
                     action:'get_24_result',

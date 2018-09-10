@@ -66,7 +66,6 @@ jQuery(function($) {
             element.on('tab(tabs)', function(){//tabs
                 var left=$(this).position().left;
                 var html=$(this).html();
-                console.log(html)
                 var css=''
                 if($(this).index()==0){
                     css='22.5px 0 0 22.5px'
@@ -210,7 +209,7 @@ jQuery(function($) {
                     ,area: '300px;'
                     ,shade: 0.8
                     ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                    ,btn: ['知道了']
+                    ,btn: ['我同意以上协议']
                     ,btnAlign: 'c'
                     ,moveType: 1 //拖拽模式，0或者1
                     ,content: '<div class="width-margin width-margin-pc userAgreement-content">'+html+'</div>'
