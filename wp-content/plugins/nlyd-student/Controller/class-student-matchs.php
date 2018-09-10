@@ -1091,6 +1091,7 @@ class Student_Matchs extends Student_Home
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_count_down'=>$next_count_down,
             'next_project_url'=>$next_project_url,
+            'wait_url' => home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1'),
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
 
