@@ -5,21 +5,66 @@
 }
 .count-wrapper{
     width: 100%;
-    position: absolute;
-    top: 100px;
+    margin-top: 60px;
+    padding-bottom: 20px;
 }
 p.match-name{
     text-align: center;
-    font-size: 0.20rem;
-    margin-bottom: 20px;
+    font-size: 0.24rem;
+    margin-bottom: 22px;
 }
 .match-detail{
     text-align: center;
-    margin-top: 20px;
 }
-.a-btn.wait{
+.wait{
+    margin: auto;
+    margin-top: 60px;
+    width: 170px;
+    height: 170px;
+    background: rgba(104, 170, 254, 0.2);
+    border-radius: 50%;
+    margin-bottom: 38px;
+    -webkit-animation-duration: 1000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name:'GrowQuare';
+    -webkit-animation-direction: alternate;
+}
+@-webkit-keyframes GrowQuare {
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+.inner{
     position: relative;
-    top:0;
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    top: 10px;
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
+    color: #fff;
+    border-radius: 50%;
+}
+.inner p{
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 0.20rem;
+}
+.inner p:first-child{
+    position: relative;
+    top: 43px;
+    line-height: 28px;
+}
+.inner p:last-child{
+    position: relative;
+    top: 43px;
+    font-weight: bold;
 }
 .a-btn.back{
     position: relative;
@@ -35,4 +80,24 @@ p.match-name{
 p.tips{
     margin-bottom: 20px;
     text-align: center;
+}
+.match_tips{
+    width: 80%;
+    margin: auto;
+    padding: 12px 0;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(90deg,rgba(104, 170, 254, 0.08), rgba(79, 186, 254, 0.081));
+    background: -o-linear-gradient(90deg,rgba(104, 170, 254, 0.08), rgba(79, 186, 254, 0.081));
+    background: -moz-linear-gradient(90deg,rgba(104, 170, 254, 0.08), rgba(79, 186, 254, 0.081));
+    background: linear-gradient(90deg,rgba(104, 170, 254, 0.08), rgba(79, 186, 254, 0.081));
+}
+.match_tips p{
+    margin-bottom: 0;
+    padding: 0 12px;
+}
+p.bottom_tips{
+    margin:auto;
+    margin-top:10px;
+    margin-bottom: 0;
+    width:80%;
 }
