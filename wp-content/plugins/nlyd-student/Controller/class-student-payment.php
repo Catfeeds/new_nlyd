@@ -429,10 +429,10 @@ class Student_Payment {
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
                 switch ($order['order_type']){
-                    case '1'://比赛订单
+                    case 1://比赛订单
                         $pay_status = 4;
                         break;
-                    case '2'://s商品订单
+                    case 2://商品订单
                         $pay_status = 2;
                         break;
                 }

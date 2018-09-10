@@ -493,21 +493,22 @@ class Student_Matchs extends Student_Home
 
                 if( get_time() > $this->current_project['project_end_time']){
 
-                    $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
-                    return;
-                }
+                        $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                        return;
+                    }
+                    //print_r($this->current_project);//die;
+                    if( get_time() < $this->current_project['project_start_time']){
 
-                if( get_time() < $this->current_project['project_start_time']){
-                    $error_data = array(
-                        'message'=>'该轮比赛未开始',
-                        'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
-                        'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
-                        'start_count_down' => $this->project_start_time - get_time(),
-                    );
-                    //var_dump($error_data);
-                    $this->get_404($error_data);
-                    return;
-                }
+                        $error_data = array(
+                            'message'=>'该轮比赛未开始',
+                            'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                            'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
+                            'start_count_down' => $this->project_start_time - get_time(),
+                        );
+                        //var_dump($error_data);die;
+                        $this->get_404($error_data);
+                        return;
+                    }
 
             }else{
 
