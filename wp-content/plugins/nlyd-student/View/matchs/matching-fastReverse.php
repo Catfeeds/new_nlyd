@@ -29,13 +29,16 @@
                             <div class="fast-item right-fast">4A@#$%</div> -->
                         </div>
                     </div>
-
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='1'></div>
+                            <input style="display:none" type="hiddhen"  name="a1" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='2'></div>
+                            <input style="display:none" type="hiddhen"  name="a2" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='3'></div>
+                            <input style="display:none" type="hiddhen"  name="a4" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='4'></div>
+                            <input style="display:none" type="hiddhen"  name="a8" value="">
                             <a class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="(">(</a>
                         </div>
                         <div class="matching-keyboard-row">
@@ -47,8 +50,8 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <a class="bg_orange matching-key c_white fs_16" id="del">删除</a>
-                            <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a>
-                            <div class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
+                            <!-- <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a> -->
+                            <div  class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 
@@ -59,44 +62,10 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
-    if(window.location.host=='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        $(window).on("blur",function(){
-            var leavePage = $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                leavePage['leavePage']+=1;
-            }else{
-                var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    leavePage:1
-                }
-                leavePage= sessionData
-            }
-            $.SetSession('leavePage',leavePage)
-        })  
-        $(window).on("focus", function(e) {
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                var leveTimes=parseInt(leavePage['leavePage'])
-                if(leveTimes>0 && leveTimes<3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                }
-                if(leveTimes>=3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    setTimeout(function() {
-                        submit(time);
-                    }, 1000);
-                    submit(time);
-                }
-            }
-        });
-    }
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time);
+    })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
     var matchSession=$.GetSession('match','true');
@@ -123,11 +92,15 @@ jQuery(function($) {
             var number=randSZ();
             select.push(number)
         }
-       var thisRow={question:select,yours:'',isRight:false}
-        ajaxData.push(thisRow)
-        if(!$.Request('test')){
-            var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
-            $.SetSession('match',sessionData)
+        if(valid(select)=="本题无解"){
+            initQuestion()
+        }else{
+            var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
+            ajaxData.push(thisRow)
+            if(!$.Request('test')){
+                var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
+                $.SetSession('match',sessionData)
+            }
         }
     }
     function nextQuestion() {
@@ -135,10 +108,10 @@ jQuery(function($) {
         $('.rand').each(function(i){
             var text= ajaxData[ajaxData.length-1]['question'][i]
              $(this).text(text).attr('date-number',text)
+             $(this).next('input').val(text)
         }).removeClass('disabled')
         $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
     }
-
     function submit(time){//提交答案
 
         var data={
@@ -163,8 +136,6 @@ jQuery(function($) {
             }
         })
     }
-
-
      function count_down(){
         var timer = setInterval(function(){
             if (sys_second > 0) {
@@ -190,11 +161,6 @@ jQuery(function($) {
 
         }, 1000);
     }
-    // $('.number').each(function(i){//键盘数字tap事件
-        // var _this=$(this);
-        // var dom=$(this)[0]
-        // var hammertime = new Hammer(dom);
-        // hammertime.on("tap", function (e) {
         mTouch('body').on('tap','.number',function(e){
             var _this=$(this);
             var flag=false;
@@ -207,13 +173,13 @@ jQuery(function($) {
             if(!_this.hasClass('disabled')){
                 var number=_this.text();
                 var text=$('.answer').text()
-                if(text=="本题无解"){
-                    text=''
-                }
-                if(number=="本题无解"){
-                    $('.answer').text(number)
-                    $('.number').removeClass('disabled')
-                }else{
+                // if(text=="本题无解"){
+                //     text=''
+                // }
+                // if(number=="本题无解"){
+                //     $('.answer').text(number)
+                //     $('.number').removeClass('disabled')
+                // }else{
                     var len=text.length;
                     var x=text.charAt(len-1,1);
                     if(!isNaN(parseInt(number))){//数字，前一位必须是符号
@@ -292,19 +258,17 @@ jQuery(function($) {
                             }
                         }
                     }
-                }
+                // }
             }
         });
     // })
     //删除tap事件
-    // var hammertime1 = new Hammer($('#del')[0]);
-    // hammertime1.on("tap", function (e) {
     mTouch('body').on('tap','#del',function(e){
         var text=$('.answer').text()
         var len=text.length;
         var news='';
         if(len>0){
-            if(text!="本题无解"){
+            // if(text!="本题无解"){
                 var end=text.substr(text.length-1,1);
                 var end_1=text.substr(text.length-2,1)
                 if(!isNaN(parseInt(end))){//删除的是数字
@@ -325,14 +289,13 @@ jQuery(function($) {
                 }else{
                     news=text.substring(0,len-1);
                 }
-            }
+            // }
             $('.answer').text(news)
         }
     });
     //下一题tap事件
-    // var hammertime2 = new Hammer($('#next')[0]);
-    // hammertime2.on("tap", function (e) {
     mTouch('body').on('tap','#next',function(e){
+        $.DelSession('leavePage')
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
@@ -340,6 +303,9 @@ jQuery(function($) {
             var flag=false;
             var isRight=false;//是否是正确答案
             var text=$('.answer').text()
+            ajaxData[ajaxData.length-1].yours=text;
+            var new_text=text.replace(/×/g,'*');
+            new_text=new_text.replace(/÷/g,'/');
             $('.rand').each(function(){//所有数字按钮都已使用后
                 if(!$(this).hasClass('disabled')){
                     flag=true;
@@ -347,22 +313,44 @@ jQuery(function($) {
                 }
             })
             if(text.length!=0){
-                if($('.answer').text()=='本题无解'){
-                    text='unsolvable'
-                }else{
+                // if($('.answer').text()=='本题无解'){
+                //     text='unsolvable';
+                //      if(ajaxData[ajaxData.length-1].rights=="本题无解"){
+                //         $('.answer').addClass('right-fast')
+                //         ajaxData[ajaxData.length-1]['isRight']='right';
+                //      }else{
+                //         $('.answer').addClass('error-fast')
+                //         ajaxData[ajaxData.length-1]['isRight']='false';
+                //      }
+                // }else{
                     if(flag){
                         _this.removeClass('disabled')
                         return false;
+                    }else{
+                        if(calculateResult(new_text)==24){
+                            $('.answer').addClass('right-fast')
+                            ajaxData[ajaxData.length-1]['isRight']='right';
+                            
+                        }else{
+                            $('.answer').addClass('error-fast')
+                            ajaxData[ajaxData.length-1]['isRight']='false';
+                        }
                     }
-                }
-            }
-                ajaxData[ajaxData.length-1].yours=text;
+                // }
+                setTimeout(function() {
+                    initQuestion()
+                    nextQuestion()
+                    _this.removeClass('disabled')
+                }, 400);
+            }else{
+                //跳过2s
+                $('.answer').addClass('error-fast')
+                ajaxData[ajaxData.length-1]['isRight']='false';
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                
                 var data={
                     action:'get_24_result',
                     numbers:thisAjaxRow.question,
-                    my_answer:thisAjaxRow.yours,
+                    my_answer:'',
                     new_date:new Date().getTime(),
                     match_more:$.Request('match_more') ? $.Request('match_more') : 1,
                     project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
@@ -375,41 +363,27 @@ jQuery(function($) {
                     timeout:2000,
                     success: function(res, textStatus, jqXHR){
                         if(text.length==0){//重新计算时间
-                            isRight=false;
                             var newTime=res.data.info;
                             sys_second=newTime
-                        }else{
-                            if(res.success){
-                                isRight=res.data.info
-                            }
                         }
-                        if(isRight){//正确答案
-                            $('.answer').addClass('right-fast')
-                        }else{
-                            $('.answer').addClass('error-fast')
-                        }
-                        ajaxData[ajaxData.length-1]['isRight']=isRight
                         setTimeout(function() {
                             initQuestion()
                             nextQuestion()
-                        }, 500);
-                        _this.removeClass('disabled')
+                            _this.removeClass('disabled')
+                        }, 400);
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
                         _this.removeClass('disabled')
-                        if(errorThrown=='timeout'){
-                            $.alerts('网络超时')
-                        }
+                        $.alerts('网络超时')
                         initQuestion()
                         nextQuestion()
                     }
 
                 });
             }
+        }
     });
     layui.use('layer', function(){
-        // var hammertime4 = new Hammer($('#sumbit')[0]);
-        // hammertime4.on("tap", function (e) {
         mTouch('body').on('tap','#sumbit',function(e){
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({

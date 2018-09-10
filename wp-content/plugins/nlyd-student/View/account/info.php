@@ -58,10 +58,7 @@
                                 <div class="nl-input"><?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?></div>
                             </div> -->
                             
-                            <div class="form-input-row no_edit">
-                                <div class="form-input-label">性 别</div>
-                                <div class="nl-input"><?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?></div>
-                            </div> -->
+                            
                             <div class="form-input-row" href="certification">
                                 <div class="form-input-label">实名认证</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
@@ -101,19 +98,19 @@
                                     <input  type="hidden" name="meta_key" value="user_real_name"/>
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">证件姓名</div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="required" class="nl-input nl-foucs">
-                                </div>
-                                <div class="form-input-row">
                                     <div class="form-input-label">证件号码</div>
                                     <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="输入证件上的真实证件号" lay-verify="required"  class="nl-input nl-foucs">
+                                </div>
+                                <div class="form-input-row">
+                                    <div class="form-input-label">姓 名</div>
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="chineseName" class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">性 别</div>
                                     <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">年龄</div>
+                                    <div class="form-input-label">年 龄</div>
                                     <input type="text" name="meta_val[real_age]" id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">

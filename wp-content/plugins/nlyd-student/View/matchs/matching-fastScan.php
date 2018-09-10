@@ -43,47 +43,14 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
-    if(window.location.host=='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        $(window).on("blur",function(){
-            var leavePage = $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                leavePage['leavePage']+=1;
-            }else{
-                var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    leavePage:1
-                }
-                leavePage= sessionData
-            }
-            $.SetSession('leavePage',leavePage)
-        })   
-        $(window).on("focus", function(e) {
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                var leveTimes=parseInt(leavePage['leavePage'])
-                if(leveTimes>0 && leveTimes<3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                }
-                if(leveTimes>=3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    setTimeout(function() {
-                        submit(time);
-                    }, 1000);
-                    submit(time);
-                }
-            }
-        });
-    }
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time);
+    })
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
+    itemAdd=2,//每隔itemAdd道题itemLen++
     nandu=0,//难度系数，越小越难
     stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
@@ -106,11 +73,17 @@ jQuery(function($) {
             var text=day+hour+':'+minute+':'+second;
             $('.count_downs').text(text).attr('data-seconds',_count_time)
             if(_count_time<=-1){
+                if(ajaxData.length%itemAdd==0){
+                    itemLen++
+                }
                 initBuild(itemLen,items,nandu,false)
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
                 clearTimeout(timer)
             }
-            timer=setTimeout("showTime()",1000);
+            if(flaseQuestion<flaseMax){
+                timer=setTimeout("showTime()",1000);
+            }
+            
 
     }  
     var matchSession=$.GetSession('match','true');
@@ -120,6 +93,7 @@ jQuery(function($) {
         ajaxData=matchSession['ajaxData'];
         flaseQuestion=matchSession['flaseQuestion'];
         nandu=matchSession['nandu'];
+        itemLen=matchSession['itemLen'];
     }
     if(!isMatching){
         $('body').on('click','.answer',function(){
@@ -148,7 +122,7 @@ jQuery(function($) {
        
     }    
     function randZF() {//生成随即字符
-            var arr=['~','!','@','#','$','￥','^','&','(',')','?','*','×','÷','<','>',';','"',':','’','“','”'];
+            var arr=['~','!','@','#','$','￥','^','&','(',')','?','*','×','÷',';','"',':',];
 
             var pos = Math.round(Math.random() * (arr.length - 1));
 
@@ -219,7 +193,7 @@ jQuery(function($) {
             checkIndex.push(k)
         }
         for(var i=0;i<total;i++){
-                levels(data,level,checkIndex,data,select)
+            levels(data,level,checkIndex,data,select)
         }
         return select;
     }
@@ -244,7 +218,7 @@ jQuery(function($) {
             }
             var randIndex = Math.round(Math.random() * (arr.length - 1));//随机取一个下标
             select.splice(arr[randIndex], 0,right); //随机插入
-            var thisRow={rights:right,question:select,yours:'',isRight:false} 
+            var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
             var sessionData={
                 ajaxData:ajaxData,
@@ -252,7 +226,8 @@ jQuery(function($) {
                 project_id:$.Request('project_id'),
                 match_more:$.Request('match_more'),
                 nandu:nandu,
-                flaseQuestion:flaseQuestion
+                flaseQuestion:flaseQuestion,
+                itemLen:itemLen,
             }
             $.SetSession('match',sessionData)
         }else{
@@ -260,17 +235,38 @@ jQuery(function($) {
             submit($('.count_down').attr('data-seconds'))
         }
     }
+    function getNewline(val) {
+        var str = new String(val); 
+        if(str.length>18){
+            var bytesCount = 0;  
+            var s="";
+            for (var i = 0 ,n = str.length; i < n; i++) { 
+                var c = str.charCodeAt(i);  
+                //统计字符串的字符长度
+                bytesCount += 1;  
+                s += str.charAt(i);
+                if(bytesCount>=18){  
+                    s = s + '</br>';
+                    //重置
+                    bytesCount=0;
+                } 
+            }  
+            return s;  
+        }else{
+            return str
+        }
 
+    } 
 
     function showQusetion(row,flashTime,answerTime){//处理页面
-            $('.answer').text(row.rights).removeClass('hide');
+            $('.answer').html(getNewline(row.rights)).removeClass('hide');
             $('.count_downs').addClass('hide');
             $('#selectWrapper').addClass('hide');
             $('#selectWrapper .fastScan-item').removeClass('error-fastScan').removeClass('noClick').removeClass('right-fastScan')
             $('#selectWrapper .fastScan-item').each(function(i){
                 var _this=$(this);
                 var text=row['question'][i]
-                _this.text(text)
+                _this.html(getNewline(text))
             })
             if(isMatching){
                 $('.answer').addClass('hide');
@@ -295,24 +291,31 @@ jQuery(function($) {
     mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
         var _this=$(this);
         var isFalse=true;
-        if(!_this.hasClass('noClick')){
-            var text=_this.text()
-            ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
-            if(text==ajaxData[ajaxData.length-1].rights){//选择正确
-                ajaxData[ajaxData.length-1].isRight=true;
-                _this.addClass('right-fastScan')
-            }else{
-                isFalse=false;
-                ajaxData[ajaxData.length-1].isRight=false;
-                _this.addClass('error-fastScan')
+        
+            if(!_this.hasClass('noClick')){
+                var text=_this.text()
+                ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
+                if(text==ajaxData[ajaxData.length-1].rights){//选择正确
+                    ajaxData[ajaxData.length-1].isRight=true;
+                    _this.addClass('right-fastScan')
+                }else{
+                    isFalse=false;
+                    ajaxData[ajaxData.length-1].isRight=false;
+                    _this.addClass('error-fastScan')
+                }
+                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
+                if(ajaxData.length%itemAdd==0){
+                    itemLen++
+                }
+                initBuild(itemLen,items,nandu,isFalse)
+                setTimeout(function(){
+                    if(flaseQuestion<flaseMax){
+                        showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+                    }
+                }, 300);
+                clearTimeout(timer);
             }
-            $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-            initBuild(itemLen,items,nandu,isFalse)
-            setTimeout(function(){
-                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
-            }, 300);
-            clearTimeout(timer);
-        }
+        
     })
     function submit(time){//提交答案
         var data={
@@ -362,8 +365,6 @@ jQuery(function($) {
         }
     });
 layui.use('layer', function(){
-    // var hammertime4 = new Hammer($('#sumbit')[0]);
-    // hammertime4.on("tap", function (e) {
     mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
@@ -385,7 +386,6 @@ layui.use('layer', function(){
                     layer.closeAll();
                     submit(time);
                     stop=false;
-                    // window.location.href="<?=home_url('/matachs/subjectFastScan');?>"
                 }
                 ,btn2: function(index, layero){
                     stop=false;

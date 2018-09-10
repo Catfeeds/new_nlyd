@@ -69,6 +69,12 @@
     border-radius: 6px;
     margin-left: 12px;
 }
+.matching-key.disabled{
+    background: -webkit-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: -o-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: -moz-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+}
 .matching-keyboard-row .matching-key:first-child{
     margin-left: 0;
 }

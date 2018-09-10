@@ -232,8 +232,14 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
+        
+        // var_dump($_POST['match_id']);
+        // var_dump($_POST['project_id']);
+        // var_dump($_POST['match_more']);
+        // var_dump($_POST['match_action']);
+        // var_dump($_POST['surplus_time']);
+        // print_r($_POST);
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) || empty($_POST['match_action']) || !isset($_POST['surplus_time'])) wp_send_json_error(array('info'=>'参数错误'));
-
         if(!empty($_POST['my_answer'])){
             if(!is_array($_POST['my_answer'])) wp_send_json_error(array('info'=>'答案请以数组格式提交'));
             $my_answer = $_POST['my_answer'];
