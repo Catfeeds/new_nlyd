@@ -23,6 +23,18 @@ $setting = get_option('default_setting');
                 <td><input name="default_timer" type="checkbox" value="1" <?= $setting['default_timer']  ? 'checked' : '';?> class="regular-text"></td>
             </tr>
             <tr>
+                <th scope="row"><label for="blogname">禁止异地登录</label></th>
+                <td><input name="default_abnormal_login" type="checkbox" value="1" <?= $setting['default_abnormal_login']  ? 'checked' : '';?> class="regular-text"></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="blogname">微信登录</label></th>
+                <td><input name="default_wechat_login" type="checkbox" value="1" <?= $setting['default_wechat_login']  ? 'checked' : '';?> class="regular-text"></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="blogname">QQ登录</label></th>
+                <td><input name="default_qq_login" type="checkbox" value="1" <?= $setting['default_qq_login']  ? 'checked' : '';?> class="regular-text"></td>
+            </tr>
+            <tr>
                 <th scope="row"><label for="blogname">使用默认比赛项目</label></th>
                 <td><input type="checkbox" name="default_match_project" value="1" <?= $setting['default_match_project']  ? 'checked' : '';?> class="regular-text" /></td>
             </tr>

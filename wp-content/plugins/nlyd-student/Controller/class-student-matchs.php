@@ -1024,20 +1024,24 @@ class Student_Matchs extends Student_Home
                 $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
                 $next_type = 1;
                 $next_count_down = $this->current_project['project_end_time']-get_time();
+                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
             }else{
                 $next_project_url = home_url('/matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
+                $wait_url = '';
             }
         }else{
 
             if($this->next_project['project_start_time'] < get_time()){
                 $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
+                $wait_url = '';
             }else{
                 $match_more = 1;
                 $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['project_id'].'/match_more/'.$match_more);
                 $next_type = 2;
                 $next_count_down = $this->next_project['project_start_time']-get_time();
+                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
             }
         }
         //print_r($this->next_project);
@@ -1091,6 +1095,7 @@ class Student_Matchs extends Student_Home
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_count_down'=>$next_count_down,
             'next_project_url'=>$next_project_url,
+            'wait_url' =>$wait_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
 
