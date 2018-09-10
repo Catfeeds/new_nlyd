@@ -127,22 +127,22 @@ class Brainpower
         //3.插入数据sql生成
         if(is_post()){
             $wpdb->startTrans();
-            $sql = 'INSERT INTO '.$wpdb->prefix.'brainpower (user_id,category_id,`level`,`match`,`range`) VALUES ';
+            $sql = 'INSERT INTO '.$wpdb->prefix.'directories (user_id,category_id,`level`,`match`,`range`,`type`) VALUES ';
             $insertValue = '';
             foreach ($cateArr as $pgv){
 //                $match = serialize(['1' => ['match_id' => $match_id, 'match_level' => 1]]);
                 $match = '('.$match_id.')';
                 foreach ($pgv['data'] as $sv){
                     //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
-                    $oldId = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'brainpower WHERE category_id='.$pgv['parent_ID'].' AND user_id='.$sv['user_ID']);
+                    $oldId = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'directories WHERE category_id='.$pgv['parent_ID'].' AND user_id='.$sv['user_ID'].' AND `type`=1');
                     if($oldId){
 //                        $match = unserialize($oldId->match);
                         if(!preg_match('/('.$match_id.')/', $oldId->match)) $match = $oldId->match.'('.$match_id.')';
                         else $match = $oldId->match;
 //                        $match[$oldId->level+1] = ['match_id' => $match_id, 'match_level' => $oldId->level+1];
-                        $wpdb->update($wpdb->prefix.'brainpower', ['level' => $oldId->level+1, 'match' => $match], ['id' => $oldId->id]);
+                        $wpdb->update($wpdb->prefix.'directories', ['level' => $oldId->level+1, 'match' => $match], ['id' => $oldId->id]);
                     }else{
-                        $insertValue .= "('{$sv['user_ID']}','{$pgv['parent_ID']}','1','{$match}','1'),";
+                        $insertValue .= "('{$sv['user_ID']}','{$pgv['parent_ID']}','1','{$match}','1','1'),";
                     }
                 }
             }
