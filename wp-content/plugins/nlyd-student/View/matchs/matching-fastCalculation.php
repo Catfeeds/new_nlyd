@@ -53,7 +53,7 @@
                             <a class="matching-key c_white fs_16 bg_orange" id="del">删除</a>
                             <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</a>
                             <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</a>
-                            <a class="matching-key c_white fs_16 bg_orange" id="next">下一题</a>
+                            <div class="matching-key c_white fs_16 bg_orange" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 
@@ -65,44 +65,10 @@
 
 <script>
 jQuery(function($) {
-    if(window.location.host=='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        $(window).on("blur",function(){
-            var leavePage = $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                leavePage['leavePage']+=1;
-            }else{
-                var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    leavePage:1
-                }
-                leavePage= sessionData
-            }
-            $.SetSession('leavePage',leavePage)
-        })  
-        $(window).on("focus", function(e) {
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                var leveTimes=parseInt(leavePage['leavePage'])
-                if(leveTimes>0 && leveTimes<3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                }
-                if(leveTimes>=3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    setTimeout(function() {
-                        submit(time);
-                    }, 1000);
-                    submit(time);
-                }
-            }
-        });
-    }
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time);
+    })
     var even_add_time = parseInt($('#even_add_time').val()); //连加
     var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
     var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
@@ -206,6 +172,13 @@ jQuery(function($) {
     function randSZ() {//生成随即数字0-9
         return ( Math.floor ( Math.random ( ) * 9  ) );
     }
+    function rand29() {//生成随即数字2-9
+        var arr=['2','3','4','5','6','7','8','9'];
+
+        var pos = Math.round(Math.random() * (arr.length - 1));
+
+        return arr[pos];
+    }
     function randJJ() {//生成随机+-
             var arr=['+','-'];
 
@@ -285,7 +258,7 @@ jQuery(function($) {
     function CX(level) {//乘除运算
         var firstNumber='';//符号左侧数字
         var answer='';//计算出的答案
-        var secondNumber=compare(0);//符号右侧数字
+        var secondNumber=rand29();//符号右侧数字
         var symbol=randCC()//符号
         var question='';//运算
         
@@ -355,27 +328,6 @@ jQuery(function($) {
         var text=$('.answer').text()
         $('.answer').text(text+number)
     })
-    // $('.number').each(function(i){//键盘数字tap事件
-    //     var _this=$(this);
-    //     var dom=$(this)[0]
-    //     var hammertime = new Hammer(dom);
-    //     hammertime.on("tap", function (e) {
-    //         var number=_this.attr('date-number');
-    //         var text=$('.answer').text()
-    //         $('.answer').text(text+number)
-    //     });
-    // })
-    //删除tap事件
-    // var hammertime1 = new Hammer($('#del')[0]);
-    // hammertime1.on("tap", function (e) {
-    //     var text=$('.answer').text()
-    //     var len=text.length;
-    //     if(len>0){
-    //         var news=text.substring(0,len-1)
-    //         $('.answer').text(news)
-    //     }
-
-    // });
     mTouch('body').on('tap','#del',function(){
         var text=$('.answer').text()
         var len=text.length;
@@ -385,65 +337,67 @@ jQuery(function($) {
         }
     })
     //下一题tap事件
-    // var hammertime2 = new Hammer($('#next')[0]);
-    // hammertime2.on("tap", function (e) {
     mTouch('body').on('tap','#next',function(e){
-        nextBtn_click++
-        if (type=='乘除运算') {
-            if(nextBtn_click%cx_interval_times==0){//难度控制
-                level.symbol=1
-                level.number++
-                if(level.number>4){
-                    level.number=4
-                }
-            }
-        }else{
-            if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
-                level.number++
-                if(level.number>4){//数字长度达到4位最大限度，数字长度变为2，符号加1，为最大限度，数字长度不变
-                    level.symbol++
-                    if(level.symbol>=4){
+        var _this=$(this)
+        if(!_this.hasClass('disabled')){
+            _this.addClass('disabled')
+            nextBtn_click++
+            if (type=='乘除运算') {
+                if(nextBtn_click%cx_interval_times==0){//难度控制
+                    level.symbol=1
+                    level.number++
+                    if(level.number>4){
                         level.number=4
-                    }else{
-                        level.number=2
                     }
-                    
+                }
+            }else{
+                if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
+                    level.number++
+                    if(level.number>4){//数字长度达到4位最大限度，数字长度变为2，符号加1，为最大限度，数字长度不变
+                        level.symbol++
+                        if(level.symbol>=4){
+                            level.number=4
+                        }else{
+                            level.number=2
+                        }
+                        
+                    }
                 }
             }
-        }
-        var thisAjaxRow=ajaxData[ajaxData.length-1]
-        var yours=$('#answer').text()
-        var flag=true;
-        if(yours.length>0){
-            for(var i=0;i< yours.length;i++){
-                if(yours.charAt(i)=="-"){
-                    if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
-                        flag=false;
-                        break;
+            var thisAjaxRow=ajaxData[ajaxData.length-1]
+            var yours=$('#answer').text()
+            var flag=true;
+            if(yours.length>0){
+                for(var i=0;i< yours.length;i++){
+                    if(yours.charAt(i)=="-"){
+                        if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
+                            flag=false;
+                            break;
+                        }
                     }
+                } 
+                
+            }
+            thisAjaxRow['yours']=yours;
+            if(flag){//符合parseInt函数
+                if(parseInt(yours)==thisAjaxRow['rights']){
+                    thisAjaxRow['isRight']=true;
+                    $('#answer').removeClass('answer').addClass('right-fast')
+                }else{
+                    thisAjaxRow['isRight']=false;
+                    $('#answer').removeClass('answer').addClass('error-fast')
                 }
-            } 
-            
-        }
-
-        thisAjaxRow['yours']=yours;
-        if(flag){//符合parseInt函数
-            if(parseInt(yours)==thisAjaxRow['rights']){
-                thisAjaxRow['isRight']=true;
-                $('#answer').removeClass('answer').addClass('right-fast')
             }else{
                 thisAjaxRow['isRight']=false;
                 $('#answer').removeClass('answer').addClass('error-fast')
             }
-        }else{
-            thisAjaxRow['isRight']=false;
-            $('#answer').removeClass('answer').addClass('error-fast')
+            setTimeout(function() {
+                $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                inItFastCalculation(level,type);
+                nextQuestion()
+                _this.removeClass('disabled')
+            }, 400);
         }
-        setTimeout(function() {
-            $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
-            inItFastCalculation(level,type);
-            nextQuestion()
-        }, 500);
         
     });
     function submit(time){//提交答案
@@ -495,8 +449,6 @@ jQuery(function($) {
         }
     });  
 layui.use('layer', function(){
-    // var hammertime4 = new Hammer($('#sumbit')[0]);
-    // hammertime4.on("tap", function (e) {
     mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({

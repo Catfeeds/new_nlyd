@@ -579,22 +579,24 @@ if(!class_exists('MatchController')){
                         $this->save_match_project($post_ID,$match_project);
                     }
                     $match_meta['entry_start_time'] = $current_time = current_time('mysql'); //当前时间 == 发布时间 == 开始报名时间
-                    //var_dump($match_meta);
+                    //var_dump($post_data);die;
                     if($post_data->post_type == 'match'){
 
                         //根据时间计算状态
                         if(!empty($match_meta['match_project'])){
                             $match_use_time = 0;
                             foreach ($match_meta['match_project'] as $v){
-                                $project_alias = get_post_meta($v['match_project_id'],'project_alias');
+                                $project_alias = get_post_meta($v['match_project_id'],'project_alias')[0];
+                                //print_r($project_alias);
                                 if($project_alias == 'zxss'){
 
                                     $child_count_down = get_post_meta($project_alias,'child_count_down')[0];
+                                    //var_dump(111);die;
                                     if($v['child_count_down'] > 0){
                                         $child_count_down['even_add'] = $v['child_count_down'];
                                         $child_count_down['add_and_subtract'] = $v['child_count_down'];
                                         $child_count_down['wax_and_wane'] = $v['child_count_down'];
-                                    }elseif (!empty($child_count_down)){
+                                    }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
 
                                         $child_count_down['even_add'] *= 1;
                                         $child_count_down['add_and_subtract'] *= 1;
@@ -618,6 +620,7 @@ if(!class_exists('MatchController')){
                             }
 
                             //var_dump(date('Y-m-d H:i:s',$match_end_time));die;
+                           // die;
                         }else{
                             //var_dump($match_meta);die;
                             $match_use_time = (($match_meta['match_use_time'] * $match_meta['match_more'] + $match_meta['match_subject_interval'] + $match_meta['match_project_interval'])*6 - $match_meta['match_project_interval'])*60;

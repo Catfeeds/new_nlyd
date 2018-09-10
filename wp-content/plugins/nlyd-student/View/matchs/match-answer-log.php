@@ -31,7 +31,9 @@
                         <div class="subject-title">
                             <div class="c_black"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10">您的得分<?=$my_score?>分</div>
+                            <?php if(ACTION != 'answerLog'):?>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
+                            <?php endif;?>
                         </div>
                         <div class="subject-row">
                             <div class="one-info">
@@ -92,7 +94,7 @@ switch ($project_alias){
                 <?php endif;?>
                 <?php if($next_type == 2 && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_project_url?>">距下一项目开赛 <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
-                    <!-- <a href="<?=$next_project_url?>">下一项目</a> -->
+                     <!-- <a href="<?=$next_project_url?>">下一项目</a> -->
                 <?php endif;?>
                 <?php if($next_type == 3):?>
                     <a class="a-btn" href="<?=$next_project_url?>">下一项已开赛,进入比赛</a>
@@ -113,27 +115,8 @@ switch ($project_alias){
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
-        if(window.location.host=='ydbeta.gjnlyd.com'){
-            history.pushState(null, null, document.URL);
-            window.addEventListener('popstate', function () {
-                history.pushState(null, null, document.URL);
-            });
-            $(window).on("blur",function(){
-                var sessionData={
-                        match_id:$.Request('match_id'),
-                        project_id:$.Request('project_id'),
-                        match_more:$.Request('match_more')
-                    }
-                $.SetSession('leavePageWaits',sessionData)
-            })  
-            $(window).on("focus", function(e) {
-                var leavePageWaits= $.GetSession('leavePageWaits','1');
-                if(leavePageWaits && leavePageWaits['match_id']===$.Request('match_id') && leavePageWaits['project_id']===$.Request('project_id') && leavePageWaits['match_more']===$.Request('match_more')){
-                    window.location.reload()
-                    $.DelSession('leavePageWaits')
-                }
-            });
-        }
+
+          leavePageLoad('<?=$wait_url?>');
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';

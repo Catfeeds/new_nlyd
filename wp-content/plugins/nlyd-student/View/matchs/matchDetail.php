@@ -11,11 +11,8 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_public_view.'leftMenu.php';
-            
+            require_once leo_student_public_view.'leftMenu.php';
         ?>
-
-
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
@@ -128,9 +125,10 @@
 
 <script>
 jQuery(function($) { 
+    matchDetail()
     if($('.count_down').attr('data-seconds')<=120){
-        $.DelSession('leavePageWaitting')
-        //window.location.href=$(this).attr('href')
+        $.DelSession('waitting')
+        window.location.href='<?=$match['match_url']?>'
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
@@ -139,8 +137,10 @@ jQuery(function($) {
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
         $(this).text(time);
-        if(S<=120){//
-            //window.location.href=$(this).attr('href')
+        if(S==120){//
+            $.DelSession('waitting')
+            window.location.href='<?=$match['match_url']?>'
+            return false;
         }
     });
     layui.use(['element','flow'], function(){

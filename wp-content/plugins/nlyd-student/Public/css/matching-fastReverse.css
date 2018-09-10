@@ -77,8 +77,8 @@
     margin-left: 0;
 }
 .matching-keyboard-row:last-child .matching-key{
-    width: -webkit-calc(100% / 3 - 8px);
-    width: calc(100% / 3 - 8px);
+    width: -webkit-calc(50% - 6px);
+    width: calc(50% - 6px);
 }
 .count_p{
     margin-top: 40px;

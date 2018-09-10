@@ -13,7 +13,6 @@ class Student_Logins
     public $action;
     public function __construct($action)
     {
-
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
         if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
@@ -40,8 +39,11 @@ class Student_Logins
     }
 
     public function index(){
+
+        $setting = get_option('default_setting');
+
         $view = student_view_path.CONTROLLER.'/login.php';
-        load_view_template($view);
+        load_view_template($view,$setting);
     }
     public function bindPhone(){
         $data = [

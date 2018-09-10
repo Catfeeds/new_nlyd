@@ -18,8 +18,10 @@
                         </span>
                     </div>
                     <div class="matching-reading">
-                        <div class="article-title"><?=$questions->post_title?></div>
-                        <?=$questions->post_content?>
+                        <div class="article-title fs_16 c_black"><?=$questions->post_title?></div>
+                        <pre>
+                            <?=$questions->post_content?>
+                        </pre>
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
@@ -34,7 +36,10 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
-
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time);
+    })
     mTouch('body').on('tap','#complete',function(){//记忆完成
         var data={
             action:'memory_complete',
@@ -56,7 +61,7 @@ jQuery(function($) {
             }
         })
     })
-    submit=function(time){//提交答案
+    function submit(time){//提交答案
         var my_answer={};
         var data={
             action:'answer_submit',
@@ -78,45 +83,6 @@ jQuery(function($) {
                 $.alerts(res.data.info)
             }
         })
-    }
-    if(window.location.host=='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        $(window).on("blur",function(){
-            var leavePage = $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                leavePage['leavePage']+=1;
-            }else{
-                var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    leavePage:1
-                }
-                leavePage= sessionData
-            }
-            
-            $.SetSession('leavePage',leavePage)
-        })  
-        $(window).on("focus", function(e) {
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                var leveTimes=parseInt(leavePage['leavePage'])
-                if(leveTimes>0 && leveTimes<3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                }
-                if(leveTimes>=3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    setTimeout(function() {
-                        submit(time);
-                    }, 1000);
-                    submit(time);
-                }
-            }
-        });
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');

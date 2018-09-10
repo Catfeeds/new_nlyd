@@ -16,7 +16,7 @@
         </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin width-margin-pc">
-                    <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn">分享我的战绩</div></div>
+                    <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn">分享战绩</div></div>
                     <div class="single-match-title">
                         <div class="single-match-name"><?=$project_title?></div>
                         <?php if($match_more > 0):?>

@@ -234,8 +234,14 @@ class Student_Ajax
         ini_set('post_max_size','10M');
 
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
+        
+        // var_dump($_POST['match_id']);
+        // var_dump($_POST['project_id']);
+        // var_dump($_POST['match_more']);
+        // var_dump($_POST['match_action']);
+        // var_dump($_POST['surplus_time']);
+        // print_r($_POST);
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) || empty($_POST['match_action']) || !isset($_POST['surplus_time'])) wp_send_json_error(array('info'=>'参数错误'));
-
         if(!empty($_POST['my_answer'])){
             if(!is_array($_POST['my_answer'])) wp_send_json_error(array('info'=>'答案请以数组格式提交'));
             $my_answer = $_POST['my_answer'];
@@ -492,11 +498,21 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'请先实名认证'));
         }
 
-        if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
-        if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
+        //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
+        //if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'所属战队不能为空'));
         //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
+
+        $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta where match_id = {$_POST['match_id']} ";
+        $match_meta = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($match_meta)) wp_send_json_error(array('info'=>'比赛信息错误'));
+        if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>'当前比赛已禁止报名'));
+        $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
+
+        if(!empty($total)){
+            if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>'已达到最大报名数,请联系管理员'));
+        }
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
@@ -1236,16 +1252,15 @@ class Student_Ajax
         if(empty($orders)) wp_send_json_error(array('info'=>'暂无选手报名'));
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
-            //print_r($user);
-            $orders[$k]['nickname'] = $user['nickname'][0];
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
             $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);
                 $orders[$k]['real_age'] = $user_real['real_age'];
-
+                $orders[$k]['nickname'] = $user_real['real_name'];
             }else{
                 $orders[$k]['real_age'] = '--';
+                $orders[$k]['nickname'] = $user['nickname'][0];
             }
         }
         //print_r($orders);
@@ -1537,9 +1552,11 @@ class Student_Ajax
 
                     //验证格式
                     if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'请选择证件类型'));
-                    if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
-                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
+                    //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
+                    //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
                     if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'证件号格式不正确'));
+                    if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
+
                     if(!empty($_POST['user_gender'])){
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
                         unset($_POST['user_gender']);
@@ -1998,6 +2015,7 @@ class Student_Ajax
      * @param $user_id
      */
     public function setUserCookie($user_id){
+        update_user_meta($user_id,'user_session_id',session_id());
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;

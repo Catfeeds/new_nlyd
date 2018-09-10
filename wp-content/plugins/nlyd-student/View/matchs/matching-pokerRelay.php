@@ -71,7 +71,36 @@
 
 <script>
 jQuery(function($) { 
-    submit=function(time){//提交答案
+
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time);
+    })
+    if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
+        $.alerts('比赛结束');
+        setTimeout(function() {
+            submit(0)
+        }, 1000);
+    }
+    $('.count_down').countdown(function(S, d){//倒计时
+        var D=d.day>0 ? d.day+'天' : '';
+        var h=d.hour<10 ? '0'+d.hour : d.hour;
+        var m=d.minute<10 ? '0'+d.minute : d.minute;
+        var s=d.second<10 ? '0'+d.second : d.second;
+        var time=D+h+':'+m+':'+s;
+        $(this).attr('data-seconds',S).text(time)
+        if(S<=0){//本轮比赛结束
+            if(S==0){
+                $.alerts('倒计时结束，即将提交答案')
+            }else{
+                $.alerts('比赛结束')
+            }
+            setTimeout(function() {
+                submit(S)
+            }, 1000);
+        }
+    });
+    function submit(time){//提交答案
         var my_answer=[];
         $('.poker-wrapper .poker').each(function(){
             var text=$(this).attr('data-text');
@@ -100,70 +129,7 @@ jQuery(function($) {
             }
         })
     }
-    if(window.location.host=='ydbeta.gjnlyd.com'){
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
-        $(window).on("blur",function(){
-            var leavePage = $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                leavePage['leavePage']+=1;
-            }else{
-                var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    leavePage:1
-                }
-                leavePage= sessionData
-            }
-            $.SetSession('leavePage',leavePage)
-        })  
-        $(window).on("focus", function(e) {
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                var leveTimes=parseInt(leavePage['leavePage'])
-                if(leveTimes>0 && leveTimes<3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                }
-                if(leveTimes>=3){
-                    $.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
-                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    setTimeout(function() {
-                        submit(time);
-                    }, 1000);
-                    submit(time);
-                }
-            }
-        });
-    }
-    if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0)
-        }, 1000);
-    }
-    $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-        $(this).attr('data-seconds',S).text(time)
-        if(S<=0){//本轮比赛结束
-            if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
-            }else{
-                $.alerts('比赛结束')
-            }
-            setTimeout(function() {
-                submit(S)
-            }, 1000);
-        }
-    });
-
-    layui.use(['layer'], function(){
+layui.use(['layer'], function(){
 
 
 //提交tap事件

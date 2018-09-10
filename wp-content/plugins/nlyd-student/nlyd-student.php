@@ -61,6 +61,9 @@ if(!class_exists('StudentController')){
             //引入学生端公用css/js
             add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
+            add_action('wp_head',array($this,'is_abnormal_login'));
+
+
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
         }
@@ -211,10 +214,10 @@ if(!class_exists('StudentController')){
             wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-common' );
             //引入layui
-            wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'));
+            wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'),leo_student_version);
             wp_enqueue_style( 'my-layui-css' );
 
-            wp_register_style( 'my-student', student_css_url.'index.css',array('style'));
+            wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
             wp_enqueue_style( 'my-student' );
             // //新闻列表css
             // wp_register_style( 'my-student-news-list', student_css_url.'news/news-list.css',array('my-student') );
@@ -231,6 +234,58 @@ if(!class_exists('StudentController')){
             <?php
         }
 
+        /**
+         * 判断是否异地登录
+         */
+        public function is_abnormal_login(){
+            $setting = get_option('default_setting');
+
+            if($setting['default_abnormal_login'] == 1){
+
+                if(is_user_logged_in() && !is_admin()){
+                    global $current_user;
+                    $session_id = get_user_meta($current_user->ID,'user_session_id')[0];
+                    /*var_dump($session_id);
+                    var_dump(session_id());*/
+                    //die;
+                    if($session_id != session_id()){?>
+                        <script>
+                            jQuery(function($)  {
+                                $.alerts('账号异地登录,即将退出<br/>请及时修改密码');
+                                $.ajax({
+                                    type: "POST",
+                                    url: window.admin_ajax,
+                                    data: {'action':'user_logout','new_date':new Date().getTime()},
+                                    dataType:'json',
+                                    timeout:3000,
+                                    success: function(data, textStatus, jqXHR){
+                                        // console.log(data)
+                                        if(data.success){
+                                            if(data.data.url){
+                                                setTimeout(function(){
+                                                    window.location.href=data.data.url
+                                                },2300)
+                                            }
+                                        }else{//登陆失败。记录登录时间
+                                        }
+
+
+                                    },
+                                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                                        // 通常 textStatus 和 errorThrown 之中
+                                        // 只有一个会包含信息
+                                        // 调用本次AJAX请求时传递的options参数
+                                        // console.log(XMLHttpRequest, textStatus, errorThrown)
+                                    }
+                                });
+                            })
+
+                        </script>
+                        <?php
+                    }
+                }
+            }
+        }
 
 
 

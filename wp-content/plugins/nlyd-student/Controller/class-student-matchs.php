@@ -168,7 +168,7 @@ class Student_Matchs extends Student_Home
         /**********************获取比赛信息end********************************/
 
         /*******************获取当前比赛项目配置******************************/
-        if(isset($_GET['project_id'])){
+        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog')) ){
 
             if (empty($this->project_key_array[$_GET['project_id']])){
                 $this->get_404('比赛项目错误');
@@ -308,8 +308,8 @@ class Student_Matchs extends Student_Home
                         $project[$k]['coach_id'] = $row->coach_id;
                     }
                 }
-
-                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$val['post_id'].'/project_id/'.$val['match_project_id']);
+                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
+                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
                 $project[$k]['project'][] = $val;
 
             }
@@ -1024,20 +1024,24 @@ class Student_Matchs extends Student_Home
                 $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
                 $next_type = 1;
                 $next_count_down = $this->current_project['project_end_time']-get_time();
+                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
             }else{
                 $next_project_url = home_url('/matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
+                $wait_url = '';
             }
         }else{
 
             if($this->next_project['project_start_time'] < get_time()){
                 $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
                 $next_type = 4;
+                $wait_url = '';
             }else{
                 $match_more = 1;
                 $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['project_id'].'/match_more/'.$match_more);
                 $next_type = 2;
                 $next_count_down = $this->next_project['project_start_time']-get_time();
+                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
             }
         }
         //print_r($this->next_project);
@@ -1091,6 +1095,7 @@ class Student_Matchs extends Student_Home
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_count_down'=>$next_count_down,
             'next_project_url'=>$next_project_url,
+            'wait_url' =>$wait_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
 
@@ -1857,6 +1862,8 @@ class Student_Matchs extends Student_Home
 
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
+        wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
+        wp_enqueue_script( 'student-leavePage' );
         if(ACTION=='info'){//比赛详情页
             wp_register_style( 'my-student-matchDetail', student_css_url.'matchDetail.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchDetail' );
@@ -1867,11 +1874,13 @@ class Student_Matchs extends Student_Home
         //比赛初始页面
         if(ACTION == 'initialMatch'){
 
-                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-mTouch' );
-                if($this->project_alias=='nxss'){//逆向速算初始页
-                    wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-                    wp_enqueue_style( 'my-student-fastReverse' );
+            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mTouch' );
+            if($this->project_alias=='nxss'){//逆向速算初始页
+                wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-check24_answer' );
+                wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+                wp_enqueue_style( 'my-student-fastReverse' );
 
             }
 
