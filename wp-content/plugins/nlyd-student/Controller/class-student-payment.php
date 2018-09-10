@@ -99,6 +99,33 @@ class Student_Payment {
 
     }
 
+    /**
+     * 微信公众号支付
+     */
+    public function wx_jsApiPay(){
+        $id = intval($_GET['id']);
+        global $wpdb,$current_user;
+        $order = $wpdb->get_row(
+            'SELECT serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
+            .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
+        if(!$order) return false;
+        //请求数据
+        //1.统一下单方法
+        $result = self::$payClass->h5UnifiedOrder($this->getWxParam($order));
+//        var_dump($result);return;
+        if($result != false){
+            if($result['status']){
+                echo $result['data'];
+//                echo '<script>window.location.href="'.$result['data'].'&redirect_url='.urlencode(home_url('payment/success/type/wxpay/serialnumber/'.$order['serialnumber'])).'"</script>';
+            }else{
+                echo $result['data'];
+            }
+        }else{
+            //发起支付失败
+            return false;
+        }
+    }
+
 
     /**
      * 微信H5支付
@@ -170,7 +197,9 @@ class Student_Payment {
                 .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no.' AND pay_status=1', ARRAY_A);
             if($order){
 
-                return $this->getWxParam($order);
+                $param = $this->getWxParam($order);
+                $param['order_type'] = $order['order_type'];
+                return $param;
             }else{
                 return false;
             }
@@ -179,11 +208,13 @@ class Student_Payment {
         if($queryRes && $queryRes['data']['trade_state'] == 'SUCCESS'){
             // TODO 处理业务逻辑
             $serialnumber = $queryRes['notifyData']['out_trade_no'];
+//            file_put_contents('aax.txt',json_encode($queryRes['order']));
+            $pay_status = 2;
             switch ($queryRes['order']['order_type']){
-                case 1://比赛订单
+                case '1' or 1://比赛订单
                     $pay_status = 4;
                     break;
-                case 2://s商品订单
+                case '2' or 2://s商品订单
                     $pay_status = 2;
                     break;
             }

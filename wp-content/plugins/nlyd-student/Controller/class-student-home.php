@@ -34,6 +34,7 @@ class Student_Home
     //获取用户信息
     public function get_user_info(){
         global $current_user,$wpdb,$user_info;
+
         $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID}",ARRAY_A);
         $user_info = array_column($rows,'meta_value','meta_key');
         //print_r($user_info);

@@ -13,7 +13,6 @@ class Student_Logins
     public $action;
     public function __construct($action)
     {
-
         if(is_user_logged_in()) wp_redirect(home_url('account'));
 
         if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){

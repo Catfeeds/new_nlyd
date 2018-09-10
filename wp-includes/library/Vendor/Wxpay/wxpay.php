@@ -120,6 +120,72 @@ class wxpay
     }
 
     /**
+     * JsAPI(公众号支付)
+     */
+    public function jsApiPay($params,$timeOut=6){
+        $url = self::API_URL_PREFIX.self::UNIFIEDORDER_URL;
+        //检测必填参数
+        //异步通知url未设置，则使用配置文件中的url
+
+
+        $inputObj = new WxPayUnifiedOrder();
+
+        $inputObj->SetAppid($this->appid);//公众账号ID
+        $inputObj->SetMch_id($this->mch_id);//商户号
+        $inputObj->SetSpbill_create_ip($this->get_client_ip());//终端ip
+        //$inputObj->SetSpbill_create_ip("1.1.1.1");
+        $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+        $inputObj->SetBody($params['body']);
+        $inputObj->SetAttach($params['attach']);//附加数据在查询api和支付通知中远洋返回.
+        $inputObj->SetOut_trade_no($params['serialnumber']); //商户订单号
+        $inputObj->SetTotal_fee($params['price']*100);//总金额
+        $inputObj->SetNotify_url($params['notify_url']);
+        $inputObj->SetTrade_type('JSAPI');
+//        $inputObj->SetScene_info('{"store_info": {"id":"'.$this->mch_id.'","name": "国际脑力运动","wap_name": "国际脑力运动"}}');
+
+
+        //签名
+        $inputObj->SetSign($this->key);
+        $xml = $inputObj->ToXml();
+//        var_dump($xml);
+//        die;
+
+//        $startTimeStamp = self::getMillisecond();//请求开始时间
+        $response = self::postXmlCurl($xml, $url, false, $timeOut);
+        if(false == $response) return false;
+        $result = WxPayResults::Init($response,$this->key);
+        $this->writeLog($result,'JsApi发起支付');
+        if($result['return_code'] === 'SUCCESS' && $result['return_msg'] === 'OK' && $result['result_code'] === 'SUCCESS' && $result['trade_type'] === 'MWEB'){
+
+            $time_stamp = time();
+            $pack	= 'Sign=WXPay';
+            //输出参数列表
+            $prePayParams =array();
+            $prePayParams['appid']		=$result['appid'];
+            $prePayParams['partnerid']	=$result['mch_id'];
+            $prePayParams['prepay_id']	=$result['prepay_id'];
+            $prePayParams['noncestr']	=$result['nonce_str'];
+            $prePayParams['package']	=$pack;
+            $prePayParams['timestamp']	=$time_stamp;
+            //echo json_encode($prePayParams);
+            $result = WxPayResults::InitFromArray($prePayParams,true)->GetValues();
+//        self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+
+            return ['status' => true, 'data' => $result];
+        }else{
+            if(isset($result['err_code'])){
+                $err_code = $this->error_code($result['err_code']);
+            }else{
+                $err_code = '发起支付失败';
+            }
+            return ['status' => false, 'data' => $err_code];
+        }
+        // 统一下单接口返回正常的prepay_id，再按签名规范重新生成签名后，将数据传输给APP。
+        // 参与签名的字段名为appId，partnerId，prepayId，nonceStr，timeStamp，package。注意：package的值格式为Sign=WXPay
+
+    }
+
+    /**
      * 错误代码
      * @param $code 服务器输出的错误代码
      * return string

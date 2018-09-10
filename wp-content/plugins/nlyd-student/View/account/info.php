@@ -122,7 +122,6 @@
                                 </div>
                                 <div class="layui-bg-white img-zoos">
                                     <p class="tps">上传身份证</p>
-
                                         <?php if(!empty($user_info['user_ID_Card'])){ ?>
                                         <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
                                         <div class="post-img no-dash">

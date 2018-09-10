@@ -18,7 +18,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','2.0.2' );//样式版本
+            define( 'leo_match_version','2.0.4' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -361,7 +361,7 @@ if(!class_exists('MatchController')){
                                     <input type="hidden" name="max_file_size" value="2097152">
 <!--                                    <small>最大尺寸：2 MB</small>-->
 
-
+                                    <a class="button" type="button" href="?page=download&action=question">下载模板</a>
                                 </td>
                             </tr>
 <!--                            <tr>-->

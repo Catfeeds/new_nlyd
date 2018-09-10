@@ -140,19 +140,30 @@ class Student_Weixin
     */
     public function save_user($res = [],$type='',$user_id=0){
         global $wpdb;
-
+        $userMetaType = false;
         if($type == true){
             //绑定手机后执行
             if($user_id < 1){
                 /*保存用户信息*/
                 //当前手机是否已注册
-                $mobileUser = $wpdb->get_row('SELECT ID FROM '.$wpdb->users.' WHERE user_mobile='.$res['mobile']);
+                $mobileUser = $wpdb->get_row('SELECT ID,weChat_openid FROM '.$wpdb->users.' WHERE user_mobile='.$res['mobile']);
+                //TODO 判断当前手机是否已经绑定过微信
+                if($mobileUser->weChat_openid != false){
+                    if(is_ajax()){
+                        wp_send_json_error(array('info'=>'当前手机已绑定其它微信'));
+                        exit;
+                    }else{
+                        return false;
+                    }
+                }
+
                 $auth = array(
                     'weChat_openid'        => $res['openid'],
                     'weChat_union_id'        => $res['unionid'],
                 );
                 $wpdb->startTrans();
                 if(!$mobileUser){
+                    $userMetaType = true;
                     $auth['user_nicename'] = $res['nickname'];
                     $auth['display_name'] = $res['mobile'];
                     $user_id = wp_create_user($res['mobile'],'123456','',$res['mobile']);
@@ -167,12 +178,12 @@ class Student_Weixin
                 }
                 $wpdb->commit();
             }else{
-                //已存在用户绑定手机
+                //已存在的微信用户绑定手机
                 $bool = $wpdb->update($wpdb->users,['user_mobile' => $res['mobile']],['ID' => $user_id]);
                 if(!$bool) return false;
             }
         }
-        $this->insertUsermeta($res,$user_id,true);
+        $this->insertUsermeta($res,$user_id,$userMetaType);
 
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
@@ -199,23 +210,29 @@ class Student_Weixin
             default:
                 $sex = '未知';
         }
-        $user_address = ['country' => $res['country'], 'province' => $res['province'], 'city' => $res['city']];
-        if($type == true){
-            //更新.
-            $result = true;
-            update_user_meta($user_id, 'user_gender', $sex);
-            update_user_meta($user_id, 'user_address', $user_address);
+//        $user_address = ['country' => $res['country'], 'province' => $res['province'], 'city' => $res['city']];
+        if($type){
+//            update_user_meta($user_id, 'user_gender', $sex);
+//            update_user_meta($user_id, 'user_address', $user_address);
             update_user_meta($user_id, 'nickname', $res['nickname']);
             update_user_meta($user_id, 'user_head', $res['headimgurl']);
-        }else{
-            $sql = 'INSERT INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
-            ('.$user_id.',"user_gender", "'.$sex.'"),
-            ('.$user_id.',"user_address",\''.serialize($user_address).'\'),
-            ('.$user_id.',"nickname","'.$res['nickname'].'"),
-            ('.$user_id.',"user_head","'.$res['headimgurl'].'")';
-            $result = $wpdb->query($sql);
         }
-        return $result;
+//        if($type == true){
+//            //更新.
+//            $result = true;
+//            update_user_meta($user_id, 'user_gender', $sex);
+//            update_user_meta($user_id, 'user_address', $user_address);
+//            update_user_meta($user_id, 'nickname', $res['nickname']);
+//            update_user_meta($user_id, 'user_head', $res['headimgurl']);
+//        }else{
+//            $sql = 'INSERT INTO '.$wpdb->usermeta.' (user_id,meta_key,meta_value) VALUES
+//            ('.$user_id.',"user_gender", "'.$sex.'"),
+//            ('.$user_id.',"user_address",\''.serialize($user_address).'\'),
+//            ('.$user_id.',"nickname","'.$res['nickname'].'"),
+//            ('.$user_id.',"user_head","'.$res['headimgurl'].'")';
+//            $result = $wpdb->query($sql);
+//        }
+        return true;
 
     }
 

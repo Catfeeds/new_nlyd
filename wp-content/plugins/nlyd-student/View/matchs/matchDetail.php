@@ -11,11 +11,8 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_public_view.'leftMenu.php';
-            
+            require_once leo_student_public_view.'leftMenu.php';
         ?>
-
-
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
@@ -42,6 +39,12 @@
                                         <div class="nl-match-info text_1 c_black">
                                             <?=$match['match_start_time']?>
                                             <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
+                                        </div>
+                                    </div>
+                                    <div class="nl-match-detail">
+                                        <div class="nl-match-label">结束时间：</div>
+                                        <div class="nl-match-info text_1 c_black">
+                                            <?=$match['match_end_time']?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
