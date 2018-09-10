@@ -19,7 +19,7 @@
                    
                     <div class="match-title c_black"><?=$match_title?>
                         <?php if($pay_status == 2):?>
-                        <a class="share" id="shareBtn">分享我的战绩</a>
+                        <a class="share" id="shareBtn">分享战绩</a>
                         <?php endif;?>
                     </div>
                    

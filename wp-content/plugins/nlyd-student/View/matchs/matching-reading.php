@@ -23,14 +23,14 @@
                             if(!empty($match_questions)){
                                 foreach ($match_questions as $k => $val ){ ?>
                             <div class="matching-reading <?=$key==0?'active':''?>" data-index="<?=$key;?>" data-id="<?=$k;?>">
-                                <p class="c_black"><?=$key+1;?>.<?=$val?></p>
+                                <p class="c_black"><?=$key+1;?>、<?=$val?></p>
                                 <?php
                                 foreach ($questions_answer[$k]['problem_select'] as $y => $v ){
                                    // print_r($v);
                                 ?>
                                 <div class="reading-select">
                                     <input type="checkbox" name='<?=$y?>' class="select_answer" lay-skin="primary">
-                                    <span  class="c_black"><?=get_select($y)?>. <?=$v;?></span>
+                                    <span  class="c_black"><?=get_select($y)?>、<?=$v;?></span>
                                 </div>
                                 <?php } ?>
                             </div>

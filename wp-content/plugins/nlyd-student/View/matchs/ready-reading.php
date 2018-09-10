@@ -18,8 +18,10 @@
                         </span>
                     </div>
                     <div class="matching-reading">
-                        <div class="article-title"><?=$questions->post_title?></div>
-                        <?=$questions->post_content?>
+                        <div class="article-title fs_16 c_black"><?=$questions->post_title?></div>
+                        <pre>
+                            <?=$questions->post_content?>
+                        </pre>
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
