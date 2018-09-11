@@ -77,9 +77,13 @@
     position: absolute;
     left: 7px;
 }
-/* .layui-form-radio>i{
-    margin-right: 6px;
-} */
+.layui-form-radio>i{
+    margin-right: 5px;
+}
+.layui-form-radio{
+    margin: 0;
+    padding-right: 0;
+}
 .layui-form-checkbox[lay-skin=primary] span{
     color: #262626;
 }

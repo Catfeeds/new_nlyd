@@ -201,16 +201,18 @@ if(!class_exists('StudentController')){
 
             wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-cookie' );
+            //序列化form表单Json对象
+            wp_register_script( 'student-serialize-object',student_js_url.'jquery.serialize-object.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-serialize-object' );
+            //手势操作
+            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mTouch' );
             //引入layui
             wp_register_script( 'student-layui',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-layui' );
             // 表单验证语言包
             wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-languages' );
- 
-            //序列化form表单Json对象
-            wp_register_script( 'student-serialize-object',student_js_url.'jquery.serialize-object.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-serialize-object' );
 
             wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-common' );
@@ -265,7 +267,7 @@ if(!class_exists('StudentController')){
                                             if(data.data.url){
                                                 setTimeout(function(){
                                                     window.location.href=data.data.url
-                                                },2300)
+                                                },3000)
                                             }
                                         }else{//登陆失败。记录登录时间
                                         }

@@ -30,12 +30,14 @@
                                 ?>
                                 <!-- 多选 -->
                                 <div class="reading-select">
-                                    <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary" title="<?=get_select($y)?>、<?=$v;?>">
+                                    <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary">
+                                    <span><?=get_select($y)?>、<?=$v;?></span>
                                 </div>
                                 <!-- 单选 -->
-                                <!-- <div class="reading-select">
-                                    <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>" title="<?=get_select($y)?>、<?=$v;?>">
-                                </div> -->
+                                <div class="reading-select">
+                                    <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
+                                    <span><?=get_select($y)?>、<?=$v;?></span>
+                                </div>
                                 <?php } ?>
                             </div>
                             <?php ++$key;?>
@@ -163,7 +165,7 @@ jQuery(function($) {
 })
 
     var n=0;
-    if($('.matching-reading').length==1){
+    if($('.matching-reading').length<=1){
         $('.a-two.right').addClass('disabled')
     }
     mTouch('body').on('tap','.a-two.left',function(e){//上一题

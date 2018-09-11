@@ -123,7 +123,14 @@ if(!class_exists('MatchController')){
          * 添加子菜单
          */
         public function add_submenu(){
-            add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'manage_options', 'import', array($this,'questionImport') );
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'question_import' ) ) {
+                global $wp_roles;
+
+                $role = 'question_import';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+            }
+            add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'question_import', 'question_import', array($this,'questionImport') );
 
         }
 
@@ -1234,6 +1241,15 @@ if(!class_exists('MatchController')){
          * 自定义分类
          */
         public function create_question_category(){
+
+            if ( !current_user_can( 'problem' ) ) {
+                global $wp_roles;
+
+                $role = 'edit_problem';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+            }
+
             register_taxonomy('question_genre', 'question', array('labels' => array('name' => '题库类型', 'add_new_item' => '添加新的题库类型', 'new_item_name' => "新的题库类型"), 'show_ui' => true, 'show_tagcloud' => true, 'hierarchical' => true));
         }
 

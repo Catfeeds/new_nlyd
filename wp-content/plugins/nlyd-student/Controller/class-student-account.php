@@ -258,8 +258,8 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION=='address'){//地址列表
-            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-mTouch' );
+            // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            // wp_enqueue_script( 'student-mTouch' );
             wp_register_script( 'student-address',student_js_url.'account/address.js',array('jquery'), leo_student_version ,true );
             wp_enqueue_script( 'student-address' );
             wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
@@ -278,18 +278,14 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION == 'train'){//我的训练
-            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-cookie' );
 
             wp_register_style( 'my-student-match', student_css_url.'match.css',array('my-student') );
             wp_enqueue_style( 'my-student-match' );
         }
 
         if(ACTION == 'course'){//我的课程
-            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-mTouch' );
-            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-cookie' );
+            // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            // wp_enqueue_script( 'student-mTouch' );
         }
 
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
