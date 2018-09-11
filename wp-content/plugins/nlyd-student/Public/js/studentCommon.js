@@ -245,7 +245,7 @@ jQuery(document).ready(function($) {
     //设置AJAX的全局默认选项
     $.ajaxSetup( {
         url: window.admin_ajax+"?date="+new Date().getTime(), // 默认URL
-        aysnc: false , // 默认同步加载
+        aysnc: true ,
         type: "POST" , // 默认使用POST方式
         dataType:'json',
         timeout:3000,
