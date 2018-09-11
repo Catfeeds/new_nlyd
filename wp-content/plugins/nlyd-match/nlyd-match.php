@@ -480,7 +480,8 @@ if(!class_exists('MatchController')){
                     echo $row['match_cost'];
                     break;
                 case 'students':
-                    echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
+                    $student_num = $wpdb->get_var('SELECT count(id) AS num FROM '.$wpdb->prefix.'order WHERE match_id='.$id.' AND (pay_status=2 OR pay_status=3 OR pay_status=4) AND order_type=1');
+                    echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员('.$student_num.')</a>';
 //                    if($row['match_status'] == -3){
 //                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
 //                    }else{
