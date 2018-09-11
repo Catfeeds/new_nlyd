@@ -241,6 +241,21 @@ jQuery(document).ready(function($) {
             })
         })
     } 
+
+    //设置AJAX的全局默认选项
+    $.ajaxSetup( {
+        url: window.admin_ajax+"?date="+new Date().getTime(), // 默认URL
+        aysnc: false , // 默认同步加载
+        type: "POST" , // 默认使用POST方式
+        dataType:'json',
+        timeout:3000,
+        error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
+            // jqXHR 是经过jQuery封装的XMLHttpRequest对象
+            // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
+            // errorMsg 可能为： "Not Found"、"Internal Server Error"等
+            $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );        
+        }
+    } );
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
     addcamera()

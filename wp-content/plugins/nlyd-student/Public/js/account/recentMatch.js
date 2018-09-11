@@ -13,7 +13,8 @@ jQuery(function($) {
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){  
                     console.log(res)
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
@@ -91,12 +92,6 @@ jQuery(function($) {
                                 }
                                 
                             }else{
-                                // if(page==1){
-                                //     var dom='<div class="no-info">近期比赛无记录</div>'
-                                //     lis.push(dom) 
-                                // }else{
-                                //     $.alerts('没有更多了')
-                                // }
                                 next(lis.join(''),false)
                             }
                             $('.getTimes').countdown(function(S, d){//倒计时
@@ -111,7 +106,9 @@ jQuery(function($) {
                                     $(this).text("报名结束");
                                 }
                             });
-                    })   
+                        }
+                    })  
+                     
             }
         });
     })

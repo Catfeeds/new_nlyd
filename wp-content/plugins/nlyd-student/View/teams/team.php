@@ -98,7 +98,8 @@ layui.use(['layer','flow'], function(){
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){  
                     console.log(res)
                         if(res.success){
                             // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
@@ -157,14 +158,9 @@ layui.use(['layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            // if(page==1){
-                            //     var dom='<div class="no-info">暂无任何战队相关</div>'
-                            //     lis.push(dom)     
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
+                    }
                 })         
         }
     });
@@ -194,15 +190,17 @@ layui.use(['layer','flow'], function(){
                     team_id:id,
                     handle:'join',//操作 join:入队 其他:离队
                 };
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){//设为主训教练
-                    $.alerts(res.data.info)
-                    if(res.success){
-                    wait='<div class="team-detail-row waitting">'
-                            +'<span class="team-info">入队申请审核中</span>'
-                        +'</div>'
-                       _this.removeClass('canJoin').addClass('waitting').html('<i class="iconfont">&#xe62f;</i>');
-                       _this.parents('.team-row').find('.team-detail').append(wait)
-                    } 
+                $.ajax({
+                    data:data,success(res,ajaxStatu,xhr){  //设为主训教练
+                        $.alerts(res.data.info)
+                        if(res.success){
+                        wait='<div class="team-detail-row waitting">'
+                                +'<span class="team-info">入队申请审核中</span>'
+                            +'</div>'
+                        _this.removeClass('canJoin').addClass('waitting').html('<i class="iconfont">&#xe62f;</i>');
+                        _this.parents('.team-row').find('.team-detail').append(wait)
+                        } 
+                    }
                 })
             }
             ,closeBtn:2

@@ -193,7 +193,8 @@ jQuery(function($) {
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){  
                     // console.log(res)
                         if(res.success){ 
                             $.each(res.data.list,function(index,value){
@@ -218,14 +219,9 @@ jQuery(function($) {
                                 next(lis.join(''),true)
                             }
                         }else{
-                            // if(page==1){
-                            //     var dom='<tr><td colspan="7">无学员信息</td></tr>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
+                    }
                 })   
             }
         });

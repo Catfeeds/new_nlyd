@@ -276,14 +276,9 @@ jQuery(document).ready(function($) {
             formData.append('meta_key','user_head');
             formData.append('meta_val',blob);
             $.ajax({
-                type: "POST",
-                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: formData,
-                    dataType:'json',
-                    timeout:3000,
                     contentType : false,
                     processData : false,
-                    cache : false,
                     success: function(data, textStatus, jqXHR){
                         $.alerts(data.data.info)
                         if(data.data.head_url){
@@ -292,10 +287,7 @@ jQuery(document).ready(function($) {
                         bg.removeClass('bg-show')
                         cropper.destroy();
                         cropper = null;
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    },
+                    }
                 })
             }); 
         }

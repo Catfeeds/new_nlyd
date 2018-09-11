@@ -89,131 +89,132 @@ jQuery(function($) {
                         postData['match_type']="history";
                     }
                     var lis = [];
-                    $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
-                        isClick[id]=true
-                        if(res.success){
-                            $.each(res.data.info,function(i,v){
-                                // 已结束-3
-                                // 等待开赛-2
-                                // 未开始-1
-                                // 报名中1
-                                // 进行中2
-                                var isMe='';//标签
-                                var match_status='c_blue';//比赛中高亮
-                                var rightBtn='';  
-                                var endTime="";//报名截止
-                                var domTime=v.entry_end_time.replace(/-/g,'/');
-                                var end_time = new Date(domTime).getTime();//月份是实际月份-1
-                                var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-                                var sys_second = (end_time-serverTimes)/1000;
-                                var sys_second_text=sys_second>0 ? '' :  "报名结束";
-                                if(v.user_id!=null){//我报名参加的赛事
-                                    isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
-                                }
-                                if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
-                                    if(v.match_status==2){
-                                        match_status='c_orange';  
+                    $.ajax({
+                        data: postData,success(res,ajaxStatu,xhr){
+                            isClick[id]=true
+                            if(res.success){
+                                $.each(res.data.info,function(i,v){
+                                    // 已结束-3
+                                    // 等待开赛-2
+                                    // 未开始-1
+                                    // 报名中1
+                                    // 进行中2
+                                    var isMe='';//标签
+                                    var match_status='c_blue';//比赛中高亮
+                                    var rightBtn='';  
+                                    var endTime="";//报名截止
+                                    var domTime=v.entry_end_time.replace(/-/g,'/');
+                                    var end_time = new Date(domTime).getTime();//月份是实际月份-1
+                                    var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
+                                    var sys_second = (end_time-serverTimes)/1000;
+                                    var sys_second_text=sys_second>0 ? '' :  "报名结束";
+                                    if(v.user_id!=null){//我报名参加的赛事
+                                        isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                     }
-                                    if(v.user_id==null){//未报名（未登录）
-                                        rightBtn=""
+                                    if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
+                                        if(v.match_status==2){
+                                            match_status='c_orange';  
+                                        }
+                                        if(v.user_id==null){//未报名（未登录）
+                                            rightBtn=""
+                                        }else{
+                                            if(v.right_url.length>0){
+                                                rightBtn='<div class="nl-match-button last-btn">'
+                                                            +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                        +'</div>'
+                                            }
+                                        }
+                                        endTime='<div class="nl-match-detail">'
+                                                    +'<span>报名截止：</span>'
+                                                    +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                    +sys_second_text+'</span>'
+                                                +'</div>'
+                                    }else if(v.match_status==-3){//已结束
+                                        rightBtn='<div class="nl-match-button last-btn">'
+                                                    +'<a href="'+v.right_url+'">查看战绩</a>'
+                                                +'</div>';   
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button last-btn">'
                                                         +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
                                                     +'</div>'
+                                            if(v.match_status==1 && v.user_id!=null){//报名中已报名
+                                                rightBtn='<div class="nl-match-button last-btn">'
+                                                            +'<a class="bg_gradient_grey">已报名参赛</a>'
+                                                        +'</div>'
+                                                
+                                            }
                                         }
+                                        endTime='<div class="nl-match-detail">'
+                                                    +'<span>报名截止：</span>'
+                                                    +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                    +sys_second_text+'</span>'
+                                                +'</div>'
                                     }
-                                    endTime='<div class="nl-match-detail">'
-                                                +'<span>报名截止：</span>'
-                                                +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                +sys_second_text+'</span>'
-                                            +'</div>'
-                                }else if(v.match_status==-3){//已结束
-                                    rightBtn='<div class="nl-match-button last-btn">'
-                                                +'<a href="'+v.right_url+'">查看战绩</a>'
-                                            +'</div>';   
+                                    var onBtn="" ;
+                                    if(rightBtn.length==0){
+                                        onBtn="onBtn"
+                                    }
+                                    var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
+                                                +'<div class="nl-match">'
+                                                    +'<div class="nl-match-header">'
+                                                        +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'
+                                                        +isMe
+                                                        +'<p class="long-name fs_12 c_black3">'+v.post_content+'</p>'
+                                                    +'</div>'
+                                                    +'<div class="nl-match-body">'
+                                                        +'<div class="nl-match-detail">'
+                                                            +'<span>开赛日期：</span>'
+                                                            +'<span class="c_black">'+v.match_start_time+'</span>'
+                                                            +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
+                                                        +'</div>'
+                                                        +'<div class="nl-match-detail">'
+                                                            +'<span>比赛地点：</span>'
+                                                            +'<span class="c_black">'+v.match_address+'</span>'
+                                                        +'</div>'
+                                                        +'<div class="nl-match-detail">'
+                                                            +'<span>报名费用：</span>'
+                                                            +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                        +'</div>'
+                                                        +endTime
+                                                        +'<div class="nl-match-detail">'
+                                                            +'<span>已报选手：</span>'
+                                                            +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                        +'</div>'
+                                                    +'</div>'
+                                                    +'<div class="nl-match-footer">'
+                                                        +'<div class="nl-match-button">'
+                                                            +'<a class="'+onBtn+'" href="'+v.left_url+'">查看详情</a>'
+                                                        +'</div>'
+                                                        +rightBtn
+                                                    +'</div>'
+                                                +'</div>'
+                                            +'</li>'
+                                    lis.push(dom) 
+                                })
+                                if (res.data.info.length<10) {
+                                    next(lis.join(''),false) 
                                 }else{
-                                    if(v.right_url.length>0){
-                                        rightBtn='<div class="nl-match-button last-btn">'
-                                                    +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
-                                                +'</div>'
-                                        if(v.match_status==1 && v.user_id!=null){//报名中已报名
-                                            rightBtn='<div class="nl-match-button last-btn">'
-                                                        +'<a class="bg_gradient_grey">已报名参赛</a>'
-                                                    +'</div>'
-                                            
-                                        }
-                                    }
-                                    endTime='<div class="nl-match-detail">'
-                                                +'<span>报名截止：</span>'
-                                                +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                +sys_second_text+'</span>'
-                                            +'</div>'
+                                    next(lis.join(''),true) 
                                 }
-                                var onBtn="" ;
-                                if(rightBtn.length==0){
-                                    onBtn="onBtn"
-                                }
-                                var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
-                                            +'<div class="nl-match">'
-                                                +'<div class="nl-match-header">'
-                                                    +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'
-                                                    +isMe
-                                                    +'<p class="long-name fs_12 c_black3">'+v.post_content+'</p>'
-                                                +'</div>'
-                                                +'<div class="nl-match-body">'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>开赛日期：</span>'
-                                                        +'<span class="c_black">'+v.match_start_time+'</span>'
-                                                        +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>比赛地点：</span>'
-                                                        +'<span class="c_black">'+v.match_address+'</span>'
-                                                    +'</div>'
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>报名费用：</span>'
-                                                        +'<span class="c_black">¥'+v.match_cost+'</span>'
-                                                    +'</div>'
-                                                    +endTime
-                                                    +'<div class="nl-match-detail">'
-                                                        +'<span>已报选手：</span>'
-                                                        +'<span class="c_black">'+v.entry_total+'人</span>'
-                                                    +'</div>'
-                                                +'</div>'
-                                                +'<div class="nl-match-footer">'
-                                                    +'<div class="nl-match-button">'
-                                                        +'<a class="'+onBtn+'" href="'+v.left_url+'">查看详情</a>'
-                                                    +'</div>'
-                                                    +rightBtn
-                                                +'</div>'
-                                            +'</div>'
-                                        +'</li>'
-                                lis.push(dom) 
-                            })
-                            if (res.data.info.length<10) {
-                                next(lis.join(''),false) 
+                                
                             }else{
-                                next(lis.join(''),true) 
+                                next(lis.join(''),false)
                             }
-                            
-                        }else{
-                            next(lis.join(''),false)
-                        }
-                    
-                        $('.getTimes'+id).countdown(function(S, d){//倒计时
-                            if(S>0){
-                                var D=d.day>0 ? d.day+'天' : '';
-                                var h=d.hour<10 ? '0'+d.hour : d.hour;
-                                var m=d.minute<10 ? '0'+d.minute : d.minute;
-                                var s=d.second<10 ? '0'+d.second : d.second;
-                                var time=D+h+':'+m+':'+s;
-                                $(this).text(time);
-                            }else{
-                                $(this).text("报名结束");
-                            }
-                        });
                         
+                            $('.getTimes'+id).countdown(function(S, d){//倒计时
+                                if(S>0){
+                                    var D=d.day>0 ? d.day+'天' : '';
+                                    var h=d.hour<10 ? '0'+d.hour : d.hour;
+                                    var m=d.minute<10 ? '0'+d.minute : d.minute;
+                                    var s=d.second<10 ? '0'+d.second : d.second;
+                                    var time=D+h+':'+m+':'+s;
+                                    $(this).text(time);
+                                }else{
+                                    $(this).text("报名结束");
+                                }
+                            });
+                        }   
                     })       
                 }
             });
