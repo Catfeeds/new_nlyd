@@ -8,13 +8,13 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$project_title?>第一轮</span>
-                        <span class="c_blue ml_10">第1/1题</span>
-                        <span class="c_blue ml_10">
+                        <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
                     </div>
                     <div class="matching-row">
                         <div class="matching-row-label">辅助操作</div>
@@ -74,12 +74,12 @@ jQuery(function($) {
 
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time);
+        submit(time,4);
     })
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
-            submit(0)
+            submit(0,3)
         }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
@@ -96,11 +96,11 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(S)
+                submit(0,3)
             }, 1000);
         }
     });
-    function submit(time){//提交答案
+    function submit(time,submit_type){//提交答案
         var my_answer=[];
         $('.poker-wrapper .poker').each(function(){
             var text=$(this).attr('data-text');
@@ -117,6 +117,7 @@ jQuery(function($) {
             my_answer:my_answer,
             match_action:'subjectPokerRelay',
             surplus_time:time,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             $.DelSession('leavePage')
@@ -133,8 +134,6 @@ layui.use(['layer'], function(){
 
 
 //提交tap事件
-// var hammertime4 = new Hammer($('#sumbit')[0]);
-//     hammertime4.on("tap", function (e) {
 mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
@@ -150,7 +149,7 @@ mTouch('body').on('tap','#sumbit',function(e){
             ,yes: function(index, layero){
                 layer.closeAll();
                 setTimeout(function() {
-                    submit(time)
+                    submit(time,1)
                 }, 1000);
             }
             ,btn2: function(index, layero){
@@ -217,29 +216,6 @@ mTouch('body').on('tap','#sumbit',function(e){
         $('.choose-wrapper').removeClass('active');
         $('.choose-wrapper.'+id).addClass('active');
     })
-    // $('.poker-wrapper .poker').each(function(i){//扑克展示区tap事件
-    //     var _this=$(this)
-    //     var dom=$(this)[0]
-    //     var hammertime = new Hammer(dom);
-    //     $(this).css('touch-action','auto');//允许默认浏览器tap事件，水平滚动
-    //     hammertime.on("tap", function (e) {
-    //         $('.poker-wrapper .poker').removeClass('active');
-    //         _this.addClass('active');
-    //     });
-    // })
-    // $('.porker-color .choose-color').each(function(i){//选择图片花色tap事件
-    //     var _this=$(this);
-    //     var dom=$(this)[0]
-    //     var hammertime1 = new Hammer(dom);
-    //     hammertime1.on("tap", function (e) {
-    //         var id=_this.attr('id')
-    //         $('.porker-color .choose-color').removeClass('active');
-    //         _this.addClass('active');
-
-    //         $('.choose-wrapper').removeClass('active');
-    //         $('.choose-wrapper.'+id).addClass('active');
-    //     });
-    // })
     mTouch('.poker-wrapper').on('tap','.poker',function (e) {
         var _this=$(this)
         var active=$('.poker-wrapper .poker.active')
@@ -247,8 +223,7 @@ mTouch('body').on('tap','#sumbit',function(e){
         _this.addClass('active');
     })
     
-    // $('.choose-wrapper .choose-poker').each(function(i){//扑克选择区tap事件
-    mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {
+    mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {//扑克选择区tap事件
 
         var _this=$(this);
            var text=_this.attr('data-text');
@@ -264,7 +239,6 @@ mTouch('body').on('tap','#sumbit',function(e){
             }else if(color=='diamond'){
                 i='<i class="iconfont">&#xe634;</i>'
             }
-            // var poker='<div class="poker active" data-color="'+color+'">'+text+'</div>'
             var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
                         +'<div class="poker-detail poker-top">'
                             +'<div class="poker-name">'+text+'</div>'
@@ -291,8 +265,6 @@ mTouch('body').on('tap','#sumbit',function(e){
         });
     // })
     //删除tap事件
-    // var hammerDel = new Hammer($('#del')[0]);
-    // hammerDel.on("tap", function (e) {
     mTouch('body').on('tap','#del',function(e){
         if($('.poker-wrapper .poker.active').length>0){
             var active=$('.poker-wrapper .poker.active');
@@ -314,8 +286,6 @@ mTouch('body').on('tap','#sumbit',function(e){
         }
     });
     //前移tap事件
-    // var hammerPrev = new Hammer($('#prev')[0]);
-    // hammerPrev.on("tap", function (e) {
     mTouch('body').on('tap','#prev',function(e){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();
@@ -336,8 +306,6 @@ mTouch('body').on('tap','#sumbit',function(e){
         }
     });
     //后移tap事件
-    // var hammerNext = new Hammer($('#next')[0]);
-    // hammerNext.on("tap", function (e) {
     mTouch('body').on('tap','#next',function(e){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();

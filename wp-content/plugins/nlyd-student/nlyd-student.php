@@ -57,6 +57,7 @@ if(!class_exists('StudentController')){
 
             //引入配置文件
             register_activation_hook(__FILE__, array($this,'plugin_activation_cretable'));
+            //$this->plugin_activation_cretable();
 
             //引入学生端公用css/js
             add_action('wp_enqueue_scripts', array($this,'scripts_default'));

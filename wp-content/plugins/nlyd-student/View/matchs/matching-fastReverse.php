@@ -9,13 +9,13 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10"> 第1题</span>
-                        <span class="c_blue ml_10">
+                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10 match_info_font"> 第1题</span>
+                        <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
                         </span>
-                        <div class="matching-sumbit" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
                     </div>
                     <p class="count_p fs_14">
                         <span class="c_black">请用完给出的4个数字，并利用运算符号使运算结果等于24！</span>
@@ -64,7 +64,7 @@
 jQuery(function($) {
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time);
+        submit(time,4);
     })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
@@ -112,7 +112,7 @@ jQuery(function($) {
         }).removeClass('disabled')
         $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
     }
-    function submit(time){//提交答案
+    function submit(time,submit_type){//提交答案
 
         var data={
             action:'answer_submit',
@@ -123,6 +123,7 @@ jQuery(function($) {
             my_answer:ajaxData,
             match_action:'subjectFastReverse',
             surplus_time:time,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             $.DelSession('match')
@@ -156,7 +157,7 @@ jQuery(function($) {
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
                 var text=$('.answer').text()
                 thisAjaxRow.yours=text;
-                submit(0)
+                submit(0,3)
             }
 
         }, 1000);
@@ -400,7 +401,7 @@ jQuery(function($) {
                         var thisAjaxRow=ajaxData[ajaxData.length-1]
                         var text=$('.answer').text()
                         thisAjaxRow.yours=text;
-                        submit(time);    
+                        submit(time,1);    
                     }
                     ,btn2: function(index, layero){
                     }

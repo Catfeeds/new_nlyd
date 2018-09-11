@@ -571,6 +571,7 @@ if(!class_exists('MatchController')){
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];
+                    $match_meta['match_use_time'] = empty($match_meta['match_use_time']) ? 1 : $match_meta['match_use_time'];
                     $match_meta['match_id'] = $post_ID;
                     //var_dump($match_meta);die;
                     if(!empty($match_meta['match_category_order'])) $match_meta['match_category_order'] = serialize($match_meta['match_category_order']);
@@ -612,6 +613,7 @@ if(!class_exists('MatchController')){
                                     //print_r($project_use_time);
                                 }else{
                                     $project_use_time = $v['project_use_time'] > 0 ? $v['project_use_time'] : $match_meta['match_use_time'];
+
                                 }
 
                                 $match_more = $v['match_more'] > 0 ? $v['match_more'] : $match_meta['match_more'];

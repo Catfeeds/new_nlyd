@@ -9,13 +9,13 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="c_black"><?=$project_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
-                            <span class="c_blue ml_10">第<span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?>题</span>
-                            <span class="c_blue ml_10">
+                            <span class="c_black match_info_font"><?=$project_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
+                            <span class="c_blue ml_10 match_info_font">第<span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?>题</span>
+                            <span class="c_blue ml_10 match_info_font">
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </span>
-                            <div class="matching-sumbit" id="sumbit">提交</div>
+                            <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
                         </div>
                         <div class="reading-question">
                             <?php
@@ -55,12 +55,12 @@
 jQuery(function($) { 
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time);
+        submit(time,4);
     })
     layui.use(['form'], function(){
 
     })
-    function submit(time){//提交答案
+    function submit(time,submit_type){//提交答案
         var my_answer={}
         $('.matching-reading').each(function(){
             var _this=$(this);
@@ -83,6 +83,7 @@ jQuery(function($) {
             my_answer:my_answer,
             match_action:'subjectReading',
             surplus_time:time,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             $.DelSession('leavePage')
@@ -98,7 +99,7 @@ jQuery(function($) {
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
-            submit(0)
+            submit(0,3)
         }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
@@ -115,7 +116,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(S)
+                submit(0,3)
             }, 1000);
         }
     });
@@ -141,7 +142,7 @@ jQuery(function($) {
             ,yes: function(index, layero){
                 layer.closeAll();
                 setTimeout(function() {
-                    submit(time)
+                    submit(time,1)
                 }, 1000);
             }
             ,btn2: function(index, layero){

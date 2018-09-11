@@ -1,7 +1,7 @@
 
     function leaveMatchPage(submit) {//准备也页，比赛页
         
-        // if(window.location.host=='ydbeta.gjnlyd.com'){
+        if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -35,13 +35,15 @@
                         }, 1000);
                         submit();
                     }
+                }else{
+                    jQuery.DelSession('leavePage')
                 }
             });
-        // }
+        }
     }
 
     function leavePageLoad(url){//比赛纪录页
-        // if(window.location.host=='ydbeta.gjnlyd.com'){
+        if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -64,22 +66,29 @@
                         window.location.reload()
                     }
                     
+                }else{
+                    jQuery.DelSession('leavePageWaits')
                 }
             });
-        // }
+        }
     }
 
     function matchDetail(){//比赛详情页
-        // if(window.location.host=='ydbeta.gjnlyd.com'){
+        if(window.location.host=='ydbeta.gjnlyd.com'){
             jQuery(window).on("blur",function(){
-                jQuery.SetSession('waitting','1')
-            })  
+                var sessionData={
+                    match_id:jQuery.Request('match_id')
+                }
+                jQuery.SetSession('waitting',sessionData)
+            })
             jQuery(window).on("focus", function(e) {
-                var waitting= jQuery.GetSession('waitting');
-                if(waitting){
-                    jQuery.DelSession('waitting')
+                var waitting= jQuery.GetSession('waitting','1');
+                if(waitting && waitting['match_id']===jQuery.Request('match_id')){
                     window.location.reload()
+                    jQuery.DelSession('waitting')
+                }else{
+                    jQuery.DelSession('waitting')
                 }
             });
-        // }
+        }
     }
