@@ -1886,8 +1886,8 @@ class Student_Matchs extends Student_Home
         //比赛初始页面
         if(ACTION == 'initialMatch'){
 
-            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-mTouch' );
+            // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+            // wp_enqueue_script( 'student-mTouch' );
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($this->project_alias=='nxss'){//逆向速算初始页
@@ -1929,8 +1929,8 @@ class Student_Matchs extends Student_Home
 
             //比赛记忆后答题页面
             if(ACTION == 'answerMatch'){
-                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-mTouch' );
+                // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                // wp_enqueue_script( 'student-mTouch' );
                 wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
                 wp_enqueue_style( 'my-public' );
             if($this->project_alias=='wzsd'){//文章速读
@@ -2016,8 +2016,6 @@ class Student_Matchs extends Student_Home
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
         if(ACTION=='startMatch'){//开始比赛
-            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-cookie' );
             wp_register_style( 'my-student-match', student_css_url.'match.css',array('my-student') );
             wp_enqueue_style( 'my-student-match' );
         }

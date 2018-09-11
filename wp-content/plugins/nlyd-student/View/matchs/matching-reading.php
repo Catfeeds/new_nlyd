@@ -163,7 +163,7 @@ jQuery(function($) {
 })
 
     var n=0;
-    if($('.matching-reading').length==1){
+    if($('.matching-reading').length<=1){
         $('.a-two.right').addClass('disabled')
     }
     mTouch('body').on('tap','.a-two.left',function(e){//上一题
