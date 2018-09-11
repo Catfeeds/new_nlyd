@@ -145,7 +145,8 @@ layui.use(['element','layer','flow'], function(){
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){ 
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -169,14 +170,9 @@ layui.use(['element','layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            // if(page==1){
-                            //     var dom='<tr><td colspan="7">无队员信息</td></tr>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
+                    }
                 })         
         }
     }); 
@@ -194,7 +190,8 @@ layui.use(['element','layer','flow'], function(){
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){ 
                         if(res.success){ 
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -218,14 +215,9 @@ layui.use(['element','layer','flow'], function(){
                                 next(lis.join(''),true) 
                             } 
                         }else{
-                            // if(page==1){
-                            //     var dom='<tr><td colspan="7">无教练信息</td></tr>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
                             next(lis.join(''),false)
                         }
+                    }
                 })         
         }
     }); 
@@ -254,13 +246,13 @@ layui.use(['element','layer','flow'], function(){
                     team_id:id,
                     handle:'join',//操作 join:入队 其他:离队
                 };
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){//设为主训教练
-                    console.log(data)
-                    console.log(res)
-                    $.alerts(res.data.info)
-                    if(res.success){
-                        _this.css('display','none');
-                        $('.nl-team-name').after('<span class="nl-team-step">入队申请审核中</span>')
+                $.ajax({//设为主训教练
+                    data:data,success(res,ajaxStatu,xhr){ 
+                        $.alerts(res.data.info)
+                        if(res.success){
+                            _this.css('display','none');
+                            $('.nl-team-name').after('<span class="nl-team-step">入队申请审核中</span>')
+                        }
                     }
                 })
             }
@@ -297,11 +289,12 @@ layui.use(['element','layer','flow'], function(){
                         team_id:id,
                         handle:'leave',//操作 join:入队 其他:离队
                     };
-                    $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){//
-                        console.log(res)
-                        $.alerts(res.data.info)
-                        if(res.success){
-                            _this.after('<span class="nl-team-step">离队申请审核中</span>').css('display','none');
+                    $.ajax({
+                        data:data,success(res,ajaxStatu,xhr){ 
+                            $.alerts(res.data.info)
+                            if(res.success){
+                                _this.after('<span class="nl-team-step">离队申请审核中</span>').css('display','none');
+                            }
                         }
                     })
                 }

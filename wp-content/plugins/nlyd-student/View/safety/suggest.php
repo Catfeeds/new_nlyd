@@ -94,16 +94,12 @@
                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
             }) 
         })
-        sendloginAjax=function(url,formData){
+        sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({
-                type: "POST",
-                url: url,
                 data: formData,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
                     console.log(data)
                     $.alerts(data.data.info)
@@ -135,11 +131,7 @@
                 })
 
                 $.ajax({
-                    type: "POST",
-                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: fd,
-                    dataType:'json',
-                    timeout:3000,
                     contentType : false,
                     processData : false,
                     cache : false,
@@ -160,7 +152,7 @@
             });
         });
         $('#loginOut').click(function(){//登出
-            sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),{action:'user_logout'})
+            sendloginAjax({action:'user_logout'})
         })
     })
 </script>

@@ -185,6 +185,7 @@ class Student_Weixin
         }
         $this->insertUsermeta($res,$user_id,$userMetaType);
 
+        update_user_meta($user_id,'user_session_id',session_id());
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         if($type == false) {

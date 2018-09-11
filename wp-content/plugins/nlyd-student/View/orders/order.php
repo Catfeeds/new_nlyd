@@ -281,56 +281,52 @@ layui.use(['element','flow'], function(){
                 page:page,
             }
             var lis = [];
-            $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
-                console.log(res)
-                if(res.success){
-                    $.each(res.data.info,function(i,v){
-                        var order_type=v.order_type;
-                        var dom='<div class="order-row layui-row">'
-                                    +'<div class="order-title layui-row width-padding width-padding-pc">'
-                                        +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'
-                                        +'<span class="pull-right blue">待收货</span>'
-                                    +'</div>'
-                                    +'<div class="order-body layui-row  width-padding width-padding-pc">'
-                                        +'<div class="order-body-top layui-row">'
-                                            +'<div class="order-img img-box pull-left">'
-                                                +'<img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">'
-                                            +'</div>'
-                                            +'<div class="order-detail pull-left">'
-                                                +'<p class="order-name">2018脑力世界杯总决赛（重庆）报名</p>'
-                                                +'<p class="order-content">脑力世界杯是一年一度的国际大赛，汇聚了海内外很多脑力健将</p>'
-                                            +'</div>'
-                                            +'<div class="order-right-info  pull-left">'
-                                                +'<p class="order-price">￥380.00</p>'
-                                                +'<p class="order-price">x1</p>'
-                                            +'</div>'
+            $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){  
+                    console.log(res)
+                    if(res.success){
+                        $.each(res.data.info,function(i,v){
+                            var order_type=v.order_type;
+                            var dom='<div class="order-row layui-row">'
+                                        +'<div class="order-title layui-row width-padding width-padding-pc">'
+                                            +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'
+                                            +'<span class="pull-right blue">待收货</span>'
                                         +'</div>'
-                                        +'<p class="order-body-bottom">'    
-                                            +'共1件商品 实际支付: ￥155.00'
-                                        +'</p>'
+                                        +'<div class="order-body layui-row  width-padding width-padding-pc">'
+                                            +'<div class="order-body-top layui-row">'
+                                                +'<div class="order-img img-box pull-left">'
+                                                    +'<img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">'
+                                                +'</div>'
+                                                +'<div class="order-detail pull-left">'
+                                                    +'<p class="order-name">2018脑力世界杯总决赛（重庆）报名</p>'
+                                                    +'<p class="order-content">脑力世界杯是一年一度的国际大赛，汇聚了海内外很多脑力健将</p>'
+                                                +'</div>'
+                                                +'<div class="order-right-info  pull-left">'
+                                                    +'<p class="order-price">￥380.00</p>'
+                                                    +'<p class="order-price">x1</p>'
+                                                +'</div>'
+                                            +'</div>'
+                                            +'<p class="order-body-bottom">'    
+                                                +'共1件商品 实际支付: ￥155.00'
+                                            +'</p>'
+                                        +'</div>'
+                                        +'<div class="order-footer layui-row width-padding width-padding-pc">'
+                                            +'<a href="" class="order-right-btn blue">确认收货</a>'
+                                            +'<div class="order-left-btn ml-20">查看物流</div>'
+                                            +'<div class="order-left-btn">查看详情</div>'
+                                        +'</div>'
                                     +'</div>'
-                                    +'<div class="order-footer layui-row width-padding width-padding-pc">'
-                                        +'<a href="" class="order-right-btn blue">确认收货</a>'
-                                        +'<div class="order-left-btn ml-20">查看物流</div>'
-                                        +'<div class="order-left-btn">查看详情</div>'
-                                    +'</div>'
-                                +'</div>'
-                        lis.push(dom) 
-                    })
-                    if (res.data.info.length<10) {
-                        next(lis.join(''),false) 
+                            lis.push(dom) 
+                        })
+                        if (res.data.info.length<10) {
+                            next(lis.join(''),false) 
+                        }else{
+                            next(lis.join(''),true) 
+                        }
+                        
                     }else{
-                        next(lis.join(''),true) 
+                        next(lis.join(''),false)
                     }
-                    
-                }else{
-                    // if(page==1){
-                    //     var dom='<div class="no-info">无新闻信息</div>'
-                    //     lis.push(dom) 
-                    // }else{
-                    //     $.alerts('没有更多了')
-                    // }
-                    next(lis.join(''),false)
                 }
             })       
         }
@@ -354,57 +350,53 @@ layui.use(['element','flow'], function(){
                         page:page,
                     }
                     var lis = [];
-                    $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res,ajaxStatu,xhr){
-                        console.log(res)
-                        isClick[data_id]=true
-                        if(res.success){
-                            $.each(res.data.info,function(i,v){
-                                
-                                var dom='<div class="order-row layui-row">'
-                                            +'<div class="order-title layui-row width-padding width-padding-pc">'
-                                                +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'
-                                                +'<span class="pull-right blue">待收货</span>'
-                                            +'</div>'
-                                            +'<div class="order-body layui-row  width-padding width-padding-pc">'
-                                                +'<div class="order-body-top layui-row">'
-                                                    +'<div class="order-img img-box pull-left">'
-                                                        +'<img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">'
-                                                    +'</div>'
-                                                    +'<div class="order-detail pull-left">'
-                                                        +'<p class="order-name">2018脑力世界杯总决赛（重庆）报名</p>'
-                                                        +'<p class="order-content">脑力世界杯是一年一度的国际大赛，汇聚了海内外很多脑力健将</p>'
-                                                    +'</div>'
-                                                    +'<div class="order-right-info  pull-left">'
-                                                        +'<p class="order-price">￥380.00</p>'
-                                                        +'<p class="order-price">x1</p>'
-                                                    +'</div>'
+                    $.ajax({
+                        data:postData,success(res,ajaxStatu,xhr){  
+                            console.log(res)
+                            isClick[data_id]=true
+                            if(res.success){
+                                $.each(res.data.info,function(i,v){
+                                    
+                                    var dom='<div class="order-row layui-row">'
+                                                +'<div class="order-title layui-row width-padding width-padding-pc">'
+                                                    +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'
+                                                    +'<span class="pull-right blue">待收货</span>'
                                                 +'</div>'
-                                                +'<p class="order-body-bottom">'    
-                                                    +'共1件商品 实际支付: ￥155.00'
-                                                +'</p>'
+                                                +'<div class="order-body layui-row  width-padding width-padding-pc">'
+                                                    +'<div class="order-body-top layui-row">'
+                                                        +'<div class="order-img img-box pull-left">'
+                                                            +'<img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">'
+                                                        +'</div>'
+                                                        +'<div class="order-detail pull-left">'
+                                                            +'<p class="order-name">2018脑力世界杯总决赛（重庆）报名</p>'
+                                                            +'<p class="order-content">脑力世界杯是一年一度的国际大赛，汇聚了海内外很多脑力健将</p>'
+                                                        +'</div>'
+                                                        +'<div class="order-right-info  pull-left">'
+                                                            +'<p class="order-price">￥380.00</p>'
+                                                            +'<p class="order-price">x1</p>'
+                                                        +'</div>'
+                                                    +'</div>'
+                                                    +'<p class="order-body-bottom">'    
+                                                        +'共1件商品 实际支付: ￥155.00'
+                                                    +'</p>'
+                                                +'</div>'
+                                                +'<div class="order-footer layui-row width-padding width-padding-pc">'
+                                                    +'<a href="" class="order-right-btn blue">确认收货</a>'
+                                                    +'<div class="order-left-btn ml-20">查看物流</div>'
+                                                    +'<div class="order-left-btn">查看详情</div>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="order-footer layui-row width-padding width-padding-pc">'
-                                                +'<a href="" class="order-right-btn blue">确认收货</a>'
-                                                +'<div class="order-left-btn ml-20">查看物流</div>'
-                                                +'<div class="order-left-btn">查看详情</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                lis.push(dom) 
-                            })
-                            if (res.data.info.length<10) {
-                                next(lis.join(''),false) 
+                                    lis.push(dom) 
+                                })
+                                if (res.data.info.length<10) {
+                                    next(lis.join(''),false) 
+                                }else{
+                                    next(lis.join(''),true) 
+                                }
+                                
                             }else{
-                                next(lis.join(''),true) 
+                                next(lis.join(''),false)
                             }
-                            
-                        }else{
-                            // if(page==1){
-                            //     var dom='<div class="no-info">无新闻信息</div>'
-                            //     lis.push(dom) 
-                            // }else{
-                            //     $.alerts('没有更多了')
-                            // }
-                            next(lis.join(''),false)
                         }
                     })       
                 }

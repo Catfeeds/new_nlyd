@@ -120,41 +120,6 @@ layui.use(['element','flow','layer'], function(){
     var flow = layui.flow;//流加载
 
  //--------------------分页--------------------------
-    // flow.load({
-    //     elem: '#flow-zoo' //流加载容器
-    //     ,isAuto: false
-    //     ,isLazyimg: true
-    //     ,done: function(page, next){//加载下一页
-    //             var postData={
-    //                 action:'get_coach_lists',
-    //                 category_id:category_id,
-    //                 page:page,
-    //                 user_id:user_id,
-    //             }
-    //             var lis = [];
-    //             $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-    //                     if(res.success){
-    //                         $.each(res.data.info,function(i,v){
-    //                             var dom=
-    //                             lis.push(dom) 
-    //                         })
-    //                         if (res.data.info.length<10) {
-    //                             next(lis.join(''),false) 
-    //                         }else{
-    //                             next(lis.join(''),true) 
-    //                         }
-    //                     }else{
-    //                         if(page==1){
-    //                             var dom='<tr><td colspan="7">无教练信息</td></tr>'
-    //                             lis.push(dom) 
-    //                         }else{
-    //                             $.alerts('没有更多了')
-    //                         }
-    //                         next(lis.join(''),false)
-    //                     }
-    //         })       
-    //     }
-    // });
 });
  //--------------------分页-------------------------- 
 

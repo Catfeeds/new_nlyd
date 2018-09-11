@@ -263,38 +263,40 @@ layui.use(['element','flow'], function(){
                             match_id:$.Request('match_id'),
                             page:page
                         }
-                        $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                            if(res.success){ 
-                                $.each(res.data.info,function(index,value){
-                                    var nl_me='';
-                                    if(res.data.my_ranking!=null){
-                                        if(value.ranking==res.data.my_ranking.ranking){
-                                            nl_me='nl-me'
-                                            if(value.ranking!=1){
-                                                $('#allRanking').css('display','table-row')
+                        $.ajax({
+                            data:postData,success(res,ajaxStatu,xhr){  
+                                if(res.success){ 
+                                    $.each(res.data.info,function(index,value){
+                                        var nl_me='';
+                                        if(res.data.my_ranking!=null){
+                                            if(value.ranking==res.data.my_ranking.ranking){
+                                                nl_me='nl-me'
+                                                if(value.ranking!=1){
+                                                    $('#allRanking').css('display','table-row')
+                                                }
                                             }
-                                        }
-                                    }  
-                                    var dom='<tr class="'+nl_me+'">'
-                                                +'<td>'
-                                                    +'<div class="nl-circle">'+value.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                                +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                                +'<td><div class="table_content">'+value.group+'</div></td>'
-                                            +'</tr>'
-                                    lis.push(dom)                           
-                                })
-                                if (res.data.info.length<10) {
-                                    next(lis.join(''),false)
+                                        }  
+                                        var dom='<tr class="'+nl_me+'">'
+                                                    +'<td>'
+                                                        +'<div class="nl-circle">'+value.ranking+'</div>'
+                                                    +'</td>'
+                                                    +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
+                                                    +'<td><div class="table_content">'+value.city+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
+                                                    +'<td><div class="table_content">'+value.group+'</div></td>'
+                                                +'</tr>'
+                                        lis.push(dom)                           
+                                    })
+                                    if (res.data.info.length<10) {
+                                        next(lis.join(''),false)
+                                    }else{
+                                        next(lis.join(''),true)
+                                    }
                                 }else{
-                                    next(lis.join(''),true)
+                                    // $.alerts('没有更多了')
+                                    next(lis.join(''),false)
                                 }
-                            }else{
-                                // $.alerts('没有更多了')
-                                next(lis.join(''),false)
                             }
                         }) 
                     }
@@ -320,57 +322,53 @@ layui.use(['element','flow'], function(){
                     category_id:category_id,
                     page:fenleiPage
                 }
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    if(res.success){ 
-                        if(res.data.my_ranking!=null){//我的成绩
-                            var rows=res.data.my_ranking
-                            var top3=rows.ranking<=3 ? "top3" : ''
-                            var Html='<td>'
-                                        +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
-                                    +'</td>'
-                                    +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                    +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                    +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                    +'<td><div class="table_content">'+rows.group+'</div></td>'
-                            // $('#fenlei_me').html(Html)
-                        }
-                        $.each(res.data.info,function(index,value){
-                            var top3=value.ranking<=3 ? 'top3' : '';
-                            var nl_me='';
-                            if(res.data.my_ranking!=null){
-                                if(value.ranking==res.data.my_ranking.ranking){
-                                    nl_me='nl-me'
-                                    if(value.ranking!=1){
-                                        $('#fenlei_me').html(Html).css('display','table-row');
-                                    }
-                                }
-                            }  
-                            var dom='<tr class="'+nl_me+'">'
-                                        +'<td>'
-                                            +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
+                $.ajax({
+                        data:postData,success(res,ajaxStatu,xhr){  
+                        if(res.success){ 
+                            if(res.data.my_ranking!=null){//我的成绩
+                                var rows=res.data.my_ranking
+                                var top3=rows.ranking<=3 ? "top3" : ''
+                                var Html='<td>'
+                                            +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
                                         +'</td>'
-                                        +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                        +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                        +'<td><div class="table_content">'+value.city+'</div></td>'
-                                        +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                        +'<td><div class="table_content">'+value.group+'</div></td>'
-                                    +'</tr>'
-                            lis.push(dom)                           
-                        })  
-                        if (res.data.info.length<10) {
-                            next(lis.join(''),false)
+                                        +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                        +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
+                                        +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                // $('#fenlei_me').html(Html)
+                            }
+                            $.each(res.data.info,function(index,value){
+                                var top3=value.ranking<=3 ? 'top3' : '';
+                                var nl_me='';
+                                if(res.data.my_ranking!=null){
+                                    if(value.ranking==res.data.my_ranking.ranking){
+                                        nl_me='nl-me'
+                                        if(value.ranking!=1){
+                                            $('#fenlei_me').html(Html).css('display','table-row');
+                                        }
+                                    }
+                                }  
+                                var dom='<tr class="'+nl_me+'">'
+                                            +'<td>'
+                                                +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
+                                            +'</td>'
+                                            +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                            +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
+                                            +'<td><div class="table_content">'+value.city+'</div></td>'
+                                            +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
+                                            +'<td><div class="table_content">'+value.group+'</div></td>'
+                                        +'</tr>'
+                                lis.push(dom)                           
+                            })  
+                            if (res.data.info.length<10) {
+                                next(lis.join(''),false)
+                            }else{
+                                next(lis.join(''),true)
+                            }
                         }else{
-                            next(lis.join(''),true)
+                            next(lis.join(''),false)
                         }
-                    }else{
-                        // if(fenleiPage==1){
-                        //     var dom='<tr><td colspan="6">暂无数据</td></tr>'
-                        //     lis.push(dom) 
-                        // }else{
-                        //     $.alerts('没有更多了')
-                        // }
-                        next(lis.join(''),false)
                     }
                 }) 
             }

@@ -6,11 +6,7 @@ jQuery(document).ready(function($) {
                 action:'reckon_age',
             }
             $.ajax({
-                type: "POST",
-                url: window.admin_ajax+"?date="+new Date().getTime(),
                 data: datas,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
                     if(data.success){
                         $("input[name='meta_val[real_age]']").val(data.data.info);
@@ -207,16 +203,12 @@ jQuery(document).ready(function($) {
         });
 
 
-        sendloginAjax=function(url,formData){
+        sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({
-                type: "POST",
-                url: url,
                 data: formData,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
                     $.alerts(data.data.info)
                     if(data.success){
@@ -284,7 +276,6 @@ jQuery(document).ready(function($) {
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
-                // sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 var fd = new FormData();
                 fd.append('action',data.field.action);
                 fd.append('_wpnonce',data.field._wpnonce);
@@ -309,11 +300,7 @@ jQuery(document).ready(function($) {
                     fd.append('user_ID_Card[]',$(this).val());
                 })
                 $.ajax({
-                    type: "POST",
-                    url: window.admin_ajax+"?date="+new Date().getTime(),
                     data: fd,
-                    dataType:'json',
-                    timeout:3000,
                     contentType : false,
                     processData : false,
                     cache : false,
@@ -334,7 +321,7 @@ jQuery(document).ready(function($) {
                 return false;
             });
             form.on('submit(nicenameFormBtn)', function(data){//昵称
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
             layer.photos({//图片预览
