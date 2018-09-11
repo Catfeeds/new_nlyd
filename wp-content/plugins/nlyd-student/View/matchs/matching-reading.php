@@ -30,11 +30,13 @@
                                 ?>
                                 <!-- 多选 -->
                                 <div class="reading-select">
-                                    <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary" title="<?=get_select($y)?>、<?=$v;?>">
+                                    <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary">
+                                    <span><?=get_select($y)?>、<?=$v;?></span>
                                 </div>
                                 <!-- 单选 -->
                                 <!-- <div class="reading-select">
-                                    <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>" title="<?=get_select($y)?>、<?=$v;?>">
+                                    <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
+                                    <span><?=get_select($y)?>、<?=$v;?></span>
                                 </div> -->
                                 <?php } ?>
                             </div>
