@@ -1,11 +1,4 @@
 <!-- 比赛详情 -->
-<style>
-    @media screen and (max-width: 991px){
-        #content,.detail-content-wrapper{
-            background:#fff;
-        }
-    }
-</style>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
