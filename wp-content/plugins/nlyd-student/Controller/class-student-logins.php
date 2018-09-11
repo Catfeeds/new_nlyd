@@ -58,8 +58,6 @@ class Student_Logins
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
-        wp_enqueue_script( 'student-cookie' );
         wp_register_style( 'my-student-login', student_css_url.'user.css',array('my-student') );
         wp_enqueue_style( 'my-student-login' );
         if($this->action=='' || $this->action=='index'){
