@@ -1,11 +1,4 @@
 <!-- 提现 -->
-<!-- <style>
-@media screen and (max-width: 991px){
-    #content,.detail-content-wrapper{
-        background:#fff;
-    }
-}
-</style> -->
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

@@ -1,11 +1,4 @@
 <!--我的消息列表-->
-<style>
-@media screen and (max-width: 991px){
-    #content,.detail-content-wrapper{
-        background:#f6f6f6;
-    }
-}
-</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

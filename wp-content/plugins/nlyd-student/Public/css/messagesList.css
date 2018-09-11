@@ -25,3 +25,8 @@ a.message-row:active{
     float: right;
     color: rgba(38, 38, 38, 0.3);
 }
+@media screen and (max-width: 991px){
+    #content,.detail-content-wrapper{
+        background:#f6f6f6;
+    }
+}
