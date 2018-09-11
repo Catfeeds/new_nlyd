@@ -35,6 +35,8 @@
                         }, 1000);
                         submit();
                     }
+                }else{
+                    jQuery.DelSession('leavePage')
                 }
             });
         }
@@ -64,6 +66,8 @@
                         window.location.reload()
                     }
                     
+                }else{
+                    jQuery.DelSession('leavePageWaits')
                 }
             });
         }
@@ -81,6 +85,8 @@
                 var waitting= jQuery.GetSession('waitting','1');
                 if(waitting && waitting['match_id']===jQuery.Request('match_id')){
                     window.location.reload()
+                    jQuery.DelSession('waitting')
+                }else{
                     jQuery.DelSession('waitting')
                 }
             });
