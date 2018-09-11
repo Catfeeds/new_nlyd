@@ -34,10 +34,10 @@
                                     <span><?=get_select($y)?>、<?=$v;?></span>
                                 </div>
                                 <!-- 单选 -->
-                                <!-- <div class="reading-select">
+                                <div class="reading-select">
                                     <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
                                     <span><?=get_select($y)?>、<?=$v;?></span>
-                                </div> -->
+                                </div>
                                 <?php } ?>
                             </div>
                             <?php ++$key;?>
