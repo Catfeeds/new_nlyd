@@ -24,11 +24,13 @@ jQuery(function($) {
                             _wpnonce:$("#defaultAddress").val(),
                             id:_this.attr('data-id')
                         }
-                        $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                            $.alerts(res.data.info)
-                            if(res.success){
-                                $('.default-address.set-address').text('设为默认').removeClass('set-address');
-                                _this.text('默认地址').addClass('set-address');
+                        $.ajax({
+                            data: postData,success(res,ajaxStatu,xhr){
+                                $.alerts(res.data.info)
+                                if(res.success){
+                                    $('.default-address.set-address').text('设为默认').removeClass('set-address');
+                                    _this.text('默认地址').addClass('set-address');
+                                }
                             }
                         })
                     }
@@ -62,12 +64,12 @@ jQuery(function($) {
                         _wpnonce:$("#delAddress").val(),
                         id:_this.attr('data-id')
                     }
-                    console.log(postData)
-                    $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                        console.log(res)
-                        $.alerts(res.data.info)
-                        if(res.success){
-                            _this.parents('.address-row').remove()
+                    $.ajax({
+                        data: postData,success(res,ajaxStatu,xhr){
+                            $.alerts(res.data.info)
+                            if(res.success){
+                                _this.parents('.address-row').remove()
+                            }
                         }
                     })
                 }

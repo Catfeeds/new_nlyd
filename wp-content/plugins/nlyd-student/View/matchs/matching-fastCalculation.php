@@ -411,16 +411,18 @@ jQuery(function($) {
             surplus_time:time,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-             $.DelSession('match')
-             $.DelSession('leavePage')
-             if(res.success){
-                 if(res.data.url){
-                     window.location.href=res.data.url
-                 }
-             }else{
-                 $.alerts(res.data.info)
-             }
+        $.ajax({
+                data:data,success(res,ajaxStatu,xhr){
+                $.DelSession('match')
+                $.DelSession('leavePage')
+                if(res.success){
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }
+                }else{
+                    $.alerts(res.data.info)
+                }
+            }
          })
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束

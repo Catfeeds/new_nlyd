@@ -8,16 +8,12 @@ jQuery(function($) {
     if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
         initHeight();//手机端最小高度为屏幕高度
     }
-        sendloginAjax=function(url,formData){
+        sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({
-                type: "POST",
-                url: url,
                 data: formData,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
                     // console.log(data)
                     $.alerts(data.data.info)
@@ -29,14 +25,6 @@ jQuery(function($) {
                         }                        
                     }else{//登陆失败。记录登录时间
                     }
-
-
-                },
-                error:function (XMLHttpRequest, textStatus, errorThrown) {
-                    // 通常 textStatus 和 errorThrown 之中
-                    // 只有一个会包含信息
-                    // 调用本次AJAX请求时传递的options参数
-                    // console.log(XMLHttpRequest, textStatus, errorThrown)
                 }
             });
         } 
@@ -48,19 +36,19 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(loginFormFastBtn)', function(data){//快速登录
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
             form.on('submit(loginFormForgetBtn)', function(data){//重置密码
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
             form.on('submit(loginFormPswBtn)', function(data){//账号密码登录
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
             form.on('submit(registerBtn)', function(data){//注册
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
             element.on('tab(tabs)', function(){//tabs
@@ -122,7 +110,7 @@ jQuery(function($) {
                             template:template,
                             tamp:getTimestamp,
                         }
-                        sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                        sendloginAjax(data)
                         var wait=60;  
                         time(wait,$(this))
                     }else{
@@ -147,7 +135,7 @@ jQuery(function($) {
                             template:template,
                             tamp:getTimestamp,
                         }
-                        sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                        sendloginAjax(data)
                         var wait=60;  
                         time(wait,$(this))
                         return false

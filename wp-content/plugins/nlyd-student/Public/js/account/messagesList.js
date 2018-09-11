@@ -15,8 +15,8 @@ jQuery(function($) {
                     page:page
                 }
                 var lis = [];
-                $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                    console.log(res)
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){  
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var type="";
@@ -43,6 +43,7 @@ jQuery(function($) {
                         }else{
                             next(lis.join(''),false)
                         }
+                    }
                 })
             }
         });

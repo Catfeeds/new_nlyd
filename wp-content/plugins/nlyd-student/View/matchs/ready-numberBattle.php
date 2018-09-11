@@ -59,13 +59,15 @@ jQuery(function($) {
             match_more:$('#inputMatchMore').val(),
             match_action:'numberBattle',
         }
-        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-            if(res.success){
-                if(res.data.url){
-                    window.location.href=res.data.url
-                }   
-            }else{
-                $.alerts(res.data.info)
+        $.ajax({
+            data:data,success(res,ajaxStatu,xhr){  
+                if(res.success){
+                    if(res.data.url){
+                        window.location.href=res.data.url
+                    }   
+                }else{
+                    $.alerts(res.data.info)
+                }
             }
         })
     })
@@ -85,17 +87,19 @@ jQuery(function($) {
             surplus_time:time,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-        $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
-            $.DelSession('leavePage')
-            if(res.success){
-                //return false;
-                if(res.data.url){
-                    setTimeout(function(){
-                        window.location.href=res.data.url
-                    },300)
-                }   
-            }else{
-                $.alerts(res.data.info)
+        $.ajax({
+            data:data,success(res,ajaxStatu,xhr){  
+                $.DelSession('leavePage')
+                if(res.success){
+                    //return false;
+                    if(res.data.url){
+                        setTimeout(function(){
+                            window.location.href=res.data.url
+                        },300)
+                    }   
+                }else{
+                    $.alerts(res.data.info)
+                }
             }
         })
     } 
