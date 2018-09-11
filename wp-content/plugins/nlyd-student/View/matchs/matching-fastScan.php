@@ -9,13 +9,13 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10">第1/1题</span>
-                        <span class="c_blue ml_10">
+                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"></span>
                         </span>
-                        <div class="matching-sumbit" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
                     </div>
                     <div class="matching-fastScan">
                         <div class="item-wrapper">
@@ -45,7 +45,7 @@
 jQuery(function($) { 
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time);
+        submit(time,4);
     })
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
@@ -232,7 +232,7 @@ jQuery(function($) {
             $.SetSession('match',sessionData)
         }else{
             $.alerts('错误'+flaseMax+'题')
-            submit($('.count_down').attr('data-seconds'))
+            submit($('.count_down').attr('data-seconds'),2)
         }
     }
     function getNewline(val) {
@@ -317,7 +317,7 @@ jQuery(function($) {
             }
         
     })
-    function submit(time){//提交答案
+    function submit(time,submit_type){//提交答案
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
@@ -327,6 +327,7 @@ jQuery(function($) {
             my_answer:ajaxData,
             match_action:'subjectfastScan',
             surplus_time:time,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.post(window.admin_ajax+"?date="+new Date().getTime(),data,function(res){
             $.DelSession('match')
@@ -343,7 +344,7 @@ jQuery(function($) {
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function(){
-            submit(0)
+            submit(0,3)
         }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
@@ -360,7 +361,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(S)
+                submit(0,3)
             }, 1000);
         }
     });
@@ -384,7 +385,7 @@ layui.use('layer', function(){
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
-                    submit(time);
+                    submit(time,1);
                     stop=false;
                 }
                 ,btn2: function(index, layero){

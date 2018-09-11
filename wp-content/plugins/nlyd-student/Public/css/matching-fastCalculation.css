@@ -2,13 +2,6 @@
 .blue-font{
     color: rgba(67, 148, 249, 1);
 }
-.fs-14{
-    font-size: 0.14rem;
-}
-.fs-16{
-    font-size: 0.16rem;
-}
-
 .matching-row{
     position: relative;
     width: 100%;
