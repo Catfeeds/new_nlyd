@@ -8,6 +8,14 @@ class Import {
 
     public function register_order_menu_page(){
 
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'imports' ) ) {
+            global $wp_roles;
+
+            $role = 'imports';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+        }
+
         // sckm_searches
         add_menu_page('导入user', '导入user', 'administrator', 'imports',array($this,'users'),'dashicons-businessman',99);
         add_submenu_page('imports','导入战队','导入战队','administrator','imports-teams',array($this,'import_teams'));
@@ -55,7 +63,7 @@ class Import {
         $fileName = 'user.sql';
 //        file_put_contents('user.sql', '');
 //        $tmp = fopen($fileName, 'w+');
-//
+
 //        $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
 //        echo '<pre />';
 //        print_r($res);
@@ -110,7 +118,7 @@ class Import {
                     $level = $sv->level;
                     $range = 1;
                     if(preg_match('/一/',$level)) $level = 1;
-                    if(preg_match('/国际/',$sv->level)) $range = 2;
+                    if(preg_match('/国际/',$level)) $range = 2;
                     $type = 0;
                     switch ($sv->search_type_id){
                         case 3:

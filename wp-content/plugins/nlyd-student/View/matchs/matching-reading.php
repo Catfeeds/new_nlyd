@@ -28,10 +28,14 @@
                                 foreach ($questions_answer[$k]['problem_select'] as $y => $v ){
                                    // print_r($v);
                                 ?>
+                                <!-- 多选 -->
                                 <div class="reading-select">
-                                    <input type="checkbox" name='<?=$y?>' class="select_answer" lay-skin="primary">
-                                    <span  class="c_black"><?=get_select($y)?>、<?=$v;?></span>
+                                    <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary" title="<?=get_select($y)?>、<?=$v;?>">
                                 </div>
+                                <!-- 单选 -->
+                                <!-- <div class="reading-select">
+                                    <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>" title="<?=get_select($y)?>、<?=$v;?>">
+                                </div> -->
                                 <?php } ?>
                             </div>
                             <?php ++$key;?>
@@ -60,6 +64,7 @@ jQuery(function($) {
     layui.use(['form'], function(){
 
     })
+
     function submit(time,submit_type){//提交答案
         var my_answer={}
         $('.matching-reading').each(function(){
@@ -69,11 +74,11 @@ jQuery(function($) {
             _this.find('.select_answer').each(function(e){
                 var __this=$(this);
                 if(__this.is(':checked')){
-                    my_answer[id].push(__this.attr('name'))
+                    my_answer[id].push(__this.attr('data-name'))
                 }
             })
+           
         })
-
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
@@ -125,8 +130,6 @@ jQuery(function($) {
 
 
 //提交tap事件
-// var hammertime4 = new Hammer($('#sumbit')[0]);
-//     hammertime4.on("tap", function (e) {
     mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
@@ -158,9 +161,10 @@ jQuery(function($) {
 })
 
     var n=0;
-    // var hammertime1 = new Hammer($('.a-two.left')[0]);
-    // hammertime1.on("tap", function (e) {//上一题
-    mTouch('body').on('tap','.a-two.left',function(e){
+    if($('.matching-reading').length==1){
+        $('.a-two.right').addClass('disabled')
+    }
+    mTouch('body').on('tap','.a-two.left',function(e){//上一题
         var left=$('.a-two.left');
         var len=$('.matching-reading').length-1;
         if(!left.hasClass('disabled')){
@@ -185,10 +189,7 @@ jQuery(function($) {
         }
         
     });
-    // var hammertime2 = new Hammer($('.a-two.right')[0]);
-    
-    // hammertime2.on("tap", function (e) {//下一题
-    mTouch('body').on('tap','.a-two.right',function(e){
+    mTouch('body').on('tap','.a-two.right',function(e){//下一题
         var right=$('.a-two.right');
         var len=$('.matching-reading').length-1;
         if(!right.hasClass('disabled')){

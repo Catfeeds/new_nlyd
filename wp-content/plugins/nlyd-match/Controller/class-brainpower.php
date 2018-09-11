@@ -10,8 +10,19 @@ class Brainpower
 
     public function register_order_menu_page(){
 
-        add_menu_page('脑力健将', '脑力健将', 'administrator', 'brainpower',array($this,'index'),'dashicons-businessman',99);
-        add_submenu_page('brainpower','加入名录','加入名录','administrator','brainpower-join_directory',array($this,'joinDirectory'));
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'brainpower' ) ) {
+            global $wp_roles;
+
+            $role = 'brainpower';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'brainpower_join_directory';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+        }
+
+        add_menu_page('脑力健将', '脑力健将', 'brainpower', 'brainpower',array($this,'index'),'dashicons-businessman',99);
+        add_submenu_page('brainpower','加入名录','加入名录','brainpower_join_directory','brainpower-join_directory',array($this,'joinDirectory'));
 //        add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
 //        add_submenu_page('order','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));

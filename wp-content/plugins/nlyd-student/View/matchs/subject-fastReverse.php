@@ -56,8 +56,8 @@
                                 <?php foreach ($match_questions as $k => $val){ ?>
                                 <div class="one-ques">
                                     <p class="question"><?=$k+1;?>、运算数字：<?=arr2str($val,'、')?></p>
-                                    <p class="yours">你的答案：<span class="<?=$answer_array[$k] == 'true' ? 'yes' : 'error';?>"><?= $my_answer[$k] == 'unsolvable' ? '本题无解' : $my_answer[$k]?></span></p>
-                                    <p class="rights">正确示例：<?=!empty($questions_answer[$k]) && $questions_answer[$k] != 'unsolvable' ? $questions_answer[$k] : '本题无解'?></p>
+                                    <p class="yours">你的答案：<span class="<?=$answer_array[$k] == 'true' ? 'yes' : 'error';?>"><?= !empty($my_answer[$k]) ? $my_answer[$k] : '' ;?></span></p>
+                                    <p class="rights">正确示例：<?=!empty($questions_answer[$k]) ? $questions_answer[$k] : '本题无解'?></p>
                                 </div>
                                 <?php } ?>
                                 <?php endif;?>

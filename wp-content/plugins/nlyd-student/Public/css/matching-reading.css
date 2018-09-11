@@ -77,3 +77,12 @@
     position: absolute;
     left: 7px;
 }
+/* .layui-form-radio>i{
+    margin-right: 6px;
+} */
+.layui-form-checkbox[lay-skin=primary] span{
+    color: #262626;
+}
+.layui-unselect div{
+    color: #262626;
+}

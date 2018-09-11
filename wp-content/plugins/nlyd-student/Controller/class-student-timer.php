@@ -86,12 +86,12 @@ class Student_Timer
 
     public function TwentyFour(){
         $b = 0;
-        $str = '$b = (9-6)*4+12;';
+        $str = '$b = (8*9)/(10-7);';
         eval($str);
         var_dump($b);
 
         $twentyfour = new TwentyFour();
-        $data = array(11,11,2,4);
+        $data = array(7,8,9,10);
         $results = $twentyfour->calculate($data);
         var_dump($results);
     }
