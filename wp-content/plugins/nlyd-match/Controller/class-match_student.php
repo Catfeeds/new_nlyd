@@ -515,16 +515,16 @@ class Match_student {
         $ageWhere = '';
         switch ($group){
             case 4://儿童组
-                $ageWhere = ' AND um.mate_value<14';
+                $ageWhere = ' AND um.mate_value<12';
                 break;
             case 3://少年组
-                $ageWhere = ' AND um.mate_value>13 AND um.mate_value<19';
+                $ageWhere = ' AND um.mate_value>11 AND um.mate_value<18';
                 break;
             case 2://成年组
-                $ageWhere = ' AND um.mate_value>18 AND um.mate_value<60';
+                $ageWhere = ' AND um.mate_value>17 AND um.mate_value<60';
                 break;
             case 1://老年组
-                $ageWhere = ' AND um.mate_value>60';
+                $ageWhere = ' AND um.mate_value>59';
                 break;
             default://全部
 

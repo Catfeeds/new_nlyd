@@ -46,7 +46,6 @@ class Import {
 
         foreach ($result as $res){
 
-            var_dump(mb_substr($res->truename, 0, 1));
             if($res->birthday){
                 $age = get_time('mysql') - explode('-',$res->birthday)[0];
             }else{

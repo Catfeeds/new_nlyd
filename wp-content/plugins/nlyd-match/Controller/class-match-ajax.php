@@ -612,6 +612,10 @@ class Match_Ajax
         global $wpdb;
         $wpdb->startTrans();
         $bool = $wpdb->update($wpdb->prefix.'match_meta', ['match_status' => -3], ['match_id' => $id]);
+        if(!$bool){
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '关闭失败']);
+        }
         //移入回收站
         if(wp_trash_post($id)){
             $wpdb->commit();
