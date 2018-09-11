@@ -1443,7 +1443,13 @@ class Student_Matchs extends Student_Home
         }
         //print_r($this->match_alias);
         //var_dump($this->project_key_array[$_GET['project_id']]);
+        //判断是否存在我的本轮答题
+        global $wpdb,$current_user;
+        $sql = "select user_id from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and  project_id = {$_GET['project_id']}";
+        $user_id = $wpdb->get_results($sql);
+
         $data = array(
+            'my_log'=>!empty($user_id) ? true : false,
             'project_title'=>$this->project_key_array[$_GET['project_id']]['post_title'],
             'match_title'=>$this->match_title,
             'match_more'=>$this->default_match_more,
@@ -1504,6 +1510,7 @@ class Student_Matchs extends Student_Home
         $match_project = $wpdb->get_row($sql,ARRAY_A);
         //leo_dump($sql);
     }
+
 
     /**
      * 设置比赛初始配置

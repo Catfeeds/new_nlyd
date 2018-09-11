@@ -46,8 +46,10 @@
                             </table>
                         </div>
                     </div>
+                    <?php if($my_log): ?>
                     <a class="a-btn get_footer"  data-href="<?=$answer_url?>">查看本轮我的答题记录</a>
-                </div> 
+                    <?php endif;?>
+                </div>
             </div>
         </div>           
     </div>

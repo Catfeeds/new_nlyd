@@ -41,7 +41,7 @@ function getAgeGroupNameByAge($age){
         case $age > 17:
             $group = '成人组';
             break;
-        case $age > 13:
+        case $age > 11:
             $group = '少年组';
             break;
         default:
