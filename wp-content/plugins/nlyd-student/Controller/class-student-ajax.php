@@ -509,9 +509,11 @@ class Student_Ajax
         if(empty($match_meta)) wp_send_json_error(array('info'=>'比赛信息错误'));
         if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>'当前比赛已禁止报名'));
         $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
+        if($match_meta['match_max_number'] > 0){
 
-        if(!empty($total)){
-            if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>'已达到最大报名数,请联系管理员'));
+            if(!empty($total)){
+                if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>'已达到最大报名数,请联系管理员'));
+            }
         }
 
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
