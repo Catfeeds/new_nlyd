@@ -6289,7 +6289,6 @@ if(!function_exists('load_view_template')){
         if(is_file($path)){
 
             if(!empty($data)){
-
                 extract($data);
             }
             //print_r($user_info['nickname']);

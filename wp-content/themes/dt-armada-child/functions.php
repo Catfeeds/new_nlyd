@@ -26,7 +26,7 @@ if(!function_exists('get_time')){
  * 年齡組別
  */
 function get_age_group(){
-    return array('1'=>"儿童组",'2'=>"青年组",'3'=>"成年组",'4'=>"老年组");
+    return array('1'=>"儿童组",'2'=>"少年组",'3'=>"成年组",'4'=>"老年组");
 }
 
 /**
@@ -38,7 +38,7 @@ function getAgeGroupNameByAge($age){
         case $age > 59:
             $group = '老年组';
             break;
-        case $age > 18:
+        case $age > 17:
             $group = '成人组';
             break;
         case $age > 13:

@@ -858,7 +858,10 @@ class Student_Ajax
 
         $a = 1;
         if(isset($_POST['is_default']) && $total > 0){
-            $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
+            $sql = "select id from {$wpdb->prefix}my_address where user_id = {$current_user->ID} and is_default = 1";
+            if(!empty($wpdb->get_var($sql))){
+                $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
+            }
         }
         $match_id = $_POST['match_id'];
         unset($_POST['match_id']);

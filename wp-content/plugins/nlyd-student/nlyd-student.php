@@ -265,7 +265,7 @@ if(!class_exists('StudentController')){
                                             if(data.data.url){
                                                 setTimeout(function(){
                                                     window.location.href=data.data.url
-                                                },2300)
+                                                },3000)
                                             }
                                         }else{//登陆失败。记录登录时间
                                         }
