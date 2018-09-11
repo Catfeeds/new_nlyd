@@ -34,13 +34,19 @@ class Import {
     public function usermeta(){
         set_time_limit(0);//0表示不限时
         global $wpdb;
-                $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
-        echo '<pre />';
-        print_r($res);
-        die;
+//                $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
+//        echo '<pre />';
+//        print_r($res);
+//        die;
+//        $sql = 'DELETE FROM '.$wpdb->usermeta.' WHERE user_id>500';
+//        $wpdb->query($sql);
+//        die;
 
-        $result = $wpdb->get_results('SELECT * FROM sckm_members');
+        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR country!=null OR mem_mobile!=null OR login_num>5');
+
         foreach ($result as $res){
+
+            var_dump(mb_substr($res->truename, 0, 1));
             if($res->birthday){
                 $age = get_time('mysql') - explode('-',$res->birthday)[0];
             }else{
@@ -65,8 +71,8 @@ class Import {
             update_user_meta($res->id,'user_birthday',$res->birthday);
             update_user_meta($res->id,'user_head',$res->headimgurl);
             update_user_meta($res->id,'user_gender',$sex);
-            update_user_meta($res->id,'first_name',explode(',',$display_name)[1]);
-            update_user_meta($res->id,'last_name',explode(',',$display_name)[0]);
+            update_user_meta($res->id,'first_name',mb_substr($res->truename, 0, 1));
+            update_user_meta($res->id,'last_name',mb_substr($res->truename, 1));
         }
     }
 
@@ -92,7 +98,8 @@ class Import {
 
 
         $errStr = '';
-            $result = $wpdb->get_results('SELECT * FROM sckm_members');
+        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR country!=null OR mem_mobile!=null OR login_num>5');
+//        var_dump($result);
 
             foreach ($result as $res){
 
@@ -127,7 +134,7 @@ class Import {
 
                 //脑力认证
                 $searchsRes = $wpdb->get_results('SELECT * FROM sckm_searches WHERE member_id='.$res->id);
-                $searchsSql = 'INSERT INTO '.$wpdb->prefix.'directories(`user_id`,`level`,`range`,`type`) VALUES ';
+                $searchsSql = 'INSERT INTO '.$wpdb->prefix.'directories(`user_id`,`category_name`,`level`,`range`,`type`) VALUES ';
                 $searchsSql2 = '';
                 foreach ($searchsRes as $sv){
                     $level = $sv->level;
@@ -152,7 +159,18 @@ class Import {
                             $type = 1;
                             break;
                     }
-                    $searchsSql2 = "('$res->id','$level','$range','$type'),";
+                    switch ($sv->level){
+                        case '国际一级(记忆类)':
+                            $c_name = '记忆类';
+                            break;
+                        case '国际一级(心算类)':
+                            $c_name = '心算类';
+                            break;
+                        case '国际一级(速读类)':
+                            $c_name = '速读类';
+                            break;
+                    }
+                    $searchsSql2 = "('$res->id','$c_name','$level','$range','$type'),";
 
                 }
                 if(!$searchsSql2 == ''){

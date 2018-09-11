@@ -2628,14 +2628,16 @@ class Student_Ajax
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id 
+        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,
         CASE d.range 
         WHEN 1 THEN "中国" 
         WHEN 2 THEN "国际"
-        END AS range,
+        END AS range 
         FROM '.$wpdb->prefix.'directories AS d 
         LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id 
         WHERE d.type=1 AND d.is_show=1 LIMIT '.$start.','.$pageSize);
+        var_dump($res);
+        die;
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
             $coachmeta = get_user_meta($v->coach_id,'user_real_name')[0];
@@ -2647,6 +2649,7 @@ class Student_Ajax
             $v['coach_name'] = unserialize($coachmeta)['real_name'];
 
         }
+
         if($res)
             wp_send_json_success(array('info'=>$res));
         else

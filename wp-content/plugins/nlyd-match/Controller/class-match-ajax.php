@@ -609,10 +609,15 @@ class Match_Ajax
     public function closeMatch(){
         $id = intval($_POST['id']);
         if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $wpdb->startTrans();
+        $bool = $wpdb->update($wpdb->prefix.'match_meta', ['match_status' => -3], ['match_id' => $id]);
         //移入回收站
         if(wp_trash_post($id)){
+            $wpdb->commit();
             wp_send_json_success(['info' => '关闭成功']);
         }else{
+            $wpdb->rollback();
             wp_send_json_error(['info' => '关闭失败']);
         }
     }
