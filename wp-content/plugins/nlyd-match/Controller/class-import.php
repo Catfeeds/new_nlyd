@@ -73,6 +73,7 @@ class Import {
 //        echo '<pre />';
 //        print_r($res);
 //        die;
+        ini_set('max_execution_time','100000000');
         set_time_limit(0);//0表示不限时
 
 
@@ -323,7 +324,7 @@ class Import {
                 'team_id' => $teamId,
                 'team_world' => $word,
             ];
-            $metaBool = insert($wpdb->prefix.'team_meta',$teamMetaData);
+            $metaBool = $wpdb->insert($wpdb->prefix.'team_meta',$teamMetaData);
 
             $users = $wpdb->get_results('SELECT * FROM sckm_team_members WHERE team_id='.$res->id);
             foreach ($users as $usv){

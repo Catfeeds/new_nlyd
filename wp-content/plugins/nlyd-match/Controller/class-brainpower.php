@@ -84,7 +84,7 @@ class Brainpower
         $match_id = intval($_GET['match_id']);
         //查询是否有名录
         $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'brainpower WHERE `match` LIKE "%('.$match_id.')%"', ARRAY_A);
-        if(!$res) $is_view_btn = true;
+        if($res) $is_view_btn = true;
 
         //查询大类以及附属小类
         $cateArr = $wpdb->get_results('SELECT p1.post_title AS parent_title,p1.ID AS parent_ID,GROUP_CONCAT(p2.ID) AS child_ID,GROUP_CONCAT(p2.post_title) AS child_title FROM '.$wpdb->posts.' AS p1 
