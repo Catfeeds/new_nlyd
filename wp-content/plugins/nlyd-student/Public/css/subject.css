@@ -197,3 +197,9 @@ p.question{
 .yours,.rights{
     padding-left: 10px;
 }
+@media screen and (max-width: 374px){
+    /* iphone6以下 */
+    .match_info_font{
+        font-size: 0.12rem;
+    }
+}

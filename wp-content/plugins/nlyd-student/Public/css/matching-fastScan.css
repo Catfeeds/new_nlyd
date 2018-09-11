@@ -45,6 +45,12 @@
 .hide{
     display: none;
 }
+@media screen and (max-width: 374px){
+    /* iphone6以下 */
+    .matching-fastScan{
+        padding-top: 15px;
+    }
+}
 
 
 

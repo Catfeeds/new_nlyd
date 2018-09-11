@@ -10,8 +10,8 @@
 
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
-                            <p class="c_black6">1、比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。</p>
-                            <p class="c_black6">2、比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。</p>
+                            <p class="c_black">1、比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。</p>
+                            <p class="c_black">2、比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。</p>
                             <!-- <p class="c_black6">3、请调整好心态准备比赛，脑力中国预祝您取得优异的比赛成绩！</p> -->
                         </div>
                         <?php if($count_down > 0 ){ ?>
@@ -37,19 +37,19 @@
                             <!-- 即将开赛 -->
 
                             <?php if( empty($current_project['match_type'])): ?>
-                            <p class="match-detail fs_14">
+                            <p class="match-detail fs_14 c_black">
                                 <span class="c_blue">当前比赛：</span><?=$current_project['project_title']?>第<?=$current_project['match_more']?>轮</span>
                             </p>
                             <?php endif;?>
-                            <p class="match-detail fs_14">
+                            <p class="match-detail fs_14 c_black">
                                 <span class="c_blue">即将进行：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>第<?=$next_more_num?>轮
                             </p>
                         </div>
-                        <p class="fs_12 ta_c bottom_tips">
-                            您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛。
+                        <p class="fs_12 ta_c bottom_tips c_black">
+                            您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛
                         </p>
-                        <p class="fs_12 ta_c bottom_tips">
-                            数字争霸第1轮已开赛，禁止进入比赛，您可等待下一轮开赛。
+                        <p class="fs_12 ta_c bottom_tips c_black">
+                            数字争霸第1轮已开赛，禁止进入比赛，您可等待下一轮开赛
                         </p>
                         
                     </div>
@@ -77,7 +77,7 @@
 <script>
     jQuery(function($) {
         <?php if($match_status == 2 || $count_down <= 120): ?>
-
+    
          history.pushState(null, null, document.URL);
          window.addEventListener('popstate', function () {
              history.pushState(null, null, document.URL);

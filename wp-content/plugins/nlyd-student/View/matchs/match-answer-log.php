@@ -29,8 +29,8 @@
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title">
-                            <div class="c_black"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
-                            <div class="c_blue ml_10">您的得分<?=$my_score?>分</div>
+                            <div class="c_black match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
+                            <div class="c_blue ml_10 match_info_font">您的得分<?=$my_score?>分</div>
                             <?php if(ACTION != 'answerLog'):?>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                             <?php endif;?>

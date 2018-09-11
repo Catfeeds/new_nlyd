@@ -420,7 +420,7 @@
     }
 }
 @media screen and (max-width: 374px){
-/* iphone5以下 */
+/* iphone6以下 */
     .userCenter-detail a{
         position: relative;
         line-height: 50px;
