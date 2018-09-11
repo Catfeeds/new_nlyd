@@ -2631,25 +2631,30 @@ class Student_Ajax
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id 
+        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,
         CASE d.range 
         WHEN 1 THEN "中国" 
-        WHEN 2 THEN "国际"
-        END AS range,
+        WHEN 2 THEN "国际" 
+        ELSE "未知" 
+        END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
         LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id 
         WHERE d.type=1 AND d.is_show=1 LIMIT '.$start.','.$pageSize);
+
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
+
             $coachmeta = get_user_meta($v->coach_id,'user_real_name')[0];
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
-            $v['header_img'] = $usermeta['user_head'][0];
-            $v['userID'] = $usermeta['user_ID'][0];
-            $v['real_name'] = $user_real_name['real_name'];
-            $v['sex'] = $usermeta['user_gender'][0];
-            $v['coach_name'] = unserialize($coachmeta)['real_name'];
+            $v->header_img = $usermeta['user_head'][0];
+
+            $v->userID = $usermeta['user_ID'][0];
+            $v->real_name = $user_real_name['real_name'];
+            $v->sex = $usermeta['user_gender'][0];
+            $v->coach_name = unserialize($coachmeta)['real_name'];
 
         }
+
         if($res)
             wp_send_json_success(array('info'=>$res));
         else
