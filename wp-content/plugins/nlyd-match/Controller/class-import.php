@@ -14,12 +14,17 @@ class Import {
             $role = 'imports';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'imports_teams';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'imports_usermeta';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         // sckm_searches
         add_menu_page('导入user', '导入user', 'administrator', 'imports',array($this,'users'),'dashicons-businessman',99);
-        add_submenu_page('imports','导入战队','导入战队','administrator','imports-teams',array($this,'import_teams'));
-        add_submenu_page('imports','usermeta','usermeta','administrator','imports-usermeta',array($this,'usermeta'));
+        add_submenu_page('imports','导入战队','导入战队','imports_teams','imports-teams',array($this,'import_teams'));
+        add_submenu_page('imports','usermeta','usermeta','imports_usermeta','imports-usermeta',array($this,'usermeta'));
 //        add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
