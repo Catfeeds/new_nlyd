@@ -8,12 +8,50 @@ class Import {
 
     public function register_order_menu_page(){
 
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'imports' ) ) {
+            global $wp_roles;
+
+            $role = 'imports';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'imports_teams';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'imports_usermeta';//权限名
+            $wp_roles->add_cap('administrator', $role);
+        }
+
         // sckm_searches
         add_menu_page('导入user', '导入user', 'administrator', 'imports',array($this,'users'),'dashicons-businessman',99);
-//        add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
-//        add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
+        add_submenu_page('imports','导入战队','导入战队','imports_teams','imports-teams',array($this,'import_teams'));
+        add_submenu_page('imports','usermeta','usermeta','imports_usermeta','imports-usermeta',array($this,'usermeta'));
 //        add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
+    }
+    /**
+     * usermeta
+     */
+    public function usermeta(){
+        set_time_limit(0);//0表示不限时
+        global $wpdb;
+        $result = $wpdb->get_results('SELECT * FROM sckm_members');
+        foreach ($result as $res){
+            if($res->birthday){
+                $age = get_time('mysql') - explode('-',$res->birthday)[0];
+            }else{
+                $age = 0;
+            };
+            $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
+            $display_name = $display_name == ',' ? '' : addslashes($display_name);
+            $user_real_name = ['real_type' => '','real_name' => addslashes($res->truename), 'real_ID' => '', 'real_age' => $age];
+            $user_address = ['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist];
+            update_user_meta($res->id,'user_address',$user_address);
+            update_user_meta($res->id,'$user_real_name',$user_real_name);
+            update_user_meta($res->id,'user_birthday',$res->birthday);
+            update_user_meta($res->id,'user_head',$res->headimgurl);
+            update_user_meta($res->id,'first_name',explode(',',$display_name)[1]);
+            update_user_meta($res->id,'last_name',explode(',',$display_name)[0]);
+        }
     }
 
     /**
@@ -48,8 +86,25 @@ class Import {
                 $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
                 $display_name = $display_name == ',' ? '' : addslashes($display_name);
                 $res->nickname = addslashes($res->nickname);
-                $values = "('$res->id','$res->mem_mobile','$res->nickname','$res->mem_mobile','$res->openid','$regirestTime','$display_name','123456','$res->email')";
-                $userSql = 'INSERT INTO '.$wpdb->users.'(`ID`,user_login,user_nicename,user_mobile,weChat_openid,user_registered,display_name,user_pass,user_email) VALUES'.$values;
+                $user_login = $res->mem_mobile ? $res->mem_mobile : $res->openid;
+                $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
+                $userUpdateArr = [
+                    'user_nicename' => $res->nickname,
+                    'weChat_openid' => $res->openid,
+                    'display_name' => $display_name,
+                ];
+                if(is_object($userCreatBool)){
+                    $user_login = $res->openid ? $res->openid : $res->email;
+                    $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
+                    if(is_object($userCreatBool)){
+                        $user_login = 'nlyd_'.get_time().$res->id;
+                        $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
+                        var_dump($userCreatBool);
+                    }
+                }
+
+                $userUpdateData = "user_nicename='$res->nickname',weChat_openid='$res->openid',display_name='$display_name',ID='$res->id'";
+                $userSql = 'UPDATE wp_users SET '.$userUpdateData.' WHERE ID='.$userCreatBool;
                 $usersBool = $wpdb->query($userSql);
                 //usermeta
                 if($res->birthday){
@@ -58,14 +113,7 @@ class Import {
                     $age = 0;
                 }
 
-                $user_real_name = serialize(['real_type' => '','real_name' => $res->truename, 'real_ID' => '', 'real_age' => $age]);
-                $user_address = serialize(['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist]);
-                $metaSql = 'INSERT INTO '.$wpdb->usermeta.'(`user_id`,`meta_key`,`meta_value`) 
-            VALUES ("'.$res->id.'","user_real_name",\''.$user_real_name.'\'),
-            ("'.$res->id.'","user_address",\''.$user_address.' \'),
-            ("'.$res->id.'","user_birthday","'.$res->birthday.'"),
-            ("'.$res->id.'","user_head","'.$res->headimgurl.'")';
-                $meatBool = $wpdb->query($metaSql);
+//                $meatBool = $wpdb->query($metaSql);
 
                 //脑力认证
                 $searchsRes = $wpdb->get_results('SELECT * FROM sckm_searches WHERE member_id='.$res->id);
@@ -106,13 +154,16 @@ class Import {
                 }
 
 
+                if(!$userCreatBool){
+                    $errStr .= $res->id.':插入失败<br /> sql: <br />';
+                }
                 if(!$usersBool){
-                    $errStr .= $res->id.':插入失败<br /> sql: '.$userSql.'<br />';
+                    $errStr .= $res->id.':更新数据失败<br /> sql: '.$userSql.'<br />';
                 }
-                if(!$meatBool){
-                    $errStr .= $res->id.'->usermeta: 插入失败<br /> sql: '.$metaSql.'<br />';
-                }
-                if(!$usersBool || !$meatBool){
+//                if(!$meatBool){
+//                    $errStr .= $res->id.'->usermeta: 插入失败<br /> sql: '.$metaSql.'<br />';
+//                }
+                if(!$usersBool){
                     $errStr .= '<hr>';
                 }
             }
@@ -242,6 +293,76 @@ class Import {
 
     }
 
+    /**
+     * 导入战队
+     */
+    public function import_teams(){
+        global $wpdb;
+        $teamErrStr = '';
+        $errStr = '';
+        $result = $wpdb->get_results('SELECT * FROM sckm_teams WHERE is_verify=1');
+//        $result->g
+        foreach ($result as $res){
+            $bool = wp_insert_post([
+//                'ID' => $res->id,
+                'post_title' => $res->title,
+                'post_content' => $res->content,
+                'post_status' => 'publish',
+                'post_type' => 'team',
+                'comment_status' => 'closed',
+                'ping_status' => 'closed',
+                'ping_date' => date('Y-m-d H:i:s',$res->created),
+            ]);
+            $wpdb->update($wpdb->posts, ['post_date' => date('Y-m-d H:i:s',$res->created)], ['ID' => $bool]);
+            $teamId = $bool;
+            $word = $res->country_id == 3 ? '中国' : '';
+            $teamMetaData = [
+                'team_slogan' => $res->summary,
+                'team_leader' => $res->member_id,
+                'team_director' => $res->member_id,
+                'team_id' => $teamId,
+                'team_world' => $word,
+            ];
+            $metaBool = insert($wpdb->prefix.'team_meta',$teamMetaData);
+
+            $users = $wpdb->get_results('SELECT * FROM sckm_team_members WHERE team_id='.$res->id);
+            foreach ($users as $usv){
+                $data = [
+                    'team_id' => $teamId,
+                    'user_id' => $usv->member_id,
+                    'user_type' => 1,
+                    'status' => 2,
+                    'created_time' => date('Y-m-d H:i:s',$usv->created),
+                ];
+                $bool = $wpdb->insert($wpdb->prefix.'match_team',$data);
+                if(!$bool){
+                    $errStr .= $usv->id.'插入失败, sql: '.$wpdb->last_query.'<br />';
+                }
+            }
+
+            if(!$bool){
+                $teamErrStr .= $res->id.'插入失败 <br />';
+            }
+            if(!$metaBool){
+                $teamErrStr .= $res->id.':team: 插入失败 <br />';
+            }
+        }
+//        $users = $wpdb->get_results('SELECT * FROM sckm_team_members');
+//        foreach ($users as $usv){
+//            $data = [
+//                'team_id' => $usv->team_id*100,
+//                'user_id' => $usv->member_id,
+//                'user_type' => 1,
+//                'status' => 2,
+//                'created_time' => date('Y-m-d H:i:s',$usv->created),
+//            ];
+//            $bool = $wpdb->insert($wpdb->prefix.'match_team',$data);
+//            if(!$bool){
+//                $errStr .= $usv->id.'插入失败, sql: '.$wpdb->last_query.'<br />';
+//            }
+//        }
+        echo $teamErrStr.'<hr />'.$errStr;
+    }
 
 }
 

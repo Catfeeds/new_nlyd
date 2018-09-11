@@ -9,10 +9,28 @@ class Order {
 
     public function register_order_menu_page(){
 
-        add_menu_page('订单', '订单', 'administrator', 'order',array($this,'orderLists'),'dashicons-businessman',99);
-        add_submenu_page('order','退款单','退款单','administrator','order-refundOrder',array($this,'refundOrder'));
-        add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
-        add_submenu_page('order','发货','发货','administrator','order-send',array($this,'sendGoods'));
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'order' ) ) {
+            global $wp_roles;
+
+            $role = 'order';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'order_refundOrder';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'order_refund';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'order_send';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+
+        }
+
+        add_menu_page('订单', '订单', 'order', 'order',array($this,'orderLists'),'dashicons-businessman',99);
+        add_submenu_page('order','退款单','退款单','order_refundOrder','order-refundOrder',array($this,'refundOrder'));
+        add_submenu_page('order','申请退款','申请退款','order_refund','order-refund',array($this,'refund'));
+        add_submenu_page('order','发货','发货','order_send','order-send',array($this,'sendGoods'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
 

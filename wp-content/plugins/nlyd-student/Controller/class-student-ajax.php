@@ -299,65 +299,16 @@ class Student_Ajax
                     $my_answer = array_column($data_arr,'yours');
                 }
                 if($_POST['match_action'] == 'subjectFastReverse'){
-
-                    $questions_answer = array_column($data_arr,'isRight');
-
-                    $twentyfour = new TwentyFour();
+                    $isRight = array_column($data_arr,'isRight');
                     $success_len = 0;
-
-                    foreach ($data_arr as $val){
-
-                        /*********************************************/
-                        if(!empty($val['yours'])){
-
-                            if($val['yours'] == 'unsolvable'){
-
-                                $results = $twentyfour->calculate($val['question']);
-
-                                if(empty($results)){
-                                    $success_len += 1;
-                                }
-
-                            }
-                            else {
-
-                                //$_POST['my_answer'] = '(5+5)+5+9';
-                                $answer_array = str_replace('×', '*', $val['yours']);
-                                $sub_answer_array = str_replace('÷', '/', $answer_array);
-                                if (preg_match('/^((\d++(\.\d+)?|\((?1)\))((\+|\/|\*|-)(\d++(\.\d+)?|(?1)))*)$/', $sub_answer_array)) {
-
-                                    $l_cont = substr_count($sub_answer_array, "(");
-                                    $r_cont = substr_count($sub_answer_array, ")");
-
-                                    if (($l_cont != 0) || ($r_cont != 0)) {
-                                        if ((substr_count($sub_answer_array, "(") != substr_count($sub_answer_array, ")"))) {
-                                            continue;
-                                        }
-                                    }
-
-                                    $b = 0;
-                                    $str = '$b = ' . $sub_answer_array . ';';
-                                    eval($str);
-                                    //var_dump($b);
-                                    if ($b == 24) {
-                                        $success_len += 1;
-                                    }
-
-                                }
-                            }
-                        }
-                        /*********************************************/
-                        //$results = $twentyfour->calculate($val['question']);
-                        //print_r($results);
-                        //$questions_answer[] = !empty($results) ? $results[0] : 'unsolvable';
-
+                    if(!empty($isRight)){
+                        $count_value = array_count_values($isRight);
+                        $success_len += $count_value['true'];
                     }
-                    //print_r($success_len);die;
-                    //$isRight = array_column($data_arr,'isRight');
-                    //print_r($questions_answer);
-                    //die;
-                    //$count_value = array_count_values($isRight);
-                    //$len = $count_value['true'];
+                    $answer['examples'] = $questions_answer;
+                    $answer['result'] = $isRight;
+                    $questions_answer = $answer;
+
                     $my_score = $success_len * 10;
 
                 }else{

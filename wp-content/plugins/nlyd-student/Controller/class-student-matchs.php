@@ -437,6 +437,13 @@ class Student_Matchs extends Student_Home
         //print_r($this->next_project);
         //print_r($this->current_project);
 
+
+        //获取本轮比赛答案是否提交
+        $sql = "select my_answer,answer_status from {$wpdb->prefix}match_questions where match_id = {$this->match_id} and project_id = {$this->current_project['project_id']} and match_more = {$this->current_project['match_more']}";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+
+        $data['answer_status'] = !empty($row['answer_status']) ? $row['answer_status'] : '';
+
         $data['match_title'] = $this->match_title;
         $data['match_status'] = $this->match['match_status'];
         $data['next_project'] = $this->next_project;
@@ -980,7 +987,12 @@ class Student_Matchs extends Student_Home
         }
         elseif ($this->project_alias == 'nxss'){
 
-            $answer_array = $questions_answer;
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            //print_r($answer_array);
+            //print_r($questions_answer);die;
+
             $count_value = array_count_values($questions_answer);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
