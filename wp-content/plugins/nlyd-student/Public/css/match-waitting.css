@@ -17,13 +17,12 @@ p.match-name{
     text-align: center;
 }
 .wait{
-    margin: auto;
-    margin-top: 60px;
+    display: block;
+    margin:38px auto;
     width: 170px;
     height: 170px;
     background: rgba(104, 170, 254, 0.2);
     border-radius: 50%;
-    margin-bottom: 38px;
     -webkit-animation-duration: 1000ms;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
@@ -50,6 +49,11 @@ p.match-name{
     background: linear-gradient(90deg,#68AAFE, #4394F9);
     color: #fff;
     border-radius: 50%;
+    text-align: center;
+}
+.oneP{
+    line-height: 150px;
+    font-size: 0.20rem;
 }
 .inner p{
     margin-bottom: 0;
