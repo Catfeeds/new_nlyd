@@ -34,6 +34,11 @@ class Import {
     public function usermeta(){
         set_time_limit(0);//0表示不限时
         global $wpdb;
+                $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
+        echo '<pre />';
+        print_r($res);
+        die;
+
         $result = $wpdb->get_results('SELECT * FROM sckm_members');
         foreach ($result as $res){
             if($res->birthday){
@@ -41,14 +46,25 @@ class Import {
             }else{
                 $age = 0;
             };
+            switch ($res->sex){
+                case 1:
+                    $sex = '男';
+                    break;
+                case 2:
+                    $sex = '女';
+                    break;
+                default:
+                    $sex = '未知';
+            }
             $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
             $display_name = $display_name == ',' ? '' : addslashes($display_name);
             $user_real_name = ['real_type' => '','real_name' => addslashes($res->truename), 'real_ID' => '', 'real_age' => $age];
             $user_address = ['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist];
             update_user_meta($res->id,'user_address',$user_address);
-            update_user_meta($res->id,'$user_real_name',$user_real_name);
+            update_user_meta($res->id,'user_real_name',$user_real_name);
             update_user_meta($res->id,'user_birthday',$res->birthday);
             update_user_meta($res->id,'user_head',$res->headimgurl);
+            update_user_meta($res->id,'user_gender',$sex);
             update_user_meta($res->id,'first_name',explode(',',$display_name)[1]);
             update_user_meta($res->id,'last_name',explode(',',$display_name)[0]);
         }
@@ -69,10 +85,7 @@ class Import {
 //        file_put_contents('user.sql', '');
 //        $tmp = fopen($fileName, 'w+');
 
-//        $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
-//        echo '<pre />';
-//        print_r($res);
-//        die;
+
         ini_set('max_execution_time','100000000');
         set_time_limit(0);//0表示不限时
 
@@ -83,17 +96,17 @@ class Import {
 
             foreach ($result as $res){
 
-                $regirestTime = date('Y-m-d H:i:s', $res->register_time);
+//                $regirestTime = date('Y-m-d H:i:s', $res->register_time);
                 $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
                 $display_name = $display_name == ',' ? '' : addslashes($display_name);
                 $res->nickname = addslashes($res->nickname);
                 $user_login = $res->mem_mobile ? $res->mem_mobile : $res->openid;
                 $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
-                $userUpdateArr = [
-                    'user_nicename' => $res->nickname,
-                    'weChat_openid' => $res->openid,
-                    'display_name' => $display_name,
-                ];
+//                $userUpdateArr = [
+//                    'user_nicename' => $res->nickname,
+//                    'weChat_openid' => $res->openid,
+//                    'display_name' => $display_name,
+//                ];
                 if(is_object($userCreatBool)){
                     $user_login = $res->openid ? $res->openid : $res->email;
                     $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
@@ -108,11 +121,7 @@ class Import {
                 $userSql = 'UPDATE wp_users SET '.$userUpdateData.' WHERE ID='.$userCreatBool;
                 $usersBool = $wpdb->query($userSql);
                 //usermeta
-                if($res->birthday){
-                    $age = get_time('mysql') - explode('-',$res->birthday)[0];
-                }else{
-                    $age = 0;
-                }
+
 
 //                $meatBool = $wpdb->query($metaSql);
 
