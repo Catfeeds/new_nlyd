@@ -7,10 +7,28 @@ class Match_student {
     }
 
     public function register_order_menu_page(){
-        add_menu_page('报名学员', '报名学员', 'administrator', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
-        add_submenu_page('match_student','个人成绩','个人成绩','administrator','match_student-score',array($this,'studentScore'));
-        add_submenu_page('match_student','比赛排名','比赛排名','administrator','match_student-ranking',array($this,'matchRanking'));
-        add_submenu_page('match_student','新增报名学员','新增报名学员','administrator','match_student-add_student',array($this,'addStudent'));
+
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'team' ) ) {
+            global $wp_roles;
+
+            $role = 'match_student';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'match_student_score';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'match_student_ranking';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'match_student_add_student';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+        }
+
+        add_menu_page('报名学员', '报名学员', 'match_student', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
+        add_submenu_page('match_student','个人成绩','个人成绩','match_student_score','match_student-score',array($this,'studentScore'));
+        add_submenu_page('match_student','比赛排名','比赛排名','match_student_ranking','match_student-ranking',array($this,'matchRanking'));
+        add_submenu_page('match_student','新增报名学员','新增报名学员','match_student_add_student','match_student-add_student',array($this,'addStudent'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
 

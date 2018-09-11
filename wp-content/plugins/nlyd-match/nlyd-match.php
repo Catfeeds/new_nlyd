@@ -895,7 +895,7 @@ if(!class_exists('MatchController')){
             );
 
             register_post_type( 'team', $args );
-            if ( !current_user_can( 'team' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'team' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_team';//权限名
@@ -931,7 +931,7 @@ if(!class_exists('MatchController')){
                             'add_new_item'       => __( '新建 比赛' ),
                             'edit_item'          => __( '编辑比赛' ),
                             'new_item'           => __( '新比赛' ),
-                            'all_items'          => __( '历史' ),
+                            'all_items'          => __( '所有比赛' ),
                             'view_item'          => __( '查看' ),
                             'search_items'       => __( '搜索' ),
                             'not_found'          => __( '没有找到有关比赛' ),
@@ -981,7 +981,7 @@ if(!class_exists('MatchController')){
                     'add_new_item'       => __( '新建 类型' ),
                     'edit_item'          => __( '编辑类型' ),
                     'new_item'           => __( '新类型' ),
-                    'all_items'          => __( '类型' ),
+                    'all_items'          => __( '比赛类型' ),
                     'view_item'          => __( '查看' ),
                     'search_items'       => __( '搜索' ),
                     'not_found'          => __( '没有找到有关比赛类型' ),
@@ -1030,7 +1030,7 @@ if(!class_exists('MatchController')){
                     'add_new_item'       => __( '新建 类别' ),
                     'edit_item'          => __( '编辑类别' ),
                     'new_item'           => __( '新类别' ),
-                    'all_items'          => __( '类别' ),
+                    'all_items'          => __( '比赛类别' ),
                     'view_item'          => __( '查看' ),
                     'search_items'       => __( '搜索' ),
                     'not_found'          => __( '没有找到有关比赛类型' ),
@@ -1080,7 +1080,7 @@ if(!class_exists('MatchController')){
                     'add_new_item'       => __( '新建 项目' ),
                     'edit_item'          => __( '编辑项目' ),
                     'new_item'           => __( '新项目' ),
-                    'all_items'          => __( '项目' ),
+                    'all_items'          => __( '比赛项目' ),
                     'view_item'          => __( '查看' ),
                     'search_items'       => __( '搜索' ),
                     'not_found'          => __( '没有找到有关比赛项目' ),

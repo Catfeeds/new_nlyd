@@ -12,6 +12,8 @@ class Teacher
 
     public function __construct()
     {
+        //add_action( 'init', array($this,'add_wp_roles'));
+
         add_action( 'admin_menu', array($this,'register_teacher_menu_page') );
         add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
 
@@ -19,11 +21,31 @@ class Teacher
 
     public function register_teacher_menu_page(){
 
-        add_menu_page('教练', '教练', 'administrator', 'teacher',array($this,'teacher'),'dashicons-businessman',99);
-        add_submenu_page('teacher','新增教练','新增教练','administrator','teacher-add',array($this,'newTeacher'));
-        add_submenu_page('teacher','个人资料','个人资料','administrator','teacher-datum',array($this,'datum'));
-        add_submenu_page('teacher','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
-        add_submenu_page('teacher','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'teacher' ) ) {
+            global $wp_roles;
+
+            $role = 'teacher';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'teacher_add';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'teacher_datum';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'teacher_student';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'teacher_course';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+        }
+
+        add_menu_page('教练', '教练', 'teacher', 'teacher',array($this,'teacher'),'dashicons-businessman',99);
+        add_submenu_page('teacher','新增教练','新增教练','teacher_add','teacher-add',array($this,'newTeacher'));
+        add_submenu_page('teacher','个人资料','个人资料','teacher_datum','teacher-datum',array($this,'datum'));
+        add_submenu_page('teacher','我的学员','我的学员','teacher_student','teacher-student',array($this,'student'));
+        add_submenu_page('teacher','我的课程','我的课程','teacher_course','teacher-course',array($this,'course'));
     }
 
     /**
