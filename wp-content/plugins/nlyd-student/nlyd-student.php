@@ -24,7 +24,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','2.0.4' );
+            define( 'leo_student_version','2.0.5' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -267,7 +267,7 @@ if(!class_exists('StudentController')){
                                             if(data.data.url){
                                                 setTimeout(function(){
                                                     window.location.href=data.data.url
-                                                },2300)
+                                                },3000)
                                             }
                                         }else{//登陆失败。记录登录时间
                                         }
@@ -275,6 +275,7 @@ if(!class_exists('StudentController')){
 
                                     },
                                     error:function (XMLHttpRequest, textStatus, errorThrown) {
+
                                         // 通常 textStatus 和 errorThrown 之中
                                         // 只有一个会包含信息
                                         // 调用本次AJAX请求时传递的options参数

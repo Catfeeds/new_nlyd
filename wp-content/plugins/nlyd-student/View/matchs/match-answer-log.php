@@ -6,6 +6,13 @@
  * Date: 2018/8/22
  * Time: 20:28
  */
+
+
+if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
+    $data['message'] = '比赛项目未绑定';
+    require_once student_view_path.'public/my-404.php';
+    return;
+}
 ?>
 <!--头部-->
 <?php if(isset($_GET['type'])): ?>
@@ -31,7 +38,7 @@
                         <div class="subject-title">
                             <div class="c_black match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10 match_info_font">您的得分<?=$my_score?>分</div>
-                            <?php if(ACTION != 'answerLog'):?>
+                            <?php if( ACTION == 'checkAnswerLog'):?>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                             <?php endif;?>
                         </div>
