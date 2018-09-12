@@ -168,7 +168,7 @@ class Student_Matchs extends Student_Home
         /**********************获取比赛信息end********************************/
 
         /*******************获取当前比赛项目配置******************************/
-        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog')) ){
+        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog','singleRecord')) ){
 
             if (empty($this->project_key_array[$_GET['project_id']])){
                 $this->get_404('比赛项目错误');
@@ -338,8 +338,12 @@ class Student_Matchs extends Student_Home
 
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            $match['match_status'] = -2;
+            $match['match_status_cn'] = '等待开赛';
         }
+
+
 
         //print_r($match);
         //获取比赛项目
@@ -998,7 +1002,7 @@ class Student_Matchs extends Student_Home
 
             $len = count($questions_answer);
 
-            if(!empty($match_questions)){
+            /*if(!empty($match_questions)){
                 $twentyfour = new TwentyFour();
                 foreach ($match_questions as $val){
                     $results = $twentyfour->calculate($val);
@@ -1006,7 +1010,7 @@ class Student_Matchs extends Student_Home
                     $arr[] = !empty($results) ? $results[0] : 'unsolvable';
                 }
                 $questions_answer = $arr;
-            }
+            }*/
         }
         else{
 
@@ -1199,7 +1203,7 @@ class Student_Matchs extends Student_Home
 
             $len = count($questions_answer);
 
-            if(!empty($match_questions)){
+            /*if(!empty($match_questions)){
                 $twentyfour = new TwentyFour();
                 foreach ($match_questions as $val){
                     $results = $twentyfour->calculate($val);
@@ -1207,7 +1211,7 @@ class Student_Matchs extends Student_Home
                     $arr[] = !empty($results) ? $results[0] : 'unsolvable';
                 }
                 $questions_answer = $arr;
-            }
+            }*/
         }
         else{
 
@@ -1443,7 +1447,13 @@ class Student_Matchs extends Student_Home
         }
         //print_r($this->match_alias);
         //var_dump($this->project_key_array[$_GET['project_id']]);
+        //判断是否存在我的本轮答题
+        global $wpdb,$current_user;
+        $sql = "select user_id from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and  project_id = {$_GET['project_id']}";
+        $user_id = $wpdb->get_results($sql);
+
         $data = array(
+            'my_log'=>!empty($user_id) ? true : false,
             'project_title'=>$this->project_key_array[$_GET['project_id']]['post_title'],
             'match_title'=>$this->match_title,
             'match_more'=>$this->default_match_more,
@@ -1504,6 +1514,7 @@ class Student_Matchs extends Student_Home
         $match_project = $wpdb->get_row($sql,ARRAY_A);
         //leo_dump($sql);
     }
+
 
     /**
      * 设置比赛初始配置

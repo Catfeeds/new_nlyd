@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font"> 第1题</span>
+                        <span class="c_blue ml_10 match_info_font"> 第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
@@ -32,26 +32,22 @@
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='1'></div>
-                            <input style="display:none" type="hiddhen"  name="a1" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='2'></div>
-                            <input style="display:none" type="hiddhen"  name="a2" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='3'></div>
-                            <input style="display:none" type="hiddhen"  name="a4" value="">
                             <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='4'></div>
-                            <input style="display:none" type="hiddhen"  name="a8" value="">
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="(">(</a>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="(">(</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="+">+</a>
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator reduce" date-number="-">-</a>
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="*">×</a>
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="/">÷</a>
-                            <a class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</a>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="+">+</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator reduce" date-number="-">-</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="*">×</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="/">÷</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="bg_orange matching-key c_white fs_16" id="del">删除</a>
+                            <div class="bg_orange matching-key c_white fs_16" id="del">删除</div>
                             <!-- <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a> -->
-                            <div  class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
+                            <div class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
                         </div>
                     </div>
                 </div> 
@@ -104,6 +100,7 @@ jQuery(function($) {
         }
     }
     function nextQuestion() {
+        $('#total').text(ajaxData.length)
         var text=$('.answer').text();
         $('.rand').each(function(i){
             var text= ajaxData[ajaxData.length-1]['question'][i]
@@ -173,7 +170,7 @@ jQuery(function($) {
                     return false;
                 }
             })
-            if(!_this.hasClass('disabled')){
+            if(!_this.hasClass('disabled') && !_this.hasClass('opcity')){
                 var number=_this.text();
                 var text=$('.answer').text()
                 // if(text=="本题无解"){
@@ -199,6 +196,7 @@ jQuery(function($) {
                             dataIndex.push(_this.attr('data-index'))
                         }
                     }else{//符号
+                        _this.addClass('opcity')
                         if(flag){//数字没有全部按下
                             var flag1=false
                             if(len>0){
@@ -244,6 +242,11 @@ jQuery(function($) {
                             }
                             if(flag1){
                                 $('.answer').text(text+number) 
+                                setTimeout(function() {
+                                    _this.removeClass('opcity')
+                                }, 100);
+                            }else{
+                                _this.removeClass('opcity')
                             }
                         }else{//数字键盘全部按下且有（
                             if(_this.hasClass('rightBrackets')){//点击右括号
@@ -257,7 +260,14 @@ jQuery(function($) {
                                 }
                                 if(leftBracket>rightBracket){
                                     $('.answer').text(text+number)  
-                                } 
+                                    setTimeout(function() {
+                                        _this.removeClass('opcity')
+                                    }, 100);
+                                }else{
+                                    _this.removeClass('opcity')
+                                }
+                            }else{
+                                _this.removeClass('opcity')
                             }
                         }
                     }
@@ -267,33 +277,42 @@ jQuery(function($) {
     // })
     //删除tap事件
     mTouch('body').on('tap','#del',function(e){
-        var text=$('.answer').text()
-        var len=text.length;
-        var news='';
-        if(len>0){
-            // if(text!="本题无解"){
-                var end=text.substr(text.length-1,1);
-                var end_1=text.substr(text.length-2,1)
-                if(!isNaN(parseInt(end))){//删除的是数字
-                    var endIndex=dataIndex.length-1
-                    var data_index=dataIndex[endIndex];
-                    $('.rand').each(function(){
-                        if($(this).attr('data-index')==data_index){
-                            $(this).removeClass('disabled')
-                            dataIndex.splice(endIndex,1)
-                            return false;
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            _this.addClass('disabled')
+            var text=$('.answer').text()
+            var len=text.length;
+            var news='';
+            if(len>0){
+                // if(text!="本题无解"){
+                    var end=text.substr(text.length-1,1);
+                    var end_1=text.substr(text.length-2,1)
+                    if(!isNaN(parseInt(end))){//删除的是数字
+                        var endIndex=dataIndex.length-1
+                        var data_index=dataIndex[endIndex];
+                        $('.rand').each(function(){
+                            if($(this).attr('data-index')==data_index){
+                                $(this).removeClass('disabled')
+                                dataIndex.splice(endIndex,1)
+                                return false;
+                            }
+                        })
+                        if(!isNaN(parseInt(end_1))){//删除的两位数数字
+                            news=text.substring(0,len-2);
+                        }else{
+                            news=text.substring(0,len-1);
                         }
-                    })
-                    if(!isNaN(parseInt(end_1))){//删除的两位数数字
-                        news=text.substring(0,len-2);
                     }else{
                         news=text.substring(0,len-1);
                     }
-                }else{
-                    news=text.substring(0,len-1);
-                }
-            // }
-            $('.answer').text(news)
+                // }
+                $('.answer').text(news)
+                setTimeout(function(){
+                    _this.removeClass('disabled')
+                }, 100);
+            }else{
+                _this.removeClass('disabled')
+            }
         }
     });
     //下一题tap事件

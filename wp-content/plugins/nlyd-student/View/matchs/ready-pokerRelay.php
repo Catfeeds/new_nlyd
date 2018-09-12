@@ -28,9 +28,9 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
-                        <i class="iconfont pokerBtn left disabled">&#xe60c;</i>
+                        <i class="iconfont pokerBtn left disabled" style="display:none">&#xe60c;</i>
                     
-                        <i class="iconfont pokerBtn right disabled">&#xe60b;</i>
+                        <i class="iconfont pokerBtn right disabled" style="display:none">&#xe60b;</i>
                     
                         <div class="porker-zoo">
                             <div class="poker-window">
@@ -217,11 +217,14 @@ jQuery(function($) {
             $('.matching-btn').removeClass('active');
             $(this).addClass('active');
             var text=parseInt($(this).text())
-            if(text!='NAN'){
+            if(!isNaN(text)){
                 onePageItems=text;
-                
+                $('.left').css('display','block')
+                $('.right').css('display','block')
             }else{
                 onePageItems=false
+                $('.left').css('display','none')
+                $('.right').css('display','none')
             }
             initPagation()
     })

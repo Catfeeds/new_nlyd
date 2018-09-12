@@ -52,7 +52,6 @@ jQuery(document).ready(function($) {
         var u = navigator.userAgent;
         var isAndroid = u.indexOf('Android') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
-        var isMQQ= u.indexOf('MQQBrowser') > -1; //QQ网页浏览器，华为浏览器
          if(navigator.userAgent.indexOf('UCBrowser') > -1) { 
             if(isAndroid){//
                 // alert('isAndroid UC')
@@ -62,7 +61,10 @@ jQuery(document).ready(function($) {
             }
          }else{
             if(isAndroid){
-                if(!isMQQ){
+                if(!mqqbrowser() && !isQQInstalled()){//非QQ浏览器，QQ内置浏览器
+                    $("input[type='file']").attr('capture','camera');
+                }
+                if(isWeiXin()){
                     $("input[type='file']").attr('capture','camera');
                 }
                 
@@ -149,6 +151,24 @@ jQuery(document).ready(function($) {
                     })
                 }    
             }
+        }
+    }
+    function mqqbrowser(){
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.indexOf('mqqbrowser')> -1 && ua.indexOf(" qq")<0){
+             //qq浏览器
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function isQQInstalled(){
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.indexOf(' qq')>-1 && ua.indexOf('mqqbrowser') <0){
+            //qq内置浏览器
+            return true;
+        }else{
+            return false;
         }
     }
     function isWeiXin(){
@@ -253,7 +273,11 @@ jQuery(document).ready(function($) {
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
-            $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );        
+            if(errorMsg=='timeout'){
+                $.alerts('网络超时，请重试');  
+            }else{
+                // $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );  
+            }       
         }
     } );
     getMatchTime()

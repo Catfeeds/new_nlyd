@@ -30,23 +30,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <a class="matching-key fs_18 c_white number" date-number="1">1</a>
-                            <a class="matching-key fs_18 c_white number" date-number="2">2</a>
-                            <a class="matching-key fs_18 c_white number" date-number="3">3</a>
+                            <div class="matching-key fs_18 c_white number" date-number="1">1</div>
+                            <div class="matching-key fs_18 c_white number" date-number="2">2</div>
+                            <div class="matching-key fs_18 c_white number" date-number="3">3</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="matching-key fs_18 c_white number" date-number="4">4</a>
-                            <a class="matching-key fs_18 c_white number" date-number="5">5</a>
-                            <a class="matching-key fs_18 c_white number" date-number="6">6</a>
+                            <div class="matching-key fs_18 c_white number" date-number="4">4</div>
+                            <div class="matching-key fs_18 c_white number" date-number="5">5</div>
+                            <div class="matching-key fs_18 c_white number" date-number="6">6</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="matching-key fs_18 c_white number" date-number="7">7</a>
-                            <a class="matching-key fs_18 c_white number" date-number="8">8</a>
-                            <a class="matching-key fs_18 c_white number" date-number="9">9</a>
+                            <div class="matching-key fs_18 c_white number" date-number="7">7</div>
+                            <div class="matching-key fs_18 c_white number" date-number="8">8</div>
+                            <div class="matching-key fs_18 c_white number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="matching-key fs_16 c_white" id="del">删除</a>
-                            <a class="matching-key fs_18 c_white number" date-number="0">0</a>
+                            <div class="matching-key fs_16 c_white" id="del">删除</div>
+                            <div class="matching-key fs_18 c_white number" date-number="0">0</div>
                         </div>
                     </div>
                 </div> 
@@ -117,34 +117,51 @@ jQuery(function($) {
         })
     }
     mTouch('body').on('tap','.matching-number',function(e){
+
         $('.matching-number').removeClass('active');
         $(this).addClass('active');
+        
     })
     mTouch('body').on('tap','.number',function(e){
-        var number=$(this).attr('date-number');
-        var active=$('.matching-number.active');
-        var len=$('.matching-number').length;
-        if(!$('.matching-number').eq(len-1).hasClass('active')){
-            active.text(number).removeClass('active').next('.matching-number').addClass('active');
-        }else{
-            active.text(number);
+        var _this=$(this);
+        if(!_this.hasClass('opcity')){
+            _this.addClass('opcity')
+            var number=_this.attr('date-number');
+            var active=$('.matching-number.active');
+            var len=$('.matching-number').length;
+            if(!$('.matching-number').eq(len-1).hasClass('active')){
+                active.text(number).removeClass('active').next('.matching-number').addClass('active');
+            }else{
+                active.text(number);
+            }
+            setTimeout(function(){
+                _this.removeClass('opcity')
+            }, 100);
         }
     })
     //删除tap事件
     mTouch('body').on('tap','#del',function(e){
-        var active=$('.matching-number.active');
-        if(active.text()==""){//已经为空
-            if(!$('.matching-number').eq(0).hasClass('active')){
-                active.prev('.matching-number').addClass('active')
-                
+        var _this=$(this);
+        if(!_this.hasClass('opcity')){
+            _this.addClass('opcity')
+            var active=$('.matching-number.active');
+            if(active.text()==""){//已经为空
+                if(!$('.matching-number').eq(0).hasClass('active')){
+                    active.prev('.matching-number').addClass('active')
+                    
+                }else{
+                    active.next('.matching-number').addClass('active')
+                }
+                active.remove()
+                var dom='<div class="matching-number"></div>'
+                $('.matching-number-zoo').append(dom)
             }else{
-                active.next('.matching-number').addClass('active')
+                active.text('');
+
             }
-            active.remove()
-            var dom='<div class="matching-number"></div>'
-            $('.matching-number-zoo').append(dom)
-        }else{
-            active.text('');
+            setTimeout(function(){
+                _this.removeClass('opcity')
+            }, 100);
         }
     })
     //前插tap事件

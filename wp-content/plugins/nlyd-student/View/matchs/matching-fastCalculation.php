@@ -9,7 +9,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1题</span>
+                        <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
@@ -35,24 +35,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="1">1</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="2">2</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="3">3</a>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="1">1</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="2">2</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="3">3</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="4">4</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="5">5</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="6">6</a>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="4">4</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="5">5</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="6">6</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="7">7</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="8">8</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9">9</a>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="7">7</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="8">8</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <a class="matching-key c_white fs_16 bg_orange" id="del">删除</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</a>
-                            <a class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</a>
+                            <div class="matching-key c_white fs_16 bg_orange" id="del">删除</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</div>
                             <div class="matching-key c_white fs_16 bg_orange" id="next">下一题</div>
                         </div>
                     </div>
@@ -205,6 +204,8 @@ jQuery(function($) {
         var N=level['number'];
         var firstNumber=''
         var answer='';
+
+        // var arr=[];
         if(level['symbol']>4){
             L=4;
         }
@@ -232,9 +233,7 @@ jQuery(function($) {
             }else if(type=='加减运算'){
                 symbol=randJJ()
             }
-            
-            result+=symbol
-            var number='';
+            var number=''
             for (let i = 0; i < N; i++) {
                 var oneNumber=randSZ();
                 if(i==0){
@@ -243,16 +242,21 @@ jQuery(function($) {
                 number+=oneNumber;
             }  
             if(symbol=='+'){
-                answer+=parseInt(number);
+                answer+=parseInt(number)
             }else if(symbol=='-'){
-                answer-=parseInt(number);
+                if(answer<parseInt(number)){//相减<0
+                    symbol='+';
+                    answer+=parseInt(number)
+                }else{
+                    answer-=parseInt(number)
+                }
             }
+            result+=symbol
             result+=number    
             
         }
-       
         var row={question:firstNumber+result,rights:answer,yours:'',isRight:false,}
-        return row;
+        return row;  
     }
     function CX(level) {//乘除运算
         var firstNumber='';//符号左侧数字
@@ -260,7 +264,6 @@ jQuery(function($) {
         var secondNumber=rand29();//符号右侧数字
         var symbol=randCC()//符号
         var question='';//运算
-        
         var N=level['number'];
         if(level['number']>4){
             N=4;
@@ -319,20 +322,42 @@ jQuery(function($) {
         $.SetSession('match',sessionData)
     }
     function nextQuestion() {
+        $('#total').text(ajaxData.length)
         $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
     mTouch('body').on('tap','.number',function(){
         var _this=$(this);
-        var number=_this.attr('date-number');
-        var text=$('.answer').text()
-        $('.answer').text(text+number)
+        if(!_this.hasClass('opcity')){
+            _this.addClass('opcity')
+            var number=_this.attr('date-number');
+            var text=$('.answer').text()
+            if(text.length<21){
+                $('.answer').text(text+number)
+                setTimeout(function(){
+                    _this.removeClass('opcity')
+                },100)
+            }else{
+                _this.removeClass('opcity')
+                return false
+            }
+        }
+
     })
     mTouch('body').on('tap','#del',function(){
-        var text=$('.answer').text()
-        var len=text.length;
-        if(len>0){
-            var news=text.substring(0,len-1)
-            $('.answer').text(news)
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            _this.addClass('disabled')
+            var text=$('.answer').text()
+            var len=text.length;
+            if(len>0){
+                var news=text.substring(0,len-1)
+                $('.answer').text(news)
+                setTimeout(function(){
+                    _this.removeClass('disabled')
+                },100)
+            }else{
+                _this.removeClass('disabled')
+            }
         }
     })
     //下一题tap事件
