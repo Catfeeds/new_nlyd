@@ -339,8 +339,11 @@ class Student_Matchs extends Student_Home
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
             $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
-
+            $match['match_status'] = -2;
+            $match['match_status_cn'] = '等待开赛';
         }
+
+
 
         //print_r($match);
         //获取比赛项目
