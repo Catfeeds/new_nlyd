@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"></span>
@@ -96,14 +96,17 @@ jQuery(function($) {
         itemLen=matchSession['itemLen'];
     }
     if(!isMatching){
+        // $('.matching-fastScan').css('paddingTop','40%');
         $('body').one('click','.answer',function(){
             var _this=$(this);
-            _this.addClass('opcity');
+            _this.addClass('start')
             setTimeout(function(){
-                _this.removeClass('opcity')
-            },100)
-            initBuild(itemLen,items,nandu,true)
-            showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+                _this.removeClass('start')
+                // $('.matching-fastScan').css('paddingTop','50px');
+                initBuild(itemLen,items,nandu,true)
+                showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
+            },500)
+
         })
     }else{
         showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
@@ -263,6 +266,7 @@ jQuery(function($) {
     } 
 
     function showQusetion(row,flashTime,answerTime){//处理页面
+            $('#total').text(ajaxData.length)
             $('.answer').html(getNewline(row.rights)).removeClass('hide');
             $('.count_downs').addClass('hide');
             $('#selectWrapper').addClass('hide');

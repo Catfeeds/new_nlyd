@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font"> 第1题</span>
+                        <span class="c_blue ml_10 match_info_font"> 第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
@@ -100,6 +100,7 @@ jQuery(function($) {
         }
     }
     function nextQuestion() {
+        $('#total').text(ajaxData.length)
         var text=$('.answer').text();
         $('.rand').each(function(i){
             var text= ajaxData[ajaxData.length-1]['question'][i]

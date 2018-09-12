@@ -131,7 +131,7 @@ switch ($project_alias){
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
             $(this).attr('data-seconds',S).text(time)
-            if(S<=0){
+            if(S==0){
                 $.DelSession('leavePageWaits')
                 window.location.href=_this.parents('.a-btn').attr('href')
             }

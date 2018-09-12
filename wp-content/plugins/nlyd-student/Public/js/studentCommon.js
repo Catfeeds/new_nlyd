@@ -65,7 +65,6 @@ jQuery(document).ready(function($) {
                 if(!isMQQ){
                     $("input[type='file']").attr('capture','camera');
                 }
-                
             }
             if(isiOS){
                 // alert('isiOS')
@@ -256,7 +255,7 @@ jQuery(document).ready(function($) {
             if(errorMsg=='timeout'){
                 $.alerts('网络超时，请重试');  
             }else{
-                $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );  
+                // $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );  
             }
                   
         }
