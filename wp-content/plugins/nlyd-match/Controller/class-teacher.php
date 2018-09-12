@@ -434,6 +434,7 @@ class Teacher
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
                 LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
                 WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.' 
+                ORDER BY co.apply_status ASC 
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
