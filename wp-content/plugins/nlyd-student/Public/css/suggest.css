@@ -44,6 +44,7 @@ textarea.suggest-textarea{
     margin-right: 8px;
     float: left;
     margin-bottom: 5px;
+    overflow: hidden;
 }
 .post-img.no-dash{
     border: 1px solid #eee;
