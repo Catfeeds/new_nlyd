@@ -168,7 +168,7 @@ class Student_Matchs extends Student_Home
         /**********************获取比赛信息end********************************/
 
         /*******************获取当前比赛项目配置******************************/
-        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog')) ){
+        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog','singleRecord')) ){
 
             if (empty($this->project_key_array[$_GET['project_id']])){
                 $this->get_404('比赛项目错误');
@@ -338,7 +338,8 @@ class Student_Matchs extends Student_Home
 
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+
         }
 
         //print_r($match);
