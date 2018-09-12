@@ -96,7 +96,12 @@ jQuery(function($) {
         itemLen=matchSession['itemLen'];
     }
     if(!isMatching){
-        $('body').on('click','.answer',function(){
+        $('body').one('click','.answer',function(){
+            var _this=$(this);
+            _this.addClass('opcity');
+            setTimeout(function(){
+                _this.removeClass('opcity')
+            },100)
             initBuild(itemLen,items,nandu,true)
             showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
         })
@@ -119,7 +124,6 @@ jQuery(function($) {
              character = String.fromCharCode(Math.floor(Math.random()*26)+"A".charCodeAt(0)); 
         } 
         return character; 
-       
     }    
     function randZF() {//生成随即字符
             var arr=['~','!','@','#','$','￥','^','&','(',')','?','*','×','÷',';','"',':',];

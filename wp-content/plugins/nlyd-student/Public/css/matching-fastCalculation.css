@@ -71,10 +71,7 @@
 .matching-keyboard-row .matching-key:first-child{
     margin-left: 0;
 }
-.matching-keyboard-row:last-child .matching-key{
-    width: -webkit-calc(25% - 9px);
-    width: calc(25% - 9px);
-}
+
 .count_p{
     text-align: left;
 }

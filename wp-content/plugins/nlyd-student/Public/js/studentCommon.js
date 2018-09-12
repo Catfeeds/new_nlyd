@@ -253,7 +253,12 @@ jQuery(document).ready(function($) {
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
-            $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );        
+            if(errorMsg=='timeout'){
+                $.alerts('网络超时，请重试');  
+            }else{
+                $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );  
+            }
+                  
         }
     } );
     getMatchTime()

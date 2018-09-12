@@ -43,7 +43,7 @@
     }
 
     function leavePageLoad(url){//比赛纪录页
-        if(window.location.host=='ydbeta.gjnlyd.com'){
+        // if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -60,7 +60,7 @@
                 var leavePageWaits= jQuery.GetSession('leavePageWaits','1');
                 if(leavePageWaits && leavePageWaits['match_id']===jQuery.Request('match_id') && leavePageWaits['project_id']===jQuery.Request('project_id') && leavePageWaits['match_more']===jQuery.Request('match_more')){
                     jQuery.DelSession('leavePageWaits')
-                    if(url){
+                    if(url.length>0){
                         window.location.href=url
                     }else{
                         window.location.reload()
@@ -70,7 +70,7 @@
                     jQuery.DelSession('leavePageWaits')
                 }
             });
-        }
+        // }
     }
 
     function matchDetail(){//比赛详情页
