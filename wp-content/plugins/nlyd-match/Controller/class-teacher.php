@@ -418,8 +418,8 @@ class Teacher
         $cateWhere .= ')';
         //类别end
         if($type == 0) $typeWhere = '';
-        else $typeWhere = 'AND co.apply_status='.$type;
-
+        else $typeWhere = ' AND co.apply_status='.$type;
+        $typeWhere .= ' AND co.apply_status!=-1';
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
@@ -434,6 +434,7 @@ class Teacher
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
                 LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
                 WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.' 
+                ORDER BY co.apply_status ASC 
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -455,7 +456,7 @@ class Teacher
                 <li class="<?php if($type == 0) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=0'.'&id='.$coach_id?>'">所有</li>
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>
-                <li class="<?php if($type == -1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=-1'.'&id='.$coach_id?>'">已拒绝</li>
+
                 <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除</li>
             </ul>
             <br class="clear">

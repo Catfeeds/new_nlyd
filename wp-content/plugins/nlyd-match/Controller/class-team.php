@@ -42,8 +42,8 @@ if(!class_exists('Team')){
             END AS status_title 
             FROM '.$wpdb->prefix.'match_team AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
-            WHERE m.team_id='.$id.' AND m.user_type=1  
-            ORDER BY m.created_time DESC 
+            WHERE m.team_id='.$id.' AND m.user_type=1 AND m.status!=-2 AND m.status!=-1 
+            ORDER BY m.status ASC 
             LIMIT '.$start.','.$pageSize;
             $rows = $wpdb->get_results($sql, ARRAY_A);
             $count = $wpdb->get_row('SELECT FOUND_ROWS() AS count',ARRAY_A)['count'];

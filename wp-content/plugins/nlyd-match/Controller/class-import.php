@@ -42,7 +42,7 @@ class Import {
 //        $wpdb->query($sql);
 //        die;
 
-        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR country!=null OR mem_mobile!=null OR login_num>5');
+        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR city!=null');
 
         foreach ($result as $res){
 
@@ -61,14 +61,21 @@ class Import {
                 default:
                     $sex = '未知';
             }
-            $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
-            $display_name = $display_name == ',' ? '' : addslashes($display_name);
-            $user_real_name = ['real_type' => '','real_name' => addslashes($res->truename), 'real_ID' => '', 'real_age' => $age];
-            $user_address = ['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist];
+
+                $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
+                $display_name = $display_name == ',' ? '' : addslashes($display_name);
+                $user_real_name = ['real_type' => '','real_name' => addslashes($res->truename), 'real_ID' => '', 'real_age' => $age];
+                $user_address = ['country' => $res->country,'province' => $res->province, 'city' => $res->city, 'area' => $res->dist];
+
+
+//            continue;
+
+//            add_user_meta();
             update_user_meta($res->id,'user_address',$user_address);
             update_user_meta($res->id,'user_real_name',$user_real_name);
             update_user_meta($res->id,'user_birthday',$res->birthday);
             update_user_meta($res->id,'user_head',$res->headimgurl);
+            update_user_meta($res->id,$wpdb->prefix.'user_level',0);
             update_user_meta($res->id,'user_gender',$sex);
             update_user_meta($res->id,'first_name',mb_substr($res->truename, 0, 1));
             update_user_meta($res->id,'last_name',mb_substr($res->truename, 1));
@@ -79,14 +86,21 @@ class Import {
      * 导入用户
      */
     public function users(){
-
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        $excelClass = new PHPExcel();
         global $wpdb;
+
+
+//        $result = $wpdb->get_results('SELECT * FROM wp_users WHERE user_mobile="13072808482"');
+//        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE mem_mobile="13826121163"');
+//        var_dump($result);
+//        die;
+
+//        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+//        $excelClass = new PHPExcel();
+
 
 //        $wpdb->delete($wpdb->users,['1' => '1']);
 //        exit;
-        $fileName = 'user.sql';
+//        $fileName = 'user.sql';
 //        file_put_contents('user.sql', '');
 //        $tmp = fopen($fileName, 'w+');
 
@@ -97,12 +111,13 @@ class Import {
 
 
         $errStr = '';
-        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR country!=null OR mem_mobile!=null OR login_num>5');
+        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR city!=null');
 //        var_dump($result);
 
             foreach ($result as $res){
 
 //                $regirestTime = date('Y-m-d H:i:s', $res->register_time);
+
                 $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
                 $display_name = $display_name == ',' ? '' : addslashes($display_name);
                 $res->nickname = addslashes($res->nickname);
@@ -113,15 +128,18 @@ class Import {
 //                    'weChat_openid' => $res->openid,
 //                    'display_name' => $display_name,
 //                ];
+
+
                 if(is_object($userCreatBool)){
                     $user_login = $res->openid ? $res->openid : $res->email;
                     $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
                     if(is_object($userCreatBool)){
                         $user_login = 'nlyd_'.get_time().$res->id;
                         $userCreatBool = wp_create_user($user_login,get_time(),$res->email,$res->mem_mobile);
-                        var_dump($userCreatBool);
+//                        var_dump($userCreatBool);
                     }
                 }
+
 
                 $userUpdateData = "user_nicename='$res->nickname',weChat_openid='$res->openid',display_name='$display_name',ID='$res->id'";
                 $userSql = 'UPDATE wp_users SET '.$userUpdateData.' WHERE ID='.$userCreatBool;
