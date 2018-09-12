@@ -1002,7 +1002,7 @@ class Student_Matchs extends Student_Home
 
             $len = count($questions_answer);
 
-            if(!empty($match_questions)){
+            /*if(!empty($match_questions)){
                 $twentyfour = new TwentyFour();
                 foreach ($match_questions as $val){
                     $results = $twentyfour->calculate($val);
@@ -1010,7 +1010,7 @@ class Student_Matchs extends Student_Home
                     $arr[] = !empty($results) ? $results[0] : 'unsolvable';
                 }
                 $questions_answer = $arr;
-            }
+            }*/
         }
         else{
 
@@ -1203,7 +1203,7 @@ class Student_Matchs extends Student_Home
 
             $len = count($questions_answer);
 
-            if(!empty($match_questions)){
+            /*if(!empty($match_questions)){
                 $twentyfour = new TwentyFour();
                 foreach ($match_questions as $val){
                     $results = $twentyfour->calculate($val);
@@ -1211,7 +1211,7 @@ class Student_Matchs extends Student_Home
                     $arr[] = !empty($results) ? $results[0] : 'unsolvable';
                 }
                 $questions_answer = $arr;
-            }
+            }*/
         }
         else{
 
