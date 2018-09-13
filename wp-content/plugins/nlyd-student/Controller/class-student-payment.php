@@ -3,7 +3,7 @@
 class Student_Payment {
 
     public static $payClass;
-    public function __construct($action)
+    public function __construct($action = '')
     {
 
 
@@ -14,14 +14,20 @@ class Student_Payment {
             }else {
                 $type = $action;
             }
+            $action = $type;
             $interface_config = get_option('interface_config');
-            if($type == 'wxpay' || $type == 'wxpay/' || $type == 'wx_notifyUrl' || $type == 'wx_notifyUrl/'){
+            if($type == 'wxpay' || $type == 'wxpay/' || $type == 'wx_notifyUrl' || $type == 'wx_notifyUrl/' || $type == 'wx_jsApiPay' || $type == 'wx_jsApiPay/'){
 
                 require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
                 //TODO 脑力运动
-                $interface_config['wx']['api'] = 'wxaee5846345bca60d';
-                $interface_config['wx']['merchant'] = '1494311232';
-                $interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
+//                $interface_config['wx']['api'] = 'wxaee5846345bca60d';
+//                $interface_config['wx']['merchant'] = '1494311232';
+//                $interface_config['wx']['secret_key'] = '0395894147b41053e3694f742f6aebce';
+
+                //TODO 脑力运动测试账号
+                $interface_config['wx']['api'] = 'wxb575928422b38270';
+                $interface_config['wx']['merchant'] = '1514508211';
+                $interface_config['wx']['secret_key'] = '1f55ec97e01f249b4ac57b7c99777173';
 
                 //TODO 测试
 //                $interface_config['wx']['api'] = 'wx4b9c68ca93325828';
@@ -107,11 +113,13 @@ class Student_Payment {
         global $wpdb,$current_user;
         $order = $wpdb->get_row(
             'SELECT serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
-            .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
+//            .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
+            .$wpdb->prefix.'order WHERE id='.$id.' AND pay_status=1', ARRAY_A);
+
         if(!$order) return false;
         //请求数据
         //1.统一下单方法
-        $result = self::$payClass->h5UnifiedOrder($this->getWxParam($order));
+        $result = self::$payClass->jsApiPay($this->getWxParam($order));
 //        var_dump($result);return;
         if($result != false){
             if($result['status']){
@@ -467,9 +475,11 @@ class Student_Payment {
         }
         // TODO 查询比赛详情和订单详情
 
+        //获取比赛名字
+        $match_title = $wpdb->get_var("select post_title as match_title from {$wpdb->prefix}posts where ID = {$row->match_id}");
         $view = student_view_path.CONTROLLER.'/paySuccess.php';
-//        load_view_template($view);
-        load_view_template($view,array('row'=>$row));
+        //load_view_template($view);
+        load_view_template($view,array('row'=>$row,'match_title'=>$match_title));
 
     }
 
