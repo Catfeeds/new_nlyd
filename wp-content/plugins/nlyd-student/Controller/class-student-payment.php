@@ -58,12 +58,19 @@ class Student_Payment {
             }
         }
 
-        if($action == ''){
-            $action = $type;
+        $arr3 = [
+            'zfb_pay',
+            'zfb_returnUrl',
+            'zfb_notifyUrl',
+        ];
+
+        if(in_array($action,$arr3)){
             //添加短标签
             add_shortcode('payment-home',array($this,$action));
-        }else{
+        }elseif(in_array($type,$arr3)){
 
+            //添加短标签
+            add_shortcode('payment-home',array($this,$type));
 //            return $this;
         }
 
