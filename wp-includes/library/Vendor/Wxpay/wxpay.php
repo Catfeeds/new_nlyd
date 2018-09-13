@@ -78,6 +78,7 @@ class wxpay
      */
     public function h5UnifiedOrder($params, $timeOut = 6)
     {
+
         $url = self::API_URL_PREFIX.self::UNIFIEDORDER_URL;
         $inputObj = new WxPayUnifiedOrder();
 
@@ -97,16 +98,17 @@ class wxpay
         //签名
         $inputObj->SetSign($this->key);
         $xml = $inputObj->ToXml();
-
+//        echo '<pre />';
+//        var_dump($this->key);
+//        var_dump($this->xml_to_data($xml));
+//        return;
 //        $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
         if(false == $response) return false;
         $result = WxPayResults::Init($response,$this->key);
 //        var_dump($result);
 
-//        echo '<pre />';
-//        var_dump($result);
-//        return;
+
         if($result['return_code'] === 'SUCCESS' && $result['return_msg'] === 'OK' && $result['result_code'] === 'SUCCESS' && $result['trade_type'] === 'MWEB'){
 
             return  ['status' => true, 'data' => $result['mweb_url']];
@@ -154,7 +156,6 @@ class wxpay
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
         if(!$response) return false;
         $result = WxPayResults::Init($response,$this->key);
-
 
         $this->writeLog($result,'JsApi发起支付');
 

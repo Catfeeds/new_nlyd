@@ -13,6 +13,7 @@ class Student_Payment {
                 $type = $action;
             }
 
+
             $interface_config = get_option('interface_config');
             if($type == 'wxpay' || $type == 'wxpay/' || $type == 'wx_notifyUrl' || $type == 'wx_notifyUrl/' || $type == 'wx_jsApiPay' || $type == 'wx_jsApiPay/'){
                 require_once INCLUDES_PATH.'library/Vendor/Wxpay/wxpay.php';
@@ -24,9 +25,10 @@ class Student_Payment {
                 //TODO 脑力运动测试账号
                 $interface_config['wx']['api'] = 'wxb575928422b38270';
                 $interface_config['wx']['merchant'] = '1514508211';
-//                $interface_config['wx']['secret_key'] = '1f55ec97e01f249b4ac57b7c99777173';//H5支付使用
+                $interface_config['wx']['secret_key'] = '1f55ec97e01f249b4ac57b7c99777173';//H5支付使用
+                if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false  OR (isset($_GET['jspai']) && $_GET['jspai'] = 'y')) $interface_config['wx']['secret_key'] = 'NSvMySxKLODh4TkQhAu4j5CTqF2TkpqV';//JSAPI支付使用
 
-                $interface_config['wx']['secret_key'] = 'NSvMySxKLODh4TkQhAu4j5CTqF2TkpqV';//JSAPI支付使用
+
 
                 //TODO 测试
 //                $interface_config['wx']['api'] = 'wx4b9c68ca93325828';
@@ -57,7 +59,8 @@ class Student_Payment {
                 );
             }
         }
-
+//        echo $action;
+//        die;
         $arr3 = [
             'zfb_pay',
             'zfb_returnUrl',
@@ -82,12 +85,11 @@ class Student_Payment {
      * 微信支付参数
      */
     public function getWxParam($order,$is_jsapi = false){
-        if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+        if($is_jsapi == true){
             $params['notify_url'] = home_url('payment/wx_notifyUrl/type/wxpay/jspai/y'); //商品描述
         }else{
             $params['notify_url'] = home_url('payment/wx_notifyUrl/type/wxpay'); //商品描述
         }
-
         $params['body'] = '脑力中国'; //商品描述
         $params['serialnumber'] = $order['serialnumber']; // TODO 自定义的订单号
 //        $params['price'] = 0.01; //订单金额 只能为整数 单位为分
