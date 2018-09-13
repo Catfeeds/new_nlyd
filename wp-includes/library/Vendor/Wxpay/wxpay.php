@@ -152,6 +152,9 @@ class wxpay
 
 //        $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
+        echo 111111;
+        var_dump($response);
+        die;
         if(false == $response) return false;
         $result = WxPayResults::Init($response,$this->key);
         $this->writeLog($result,'JsApi发起支付');
