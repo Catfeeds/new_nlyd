@@ -144,6 +144,18 @@ if(!class_exists('MatchController')){
         public function questionImport(){
             global $wpdb;
             if(is_post()){
+
+                if(empty($_FILES['import']['tmp_name'])){
+                    echo "<script type='text/javascript'>
+                            alert('请选择上传文件');
+                            setTimeout(function() {
+                              history.go(0);
+                            },1300)
+                          </script>";
+                    return false;
+
+                }
+
                 $questionTypeId = $_POST['question_type'];
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
                 $excelClass = new PHPExcel();

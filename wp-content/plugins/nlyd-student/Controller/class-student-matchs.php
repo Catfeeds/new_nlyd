@@ -547,7 +547,7 @@ class Student_Matchs extends Student_Home
 
         /*****测试使用*****/
         if($_GET['test'] == 1){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
+            $a = $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
             //$this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
         }
 
@@ -564,7 +564,7 @@ class Student_Matchs extends Student_Home
         $questions_answer = '';
         //var_dump($this->project_alias);die;
         if($this->project_alias == 'wzsd'){
-            //var_dump('wzsd_question'.$current_user->ID.'_'.$this->current_more);
+            //var_dump($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID.'_'.$this->current_more));
             if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
                 $question = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
@@ -597,7 +597,7 @@ class Student_Matchs extends Student_Home
                     return;
                 }
                 //print_r($question);
-                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
 
                 //获取当前题目所有问题
                 $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -605,15 +605,18 @@ class Student_Matchs extends Student_Home
                         left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
                         where a.post_parent = {$question->ID} order by b.id asc
                         ";
+
                 $rows = $wpdb->get_results($sql1,ARRAY_A);
                 $questions_answer = array();
                 $match_questions = array();
-
                 if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
                     foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
                         $key = &$val['ID'];
                         $questions_answer[$key]['problem_select'][] = $val['problem_select'];
                         $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
                     }
                     $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
@@ -697,8 +700,9 @@ class Student_Matchs extends Student_Home
             'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
+            'answer_total'=>isset($answer_total) ? $answer_total : 1,
         );
-        //var_dump($data);die;
+        //var_dump($data);
         //$data['count_down'] = 3000;
 
         if(in_array($this->project_alias,array('zxss','kysm'))){
@@ -869,6 +873,7 @@ class Student_Matchs extends Student_Home
             'match_questions'=>empty($row['match_questions']) ? '' : json_decode($row['match_questions'],true),
             'questions_answer' =>empty($row['questions_answer']) ? '' : json_decode($row['questions_answer'],true),
         );
+
 
         if ($this->project_alias == 'pkjl'){
             $poker = poker_create(false);

@@ -62,11 +62,20 @@ if(!class_exists('StudentController')){
             //引入学生端公用css/js
             add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
+            //登录时执行
+            add_action('wp_login',array( $this, 'logging_in' ));
+
+            //判断异地登录
             add_action('wp_head',array($this,'is_abnormal_login'));
 
 
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
+        }
+
+        public function logging_in($user_login){
+            $user = get_user_by( 'login', $user_login );
+            update_user_meta($user->ID,'user_session_id',session_id());
         }
 
         //插件启动时加载
