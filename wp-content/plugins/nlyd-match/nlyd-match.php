@@ -32,8 +32,8 @@ if(!class_exists('MatchController')){
         public function Yct_Row_actions( $actions, $post )
         {
 //            unset($actions['inline hide-if-no-js']);
-            if($this->post_type == 'match'){
-                unset($actions['trash']);
+            if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem')) ){
+                if($this->post_type == 'match') unset($actions['trash']);
                 unset($actions['view']);
 
             }elseif ($this->post_type == 'question'){
