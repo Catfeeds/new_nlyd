@@ -24,33 +24,33 @@
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name fs_12 c_black3 text_1"><?=$match['post_content']?></p>
+                                    <p class="long-name fs_12 c_black3"><?=$match['post_content']?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛日期：</div>
-                                        <div class="nl-match-info text_1 c_black">
+                                        <div class="nl-match-info c_black">
                                             <?=$match['match_start_time']?>
                                             <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">结束时间：</div>
-                                        <div class="nl-match-info text_1 c_black">
+                                        <div class="nl-match-info c_black">
                                             <?=$match['match_end_time']?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛地点：</div>
-                                        <div class="nl-match-info text_1 c_black"><?=$match['match_address']?></div>
+                                        <div class="nl-match-info c_black"><?=$match['match_address']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名费用：</div>
-                                        <div class="nl-match-info text_1 c_black">¥<?=$match['match_cost']?></div>
+                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info text_1 c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
+                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
                                     </div>
                                 </div>
                             </li>
@@ -66,10 +66,7 @@
                                         <div class="nl-match-label"><?=$val['parent_title']?>：</div>
                                             <div class="nl-match-info">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                            
                                                 <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">比赛规则</a>&nbsp;&nbsp;
-                                                
-                                            
                                             <?php } ?>
                                         </div>
                                     </div>

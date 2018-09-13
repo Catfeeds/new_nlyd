@@ -102,6 +102,17 @@ p.long-name{
     color: #fff;
     border-radius: 50%;
 }
+.nl-match-label{
+    float: left;
+    width: 70px;
+}
+.nl-match-info{
+    float: left;
+    width: -webkit-calc(100% - 70px);
+    width: calc(100% - 70px);
+    text-align: left;
+}
+
 @media screen and (min-width: 992px){
     .nl-border{
         padding-top: 0;
