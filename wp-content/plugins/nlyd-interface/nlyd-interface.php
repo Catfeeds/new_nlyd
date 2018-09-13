@@ -315,6 +315,6 @@ if(!class_exists('myInterface')){
 
 }
 define( 'leo_user_interface_path', plugin_dir_path( __FILE__ ) );
-define( 'leo_user_interface_version','2.0.5' );//样式版本
+define( 'leo_user_interface_version','2.0.6' );//样式版本
 
 new myInterface();

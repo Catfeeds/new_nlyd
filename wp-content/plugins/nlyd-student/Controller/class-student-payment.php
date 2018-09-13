@@ -478,7 +478,7 @@ class Student_Payment {
         //获取比赛名字
         $match_title = $wpdb->get_var("select post_title as match_title from {$wpdb->prefix}posts where ID = {$row->match_id}");
         $view = student_view_path.CONTROLLER.'/paySuccess.php';
-        //load_view_template($view);
+//        load_view_template($view);
         load_view_template($view,array('row'=>$row,'match_title'=>$match_title));
 
     }

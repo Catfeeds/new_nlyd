@@ -44,6 +44,14 @@
                 </div>
             </div>  
         <?php }else{ ?>
+        <style>
+            @media screen and (max-width: 991px){
+                #page {
+                    top: 0;
+                }
+            }
+
+        </style>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">

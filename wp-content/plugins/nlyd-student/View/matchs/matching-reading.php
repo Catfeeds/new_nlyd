@@ -29,10 +29,10 @@
                                    // print_r($v);
                                 ?>
                                 <!-- 多选 -->
-                                <div class="reading-select">
+                                <!-- <div class="reading-select">
                                     <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary">
                                     <span><?=get_select($y)?>、<?=$v;?></span>
-                                </div>
+                                </div> -->
                                 <!-- 单选 -->
                                 <div class="reading-select">
                                     <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
