@@ -2200,9 +2200,17 @@ class Student_Ajax
                 $wxpay = new Student_Payment('wxpay');
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
-                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
+                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
+                    $params['open_id'] =$current_user->weChat_openid;
+                    $result = $wxpay->payClass->jsApiPay($params);
+                    if($result['status'] != false){
+                        wp_send_json_success(array('params' => $result['data'], 'info' => NULL));
+                    }else{
+                        wp_send_json_error(array('info'=>$result['data']));
+                    }
+//                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/').$order['id'].'.html'];
                 }else{
-                    $result = $wxpay::$payClass->h5UnifiedOrder($params);
+                    $result = $wxpay->payClass->h5UnifiedOrder($params);
                 }
 
 
