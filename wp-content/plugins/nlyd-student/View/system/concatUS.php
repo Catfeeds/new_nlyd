@@ -1,5 +1,5 @@
 
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bAXxnnlcOdxyHxkxpkKoaPfkEnMqSTcV&callback=initialize"></script>  
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=bAXxnnlcOdxyHxkxpkKoaPfkEnMqSTcV&callback=initialize"></script>  
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">

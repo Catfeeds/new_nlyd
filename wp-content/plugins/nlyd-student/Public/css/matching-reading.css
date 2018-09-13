@@ -42,6 +42,7 @@
     display: none;
 }
 .matching-reading.active{
+    padding-bottom: 70px;
     display: block;
 }
 .a-btn.two{

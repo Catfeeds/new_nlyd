@@ -1,8 +1,13 @@
 <?php
 class Student_Weixin
 {
-    public $appid = 'wxb70e5bd97a67bb51';
-    public $appsecret = '9c846264ee2169c34882e71ccc0f5935';
+
+//    public $appid = 'wxb70e5bd97a67bb51';
+//    public $appsecret = '9c846264ee2169c34882e71ccc0f5935';
+    //脑力运动测试号
+    public $appid = 'wxb575928422b38270';
+    public $appsecret = '1f55ec97e01f249b4ac57b7c99777173';
+
     public function __construct($action = '')
     {
         if($action) $this->$action();
@@ -16,9 +21,10 @@ class Student_Weixin
     }
 
     public function verification(){
-
-
-        die;
+//        $echoStr = $_GET["echostr"];
+//        echo $echoStr;
+//
+//        die;
     }
 
 
@@ -26,6 +32,8 @@ class Student_Weixin
      * 微信网页授权登录
      */
     public function webLogin(){
+
+
 //            wp_logout();
 
 //        $this->getWebCode(true);
