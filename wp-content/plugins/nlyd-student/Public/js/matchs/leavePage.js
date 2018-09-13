@@ -65,7 +65,6 @@
                     }else{
                         window.location.reload()
                     }
-                    
                 }else{
                     jQuery.DelSession('leavePageWaits')
                 }
