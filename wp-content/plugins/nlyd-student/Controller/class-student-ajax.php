@@ -323,6 +323,7 @@ class Student_Ajax
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
             case 'subjectReading': //文章速读
+                //var_dump($_POST);die;
                 $questions_answer = json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -361,7 +362,7 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                //$a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
                 //var_dump($a);die;
                 break;
             default:

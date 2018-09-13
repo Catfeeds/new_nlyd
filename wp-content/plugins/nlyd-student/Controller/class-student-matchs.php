@@ -951,7 +951,7 @@ class Student_Matchs extends Student_Home
         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
 
         if(empty($row)){
-            $this->get_404('数据错误');
+            $this->get_404('数据为空,请确认是否参加本轮答题');
             return;
         }else{
             if($row['answer_status'] != 1){
@@ -1035,6 +1035,7 @@ class Student_Matchs extends Student_Home
 
         if(empty($this->next_project)){
             if(!empty($this->current_project)){
+
 
                 $match_more = $this->current_project['match_more']+1;
                 $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
@@ -1139,7 +1140,7 @@ class Student_Matchs extends Student_Home
         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
         //print_r($row);
         if(empty($row)){
-            $this->get_404('数据错误');
+            $this->get_404('数据为空,请确认是否参加本轮答题');
             return;
         }else{
             if($row['answer_status'] != 1){

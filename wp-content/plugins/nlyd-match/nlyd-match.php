@@ -18,7 +18,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','2.0.5' );//样式版本
+            define( 'leo_match_version','2.0.6' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -1260,7 +1260,7 @@ if(!class_exists('MatchController')){
             //var_dump($this->post_type);
             wp_register_style( 'admin_index_css',match_css_url.'index.css','', leo_match_version  );
             wp_enqueue_style( 'admin_index_css' );
-            if(!in_array($this->post_type,array('page','post','question','project','match-category'))){
+            if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
 
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
