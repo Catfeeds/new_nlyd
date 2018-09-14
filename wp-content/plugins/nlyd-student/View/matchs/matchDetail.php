@@ -83,6 +83,15 @@
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
                                         <table class="nl-table">
+                                            <thead>
+                                                <tr>
+                                                    <td><div class="table_content">头像</div></td>
+                                                    <td><div class="table_content">学员姓名 </div></td>
+                                                    <td><div class="table_content">性 别</div></td>
+                                                    <td><div class="table_content">年龄</div></td>
+                                                    <td><div class="table_content">报名日期</div></td>
+                                                </tr>
+                                            </thead>
                                             <tbody id="flow-table">
 
                                             </tbody>    

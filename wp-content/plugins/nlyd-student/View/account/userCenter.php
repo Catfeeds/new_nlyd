@@ -234,6 +234,11 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
       });
 });
 jQuery(document).ready(function($) {
+    if(parseInt(window.innerWidth)<=1199) {
+        var window_height=$(window).height();
+        var height=window_height+'px'
+        $('.nl-left-menu').css('minHeight',height)
+    }
     $('.userCenter-main').click(function(){
         $("#file").click()
     })
