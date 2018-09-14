@@ -102,7 +102,7 @@ jQuery(function($) {
                     }
                     var lis = [];
                     $.ajax({
-                        data: postData,success(res,ajaxStatu,xhr){
+                        data: postData,success:function(res,ajaxStatu,xhr){
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){

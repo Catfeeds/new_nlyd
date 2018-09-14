@@ -246,7 +246,7 @@ jQuery(function($) {
             // 监听提交
             form.on('submit(pay-formbtn)', function(data){
                 $.ajax({
-                    data:data.field,success(res){
+                    data:data.field,success:function(res){
                         // console.log(res)
                         if(res.success){
                             //不需要支付
@@ -299,7 +299,7 @@ jQuery(function($) {
                                     if(pay_type){
                                         
                                         $.ajax({
-                                            data:datas,success(response){
+                                            data:datas,success:function(response){
                                                 if(response.success){
                                                     if(response.data.info){
                                                         window.location.href=response.data.info;

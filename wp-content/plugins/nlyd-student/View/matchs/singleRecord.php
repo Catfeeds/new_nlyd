@@ -112,7 +112,7 @@ layui.use(['element','flow'], function(){
                     page:fenleiPage
                 }
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){  
+                    data:postData,success:function(res,ajaxStatu,xhr){  
                         if(res.success){
                             var Html="";
                             if(res.data.my_ranking!=null){//我的成绩

@@ -146,7 +146,7 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){ 
+                    data:postData,success:function(res,ajaxStatu,xhr){ 
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -191,7 +191,7 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){ 
+                    data:postData,success:function(res,ajaxStatu,xhr){ 
                         if(res.success){ 
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -247,7 +247,7 @@ layui.use(['element','layer','flow'], function(){
                     handle:'join',//操作 join:入队 其他:离队
                 };
                 $.ajax({//设为主训教练
-                    data:data,success(res,ajaxStatu,xhr){ 
+                    data:data,success:function(res,ajaxStatu,xhr){ 
                         $.alerts(res.data.info)
                         if(res.success){
                             _this.css('display','none');
@@ -290,7 +290,7 @@ layui.use(['element','layer','flow'], function(){
                         handle:'leave',//操作 join:入队 其他:离队
                     };
                     $.ajax({
-                        data:data,success(res,ajaxStatu,xhr){ 
+                        data:data,success:function(res,ajaxStatu,xhr){ 
                             $.alerts(res.data.info)
                             if(res.success){
                                 _this.after('<span class="nl-team-step">离队申请审核中</span>').css('display','none');

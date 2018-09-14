@@ -194,7 +194,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){  
+                    data:postData,success:function(res,ajaxStatu,xhr){  
                     // console.log(res)
                         if(res.success){ 
                             $.each(res.data.list,function(index,value){

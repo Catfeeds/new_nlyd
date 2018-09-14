@@ -160,7 +160,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){
+                    data:postData,success:function(res,ajaxStatu,xhr){
                         var domTime=$('#time_count').attr('data-end').replace(/-/g,'/');
                         var end_time = new Date(domTime).getTime();//月份是实际月份-1
                         var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()

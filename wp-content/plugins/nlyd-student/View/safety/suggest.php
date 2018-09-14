@@ -138,7 +138,7 @@
                     success: function(res, textStatus, jqXHR){
                         if(res.success){
                             $.alerts(res.data.info)
-                            setTimeout(() => {
+                            setTimeout(function() {
                                  window.location.reload() 
                             }, 300);
                            

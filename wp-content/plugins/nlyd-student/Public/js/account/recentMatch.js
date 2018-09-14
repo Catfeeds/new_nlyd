@@ -10,12 +10,12 @@ jQuery(function($) {
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'get_my_match_list',
-                    page:page
-                }
+                    page:page,
+                };
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){  
-                    console.log(res)
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){ 
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签

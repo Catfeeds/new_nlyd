@@ -276,7 +276,8 @@ jQuery(document).ready(function($) {
             cropper.destroy();
             cropper = null;
     })
-    document.getElementById('crop').addEventListener('click', function () {
+    $('body').on('click','#crop',function(){
+    // document.getElementById('crop').addEventListener('click', function () {
         var canvas;
         if (cropper) {
         canvas = cropper.getCroppedCanvas({

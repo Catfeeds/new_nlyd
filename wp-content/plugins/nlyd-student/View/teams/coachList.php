@@ -158,7 +158,7 @@ layui.use(['element','flow','layer','form'], function(){
                 category_id:category_id
             }
             $.ajax({
-                data:ajax_data,success(resp,ajaxStatu,xhr){  
+                data:ajax_data,success:function(resp,ajaxStatu,xhr){  
                     var hasMajor= resp.success ? true : false;
                     var content=""
                     if(hasMajor){
@@ -198,7 +198,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 major:major,
                             }
                             $.ajax({
-                                data:postData,success(res,ajaxStatu,xhr){  
+                                data:postData,success:function(res,ajaxStatu,xhr){  
                                     $.alerts(res.data.info)
                                     if(res.success){
                                         _this.removeClass('setTeacher').addClass('bg_gradient_grey').text('教练审核中···');
@@ -260,7 +260,7 @@ layui.use(['element','flow','layer','form'], function(){
                         category_id:category_id,
                     }
                     $.ajax({
-                        data:postData,success(res,ajaxStatu,xhr){  
+                        data:postData,success:function(res,ajaxStatu,xhr){  
                             if(res.success){
                                 $.alerts(res.data.info)
                                 if(res.data.url&&res.data.url.length>0){
@@ -310,7 +310,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                 category_id:category_id,
                                             }
                                             $.ajax({
-                                                data:replaceData,success(response,ajaxStatu,xhr){  
+                                                data:replaceData,success:function(response,ajaxStatu,xhr){  
                                                     $.alerts(response.data.info)
                                                     if(response.success){
                                                         var majorDom=$('.coach-type.c_orange')
@@ -401,7 +401,7 @@ layui.use(['element','flow','layer','form'], function(){
                         category_id:category_id,
                     }
                     $.ajax({
-                        data:postData,success(res,ajaxStatu,xhr){  
+                        data:postData,success:function(res,ajaxStatu,xhr){  
                             $.alerts(res.data.info)
                             if(res.success){
                                 if(res.data.url.length>0){
