@@ -51,6 +51,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="matching-key c_white fs_16 bg_orange" id="del">删除</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</div>
                             <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</div>
                             <div class="matching-key c_white fs_16 bg_orange" id="next">下一题</div>
                         </div>
@@ -130,7 +131,7 @@ jQuery(function($) {
                 $('#type').text(type)
             } else {//倒计时结束
                 level={number:2,symbol:1};//初始化难度
-                n_type++;
+                n_type++
                 if(n_type==0){
                     type="连加运算" 
                     sys_second=even_add_time;
@@ -218,7 +219,7 @@ jQuery(function($) {
         if(level['number']<2){
             N=2;
         }
-        for (let i = 0; i < N; i++;) {
+        for (var i = 0; i < N; i++) {
             var oneNumber=randSZ();
             if(i==0){
                 oneNumber=compare(0)
@@ -226,7 +227,7 @@ jQuery(function($) {
             firstNumber+=oneNumber;
         }
         answer=parseInt(firstNumber);
-        for (var index = 0; index < L; index++;) {
+        for (var index = 0; index < L; index++) {
             var symbol=''
             if(type=='连加运算'){
                 symbol='+';
@@ -234,7 +235,7 @@ jQuery(function($) {
                 symbol=randJJ()
             }
             var number=''
-            for (let i = 0; i < N; i++;) {
+            for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
                 if(i==0){
                     oneNumber=compare(0)
@@ -244,12 +245,13 @@ jQuery(function($) {
             if(symbol=='+'){
                 answer+=parseInt(number)
             }else if(symbol=='-'){
-                if(answer<parseInt(number)){//相减<0
-                    symbol='+';
-                    answer+=parseInt(number)
-                }else{
-                    answer-=parseInt(number)
-                }
+                // if(answer<parseInt(number)){//相减<0
+                //     symbol='+';
+                //     answer+=parseInt(number)
+                // }else{
+                //     answer-=parseInt(number)
+                // }
+                answer-=parseInt(number)
             }
             result+=symbol
             result+=number    
@@ -272,7 +274,7 @@ jQuery(function($) {
             N=2;
         }
         if(symbol=='×'){
-            for (let i = 0; i < N; i++;) {
+            for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
                 if(i==0){
                     oneNumber=compare(0)
@@ -282,7 +284,7 @@ jQuery(function($) {
             answer=parseInt(firstNumber)*parseInt(secondNumber)
             question=firstNumber+symbol+secondNumber
         }else if(symbol=='÷'){
-            for (let i = 0; i < N; i++;) {
+            for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
                 if(i==0){
                     oneNumber=compare(0)
@@ -365,20 +367,20 @@ jQuery(function($) {
         var _this=$(this)
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
-            nextBtn_click++;
+            nextBtn_click++
             if (type=='乘除运算') {
                 if(nextBtn_click%cx_interval_times==0){//难度控制
-                    level.symbol=1;
-                    level.number++;
+                    level.symbol=1
+                    level.number++
                     if(level.number>4){
                         level.number=4
                     }
                 }
             }else{
                 if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
-                    level.number++;
+                    level.number++
                     if(level.number>4){//数字长度达到4位最大限度，数字长度变为2，符号加1，为最大限度，数字长度不变
-                        level.symbol++;
+                        level.symbol++
                         if(level.symbol>=4){
                             level.number=4
                         }else{
@@ -392,7 +394,7 @@ jQuery(function($) {
             var yours=$('#answer').text()
             var flag=true;
             if(yours.length>0){
-                for(var i=0;i< yours.length;i++;){
+                for(var i=0;i< yours.length;i++){
                     if(yours.charAt(i)=="-"){
                         if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
                             flag=false;
