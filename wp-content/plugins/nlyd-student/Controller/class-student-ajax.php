@@ -9,8 +9,8 @@
 use library\AliSms;
 use library\TwentyFour;
 class Student_Ajax
-{   
-    
+{
+
     function __construct() {
 
         //如果有提交并且提交的内容中有规定的提交数据
@@ -32,8 +32,8 @@ class Student_Ajax
     }
 
     /**
-    *获取24点结果
-    */
+     *获取24点结果
+     */
     public function get_24_result(){
 
         if(empty($_POST['numbers'])) wp_send_json_error(array('info'=>'参数不能为空'));
@@ -234,7 +234,7 @@ class Student_Ajax
         ini_set('post_max_size','10M');
 
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
-        
+
         // var_dump($_POST['match_id']);
         // var_dump($_POST['project_id']);
         // var_dump($_POST['match_more']);
@@ -323,7 +323,6 @@ class Student_Ajax
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
             case 'subjectReading': //文章速读
-                //var_dump($_POST);die;
                 $questions_answer = json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -362,7 +361,7 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                //$a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
                 //var_dump($a);die;
                 break;
             default:
@@ -494,7 +493,7 @@ class Student_Ajax
 //        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
         if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
-            $data['pay_status'] = 2;
+            $data['pay_status'] = 4;
         }
 
         //print_r($data);die;
@@ -718,7 +717,7 @@ class Student_Ajax
                 left join {$wpdb->prefix}team_meta c on a.ID = c.team_id 
                 where {$where} order by b.status desc limit $start,$pageSize";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-       // print_r($sql);
+        // print_r($sql);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -982,7 +981,7 @@ class Student_Ajax
                 $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status != -1";
                 //print_r($sql2);
                 $my_coach = $wpdb->get_row($sql2,ARRAY_A);
-               // print_r($my_coach);
+                // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
                 $rows[$k]['my_major_coach'] = 'n';
@@ -1002,26 +1001,26 @@ class Student_Ajax
                 foreach ($categoryArr as $cateK => $cate){
 //                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title,mc.major FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
 //                      $readApply = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$val[$cate]);
-                        switch ($cate){
-                            case 'read':
-                                $post_title = '速读类';
-                                break;
-                            case 'memory':
-                                $post_title = '速记类';
-                                break;
-                            case 'compute':
-                                $post_title = '速算类';
-                                break;
-                        }
-                        $rows[$k]['category'][$cateK]['name'] = $cate;
-                        $rows[$k]['category'][$cateK]['post_title'] = $post_title;
-                        $rows[$k]['category'][$cateK]['category_id'] = $rows[$k][$cate];
-                        $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
-                        $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
-                        $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
-                        $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
-                        $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
-                        $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
+                    switch ($cate){
+                        case 'read':
+                            $post_title = '速读类';
+                            break;
+                        case 'memory':
+                            $post_title = '速记类';
+                            break;
+                        case 'compute':
+                            $post_title = '速算类';
+                            break;
+                    }
+                    $rows[$k]['category'][$cateK]['name'] = $cate;
+                    $rows[$k]['category'][$cateK]['post_title'] = $post_title;
+                    $rows[$k]['category'][$cateK]['category_id'] = $rows[$k][$cate];
+                    $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
+                    $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
+                    $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
+                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
+                    $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
+                    $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
                     if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
                         $rows[$k]['category'][$cateK]['is_current'] = 'true';//此教练是否在当前分类
                         $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate].' AND user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
@@ -1063,7 +1062,7 @@ class Student_Ajax
 
         global $wpdb;
         $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
-        
+
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if($json){
             wp_send_json_success(array('info'=>$rows));
@@ -1153,7 +1152,7 @@ class Student_Ajax
         }
         $b = $wpdb->update($wpdb->prefix.'my_coach',array('major'=>$major),array('id'=>$row['id'],'user_id'=>$current_user->ID));
         if($b){
-            
+
             if(!empty($_POST['match_id'])){
                 $url = home_url('matchs/confirm/match_id/'.$_POST['match_id']);
             }else{
@@ -1161,7 +1160,7 @@ class Student_Ajax
             }
             wp_send_json_success(array('info'=>'操作成功','url'=>$url));
         }else{
-            
+
             wp_send_json_error(array('info'=>'操作失败'));
         }
     }
@@ -1370,7 +1369,7 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
             //获取报名人数
-            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status = 2";
+            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status = 4";
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
             //前端需要的数组
@@ -1767,7 +1766,7 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_login_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
-        
+
         switch ($_POST['login_type']){
             case 'mobile':
 
@@ -1776,11 +1775,11 @@ class Student_Ajax
 
                 break;
             case 'pass';
-                
+
                 if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>'用户名不能为空'));
                 if(empty($_POST['password'])) wp_send_json_error(array('info'=>'密码不能为空'));
 
-               break;
+                break;
         }
         global $wpdb;
         $sql = "SELECT * FROM $wpdb->users WHERE user_login = '{$_POST['user_login']}' or user_email = '{$_POST['user_login']}' or user_mobile = '{$_POST['user_login']}'";
@@ -2019,13 +2018,13 @@ class Student_Ajax
         global $wpdb,$current_user;
         $messagesId = intval($_POST['messages_id']);
         $row = $wpdb->get_row('SELECT title,content,message_time FROM '.$wpdb->prefix.'messages '.'WHERE'
-        .' id='.$messagesId.' AND user_id='.$current_user->ID.' AND status=1');
+            .' id='.$messagesId.' AND user_id='.$current_user->ID.' AND status=1');
         if($row){
-                $wpdb->update($wpdb->prefix.'messages', array(
-                    'read_status' => 2
-                ),array(
-                    'id' => $messagesId
-                ));
+            $wpdb->update($wpdb->prefix.'messages', array(
+                'read_status' => 2
+            ),array(
+                'id' => $messagesId
+            ));
             wp_send_json_success(array('info'=>$row));
         } else{
             wp_send_json_error(array('info'=>'未找到数据'));
@@ -2200,9 +2199,17 @@ class Student_Ajax
                 $wxpay = new Student_Payment('wxpay');
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
-                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/'.$order['id'])];
+                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
+                    $params['open_id'] =$current_user->weChat_openid;
+                    $result = $wxpay->payClass->jsApiPay($params);
+                    if($result['status'] != false){
+                        wp_send_json_success(array('params' => $result['data'], 'info' => NULL));
+                    }else{
+                        wp_send_json_error(array('info'=>$result['data']));
+                    }
+//                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/').$order['id'].'.html'];
                 }else{
-                    $result = $wxpay::$payClass->h5UnifiedOrder($params);
+                    $result = $wxpay->payClass->h5UnifiedOrder($params);
                 }
 
 

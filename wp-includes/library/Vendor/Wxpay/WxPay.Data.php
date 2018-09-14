@@ -133,8 +133,9 @@ class WxPayDataBase
 	 * 生成签名
 	 * @return 签名，本函数不覆盖sign成员变量，如要设置签名需要调用SetSign方法赋值
 	 */
-	public function MakeSign()
+	public function MakeSign($key = '')
 	{
+	    if($key != '') $this->key = $key;
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
