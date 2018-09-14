@@ -59,7 +59,7 @@
 .layui-tab-bar{
     display: none;
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .layui-col-space20>*{
         padding: 0;
     }

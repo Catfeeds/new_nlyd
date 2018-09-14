@@ -1,177 +1,178 @@
 
 <!-- 登陆 -->
 <div class="wrapper_content">
-    <p class="titleLanguage">
-        <!-- <span>切换语言</span>
-        <span class="c_blue pointer">中文</span> -->
-    </p>
-    <div class="login-box-top">
-        <div class="box-logo ">
-            <img src="<?=student_css_url.'image/login-logo.png'?>" class="logoImg">
-        </div>
-    </div>
-    <div class="layui-tab layui-tab-brief" lay-filter="tabs">
-        <ul style="margin-left: 0" class="layui-tab-title  ">
-            <li class="layui-this">
-                <div class="login_icon iconLock lock_blue display-hide"></div>
-                <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
-            </li>
-            <li>
-                <div class="login_icon icon-zhuce user_blue"></div>&nbsp;&nbsp;<span >注册</span>
-            </li>
-            <div class="nl-transform">
-                <div class="login_icon iconLock user_white display-hide"></div>
-                <div class="login_icon iconPhone phone_white"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+    <div class="login_zoo">
+        <!-- <p class="titleLanguage">
+            <span>切换语言</span>
+            <span class="c_blue pointer">中文</span>
+        </p> -->
+        <div class="login-box-top">
+            <div class="box-logo ">
+                <img src="<?=student_css_url.'image/login-logo.png'?>" class="logoImg">
             </div>
-        </ul>
-        <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show"> 
-                <!-- 手机号码登陆 -->
-                <div class="tabs-wraps a1">
-                    <form class="layui-form" action="" id='loginFormFast' lay-filter='loginFormFast'>
-                        <!-- 使用手机验证码快速登录 -->
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <input type="hidden" name="action" value="student_login">
-                                <input type="hidden" name="login_type" value="mobile">
-                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce');?>">
-                                <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input ">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
-                            </div>
-                        </div>
-                        <p class="no-margin">
-                            <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
-                        </p>
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</a>
-                            </div>
-                        </div>
-                    </form>
+        </div>
+        <div class="layui-tab layui-tab-brief" lay-filter="tabs">
+            <ul style="margin-left: 0" class="layui-tab-title  ">
+                <li class="layui-this">
+                    <div class="login_icon iconLock lock_blue display-hide"></div>
+                    <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                </li>
+                <li>
+                    <div class="login_icon icon-zhuce user_blue"></div>&nbsp;&nbsp;<span >注册</span>
+                </li>
+                <div class="nl-transform">
+                    <div class="login_icon iconLock user_white display-hide"></div>
+                    <div class="login_icon iconPhone phone_white"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
                 </div>
-                <div class="tabs-wraps display-hide a3">
-                    <!-- 使用账号密码 -->
-                    <form class="layui-form" action="" id='loginFormPsw' lay-filter='loginFormPsw'>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show"> 
+                    <!-- 手机号码登陆 -->
+                    <div class="tabs-wraps a1">
+                        <form class="layui-form" action="" id='loginFormFast' lay-filter='loginFormFast'>
+                            <!-- 使用手机验证码快速登录 -->
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name="action" value="student_login">
+                                    <input type="hidden" name="login_type" value="mobile">
+                                    <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce');?>">
+                                    <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input ">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
+                                </div>
+                            </div>
+                            <p class="no-margin">
+                                <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
+                            </p>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tabs-wraps display-hide a3">
+                        <!-- 使用账号密码 -->
+                        <form class="layui-form" action="" id='loginFormPsw' lay-filter='loginFormPsw'>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name="action" value="student_login">
+                                    <input type="hidden" name="login_type" value="pass">
+                                    <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce')?>">
+                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" >
+                                <div class="layui-input-inline">
+                                    <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input ">
+                                </div>
+                            </div>
+                            <p class="no-margin">
+                                <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
+                                <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
+                            </p>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tabs-wraps display-hide a2">
+                        <!-- 忘记密码 -->
+                        <form class="layui-form" action="" id='loginFormForget' lay-filter='loginFormForget'>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input type="hidden" name="action" value="student_reset">
+                                    <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_reset_code_nonce');?>">
+                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</a>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" >
+                                <div class="layui-input-inline">
+                                    <input type="password" name="password" lay-verify="password" placeholder="输入新密码" autocomplete="off" class="layui-input ">
+                                </div>
+                            </div>
+                            <div class="layui-form-item" >
+                                <div class="layui-input-inline">
+                                    <input type="password" name="confirm_password" lay-verify="required" placeholder="输入新密码" autocomplete="off" class="layui-input ">
+                                </div>
+                            </div>
+                            <p class="no-margin">
+                                <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
+                            </p>
+                            <div class="layui-form-item">
+                                <div class="layui-input-inline">
+                                    <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit="">确认重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+
+                <!-- 注册 -->
+                <div class="layui-tab-item">
+                    <form class="layui-form" action="" id='registerForm' lay-filter='registerForm'>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="hidden" name="action" value="student_login">
-                                <input type="hidden" name="login_type" value="pass">
-                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce')?>">
-                                <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
-                            </div>
-                        </div>
-                        <div class="layui-form-item" >
-                            <div class="layui-input-inline">
-                                <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input ">
-                            </div>
-                        </div>
-                        <p class="no-margin">
-                            <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
-                            <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
-                        </p>
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="tabs-wraps display-hide a2">
-                    <!-- 忘记密码 -->
-                    <form class="layui-form" action="" id='loginFormForget' lay-filter='loginFormForget'>
-                        <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <input type="hidden" name="action" value="student_reset">
-                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_reset_code_nonce');?>">
+                                <input type="hidden" name="action" value="student_register">
+                                <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_register_code_nonce');?>">
                                 <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</a>
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
                             </div>
                         </div>
-                        <div class="layui-form-item" >
+                        <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="password" name="password" lay-verify="password" placeholder="输入新密码" autocomplete="off" class="layui-input ">
+                                <input type="password" name="password" lay-verify="password" placeholder="设置密码,6位以上含字母及数字" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
-                        <div class="layui-form-item" >
-                            <div class="layui-input-inline">
-                                <input type="password" name="confirm_password" lay-verify="required" placeholder="输入新密码" autocomplete="off" class="layui-input ">
-                            </div>
-                        </div>
+                                            
                         <p class="no-margin">
-                            <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
+                            <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit="">确认重置</button>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</a>
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> 
             </div> 
-
-            <!-- 注册 -->
-            <div class="layui-tab-item">
-                <form class="layui-form" action="" id='registerForm' lay-filter='registerForm'>
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline">
-                            <input type="hidden" name="action" value="student_register">
-                            <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_register_code_nonce');?>">
-                            <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
-                        </div>
+            <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
+            <ul style="margin-left: 0"  class="login-type">
+                <?php if($default_wechat_login): ?>
+                <li class="login-type-wrapper">
+                    <div class="login-type-logo">
+                        <i class="iconfont">&#xe695;</i>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline">
-                            <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                            <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
-                        </div>
+                    <div class="login-type-name">微信登录</div>
+                </li>
+                <?php endif;?>
+                <?php if($default_qq_login): ?>
+                <li class="login-type-wrapper">
+                    <div class="login-type-logo">
+                        <i class="iconfont">&#xe603;</i>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline">
-                            <input type="password" name="password" lay-verify="password" placeholder="设置密码,6位以上含字母及数字" autocomplete="off" class="layui-input ">
-                        </div>
-                    </div>
-                                        
-                    <p class="no-margin">
-                        <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
-                    </p>
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline">
-                            <a class="layui-btn submitBtn  bg_gradient_blue fs_16" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</a>
-                        </div>
-                    </div>
-                </form>
-            </div> 
-        </div> 
-        <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
-        <ul style="margin-left: 0"  class="login-type">
-            <?php if($default_wechat_login): ?>
-            <li class="login-type-wrapper">
-                <div class="login-type-logo">
-                    <i class="iconfont">&#xe695;</i>
-                </div>
-                <div class="login-type-name">微信登录</div>
-            </li>
-            <?php endif;?>
-            <?php if($default_qq_login): ?>
-            <li class="login-type-wrapper">
-                <div class="login-type-logo">
-                    <i class="iconfont">&#xe603;</i>
-                </div>
-                <div class="login-type-name">QQ登录</div>
-            </li>
-            <?php endif;?>
-        </ul>
-    </div>  
+                    <div class="login-type-name">QQ登录</div>
+                </li>
+                <?php endif;?>
+            </ul>
+        </div>  
         <div class="width-margin width-margin-pc userAgreement" style='display:none'>
             <div class="head-tips">脑力中国用户协议</div>
             <p class="content-p indent">脑力(中国)运动开发有限公司（以下简称“脑力中国”）在此特别提醒您（用户）在注册成为用户之前，请您认真阅读本《用户协议》（以下简称“协议”）并审慎选择接受或不接受本协议内容。同时，脑力中国特别提醒用户注意本协议中免除脑力中国责任和限制用户权利的条款。未成年人应在法定监护人的陪同下阅读本协议。您的注册、登录、使用等行为将视为对本协议的全部接受，并同意接受本协议全部条款的约束。</p>
@@ -325,4 +326,5 @@
             <p class="content-p">3、本协议的任何条款无论因何种原因无效或不具可执行性，其余条款仍有效，对双方具有约束力。</p>
             <p class="content-p">4、由于互联网高速发展，您与脑力中国签署的本协议列明的条款可能并不能完整罗列并覆盖您与脑力中国所有权利与义务，现有的约定也不能保证完全符合未来发展的需求。因此，脑力中国隐私权政策、脑力中国平台行为规范等均为本协议的补充协议，与本协议不可分割且具有同等法律效力。如您使用脑力中国平台服务，视为您同意上述补充协议。</p>
         </div>
+    </div>
 </div>

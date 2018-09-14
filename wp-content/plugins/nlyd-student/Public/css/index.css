@@ -597,7 +597,7 @@ p.share-font{
     white-space: nowrap;
 }
 
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .nl-page-form{
         border: 1px solid #f2f2f2;
         overflow: hidden;
@@ -687,7 +687,7 @@ p.share-font{
         border:1px solid #f2f2f2;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .have-footer{
         margin-bottom: 50px;
     }
@@ -776,7 +776,7 @@ p.share-font{
     }
 }
 
-@media screen and (min-width: 321px) and (max-width: 991px){
+@media screen and (min-width: 321px) and (max-width: 1199px){
 
 }
 @media screen and (max-width: 320px){

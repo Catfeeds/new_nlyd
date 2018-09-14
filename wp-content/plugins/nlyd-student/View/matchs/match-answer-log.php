@@ -25,7 +25,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             require_once leo_student_public_view.'leftMenu.php';
         }
         ?>
-        <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['type'])){ ?>
                     <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>

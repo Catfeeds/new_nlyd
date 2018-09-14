@@ -1,7 +1,7 @@
 <div class="layui-fluid">
     <div class="layui-row">
 
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
            
             <div class="layui-row nl-border nl-content">
   
@@ -9,22 +9,6 @@
                     <div class="count-wrapper">
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
-                            <!-- <?php if( empty($current_project['match_type'])): ?>
-                            <p class="match-detail c_blue fs_14">
-                                <?=$current_project['project_title']?>第<?=$current_project['match_more']?>轮</span>已经开赛
-                            </p>
-                            <?php endif;?> -->
-                            <!-- <p class="match-detail c_blue fs_14">
-                                即将开赛<?= empty($current_project['match_type']) ? '下一个' : '第'.$project_num.'个';?>项目“<?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>”，第<?=$next_more_num?>轮
-                            </p> -->
-
-                            <!-- 即将开赛 -->
-
-                            <?php if( empty($current_project['match_type'])): ?>
-                            <p class="match-detail fs_14 c_black">
-                                <span class="c_blue">当前比赛：</span><?=$current_project['project_title']?>第<?=$current_project['match_more']?>轮</span>
-                            </p>
-                            <?php endif;?>
                             <p class="match-detail fs_14 c_black">
                                 <span class="c_blue">即将进行：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>第<?=$next_more_num?>轮
                             </p>
@@ -118,6 +102,17 @@
                 window.location.href="<?=$match_url?>"
             }
         });
-
+        var height= $('.count-wrapper').height();
+        var marginTop=height / 2;
+        var top=$('.detail-content-wrapper').height() / 2;
+        if(top>marginTop+25){
+            $('.count-wrapper').css({
+                'margin-top':-marginTop+'px',
+                'top':top+'px',
+                'width': '100%',
+                'position': 'absolute',
+                'left': '0',
+            })
+        }
     })
 </script>

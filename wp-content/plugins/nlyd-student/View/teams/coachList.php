@@ -6,7 +6,7 @@
         ?>
 
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <?php
             if(isset($_GET['match_id'])){
@@ -561,7 +561,7 @@ layui.use(['element','flow','layer','form'], function(){
                                         coach_btn='<div class="right_c"><a class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</a></div>';//不是我的教练
                                         isLeft="ta_l"
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
                                                 +'<div class="coach-row">'
                                                     +'<div class="coach-row-top">'
                                                         +'<div class="coach-picture img-box">'

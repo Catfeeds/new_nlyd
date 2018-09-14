@@ -8,7 +8,7 @@
 
 
         <?php if($is_show){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <i class="iconfont">&#xe610;</i>
@@ -22,7 +22,7 @@
                 </div>
             </div>
         <?php }else{ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <i class="iconfont">&#xe610;</i>

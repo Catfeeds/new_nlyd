@@ -303,7 +303,7 @@ p.content-p{
     color: RGBA(38, 38, 38, 0.6);
     font-size: 0.14rem;
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .nl-border {
         padding-top: 0;
     }
@@ -348,7 +348,7 @@ p.content-p{
         margin: auto;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .coach-row{
         display: block;
         width: 100%;

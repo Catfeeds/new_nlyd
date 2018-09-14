@@ -237,7 +237,7 @@ a.c_black3:hover{
 .pull-left{
     float: left;
 }
-@media screen and (min-width:992px) {
+@media screen and (min-width:1200px) {
     html{font-size:625%!important;}
 }
 @media screen and (min-width:360px) and (max-width:374px) and (orientation:portrait) {
@@ -258,7 +258,7 @@ a.c_black3:hover{
 @media screen and (min-width:432px) and (max-width:479px) and (orientation:portrait){
     html { font-size: 843.75%!important; }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     html{font-size:625%!important;}
     /* .mui-bar{
         display: block;

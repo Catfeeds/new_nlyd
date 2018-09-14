@@ -1,5 +1,5 @@
 <style>
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #page {
         top: 130px;
     }
@@ -7,7 +7,7 @@
 </style>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav system-list system-test">
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>

@@ -45,7 +45,6 @@ input[type="text"], input[type="tel"], input[type="url"], input[type="email"], i
 }
 a.nl-see-link{
     color: #2484FE;
-    font-size: 0.12rem;
 }
 #page{
     padding-bottom: 45px;
@@ -65,4 +64,14 @@ a.nl-see-link{
     top: 4px;
     position: absolute;
     left: 7px;
+}
+.nl-match-label{
+    float: left;
+    width: 85px;
+}
+.nl-match-info{
+    float: left;
+    width: -webkit-calc(100% - 85px);
+    width: calc(100% - 85px);
+    text-align: left;
 }

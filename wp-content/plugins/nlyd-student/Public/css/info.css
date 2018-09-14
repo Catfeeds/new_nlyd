@@ -19,7 +19,7 @@
 .mui-bar.headerShow{
     display: block;
 }
-@media screen and (min-width: 992px){  
+@media screen and (min-width: 1200px){  
     .nl-goPage{
         position: absolute;
         height: 60px;
@@ -28,7 +28,7 @@
         z-index: 99;
     }
 }
-@media screen and (max-width: 991px){  
+@media screen and (max-width: 1199px){  
     .nl-border{
         position: initial;
         /* margin-top: -40px; */

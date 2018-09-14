@@ -1,5 +1,5 @@
 <style>
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .layui-fluid>.layui-row>.layui-bg-white:first-child,#page{
         background-color:#f6f6f6!important;
     }
@@ -21,13 +21,13 @@
 </div>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-bg-white have-footer">
+        <div class="nl-left-menu layui-col-sm12 layui-col-xs12 layui-col-md12 layui-bg-white have-footer">
             <div class="userCenter-info layui-row">
                 <?php if(is_user_logged_in()): ?>
                 <!-- 消息 -->
-                <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-md layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
+                <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
-                <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-md layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
+                <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
                 <?php endif;?>
                 <div class="radius-zoo">
                     <!-- 头像 -->
@@ -42,12 +42,12 @@
                         <a class="userCenter-names c_black" href="<?=home_url('/logins')?>">未登录</a>
                         <?php }else{ ?>
                         <div class="userCenter-names login"><?=$user_info['nickname']?></div>
-                        <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12 layui-hide-md layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
+                        <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12  layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
                         <?php } ?>
                     </div>
                     <?php if(is_user_logged_in()): ?>
                     <!-- 用户标签 -->
-                    <div class="userCenter-describe layui-row layui-hide-md layui-hide-lg">
+                    <div class="userCenter-describe layui-row  layui-hide-lg">
                         <span class="userCenter-item">ID<?=isset($user_info['user_ID']) ? ':'.$user_info['user_ID'] : '';?></span>
                         <?php if(in_array($my_team['status'],array(-1,1,2))){ ?>
                             <a class="userCenter-item c_black6" href="<?=home_url('teams/teamDetail/team_id/'.$my_team['ID'])?>">
@@ -66,7 +66,7 @@
             <div class="layui-row menu-wrapper">
                 <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
-                <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
+                <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <span class="fs_14 c_black">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
                             <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
@@ -77,12 +77,12 @@
                     </span>
                 </div>
                 <?php }else{ ?>
-                <div class="userCenter-row width-padding layui-row layui-bg-white layui-hide-md layui-hide-lg ta_c text_1">
+                <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <a class="c_black6" href="<?=home_url('/logins')?>">登录后可查看认证脑力等级</a>
                 </div>
                 <?php } ?>
                 <!-- 我的钱包 -->
-                <!-- <a class="userCenter-row layui-row layui-bg-white layui-hide-md layui-hide-lg" href="<?=home_url('wallet')?>">
+                <!-- <a class="userCenter-row layui-row layui-bg-white  layui-hide-lg" href="<?=home_url('wallet')?>">
                     <span class="pull-left">我的余额：<i class="iconfont">&#xe61e;</i>3200.00</span>
                     <span class="pull-right">我的脑币：<?=$user_info['mycred_default_total'] > 0 ? $user_info['mycred_default_total'] : 0 ;?></span>
                 </a> -->
@@ -137,7 +137,7 @@
                         </div>
                         <div class="userCenter-detail-foot">我的推广</div>
                     </a>
-                    <a class="c_black8"  href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
@@ -164,7 +164,7 @@
             <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple />
             <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">        
         </div>
-        <div class="nl-right-content layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs layui-bg-white">
+        <div class="nl-right-content layui-show-lg-block layui-hide-md layui-hide-sm layui-hide-xs layui-bg-white">
             <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
@@ -178,16 +178,43 @@
     </div>
 </div>
 <script>
-<?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
+
 layui.use('layer', function(){ //独立版的layer无需执行这一句
-  layer.open({
+    <?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
+    layer.open({
+            type: 1
+            ,maxWidth:300
+            ,title: '提示' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">是否立即进行实名认证？</div>'
+            ,btn: ['稍后认证', '立即认证', ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                //按钮【按钮二】的回调
+                
+                //return false 开启该代码可禁止点击该按钮关闭
+                window.location.href="<?=home_url('/account/info');?>"
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+      <?php } ?>
+      layer.open({
         type: 1
         ,maxWidth:300
-        ,title: '提示' //不显示标题栏
+        ,title: '您当前有一个未结束的比赛' //不显示标题栏
         ,skin:'nl-box-skin'
         ,id: 'certification' //防止重复弹出
-        ,content: '<div class="box-conent-wrapper">是否立即进行实名认证？</div>'
-        ,btn: ['稍后认证', '立即认证', ]
+        ,content: '<div class="box-conent-wrapper">是否继续进入比赛？</div>'
+        ,btn: ['不进入', '进入', ]
         ,success: function(layero, index){
             
         }
@@ -198,7 +225,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             //按钮【按钮二】的回调
             
             //return false 开启该代码可禁止点击该按钮关闭
-            window.location.href="<?=home_url('/account/info');?>"
+            window.location.href="<?=home_url('/matchs');?>"
         }
         ,closeBtn:2
         ,btnAagn: 'c' //按钮居中
@@ -206,7 +233,6 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
         ,isOutAnim:true//关闭动画
       });
 });
-<?php } ?>
 jQuery(document).ready(function($) {
     $('.userCenter-main').click(function(){
         $("#file").click()

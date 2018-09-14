@@ -12,7 +12,7 @@
   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
   <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<div class="nl-left-menu layui-col-lg4 layui-col-md4 layui-show-lg-block layui-show-md-block layui-hide-sm layui-hide-xs">
+<div class="nl-left-menu layui-col-lg4 layui-show-lg-block layui-hide-md layui-hide-sm layui-hide-xs">
         <div class="userCenter-info layui-row">
             <!-- 头像 -->
             <div class="userCenter-main isMobile layui-row">

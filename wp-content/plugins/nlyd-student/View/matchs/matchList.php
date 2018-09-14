@@ -8,7 +8,7 @@
         ?>
 
         <?php if($row){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
@@ -45,14 +45,14 @@
             </div>  
         <?php }else{ ?>
         <style>
-            @media screen and (max-width: 991px){
+            @media screen and (max-width: 1199px){
                 #page {
                     top: 0;
                 }
             }
 
         </style>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">
                         <div class="no-info-img">
@@ -74,6 +74,10 @@ jQuery(function($) {
     if(window.wait_match == ''){
         $('.countdown-time').hide();
     }
+    $('body').on('click','.not_sign',function(){
+        // alert(1)
+        // return false;
+    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -146,7 +150,7 @@ jQuery(function($) {
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button last-btn">'
-                                                        +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                        +'<a class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</a>'
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button last-btn">'
@@ -167,7 +171,7 @@ jQuery(function($) {
                                     if(rightBtn.length==0){
                                         onBtn="onBtn"
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'
@@ -232,6 +236,7 @@ jQuery(function($) {
                                     $(this).text(time);
                                 }else{
                                     $(this).text("报名结束");
+                                    window.location.reload()
                                 }
                             });
                         }   

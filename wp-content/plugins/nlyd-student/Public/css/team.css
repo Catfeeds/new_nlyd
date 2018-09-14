@@ -207,7 +207,7 @@
     margin-right: 0;
 }
 
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .team-row{
         width: -webkit-calc(100% - 2px);
         width: calc(100% - 2px);

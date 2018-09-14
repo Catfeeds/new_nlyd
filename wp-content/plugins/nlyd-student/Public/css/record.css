@@ -265,12 +265,12 @@ border-bottom-right-radius: 8px;
     color: #fff;
     cursor: pointer;
 }
-@media screen and (min-width: 991px){
+@media screen and (min-width: 1199px){
     .layui-tab-content .layui-tab-item:last-child{
         padding-bottom: 80px;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #page{
         padding-bottom: 50px;
     }
