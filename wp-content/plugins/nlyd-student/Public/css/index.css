@@ -587,6 +587,7 @@ p.share-font{
     text-align: center;
     font-size:0.13rem;
     white-space: nowrap;
+    padding: 3px;
 }
 .content .nl-table thead tr td{
     color: rgba(38, 38, 38, 1);
