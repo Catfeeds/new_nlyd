@@ -62,11 +62,19 @@ if(!class_exists('StudentController')){
             //引入学生端公用css/js
             add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
+            //登录时执行
+            add_action('wp_login',array( $this, 'logging_in' ));
+
             add_action('wp_head',array($this,'is_abnormal_login'));
 
 
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
+        }
+
+        public function logging_in($user_login){
+            $user = get_user_by( 'login', $user_login );
+            update_user_meta($user->ID,'user_session_id',session_id());
         }
 
         //插件启动时加载
@@ -165,7 +173,7 @@ if(!class_exists('StudentController')){
                 $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
                 left join {$wpdb->prefix}order b on a.match_id = b.match_id
                 left join {$wpdb->prefix}posts c on a.match_id = c.ID
-                WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status = 2 
+                WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
                 ORDER BY match_start_time asc limit 1
                 ";
                 //print_r($sql);

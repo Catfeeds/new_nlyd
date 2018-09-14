@@ -172,15 +172,9 @@ class Student_Account extends Student_Home
      */
     public function secure(){
 
-        // //获取教练分类
-        $category = $this->ajaxControll->get_coach_category(false);
+        global $user_info;
 
-        // //获取我的教练列表
-        // $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : $category[0]->ID;
-        // global $current_user;
-        // $coach_lists = $this->ajaxControll->get_coach_lists($category_id,'',false);
-
-        $data = array('category'=>$category);
+        $data = array('user_info'=>$user_info);
 
         $view = student_view_path.CONTROLLER.'/secure.php';
         load_view_template($view,$data);

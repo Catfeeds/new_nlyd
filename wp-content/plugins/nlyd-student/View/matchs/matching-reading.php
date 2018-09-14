@@ -21,23 +21,30 @@
                             <?php
                             $key = 0;
                             if(!empty($match_questions)){
-                                foreach ($match_questions as $k => $val ){ ?>
+                                foreach ($match_questions as $k => $val ){
+
+                                    //var_dump($questions_answer[$k]['problem_answer']);
+                                    $arr = array_count_values($questions_answer[$k]['problem_answer']);
+                                    $checkbox = $arr[1] > 1 ? true : false;
+                            ?>
                             <div class="matching-reading <?=$key==0?'active':''?>" data-index="<?=$key;?>" data-id="<?=$k;?>">
                                 <p class="c_black"><?=$key+1;?>、<?=$val?></p>
                                 <?php
                                 foreach ($questions_answer[$k]['problem_select'] as $y => $v ){
-                                   // print_r($v);
+
                                 ?>
-                                <!-- 多选 -->
-                                <!-- <div class="reading-select">
+
+                                 <div class="reading-select">
+                                    <?php if($checkbox){ ?>
+                                    <!-- 多选 -->
                                     <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary">
-                                    <span><?=get_select($y)?>、<?=$v;?></span>
-                                </div> -->
-                                <!-- 单选 -->
-                                <div class="reading-select">
+                                    <?php }else{ ?>
+                                    <!-- 单选 -->
                                     <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
+                                    <?php }?>
                                     <span><?=get_select($y)?>、<?=$v;?></span>
                                 </div>
+
                                 <?php } ?>
                             </div>
                             <?php ++$key;?>
@@ -55,7 +62,6 @@
     </div>
 </div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
-
 
 <script>
 jQuery(function($) { 

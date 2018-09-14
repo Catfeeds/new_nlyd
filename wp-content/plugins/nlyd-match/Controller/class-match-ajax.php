@@ -27,6 +27,128 @@ class Match_Ajax
     }
 
     /**
+     * 清除历史操作
+     */
+    public function clear_history(){
+        global $wpdb;
+        if($_POST['type'] == 'category'){
+            $args = array(
+                'taxonomy' => 'question_genre', //自定义分类法
+                'pad_counts' => false
+            );
+            $category = get_categories($args);
+            if(!empty($category)){
+                $category_id = array();
+                foreach ($category as $k => $v){
+                    $category_id[] = $v->term_id;
+                }
+                $id = arr2str($category_id);
+
+                $sql = "select object_id,term_taxonomy_id from {$wpdb->prefix}term_relationships where term_taxonomy_id in($id) ";
+                $object_id = $wpdb->get_results($sql,ARRAY_A);
+                if(!empty($object_id)){
+                    $object_ids = array();
+                    foreach ($object_id as $val){
+                        if($val['term_taxonomy_id'] != $_POST['id'] ){
+                            $object_ids[] = $val['object_id'];
+                        }
+                    }
+                    $ids = arr2str($object_ids);
+                    $sql_ = "UPDATE `{$wpdb->prefix}term_relationships` SET `term_taxonomy_id`= {$_POST['id']} WHERE object_id in({$ids})";
+                    //print_r($sql_);
+                    $a = $wpdb->query($sql_);
+                    if($a){
+                        wp_send_json_success('操作完成');
+                    }
+
+                }
+
+                wp_send_json_error('操作失败');
+            }
+            die;
+        }
+
+        if(empty($_POST['id'])) wp_send_json_error('请选择需要删除的数据');
+
+        $ids = arr2str($_POST['id']);
+
+        $wpdb->startTrans();
+        switch ($_POST['type']){
+            case 'user':
+            case 'teacher':
+
+                $table = "`{$wpdb->prefix}users`";
+                $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}usermeta` WHERE user_id in({$ids})");
+                $wpdb->query("DELETE FROM `{$wpdb->prefix}order` WHERE user_id in({$ids})");
+                $wpdb->query("DELETE FROM `{$wpdb->prefix}my_coach` WHERE user_id in({$ids})");
+
+                break;
+            case 'match':
+
+                $table = "`{$wpdb->prefix}posts`";
+                $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}match_meta` WHERE match_id in({$ids})");
+                $wpdb->query("DELETE FROM `{$wpdb->prefix}match_project` WHERE post_id in({$ids})");
+                $wpdb->query("DELETE FROM `{$wpdb->prefix}order` WHERE match_id in({$ids})");
+
+                break;
+            case 'question':
+
+                $table = "`{$wpdb->prefix}posts`";
+                $sql = "select ID from {$wpdb->prefix}posts where post_parent in ({$ids})";
+                $problem_id = $wpdb->get_results($sql,ARRAY_A);
+                if(!empty($problem_id)){
+                    $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}posts` WHERE post_parent in({$ids})");
+                    $problem_ids = arr2str($problem_id);
+                    $wpdb->query("DELETE FROM `{$wpdb->prefix}problem_meta` WHERE post_parent in({$problem_ids})");
+                }else{
+                    $a = 1;
+                }
+
+                break;
+            case 'team':
+
+                $table = "`{$wpdb->prefix}posts`";
+                $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}team_meta` WHERE team_id in({$ids})");
+
+                break;
+            default:
+                wp_send_json_error('非法操作');
+                break;
+        }
+        $sql = "DELETE FROM $table WHERE ID in({$ids})";
+        $c = $wpdb->query($sql);
+        //var_dump($a .'---'.$c);
+        if($a && $c ){
+            $wpdb->commit();
+            wp_send_json_success('清除完成');
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error('清除失败');
+        }
+    }
+
+    /**
+     * 获取所有题目分类
+     */
+    public function get_category_list(){
+        $args = array(
+            'taxonomy' => 'question_genre', //自定义分类法
+            'pad_counts' => false
+        );
+        $category = get_categories($args);
+        $new_category = array();
+        if(!empty($category)){
+            foreach ($category as $k => $v){
+
+                $new_category[$k]['id'] = $v->term_id;
+                $new_category[$k]['text'] = $v->name;
+            }
+        }
+        wp_send_json_success($new_category);
+    }
+
+
+    /**
      * 获取所有题目
      */
     public function get_question_list(){
@@ -42,6 +164,78 @@ class Match_Ajax
         }
         $where = join(' and ',$map);
         $sql = "select ID as id,post_title as text from {$wpdb->prefix}posts where {$where} limit 0,10";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        wp_send_json_success($rows);
+    }
+
+    /**
+     * 获取所有比赛
+     */
+    public function get_match_list(){
+        global $wpdb;
+        $map = array();
+        $map[] = ' post_type = "match" ';
+        if(!empty($_GET['term'])){
+            $map[] = " post_title like '%{$_GET['term']}%' ";
+        }
+
+        $where = join(' and ',$map);
+        $sql = "select ID as id,post_title as text from {$wpdb->prefix}posts where {$where} limit 0,10";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        wp_send_json_success($rows);
+    }
+
+
+    /**
+     * 获取所有战队
+     */
+    public function get_team_list(){
+        global $wpdb;
+        $map = array();
+        $map[] = ' post_type = "team" ';
+        if(!empty($_GET['term'])){
+            $map[] = " post_title like '%{$_GET['term']}%' ";
+        }
+
+        $where = join(' and ',$map);
+        $sql = "select ID as id,post_title as text from {$wpdb->prefix}posts where {$where} limit 0,10";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        wp_send_json_success($rows);
+    }
+
+
+    /**
+     * 获取所有用户
+     */
+    public function get_user_list(){
+        global $wpdb;
+        $map = array();
+        if(!empty($_GET['term'])){
+            $map[] = " (a.user_login like '%{$_GET['term']}%') ";
+            $map[] = " (a.user_nicename like '%{$_GET['term']}%') ";
+            $map[] = " (a.user_mobile like '%{$_GET['term']}%') ";
+            $map[] = " (a.user_email like '%{$_GET['term']}%') ";
+        }
+        $where = !empty($map) ? join(' or ',$map)  : '';
+
+        if($_GET['type'] == 'teacher'){
+            $where .= 'b.meta_value = 7';
+        }else{
+            $where .= 'b.meta_value >= 0';
+        }
+        $sql = "select a.ID as id,
+                case 
+                when a.user_login != '' then a.user_login
+                when a.user_mobile != '' then a.user_mobile
+                when a.user_email != '' then a.user_email
+                else a.user_nicename
+                end as text 
+                from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b  on a.ID = b.user_id and b.meta_key = 'wp_user_level'
+                where {$where}
+                limit 0,10";
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
         wp_send_json_success($rows);
     }

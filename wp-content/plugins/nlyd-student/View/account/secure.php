@@ -24,13 +24,21 @@
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定手机</div>
-                                <div class="nl-input">13982242710</div>
+                                <?php if(!empty($user_info['user_mobile'])){?>
+                                <div class="nl-input"><?=hideStar($user_info['user_mobile'])?></div>
                                 <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                <?php }else{ ?>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">去设置</a>
+                                <?php } ?>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定邮箱</div>
-                                <div class="nl-input">821831825@qq.com</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                <?php if(!empty($user_info['user_email'])){?>
+                                    <div class="nl-input"><?=hideStar($user_info['user_email'])?></div>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                <?php }else{ ?>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">去设置</a>
+                                <?php } ?>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定微信</div>

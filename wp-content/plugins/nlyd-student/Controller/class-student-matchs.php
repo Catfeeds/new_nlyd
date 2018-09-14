@@ -418,7 +418,7 @@ class Student_Matchs extends Student_Home
             //获取用户即将开赛的比赛信息
             $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
                     left join {$wpdb->prefix}order b on a.match_id = b.match_id
-                    WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status = 2 
+                    WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
                     ORDER BY match_start_time asc limit 1
                     ";
             //print_r($sql);
@@ -491,8 +491,8 @@ class Student_Matchs extends Student_Home
             $this->get_404('你未报名');
             return;
         }else{
-            if($row->pay_status == 1){
-                $this->get_404('你未付款');
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404('订单未付款');
                 return;
             }
         }
@@ -547,7 +547,7 @@ class Student_Matchs extends Student_Home
 
         /*****测试使用*****/
         if($_GET['test'] == 1){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
+            $a = $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
             //$this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
         }
 
@@ -564,7 +564,7 @@ class Student_Matchs extends Student_Home
         $questions_answer = '';
         //var_dump($this->project_alias);die;
         if($this->project_alias == 'wzsd'){
-            //var_dump('wzsd_question'.$current_user->ID.'_'.$this->current_more);
+            //var_dump($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID.'_'.$this->current_more));
             if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
                 $question = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
@@ -597,7 +597,7 @@ class Student_Matchs extends Student_Home
                     return;
                 }
                 //print_r($question);
-                $this->redis->setex('wzsd_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
+                $this->redis->setex($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
 
                 //获取当前题目所有问题
                 $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -605,15 +605,18 @@ class Student_Matchs extends Student_Home
                         left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
                         where a.post_parent = {$question->ID} order by b.id asc
                         ";
+
                 $rows = $wpdb->get_results($sql1,ARRAY_A);
                 $questions_answer = array();
                 $match_questions = array();
-
                 if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
                     foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
                         $key = &$val['ID'];
                         $questions_answer[$key]['problem_select'][] = $val['problem_select'];
                         $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
                     }
                     $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
@@ -697,8 +700,9 @@ class Student_Matchs extends Student_Home
             'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
+            'answer_total'=>isset($answer_total) ? $answer_total : 1,
         );
-        //var_dump($data);die;
+        //var_dump($data);
         //$data['count_down'] = 3000;
 
         if(in_array($this->project_alias,array('zxss','kysm'))){
@@ -824,8 +828,8 @@ class Student_Matchs extends Student_Home
             $this->get_404('你未报名');
             return;
         }else{
-            if($row->pay_status == 1){
-                $this->get_404('你未付款');
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404('订单未付款');
                 return;
             }
         }
@@ -869,6 +873,7 @@ class Student_Matchs extends Student_Home
             'match_questions'=>empty($row['match_questions']) ? '' : json_decode($row['match_questions'],true),
             'questions_answer' =>empty($row['questions_answer']) ? '' : json_decode($row['questions_answer'],true),
         );
+
 
         if ($this->project_alias == 'pkjl'){
             $poker = poker_create(false);
@@ -942,7 +947,7 @@ class Student_Matchs extends Student_Home
             return;
         }else{
 
-            if($order->pay_status != 2){
+            if(!in_array($order->pay_status,array(2,3,4))){
                 $this->get_404('订单未付款');
                 return;
             }
@@ -1790,6 +1795,9 @@ class Student_Matchs extends Student_Home
                             $interval = $i < $project_match_more ? $more_interval : $this->match_project_interval ;
                             //var_dump($match_use_time);
                             $project_more_end_time = $project_more_start_time + ($match_use_time + $interval) * 60;
+                            if($interval == 0){
+                                $project_more_end_time = $next_end_time;
+                            }
                             //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_end_time));
 
                             if($project_more_start_time <= get_time() && get_time() < $project_more_end_time){
