@@ -418,7 +418,7 @@ class Student_Matchs extends Student_Home
             //获取用户即将开赛的比赛信息
             $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
                     left join {$wpdb->prefix}order b on a.match_id = b.match_id
-                    WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status = 2 
+                    WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
                     ORDER BY match_start_time asc limit 1
                     ";
             //print_r($sql);
@@ -491,8 +491,8 @@ class Student_Matchs extends Student_Home
             $this->get_404('你未报名');
             return;
         }else{
-            if($row->pay_status == 1){
-                $this->get_404('你未付款');
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404('订单未付款');
                 return;
             }
         }
@@ -828,8 +828,8 @@ class Student_Matchs extends Student_Home
             $this->get_404('你未报名');
             return;
         }else{
-            if($row->pay_status == 1){
-                $this->get_404('你未付款');
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404('订单未付款');
                 return;
             }
         }
@@ -947,7 +947,7 @@ class Student_Matchs extends Student_Home
             return;
         }else{
 
-            if($order->pay_status != 2){
+            if(!in_array($order->pay_status,array(2,3,4))){
                 $this->get_404('订单未付款');
                 return;
             }
@@ -1795,6 +1795,9 @@ class Student_Matchs extends Student_Home
                             $interval = $i < $project_match_more ? $more_interval : $this->match_project_interval ;
                             //var_dump($match_use_time);
                             $project_more_end_time = $project_more_start_time + ($match_use_time + $interval) * 60;
+                            if($interval == 0){
+                                $project_more_end_time = $next_end_time;
+                            }
                             //leo_dump(date_i18n('Y-m-d H:i:s',$project_more_end_time));
 
                             if($project_more_start_time <= get_time() && get_time() < $project_more_end_time){

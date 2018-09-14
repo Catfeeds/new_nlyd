@@ -37,7 +37,15 @@ if(!class_exists('myInterface')){
             add_submenu_page( 'options-general.php', 'logo设置', 'logo设置', 'manage_options', 'logo', array($this,'my_submenu_page_logo') );
             add_submenu_page( 'options-general.php', 'banner设置', 'banner设置', 'manage_options', 'banner', array($this,'my_submenu_page_banner') );
             add_submenu_page( 'options-general.php', '默认配置', '默认配置', 'manage_options', 'default_setting', array($this,'my_submenu_page_setting') );
+            add_submenu_page( 'options-general.php', '清除历史', '清除历史', 'administrator', 'clear_history', array($this,'my_clear_history') );
 
+        }
+
+        /**
+         * 清除历史
+         */
+        public function my_clear_history(){
+            require_once( leo_user_interface_path . 'view/clear_history.php' );
         }
 
         /**
