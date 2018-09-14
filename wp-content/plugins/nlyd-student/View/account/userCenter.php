@@ -178,16 +178,43 @@
     </div>
 </div>
 <script>
-<?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
+
 layui.use('layer', function(){ //独立版的layer无需执行这一句
-  layer.open({
+    <?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
+    layer.open({
+            type: 1
+            ,maxWidth:300
+            ,title: '提示' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">是否立即进行实名认证？</div>'
+            ,btn: ['稍后认证', '立即认证', ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                //按钮【按钮二】的回调
+                
+                //return false 开启该代码可禁止点击该按钮关闭
+                window.location.href="<?=home_url('/account/info');?>"
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+      <?php } ?>
+      layer.open({
         type: 1
         ,maxWidth:300
-        ,title: '提示' //不显示标题栏
+        ,title: '您当前有一个未结束的比赛' //不显示标题栏
         ,skin:'nl-box-skin'
         ,id: 'certification' //防止重复弹出
-        ,content: '<div class="box-conent-wrapper">是否立即进行实名认证？</div>'
-        ,btn: ['稍后认证', '立即认证', ]
+        ,content: '<div class="box-conent-wrapper">是否继续进入比赛？</div>'
+        ,btn: ['不进入', '进入', ]
         ,success: function(layero, index){
             
         }
@@ -198,7 +225,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             //按钮【按钮二】的回调
             
             //return false 开启该代码可禁止点击该按钮关闭
-            window.location.href="<?=home_url('/account/info');?>"
+            window.location.href="<?=home_url('/matchs');?>"
         }
         ,closeBtn:2
         ,btnAagn: 'c' //按钮居中
@@ -206,7 +233,6 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
         ,isOutAnim:true//关闭动画
       });
 });
-<?php } ?>
 jQuery(document).ready(function($) {
     $('.userCenter-main').click(function(){
         $("#file").click()
