@@ -1,13 +1,12 @@
 .wrapper_content{
-    width: 350px;
+    width: 300px;
     min-height: 645px;
     position: relative;
     top: 0%;
     left: 50%;
     transform: translate(-50%,0%);
-    padding: 0 40px 0 40px;
+    /* padding: 0 40px 0 40px; */
 }
-
 .login_icon{
     display: inline-block;
     position: relative;

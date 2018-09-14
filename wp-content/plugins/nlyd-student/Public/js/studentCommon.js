@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
     }
    
     function initHeight(){
-        if('ontouchstart' in window) {
+        if(parseInt(window.innerWidth)<=1199) {
             var window_height=$(window).height();
             var top=parseInt($('#page').css('top'));
             var padding=parseInt($('.detail-content-wrapper').css("paddingBottom"))

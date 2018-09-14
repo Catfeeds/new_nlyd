@@ -102,6 +102,17 @@
                 window.location.href="<?=$match_url?>"
             }
         });
-
+        var height= $('.count-wrapper').height();
+        var marginTop=height / 2;
+        var top=$('.detail-content-wrapper').height() / 2;
+        if(top>marginTop+25){
+            $('.count-wrapper').css({
+                'margin-top':-marginTop+'px',
+                'top':top+'px',
+                'width': '100%',
+                'position': 'absolute',
+                'left': '0',
+            })
+        }
     })
 </script>
