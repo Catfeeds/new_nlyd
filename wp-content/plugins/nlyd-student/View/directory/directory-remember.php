@@ -36,18 +36,6 @@
                                 </tr>
                             </thead>
                             <tbody id="flow-table">
-                                <tr>
-                                    <td>
-                                        <div class="player-img img-box">
-                                            <img src="<?=student_css_url.'image/icons/match-big.png'?>">
-                                        </div>
-                                    </td>
-                                    <td>学员姓名</td>
-                                    <td>ID</td>
-                                    <td>性别</td>
-                                    <td>速算级别</td>
-                                    <td>主训教练</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -56,14 +44,62 @@
         </div>
     </div>
 </div>
-<!-- 战队分页 -->
-<input type="hidden" name="_wpnonce" id="getTeam" value="<?=wp_create_nonce('student_get_team_code_nonce');?>">
 <script>
 jQuery(function($) {   
     layui.use(['layer','flow'], function(){
         var flow = layui.flow;//流加载
 //--------------------分页--------------------------
-
+        flow.load({
+            elem: '#flow-table' //流加载容器
+            ,scrollElem: '#flow-table' 
+            ,isAuto: false
+            ,isLazyimg: true
+            ,done: function(page, next){ //加载下一页
+                var postData={
+                    action:'getDirectories',
+                    page:page,
+                    type:4,//1脑力健将,2国际速读水平认证,3国际心算水平认证,4国际记忆水平认证
+                }
+                var lis = [];
+                $.ajax({
+                    data:postData,success(res,ajaxStatu,xhr){
+                        console.log(res)
+                        if(res.success){
+                            $.each(res.data.info,function(index,value){
+                                var real_name=value.real_name ? value.real_name :'-';
+                                var user_id=value.userID ? value.userID :'-';
+                                var sex=value.sex ? value.sex :'-';
+                                var category_name=value.category_name ? value.category_name :'-';
+                                var level=value.level ? value.level :'-';
+                                var coach_name=value.coach_name ? value.coach_name :'-';
+                                var ranges=value.ranges ? value.ranges :'-';
+                                var header_img=value.header_img ? value.header_img :'';
+                                var dom='<tr>'
+                                            +'<td>'
+                                                +'<div class="player-img img-box">'
+                                                    +'<img src="'+header_img+'">'
+                                                +'</div>'
+                                            +'</td>'
+                                            +'<td>'+real_name+'</td>'
+                                            +'<td>'+user_id+'</td>'
+                                            +'<td>'+sex+'</td>'
+                                            +'<td>'+level+'</td>'
+                                            +'<td>'+coach_name+'</td>'
+                                        +'</tr>';
+                                lis.push(dom)
+                            })
+                            if (res.data.info.length<10) {
+                                next(lis.join(''),false)
+                            }else{
+                                next(lis.join(''),true)
+                            }
+                        }else{
+                            next(lis.join(''),false)
+                        }
+                    }
+                })
+            }
+        });
  //--------------------分页--------------------------  
     })
 })

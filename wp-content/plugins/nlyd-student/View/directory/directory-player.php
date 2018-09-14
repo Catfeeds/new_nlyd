@@ -27,6 +27,7 @@
                         <table class="nl-table" >
                             <thead>
                                 <tr>
+                                    <td><div class="table_content">头像</div></td>
                                     <td><div class="table_content">学员姓名</div></td>
                                     <td><div class="table_content">ID</div></td>
                                     <td><div class="table_content">性 别</div></td>
@@ -37,7 +38,6 @@
                                 </tr>
                             </thead>
                             <tbody id="flow-table">
-                    
                             </tbody>
                         </table>
                     </div>
@@ -46,8 +46,6 @@
         </div>
     </div>
 </div>
-<!-- 战队分页 -->
-<input type="hidden" name="_wpnonce" id="getTeam" value="<?=wp_create_nonce('student_get_team_code_nonce');?>">
 <script>
 jQuery(function($) {   
     layui.use(['layer','flow'], function(){
@@ -60,8 +58,9 @@ jQuery(function($) {
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
-                    action:'getBrainpower',
-                    page:page
+                    action:'getDirectories',
+                    page:page,
+                    type:1,//1脑力健将,2国际速读水平认证,3国际心算水平认证,4国际记忆水平认证
                 }
                 var lis = [];
                 $.ajax({
@@ -77,6 +76,11 @@ jQuery(function($) {
                                 var ranges=value.ranges ? value.ranges :'-';
                                 var header_img=value.header_img ? value.header_img :'';
                                 var dom='<tr>'
+                                            +'<td>'
+                                                +'<div class="player-img img-box">'
+                                                    +'<img src="'+header_img+'">'
+                                                +'</div>'
+                                            +'</td>'
                                             +'<td><div class="table_content">'+real_name+'</div></td>'
                                             +'<td><div class="table_content">'+user_id+'</div></td>'
                                             +'<td><div class="table_content">'+sex+'</div></td>'
