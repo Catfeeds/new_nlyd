@@ -265,7 +265,7 @@ layui.use(['element','flow'], function(){
                             page:page
                         }
                         $.ajax({
-                            data:postData,success(res,ajaxStatu,xhr){  
+                            data:postData,success:function(res,ajaxStatu,xhr){  
                                 if(res.success){ 
                                     $.each(res.data.info,function(index,value){
                                         var nl_me='';
@@ -324,7 +324,7 @@ layui.use(['element','flow'], function(){
                     page:fenleiPage
                 }
                 $.ajax({
-                        data:postData,success(res,ajaxStatu,xhr){  
+                        data:postData,success:function(res,ajaxStatu,xhr){  
                         if(res.success){ 
                             if(res.data.my_ranking!=null){//我的成绩
                                 var rows=res.data.my_ranking

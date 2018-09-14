@@ -64,7 +64,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){
+                    data:postData,success:function(res,ajaxStatu,xhr){
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var real_name=value.real_name ? value.real_name :'-';
