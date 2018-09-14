@@ -16,7 +16,6 @@ $setting = get_option('default_setting');
     <form method="post" id="default_form" novalidate="novalidate">
         <input type="hidden" name="action" value="update_default_setting">
         <table class="form-table">
-
             <tbody>
             <tr>
                 <th scope="row"><label for="blogname">定时器开关</label></th>
@@ -38,7 +37,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">使用默认比赛项目</label></th>
                 <td><input type="checkbox" name="default_match_project" value="1" <?= $setting['default_match_project']  ? 'checked' : '';?> class="regular-text" /></td>
             </tr>
-
+            </tbody>
         <p class="submit"><input type="submit" name="submit" id="submit_form" class="button button-primary" value="保存更改"></p>
     </form>
 </div>

@@ -417,7 +417,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         //获取最新比赛倒计时
         $sql1 = "select a.match_id,a.match_start_time,b.user_id from {$wpdb->prefix}match_meta a
-                 left join {$wpdb->prefix}order b on a.match_id = b.match_id and b.user_id = {$current_user->ID} and b.pay_status = 2 
+                 left join {$wpdb->prefix}order b on a.match_id = b.match_id and b.user_id = {$current_user->ID} and b.pay_status in(2,3,4) 
                  where match_status = -2 order by match_start_time asc ";
         //print_r($sql1);
         $row = $wpdb->get_row($sql1);
@@ -551,11 +551,19 @@ class Student_Ajax
 
         if(!empty($rows)){
             foreach ($rows as $k => $v){
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname') and user_id = {$v['user_id']}";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname','user_real_name') and user_id = {$v['user_id']}";
                 $user = $wpdb->get_results($sql1,ARRAY_A);
                 $user_info = array_column($user,'meta_value','meta_key');
+
+                if(!empty($user_info['user_real_name'])){
+                    $user_real = unserialize($user_info['user_real_name']);
+                    $rows[$k]['real_age'] = $user_real['real_age'];
+                    $rows[$k]['nickname'] = $user_real['real_name'];
+                }else{
+                    $rows[$k]['nickname'] = $user_info['nickname'];
+                }
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-                $rows[$k]['nickname'] = $user_info['nickname'];
+
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
                 $rows[$k]['mental'] = '待定';
             }
@@ -1369,7 +1377,7 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
             //获取报名人数
-            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status = 4";
+            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status in(2,3,4) ";
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
             //前端需要的数组
@@ -1487,7 +1495,8 @@ class Student_Ajax
 
             $resul = $wpdb->update($wpdb->users,array($_POST['meta_key']=>$_POST['meta_val']),array('ID'=>$current_user->ID));
 
-        }else{
+        }
+        else{
 
             switch ($_POST['meta_key']){
                 case 'user_head':
@@ -1985,6 +1994,7 @@ class Student_Ajax
 
         wp_logout();
         unset($_SESSION['login_time']);
+        unset($_SESSION['user_info']);
         wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins/index/login_type/out')));
     }
 

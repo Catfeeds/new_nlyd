@@ -1,5 +1,40 @@
 
 jQuery(document).ready(function($) {
+
+    $('.clear_history').click(function () {
+        var query = $(this).parents('tr').find('select').serialize()+'&type='+$(this).attr('data-type')+'&action=clear_history';
+        console.log(query);
+        $.post(ajaxurl,query,function (data) {
+            alert(data.data);
+            if(data.success){
+                history.go(0);
+            }
+            console.log(data);
+        },'json')
+    })
+
+    $('.js-data-select-ajax').each(function () {
+        var _this=$(this);
+        var _placeholder = _this.attr('data-placeholder');
+        _this.select2({
+            placeholder : _placeholder,
+            maximumSelectionLength : 10,
+            ajax: {
+                url: ajaxurl+'?action='+_this.attr('data-action')+'&type='+_this.attr('data-type'),
+                dataType: 'json',
+                delay: 600, //wait 250 milliseconds before triggering the request
+                processResults: function (res) {
+                    // Tranforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: res.data
+                    };
+                }
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+
+        });
+    })
+
     $('.js-data-example-ajax').each(function () {
         var _this=$(this)
         var team_type = _this.attr('data-type');

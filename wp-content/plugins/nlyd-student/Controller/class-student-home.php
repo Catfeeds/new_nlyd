@@ -37,6 +37,7 @@ class Student_Home
         global $current_user,$wpdb,$user_info;
         if(isset($_SESSION['user_info'])){
             $user_info = $_SESSION['user_info'];
+            //var_dump($user_info);
         }else{
 
             $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID}",ARRAY_A);
@@ -52,6 +53,8 @@ class Student_Home
             }
             $user_info['user_id'] = $current_user->ID;
             $user_info['user_head'] = isset($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+            $user_info['user_mobile'] = !empty($current_user->user_mobile) ? $current_user->user_mobile : '';
+            $user_info['user_email'] = !empty($current_user->user_email) ? $current_user->user_email : '';
             $user_info['contact'] = !empty($current_user->user_mobile) ? hideStar($current_user->user_mobile) : hideStar($current_user->user_email);
 
             $user_info['user_address'] = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
