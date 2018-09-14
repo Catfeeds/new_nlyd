@@ -88,7 +88,7 @@
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
 
     .userCenter-detail-head{
         width: 50px;
@@ -194,7 +194,7 @@
         overflow: hidden;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .menuImg-wrapper{
         height: 30px;
         margin: auto;
@@ -395,7 +395,7 @@
         font-size: 0.12rem;
     }
 }
-@media screen and (min-width: 375px) and (max-width: 991px){
+@media screen and (min-width: 375px) and (max-width: 1199px){
     .userCenter-detail a{
         position: relative;
         line-height: 50px;

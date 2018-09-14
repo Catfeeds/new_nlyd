@@ -1,7 +1,7 @@
 
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>

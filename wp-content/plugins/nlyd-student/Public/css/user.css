@@ -288,12 +288,12 @@ input[type=tel].layui-input.hasIcon{
     font-weight: bold;
     margin-bottom: 10px;
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     #main{
         background: transparent url('./image/login-bg.png') no-repeat center center;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .wrapper_content{
         width: 250px;
         min-height: 645px;
@@ -316,7 +316,7 @@ input[type=tel].layui-input.hasIcon{
         top: 0;
     }
 }
-@media screen and (min-width: 321px) and (max-width: 991px){
+@media screen and (min-width: 321px) and (max-width: 1199px){
     .wrapper_content{
         width: 300px;
         min-height: 645px;

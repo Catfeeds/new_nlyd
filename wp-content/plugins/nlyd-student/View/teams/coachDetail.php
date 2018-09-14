@@ -6,7 +6,7 @@
         ?>
 
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
         <a class="mui-pull-left nl-goback">
         <i class="iconfont">&#xe610;</i>
@@ -15,7 +15,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin-pc layui-row">
-                    <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12 have-abtn">
+                    <div class="layui-col-lg6 layui-col-md12 layui-col-sm12 layui-col-xs12 have-abtn">
                         <div class="coachDetail-row width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-headImg img-box"  id="imgBox">
@@ -106,7 +106,7 @@
 <!--                        <a class="a-btn">请TA当教练</a>-->
                         <?php endif;?>
                     </div>
-                    <div class="layui-col-lg6 layui-col-md6 layui-col-sm12 layui-col-xs12">
+                    <div class="layui-col-lg6 layui-col-md12 layui-col-sm12 layui-col-xs12">
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-metal">学 员</div>

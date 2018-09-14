@@ -113,7 +113,7 @@ p.long-name{
     text-align: left;
 }
 
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .nl-border{
         padding-top: 0;
     }
@@ -151,7 +151,7 @@ p.long-name{
         display: none;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #content{
         background:#f6f6f6;
     }
@@ -222,7 +222,7 @@ p.long-name{
         top: auto;
     }
 }
-@media screen and (min-width: 375px) and (max-width: 991px){
+@media screen and (min-width: 375px) and (max-width: 1199px){
     .nl-match-button{
         text-align: right;
     }

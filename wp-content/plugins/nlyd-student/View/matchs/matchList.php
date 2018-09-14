@@ -8,7 +8,7 @@
         ?>
 
         <?php if($row){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
@@ -45,14 +45,14 @@
             </div>  
         <?php }else{ ?>
         <style>
-            @media screen and (max-width: 991px){
+            @media screen and (max-width: 1199px){
                 #page {
                     top: 0;
                 }
             }
 
         </style>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">
                         <div class="no-info-img">
@@ -171,7 +171,7 @@ jQuery(function($) {
                                     if(rightBtn.length==0){
                                         onBtn="onBtn"
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'

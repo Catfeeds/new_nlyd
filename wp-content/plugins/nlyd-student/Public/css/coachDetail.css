@@ -152,7 +152,7 @@
 .course-name{
     padding-top: 17px;
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     #content{
         background:#fff;
     }
@@ -170,7 +170,7 @@
         padding-bottom: 180px;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #content{
         background:#f6f6f6;
     }
