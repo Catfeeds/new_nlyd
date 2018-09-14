@@ -493,7 +493,7 @@ class Student_Ajax
 //        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
         if($_POST['cost'] == 0 || $_POST['cost'] < 0.01){
-            $data['pay_status'] = 2;
+            $data['pay_status'] = 4;
         }
 
         //print_r($data);die;
