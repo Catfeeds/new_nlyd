@@ -2613,6 +2613,12 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+        if(!preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) wp_send_json_error(array('info'=>'手机格式不正确'));
+        global $wpdb;
+        //判断当前手机是否已经存在
+        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE user_mobile='.$_POST['mobile']);
+        if($var)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
+
         $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
 
         $mobile = $_POST['mobile'];

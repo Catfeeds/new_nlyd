@@ -9,7 +9,7 @@
 use library\AliSms;
 use library\TwentyFour;
 class Match_Ajax
-{   
+{
 
     public $redis;
     function __construct() {
@@ -204,7 +204,7 @@ class Match_Ajax
                         'transaction_id' => unserialize($order['pay_lowdown'])['transaction_id'], //微信订单号(二选一)
                         'order_no' => $order['serialnumber']// 商户订单号 (二选一)
                     ];
-                    $result = $payClass::$payClass->orderQuery($param); //return array
+                    $result = $payClass->payClass->orderQuery($param); //return array
                     break;
                 case 'zfb':
                     $param = [
@@ -212,7 +212,7 @@ class Match_Ajax
                         'trade_no' => unserialize($order['pay_lowdown'])['trade_no'],
                     ];
                     $payClass = new Student_Payment('alipay');
-                    $result = $payClass::$payClass->queryOrder($param);
+                    $result = $payClass->payClass->queryOrder($param);
                     break;
                 case 'ylk':
 
@@ -247,9 +247,12 @@ class Match_Ajax
         $serial = intval($_POST['serial']);
         global $wpdb;
         $refundFee = $_POST['refund_fee'];
-        $order = $wpdb->get_row('SELECT id,serialnumber,pay_lowdown,cost,pay_type,funllname,telephone FROM '.$wpdb->prefix.'order WHERE serialnumber='.$serial.' AND pay_status=-1', ARRAY_A);
+        $order = $wpdb->get_row('SELECT id,serialnumber,user_id,pay_lowdown,cost,pay_type,fullname,telephone FROM '.$wpdb->prefix.'order WHERE serialnumber="'.$serial.'" AND pay_status!=1 AND pay_status!=5', ARRAY_A);
 
-        if(!$order) wp_send_json_error(array('info' => '未找到订单或此订单不是待退款订单'));
+
+
+        if(!$order) wp_send_json_error(array('info' => '未找到订单或此订单不可退款'));
+
 
         if($refundFee > $order['cost']) wp_send_json_error(array('info' => '退款金额不能超过订单金额'));
 
@@ -257,7 +260,7 @@ class Match_Ajax
         $refund_no = $order['serialnumber'].date_i18n('dHis',current_time('timestamp')).rand(000,999);
 //        var_dump(['order_id' => $order['id'], 'refund_no' => $refund_no, 'created_time' => date('Y-m-d H:i:s')]);die;
         //更新订单状态
-        if(!$wpdb->update($wpdb->prefix.'order', ['pay_status' => -2], ['id' => $order['id'], 'pay_status' => -1])){
+        if(!$wpdb->update($wpdb->prefix.'order', ['pay_status' => -2], ['id' => $order['id']])){
             $wpdb->rollback();
             wp_send_json_error(array('info'=>'更新订单状态失败'));
         }
@@ -269,7 +272,7 @@ class Match_Ajax
         }
 
         $orderRefundId = $wpdb->insert_id;
-        require_once WP_CONTENT_DIR.'/plugins/nlyd-student/Controller/class-student-payment.php';
+        require_once PLUGINS_PATH.'/nlyd-student/Controller/class-student-payment.php';
         switch ($order['pay_type']){
             case 'wx':
                 $param['transaction_id'] = unserialize($order['pay_lowdown'])['transaction_id']; //微信订单号
@@ -278,9 +281,11 @@ class Match_Ajax
                 $param['refund_fee'] = $refundFee;
                 $param['price'] = $order['cost'];
                 $payClass = new Student_Payment('wxpay');
-                $result = $payClass::$payClass->refund($param);
+                $result = $payClass->payClass->refund($param);
                 break;
             case 'zfb':
+
+
                 $param = [
                     'out_trade_no' => $order['serialnumber'],     //商户订单号，和支付宝交易号二选一
                     'trade_no' => unserialize($order['pay_lowdown'])['trade_no'],    //支付宝交易号，和商户订单号二选一
@@ -290,7 +295,7 @@ class Match_Ajax
                 ];
                 $payClass = new Student_Payment('alipay');
 
-                $result = $payClass::$payClass->refund($param);
+                $result = $payClass->payClass->refund($param);
                 break;
             case 'ylk':
 
@@ -306,7 +311,10 @@ class Match_Ajax
                 $wpdb->update($wpdb->prefix.'order_refund', ['refund_lowdown' => serialize($result['data'])], ['id' => $orderRefundId]);
                 //发送短信
                 $ali = new AliSms();
-
+                if(!$order['telephone']){
+                    $order['telephone'] = $wpdb->get_var('SELECT user_mobile FROM '.$wpdb->users.' WHERE ID='.$order['user_id']);
+                    $order['fullname'] = get_user_meta($order['user_id'],'user_real_name')[0]['real_name'];
+                }
                 $result = $ali->sendSms($order['telephone'], 8, array('user'=> $order['funllname'], 'order' => $order['serialnumber'], 'cost' => $refundFee));
                 if($result){
                     $sendMsg = ', 已发送短信通知';
@@ -351,7 +359,7 @@ class Match_Ajax
         $id = intval($_POST['id']);
         global $wpdb;
         $order = $wpdb->get_row('SELECT o.serialnumber,o.pay_lowdown,o.cost,o.pay_type,r.refund_no,r.refund_lowdown FROM '
-                                .$wpdb->prefix.'order_refund AS r 
+            .$wpdb->prefix.'order_refund AS r 
                                 LEFT JOIN '.$wpdb->prefix.'order AS o ON o,id=r.order_id   
                                 WHERE r.id='.$id, ARRAY_A);
 
@@ -367,7 +375,7 @@ class Match_Ajax
                     'refund_id' => unserialize($order['refund_lowdown'])['refund_id'], //微信退款单号 (四选一)
                 ];
                 $payClass = new Student_Payment('wxpay');
-                $res = $payClass::$payClass->refundQuery($param);
+                $res = $payClass->payClass->refundQuery($param);
                 break;
             case 'zfb':
                 $param = [
@@ -376,7 +384,7 @@ class Match_Ajax
                     'out_request_no' => unserialize($order['refund_lowdown'])['out_request_no'],        //请求退款接口时，传入的退款请求号，如果在退款请求时未传入，则该值为创建交易时的外部交易号
                 ];
                 $payClass = new Student_Payment('alipay');
-                $res = $payClass::$payClass->refund($param);
+                $res = $payClass->payClass->refund($param);
                 break;
             case 'ylk':
 
@@ -408,7 +416,7 @@ class Match_Ajax
             case 'wx':
                 //微信
                 $payClass = new Student_Payment('wxpay');
-                $result = $payClass::$payClass->closeOrder($order['serialnumber']); //return array
+                $result = $payClass->payClass->closeOrder($order['serialnumber']); //return array
                 break;
             case 'zfb':
                 $param = [
@@ -416,7 +424,7 @@ class Match_Ajax
                     'trade_no' => unserialize($order['pay_lowdown'])['trade_no'],        //支付宝交易号，和商户订单号二选一
                 ];
                 $payClass = new Student_Payment('alipay');
-                $result = $payClass::$payClass->closeOrder($param);
+                $result = $payClass->payClass->closeOrder($param);
                 break;
             case 'yld':
 
