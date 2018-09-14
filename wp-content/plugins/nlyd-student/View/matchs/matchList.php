@@ -74,6 +74,10 @@ jQuery(function($) {
     if(window.wait_match == ''){
         $('.countdown-time').hide();
     }
+    $('body').on('click','.not_sign',function(){
+        // alert(1)
+        // return false;
+    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -146,7 +150,7 @@ jQuery(function($) {
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button last-btn">'
-                                                        +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                        +'<a class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</a>'
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button last-btn">'
@@ -232,6 +236,7 @@ jQuery(function($) {
                                     $(this).text(time);
                                 }else{
                                     $(this).text("报名结束");
+                                    window.location.reload()
                                 }
                             });
                         }   

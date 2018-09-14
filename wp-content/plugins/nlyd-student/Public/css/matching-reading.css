@@ -73,6 +73,9 @@
     width: 25px;
     height: 25px;
 }
+.layui-form-checkbox{
+    vertical-align: text-top;
+}
 .layui-icon-ok:before {
     top: 4px;
     position: absolute;

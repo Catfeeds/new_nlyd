@@ -30,17 +30,24 @@
                             </div>
                             <div class="nl-match-body ">
                                 <div class="nl-match-detail">
-                                    <span >开赛日期：</span>
-                                    <span class="c_black"><?=$match['match_start_time']?></span>
+                                    <div class="nl-match-label">开赛日期：</div>
+                                    <div class="nl-match-info">
+                                        <span class="c_black"><?=$match['match_start_time']?></span>
+                                    </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span >开赛地点：</span>
-                                    <span class="c_black"><?=$match['match_address']?></span>
+                                    <div class="nl-match-label">开赛地点：</div>
+                                    <!-- <span >开赛地点：</span> -->
+                                    <div class="nl-match-info">
+                                        <span class="c_black"><?=$match['match_address']?></span>
+                                    </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span >报名费用：</span>
-                                    <input class="c_black" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
-                                    <!-- <span class="c_black">¥<?=$match['match_cost']?></span> -->
+                                    <div class="nl-match-label">报名费用：</div>
+                                    <!-- <span >报名费用：</span> -->
+                                    <div class="nl-match-info">
+                                        <input class="c_black" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
+                                    <div>
                                 </div>
                             </div>
                         </li>
@@ -53,25 +60,28 @@
                             <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
                                 <div class="nl-match-detail">
-                                    <span ><?=$val['parent_title']?>：</span>
-                                    <input type="hidden" name="project_id[]" value="<?=$k?>"/>
-                                    <span class="c_black">
-                                        <?php
-                                            $str = '';
-                                            foreach ($val['project'] as $v) {
-                                                $str .= $v['post_title'].'/';
-                                            }
-                                            echo rtrim($str,'/');
-                                        ?>
-                                        &nbsp;&nbsp;&nbsp;
-                                    </span>
-                                    <span class="nl-see-link">主训教练：</span>
-                                    <?php if(isset($val['major_coach']) && isset($val['coach_id'])){ ?>
-                                    <input type="hidden" name="major_coach[]" value="<?=$val['coach_id']?>"/>
-                                    <?=$val['major_coach']?>
-                                    <?php }else{ ?>
-                                        <a href="<?=home_url('/teams/myCoach/match_id/'.$_GET['match_id']).'/category_id/'.$k;?>" class="nl-see-link">去设置</a>
-                                    <?php } ?>
+                                    <div class="nl-match-label"><?=$val['parent_title']?>：</div>
+                                    <!-- <span ><?=$val['parent_title']?>：</span> -->
+                                    <div class="nl-match-info">
+                                        <input type="hidden" name="project_id[]" value="<?=$k?>"/>
+                                        <span class="c_black">
+                                            <?php
+                                                $str = '';
+                                                foreach ($val['project'] as $v) {
+                                                    $str .= $v['post_title'].'/';
+                                                }
+                                                echo rtrim($str,'/');
+                                            ?>
+                                            &nbsp;&nbsp;&nbsp;
+                                        </span>
+                                        <span class="nl-see-link">主训教练：</span>
+                                        <?php if(isset($val['major_coach']) && isset($val['coach_id'])){ ?>
+                                        <input type="hidden" name="major_coach[]" value="<?=$val['coach_id']?>"/>
+                                        <?=$val['major_coach']?>
+                                        <?php }else{ ?>
+                                            <a href="<?=home_url('/teams/myCoach/match_id/'.$_GET['match_id']).'/category_id/'.$k;?>" class="nl-see-link">去设置</a>
+                                        <?php } ?>
+                                        </div>
                                 </div>
                                 <?php } ?>
                             </div>
@@ -84,31 +94,40 @@
                             </div>
                             <div class="nl-match-body ">
                                 <div class="nl-match-detail rz">
-                                    <span >选手姓名：</span>
-                                    <?php if(!empty($player['real_name'])){?>
-                                    <span class="c_black"><?=$player['real_name']?></span>
-                                    <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
-                                    <?php }else{?>
-                                        <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
-                                    <?php }?>
-                                </div>
-                                <div class="nl-match-detail">
-                                    <span >所属战队：</span>
-                                    <span class="c_black">
-                                        <?php if(!empty($player['team_id'])){ ?>
-                                        <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
-                                        <?=$player['user_team']?>
-                                        <?php }else{
-                                            $url = home_url('teams/index');
-                                            if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
-                                        ?>
-                                            <a href="<?=$url?>" class="nl-see-link">加入战队</a>
+                                    <div class="nl-match-label">选手姓名：</div>
+                                    <!-- <span >选手姓名：</span> -->
+                                    <div class="nl-match-info">
+                                        <?php if(!empty($player['real_name'])){?>
+                                        <span class="c_black"><?=$player['real_name']?></span>
+                                        <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
+                                        <?php }else{?>
+                                            <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
                                         <?php }?>
-                                    </span>
+                                    </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span >选手ID：</span>
-                                    <span class="c_black"><?=$player['user_ID']?></span>
+                                    <div class="nl-match-label">所属战队：</div>
+                                    <!-- <span >所属战队：</span> -->
+                                    <div class="nl-match-info">
+                                        <span class="c_black">
+                                            <?php if(!empty($player['team_id'])){ ?>
+                                            <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
+                                            <?=$player['user_team']?>
+                                            <?php }else{
+                                                $url = home_url('teams/index');
+                                                if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
+                                            ?>
+                                                <a href="<?=$url?>" class="nl-see-link">加入战队</a>
+                                            <?php }?>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="nl-match-detail">
+                                    <div class="nl-match-label">选手ID：</div>
+                                    <!-- <span >选手ID：</span> -->
+                                    <div class="nl-match-info">
+                                        <span class="c_black"><?=$player['user_ID']?></span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -122,21 +141,28 @@
                             <div class="nl-match-body ">
                                 <?php if(!empty($address)){ ?>
                                 <div class="nl-match-detail">
-                                    <span >收货人姓名：</span>
-                                    <input class="c_black" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
-                                
+                                    <div class="nl-match-label">收货人姓名：</div>
+                                    <!-- <span >收货人姓名：</span> -->
+                                    <div class="nl-match-info">
+                                        <input class="c_black" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
+                                    </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span >联系电话：</span>
-                                    <input class="c_black" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
-                                    
+                                    <div class="nl-match-label">联系电话：</div>
+                                    <!-- <span >联系电话：</span> -->
+                                    <div class="nl-match-info">
+                                        <input class="c_black" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
+                                    </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <span >收货地址：</span>
-                                    <span class="c_black">
-                                    <?=$address['user_address']?>
-                                        <input type="hidden" name="address" value="<?=$address['user_address']?>">
-                                    </span>
+                                    <div class="nl-match-label">收货地址：</div>
+                                    <!-- <span >收货地址：</span> -->
+                                    <div class="nl-match-info">
+                                        <span class="c_black">
+                                        <?=$address['user_address']?>
+                                            <input type="hidden" name="address" value="<?=$address['user_address']?>">
+                                        </span>
+                                    </div>
                                 </div>
                                 <?php }else{ ?>
                                 暂无地址
@@ -176,17 +202,29 @@
 <script>
 jQuery(function($) { 
     var serialnumber='';//订单号
+    $('body').on('click','.layui-form-checkbox',function(){
+        var _this=$(this);
+        $('.layui-form-checkbox').each(function(){
+            var __this=$(this);
+            if(__this.hasClass('layui-form-checked')){
+                __this.removeClass('layui-form-checked');
+            }
+        })
+        _this.toggleClass('layui-form-checked');
+    })
+    var prams=''
     function jsApiCall()
-	{
-		WeixinJSBridge.invoke(
-			'getBrandWCPayRequest',
-			<?php echo $param; ?>,
-			function(res){
-				WeixinJSBridge.log(res.err_msg);
-				alert(res.err_code+res.err_desc+res.err_msg);
-			}
-		);
-	}
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            prams,
+            function(res){
+                if(res.err_msg=='get_brand_wcpay_request:ok'){
+                    window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
+                }
+            }
+        );
+    }
 	function callpay()
 	{
 		if (typeof WeixinJSBridge == "undefined"){
@@ -200,17 +238,6 @@ jQuery(function($) {
 		    jsApiCall();
 		}
 	}
-
-    $('body').on('click','.layui-form-checkbox',function(){
-        var _this=$(this);
-        $('.layui-form-checkbox').each(function(){
-            var __this=$(this);
-            if(__this.hasClass('layui-form-checked')){
-                __this.removeClass('layui-form-checked');
-            }
-        })
-        _this.toggleClass('layui-form-checked');
-    })
     layui.use(['form'], function(){
             var form = layui.form
             form.render();
@@ -220,6 +247,7 @@ jQuery(function($) {
             form.on('submit(pay-formbtn)', function(data){
                 $.ajax({
                     data:data.field,success(res){
+                        // console.log(res)
                         if(res.success){
                             //不需要支付
                             if(res.data.is_pay == 0){
@@ -260,17 +288,28 @@ jQuery(function($) {
                                     }else{
                                         pay_type=null;
                                     }
-                                    var data={
+
+                                    var datas={
                                         action:'pay',
                                         pay_type:pay_type,
                                         _wpnonce:$('#inputPay').val(),
                                         serialnumber:serialnumber
                                     }
+                                    // alert(pay_type)
                                     if(pay_type){
+                                        
                                         $.ajax({
-                                            data:data,success(response){
+                                            data:datas,success(response){
                                                 if(response.success){
-                                                    window.location.href=response.data.info;
+                                                    if(response.data.info){
+                                                        window.location.href=response.data.info;
+                                                    }else{//微信公众号支付
+                                                        if(response.data.params){
+                                                            prams=response.data.params;
+                                                            jsApiCall()
+                                                        }
+                                                    }
+                                                    
                                                 }else{
                                                     $.alerts(response.data.info)
                                                 }
@@ -284,11 +323,34 @@ jQuery(function($) {
                                 ,isOutAnim:true//关闭动画
                             });
                         }else{
-                            $.alerts(res.data.info)
-                            if(res.data.url){
-                                setTimeout(function() {
-                                    window.location.href=res.data.url;
-                                }, 300);
+                            if(res.data.info=="请先实名认证"){
+                                setTimeout(function(){
+                                    window.location.href=window.home_url+'/account/info/';
+                                }, 1000);
+                                // layer.open({
+                                //     type: 1
+                                //     ,maxWidth:300
+                                //     ,title: '提示' //不显示标题栏
+                                //     ,skin:'nl-box-skin'
+                                //     ,id: 'certification' //防止重复弹出
+                                //     ,content: '<div class="box-conent-wrapper">是否立即实名认证？</div>'
+                                //     ,btn: ['再等等', '去实名认证' ]
+                                //     ,success: function(layero, index){
+                                //     }
+                                //     ,yes: function(index, layero){
+                                //         layer.closeAll();
+                                //     }
+                                //     ,btn2: function(index, layero){
+                                //         //按钮【按钮二】的回调
+                                //         window.location.href=window.home_url+'/account/info/'
+                                //     }
+                                //     ,closeBtn:2
+                                //     ,btnAagn: 'c' //按钮居中
+                                //     ,shade: 0.3 //遮罩
+                                //     ,isOutAnim:true//关闭动画
+                                // });
+                            }else{
+                                $.alerts(res.data.info)
                             }
 
                         }
@@ -297,35 +359,9 @@ jQuery(function($) {
                 return false;
             });
         })
+        
     $('.selectBottom').on('click','.cancel',function(){
         $(this).parents('.selectBottom').removeClass('selectBottom-show');
-    })
-    $('.pay').click(function(){
-        var _this=$(this);
-        var id=_this.attr('id')
-        var pay_type=''
-        if(id=='weiChat'){//微信支付
-            pay_type='wxh5pay'
-        }else if(id=='zfb'){//支付宝支付
-            pay_type='alipay'
-        }else{
-            return false;
-        }
-        var data={
-            action:'pay',
-            pay_type:pay_type,
-            _wpnonce:$('#inputPay').val(),
-            serialnumber:serialnumber
-        }
-        $.ajax({
-            data:data,success(res){
-                if(res.success){
-                    window.location.href=res.data.info;
-                }else{
-                    $.alerts(res.data.info)
-                }
-            }
-        })
     })
 
 })

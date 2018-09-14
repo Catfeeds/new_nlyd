@@ -199,11 +199,14 @@ overflow: hidden;
     display: none;
 }
 .layui-form-checkbox{
-    top: -2px;
+    vertical-align: text-top;
 }
 .layui-form-checked[lay-skin=primary] i{
     border-color: #FB8E8E;
     background-color: #FB8E8E;
+}
+.layui-form-checkbox[lay-skin=primary]{
+    height: 18px!important;
 }
 .layui-form-checkbox[lay-skin=primary]:hover i{
     border-color: #FB8E8E;

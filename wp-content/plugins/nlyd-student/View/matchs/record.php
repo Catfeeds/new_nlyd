@@ -215,7 +215,7 @@ $('.a-btn').click(function(){//查看本项目比赛详情
     var match_id=<?=$_GET['match_id']?>;
     var project_id=$('.one-rank .classify-active').attr('data-post-id')
     var href=window.home_url+'/matchs/singleRecord/match_id/'+match_id+'/project_id/'+project_id;
-    window.location.href=href
+    window.location.href=href;
 })
 initWidth=function() {//按钮滚动区域宽度
     var len=$('.btn-inner-wrapper .classify-btn ').length;
@@ -244,6 +244,7 @@ layui.use(['element','flow'], function(){
         $('.nl-transform').css({
             'transform':'translate3d('+left+'px, 0px, 0px)'
         }).html(html)
+       
     })
     flow.load({
             elem: '#flow' //流加载容器
@@ -440,12 +441,6 @@ layui.use(['element','flow'], function(){
                             next(lis.join(''),true)
                         }
                     }else{
-                        // if(fenleiPage==1){
-                        //     var dom='<tr><td colspan="6">暂无数据</td></tr>'
-                        //     lis.push(dom) 
-                        // }else{
-                        //     $.alerts('没有更多了')
-                        // }
                         next(lis.join(''),false)
                     }
                 }) 
@@ -454,7 +449,11 @@ layui.use(['element','flow'], function(){
     }
     initDanxiang(0,$('.one-rank .classify-active').attr('data-post-id'))
 })
-
+$('body').click(function(e){
+    if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
+        $('.ul-select').removeClass('ul-select-show')
+    }
+})
 $('.classify-btn').click(function(){//选择比赛项目
     var _this=$(this);
     if(!_this.hasClass('classify-active')){
@@ -468,7 +467,6 @@ $('.classify-btn').click(function(){//选择比赛项目
             var id=_this.attr('data-post-id');
             $('#flow-fenlei').empty();
             initFenlei(0,id)
-            
         }
     }
 })
