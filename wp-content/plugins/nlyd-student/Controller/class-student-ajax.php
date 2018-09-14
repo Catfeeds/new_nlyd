@@ -508,7 +508,7 @@ class Student_Ajax
 
         if($b && $a ){
             $wpdb->commit();
-            if($data['pay_status'] == 2){
+            if($data['pay_status'] == 2 || $data['pay_status'] == 4){
                 wp_send_json_success(array('info' => '报名成功','serialnumber'=>$serialnumber, 'is_pay' => 0, 'url' => home_url('payment/success/serialnumber/'.$serialnumber)));
             }
             wp_send_json_success(array('info' => '请选择支付方式','serialnumber'=>$serialnumber,'is_pay' => 1));
