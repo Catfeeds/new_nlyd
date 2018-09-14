@@ -2655,7 +2655,7 @@ class Student_Ajax
         END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
         LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id 
-        WHERE d.type='.$type.' AND d.is_show=1 LIMIT '.$start.','.$pageSize);
+        WHERE d.type='.$type.' AND d.is_show=1 AND d.level!=null LIMIT '.$start.','.$pageSize);
 
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
