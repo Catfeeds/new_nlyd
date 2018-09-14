@@ -5,8 +5,20 @@ jQuery(function($) {
         var height=window_height-top+'px'
         $('.wrapper_content').css('minHeight',height)
     };
-    if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    if('ontouchstart' in window){
         initHeight();//手机端最小高度为屏幕高度
+        var height= $('.login_zoo').height();
+        var marginTop=height / 2;
+        var top=parseInt(window.innerHeight) / 2;
+        if(top>marginTop){
+            $('.login_zoo').css({
+                'margin-top':-marginTop+'px',
+                'top':top+'px',
+                'width': '100%',
+                'position': 'absolute',
+                'left': '0',
+            })
+        }
     }
         sendloginAjax=function(formData){
             //type：确定回调函数

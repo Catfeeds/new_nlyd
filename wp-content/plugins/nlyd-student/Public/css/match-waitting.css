@@ -23,13 +23,13 @@ p.match-name{
     height: 170px;
     background: rgba(104, 170, 254, 0.2);
     border-radius: 50%;
-    -webkit-animation-duration: 1000ms;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-name:'GrowQuare';
-    -webkit-animation-direction: alternate;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name:'GrowQuare';
+    animation-direction: alternate;
 }
-@-webkit-keyframes GrowQuare {
+@keyframes GrowQuare {
     from {
         background: rgba(104, 170, 254, 0.2);
     }

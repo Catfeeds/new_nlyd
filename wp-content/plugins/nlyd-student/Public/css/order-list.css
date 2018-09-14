@@ -103,7 +103,7 @@ p.order-name,p.order-content{
     display:-webkit-box;
     -webkit-line-clamp:2;
     overflow:hidden;
-    -webkit-line-break:auto;
+    line-break:auto;
     -webkit-box-orient:vertical;
     margin-bottom: 0;
 }
@@ -148,7 +148,6 @@ p.order-body-bottom{
     color: #404142;
     font-size: 0.14rem;
     float: right;
-    display: inline-block;
 }
 .ml-20{
     margin-left: 20px;
