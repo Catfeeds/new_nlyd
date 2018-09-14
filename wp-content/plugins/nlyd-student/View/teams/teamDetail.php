@@ -1,5 +1,5 @@
 <style>
- @media screen and (max-width: 991px){
+ @media screen and (max-width: 1199px){
     #content,.detail-content-wrapper{
         background:#f6f6f6;
     }
@@ -12,7 +12,7 @@
             
         ?>
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
@@ -146,7 +146,7 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){ 
+                    data:postData,success:function(res,ajaxStatu,xhr){ 
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -191,7 +191,7 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){ 
+                    data:postData,success:function(res,ajaxStatu,xhr){ 
                         if(res.success){ 
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -247,7 +247,7 @@ layui.use(['element','layer','flow'], function(){
                     handle:'join',//操作 join:入队 其他:离队
                 };
                 $.ajax({//设为主训教练
-                    data:data,success(res,ajaxStatu,xhr){ 
+                    data:data,success:function(res,ajaxStatu,xhr){ 
                         $.alerts(res.data.info)
                         if(res.success){
                             _this.css('display','none');
@@ -290,7 +290,7 @@ layui.use(['element','layer','flow'], function(){
                         handle:'leave',//操作 join:入队 其他:离队
                     };
                     $.ajax({
-                        data:data,success(res,ajaxStatu,xhr){ 
+                        data:data,success:function(res,ajaxStatu,xhr){ 
                             $.alerts(res.data.info)
                             if(res.success){
                                 _this.after('<span class="nl-team-step">离队申请审核中</span>').css('display','none');

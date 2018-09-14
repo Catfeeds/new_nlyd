@@ -25,7 +25,7 @@ jQuery(function($) {
                             id:_this.attr('data-id')
                         }
                         $.ajax({
-                            data: postData,success(res,ajaxStatu,xhr){
+                            data: postData,success:function(res,ajaxStatu,xhr){
                                 $.alerts(res.data.info)
                                 if(res.success){
                                     $('.default-address.set-address').text('设为默认').removeClass('set-address');
@@ -65,7 +65,7 @@ jQuery(function($) {
                         id:_this.attr('data-id')
                     }
                     $.ajax({
-                        data: postData,success(res,ajaxStatu,xhr){
+                        data: postData,success:function(res,ajaxStatu,xhr){
                             $.alerts(res.data.info)
                             if(res.success){
                                 _this.parents('.address-row').remove()

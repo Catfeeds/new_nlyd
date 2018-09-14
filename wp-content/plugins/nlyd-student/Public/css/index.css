@@ -572,6 +572,9 @@ p.share-font{
     color:#fff;
     font-size:0.16rem
 }
+.content table.nl-table{
+    position: relative;
+}
 .nl-table-wapper{
     overflow-x: scroll;
     padding-bottom: 35px;
@@ -584,6 +587,7 @@ p.share-font{
     text-align: center;
     font-size:0.13rem;
     white-space: nowrap;
+    padding: 3px;
 }
 .content .nl-table thead tr td{
     color: rgba(38, 38, 38, 1);
@@ -591,13 +595,13 @@ p.share-font{
 .content .nl-table tbody tr td{
     color: rgba(38, 38, 38, 0.8);
 }
-.content .nl-table td div.table_content{
+.content .nl-table tbody td div.table_content{
     text-align: center;
     margin: auto;
-    white-space: nowrap;
+    white-space: normal;
 }
 
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .nl-page-form{
         border: 1px solid #f2f2f2;
         overflow: hidden;
@@ -687,7 +691,7 @@ p.share-font{
         border:1px solid #f2f2f2;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .have-footer{
         margin-bottom: 50px;
     }
@@ -776,7 +780,7 @@ p.share-font{
     }
 }
 
-@media screen and (min-width: 321px) and (max-width: 991px){
+@media screen and (min-width: 321px) and (max-width: 1199px){
 
 }
 @media screen and (max-width: 320px){

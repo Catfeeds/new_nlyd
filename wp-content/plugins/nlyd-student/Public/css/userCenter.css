@@ -45,50 +45,50 @@
     background-repeat: no-repeat
 }
 .my-match{
-    width: 23px;
-    background-position: -153px 3px;
+    width: 30px;
+    background-position: -204px 3px;
 }
 .my-train{
-    width: 26px;
-    background-position: -178px 3px;
+    width: 31px;
+    background-position: -240px 3px;
 }
 .my-course{
-    width: 23px;
-    background-position: -46px 3px;
+    width: 28px;
+    background-position: -65px 3px;
 }
 .my-coach{
-    width: 23px;
-    background-position: -100px 3px;
+    width: 30px;
+    background-position: -134px 3px;
 }
 .my-order{
-    width: 23px;
+    width: 30px;
     background-position: 0 0;
 }
 .my-kaoji{
-    width: 23px;
-    background-position: -23px 3px;
+    width: 30px;
+    background-position: -31px 3px;
 }
 .my-tuiguang{
-    width: 23px;
-    background-position: -206px 3px;
+    width: 30px;
+    background-position: -276px 3px;
 }
 .my-secure{
-    width: 23px;
-    background-position: -74px 3px;
+    width: 30px;
+    background-position: -99px 3px;
 }
 .my-setting{
-    width: 23px;
-    background-position: -233px 3px;
+    width: 30px;
+    background-position: -312px 3px;
 }
 .my-wallet{
-    width: 23px;
-    background-position: -125px 3px;
+    width: 30px;
+    background-position: -168px 3px;
 }
 .userCenter-detail a:active{
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
 
     .userCenter-detail-head{
         width: 50px;
@@ -107,10 +107,10 @@
         text-indent: 0.12rem;
     }
     .menuImg-wrapper{
-        height: 30px;
+        height: 40px;
         margin: auto;
         line-height: normal;
-        margin-top: 12.5px;
+        margin-top: 5px;
     }
     .nl-right-content{
         width: -webkit-calc(100% - 270px);
@@ -194,9 +194,9 @@
         overflow: hidden;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .menuImg-wrapper{
-        height: 30px;
+        height: 40px;
         margin: auto;
         line-height: normal;
     }
@@ -395,7 +395,7 @@
         font-size: 0.12rem;
     }
 }
-@media screen and (min-width: 375px) and (max-width: 991px){
+@media screen and (min-width: 375px) and (max-width: 1199px){
     .userCenter-detail a{
         position: relative;
         line-height: 50px;

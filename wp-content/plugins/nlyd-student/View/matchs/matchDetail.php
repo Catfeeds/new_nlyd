@@ -6,7 +6,7 @@
         <?php
             require_once leo_student_public_view.'leftMenu.php';
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
                 <i class="iconfont">&#xe610;</i>
@@ -24,33 +24,33 @@
                                     <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name fs_12 c_black3 text_1"><?=$match['post_content']?></p>
+                                    <p class="long-name fs_12 c_black3"><?=$match['post_content']?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛日期：</div>
-                                        <div class="nl-match-info text_1 c_black">
+                                        <div class="nl-match-info c_black">
                                             <?=$match['match_start_time']?>
                                             <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">结束时间：</div>
-                                        <div class="nl-match-info text_1 c_black">
+                                        <div class="nl-match-info c_black">
                                             <?=$match['match_end_time']?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">开赛地点：</div>
-                                        <div class="nl-match-info text_1 c_black"><?=$match['match_address']?></div>
+                                        <div class="nl-match-info c_black"><?=$match['match_address']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名费用：</div>
-                                        <div class="nl-match-info text_1 c_black">¥<?=$match['match_cost']?></div>
+                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info text_1 c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
+                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
                                     </div>
                                 </div>
                             </li>
@@ -66,10 +66,7 @@
                                         <div class="nl-match-label"><?=$val['parent_title']?>：</div>
                                             <div class="nl-match-info">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                            
                                                 <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">比赛规则</a>&nbsp;&nbsp;
-                                                
-                                            
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -86,6 +83,15 @@
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
                                         <table class="nl-table">
+                                            <thead>
+                                                <tr>
+                                                    <td><div class="table_content">头像</div></td>
+                                                    <td><div class="table_content">学员姓名 </div></td>
+                                                    <td><div class="table_content">性 别</div></td>
+                                                    <td><div class="table_content">年龄</div></td>
+                                                    <td><div class="table_content">报名日期</div></td>
+                                                </tr>
+                                            </thead>
                                             <tbody id="flow-table">
 
                                             </tbody>    
@@ -154,7 +160,7 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){
+                    data:postData,success:function(res,ajaxStatu,xhr){
                         var domTime=$('#time_count').attr('data-end').replace(/-/g,'/');
                         var end_time = new Date(domTime).getTime();//月份是实际月份-1
                         var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()

@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
     }
    
     function initHeight(){
-        if('ontouchstart' in window) {
+        if(parseInt(window.innerWidth)<=1199) {
             var window_height=$(window).height();
             var top=parseInt($('#page').css('top'));
             var padding=parseInt($('.detail-content-wrapper').css("paddingBottom"))
@@ -268,16 +268,14 @@ jQuery(document).ready(function($) {
         aysnc: true ,
         type: "POST" , // 默认使用POST方式
         dataType:'json',
-        timeout:3000,
+        timeout:4000,
         error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
             if(errorMsg=='timeout'){
                 $.alerts('网络超时，请重试');  
-            }else{
-                // $.alerts( '请求出错[' + jqXHR.status + ']：' + errorMsg );  
-            }       
+            }      
         }
     } );
     getMatchTime()

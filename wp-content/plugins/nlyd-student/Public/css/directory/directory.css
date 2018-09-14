@@ -190,7 +190,7 @@ p.content-p{
 .content .nl-table td.nl-blue-font{
     color: rgba(67, 148, 249, 1);
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .nl-border {
         padding-top: 0;
     }
@@ -198,6 +198,6 @@ p.content-p{
         overflow: visible;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
 
 }

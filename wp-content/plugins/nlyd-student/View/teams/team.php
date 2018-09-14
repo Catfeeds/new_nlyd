@@ -1,5 +1,5 @@
 <style>
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #content,.detail-content-wrapper{
         background:#fff;
     }
@@ -13,7 +13,7 @@
         ?>
 
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
@@ -99,7 +99,7 @@ layui.use(['layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success(res,ajaxStatu,xhr){  
+                    data:postData,success:function(res,ajaxStatu,xhr){  
                     console.log(res)
                         if(res.success){
                             // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
@@ -191,7 +191,7 @@ layui.use(['layer','flow'], function(){
                     handle:'join',//操作 join:入队 其他:离队
                 };
                 $.ajax({
-                    data:data,success(res,ajaxStatu,xhr){  //设为主训教练
+                    data:data,success:function(res,ajaxStatu,xhr){  //设为主训教练
                         $.alerts(res.data.info)
                         if(res.success){
                         wait='<div class="team-detail-row waitting">'

@@ -12,7 +12,7 @@
         ?>
 
 
-        <!--<div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <!--<div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc">
                     <div class="rule-row">

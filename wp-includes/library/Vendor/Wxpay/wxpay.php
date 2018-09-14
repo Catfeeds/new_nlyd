@@ -63,6 +63,7 @@ class wxpay
         $this->mch_id = $mch_id;
 //        $this->notify_url = $notify_url;
         $this->key = $key;
+//        $this->key = 'NSvMySxKLODh4TkQhAu4j5CTqF2TkpqV';
     }
 
 
@@ -77,6 +78,7 @@ class wxpay
      */
     public function h5UnifiedOrder($params, $timeOut = 6)
     {
+
         $url = self::API_URL_PREFIX.self::UNIFIEDORDER_URL;
         $inputObj = new WxPayUnifiedOrder();
 
@@ -96,16 +98,17 @@ class wxpay
         //签名
         $inputObj->SetSign($this->key);
         $xml = $inputObj->ToXml();
-
+//        echo '<pre />';
+//        var_dump($this->key);
+//        var_dump($this->xml_to_data($xml));
+//        return;
 //        $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
         if(false == $response) return false;
         $result = WxPayResults::Init($response,$this->key);
 //        var_dump($result);
 
-//        echo '<pre />';
-//        var_dump($result);
-//        return;
+
         if($result['return_code'] === 'SUCCESS' && $result['return_msg'] === 'OK' && $result['result_code'] === 'SUCCESS' && $result['trade_type'] === 'MWEB'){
 
             return  ['status' => true, 'data' => $result['mweb_url']];
@@ -123,12 +126,12 @@ class wxpay
      * JsAPI(公众号支付)
      */
     public function jsApiPay($params,$timeOut=6){
+
         $url = self::API_URL_PREFIX.self::UNIFIEDORDER_URL;
         //检测必填参数
         //异步通知url未设置，则使用配置文件中的url
-
-
         $inputObj = new WxPayUnifiedOrder();
+//        $inputObj = new WxPayJsApiPay();
 
         $inputObj->SetAppid($this->appid);//公众账号ID
         $inputObj->SetMch_id($this->mch_id);//商户号
@@ -141,40 +144,38 @@ class wxpay
         $inputObj->SetTotal_fee($params['price']*100);//总金额
         $inputObj->SetNotify_url($params['notify_url']);
         $inputObj->SetTrade_type('JSAPI');
+        $inputObj->SetOpenid($params['open_id']);
 //        $inputObj->SetScene_info('{"store_info": {"id":"'.$this->mch_id.'","name": "国际脑力运动","wap_name": "国际脑力运动"}}');
-
-
         //签名
         $inputObj->SetSign($this->key);
         $xml = $inputObj->ToXml();
-//        var_dump($xml);
-//        die;
+
+
 
 //        $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
-        echo 111111;
-        var_dump($response);
-        die;
-        if(false == $response) return false;
+        if(!$response) return false;
         $result = WxPayResults::Init($response,$this->key);
+
         $this->writeLog($result,'JsApi发起支付');
-        if($result['return_code'] === 'SUCCESS' && $result['return_msg'] === 'OK' && $result['result_code'] === 'SUCCESS' && $result['trade_type'] === 'MWEB'){
 
-            $time_stamp = time();
-            $pack	= 'Sign=WXPay';
-            //输出参数列表
-            $prePayParams =array();
-            $prePayParams['appid']		=$result['appid'];
-            $prePayParams['partnerid']	=$result['mch_id'];
-            $prePayParams['prepay_id']	=$result['prepay_id'];
-            $prePayParams['noncestr']	=$result['nonce_str'];
-            $prePayParams['package']	=$pack;
-            $prePayParams['timestamp']	=$time_stamp;
-            //echo json_encode($prePayParams);
-            $result = WxPayResults::InitFromArray($prePayParams,true)->GetValues();
-//        self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+        if($result['return_code'] === 'SUCCESS' && $result['return_msg'] === 'OK' && $result['result_code'] === 'SUCCESS' && $result['trade_type'] === 'JSAPI'){
 
-            return ['status' => true, 'data' => $result];
+
+            $jsapi = new WxPayJsApiPay();
+            $jsapi->SetAppid($result['appid']);
+            $timeStamp = get_time();
+            $jsapi->SetTimeStamp("$timeStamp");
+            $jsapi->SetNonceStr(self::getNonceStr());
+            $jsapi->SetPackage("prepay_id=" . $result['prepay_id']);
+            $jsapi->SetSignType("MD5");
+            $jsapi->SetPaySign($jsapi->MakeSign($this->key));
+            $params = $jsapi->GetValues();
+            if(isset($params['package']) && !empty($params['package']))
+//                return ['status' => true, 'data' => json_encode($params)];//当前页面
+                return ['status' => true, 'data' => $params];
+            else
+                return ['status' => false, 'data' => '发起支付失败'];
         }else{
             if(isset($result['err_code'])){
                 $err_code = $this->error_code($result['err_code']);

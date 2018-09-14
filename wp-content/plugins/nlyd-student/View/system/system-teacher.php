@@ -1,5 +1,5 @@
 <style>
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #page {
         top: 130px;
     }
@@ -7,7 +7,7 @@
 </style>
 <div class="layui-fluid">
     <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
             <div class="layui-row nl-border nl-content">
                     <header class="mui-bar mui-bar-nav system-list system-teacher layui-tab layui-tab-brief" lay-filter="tabs">
                         <a class="mui-pull-left nl-goback">
@@ -31,7 +31,7 @@
                     <div class="layui-tab-content width-margin width-margin-pc">
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="flow-teacher1">
-                                <li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">
+                                <li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">
                                     <a class="coach-row">
                                         <div class="coach-picture">
                                         <img src="<?=student_css_url.'image/noInfo/404x3.png'?>" >
@@ -55,7 +55,7 @@
                                     </a>
                                 </li>
 
-                                <li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">
+                                <li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">
                                     <a class="coach-row">
                                         <div class="coach-picture">
                                             <img src="<?=student_css_url.'image/test/test1.png'?>">

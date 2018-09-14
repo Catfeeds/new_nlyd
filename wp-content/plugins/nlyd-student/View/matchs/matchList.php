@@ -8,7 +8,7 @@
         ?>
 
         <?php if($row){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper have-footer">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
@@ -45,14 +45,14 @@
             </div>  
         <?php }else{ ?>
         <style>
-            @media screen and (max-width: 991px){
+            @media screen and (max-width: 1199px){
                 #page {
                     top: 0;
                 }
             }
 
         </style>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">
                         <div class="no-info-img">
@@ -74,6 +74,10 @@ jQuery(function($) {
     if(window.wait_match == ''){
         $('.countdown-time').hide();
     }
+    $('body').on('click','.not_sign',function(){
+        // alert(1)
+        // return false;
+    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -98,7 +102,7 @@ jQuery(function($) {
                     }
                     var lis = [];
                     $.ajax({
-                        data: postData,success(res,ajaxStatu,xhr){
+                        data: postData,success:function(res,ajaxStatu,xhr){
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
@@ -132,10 +136,12 @@ jQuery(function($) {
                                                         +'</div>'
                                             }
                                         }
-                                        endTime='<div class="nl-match-detail">'
-                                                    +'<span>报名截止：</span>'
-                                                    +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                    +sys_second_text+'</span>'
+                                        endTime='<div class="nl-match-detail layui-row">'
+                                                    +'<div class="nl-match-label">报名截止：</div>'
+                                                    +'<div class="nl-match-info">'
+                                                        +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                        +sys_second_text+'</span>'
+                                                    +'</div>'
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button last-btn">'
@@ -144,7 +150,7 @@ jQuery(function($) {
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button last-btn">'
-                                                        +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                        +'<a class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</a>'
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button last-btn">'
@@ -153,17 +159,19 @@ jQuery(function($) {
                                                 
                                             }
                                         }
-                                        endTime='<div class="nl-match-detail">'
-                                                    +'<span>报名截止：</span>'
-                                                    +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                    +sys_second_text+'</span>'
+                                        endTime='<div class="nl-match-detail layui-row">'
+                                                    +'<div class="nl-match-label">报名截止：</div>'
+                                                    +'<div class="nl-match-info">'
+                                                        +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                        +sys_second_text+'</span>'
+                                                    +'</div>'
                                                 +'</div>'
                                     }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
                                         onBtn="onBtn"
                                     }
-                                    var dom='<li class="layui-col-lg4 layui-col-md4 layui-col-sm12 layui-col-xs12">'
+                                    var dom='<li class="layui-col-lg4 layui-col-sm12 layui-col-xs12 layui-col-md12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name fs_16 c_blue">'+v.post_title+'</span>'
@@ -171,23 +179,31 @@ jQuery(function($) {
                                                         +'<p class="long-name fs_12 c_black3">'+v.post_content+'</p>'
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
-                                                        +'<div class="nl-match-detail">'
-                                                            +'<span>开赛日期：</span>'
-                                                            +'<span class="c_black">'+v.match_start_time+'</span>'
-                                                            +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
+                                                        +'<div class="nl-match-detail layui-row">'
+                                                            +'<div class="nl-match-label">开赛日期：</div>'
+                                                            +'<div class="nl-match-info">'
+                                                                +'<span class="c_black">'+v.match_start_time+'</span>'
+                                                                +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
+                                                            +'</div>'
                                                         +'</div>'
-                                                        +'<div class="nl-match-detail">'
-                                                            +'<span>比赛地点：</span>'
-                                                            +'<span class="c_black">'+v.match_address+'</span>'
+                                                        +'<div class="nl-match-detail layui-row">'
+                                                            +'<div class="nl-match-label">比赛地点：</div>'
+                                                            +'<div class="nl-match-info">'
+                                                                +'<span class="c_black">'+v.match_address+'</span>'
+                                                            +'</div>'
                                                         +'</div>'
-                                                        +'<div class="nl-match-detail">'
-                                                            +'<span>报名费用：</span>'
-                                                            +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                        +'<div class="nl-match-detail layui-row">'
+                                                            +'<div class="nl-match-label">报名费用：</div>'
+                                                            +'<div class="nl-match-info">'
+                                                                +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                            +'</div>'
                                                         +'</div>'
                                                         +endTime
-                                                        +'<div class="nl-match-detail">'
-                                                            +'<span>已报选手：</span>'
-                                                            +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                        +'<div class="nl-match-detail layui-row">'
+                                                            +'<div class="nl-match-label">已报选手：</div>'
+                                                            +'<div class="nl-match-info">'
+                                                                +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                            +'</div>'
                                                         +'</div>'
                                                     +'</div>'
                                                     +'<div class="nl-match-footer">'
@@ -220,6 +236,7 @@ jQuery(function($) {
                                     $(this).text(time);
                                 }else{
                                     $(this).text("报名结束");
+                                    window.location.reload()
                                 }
                             });
                         }   

@@ -102,7 +102,18 @@ p.long-name{
     color: #fff;
     border-radius: 50%;
 }
-@media screen and (min-width: 992px){
+.nl-match-label{
+    float: left;
+    width: 70px;
+}
+.nl-match-info{
+    float: left;
+    width: -webkit-calc(100% - 70px);
+    width: calc(100% - 70px);
+    text-align: left;
+}
+
+@media screen and (min-width: 1200px){
     .nl-border{
         padding-top: 0;
     }
@@ -140,7 +151,7 @@ p.long-name{
         display: none;
     }
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     #content{
         background:#f6f6f6;
     }
@@ -211,7 +222,7 @@ p.long-name{
         top: auto;
     }
 }
-@media screen and (min-width: 375px) and (max-width: 991px){
+@media screen and (min-width: 375px) and (max-width: 1199px){
     .nl-match-button{
         text-align: right;
     }

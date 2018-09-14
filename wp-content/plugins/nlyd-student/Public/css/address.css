@@ -81,7 +81,7 @@ p.address-detail{
     margin-top: 20px;
     text-align: center;
 }
-@media screen and (max-width: 991px){
+@media screen and (max-width: 1199px){
     .nl-content{
         padding-bottom: 80px;
     }
@@ -89,7 +89,7 @@ p.address-detail{
         background: #f6f6f6;
     }
 }
-@media screen and (min-width: 992px){
+@media screen and (min-width: 1200px){
     .detail-content-wrapper{
         background: #fff;
     }

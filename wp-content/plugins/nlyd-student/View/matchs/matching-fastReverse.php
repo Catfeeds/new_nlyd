@@ -2,7 +2,7 @@
 
 <div class="layui-fluid noCopy">
     <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <h1 class="mui-title"><?=$project_title?></h1>
         </header>
@@ -123,7 +123,7 @@ jQuery(function($) {
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.ajax({
-            data:data,success(res,ajaxStatu,xhr){    
+            data:data,success:function(res,ajaxStatu,xhr){    
                 $.DelSession('match')
                 $.DelSession('leavePage')
                 if(res.success){

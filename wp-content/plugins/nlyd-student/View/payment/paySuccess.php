@@ -7,7 +7,7 @@
         ?>
 
 
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper layui-bg-white">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper layui-bg-white">
         <header class="mui-bar mui-bar-nav">
         <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
