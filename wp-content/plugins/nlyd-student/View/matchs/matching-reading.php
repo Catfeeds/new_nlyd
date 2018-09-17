@@ -65,6 +65,7 @@
 
 <script>
 jQuery(function($) { 
+    var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -72,44 +73,52 @@ jQuery(function($) {
     layui.use(['form'], function(){
 
     })
-
     function submit(time,submit_type){//提交答案
-        var my_answer={}
-        $('.matching-reading').each(function(){
-            var _this=$(this);
-            var id=_this.attr('data-id');
-            my_answer[id]=[];
-            _this.find('.select_answer').each(function(e){
-                var __this=$(this);
-                if(__this.is(':checked')){
-                    my_answer[id].push(__this.attr('data-name'))
+        if(!isSubmit){
+            isSubmit=true;
+            var my_answer={}
+            $('.matching-reading').each(function(){
+                var _this=$(this);
+                var id=_this.attr('data-id');
+                my_answer[id]=[];
+                _this.find('.select_answer').each(function(e){
+                    var __this=$(this);
+                    if(__this.is(':checked')){
+                        my_answer[id].push(__this.attr('data-name'))
+                    }
+                })
+            })
+            var data={
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1?>,
+                my_answer:my_answer,
+                match_action:'subjectReading',
+                surplus_time:time,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+            }
+            $.ajax({
+                data:data,
+                success:function(res,ajaxStatu,xhr){  
+                    $.DelSession('leavePage')
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url
+                        }   
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                    isSubmit=false;
+                },
+                error: function(jqXHR, textStatus, errorMsg){
+                    isSubmit=false;
                 }
             })
-           
-        })
-        var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1?>,
-            my_answer:my_answer,
-            match_action:'subjectReading',
-            surplus_time:time,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+        }else{
+            $.alerts('正在提交答案')
         }
-        $.ajax({
-            data:data,success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
-                if(res.success){
-                    if(res.data.url){
-                        window.location.href=res.data.url
-                    }   
-                }else{
-                    $.alerts(res.data.info)
-                }
-            }
-        })
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');

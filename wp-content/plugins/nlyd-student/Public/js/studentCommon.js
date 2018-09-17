@@ -112,13 +112,14 @@ jQuery(document).ready(function($) {
         
     })
     count_down= function(_count_time,waiting_url){
+        if(_count_time<=120){
+            clearTimeout(count_down_timer)
+            window.location.href=waiting_url;
+            return false;
+        }else{
             _count_time--
-            if(_count_time<=120){
-                clearTimeout(count_down_timer)
-                window.location.href=waiting_url;
-            }
             count_down_timer=setTimeout("count_down("+_count_time+",'"+waiting_url+"')",1000);
-
+        }
     } 
     function getMatchTime(){
         var wait_match=window.wait_match;
@@ -132,11 +133,12 @@ jQuery(document).ready(function($) {
                     if(match_start_time>120){//倒计时时间大于2分钟,进行倒计时
                         count_down(match_start_time,wait_match.waiting_url)
                     }else{
-                        if(match_start_time<=120 && match_start_time>0){//倒计时时间小于于2分钟,大于0，跳转到比赛等待页
+                        if(match_start_time<=120 && match_start_time>=0){//倒计时时间小于于2分钟,大于0，跳转到比赛等待页
                             window.location.href=wait_match.waiting_url;
-                        }else{//倒计时时间小于=0，跳转至比赛页
-                            window.location.href=match_url;
                         }
+                        // else{//倒计时时间小于=0，跳转至比赛页
+                        //     window.location.href=wait_match.waiting_url;
+                        // }
                     }
                 }
                 if($('#getTimes').length>0){//最新比赛倒计时

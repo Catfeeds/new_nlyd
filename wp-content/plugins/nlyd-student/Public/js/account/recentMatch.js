@@ -1,4 +1,15 @@
 jQuery(function($) { 
+    $('body').on('click','.nl-match-button button',function(){
+        var _this=$(this);
+        var href=_this.attr('href');
+        if(href){
+            _this.addClass('opacity')
+            setTimeout(function(){
+                _this.removeClass('opacity')
+            }, 100);
+            window.location.href=href;
+        }
+    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -26,13 +37,13 @@ jQuery(function($) {
                                     }
                                     if(v.right_url.length>0){
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                            +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                            +'<button type="button" href="'+v.right_url+'">'+v.button_title+'</button>'
                                         +'</div>'
                                     }
                                     if(v.match_status==1){//报名中
                                         className='bg_gradient_grey';
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                            +'<a class="'+className+'">'+v.button_title+'</a>'
+                                            +'<button type="button" class="'+className+'">'+v.button_title+'</button>'
                                         +'</div>'
                                     }
                                     var onBtn="" ;
@@ -71,7 +82,7 @@ jQuery(function($) {
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">报名截止倒计时：</div>'
+                                                            +'<div class="nl-match-label">报名截止：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
                                                                 +sys_second_text+'</span>'
@@ -87,7 +98,7 @@ jQuery(function($) {
 
                                                     +'<div class="nl-match-footer">'
                                                         +'<div class="nl-match-button">'
-                                                            +'<a class="'+onBtn+'"  href="'+v.left_url+'">查看详情</a>'
+                                                            +'<button type="button" class="'+onBtn+'"  href="'+v.left_url+'">查看详情</button>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'

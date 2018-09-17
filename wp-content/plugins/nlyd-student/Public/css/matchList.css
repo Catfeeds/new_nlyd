@@ -50,25 +50,28 @@ p.long-name{
     flex: 1;
     padding: 10px 0;
 }
-.nl-match-button a{
+.nl-match-button button{
     display: block;
     width: 90%;
     height: 40px;
-    line-height: 40px;
+    line-height: normal;
     text-align: center;
     margin: auto;
     border-radius: 23px;
     color: #2484FE;
     border: 1px solid #2484FE;
+    outline: none;
+    background:#fff;
+    font-weight: normal;
 }
 
-.nl-match-button a.onBtn{
+.nl-match-button button.onBtn{
     width: 50%;
 }
-.nl-match-button a:hover{
+.nl-match-button button:hover{
     color: #2484FE;
 }
-.nl-match-footer .last-btn a{
+.nl-match-footer .last-btn button{
     color: #fff;
     background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
     background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
@@ -76,7 +79,7 @@ p.long-name{
     background: linear-gradient(90deg,#68AAFE, #4394F9);
     border: none;
 }
-.nl-match-footer .last-btn a.bg_gradient_grey{
+.nl-match-footer .last-btn button.bg_gradient_grey{
     color: #fff;
     background: -webkit-linear-gradient(90deg,#b8bcbe,#919191);
     background: -o-linear-gradient(90deg,#b8bcbe,#919191);
@@ -84,7 +87,7 @@ p.long-name{
     background: linear-gradient(90deg,#b8bcbe,#919191);
     border: none;
 }
-.nl-match-footer .last-btn a:hover{
+.nl-match-footer .last-btn button:hover{
     color: #fff;
 }
 .nl-badge{

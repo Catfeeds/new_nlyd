@@ -1376,6 +1376,10 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
+
+
+
+
             //获取报名人数
             $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status in(2,3,4) ";
             $row = $wpdb->get_row($sql_,ARRAY_A);

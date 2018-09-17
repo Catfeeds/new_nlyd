@@ -36,7 +36,7 @@
                         <?php endif;?>
                     </div>
                 </div>
-                <a class="a-btn" id="complete">记忆完成</a>
+                <div class="a-btn" id="complete">记忆完成</div>
             </div>
         </div>
     </div>
@@ -51,25 +51,35 @@ jQuery(function($) {
         submit(time,4);
     })
     mTouch('body').on('tap','#complete',function(){//记忆完成
-        var data={
-            action:'memory_complete',
-            _wpnonce:$('#inputComplete').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:$('#inputMatchMore').val(),
-            match_action:'numberBattle',
-        }
-        $.ajax({
-            data:data,success:function(res,ajaxStatu,xhr){  
-                if(res.success){
-                    if(res.data.url){
-                        window.location.href=res.data.url
-                    }   
-                }else{
-                    $.alerts(res.data.info)
-                }
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            _this.addClass('disabled')
+            var data={
+                action:'memory_complete',
+                _wpnonce:$('#inputComplete').val(),
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:$('#inputMatchMore').val(),
+                match_action:'numberBattle',
             }
-        })
+            $.ajax({
+                data:data,
+                success:function(res,ajaxStatu,xhr){  
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url;
+                        }   
+                    }else{
+                        $.alerts(res.data.info)
+                        _this.removeClass('disabled')
+                    }
+                    
+                },
+                error: function(jqXHR, textStatus, errorMsg){
+                    _this.removeClass('disabled')
+                }
+            })
+        }
     })
     function submit(time,submit_type){//提交答案
         var my_answer=[];

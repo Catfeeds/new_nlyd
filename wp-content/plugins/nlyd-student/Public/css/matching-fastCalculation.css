@@ -72,8 +72,8 @@
     margin-left: 0;
 }
 .matching-keyboard-row:last-child .matching-key{
-    width: -webkit-calc(100% / 4 - 12px);
-    width: calc(100% / 4 - 12px);
+    width: -webkit-calc(100% / 4 - 9px);
+    width: calc(100% / 4 - 9px);
 }
 .count_p{
     text-align: left;

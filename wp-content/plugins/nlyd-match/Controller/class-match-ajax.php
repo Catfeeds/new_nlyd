@@ -232,7 +232,7 @@ class Match_Ajax
                 else a.user_nicename
                 end as text 
                 from {$wpdb->prefix}users a 
-                left join {$wpdb->prefix}usermeta b  on a.ID = b.user_id and b.meta_key = 'wp_user_level'
+                left join {$wpdb->prefix}usermeta b  on a.ID = b.user_id and b.meta_key = '{$wpdb->prefix}user_level'
                 where {$where}
                 limit 0,10";
         //print_r($sql);die;

@@ -151,8 +151,8 @@ border-bottom-right-radius: 8px;
 }
 .match-title{
     font-size: 0.16rem;
-    line-height: 50px;
-    overflow: hidden;
+    line-height: normal;
+    padding: 10px 0;
 }
 .match-title .share{
     float: right;

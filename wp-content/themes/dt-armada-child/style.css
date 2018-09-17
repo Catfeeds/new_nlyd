@@ -36,10 +36,11 @@ a{
     cursor: pointer;
     text-decoration: none!important;
 }
-a:active{
+a:active,btton:active,.opacity{
     opacity:0.6;
     filter: alpha(opacity=60);
 }
+
 .pace .pace-activity::after, .pace .pace-activity::before{
     content: none!important;
 }
