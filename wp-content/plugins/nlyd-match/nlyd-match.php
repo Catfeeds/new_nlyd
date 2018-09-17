@@ -249,17 +249,17 @@ if(!class_exists('MatchController')){
                     $successNum = 0;
                     $wpdb->startTrans();
                     foreach ($dataArr as $k => $data){
-//                        $content = '';
-//                        foreach (explode("\n",$data['content']) as $contentChild){
-//                            $content .= "　　".trim($contentChild)."\r";
-//                        }
+                        $content = '';
+                        foreach (explode("\n",$data['content']) as $contentChild){
+                            $content .= '<p style="text-indent: 2em;">'.$contentChild.'</p>';
+                        }
 
 //                        echo '<pre />';
-//                        echo $content;
+//                        echo htmlspecialchars($content);
 //                        die;
                         $id = wp_insert_post([
                             'post_title' => $data['title'],
-                            'post_content' => $data['content'],
+                            'post_content' => $content,
                             'post_status' => 'publish',
                             'post_type' => 'question',
                         ]);
