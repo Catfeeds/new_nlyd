@@ -794,7 +794,9 @@ remove_action('wp_head', 'parent_post_rel_link', 10, 0 );//清除前后文信息
 remove_action('wp_head', 'start_post_rel_link', 10, 0 );//清除前后文信息
 remove_action( 'wp_head', 'rel_canonical' );
 
-
+if(!is_admin()){
+    show_admin_bar(false);
+}
 
 //引入url重写规则
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');
