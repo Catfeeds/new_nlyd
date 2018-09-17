@@ -82,7 +82,7 @@ jQuery(function($) {
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">报名截止倒计时：</div>'
+                                                            +'<div class="nl-match-label">报名截止：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
                                                                 +sys_second_text+'</span>'
