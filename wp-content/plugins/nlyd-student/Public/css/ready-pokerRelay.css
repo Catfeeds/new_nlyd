@@ -40,6 +40,7 @@
     left: 0;
     top: 0;
     height: 174px;
+    margin: auto;
 }
 
 .poker{
@@ -96,18 +97,20 @@
 .pokerBtn{
     position: absolute;
     padding: 0;
-    width: 30px;
+    /* width: 30px;
     height: 30px;
     line-height: 30px;
     text-align: center;
     color: #fff;
     border-radius: 50%;
-    background: #4394F9;
+    background: #4394F9; */
+    font-size: 0.35rem;
+    color: #4394F9;
     top:-webkit-calc(50% - 15px);
     top:calc(50% - 15px);
 }
 .pokerBtn.disabled{
-    background: #A4A4A4;
+    color: #A4A4A4;
 }
 .pokerBtn:focus{
     top:-webkit-calc(50% - 15px);

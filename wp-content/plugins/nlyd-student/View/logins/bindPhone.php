@@ -27,7 +27,7 @@
                                     <input type="hidden" name="action" value="wxWebLoginBindMobile">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_current_wx_web_login_nonce');?>">
                                     <div class="input-icon "><div class="login_icon phone_grey"></div></div>
-                                    <input type="tel" name="mobile" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input hasIcon">
+                                    <input type="tel" name="mobile" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input hasIcon">
                                 </div>
                             </div>
                             <div class="layui-form-item">
