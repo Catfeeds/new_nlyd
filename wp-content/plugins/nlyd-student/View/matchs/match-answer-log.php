@@ -136,7 +136,11 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             $(this).attr('data-seconds',S).text(time)
             if(S==0){
                 $.DelSession('leavePageWaits')
-                window.location.href=_this.parents('.a-btn').attr('href')
+                if(_this.parents('.a-btn').attr('href')){
+                    window.location.href=_this.parents('.a-btn').attr('href')
+                }else{
+                     window.location.reload();
+                }
             }
         });
         <?php endif;?>
