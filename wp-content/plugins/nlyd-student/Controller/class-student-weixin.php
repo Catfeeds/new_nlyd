@@ -120,7 +120,7 @@ class Student_Weixin
     /**
      * 网页授权登录根据access_token和openid获取用户信息
      */
-    public function getUserInfo($access_token,$openid,$type = true,$user_id = 0,$mobile=''){
+    public function getUserInfo($access_token,$openid,$type = true,$user_id = 0,$mobile='',$emailOrMobile = ''){
         $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
 
         $ch = curl_init();
@@ -139,14 +139,15 @@ class Student_Weixin
         }
         //保存用户信息
         $res['mobile'] = $mobile;
-        return $this->save_user($res,$type,$user_id);
+        return $this->save_user($res,$type,$user_id,$emailOrMobile);
         exit;
     }
 
     /**
      * 微信授权登录页,保存用户信息
-    */
-    public function save_user($res = [],$type='',$user_id=0){
+     */
+    public function save_user($res = [],$type='',$user_id=0,$emailOrMobile=''){
+        $me_name = $emailOrMobile == 'mobile' ? '手机' : '邮箱';
         global $wpdb;
         $userMetaType = false;
         if($type == true){
@@ -158,7 +159,7 @@ class Student_Weixin
                 //TODO 判断当前手机是否已经绑定过微信
                 if($mobileUser->weChat_openid != false){
                     if(is_ajax()){
-                        wp_send_json_error(array('info'=>'当前手机已绑定其它微信'));
+                        wp_send_json_error(array('info'=>'当前'.$me_name.'已绑定其它微信'));
                         exit;
                     }else{
                         return false;
@@ -174,10 +175,15 @@ class Student_Weixin
                     $userMetaType = true;
                     $auth['user_nicename'] = $res['nickname'];
                     $auth['display_name'] = $res['mobile'];
-                    $user_id = wp_create_user($res['mobile'],'123456','',$res['mobile']);
+                    if($emailOrMobile == 'email'){
+                        $user_id = wp_create_user($res['mobile'],get_time(),$res['mobile'],'');
+                    }else{
+                        $user_id = wp_create_user($res['mobile'],get_time(),'',$res['mobile']);
+                    }
+
                 }else{
                     //已存在
-                    if(!$mobileUser->user_mobile) $auth['user_mobile'] = $res['mobile'];
+                    if(!$mobileUser->user_mobile) $auth['user_'.$emailOrMobile] = $res['mobile'];
                     $user_id = $mobileUser->ID;
                 }
                 $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
@@ -188,7 +194,7 @@ class Student_Weixin
                 $wpdb->commit();
             }else{
                 //已存在的微信用户绑定手机
-                $bool = $wpdb->update($wpdb->users,['user_mobile' => $res['mobile']],['ID' => $user_id]);
+                $bool = $wpdb->update($wpdb->users,['user_'.$emailOrMobile => $res['mobile']],['ID' => $user_id]);
                 if(!$bool) return false;
             }
         }
