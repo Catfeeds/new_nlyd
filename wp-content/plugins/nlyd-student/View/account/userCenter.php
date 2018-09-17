@@ -207,6 +207,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             ,isOutAnim:true//关闭动画
         });
       <?php } ?>
+       <?php if($waitting_url):?>
       layer.open({
         type: 1
         ,maxWidth:300
@@ -225,13 +226,14 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             //按钮【按钮二】的回调
             
             //return false 开启该代码可禁止点击该按钮关闭
-            window.location.href="<?=home_url('/matchs');?>"
+            window.location.href="<?=$waitting_url;?>"
         }
         ,closeBtn:2
         ,btnAagn: 'c' //按钮居中
         ,shade: 0.3 //遮罩
         ,isOutAnim:true//关闭动画
       });
+      <?php endif;?>
 });
 jQuery(document).ready(function($) {
     if(parseInt(window.innerWidth)<=1199) {

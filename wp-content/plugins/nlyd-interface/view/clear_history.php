@@ -21,7 +21,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">一键删除指定用户</label></th>
                 <td>
                     <div class="layui-input-block">
-                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="get_user_list" data-type="user" data-placeholder="输入用户名/手机/邮箱/昵称" multiple></select>
+                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="admin_get_user_list" data-type="user" data-placeholder="输入用户名/手机/邮箱/昵称" multiple></select>
                     </div>
                 </td>
                 <td>
@@ -32,7 +32,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">一键清除比赛</label></th>
                 <td>
                     <div class="layui-input-block">
-                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="get_match_list" data-placeholder="输入比赛名字" multiple></select>
+                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="admin_get_match_list" data-placeholder="输入比赛名字" multiple></select>
                     </div>
                 </td>
                 <td>
@@ -54,7 +54,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">一键清除教练</label></th>
                 <td>
                     <div class="layui-input-block">
-                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="get_user_list" data-type="teacher" data-placeholder="输入教练名字" multiple></select>
+                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="admin_get_user_list" data-type="teacher" data-placeholder="输入教练名字" multiple></select>
                     </div>
                 </td>
                 <td>
@@ -65,7 +65,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">一键清除战队</label></th>
                 <td>
                     <div class="layui-input-block">
-                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="get_team_list" data-type="team" data-placeholder="输入战队名字" multiple></select>
+                        <select class="js-data-select-ajax" name="id[]" style="width: 100%" data-action="admin_get_team_list" data-type="team" data-placeholder="输入战队名字" multiple></select>
                     </div>
                 </td>
                 <td>
@@ -76,7 +76,7 @@ $setting = get_option('default_setting');
                 <th scope="row"><label for="blogname">一键切换题目类型</label></th>
                 <td>
                     <div class="layui-input-block">
-                        <select class="js-data-select-ajax" name="id" style="width: 100%" data-action="get_category_list" data-type="team" data-placeholder="输入题目分类名字" ></select>
+                        <select class="js-data-select-ajax" name="id" style="width: 100%" data-action="admin_get_category_list" data-type="team" data-placeholder="输入题目分类名字" ></select>
                     </div>
                 </td>
                 <td>

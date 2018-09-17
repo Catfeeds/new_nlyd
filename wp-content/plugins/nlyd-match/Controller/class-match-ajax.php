@@ -130,7 +130,7 @@ class Match_Ajax
     /**
      * 获取所有题目分类
      */
-    public function get_category_list(){
+    public function admin_get_category_list(){
         $args = array(
             'taxonomy' => 'question_genre', //自定义分类法
             'pad_counts' => false
@@ -171,7 +171,7 @@ class Match_Ajax
     /**
      * 获取所有比赛
      */
-    public function get_match_list(){
+    public function admin_get_match_list(){
         global $wpdb;
         $map = array();
         $map[] = ' post_type = "match" ';
@@ -189,7 +189,7 @@ class Match_Ajax
     /**
      * 获取所有战队
      */
-    public function get_team_list(){
+    public function admin_get_team_list(){
         global $wpdb;
         $map = array();
         $map[] = ' post_type = "team" ';
@@ -208,7 +208,7 @@ class Match_Ajax
     /**
      * 获取所有用户
      */
-    public function get_user_list(){
+    public function admin_get_user_list(){
         global $wpdb;
         $map = array();
         if(!empty($_GET['term'])){

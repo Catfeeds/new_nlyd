@@ -60,7 +60,19 @@ class Student_Account extends Student_Home
             $my_skill = $wpdb->get_row($sql1,ARRAY_A);
             //print_r($sql1);
             //var_dump($my_skill);
-            $data = array('user_info'=>$user_info,'message_total'=>$message_total->total,'my_team'=>$my_team,'my_skill'=>$my_skill);
+
+            //获取当前是否有比赛
+            $saql = "select a.match_id from {$wpdb->prefix}match_meta a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
+            $match_id = $wpdb->get_var($saql);
+
+            $data = array(
+                'user_info'=>$user_info,
+                'message_total'=>$message_total->total,
+                'my_team'=>$my_team,
+                'my_skill'=>$my_skill,
+                'waitting_url'=>!empty($match_id) ? home_url('matchs/matchWaitting/match_id/'.$match_id) : '',
+            );
+            //print_r($data);
         }else{
             $user_info['user_head'] = student_css_url.'image/nlyd.png';
             $data = array('user_info'=>$user_info);
