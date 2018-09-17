@@ -132,10 +132,14 @@ jQuery(document).ready(function($) {
                     if(match_start_time>120){//倒计时时间大于2分钟,进行倒计时
                         count_down(match_start_time,wait_match.waiting_url)
                     }else{
-                        if(match_start_time<=120 && match_start_time>0){//倒计时时间小于于2分钟,大于0，跳转到比赛等待页
+                        // if(match_start_time<=120 && match_start_time>0){//倒计时时间小于于2分钟,大于0，跳转到比赛等待页
+                        //     window.location.href=wait_match.waiting_url;
+                        // }else{//倒计时时间小于=0，跳转至比赛页
+                        //     window.location.href=match_url;
+                        // }
+
+                        if(match_start_time<=120 && match_start_time>=0){
                             window.location.href=wait_match.waiting_url;
-                        }else{//倒计时时间小于=0，跳转至比赛页
-                            window.location.href=match_url;
                         }
                     }
                 }
@@ -268,7 +272,7 @@ jQuery(document).ready(function($) {
         aysnc: true ,
         type: "POST" , // 默认使用POST方式
         dataType:'json',
-        timeout:4000,
+        timeout:6000,
         error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
