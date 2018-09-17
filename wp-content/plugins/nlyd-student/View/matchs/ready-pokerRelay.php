@@ -28,9 +28,9 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
-                        <i class="iconfont pokerBtn left disabled" style="display:none">&#xe60c;</i>
+                        <i class="iconfont pokerBtn left disabled" style="display:none">&#xe647;</i>
                     
-                        <i class="iconfont pokerBtn right disabled" style="display:none">&#xe60b;</i>
+                        <i class="iconfont pokerBtn right disabled" style="display:none">&#xe648;</i>
                     
                         <div class="porker-zoo">
                             <div class="poker-window">
@@ -141,6 +141,15 @@ jQuery(function($) {
         var width=$('.poker-wrapper .poker').width()+2;
         var marginRight=parseInt($('.poker-wrapper .poker').css('marginRight'))
         var W=width*len+marginRight*(len-1)+'px';
+        if(parseInt(W)<$('.poker-window').width()){
+            $('.poker-wrapper').css({
+                'position': 'relative'
+            })
+        }else{
+            $('.poker-wrapper').css({
+                'position': 'absolute'
+            })
+        }
         $('.poker-wrapper').css('width',W);
     }
     // initWidth()

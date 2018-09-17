@@ -89,7 +89,6 @@ jQuery(function($) {
             var layVerify=dom.attr('lay-verify')
             var message=allRules[layVerify][1];
             var template=parseInt($(this).attr('data-sendCodeCase'));
-
             if(layVerify=='phone'){//手机登录
                 if(phone.test(value)){
                     var formData=$(this).parents('form').serializeObject();
@@ -122,7 +121,7 @@ jQuery(function($) {
                     }
                     var data={
                         action:action,
-                        user_login:formData.user_login,
+                        mobile:formData.mobile,
                         template:template,
                         tamp:getTimestamp,
                     }
