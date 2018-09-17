@@ -226,17 +226,18 @@ jQuery(function($) {
                                 next(lis.join(''),false)
                             }
                         
-                            $('.getTimes'+id).countdown(function(S, d){//倒计时
-                                if(S>0){
+                            $('.getTimes'+id).countdown(function(S, d){//倒计
                                     var D=d.day>0 ? d.day+'天' : '';
                                     var h=d.hour<10 ? '0'+d.hour : d.hour;
                                     var m=d.minute<10 ? '0'+d.minute : d.minute;
                                     var s=d.second<10 ? '0'+d.second : d.second;
                                     var time=D+h+':'+m+':'+s;
                                     $(this).text(time);
-                                }else{
-                                    $(this).text("报名结束");
-                                    window.location.reload()
+                                if(S==0){
+                                    $(this).text("报名结束");   
+                                    setTimeout(function() {
+                                        window.location.reload()  
+                                    }, 1000);
                                 }
                             });
                         }   

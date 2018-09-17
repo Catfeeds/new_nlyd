@@ -71,7 +71,7 @@
 
 <script>
 jQuery(function($) { 
-
+    var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -101,36 +101,45 @@ jQuery(function($) {
         }
     });
     function submit(time,submit_type){//提交答案
-        var my_answer=[];
-        $('.poker-wrapper .poker').each(function(){
-            var text=$(this).attr('data-text');
-            var color=$(this).attr('data-color');
-            var answer=color+'-'+text;
-            my_answer.push(answer)
-        })
-        var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
-            my_answer:my_answer,
-            match_action:'subjectPokerRelay',
-            surplus_time:time,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-        }
-        $.ajax({
-            data:data,success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
-                if(res.success){
-                    if(res.data.url){
-                        window.location.href=res.data.url
-                    }   
-                }else{
-                    $.alerts(res.data.info)
-                }
+        if(!isSubmit){
+            isSubmit=true;
+            var my_answer=[];
+            $('.poker-wrapper .poker').each(function(){
+                var text=$(this).attr('data-text');
+                var color=$(this).attr('data-color');
+                var answer=color+'-'+text;
+                my_answer.push(answer)
+            })
+            var data={
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
+                my_answer:my_answer,
+                match_action:'subjectPokerRelay',
+                surplus_time:time,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-        })
+            $.ajax({
+                data:data,success:function(res,ajaxStatu,xhr){  
+                    $.DelSession('leavePage')
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url
+                        }   
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                    isSubmit=false;
+                },
+                error: function(jqXHR, textStatus, errorMsg){
+                    isSubmit=false;
+                }
+            })
+        }else{
+            $.alerts('正在提交答案')
+        }
     }
 layui.use(['layer'], function(){
 
