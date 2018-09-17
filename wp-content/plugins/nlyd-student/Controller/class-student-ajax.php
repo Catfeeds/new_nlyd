@@ -2643,7 +2643,7 @@ class Student_Ajax
             $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
         }else{
             if($var)  wp_send_json_error(array('info'=>'当前邮箱已使用'));
-            $this->get_smtp_code($_POST['mobile'],17,false,$_POST['send_code']);
+            $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
         }
 
 
