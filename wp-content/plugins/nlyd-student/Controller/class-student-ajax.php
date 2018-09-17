@@ -2621,19 +2621,31 @@ class Student_Ajax
     }
 
     /**
-     * 微信授权登录绑定手机
+     * 微信授权登录绑定手机或邮箱
      */
     public function wxWebLoginBindMobile(){
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
-        if(!preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) wp_send_json_error(array('info'=>'手机格式不正确'));
+        if(preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) {
+            $type = 'mobile';
+        }elseif (is_email($_POST['mobile'])){
+            $type = 'email';
+        }else{
+            wp_send_json_error(array('info'=>'手机或邮箱格式不正确'));
+        }
         global $wpdb;
-        //判断当前手机是否已经存在
-        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
-        if($var)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
 
-        $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
+        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
+        if($type == 'mobile'){
+            //判断当前手机是否已经存在
+            if($var)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
+            $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
+        }else{
+            if($var)  wp_send_json_error(array('info'=>'当前邮箱已使用'));
+            $this->get_smtp_code($_POST['mobile'],17,false,$_POST['send_code']);
+        }
+
 
         $mobile = $_POST['mobile'];
         $user_id = $_POST['user_id'];
@@ -2642,7 +2654,7 @@ class Student_Ajax
 
         require_once 'class-student-weixin.php';
         $weiLogin = new Student_Weixin();
-        $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile);
+        $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type);
 
         if($res){
             wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
