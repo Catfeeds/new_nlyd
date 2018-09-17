@@ -37,6 +37,7 @@ class Match_Ajax
                 'pad_counts' => false
             );
             $category = get_categories($args);
+            //print_r($category);
             if(!empty($category)){
                 $category_id = array();
                 foreach ($category as $k => $v){
@@ -46,21 +47,16 @@ class Match_Ajax
 
                 $sql = "select object_id,term_taxonomy_id from {$wpdb->prefix}term_relationships where term_taxonomy_id in($id) ";
                 $object_id = $wpdb->get_results($sql,ARRAY_A);
+
                 if(!empty($object_id)){
-                    $object_ids = array();
                     foreach ($object_id as $val){
                         if($val['term_taxonomy_id'] != $_POST['id'] ){
-                            $object_ids[] = $val['object_id'];
+                            //$object_ids[] = $val['object_id'];
+                            $sql_ = "UPDATE `{$wpdb->prefix}term_relationships` SET `term_taxonomy_id`= {$_POST['id']} WHERE object_id in({$val['object_id']})";
+                            $a = $wpdb->query($sql_);
                         }
                     }
-                    $ids = arr2str($object_ids);
-                    $sql_ = "UPDATE `{$wpdb->prefix}term_relationships` SET `term_taxonomy_id`= {$_POST['id']} WHERE object_id in({$ids})";
-                    //print_r($sql_);
-                    $a = $wpdb->query($sql_);
-                    if($a){
-                        wp_send_json_success('操作完成');
-                    }
-
+                    wp_send_json_success('操作完成');
                 }
 
                 wp_send_json_error('操作失败');

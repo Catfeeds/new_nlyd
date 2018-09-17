@@ -38,9 +38,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         <div class="subject-title">
                             <div class="c_black match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10 match_info_font">您的得分<?=$my_score?>分</div>
-                            <?php if( ACTION == 'checkAnswerLog'):?>
+                            <?php //if( ACTION == 'checkAnswerLog'):?>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
-                            <?php endif;?>
+                            <?php //endif;?>
                         </div>
                         <div class="subject-row">
                             <div class="one-info">
@@ -69,32 +69,35 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                             <?php endif;?>
                         </div>
                     </div>
-<?php
-switch ($project_alias){
-    case 'szzb':    //数字争霸
-        require_once student_view_path.'matchs/subject-numberBattle.php';
-        break;
-    case 'pkjl':    //扑克接力
-        require_once student_view_path.'matchs/subject-pokerRelay.php';
-        break;
-    case 'zxss':    //正向速算
-        require_once student_view_path.'matchs/subject-fastCalculation.php';
-        break;
-    case 'nxss':    //逆向速算
-        require_once student_view_path.'matchs/subject-fastReverse.php';
-        break;
-    case 'wzsd':     //文章速读
-        require_once student_view_path.'matchs/subject-reading.php';
-        break;
-    case 'kysm':    //快眼扫描
-        require_once student_view_path.'matchs/subject-fastScan.php';
-        break;
-    default:
-        require_once student_view_path.'public/my-404.php';
-        break;
-}
-?>
+                    <?php
+                    switch ($project_alias){
+                        case 'szzb':    //数字争霸
+                            require_once student_view_path.'matchs/subject-numberBattle.php';
+                            break;
+                        case 'pkjl':    //扑克接力
+                            require_once student_view_path.'matchs/subject-pokerRelay.php';
+                            break;
+                        case 'zxss':    //正向速算
+                            require_once student_view_path.'matchs/subject-fastCalculation.php';
+                            break;
+                        case 'nxss':    //逆向速算
+                            require_once student_view_path.'matchs/subject-fastReverse.php';
+                            break;
+                        case 'wzsd':     //文章速读
+                            require_once student_view_path.'matchs/subject-reading.php';
+                            break;
+                        case 'kysm':    //快眼扫描
+                            require_once student_view_path.'matchs/subject-fastScan.php';
+                            break;
+                        default:
+                            require_once student_view_path.'public/my-404.php';
+                            break;
+                    }
+                    ?>
                 </div>
+                <?php if(!empty($end_time_count_down)):?>
+                    <div class="a-btn" style="display: none"><span class="count_down next_more_down" data-seconds="<?=$end_time_count_down?>">00:00:00</span></div>
+                <?php endif;?>
                 <?php if($next_type == 1 && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_project_url?>">距下一轮开赛&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
                     <!-- <a href="<?=$next_project_url?>">下一轮</a> -->
@@ -133,7 +136,11 @@ switch ($project_alias){
             $(this).attr('data-seconds',S).text(time)
             if(S==0){
                 $.DelSession('leavePageWaits')
-                window.location.href=_this.parents('.a-btn').attr('href')
+                if(_this.parents('.a-btn').attr('href')){
+                    window.location.href=_this.parents('.a-btn').attr('href')
+                }else{
+                     window.location.reload();
+                }
             }
         });
         <?php endif;?>

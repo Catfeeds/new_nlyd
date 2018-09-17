@@ -8,7 +8,6 @@
 //设置时区
 //date_default_timezone_set('Asia/Shanghai');
 
-
 /**
  * 计算比赛结束时间
  * @param $match_id
@@ -784,6 +783,13 @@ function set_user_admin_bar_false_by_default($user_id) {
     update_user_meta( $user_id, 'show_admin_bar_admin', 'false');
 }
 
+//文章首行缩进
+function Bing_text_indent($text){
+    $return = str_replace('<p', '<p style="text-indent:2em;"',$text);
+    return $return;
+}
+add_filter('the_content','Bing_text_indent');
+
 //精简头部信息
 remove_action( 'wp_head', 'feed_links', 2 ); //移除feed
 remove_action( 'wp_head', 'feed_links_extra', 3 ); //移除feed
@@ -797,6 +803,7 @@ remove_action( 'wp_head', 'rel_canonical' );
 if(!is_admin()){
     show_admin_bar(false);
 }
+
 
 //引入url重写规则
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');

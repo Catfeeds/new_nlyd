@@ -100,25 +100,25 @@ a:hover {
     color: #fff;
 }
 a.c_white:hover{
-    color: #fff
+    color: #fff;
 }
 .c_blue,a.c_blue{
     color: #2484FE;
 }
 a.c_blue:hover{
-    color: #2484FE
+    color: #2484FE;
 }
 .c_orange,a.c_orange{
     color: #FB8E8E;
 }
 a.c_orange:hover{
-    color: #FB8E8E
+    color: #FB8E8E;
 }
 .c_black,a.c_black{
     color: #262626;
 }
 a.c_black:hover{
-    color: #262626
+    color: #262626;
 }
 .c_black8,a.c_black8{
     color: rgba(38, 38, 38, 0.8);
