@@ -200,12 +200,12 @@ jQuery(function($) {
             return newStr
         }
     }
-    function add(level,type) {//连加运算
+    function add(level,type) {//连加运算   
         var result='';
         var L=level['symbol'];
         var N=level['number'];
         var firstNumber=''
-        var answer='';
+        var answer='';  
 
         // var arr=[];
         if(level['symbol']>4){
@@ -255,11 +255,11 @@ jQuery(function($) {
                 answer-=parseInt(number)
             }
             result+=symbol
-            result+=number    
-            
+            result+=number  
+
         }
         var row={question:firstNumber+result,rights:answer,yours:'',isRight:false,}
-        return row;  
+        return row;
     }
     function CX(level) {//乘除运算
         var firstNumber='';//符号左侧数字
@@ -382,12 +382,11 @@ jQuery(function($) {
                     level.number++
                     if(level.number>4){//数字长度达到4位最大限度，数字长度变为2，符号加1，为最大限度，数字长度不变
                         level.symbol++
-                        if(level.symbol>=4){
+                        if(level.symbol>4){
                             level.number=4
                         }else{
                             level.number=2
                         }
-                        
                     }
                 }
             }

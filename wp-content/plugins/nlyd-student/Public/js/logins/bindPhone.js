@@ -56,6 +56,27 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(bindPhone)', function(data){//快速登录
+                // var value=data.field.mobile;
+                // var allRules=$.validationLayui.allRules;//全局正则配置
+                // var phone=allRules['phone'][0];
+                // var email=allRules['email'][0];
+                // if(phone.test(value)){//手机号码登录
+                //     action='get_sms_code'
+                //     var data={
+                //         action:action,
+                //         mobile:formData.mobile,
+                //         template:template,
+                //         tamp:getTimestamp,
+                //     }
+                // }else if(email.test(value)){//邮箱登录
+                //     action='get_smtp_code'    
+                //     var data={
+                //         action:action,
+                //         user_login:formData.mobile,
+                //         template:template,
+                //         tamp:getTimestamp,
+                //     }
+                // }
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
@@ -81,7 +102,8 @@ jQuery(function($) {
     }
     $('.getCode').click(function(){//获取验证码
         if(!$(this).hasClass('disabled')){
-            var dom=$(this).parents('form').find("input[name='mobile']")
+            var dom=$("#mobile")
+            console.log(dom)
             var value=dom.val()
             var allRules=$.validationLayui.allRules;//全局正则配置
             var phone=allRules['phone'][0];
@@ -89,6 +111,7 @@ jQuery(function($) {
             var layVerify=dom.attr('lay-verify')
             var message=allRules[layVerify][1];
             var template=parseInt($(this).attr('data-sendCodeCase'));
+
             if(layVerify=='phone'){//手机登录
                 if(phone.test(value)){
                     var formData=$(this).parents('form').serializeObject();
@@ -113,17 +136,22 @@ jQuery(function($) {
                 if(phone.test(value) || email.test(value)){
                     var formData=$(this).parents('form').serializeObject();
                     var getTimestamp=new Date().getTime()
-                    var action='get_sms_code'
                     if(phone.test(value)){//手机号码登录
                         action='get_sms_code'
+                        var data={
+                            action:action,
+                            mobile:formData.mobile,
+                            template:template,
+                            tamp:getTimestamp,
+                        }
                     }else if(email.test(value)){//邮箱登录
                         action='get_smtp_code'    
-                    }
-                    var data={
-                        action:action,
-                        mobile:formData.mobile,
-                        template:template,
-                        tamp:getTimestamp,
+                        var data={
+                            action:action,
+                            user_login:formData.mobile,
+                            template:template,
+                            tamp:getTimestamp,
+                        }
                     }
                     sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
                     var wait=60;  
