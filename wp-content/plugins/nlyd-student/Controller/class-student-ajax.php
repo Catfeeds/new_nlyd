@@ -2626,7 +2626,7 @@ class Student_Ajax
         if(!preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) wp_send_json_error(array('info'=>'手机格式不正确'));
         global $wpdb;
         //判断当前手机是否已经存在
-        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE user_mobile='.$_POST['mobile']);
+        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
         if($var)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
 
         $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
@@ -2657,7 +2657,7 @@ class Student_Ajax
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,
+        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,d.certificate,
         CASE d.range 
         WHEN 1 THEN "中国" 
         WHEN 2 THEN "国际" 
@@ -2665,13 +2665,16 @@ class Student_Ajax
         END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
         LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id 
-        WHERE d.type='.$type.' AND d.is_show=1 LIMIT '.$start.','.$pageSize);
+        WHERE d.type='.$type.' AND d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
 
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
 
             $coachmeta = get_user_meta($v->coach_id,'user_real_name')[0];
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
+            if(!$user_real_name){
+                $user_real_name['real_name'] = $usermeta['last_name'][0].$usermeta['first_name'][0];
+            }
             $v->header_img = $usermeta['user_head'][0];
 
             $v->userID = $usermeta['user_ID'][0];
