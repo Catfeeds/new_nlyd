@@ -23,13 +23,41 @@ p.match-name{
     height: 170px;
     background: rgba(104, 170, 254, 0.2);
     border-radius: 50%;
-    animation-duration: 1000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-    animation-name:'GrowQuare';
-    animation-direction: alternate;
+    animation: 'GrowQuare' 1s linear infinite alternate;
+    -moz-animation:'GrowQuare' 1s linear infinite alternate;
+    -webkit-animation: 'GrowQuare' 1s linear infinite alternate;
+    -o-animation: 'GrowQuare' 1s linear infinite alternate;
 }
 @keyframes GrowQuare {
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+@-moz-keyframes myfirst
+{
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+
+@-webkit-keyframes myfirst /* Safari 和 Chrome */
+{
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+
+@-o-keyframes myfirst /* Opera */
+{
     from {
         background: rgba(104, 170, 254, 0.2);
     }

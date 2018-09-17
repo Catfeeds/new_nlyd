@@ -19,6 +19,7 @@
     background-color:#fff;
     border-bottom:none;
     margin-top: 20px;
+    padding-top: 5px;
 }
 .layui-layer-content{
     padding: 40px 10px;
@@ -32,8 +33,9 @@
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     overflow: hidden;
+    display: flex;
 }
-.layui-layer.nl-box-skin .layui-layer-btn a{
+.layui-layer.nl-box-skin .layui-layer-btn button{
     margin: 0;
     padding: 0;
     height: 45px;
@@ -42,11 +44,13 @@
     width: 50%;
     border: none;
     border-radius: 0;
+    flex:1;
 }
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
     border-top:1px solid rgb(238, 238, 238);
-    background-color: #fff;
+    background: #fff!important;
     color: #4394F9;
+    vertical-align: middle;
 }
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn1{
     border-top: 1px solid transparent;
@@ -55,6 +59,7 @@
     background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
     background: linear-gradient(90deg,#68AAFE, #4394F9);
     color: #fff;
+    vertical-align: middle;
 }
 .layui-tab-bar{
     display: none;

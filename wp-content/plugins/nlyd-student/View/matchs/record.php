@@ -128,7 +128,7 @@
                                 <?php } ?>
                             </div> -->
                             <?php endif;?>
-                            <div class="nl-table-wapper" style="min-height:145px;">
+                            <div class="nl-table-wapper have-bottom-footer" style="min-height:145px;">
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head'>

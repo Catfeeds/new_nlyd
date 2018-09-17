@@ -150,8 +150,10 @@ line-height: normal; /* for non-ie */
 line-height:45px;
 }
 .layui-btn{
+    display: block;
     height: 45px;
     line-height: 45px;
+    font-size: 0.14rem;
     border-radius: 25px!important;
 }
 .layui-btn:hover{

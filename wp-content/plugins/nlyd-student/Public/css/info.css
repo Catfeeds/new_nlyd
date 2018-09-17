@@ -10,7 +10,7 @@
     left: 0;
     display: block;
 }
-.mui-bar{
+/* .mui-bar{
     display: none;
 }
 .mui-bar.main{
@@ -18,7 +18,7 @@
 }
 .mui-bar.headerShow{
     display: block;
-}
+} */
 @media screen and (min-width: 1200px){  
     .nl-goPage{
         position: absolute;
