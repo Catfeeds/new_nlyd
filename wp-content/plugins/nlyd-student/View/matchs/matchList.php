@@ -110,6 +110,7 @@ jQuery(function($) {
                     var lis = [];
                     $.ajax({
                         data: postData,success:function(res,ajaxStatu,xhr){
+                            console.log(res)
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
