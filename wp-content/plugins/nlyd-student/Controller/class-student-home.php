@@ -19,7 +19,7 @@ class Student_Home
 
                 wp_redirect(home_url('logins'));
             }
-        }elseif (CONTROLLER == 'account' && ACTION != 'index'){
+        }elseif ((CONTROLLER == 'account' && ACTION != 'index')){
 
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
@@ -40,7 +40,7 @@ class Student_Home
             //var_dump($user_info);
         }else{*/
 
-            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID') ",ARRAY_A);
+            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender') ",ARRAY_A);
             $user_info = array_column($rows,'meta_value','meta_key');
             //print_r($user_info);
             $user_level = get_the_author_meta('user_level',$current_user->ID);

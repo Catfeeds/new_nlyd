@@ -458,7 +458,7 @@ if(!function_exists('reg_match')){
         switch ($type) {
 
             case 'm':   //匹配手机
-                $reg = '/^1[34578]\d{9}$/';
+                $reg = '/^1[345789]\d{9}$/';
                 break;
             case 't':   //匹配座机
                 $reg = '\d{3}-\d{8}|\d{4}-\d{7}';
