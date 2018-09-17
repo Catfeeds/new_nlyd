@@ -1336,8 +1336,9 @@ if(!class_exists('MatchController')){
             //var_dump($this->post_type);
             wp_register_style( 'admin_index_css',match_css_url.'index.css','', leo_match_version  );
             wp_enqueue_style( 'admin_index_css' );
-            if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
-
+            in_array($this->post_type,array('team','match','genre'));
+            //if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
+            if(in_array($this->post_type,array('team','match','genre'))){
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
                 wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
