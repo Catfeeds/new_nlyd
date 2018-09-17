@@ -1137,7 +1137,7 @@ class Student_Matchs extends Student_Home
             'wait_url' =>$wait_url,
             'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
         );
-        var_dump($data['end_time_count_down']);
+        //var_dump($data['end_time_count_down']);
         /********测试使用*********/
         if($_GET['test'] == 1){
             $data['next_count_down'] = 50;
