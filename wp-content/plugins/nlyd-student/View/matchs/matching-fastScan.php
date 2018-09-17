@@ -6,7 +6,7 @@
             <h1 class="mui-title"><?=$match_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
-
+                <div class="fastScan-item answer">开始答题</div>
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
@@ -22,7 +22,6 @@
                             <span class="blue-font fs-14">
                                 <span class="count_downs"></span>
                             </span>
-                            <div class="fastScan-item answer">开始答题</div>
                             <div id="selectWrapper" class="hide">
                                 <div class="fastScan-item"></div>
                                 <div class="fastScan-item"></div>
@@ -51,6 +50,7 @@ jQuery(function($) {
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
+    showHZ=5,//每5道题添加一个汉字
     itemAdd=2,//每隔itemAdd道题itemLen++
     nandu=0,//难度系数，越小越难
     stop=false,//停止计时
@@ -112,10 +112,13 @@ jQuery(function($) {
     }else{
         showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
     }
-        
-    
     function getHZ() {//生成随即汉字
-        return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
+        // return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
+        var arr=$.validationLayui.hanzi;
+
+        var pos = Math.round(Math.random() * (arr.length - 1));
+
+        return arr[pos];
     }
     function randSZ() {//生成随即数字0-9
         return ( Math.floor ( Math.random ( ) * 9  ) );
@@ -130,19 +133,20 @@ jQuery(function($) {
         return character; 
     }    
     function randZF() {//生成随即字符
-            var arr=['~','!','@','#','$','￥','^','&','(',')','?','*','×','÷',';','"',':',];
+            var arr=['~','!','@','#','$','^','&','(',')','?',';','"',':',];
 
             var pos = Math.round(Math.random() * (arr.length - 1));
 
             return arr[pos];
     }
     function randHS() {//随机执行一个函数
-        var arr=['getHZ','randSZ','randZM1','randZF','randZM2'];
-
+        // var arr=['getHZ','randSZ','randZM1','randZF','randZM2'];
+        var arr=['randSZ','randZM1','randZF','randZM2'];
         var pos = Math.round(Math.random() * (arr.length - 1));
-        if(arr[pos]=='getHZ'){
-            return getHZ()
-        }else if(arr[pos]=='randSZ'){
+        // if(arr[pos]=='getHZ'){
+        //     return getHZ()
+        // }else 
+        if(arr[pos]=='randSZ'){
             return randSZ()
         }else if(arr[pos]=='randZM1'){
             return randZM('lower')
@@ -152,11 +156,26 @@ jQuery(function($) {
             return randZM('upper')
         }
     }
-
+    function pushHZ(string) {
+        var arr=[];
+        var len=string.length;
+        for (var index = 0; index < len; index++) {
+            arr.push(index)
+        }
+        var pos = Math.round(Math.random() * (arr.length - 1));
+        var indexs=arr[pos];
+        var newStrs= string.substring(0,indexs) + getHZ() + string.substring(indexs,len)
+        return newStrs;
+    }
     function buildQuestion(len) {//生成题目
         var x="";
-        for(var i=0;i<len;i++){
+        var _n=Math.floor((ajaxData.length+1)/showHZ)
+        var times=_n+1;
+        for(var i=0;i<len-times;i++){
             x+=randHS()
+        }
+        for(var i=0;i<times;i++){
+            x=pushHZ(x)
         }
         return x;
     }
@@ -198,7 +217,9 @@ jQuery(function($) {
         var select=[];
         var checkIndex=[];//存储已选中下标，进行排除
         for(var k=0; k<len ; k++){
-            checkIndex.push(k)
+            if(data.charCodeAt(k)<=255){
+                checkIndex.push(k)
+            }
         }
         for(var i=0;i<total;i++){
             levels(data,level,checkIndex,data,select)
@@ -245,7 +266,7 @@ jQuery(function($) {
     }
     function getNewline(val) {
         var str = new String(val); 
-        if(str.length>18){
+        if(str.length>25){
             var bytesCount = 0;  
             var s="";
             for (var i = 0 ,n = str.length; i < n; i++) { 
@@ -253,7 +274,7 @@ jQuery(function($) {
                 //统计字符串的字符长度
                 bytesCount += 1;  
                 s += str.charAt(i);
-                if(bytesCount>=18){  
+                if(bytesCount>=25){  
                     s = s + '</br>';
                     //重置
                     bytesCount=0;
@@ -419,5 +440,17 @@ layui.use('layer', function(){
             
     });
 });
+    // var height= $('.matching-fastScan').height();
+    // var marginTop=height / 2;
+    // var top=$('.detail-content-wrapper').height() / 2;
+    // if(top>marginTop+50){
+    //     $('.matching-fastScan').css({
+    //         'margin-top':-marginTop+'px',
+    //         'top':top+'px',
+    //         'position': 'absolute',
+    //         'left': '5%',
+    //         'padding-top':'0',
+    //     })
+    // }
 })
 </script>

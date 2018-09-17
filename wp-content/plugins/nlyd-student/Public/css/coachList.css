@@ -138,9 +138,12 @@ overflow: hidden;
     height: 40px;
     border-radius: 20px;
     text-align: center;
-    line-height: 40px;
+    line-height: normal;
     color: #fff;
     font-size: 0.14rem;
+    font-weight: normal;
+    border: none;
+    outline: none;
 }
 .nl-badge{
     position: relative;

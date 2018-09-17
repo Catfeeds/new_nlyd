@@ -154,7 +154,7 @@ class Student_Weixin
             if($user_id < 1){
                 /*保存用户信息*/
                 //当前手机是否已注册
-                $mobileUser = $wpdb->get_row('SELECT ID,weChat_openid FROM '.$wpdb->users.' WHERE user_mobile='.$res['mobile']);
+                $mobileUser = $wpdb->get_row('SELECT ID,weChat_openid,user_mobile FROM '.$wpdb->users.' WHERE user_mobile="'.$res['mobile'].'" OR user_login="'.$res['mobile'].'" OR user_email="'.$res['mobile'].'"');
                 //TODO 判断当前手机是否已经绑定过微信
                 if($mobileUser->weChat_openid != false){
                     if(is_ajax()){
@@ -177,6 +177,7 @@ class Student_Weixin
                     $user_id = wp_create_user($res['mobile'],'123456','',$res['mobile']);
                 }else{
                     //已存在
+                    if(!$mobileUser->user_mobile) $auth['user_mobile'] = $res['mobile'];
                     $user_id = $mobileUser->ID;
                 }
                 $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);

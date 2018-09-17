@@ -74,9 +74,16 @@ jQuery(function($) {
     if(window.wait_match == ''){
         $('.countdown-time').hide();
     }
-    $('body').on('click','.not_sign',function(){
-        // alert(1)
-        // return false;
+    $('body').on('click','.nl-match-button button',function(){
+        var _this=$(this);
+        var href=_this.attr('href');
+        if(href){
+            _this.addClass('opacity')
+            setTimeout(function(){
+                _this.removeClass('opacity')
+            }, 100);
+            window.location.href=href;
+        }
     })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
@@ -103,6 +110,7 @@ jQuery(function($) {
                     var lis = [];
                     $.ajax({
                         data: postData,success:function(res,ajaxStatu,xhr){
+                            console.log(res)
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
@@ -132,7 +140,7 @@ jQuery(function($) {
                                         }else{
                                             if(v.right_url.length>0){
                                                 rightBtn='<div class="nl-match-button last-btn">'
-                                                            +'<a href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                            +'<button type="button" href="'+v.right_url+'">'+v.button_title+'</button>'
                                                         +'</div>'
                                             }
                                         }
@@ -145,16 +153,16 @@ jQuery(function($) {
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button last-btn">'
-                                                    +'<a href="'+v.right_url+'">查看战绩</a>'
+                                                    +'<button type="button" href="'+v.right_url+'">查看战绩</button>'
                                                 +'</div>';   
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button last-btn">'
-                                                        +'<a class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</a>'
+                                                        +'<button type="button" class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</button>'
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button last-btn">'
-                                                            +'<a class="bg_gradient_grey">已报名参赛</a>'
+                                                            +'<button type="button" class="bg_gradient_grey">已报名参赛</button>'
                                                         +'</div>'
                                                 
                                             }
@@ -208,7 +216,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-footer">'
                                                         +'<div class="nl-match-button">'
-                                                            +'<a class="'+onBtn+'" href="'+v.left_url+'">查看详情</a>'
+                                                            +'<button type="button" class="'+onBtn+'" href="'+v.left_url+'">查看详情</button>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'
