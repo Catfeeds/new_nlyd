@@ -43,7 +43,7 @@
                                     <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                     <input type="hidden" name="access" value="<?=$data['access']?>">
                                     <input type="hidden" name="open" value="<?=$data['open']?>">
-                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定手机号</a>
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定帐号</a>
                                 </div>
                             </div>
                         </form>

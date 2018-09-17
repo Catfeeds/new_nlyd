@@ -87,7 +87,7 @@ jQuery(function($) {
         function time(wait,o){//倒计时
             if (wait == 0) {  
                 o.removeClass("disabled");            
-                o.text("获取短信验证码")  
+                o.text("获取验证码")  
                 wait = 60;  
             } else {  
                 o.addClass("disabled");  
