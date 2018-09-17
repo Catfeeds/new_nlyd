@@ -6348,4 +6348,76 @@ function get_time($type='timestamp'){
     }
 }
 
+function get_match_end_time($match_id){
+    global $wpdb;
+
+    //获取比赛信息
+    $sql = "select match_id,match_start_time,match_more,match_use_time,match_project_interval,match_subject_interval from {$wpdb->prefix}match_meta where match_id = {$match_id}";
+
+    $match = $wpdb->get_row($sql,ARRAY_A);
+    if(empty($match)){
+        return -1; //error 比赛信息错误
+    }
+    //对比赛项目进行排序
+    $sql1 = "SELECT b.post_title,c.meta_value as project_alias,a.post_id match_id,a.match_project_id,a.project_use_time,a.match_more,a.project_start_time,a.project_time_interval,a.str_bit,a.child_count_down
+                         FROM {$wpdb->prefix}match_project a
+                         LEFT JOIN {$wpdb->prefix}posts b ON a.match_project_id = b.ID
+                         LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_project_id = c.post_id AND meta_key = 'project_alias'
+                         WHERE a.post_id = {$match_id} ORDER BY a.project_start_time ASC , a.id ASC 
+                         ";
+    //print_r($sql1);
+    $rows = $wpdb->get_results($sql1,ARRAY_A);
+    if(empty($rows)){
+        return -2; //error 比赛项目未绑定
+    }
+    //计算每个项目结束时间
+    foreach ($rows as $k => $row){
+
+        if($row['project_alias'] == 'zxss'){
+
+            $child_count_down = get_post_meta($row['match_project_id'],'child_count_down')[0];
+            if($row['child_count_down'] > 0){
+                $child_count_down['even_add'] = $row['child_count_down'];
+                $child_count_down['add_and_subtract'] = $row['child_count_down'];
+                $child_count_down['wax_and_wane'] = $row['child_count_down'];
+            }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
+                //var_dump($child_count_down);
+                $child_count_down['even_add'] *= 1;
+                $child_count_down['add_and_subtract'] *= 1;
+                $child_count_down['wax_and_wane'] *= 1;
+            }else{
+
+                $child_count_down['even_add'] = 3;
+                $child_count_down['add_and_subtract'] = 3;
+                $child_count_down['wax_and_wane'] = 3;
+            }
+            $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
+            //print_r($project_use_time);die;
+        }else{
+            $project_use_time = $row['project_use_time'] > 0 ? $row['project_use_time'] : $match['match_use_time'];
+        }
+        $match_more = $row['match_more'] > 0 ? $row['match_more'] : $match['match_more'];
+        $project_time_interval = $row['project_time_interval'] > 0 ? $row['project_time_interval'] : $match['match_subject_interval'];
+        //项目间隔时间
+        $project_interval = count($rows) - 1 == $k ? 0 :$match['match_project_interval'];
+
+
+        if(strtotime($row['project_start_time']) > 0){
+            $end_time = strtotime($row['project_start_time']) + ($project_use_time*$match_more + ($match_more-1)*$project_time_interval+$project_interval)*60;
+            $rows[$k]['project_end_time'] = $row['project_end_time'] = date_i18n('Y-m-d H:i:s',$end_time);
+
+        }else{
+
+            $project_end_time = !empty($rows[$k-1]['project_end_time']) ? strtotime($rows[$k-1]['project_end_time']) + $match['match_project_interval']*60 : strtotime($match['match_start_time']);
+            $end_time = $project_end_time + ($project_use_time*$match_more + ($match_more-1)*$project_time_interval)*60;
+            $rows[$k]['project_end_time'] = $row['project_end_time'] = date_i18n('Y-m-d H:i:s',$end_time);
+            $rows[$k]['project_start_time'] = $row['project_start_time'] = date_i18n('Y-m-d H:i:s',$project_end_time);
+        }
+        //leo_dump($rows[$k]['project_start_time'].'-----'.$rows[$k]['project_end_time']);
+
+    }
+
+    return $rows;
+}
+
 
