@@ -308,37 +308,27 @@ if(!class_exists('StudentController')){
          */
         public function ashu_add_page($data,$post_parent=0){
 
-            $allPages = get_pages();//获取所有页面
-            $allPostName = array();
-
-            if(!empty($allPages)){
-                foreach ($allPages as $val){
-                    $allPostName[] = $val->post_name;
-                }
-            }
-            if(!in_array($data['post_name'],$allPostName)){
-
-                $new_page_id = wp_insert_post(
-                    array(
-                        'post_title' => $data['post_title'],
+            global $wpdb,$current_user;
+            foreach ($data as $val ){
+                $post_id = $wpdb->get_var("select ID from {$wpdb->prefix}posts where post_name = '{$val['post_name']}' ");
+                //var_dump($post_id);
+                if(empty($post_id)){
+                    $arr = array(
+                        'post_title' => $val['post_title'],
                         'post_type'     => 'page',
-                        'post_name'  => $data['post_name'],
-                        'post_content' => $data['post_content'],
+                        'post_name'  => $val['post_name'],
+                        'post_content' => $val['post_content'],
                         'post_status' => 'publish',
-                        'post_author' => 1,
-                        'post_parent' => $post_parent
-                    )
-                );
+                        'post_author' => $current_user->ID,
+                    );
 
-                if($new_page_id ){
-                    if(!empty($data['child-page'])){
-                        foreach ($data['child-page'] as $child ){
-                            $this->ashu_add_page($child,$new_page_id);
-                        }
-                    }
+                    $new_page_id = wp_insert_post($arr);
+                    //var_dump($new_page_id);
+                }else{
+                    //var_dump($post_id);
                 }
             }
-
+            //die;
         }
 
     }

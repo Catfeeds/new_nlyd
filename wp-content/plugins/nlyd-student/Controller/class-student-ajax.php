@@ -25,11 +25,6 @@ class Student_Ajax
         add_action( 'wp_ajax_nopriv_'.$action,  array($this,$action) );
     }
 
-    public function set_test(){
-
-        var_dump('定时器测试');
-        die;
-    }
 
     /**
      *获取24点结果
@@ -125,7 +120,9 @@ class Student_Ajax
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
         }else{
-            $where = " where x.match_id = {$_POST['match_id']} ";
+
+            $where = " WHERE a.match_id = {$_POST['match_id']} AND a.pay_status = 4 ";
+            $age_where = '';
             //判断是否存在分类id
             if(!empty($_POST['category_id'])){
                 //获取当前分类下项目
@@ -133,51 +130,56 @@ class Student_Ajax
                 $category = $wpdb->get_results($sql_,ARRAY_A);
                 if(!empty($category)){
                     $project_id = arr2str(array_column($category,'ID'));
-                    $where .= " and x.project_id in ({$project_id}) ";
+                    $where .= " and b.project_id in ({$project_id}) ";
                 }
             }
             if(!empty($_POST['project_id'])){
-                $where .= " and x.project_id = {$_POST['project_id']} ";
+                $where .= " and b.project_id = {$_POST['project_id']} ";
             }
 
             if(!empty($_POST['age_group'])){
                 $age = $_POST['age_group'];
-
+                $age_where = " WHERE ";
                 switch ($age){
                     case $age == 1:
-                        $where .= " and y.meta_value < 13 ";
+                        $age_where .= "  y.meta_value < 12 ";
                         break;
                     case $age == 2:
-                        $where .= " and (y.meta_value > 12 and y.meta_value < 20) ";
+                        $age_where .= "  (y.meta_value > 11 and y.meta_value < 18) ";
                         break;
                     case $age == 3:
-                        $where .= " and (y.meta_value > 19 and y.meta_value < 60) ";
+                        $age_where .= "  (y.meta_value > 17 and y.meta_value < 60) ";
                         break;
                     default:
-                        $where .= " and y.meta_value > 59 ";
+                        $age_where .= "  y.meta_value > 59 ";
                         break;
                 }
             }
 
             if(!empty($_POST['match_more'])){
-                $where .= " and x.match_more = {$_POST['match_more']} ";
+                $where .= " and b.match_more = {$_POST['match_more']} ";
             }
-
+            //print_r($where);
             //$sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
 
-            $sql = " select a.user_id,SUM(a.score) my_score,a.user_age 
-                    from 
-                    ( select x.user_id,x.project_id,x.match_more,x.surplus_time,MAX(my_score) score,y.meta_value user_age 
-                      from {$wpdb->prefix}match_questions x   
-                        LEFT JOIN {$wpdb->prefix}usermeta y on x.user_id = y.user_id and y.meta_key = 'user_age' 
-                        {$where} GROUP BY x.user_id,x.project_id
-                    ) a 
-                    GROUP BY a.user_id order by my_score desc limit 0,10 ";
+            $sql = " SELECT x.user_id,x.my_score,y.meta_value 
+                    FROM
+                    (SELECT a.user_id ,SUM(b.my_score) my_score
+                    	FROM `{$wpdb->prefix}order` a 
+                    	LEFT JOIN {$wpdb->prefix}match_questions b ON a.user_id = b.user_id
+                    	{$where} 
+                    	GROUP BY a.user_id order by my_score desc 
+                	) x 
+                    left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
+                    {$age_where}
+                    limit {$start},{$pageSize} ";
 
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
+            //print_r($rows);
+            $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         }
-        $maxPage = ceil( (count($rows)/$pageSize) );
+        $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && count($rows) != 0) wp_send_json_error(array('info'=>'已经到底了'));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无列表信息'));
@@ -211,7 +213,7 @@ class Student_Ajax
                 //$list[$k]['score'] = $val['my_score'];
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
-                $list[$k]['ranking'] = $k+1;
+                $list[$k]['ranking'] = $start+$k+1;
 
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
@@ -1354,14 +1356,7 @@ class Student_Ajax
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
-                b.match_cost,b.entry_end_time,b.match_status ,c.user_id,
-                (case b.match_status 
-                when -3 then '已结束' 
-                when -2 then '等待开赛' 
-                when -1 then '未开始' 
-                when 1 then '报名中' 
-                when 2 then '比赛中' 
-                end) match_status_cn
+                b.match_cost,b.entry_end_time,b.match_status ,c.user_id
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
@@ -1377,8 +1372,19 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
 
-
-
+            //修改比赛状态
+            $match = get_match_end_time($val['ID']);
+            $end_time = end($match)['project_end_time'];
+            if(strtotime($val['entry_end_time']) < get_time() && get_time() < strtotime($val['match_start_time'])){
+                $val['match_status'] = $match_status = -2;  //等待开赛
+            }elseif (get_time() < strtotime($val['entry_end_time'])){
+                $val['match_status'] = $match_status = 1;      //报名中
+            }elseif (get_time() > strtotime($end_time)){
+                $val['match_status'] = $match_status = -3;  //已结束
+            }else{
+                $val['match_status'] = $match_status = 2;   //比赛中
+            }
+            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
 
             //获取报名人数
             $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status in(2,3,4) ";
@@ -1392,21 +1398,29 @@ class Student_Ajax
                 //比赛中
                 $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
                 $button_title = '进入比赛';
-            }else if ($val['match_status'] == 1){
+                $rows[$k]['match_status_cn'] = '比赛中';
+            }
+            else if ($val['match_status'] == 1){
                 //报名中
                 $url = home_url('matchs/confirm/match_id/'.$val['ID']);
                 $button_title = '参赛报名';
+                $rows[$k]['match_status_cn'] = '报名中';
             }
             else if ($val['match_status'] == -1){
                 //未开始
                 $url = '';
-            }else if($val['match_status'] == -3){
+                $rows[$k]['match_status_cn'] = '未开始';
+            }
+            else if($val['match_status'] == -3){
                 //已结束
                 $url = '';
-            }else{
+                $rows[$k]['match_status_cn'] = '已结束';
+            }
+            else{
                 //等待开赛
                 $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
                 $button_title = '等待开赛';
+                $rows[$k]['match_status_cn'] = '等待开赛';
             }
             $rows[$k]['button_title'] = $button_title;
             $rows[$k]['right_url'] = $url;

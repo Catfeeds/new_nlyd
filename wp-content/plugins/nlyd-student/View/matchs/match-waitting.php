@@ -39,8 +39,10 @@
                                     <p class="count_down" data-seconds="<?=$count_down?>">初始中...</p>
                                 </div>
                             </div>
-                        <?php }else{ ?>
-                            <a class="wait" href="<?=$match_url?>">
+                        <?php }
+                        if($buffer_time){
+                        ?>
+                            <a class="" href="<?=$match_url?>">
                                 <div class="inner oneP">
                                     进入比赛
                                 </div>

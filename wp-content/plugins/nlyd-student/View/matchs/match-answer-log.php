@@ -38,9 +38,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         <div class="subject-title">
                             <div class="c_black match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
                             <div class="c_blue ml_10 match_info_font">您的得分<?=$my_score?>分</div>
-                            <?php //if( ACTION == 'checkAnswerLog'):?>
+                            <?php if( (ACTION == 'checkAnswerLog') || $_GET['match_more'] == $match_more):?>
                             <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
-                            <?php //endif;?>
+                            <?php endif;?>
                         </div>
                         <div class="subject-row">
                             <div class="one-info">

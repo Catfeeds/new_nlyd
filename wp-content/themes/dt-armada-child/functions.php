@@ -88,7 +88,6 @@ if(!function_exists('get_match_end_time')){
 }
 
 
-
 //获取当前时间
 if(!function_exists('get_time')){
 
@@ -654,10 +653,9 @@ if(!function_exists('hideStar')){
             $count = 0;
             $str = preg_replace('/([\d\w+_-]{0,100})@/', '***@', $str, -1, $count);
             $rs = $prevfix . $str;
-        }elseif (strlen($str) == 18){
-            $rs = substr($str, 0, 3) . "***************";
-        }
-        else {
+        } elseif (strlen($str) == 18){
+            $rs = substr($str, 0, 4) . "*************".substr($str, -1);
+        }else {
             $pattern = '/(1[34578]{1}[0-9])[0-9]{4}([0-9]{4})/i';
             if (preg_match($pattern, $str)) {
                 $rs = preg_replace($pattern, '$1****$2', $str); // substr_replace($name,'****',3,4);
