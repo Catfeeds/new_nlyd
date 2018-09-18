@@ -174,7 +174,7 @@ class Student_Weixin
                 if(!$mobileUser){
                     $userMetaType = true;
                     $auth['user_nicename'] = $res['nickname'];
-                    $auth['display_name'] = $res['mobile'];
+//                    $auth['display_name'] = $res['mobile'];
                     if($emailOrMobile == 'email'){
                         $user_id = wp_create_user($res['mobile'],get_time(),$res['mobile'],'');
                     }else{
