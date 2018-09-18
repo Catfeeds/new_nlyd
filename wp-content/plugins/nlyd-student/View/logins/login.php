@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="layui-tab layui-tab-brief" lay-filter="tabs">
-            <ul style="margin-left: 0" class="layui-tab-title  ">
+            <ul style="margin-left: 0;margin-bottom:15px!imporatant;" class="layui-tab-title">
                 <li class="layui-this">
                     <div class="login_icon iconLock lock_blue display-hide"></div>
                     <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>

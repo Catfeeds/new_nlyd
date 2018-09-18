@@ -59,6 +59,23 @@ jQuery(function($) {
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
+            element.on('tab(tabs)', function(){//tabs
+                var left=$(this).position().left;
+                var html=$(this).html();
+                var css=''
+                if($(this).index()==0){
+                    css='22.5px 0 0 22.5px'
+                }else{
+                    css='0px 22.5px 22.5px 0'
+                }
+                $('.nl-transform').css({
+                    'transform':'translate3d('+left+'px, 0px, 0px)',
+                    'border-radius':css
+                }).html(html)
+                $('.nl-transform .login_icon.phone_blue').removeClass('phone_blue').addClass('phone_white')
+                $('.nl-transform .login_icon.lock_blue').removeClass('lock_blue').addClass('lock_white')
+                $('.nl-transform .login_icon.user_blue').removeClass('user_blue').addClass('user_white')
+            });
         });
 
     //-----------------获取验证码-------------------- 
