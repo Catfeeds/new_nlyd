@@ -32,6 +32,7 @@
 .article-title{
     font-weight: bold;
     text-align: center;
+    margin: 20px auto;
 }
 .article-author{
     font-size: 0.14rem;

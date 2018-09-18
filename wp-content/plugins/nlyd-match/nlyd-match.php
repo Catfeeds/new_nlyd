@@ -213,11 +213,13 @@ if(!class_exists('MatchController')){
                             continue;
                         }
 
-                        if(!$d || !$e || !$f || empty($problemArr = explode("##", $e)) || empty($correct = explode("#", $f))){
+
+                        if(!$d || !$e || !$f || empty($problemArr = explode("\n", $e))){
                             $errNum++;
                             $errStr .= "第{$page}行发 生错误<br />";
                             continue;
                         }
+
 
 
                         if($a != false){ //新题目
@@ -229,7 +231,7 @@ if(!class_exists('MatchController')){
 
                         $dataArr[$index]['problem'][$ci]['title'] = $d;  //问题
                         $dataArr[$index]['problem'][$ci]['answer'] = $problemArr; //答案选项
-                        $dataArr[$index]['problem'][$ci]['correct'] = $correct; //正确答案
+                        $dataArr[$index]['problem'][$ci]['correct'] = $f-1; //正确答案
                         $ci++;
 
                     }
@@ -240,14 +242,24 @@ if(!class_exists('MatchController')){
                         return false;
                     }
 
+
+
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
                     $wpdb->startTrans();
                     foreach ($dataArr as $k => $data){
+                        $content = '';
+                        foreach (explode("\n",$data['content']) as $contentChild){
+                            $content .= '<p style="text-indent: 2em;">'.$contentChild.'</p>';
+                        }
+
+//                        echo '<pre />';
+//                        echo htmlspecialchars($content);
+//                        die;
                         $id = wp_insert_post([
                             'post_title' => $data['title'],
-                            'post_content' => $data['content'],
+                            'post_content' => $content,
                             'post_status' => 'publish',
                             'post_type' => 'question',
                         ]);
@@ -292,15 +304,16 @@ if(!class_exists('MatchController')){
 //                            die;
                             foreach ($problem['answer'] as $ansK => $answer){
                                 if(empty($answer)) continue;
-                                foreach ($problem['correct'] as $correctV){
-                                    $problem_answer = 0;
-                                    if($ansK == $correctV){
-                                        $problem_answer = 1;
-                                        break;
-                                    }
+//                                foreach ($problem['correct'] as $correctV){
+//                                    $problem_answer = 0;
+//                                    if($ansK == $correctV){
+//                                        $problem_answer = 1;
+//                                        break;
+//                                    }
+//
+//                                }
 
-                                }
-//                                $problem_answer = $ansK == $problem['correct'] ? 1 : 0;
+                                $problem_answer = $ansK == $problem['correct'] ? 1 : 0;
                                 $bool = $wpdb->insert($wpdb->prefix.'problem_meta',['problem_id' => $problemId, 'problem_select' => $answer, 'problem_answer' => $problem_answer]);
                                 if(!$bool){
                                     //选项插入数据库失败
@@ -383,33 +396,6 @@ if(!class_exists('MatchController')){
                                     <a class="button" type="button" href="?page=download&action=question">下载模板</a>
                                 </td>
                             </tr>
-<!--                            <tr>-->
-<!--                                <th>-->
-<!--                                    <label for="file_url">或输入文件的路径：</label>-->
-<!--                                </th>-->
-<!--                                <td>-->
-<!--                                    D:\application\wamp\www\nlyd/ <input type="text" id="file_url" name="file_url" size="25">-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <th>-->
-<!--                                    <label for="delimiter">分隔符</label>-->
-<!--                                </th>-->
-<!--                                <td>-->
-<!--                                    <input type="text" name="delimiter" id="delimiter" placeholder="," size="2">-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <th>-->
-<!--                                    <label>方法</label>-->
-<!--                                </th>-->
-<!--                                <td>-->
-<!--                                    <select name="method">-->
-<!--                                        <option value="">使用这个CSV文件里的数量替换当前的余额</option>-->
-<!--                                        <option value="add">根据这个 CSV 文件里的数量来调整当前余额</option>-->
-<!--                                    </select>-->
-<!--                                </td>-->
-<!--                            </tr>-->
                             </tbody>
                         </table>
                         <p class="submit">

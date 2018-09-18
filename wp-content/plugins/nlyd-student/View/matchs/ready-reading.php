@@ -19,9 +19,9 @@
                     </div>
                     <div class="matching-reading">
                         <div class="article-title fs_16 c_black"><?=$questions->post_title?></div>
-                        <pre>
+<!--                        <pre>-->
                             <?=$questions->post_content?>
-                        </pre>
+<!--                        </pre>-->
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
