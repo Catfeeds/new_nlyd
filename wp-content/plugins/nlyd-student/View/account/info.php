@@ -31,7 +31,7 @@
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                 <input  type="hidden" name="meta_key" value="user_nicename"/>
                             </div>
-                            <a class="form-input-row" href="<?=home_url('/account/certification');?>" >
+                            <a class="form-input-row" href="<?=home_url('account/certification');?>" >
                                 <div class="form-input-label">实名认证</div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                                 <div class="nl-input"><?=$user_info['real_ID']?></div>
