@@ -53,7 +53,7 @@ p.tips{
                         <?php endif;?>
                     </p>
                     <?php if(!empty($data['match_url'])):?>
-                    <a class="a-btn wait" href="<?=$data['match_url']?>">返回比赛详情</a>
+                    <a class="a-btn" href="<?=$data['match_url']?>">返回比赛详情</a>
                     <?php endif;?>
                     <?php if(!empty($data['waiting_url'])):?>
                     <a class="a-btn back" href="<?=$data['waiting_url']?>">返回比赛等待</a>
