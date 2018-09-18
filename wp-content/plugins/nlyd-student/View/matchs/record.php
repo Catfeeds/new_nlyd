@@ -9,7 +9,13 @@
 
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback">
+
+            <?php if(isset($_GET['last'])){ ?>
+            <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs/matchWaitting/match_id/'.$_GET['match_id'])?>">
+                <?php }else{ ?>
+                <a class="mui-pull-left nl-goback">
+                    <?php } ?>
+
                 <i class="iconfont">&#xe610;</i>
             </a>
             <h1 class="mui-title">成绩</h1>

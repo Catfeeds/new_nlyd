@@ -441,7 +441,7 @@ class Student_Matchs extends Student_Home
 
 
         //print_r($this->next_project);
-        //print_r($this->current_project);
+       // print_r($this->current_project);
 
 
         //获取本轮比赛答案是否提交
@@ -456,6 +456,7 @@ class Student_Matchs extends Student_Home
         $data['current_project'] = $this->current_project;
         $data['count_down'] = $this->current_project['project_end_time']-get_time();
         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
+
         if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
         $data['next_more_num'] = $next_more_num;
         $project_id = !empty($this->next_project['project_id']) ? $this->next_project['project_id'] : $this->current_project['project_id'];
@@ -465,6 +466,15 @@ class Student_Matchs extends Student_Home
 
         if(isset($this->current_project['time_type']) && $this->current_project['time_type'] == 'end' && empty($this->next_project)){
             $data['match_url'] = home_url('matchs/record/match_id/'.$this->match_id);
+        }
+
+        //未进入比赛缓冲时间设置
+        $buffer_time = get_time()-$this->current_project['project_start_time'];
+
+        if(10 <= $buffer_time && $buffer_time <= 90 && empty($row['answer_status'])){
+
+            $data['buffer_time'] = true;
+            $data['buffer_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$this->current_project['match_more']);
         }
 
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
@@ -511,22 +521,22 @@ class Student_Matchs extends Student_Home
 
                 if( get_time() > $this->current_project['project_end_time']){
 
-                        $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
-                        return;
-                    }
-                    //print_r($this->current_project);//die;
-                    if( get_time() < $this->current_project['project_start_time']){
+                    $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                    return;
+                }
+                //print_r($this->current_project);//die;
+                if( get_time() < $this->current_project['project_start_time']){
 
-                        $error_data = array(
-                            'message'=>'该轮比赛未开始',
-                            'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
-                            'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
-                            'start_count_down' => $this->project_start_time - get_time(),
-                        );
-                        //var_dump($error_data);die;
-                        $this->get_404($error_data);
-                        return;
-                    }
+                    $error_data = array(
+                        'message'=>'该轮比赛未开始',
+                        'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
+                        'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
+                        'start_count_down' => $this->project_start_time - get_time(),
+                    );
+                    //var_dump($error_data);die;
+                    $this->get_404($error_data);
+                    return;
+                }
 
             }else{
 
@@ -1018,7 +1028,7 @@ class Student_Matchs extends Student_Home
             //print_r($answer_array);
             //print_r($questions_answer);die;
 
-            $count_value = array_count_values($questions_answer);
+            $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
@@ -1125,6 +1135,7 @@ class Student_Matchs extends Student_Home
             'next_type'=>$next_type,
             'str_len'=>$len,
             'match_more_cn'=>chinanum($_GET['match_more']),
+            'match_more'=>$this->match_more,
             'success_length'=>$success_len,
             'use_time'=>$this->default_count_down-$row['surplus_time'],
             'surplus_time'=>$row['surplus_time'],
@@ -1142,7 +1153,7 @@ class Student_Matchs extends Student_Home
             'end_time_count_down'=>$end_time-get_time() > 0 ? $end_time - get_time() : '',
             'next_project_url'=>$next_project_url,
             'wait_url' =>$wait_url,
-            'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
+            'record_url'=>home_url('matchs/record/match_id/'.$this->match_id.'/last/answerLog'),
         );
         //var_dump($data['end_time_count_down']);
         /********测试使用*********/
@@ -1225,10 +1236,11 @@ class Student_Matchs extends Student_Home
             $answer = $questions_answer;
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
-            //print_r($answer_array);
-            //print_r($questions_answer);die;
+            /*print_r($answer_array);
+            print_r($questions_answer);*/
+            //die;
 
-            $count_value = array_count_values($questions_answer);
+            $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
@@ -1381,8 +1393,8 @@ class Student_Matchs extends Student_Home
 
             $title = $this->match_title;
         }else{
-            $where = " where match_id = {$_GET['match_id']} ";
-            //判断是否存在分类id
+            $where = " WHERE a.match_id = {$_GET['match_id']} AND a.pay_status = 4 ";
+            /*//判断是否存在分类id
             if(!empty($_GET['category_id'])){
 
                 //获取当前分类下项目
@@ -1398,10 +1410,19 @@ class Student_Matchs extends Student_Home
                 $where .= " and project_id = {$_GET['project_id']} ";
             }
 
-            $sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
+            $sql = "select SQL_CALC_FOUND_ROWS a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
+            print_r($sql);*/
+
+            $sql = "SELECT SQL_CALC_FOUND_ROWS a.user_id ,SUM(b.my_score) my_score
+                    FROM `{$wpdb->prefix}order` a 
+                    LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
+                    {$where}
+                    GROUP BY a.user_id ORDER BY my_score DESC limit 0,10";
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
             //var_dump($rows);
+            $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+            //var_dump($total);
             $title = $this->match['post_title'];
             //获取比赛类别
             $category = $this->ajaxControll->get_coach_category(false);
@@ -1424,11 +1445,11 @@ class Student_Matchs extends Student_Home
                             case $age > 59:
                                 $group = '老年组';
                                 break;
-                            case $age > 18:
+                            case $age > 17:
                                 $group = '成人组';
                                 break;
-                            case $age > 13:
-                                $group = '少年组';
+                            case $age > 12:
+                                $group = '少儿组';
                                 break;
                             default:
                                 $group = '儿童组';
@@ -1462,7 +1483,7 @@ class Student_Matchs extends Student_Home
         //判断是否报名该比赛
         $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
 
-        $data = array('pay_status'=>$order->pay_status,'list'=>$list,'my_ranking'=>$my_ranking,'match_title'=>$title,'match_category'=>$match_category,'count'=>count($rows) > 10 ? count($rows) : 0,'default_category'=>$default_category);
+        $data = array('pay_status'=>$order->pay_status,'list'=>$list,'my_ranking'=>$my_ranking,'match_title'=>$title,'match_category'=>$match_category,'count'=>$total['total'] > 10 ? $total['total'] : 0,'default_category'=>$default_category);
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view,$data);

@@ -52,7 +52,8 @@ jQuery(function($) {
     itemLen=5,//生成每一条选项的长度
     showHZ=5,//每5道题添加一个汉字
     itemAdd=2,//每隔itemAdd道题itemLen++
-    nandu=0,//难度系数，越小越难
+    nandu=0,//难度系数，越小越难,有几个不同字符
+    nanduLen=3,//每nanduLen题nandu++
     stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
@@ -76,6 +77,9 @@ jQuery(function($) {
             if(_count_time<=-1){
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
+                }
+                if(ajaxData.length%nanduLen==0){
+                    nandu++
                 }
                 initBuild(itemLen,items,nandu,false)
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
@@ -113,46 +117,14 @@ jQuery(function($) {
         showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
     }
     function getHZ() {//生成随即汉字
-        // return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
         var arr=$.validationLayui.hanzi;
         var pos = Math.round(Math.random() * (arr.length - 1));
         return arr[pos];
-    }
-    function randSZ() {//生成随即数字0-9
-        return ( Math.floor ( Math.random ( ) * 9  ) );
-    }
-    function randZM(flag) {//生成随即小写字母
-        if(flag==="lower"){ 
-             character = String.fromCharCode(Math.floor(Math.random()*26)+"a".charCodeAt(0)); 
-        } 
-        if(flag==="upper"){ 
-             character = String.fromCharCode(Math.floor(Math.random()*26)+"A".charCodeAt(0)); 
-        } 
-        return character; 
-    }    
+    }  
     function randZF() {//生成随即字符
-            var arr=['~','!','@','#','$','^','&','(',')','?',';','"',':',];
-
+            var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
             var pos = Math.round(Math.random() * (arr.length - 1));
-
             return arr[pos];
-    }
-    function randHS() {//随机执行一个函数
-        // var arr=['getHZ','randSZ','randZM1','randZF','randZM2'];
-        var arr=['randSZ','randZM1','randZF','randZM2'];
-        var pos = Math.round(Math.random() * (arr.length - 1));
-        // if(arr[pos]=='getHZ'){
-        //     return getHZ()
-        // }else 
-        if(arr[pos]=='randSZ'){
-            return randSZ()
-        }else if(arr[pos]=='randZM1'){
-            return randZM('lower')
-        }else if(arr[pos]=='randZF'){
-            return randZF()
-        }else if(arr[pos]=='randZM2'){
-            return randZM('upper')
-        }
     }
     function pushHZ(string) {
         var arr=[];
@@ -167,10 +139,10 @@ jQuery(function($) {
     }
     function buildQuestion(len) {//生成题目
         var x="";
-        var _n=Math.floor((ajaxData.length+1)/showHZ)
+        var _n=Math.floor((ajaxData.length)/showHZ)
         var times=_n+1;
         for(var i=0;i<len-times;i++){
-            x+=randHS()
+            x+=randZF()
         }
         for(var i=0;i<times;i++){
             x=pushHZ(x)
@@ -178,7 +150,7 @@ jQuery(function($) {
         return x;
     }
     function compare(old) {//比较字符是否相同
-        var newStr=randHS();
+        var newStr=randZF();
         var oldStr=old
         if(oldStr==newStr){
             return compare(oldStr)
@@ -247,6 +219,7 @@ jQuery(function($) {
             select.splice(arr[randIndex], 0,right); //随机插入
             var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
+            console.log(ajaxData)
             var sessionData={
                 ajaxData:ajaxData,
                 match_id:$.Request('match_id'),
@@ -297,18 +270,17 @@ jQuery(function($) {
                 _this.html(getNewline(text))
             })
             if(isMatching){
-                $('.answer').addClass('hide');
+                $('.answer').addClass('hide').text('');
                 $('#selectWrapper').removeClass('hide')
                 $('.count_downs').removeClass('hide')
                 isMatching=!isMatching
             }else{
                 setTimeout(function() {
-                    $('.answer').addClass('hide');
+                    $('.answer').addClass('hide').text('')
                     $('#selectWrapper').removeClass('hide')
                     $('.count_downs').removeClass('hide')
                 }, flashTime*1000);
             }
-
             //计时器
             _count_time=answerTime
             showTime()
@@ -319,7 +291,6 @@ jQuery(function($) {
     mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
         var _this=$(this);
         var isFalse=true;
-        
             if(!_this.hasClass('noClick')){
                 var text=_this.text()
                 ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
@@ -334,6 +305,9 @@ jQuery(function($) {
                 $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
+                }
+                if(ajaxData.length%nanduLen==0){
+                    nandu++
                 }
                 initBuild(itemLen,items,nandu,isFalse)
                 setTimeout(function(){
