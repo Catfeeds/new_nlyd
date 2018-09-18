@@ -213,6 +213,7 @@ jQuery(function($) {
                 i='<i class="iconfont">&#xe634;</i>'
             }
             var dom='<div class="poker '+value[0]+'">'
+                        +'<div class="Glass"></div>'
                         +'<div class="poker-detail poker-top">'
                             +'<div class="poker-name">'+value[1]+'</div>'
                             +'<div class="poker-type">'+i+'</div>'

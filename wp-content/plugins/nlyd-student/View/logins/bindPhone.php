@@ -17,7 +17,7 @@
         <div class="layui-tab layui-tab-brief" lay-filter="tabs">
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show"> 
-                    <p class="ta_c">为了您账号的统一性，请您绑定手机号码</p>
+                    <p class="ta_c">为了您账号的统一性，请您绑定手机号码或邮箱</p>
                     <!-- 手机号码登陆 -->
                     <div class="tabs-wraps a1">
                         <form class="layui-form" action="" id='loginFormFast' lay-filter='loginFormFast'>

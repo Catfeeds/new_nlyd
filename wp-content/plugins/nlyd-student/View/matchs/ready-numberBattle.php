@@ -28,6 +28,7 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
+                        <div class="Glass"></div>
                         <?php if(!empty($questions)):
                             foreach ($questions as $v){
                         ?>

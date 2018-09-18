@@ -18,8 +18,8 @@
                     <div class="matching-row">
                         <div class="matching-row-label">辅助操作</div>
                         <div class="matching-row-list">
-                            <a class="matching-btn c_white" id="prev">前插一位</a>
-                            <a class="matching-btn c_white" id="next">后插一位</a>
+                            <div class="matching-btn c_white" id="prev">前插一位</div>
+                            <div class="matching-btn c_white" id="next">后插一位</div>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -134,8 +134,8 @@ jQuery(function($) {
     })
     mTouch('body').on('tap','.number',function(e){
         var _this=$(this);
-        if(!_this.hasClass('opcity')){
-            _this.addClass('opcity')
+        // if(!_this.hasClass('opcity')){
+        //     _this.addClass('opcity')
             var number=_this.attr('date-number');
             var active=$('.matching-number.active');
             var len=$('.matching-number').length;
@@ -144,16 +144,20 @@ jQuery(function($) {
             }else{
                 active.text(number);
             }
-            setTimeout(function(){
-                _this.removeClass('opcity')
-            }, 100);
-        }
+            _this.stop(true).animate({
+                'opacity':'0.6',
+                'filter': 'alpha(opacity=60)',
+            },50).animate({
+                'opacity':'1',
+                'filter': 'alpha(opacity=100)',
+            },50)
+        // }
     })
     //删除tap事件
     mTouch('body').on('tap','#del',function(e){
         var _this=$(this);
-        if(!_this.hasClass('opcity')){
-            _this.addClass('opcity')
+        // if(!_this.hasClass('opcity')){
+        //     _this.addClass('opcity')
             var active=$('.matching-number.active');
             if(active.text()==""){//已经为空
                 if(!$('.matching-number').eq(0).hasClass('active')){
@@ -169,14 +173,19 @@ jQuery(function($) {
                 active.text('');
 
             }
-            setTimeout(function(){
-                _this.removeClass('opcity')
-            }, 100);
-        }
+            _this.stop(true).animate({
+                'opacity':'0.6',
+                'filter': 'alpha(opacity=60)',
+            },50).animate({
+                'opacity':'1',
+                'filter': 'alpha(opacity=100)',
+            },50)
+        // }
     })
     //前插tap事件
     mTouch('body').on('tap','#prev',function(e){
         var len=$('.matching-number').length;
+        var _this=$(this)
         if(!$('.matching-number').eq(len-1).hasClass('active')){
             var active=$('.matching-number.active');
             var dom='<div class="matching-number active"></div>';
@@ -185,10 +194,17 @@ jQuery(function($) {
         }else{
             $('.matching-number.active').text('')
         }
-       
+        _this.stop(true).animate({
+            'opacity':'0.6',
+            'filter': 'alpha(opacity=60)',
+        },50).animate({
+            'opacity':'1',
+            'filter': 'alpha(opacity=100)',
+        },50)
     });
     //后插tap事件
     mTouch('body').on('tap','#next',function(e){
+        var _this=$(this)
         $('.matching-number').each(function(i){
             if(i!=$('.matching-number').length-1){//如果不是最后一位
                 if($(this).hasClass('active')){
@@ -198,6 +214,13 @@ jQuery(function($) {
                 }
             }
         })
+        _this.stop(true).animate({
+            'opacity':'0.6',
+            'filter': 'alpha(opacity=60)',
+        },50).animate({
+            'opacity':'1',
+            'filter': 'alpha(opacity=100)',
+        },50)
     });
 layui.use('layer', function(){
     mTouch('body').on('tap','#sumbit',function(e){

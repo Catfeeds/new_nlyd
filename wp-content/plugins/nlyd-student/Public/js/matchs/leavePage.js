@@ -25,10 +25,10 @@
                 var leavePage= jQuery.GetSession('leavePage','1');
                 if(leavePage && leavePage['match_id']===jQuery.Request('match_id') && leavePage['project_id']===jQuery.Request('project_id') && leavePage['match_more']===jQuery.Request('match_more')){
                     var leveTimes=parseInt(leavePage['leavePage'])
-                    if(leveTimes>0 && leveTimes<3){
-                        jQuery.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
-                    }
-                    if(leveTimes>=3){
+                    // if(leveTimes>0 && leveTimes<3){
+                    //     jQuery.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
+                    // }
+                    if(leveTimes>=1){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
                             submit();
