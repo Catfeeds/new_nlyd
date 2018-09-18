@@ -17,7 +17,7 @@
         <div class="layui-tab layui-tab-brief" lay-filter="tabs">
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show"> 
-                    <p class="ta_c">为了您账号的统一性，请您绑定手机号码</p>
+                    <p class="ta_c">为了您账号的统一性，请您绑定手机号码或邮箱</p>
                     <!-- 手机号码登陆 -->
                     <div class="tabs-wraps a1">
                         <form class="layui-form" action="" id='loginFormFast' lay-filter='loginFormFast'>
@@ -43,7 +43,7 @@
                                     <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                     <input type="hidden" name="access" value="<?=$data['access']?>">
                                     <input type="hidden" name="open" value="<?=$data['open']?>">
-                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定手机号</a>
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定帐号</a>
                                 </div>
                             </div>
                         </form>
