@@ -36,13 +36,13 @@ jQuery(function($) {
                                         match_status='c_orange';   
                                     }
                                     if(v.right_url.length>0){
-                                        rightBtn='<div class="nl-match-button last-btn">'
+                                        rightBtn='<div class="nl-match-button flex1 last-btn">'
                                             +'<button type="button" href="'+v.right_url+'">'+v.button_title+'</button>'
                                         +'</div>'
                                     }
                                     if(v.match_status==1){//报名中
                                         className='bg_gradient_grey';
-                                        rightBtn='<div class="nl-match-button last-btn">'
+                                        rightBtn='<div class="nl-match-button flex1 last-btn">'
                                             +'<button type="button" class="'+className+'">'+v.button_title+'</button>'
                                         +'</div>'
                                     }
@@ -96,8 +96,8 @@ jQuery(function($) {
                                                         +'</div>'
                                                     +'</div>'
 
-                                                    +'<div class="nl-match-footer">'
-                                                        +'<div class="nl-match-button">'
+                                                    +'<div class="nl-match-footer flex-h">'
+                                                        +'<div class="nl-match-button flex1">'
                                                             +'<button type="button" class="'+onBtn+'"  href="'+v.left_url+'">查看详情</button>'
                                                         +'</div>'
                                                         +rightBtn

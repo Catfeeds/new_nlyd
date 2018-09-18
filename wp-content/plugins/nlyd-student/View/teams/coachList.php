@@ -328,7 +328,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                                     var this_coach_name=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
                                                                     var this_coach_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
                                                                     var this_category_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
-                                                                    var coach_btn='<div class="right_c"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_blue" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</button></div>';
+                                                                    var coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_blue" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</button></div>';
                                                                     __this.removeClass('c_orange').addClass('c_blue')
                                                                     __this.children('.nl-badge').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
                                                                     __this.parents('.coach-row').find('.left_c .ta_l').text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
@@ -417,7 +417,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 if(res.data.url.length>0){
                                     window.location.href=res.data.url
                                 }else{
-                                    var coach_btn='<div class="right_c"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</button></div>';
+                                    var coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+coach_name+'" data-coachId="'+coach_id+'" data-categoryId="'+category_id+'">设为主训教练</button></div>';
                                     _this.text('解除教学关系').removeClass('clearMain').addClass('clearCoach')
                                     _this.parents('.coach-row').find('.coach-row-footer').append(coach_btn)
                                     _this.parents('.coach-row').find('.coach-type').each(function(){
@@ -560,26 +560,26 @@ layui.use(['element','flow','layer','form'], function(){
                                                 post_title='<span style="color:#FF2300">审核中···</span>'
                                             }   
                                         }
-                                        var categoryBtnDom='<div data-id="'+value.category_id+'" class="coach-type text_1 '+is_current+'">'+metal+' '+post_title+'</div>'
+                                        var categoryBtnDom='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 '+is_current+'">'+metal+' '+post_title+'</div>'
                                         detailFooter+=categoryBtnDom
                                     }) 
                                     if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
                                         if(v.apply_status==1){//1，申请中，2我的教练
-                                            coach_btn='<div class="right_c"><button type="button" class="coach-btn bg_gradient_grey text_1 ">教练审核中···</button></div>';
+                                            coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_grey text_1 ">教练审核中···</button></div>';
                                             isLeft="ta_l"
                                         }else if(v.apply_status==2){//1，申请中，2我的教练
                                             if(v.my_major_coach=='y'){//主训教练
                                                 clear_btn='<a class="clearMain text_1 ta_l c_black6"  data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除主训关系</a>'
                                             }else{
-                                                coach_btn='<div class="right_c"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</button></div>';
+                                                coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">设为主训教练</button></div>';
                                                 clear_btn='<a class="clearCoach text_1 ta_l c_black6" data-coachName="'+v.display_name+'"  data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">解除教学关系</a>'
                                             }
                                         }else{
-                                            coach_btn='<div class="right_c"><button type="button" class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</button></div>';//不是我的教练
+                                            coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</button></div>';//不是我的教练
                                             isLeft="ta_l"
                                         }
                                     }else{
-                                        coach_btn='<div class="right_c"><button type="button" class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</button></div>';//不是我的教练
+                                        coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_blue text_1 setTeacher c_white" data-coachName="'+v.display_name+'" data-coachId="'+v.coach_id+'" data-categoryId="'+v.category_id+'">请TA当教练</button></div>';//不是我的教练
                                         isLeft="ta_l"
                                     }
                                     var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
@@ -597,13 +597,13 @@ layui.use(['element','flow','layer','form'], function(){
                                                             +'<div class="text_3">'
                                                                 +'<span class="c_black6">国际脑力运动委员会（IISC） '+v.user_coach_level+'</span>'
                                                             +'</div>'
-                                                            +'<div class="coach-detail-footer">'
+                                                            +'<div class="coach-detail-footer flex-h">'
                                                                 +detailFooter
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
-                                                    +'<div class="coach-row-footer">'
-                                                        +'<div class="left_c">'
+                                                    +'<div class="coach-row-footer flex-h">'
+                                                        +'<div class="left_c flex1">'
                                                             +clear_btn
                                                             +'<a class="c_black6 text_1 '+isLeft+'"  href="'+v.coach_url+'/category_id/<?=$_GET['category_id']?>">查看详情</a>'
                                                         +'</div>'

@@ -58,21 +58,21 @@
 <!-- 底部弹出框 -->
 <div class="selectBottom">
     <div class="grayLayer cancel"></div>
-    <div class="selectBox shareBox">
+    <div class="selectBox shareBox flex-h">
         <img class="share-bgs" src="<?=student_css_url.'image/share/share-bg.png'?>">
-        <div class="shareItem">
+        <div class="shareItem flex1">
             <div class="shareContent shareLeft" data-id="wechatFriend">
                 <div class="shareTop wechatFriend"></div>
                 <div class="shareBottom">微信好友</div>
             </div>
         </div>
-        <div class="shareItem">
+        <div class="shareItem flex1">
             <div class="shareContent shareMid" data-id="wechatTimeline">
                 <div class="shareTop wechatTimeline"></div>
                 <div class="shareBottom">朋友圈</div>
             </div>
         </div>
-        <div class="shareItem">
+        <div class="shareItem flex1">
             <div class="shareContent shareRight" data-id="qqFriend">
                 <div class="shareTop qqFriend"></div>
                 <div class="shareBottom">QQ</div>

@@ -95,7 +95,7 @@
    margin-bottom: 15px;
    display: flex;
    align-items: center;
-overflow: hidden;
+   overflow: hidden;
 }
 .title-img img{
     width: 100%;
@@ -160,26 +160,26 @@ overflow: hidden;
     font-size: 0.12rem;
 }
 .coach-type{
-    flex:1;
+    /* flex:1; */
     text-align: center;
     height: 20px;
     line-height: 20px;
     border-right: 1px solid #2484FE;
 }
 
-.coach-detail-footer{
+/* .coach-detail-footer{
     display: flex;
-}
+} */
 .coach-detail-footer .coach-type:last-child{
     border-right: none;
 }
 .coach-row-footer{
     padding-top: 15px;
-    display: flex;
+    /* display: flex; */
 }
-.left_c,.right_c{
+/* .left_c,.right_c{
     flex: 1;
-}
+} */
 .left_c{
     height: 40px;
     line-height: 40px;

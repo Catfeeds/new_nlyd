@@ -40,15 +40,15 @@
     width: 100%;
 }
 .coach-type{
-    flex:1;
+    /* flex:1; */
     text-align: center;
     height: 20px;
     line-height: 20px;
     border-right: 1px solid #2484FE;
 }
-.coach-detail-footer{
+/* .coach-detail-footer{
     display: flex;
-}
+} */
 .coach-detail-footer .coach-type:last-child{
     border-right: none;
 }

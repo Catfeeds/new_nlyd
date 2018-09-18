@@ -78,8 +78,8 @@ get_header(); ?>
                 </div>
                 <!-- 入口 -->
                 <div class="layui-row width-padding  layui-bg-white">
-                    <div class="entrance">
-                        <div class="entrance-wrap">
+                    <div class="entrance flex-h">
+                        <div class="entrance-wrap flex1">
                             <a class="index-btn">
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/for-us-big.png'?>">
@@ -87,7 +87,7 @@ get_header(); ?>
                                 <div class="entrance-name c_black6">关于我们</div>
                             </a>
                         </div>
-                        <div class="entrance-wrap">
+                        <div class="entrance-wrap flex1">
                             <a class="index-btn" href="<?=home_url('system')?>">
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/sys-big.png'?>">
@@ -95,7 +95,7 @@ get_header(); ?>
                                 <div class="entrance-name c_black6">体系标准</div>
                             </a>
                         </div>
-                        <div class="entrance-wrap">
+                        <div class="entrance-wrap flex1">
                             <a class="index-btn"   href="<?=home_url('system/concatUs');?>">
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">

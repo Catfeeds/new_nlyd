@@ -38,16 +38,16 @@
 p.long-name{
     margin-bottom: 0;
 }
-.nl-match-footer{
+/* .nl-match-footer{
   display: flex;
-}
+} */
 .nl-match-button{
     border-top:1px solid #EEEEEE;
     text-align: center;
     color: #2484FE;
-    float: left;
+    /* float: left; */
     cursor: pointer;
-    flex: 1;
+    /* flex: 1; */
     padding: 10px 0;
 }
 .nl-match-button button{

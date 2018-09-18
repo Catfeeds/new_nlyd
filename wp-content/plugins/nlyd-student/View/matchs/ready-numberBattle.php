@@ -107,7 +107,7 @@ jQuery(function($) {
                         setTimeout(function(){
                             window.location.href=res.data.url
                         },300)
-                    }   
+                    }
                 }else{
                     $.alerts(res.data.info)
                 }
