@@ -139,7 +139,7 @@ jQuery(function($) {
                                             rightBtn=""
                                         }else{
                                             if(v.right_url.length>0){
-                                                rightBtn='<div class="nl-match-button last-btn">'
+                                                rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                             +'<button type="button" href="'+v.right_url+'">'+v.button_title+'</button>'
                                                         +'</div>'
                                             }
@@ -152,16 +152,16 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
-                                        rightBtn='<div class="nl-match-button last-btn">'
+                                        rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                     +'<button type="button" href="'+v.right_url+'">查看战绩</button>'
                                                 +'</div>';   
                                     }else{
                                         if(v.right_url.length>0){
-                                            rightBtn='<div class="nl-match-button last-btn">'
+                                            rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                         +'<button type="button" class="not_sign" data-id="'+v.ID+'" href="'+v.right_url+'">'+v.button_title+'</button>'
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
-                                                rightBtn='<div class="nl-match-button last-btn">'
+                                                rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                             +'<button type="button" class="bg_gradient_grey">已报名参赛</button>'
                                                         +'</div>'
                                                 
@@ -214,8 +214,8 @@ jQuery(function($) {
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
-                                                    +'<div class="nl-match-footer">'
-                                                        +'<div class="nl-match-button">'
+                                                    +'<div class="nl-match-footer flex-h">'
+                                                        +'<div class="nl-match-button flex1">'
                                                             +'<button type="button" class="'+onBtn+'" href="'+v.left_url+'">查看详情</button>'
                                                         +'</div>'
                                                         +rightBtn

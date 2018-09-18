@@ -35,35 +35,35 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title">
-                            <div class="c_black match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
-                            <div class="c_blue ml_10 match_info_font">您的得分<?=$my_score?>分</div>
+                        <div class="subject-title flex-h">
+                            <div class="c_black flex1 match_info_font"><?=$project_title?> 第<?=$match_more_cn?>轮</div>
+                            <div class="c_blue flex1 ml_10 match_info_font">您的得分<?=$my_score?>分</div>
                             <?php //if( ACTION == 'checkAnswerLog'):?>
-                            <div class="subject-title-info"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
+                            <div class="subject-title-info flex1"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                             <?php //endif;?>
                         </div>
-                        <div class="subject-row">
-                            <div class="one-info">
+                        <div class="subject-row flex1">
+                            <div class="one-info flex1">
                                 <div class="left-label">答题数量：</div><span class="c_blue"><?=$str_len;?></span>
                             </div>
-                            <div class="one-info">
+                            <div class="one-info flex1">
                                 <div class="left-label">正确数量：</div><span class="c_blue"><?=$success_length;?></span>
                             </div>
                         </div>
-                        <div class="subject-row">
-                            <div class="one-info">
+                        <div class="subject-row flex1">
+                            <div class="one-info flex1">
                                 <div class="left-label">答题用时：</div><span class="c_blue"><?=$use_time;?>s</span>
                             </div>
-                            <div class="one-info">
+                            <div class="one-info flex1">
                                 <div class="left-label">剩余时间：</div><span class="c_blue"><?=$surplus_time;?>s</span>
                             </div>
                         </div>
-                        <div class="subject-row">
-                            <div class="one-info">
+                        <div class="subject-row flex1">
+                            <div class="one-info flex1">
                                 <div class="left-label">&nbsp;&nbsp;&nbsp;正确率：</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
                             <?php if(!empty($ranking)):?>
-                                <div class="one-info">
+                                <div class="one-info flex1">
                                     <div class="left-label">本轮排名：</div><span class="c_blue"><?=$ranking?></span>
                                 </div>
                             <?php endif;?>
@@ -139,7 +139,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 if(_this.parents('.a-btn').attr('href')){
                     window.location.href=_this.parents('.a-btn').attr('href')
                 }else{
-                     window.location.reload();
+                    window.location.reload();
                 }
             }
         });

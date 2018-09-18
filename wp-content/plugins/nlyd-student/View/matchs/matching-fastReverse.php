@@ -134,8 +134,8 @@ jQuery(function($) {
                         }
                     }else{
                         $.alerts(res.data.info)
+                        isSubmit=false;
                     }
-                    isSubmit=false;
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;

@@ -2,12 +2,12 @@
 .subject-title{
     margin-top: 20px;
     margin-bottom: 15px;
-    display: flex;
+    /* display: flex; */
 }
 .subject-title>div{
     height: 32px;
     line-height: 32px;
-    flex: 1;
+    /* flex: 1; */
 }
 .subject-title-info a{
     display: block;
@@ -26,12 +26,12 @@
     color: rgba(191, 190, 190, 1);
 }
 
-.subject-row{
+/* .subject-row{
     display: flex;
-}
-.one-info{
+} */
+/* .one-info{
     flex: 1;
-}
+} */
 .subject-title span{
     text-align: center;
 }
