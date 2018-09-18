@@ -2643,8 +2643,9 @@ class Student_Ajax
 
         global $wpdb;
 
-        $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
+
         if($bindType == 'code'){
+            $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=""');
             //验证码绑定
             if($type == 'mobile'){
                 //判断当前手机是否已经存在
@@ -2656,17 +2657,16 @@ class Student_Ajax
             }
             $user_id = $_POST['user_id'];
         }else{
+            $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
             //账号绑定
             //判断用户是否存在
             if($user){
-                if($_POST['login_type'] == 'pass'){
-
-                    $check = wp_check_password($_POST['password'],$user->user_pass);
-                    if(!$check) wp_send_json_error(array('info'=>'密码错误'));
-                }
+                $check = wp_check_password($_POST['password'],$user->user_pass);
+                if(!$check) wp_send_json_error(array('info'=>'密码错误'));
             }else{
                 wp_send_json_error(array('info'=>'该用户不存在'));
             }
+            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
         }
 
