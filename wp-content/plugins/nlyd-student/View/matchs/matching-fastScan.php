@@ -115,9 +115,7 @@ jQuery(function($) {
     function getHZ() {//生成随即汉字
         // return String.fromCodePoint(Math.round(Math.random() * 20901) + 19968);
         var arr=$.validationLayui.hanzi;
-
         var pos = Math.round(Math.random() * (arr.length - 1));
-
         return arr[pos];
     }
     function randSZ() {//生成随即数字0-9

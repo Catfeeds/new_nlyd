@@ -48,6 +48,7 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
+                                <input type="hidden" name="type" value="code">
                                 <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
@@ -72,15 +73,16 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <div class="input-icon "><div class="login_icon code_grey"></div></div>
-                                <input type="password" name="send_code" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input hasIcon">
+                                <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input hasIcon">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
+                                <input type="hidden" name="type" value="username">
                                 <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
-                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit="">绑定</a>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPwd" lay-filter="bindPwd" lay-submit="">绑定</a>
                             </div>
                         </div>
                     </form>

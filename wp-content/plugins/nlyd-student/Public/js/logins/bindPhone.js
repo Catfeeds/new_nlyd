@@ -59,6 +59,10 @@ jQuery(function($) {
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
             });
+            form.on('submit(bindPwd)', function(data){//快速登录
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                return false;
+            });
             element.on('tab(tabs)', function(){//tabs
                 var left=$(this).position().left;
                 var html=$(this).html();
