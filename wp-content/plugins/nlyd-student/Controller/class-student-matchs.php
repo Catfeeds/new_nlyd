@@ -438,6 +438,8 @@ class Student_Matchs extends Student_Home
             $this->match_id = $row['match_id'];
         }
 
+
+
         //print_r($this->next_project);
         //print_r($this->current_project);
 
@@ -460,6 +462,10 @@ class Student_Matchs extends Student_Home
         $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$data['next_more_num']);
         $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
         $data['project_num'] = !empty($this->next_project) ? $this->next_project['project_num'] : $this->current_project['project_num'];
+
+        if(isset($this->current_project['time_type']) && $this->current_project['time_type'] == 'end' && empty($this->next_project)){
+            $data['match_url'] = home_url('matchs/record/match_id/'.$this->match_id);
+        }
 
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
@@ -500,6 +506,7 @@ class Student_Matchs extends Student_Home
         //正式时取消此test
         if(empty($_GET['test'])){
             //print_r($this->current_project);
+            //print_r($this->next_project);
             if(($this->current_project['match_more'] == $_GET['match_more']) && $this->current_project['project_id'] == $_GET['project_id']){
 
                 if( get_time() > $this->current_project['project_end_time']){
@@ -1827,20 +1834,27 @@ class Student_Matchs extends Student_Home
                                     'project_num'=>array_search($value['match_project_id'],$this->project_id_array)+1,
                                     'project_start_time'=>$project_more_start_time,
                                     'project_start_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_start_time),
-                                    'project_end_time'=>!empty($rows[$key+1]) ? $project_more_end_time : $project_more_start_time + $match_use_time*60,
-                                    'project_end_time_format'=>!empty($rows[$key+1]) ? date_i18n('Y-m-d H:i:s',$project_more_end_time) : $value['project_end_time'],
+                                    'project_end_time'=>$project_more_end_time , //!empty($rows[$key+1]) ? $project_more_end_time : $project_more_start_time + $match_use_time*60,
+                                    'project_end_time_format'=>date_i18n('Y-m-d H:i:s',$project_more_end_time),//!empty($rows[$key+1]) ? date_i18n('Y-m-d H:i:s',$project_more_end_time) : $value['project_end_time'],
                                 );
                                 //print_r($current_project);
 
-                                if($i == $project_match_more && !empty($rows[$key+1])){
-                                    $next_project = array(
-                                        'project_title'=>$rows[$key+1]['post_title'],
-                                        'project_id'=>$rows[$key+1]['match_project_id'],
-                                        'match_more'=>1,
-                                        'project_num'=>array_search($rows[$key+1]['match_project_id'],$this->project_id_array)+1,
-                                        'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
-                                        'project_start_time_format'=>$rows[$key+1]['project_start_time'],
-                                    );
+                                if($i == $project_match_more){
+
+                                    if(!empty($rows[$key+1])){
+                                        $next_project = array(
+                                            'project_title'=>$rows[$key+1]['post_title'],
+                                            'project_id'=>$rows[$key+1]['match_project_id'],
+                                            'match_more'=>1,
+                                            'project_num'=>array_search($rows[$key+1]['match_project_id'],$this->project_id_array)+1,
+                                            'project_start_time'=>strtotime($rows[$key+1]['project_start_time']),
+                                            'project_start_time_format'=>$rows[$key+1]['project_start_time'],
+                                        );
+                                    }else{
+                                        $current_project['time_type'] = 'end';
+                                        $current_project['project_end_time'] = $project_more_start_time + $match_use_time*60;
+                                        $current_project['project_end_time_format'] = $value['project_end_time'];
+                                    }
                                 }
                                 break;
                             }
