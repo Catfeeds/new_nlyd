@@ -2627,6 +2627,10 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
+
+        $bindType = $_POST['type'];
+        if($bindType != 'code' && $bindType != 'username') wp_send_json_error(array('info'=>'参数错误'));
+
         if(preg_match('/^1[3456789][0-9]{9}$/',$_POST['mobile'])) {
             $type = 'mobile';
         }elseif (is_email($_POST['mobile'])){
@@ -2634,27 +2638,46 @@ class Student_Ajax
         }else{
             wp_send_json_error(array('info'=>'手机或邮箱格式不正确'));
         }
+
+
+
         global $wpdb;
 
-        $var = $wpdb->get_var('SELECT id FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
-        if($type == 'mobile'){
-            //判断当前手机是否已经存在
-            if($var)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
-            $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
+        $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=NULL');
+        if($bindType == 'code'){
+            //验证码绑定
+            if($type == 'mobile'){
+                //判断当前手机是否已经存在
+                if($user)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
+                if($bindType == 'code') $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
+            }else{
+                if($user)  wp_send_json_error(array('info'=>'当前邮箱已使用'));
+                if($bindType == 'code') $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
+            }
+            $user_id = $_POST['user_id'];
         }else{
-            if($var)  wp_send_json_error(array('info'=>'当前邮箱已使用'));
-            $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
+            //账号绑定
+            //判断用户是否存在
+            if($user){
+                if($_POST['login_type'] == 'pass'){
+
+                    $check = wp_check_password($_POST['password'],$user->user_pass);
+                    if(!$check) wp_send_json_error(array('info'=>'密码错误'));
+                }
+            }else{
+                wp_send_json_error(array('info'=>'该用户不存在'));
+            }
+            $user_id = $user->ID;
         }
 
 
         $mobile = $_POST['mobile'];
-        $user_id = $_POST['user_id'];
         $access_token = $_POST['access'];
         $open_id = $_POST['open'];
 
         require_once 'class-student-weixin.php';
         $weiLogin = new Student_Weixin();
-        $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type);
+        $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type,$bindType);
 
         if($res){
             wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
