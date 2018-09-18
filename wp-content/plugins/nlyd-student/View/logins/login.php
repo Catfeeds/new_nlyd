@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="layui-tab layui-tab-brief" lay-filter="tabs">
-            <ul style="margin-left: 0" class="layui-tab-title  ">
+            <ul style="margin-left: 0;margin-bottom:15px!imporatant;" class="layui-tab-title">
                 <li class="layui-this">
                     <div class="login_icon iconLock lock_blue display-hide"></div>
                     <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
@@ -154,9 +154,9 @@
                 </div> 
             </div> 
             <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
-            <ul style="margin-left: 0"  class="login-type">
+            <ul style="margin-left: 0"  class="login-type flex-h">
                 <?php if($default_wechat_login): ?>
-                <li class="login-type-wrapper">
+                <li class="login-type-wrapper flex1">
                     <div class="login-type-logo">
                         <i class="iconfont">&#xe695;</i>
                     </div>
@@ -164,7 +164,7 @@
                 </li>
                 <?php endif;?>
                 <?php if($default_qq_login): ?>
-                <li class="login-type-wrapper">
+                <li class="login-type-wrapper flex1">
                     <div class="login-type-logo">
                         <i class="iconfont">&#xe603;</i>
                     </div>

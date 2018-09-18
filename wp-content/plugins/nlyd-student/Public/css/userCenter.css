@@ -322,38 +322,6 @@
     .userCenter-edit{
         right: 17px;
     }
-    /* 钱包 */
-    .userCenter-level{
-        position: absolute;
-        bottom: -23px;
-        height: 55px;
-        /* border-radius: 5px; */
-        display: -webkit-flex;
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content:center;
-        background-color: #fff;
-        line-height: 55px;
-    }
-    .userCenter-level-item{
-        flex-grow:1;
-        color:rgba(38, 38, 38, 0.6);;
-
-    }
-    .userCenter-level-item p{
-        margin-bottom: 0;
-        padding: 0;
-        height: 27.5px;
-        line-height: 23.5px;
-    }
-    .userCenter-level-item p:first-child{
-        font-size: 0.14rem;
-        line-height: 35.5px;
-        color: #2484FE;
-    }
-    .userCenter-detail i{
-        color: #2484FE;
-    }
     /* 列表 */
     .userCenter-detail{
         margin-top: 10px;

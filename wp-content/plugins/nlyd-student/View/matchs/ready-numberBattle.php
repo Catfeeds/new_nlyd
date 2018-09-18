@@ -28,6 +28,7 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo">
+                        <div class="Glass"></div>
                         <?php if(!empty($questions)):
                             foreach ($questions as $v){
                         ?>
@@ -106,7 +107,7 @@ jQuery(function($) {
                         setTimeout(function(){
                             window.location.href=res.data.url
                         },300)
-                    }   
+                    }
                 }else{
                     $.alerts(res.data.info)
                 }

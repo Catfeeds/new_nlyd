@@ -179,6 +179,13 @@ jQuery(function($) {
 
         return arr[pos];
     }
+    function rand19() {//生成随即数字1-9
+        var arr=['1','2','3','4','5','6','7','8','9'];
+
+        var pos = Math.round(Math.random() * (arr.length - 1));
+
+        return arr[pos];
+    }
     function randJJ() {//生成随机+-
             var arr=['+','-'];
 
@@ -205,8 +212,7 @@ jQuery(function($) {
         var L=level['symbol'];
         var N=level['number'];
         var firstNumber=''
-        var answer='';  
-
+        var answer='';
         // var arr=[];
         if(level['symbol']>4){
             L=4;
@@ -223,7 +229,7 @@ jQuery(function($) {
         for (var i = 0; i < N; i++) {
             var oneNumber=randSZ();
             if(i==0){
-                oneNumber=compare(0)
+                oneNumber=rand19()
             }
             firstNumber+=oneNumber;
         }
@@ -238,8 +244,8 @@ jQuery(function($) {
             var number=''
             for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
-                if(i==0){
-                    oneNumber=compare(0)
+                if(i==0){//第一个数字不能是0
+                    oneNumber=rand19()
                 }
                 number+=oneNumber;
             }  
@@ -256,9 +262,18 @@ jQuery(function($) {
             }
             result+=symbol
             result+=number  
-
         }
-        var row={question:firstNumber+result,rights:answer,yours:'',isRight:false,}
+        var question=firstNumber+result;
+        var questionLen=question.length;
+        var row={question:question,rights:answer,yours:'',isRight:false,}
+        if(ajaxData.length>0){
+            if(question==ajaxData[ajaxData.length-1]['question']){//生成题目和上一题一样
+                var lastcode=question.substring(questionLen-1,questionLen);
+                lastcode=parseInt(lastcode)+1>9 ? parseInt(lastcode)-1 : parseInt(lastcode)+1;
+                var newQuestion= question.substring(0,questionLen-1) + lastcode;
+                row['question']=newQuestion
+            }
+        }
         return row;
     }
     function CX(level) {//乘除运算
@@ -278,25 +293,49 @@ jQuery(function($) {
             for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
                 if(i==0){
-                    oneNumber=compare(0)
+                    oneNumber=rand19()
                 }
                 firstNumber+=oneNumber;
             }  
             answer=parseInt(firstNumber)*parseInt(secondNumber)
             question=firstNumber+symbol+secondNumber
+
+            if(ajaxData.length>0){
+                if(question==ajaxData[ajaxData.length-1]['question']){//生成题目和上一题一样
+                    firstNumber=parseInt(firstNumber)+1;
+                    if(firstNumber.toString().length>N){
+                        firstNumber=parseInt(firstNumber)-2;
+                    }
+                     question= firstNumber+symbol+secondNumber
+                     answer=parseInt(firstNumber)*parseInt(secondNumber)
+                }
+            }
         }else if(symbol=='÷'){
             for (var i = 0; i < N; i++) {
                 var oneNumber=randSZ();
-                if(i==0){
-                    oneNumber=compare(0)
+                if(i==0){//第一个字符不能是0
+                    oneNumber=rand19()
                 }
                 firstNumber+=oneNumber;
             }  
-            firstNumber=parseInt(firstNumber)
-            firstNumber=firstNumber-firstNumber%parseInt(secondNumber)
+            firstNumber=parseInt(firstNumber)+(parseInt(secondNumber)-parseInt(firstNumber)%parseInt(secondNumber))
+            if(firstNumber.toString().length>N){
+                firstNumber=parseInt(firstNumber)-parseInt(secondNumber)
+            }
             answer=parseInt(firstNumber)/parseInt(secondNumber)
-
             question=firstNumber+symbol+secondNumber
+
+
+            if(ajaxData.length>0){
+                if(question==ajaxData[ajaxData.length-1]['question']){//生成题目和上一题一样
+                    firstNumber=parseInt(firstNumber)+parseInt(secondNumber);
+                    if(firstNumber.toString().length>N){
+                        firstNumber=parseInt(firstNumber)-2*parseInt(secondNumber);
+                    }
+                    question= firstNumber+symbol+secondNumber
+                    answer=parseInt(firstNumber)/parseInt(secondNumber)
+                }
+            }
         }
         var row={question:question,rights:answer,yours:'',isRight:false,}
         return row
@@ -330,19 +369,17 @@ jQuery(function($) {
     }
     mTouch('body').on('tap','.number',function(){
         var _this=$(this);
-        if(!_this.hasClass('opcity')){
-            _this.addClass('opcity')
-            var number=_this.attr('date-number');
-            var text=$('.answer').text()
-            if(text.length<21){
-                $('.answer').text(text+number)
-                setTimeout(function(){
-                    _this.removeClass('opcity')
-                },100)
-            }else{
-                _this.removeClass('opcity')
-                return false
-            }
+        var number=_this.attr('date-number');
+        var text=$('.answer').text()
+        if(text.length<21){
+            $('.answer').text(text+number)
+            _this.stop(true).animate({
+                'opacity':'0.6',
+                'filter': 'alpha(opacity=60)',
+            },50).animate({
+                'opacity':'1',
+                'filter': 'alpha(opacity=100)',
+            },50)
         }
 
     })
@@ -379,13 +416,13 @@ jQuery(function($) {
                 }
             }else{
                 if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
-                    level.number++
-                    if(level.number>4){//数字长度达到4位最大限度，数字长度变为2，符号加1，为最大限度，数字长度不变
-                        level.symbol++
-                        if(level.symbol>4){
-                            level.number=4
+                    level.symbol++
+                    if(level.symbol>4){
+                        level.number++
+                        if(level.number>4){
+                            level.symbol=4
                         }else{
-                            level.number=2
+                            level.symbol=1
                         }
                     }
                 }
@@ -450,8 +487,8 @@ jQuery(function($) {
                         }
                     }else{
                         $.alerts(res.data.info)
+                        isSubmit=false;
                     }
-                    isSubmit=false;
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;

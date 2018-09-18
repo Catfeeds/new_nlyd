@@ -28,7 +28,7 @@
                     if(leveTimes>0 && leveTimes<3){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
                     }
-                    if(leveTimes>=3){
+                    if(leveTimes>2){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
                             submit();

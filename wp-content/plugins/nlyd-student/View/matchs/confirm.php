@@ -101,7 +101,7 @@
                                         <span class="c_black"><?=$player['real_name']?></span>
                                         <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
                                         <?php }else{?>
-                                            <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
+                                            <a href="<?=home_url('account/certification/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
                                         <?php }?>
                                     </div>
                                 </div>

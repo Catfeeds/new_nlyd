@@ -56,29 +56,29 @@ jQuery(function($) {
             form.verify($.validationLayui.allRules); 
             // 监听提交
             form.on('submit(bindPhone)', function(data){//快速登录
-                // var value=data.field.mobile;
-                // var allRules=$.validationLayui.allRules;//全局正则配置
-                // var phone=allRules['phone'][0];
-                // var email=allRules['email'][0];
-                // if(phone.test(value)){//手机号码登录
-                //     action='get_sms_code'
-                //     var data={
-                //         action:action,
-                //         mobile:formData.mobile,
-                //         template:template,
-                //         tamp:getTimestamp,
-                //     }
-                // }else if(email.test(value)){//邮箱登录
-                //     action='get_smtp_code'    
-                //     var data={
-                //         action:action,
-                //         user_login:formData.mobile,
-                //         template:template,
-                //         tamp:getTimestamp,
-                //     }
-                // }
                 sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
                 return false;
+            });
+            form.on('submit(bindPwd)', function(data){//快速登录
+                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                return false;
+            });
+            element.on('tab(tabs)', function(){//tabs
+                var left=$(this).position().left;
+                var html=$(this).html();
+                var css=''
+                if($(this).index()==0){
+                    css='22.5px 0 0 22.5px'
+                }else{
+                    css='0px 22.5px 22.5px 0'
+                }
+                $('.nl-transform').css({
+                    'transform':'translate3d('+left+'px, 0px, 0px)',
+                    'border-radius':css
+                }).html(html)
+                $('.nl-transform .login_icon.phone_blue').removeClass('phone_blue').addClass('phone_white')
+                $('.nl-transform .login_icon.lock_blue').removeClass('lock_blue').addClass('lock_white')
+                $('.nl-transform .login_icon.user_blue').removeClass('user_blue').addClass('user_white')
             });
         });
 
@@ -87,7 +87,7 @@ jQuery(function($) {
     function time(wait,o){//倒计时
         if (wait == 0) {  
             o.removeClass("disabled");            
-            o.text("获取短信验证码")  
+            o.text("获取验证码")  
             wait = 60;  
         } else {  
             o.addClass("disabled");  

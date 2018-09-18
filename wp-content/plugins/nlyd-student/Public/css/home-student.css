@@ -41,11 +41,11 @@
     border-radius: 0;
     border-bottom: 3px solid #2484FE;
 }
-.entrance{
+/* .entrance{
     display: flex;
-}
+} */
 .entrance-wrap{
-    flex: 1;
+    /* flex: 1; */
     text-align: center;
 }
 .entrance .entrance-wrap:first-child{

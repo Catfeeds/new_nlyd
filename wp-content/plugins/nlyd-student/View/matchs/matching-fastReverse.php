@@ -134,8 +134,8 @@ jQuery(function($) {
                         }
                     }else{
                         $.alerts(res.data.info)
+                        isSubmit=false;
                     }
-                    isSubmit=false;
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
@@ -179,7 +179,6 @@ jQuery(function($) {
                     return false;
                 }
             })
-            if(!_this.hasClass('disabled') && !_this.hasClass('opcity')){
                 var number=_this.text();
                 var text=$('.answer').text()
                 // if(text=="本题无解"){
@@ -205,7 +204,6 @@ jQuery(function($) {
                             dataIndex.push(_this.attr('data-index'))
                         }
                     }else{//符号
-                        _this.addClass('opcity')
                         if(flag){//数字没有全部按下
                             var flag1=false
                             if(len>0){
@@ -251,11 +249,13 @@ jQuery(function($) {
                             }
                             if(flag1){
                                 $('.answer').text(text+number) 
-                                setTimeout(function() {
-                                    _this.removeClass('opcity')
-                                }, 100);
-                            }else{
-                                _this.removeClass('opcity')
+                                _this.stop(true).animate({
+                                    'opacity':'0.6',
+                                    'filter': 'alpha(opacity=60)',
+                                },50).animate({
+                                    'opacity':'1',
+                                    'filter': 'alpha(opacity=100)',
+                                },50)
                             }
                         }else{//数字键盘全部按下且有（
                             if(_this.hasClass('rightBrackets')){//点击右括号
@@ -269,19 +269,19 @@ jQuery(function($) {
                                 }
                                 if(leftBracket>rightBracket){
                                     $('.answer').text(text+number)  
-                                    setTimeout(function() {
-                                        _this.removeClass('opcity')
-                                    }, 100);
-                                }else{
-                                    _this.removeClass('opcity')
+                                    _this.stop(true).animate({
+                                        'opacity':'0.6',
+                                        'filter': 'alpha(opacity=60)',
+                                    },50).animate({
+                                        'opacity':'1',
+                                        'filter': 'alpha(opacity=100)',
+                                    },50)
                                 }
-                            }else{
-                                _this.removeClass('opcity')
+                             
                             }
                         }
                     }
-                // }
-            }
+            // }
         });
     // })
     //删除tap事件

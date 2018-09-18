@@ -106,8 +106,8 @@ class Student_Weixin
         $openid = $data['openid'];
         //是否存在用户
         global $wpdb;
-        $users = $wpdb->get_row('SELECT ID,user_mobile FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
-        if(empty($users) || !$users->user_mobile){
+        $users = $wpdb->get_row('SELECT ID,user_mobile,user_email FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
+        if(empty($users) || (!$users->user_mobile && !$users->user_email)){
             //TODO 显示绑定手机页面
             $users_id = $users->ID == true ? $users->ID : 0;
             wp_redirect(home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid));
@@ -120,7 +120,7 @@ class Student_Weixin
     /**
      * 网页授权登录根据access_token和openid获取用户信息
      */
-    public function getUserInfo($access_token,$openid,$type = true,$user_id = 0,$mobile='',$emailOrMobile = ''){
+    public function getUserInfo($access_token,$openid,$type = true,$user_id = 0,$mobile='',$emailOrMobile = '',$bindType = ''){
         $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$access_token.'&openid='.$openid.'&lang=zh_CN';
 
         $ch = curl_init();
@@ -139,65 +139,76 @@ class Student_Weixin
         }
         //保存用户信息
         $res['mobile'] = $mobile;
-        return $this->save_user($res,$type,$user_id,$emailOrMobile);
+        return $this->save_user($res,$type,$user_id,$emailOrMobile,$bindType);
         exit;
     }
 
     /**
      * 微信授权登录页,保存用户信息
      */
-    public function save_user($res = [],$type='',$user_id=0,$emailOrMobile=''){
+    public function save_user($res = [],$type='',$user_id=0,$emailOrMobile='',$bindType=''){
         $me_name = $emailOrMobile == 'mobile' ? '手机' : '邮箱';
         global $wpdb;
         $userMetaType = false;
-        if($type == true){
-            //绑定手机后执行
-            if($user_id < 1){
-                /*保存用户信息*/
-                //当前手机是否已注册
-                $mobileUser = $wpdb->get_row('SELECT ID,weChat_openid,user_mobile FROM '.$wpdb->users.' WHERE user_mobile="'.$res['mobile'].'" OR user_login="'.$res['mobile'].'" OR user_email="'.$res['mobile'].'"');
-                //TODO 判断当前手机是否已经绑定过微信
-                if($mobileUser->weChat_openid != false){
-                    if(is_ajax()){
-                        wp_send_json_error(array('info'=>'当前'.$me_name.'已绑定其它微信'));
-                        exit;
+        if($bindType == 'username'){
+            //使用账号绑定微信号
+            $auth = array(
+                'weChat_openid'        => $res['openid'],
+                'weChat_union_id'        => $res['unionid'],
+            );
+            $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
+            if(!$bool) return false;
+        }else{
+            if($type == true){
+                //绑定手机后执行
+                if($user_id < 1){
+                    /*保存用户信息*/
+                    //当前手机是否已注册
+                    $mobileUser = $wpdb->get_row('SELECT ID,weChat_openid,user_mobile FROM '.$wpdb->users.' WHERE user_mobile="'.$res['mobile'].'" OR user_login="'.$res['mobile'].'" OR user_email="'.$res['mobile'].'"');
+                    //TODO 判断当前手机是否已经绑定过微信
+                    if($mobileUser->weChat_openid != false){
+                        if(is_ajax()){
+                            wp_send_json_error(array('info'=>'当前'.$me_name.'已绑定其它微信'));
+                            exit;
+                        }else{
+                            return false;
+                        }
+                    }
+
+                    $auth = array(
+                        'weChat_openid'        => $res['openid'],
+                        'weChat_union_id'        => $res['unionid'],
+                    );
+                    $wpdb->startTrans();
+                    if(!$mobileUser){
+                        $userMetaType = true;
+                        $auth['user_nicename'] = $res['nickname'];
+//                    $auth['display_name'] = $res['mobile'];
+                        if($emailOrMobile == 'email'){
+                            $user_id = wp_create_user($res['mobile'],get_time(),$res['mobile'],'');
+                        }else{
+                            $user_id = wp_create_user($res['mobile'],get_time(),'',$res['mobile']);
+                        }
+
                     }else{
+                        //已存在
+                        if(!$mobileUser->user_mobile) $auth['user_'.$emailOrMobile] = $res['mobile'];
+                        $user_id = $mobileUser->ID;
+                    }
+                    $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
+                    if(!$bool) {
+                        $wpdb->rollback();
                         return false;
                     }
-                }
-
-                $auth = array(
-                    'weChat_openid'        => $res['openid'],
-                    'weChat_union_id'        => $res['unionid'],
-                );
-                $wpdb->startTrans();
-                if(!$mobileUser){
-                    $userMetaType = true;
-                    $auth['user_nicename'] = $res['nickname'];
-                    $auth['display_name'] = $res['mobile'];
-                    if($emailOrMobile == 'email'){
-                        $user_id = wp_create_user($res['mobile'],get_time(),$res['mobile'],'');
-                    }else{
-                        $user_id = wp_create_user($res['mobile'],get_time(),'',$res['mobile']);
-                    }
-
+                    $wpdb->commit();
                 }else{
-                    //已存在
-                    if(!$mobileUser->user_mobile) $auth['user_'.$emailOrMobile] = $res['mobile'];
-                    $user_id = $mobileUser->ID;
+                    //已存在的微信用户绑定手机
+                    $bool = $wpdb->update($wpdb->users,['user_'.$emailOrMobile => $res['mobile']],['ID' => $user_id]);
+                    if(!$bool) return false;
                 }
-                $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
-                if(!$bool) {
-                    $wpdb->rollback();
-                    return false;
-                }
-                $wpdb->commit();
-            }else{
-                //已存在的微信用户绑定手机
-                $bool = $wpdb->update($wpdb->users,['user_'.$emailOrMobile => $res['mobile']],['ID' => $user_id]);
-                if(!$bool) return false;
             }
         }
+
         $this->insertUsermeta($res,$user_id,$userMetaType);
 
         update_user_meta($user_id,'user_session_id',session_id());
