@@ -65,7 +65,7 @@
     height: 45px;
     width: -webkit-calc(100% - 2px);; 
     width: calc(100% - 2px);
-    margin-bottom: 15px!important;
+    margin-bottom: 0!important;
     border-radius: 25px;
     overflow: hidden;
 }
