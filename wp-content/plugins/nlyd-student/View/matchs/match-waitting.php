@@ -42,10 +42,8 @@
                         <?php }
                         if($buffer_time){
                         ?>
-                            <a class="" href="<?=$match_url?>">
-                                <div class="inner oneP">
-                                    进入比赛
-                                </div>
+                            <a class="a-btn back" href="<?=$buffer_url?>">
+                                进入比赛
                             </a>
                         <?php }?>
                         <div class="match_tips">

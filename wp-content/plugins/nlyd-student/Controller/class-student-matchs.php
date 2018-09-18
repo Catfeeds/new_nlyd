@@ -456,6 +456,7 @@ class Student_Matchs extends Student_Home
         $data['current_project'] = $this->current_project;
         $data['count_down'] = $this->current_project['project_end_time']-get_time();
         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
+
         if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
         $data['next_more_num'] = $next_more_num;
         $project_id = !empty($this->next_project['project_id']) ? $this->next_project['project_id'] : $this->current_project['project_id'];
@@ -469,8 +470,11 @@ class Student_Matchs extends Student_Home
 
         //未进入比赛缓冲时间设置
         $buffer_time = get_time()-$this->current_project['project_start_time'];
-        if(10 < $buffer_time && $buffer_time < 90 && empty($row['answer_status'])){
+
+        if(10 <= $buffer_time && $buffer_time <= 90 && empty($row['answer_status'])){
+
             $data['buffer_time'] = true;
+            $data['buffer_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$this->current_project['match_more']);
         }
 
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
