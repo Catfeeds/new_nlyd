@@ -120,41 +120,12 @@ jQuery(function($) {
         var arr=$.validationLayui.hanzi;
         var pos = Math.round(Math.random() * (arr.length - 1));
         return arr[pos];
-    }
-    // function randSZ() {//生成随即数字0-9
-    //     return ( Math.floor ( Math.random ( ) * 9  ) );
-    // }
-    // function randZM(flag) {//生成随即小写字母
-    //     if(flag==="lower"){ 
-    //          character = String.fromCharCode(Math.floor(Math.random()*26)+"a".charCodeAt(0)); 
-    //     } 
-    //     if(flag==="upper"){ 
-    //          character = String.fromCharCode(Math.floor(Math.random()*26)+"A".charCodeAt(0)); 
-    //     } 
-    //     return character; 
-    // }    
+    }  
     function randZF() {//生成随即字符
             var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
             var pos = Math.round(Math.random() * (arr.length - 1));
             return arr[pos];
     }
-    // function randHS() {//随机执行一个函数
-    //     // var arr=['getHZ','randSZ','randZM1','randZF','randZM2'];
-    //     var arr=['randSZ','randZM1','randZF','randZM2'];
-    //     var pos = Math.round(Math.random() * (arr.length - 1));
-    //     // if(arr[pos]=='getHZ'){
-    //     //     return getHZ()
-    //     // }else 
-    //     if(arr[pos]=='randSZ'){
-    //         return randSZ()
-    //     }else if(arr[pos]=='randZM1'){
-    //         return randZM('lower')
-    //     }else if(arr[pos]=='randZF'){
-    //         return randZF()
-    //     }else if(arr[pos]=='randZM2'){
-    //         return randZM('upper')
-    //     }
-    // }
     function pushHZ(string) {
         var arr=[];
         var len=string.length;

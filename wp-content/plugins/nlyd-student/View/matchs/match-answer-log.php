@@ -42,7 +42,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                             <div class="subject-title-info flex1"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> >全部排名</a></div>
                             <?php //endif;?>
                         </div>
-                        <div class="subject-row flex1">
+                        <div class="subject-row flex-h">
                             <div class="one-info flex1">
                                 <div class="left-label">答题数量：</div><span class="c_blue"><?=$str_len;?></span>
                             </div>
@@ -50,7 +50,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                                 <div class="left-label">正确数量：</div><span class="c_blue"><?=$success_length;?></span>
                             </div>
                         </div>
-                        <div class="subject-row flex1">
+                        <div class="subject-row flex-h">
                             <div class="one-info flex1">
                                 <div class="left-label">答题用时：</div><span class="c_blue"><?=$use_time;?>s</span>
                             </div>
@@ -58,7 +58,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                                 <div class="left-label">剩余时间：</div><span class="c_blue"><?=$surplus_time;?>s</span>
                             </div>
                         </div>
-                        <div class="subject-row flex1">
+                        <div class="subject-row flex-h">
                             <div class="one-info flex1">
                                 <div class="left-label">&nbsp;&nbsp;&nbsp;正确率：</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
