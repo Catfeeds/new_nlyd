@@ -52,7 +52,7 @@
                                 </div>
                             </a>
   
-                            <a class="a-btn" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新账户昵称</a>
+                            <a class="a-btn" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</a>
                         </div>
                 
                     </form>

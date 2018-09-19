@@ -40,7 +40,7 @@ class Match_student {
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         WHERE o.order_type=1 AND (o.pay_status=2 OR o.pay_status=3 OR o.pay_status=4) AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
 
@@ -163,7 +163,7 @@ class Match_student {
                                 <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
                                 <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
                                 <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
-                                <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone']?></a></td>
+                                <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_login']?></a></td>
                                 <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
                                 <td class="role column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
                                 <td class="role column-score" data-colname="个人比赛成绩"><a href="admin.php?page=match_student-score&match_id=<?=$_GET['match_id']?>&student_id=<?=$row['ID']?>">个人比赛成绩</a></td>
@@ -536,7 +536,7 @@ class Match_student {
         $page = intval($_GET['cpage']) < 1 ? 1 : intval($_GET['cpage']);
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,SUM(mq.my_score) as my_score,mq.answer_status,SUM(mq.surplus_time) AS surplus_time,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
+        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,SUM(mq.my_score) as my_score,mq.answer_status,SUM(mq.surplus_time) AS surplus_time,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
             LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=mq.user_id AND o.match_id=mq.match_id 
             WHERE mq.match_id='.$post->ID.' GROUP BY user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
@@ -691,7 +691,7 @@ class Match_student {
                             <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['ageGroup']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-address" data-colname="所在地区"><span aria-hidden="true"><?=$raV['address']?></span><span class="screen-reader-text">-</span></td>
-                            <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['telephone']?></span><span class="screen-reader-text">-</span></td>
+                            <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['telephone'] ? $raV['telephone'] : $raV['user_mobile']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-email" data-colname="邮箱"><span aria-hidden="true"><?=$raV['user_email']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-created_time" data-colname="报名时间"><span aria-hidden="true"><?=$raV['created_time']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-total_score" data-colname="总得分"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
