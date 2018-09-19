@@ -121,7 +121,7 @@ class Student_Ajax
             $rows = $wpdb->get_results($sql,ARRAY_A);
         }else{
 
-            $where = " WHERE a.match_id = {$_POST['match_id']} AND a.pay_status = 4 ";
+            $where = " WHERE b.match_id = {$_POST['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
             $age_where = '';
             //判断是否存在分类id
             if(!empty($_POST['category_id'])){
@@ -162,17 +162,17 @@ class Student_Ajax
             //print_r($where);
             //$sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
 
-            $sql = " SELECT x.user_id,x.my_score,y.meta_value 
-                    FROM
-                    (SELECT a.user_id ,SUM(b.my_score) my_score
-                    	FROM `{$wpdb->prefix}order` a 
-                    	LEFT JOIN {$wpdb->prefix}match_questions b ON a.user_id = b.user_id
-                    	{$where} 
-                    	GROUP BY a.user_id order by my_score desc 
-                	) x 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score 
+                    FROM (
+                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score
+                            FROM `{$wpdb->prefix}order` a 
+                            LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
+                            {$where} 
+                            GROUP BY b.user_id,b.project_id 
+                            ) x 
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
                     {$age_where}
-                    limit {$start},{$pageSize} ";
+                    GROUP BY x.user_id ORDER BY my_score DESC limit {$start},{$pageSize} ";
 
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -1209,7 +1209,11 @@ class Student_Ajax
         $pageSize = 15;
         $start = ($page-1)*$pageSize;
 
-        $sql2 = "select SQL_CALC_FOUND_ROWS user_id,created_time from {$wpdb->prefix}order where match_id = {$_POST['match_id']} and (pay_status=2 or pay_status=3 or pay_status=4) limit {$start},{$pageSize}";
+        $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
+                  from {$wpdb->prefix}order a
+                  right join {$wpdb->prefix}users b on a.user_id = b.ID
+                  where a.match_id = {$_POST['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
+                  order by a.id desc limit {$start},{$pageSize} ";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         //print_r($orders);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -1219,7 +1223,7 @@ class Student_Ajax
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
-            $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
+            $orders[$k]['user_head'] = file_exists($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);
                 $orders[$k]['real_age'] = $user_real['real_age'];
@@ -1502,8 +1506,8 @@ class Student_Ajax
                 case 'user_nicename':
 
                     if(mb_strlen($_POST['meta_val'],'utf-8') > 24) wp_send_json_error(array('info'=>'昵称不能超过24个字符'));
-                    update_user_meta($current_user->ID,'nickname',$_POST['meta_val']);
-
+                    update_user_meta($current_user->ID,'nickname',$_POST['meta_val']) ;
+                    $user_nicename_update = true;
                     break;
                 default:
 
@@ -1511,7 +1515,7 @@ class Student_Ajax
                     break;
             }
 
-            $resul = $wpdb->update($wpdb->users,array($_POST['meta_key']=>$_POST['meta_val']),array('ID'=>$current_user->ID));
+            $resul = $wpdb->update($wpdb->users,array($_POST['meta_key']=>$_POST['meta_val']),array('ID'=>$current_user->ID)) || $user_nicename_update;
 
         }
         else{
@@ -2654,9 +2658,7 @@ class Student_Ajax
         }
 
 
-
         global $wpdb;
-
 
         if($bindType == 'code'){
             $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=""');
@@ -2672,7 +2674,7 @@ class Student_Ajax
             $user_id = $_POST['user_id'];
         }else{
             $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
-            //账号绑定
+            //账号直接登录, 不绑定微信
             //判断用户是否存在
             if($user){
                 $check = wp_check_password($_POST['password'],$user->user_pass);
@@ -2680,8 +2682,13 @@ class Student_Ajax
             }else{
                 wp_send_json_error(array('info'=>'该用户不存在'));
             }
-            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
+
+//            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
+            update_user_meta($user_id,'user_session_id',session_id());
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
+            wp_send_json_success(['info' => '登录成功']);
         }
 
 
