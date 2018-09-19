@@ -59,7 +59,7 @@ jQuery(function($) {
                                                     +'<div class="nl-match-header">'
                                                         +'<span class="nl-match-name  fs_16 c_blue">'+v.post_title+'</span>'
                                                         +isMe
-                                                        +'<p class="long-name fs_12 c_black3">'+v.post_content+'</p>'
+                                                        +'<p class="long-name fs_12 c_black8">'+v.post_content+'</p>'
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
