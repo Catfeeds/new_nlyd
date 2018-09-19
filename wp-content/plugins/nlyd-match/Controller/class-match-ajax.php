@@ -213,12 +213,12 @@ class Match_Ajax
             $map[] = " (a.user_mobile like '%{$_GET['term']}%') ";
             $map[] = " (a.user_email like '%{$_GET['term']}%') ";
         }
-        $where = !empty($map) ? join(' or ',$map)  : '';
+        $where = !empty($map) ? join(' or ',$map) .' and ' : '';
 
         if($_GET['type'] == 'teacher'){
-            $where .= 'b.meta_value = 7';
+            $where .= ' (b.meta_value = 7) ';
         }else{
-            $where .= 'b.meta_value >= 0';
+            $where .= ' (b.meta_value >= 0) ';
         }
         $sql = "select a.ID as id,
                 case 
