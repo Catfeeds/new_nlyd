@@ -172,6 +172,7 @@ jQuery(function($) {
     }
         mTouch('body').on('tap','.number',function(e){
             var _this=$(this);
+            if(!_this.hasClass('disabled')){
             var flag=false;
             $('.rand').each(function(){//所有数字按钮都已使用后
                 if(!$(this).hasClass('disabled')){
@@ -281,14 +282,14 @@ jQuery(function($) {
                             }
                         }
                     }
-            // }
+            }
         });
     // })
     //删除tap事件
     mTouch('body').on('tap','#del',function(e){
         var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
+        // if(!_this.hasClass('disabled')){
+        //     _this.addClass('disabled')
             var text=$('.answer').text()
             var len=text.length;
             var news='';
@@ -316,13 +317,18 @@ jQuery(function($) {
                     }
                 // }
                 $('.answer').text(news)
-                setTimeout(function(){
-                    _this.removeClass('disabled')
-                }, 100);
-            }else{
-                _this.removeClass('disabled')
+                _this.stop(true).animate({
+                    'opacity':'0.6',
+                    'filter': 'alpha(opacity=60)',
+                },50).animate({
+                    'opacity':'1',
+                    'filter': 'alpha(opacity=100)',
+                },50)
             }
-        }
+            // else{
+            //     _this.removeClass('disabled')
+            // }
+        // }
     });
     //下一题tap事件
     mTouch('body').on('tap','#next',function(e){
@@ -371,7 +377,7 @@ jQuery(function($) {
                     initQuestion()
                     nextQuestion()
                     _this.removeClass('disabled')
-                }, 400);
+                }, 300);
             }else{
                 //跳过2s
                 $('.answer').addClass('error-fast')
@@ -397,7 +403,7 @@ jQuery(function($) {
                             initQuestion()
                             nextQuestion()
                             _this.removeClass('disabled')
-                        }, 400);
+                        }, 300);
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
                         _this.removeClass('disabled')
@@ -420,17 +426,18 @@ jQuery(function($) {
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                    ,btn: ['提交', '按错了', ]
+                    ,btn: ['按错了','提交',  ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){
                         layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.closeAll();
                         var thisAjaxRow=ajaxData[ajaxData.length-1]
                         var text=$('.answer').text()
                         thisAjaxRow.yours=text;
-                        submit(time,1);    
-                    }
-                    ,btn2: function(index, layero){
+                        submit(time,1);  
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中

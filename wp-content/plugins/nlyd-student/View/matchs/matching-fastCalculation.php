@@ -385,20 +385,25 @@ jQuery(function($) {
     })
     mTouch('body').on('tap','#del',function(){
         var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
+        // if(!_this.hasClass('disabled')){
+        //     _this.addClass('disabled')
             var text=$('.answer').text()
             var len=text.length;
             if(len>0){
                 var news=text.substring(0,len-1)
                 $('.answer').text(news)
-                setTimeout(function(){
-                    _this.removeClass('disabled')
-                },100)
-            }else{
-                _this.removeClass('disabled')
+                _this.stop(true).animate({
+                    'opacity':'0.6',
+                    'filter': 'alpha(opacity=60)',
+                },50).animate({
+                    'opacity':'1',
+                    'filter': 'alpha(opacity=100)',
+                },50)
             }
-        }
+            // else{
+            //     _this.removeClass('disabled')
+            // }
+        // }
     })
     //下一题tap事件
     mTouch('body').on('tap','#next',function(e){
@@ -459,7 +464,7 @@ jQuery(function($) {
                 inItFastCalculation(level,type);
                 nextQuestion()
                 _this.removeClass('disabled')
-            }, 400);
+            }, 300);
         }
         
     });
@@ -527,35 +532,35 @@ layui.use('layer', function(){
     mTouch('body').on('tap','#sumbit',function(e){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
-                type: 1
-                ,maxWidth:300
-                ,title: '提示' //不显示标题栏
-                ,skin:'nl-box-skin'
-                ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: ['提交', '按错了', ]
-                ,success: function(layero, index){
+            type: 1
+            ,maxWidth:300
+            ,title: '提示' //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification' //防止重复弹出
+            ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+            ,btn: [ '按错了','提交', ]
+            ,success: function(layero, index){
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                var thisAjaxRow=ajaxData[ajaxData.length-1]
+                var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
+                thisAjaxRow['yours']=yours;
+                if(yours==thisAjaxRow['rights']){
+                    thisAjaxRow['isRight']=true;
+                }else{
+                    thisAjaxRow['isRight']=false;
                 }
-                ,yes: function(index, layero){
-                    
-                    var thisAjaxRow=ajaxData[ajaxData.length-1]
-                    var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
-                    thisAjaxRow['yours']=yours;
-                    if(yours==thisAjaxRow['rights']){
-                        thisAjaxRow['isRight']=true;
-                    }else{
-                        thisAjaxRow['isRight']=false;
-                    }
-                    layer.closeAll();
-                    submit(time,1);
-                }
-                ,btn2: function(index, layero){
-                }
-                ,closeBtn:2
-                ,btnAagn: 'c' //按钮居中
-                ,shade: 0.3 //遮罩
-                ,isOutAnim:true//关闭动画
-            });
+                layer.closeAll();
+                submit(time,1);
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
             
     });
 });
