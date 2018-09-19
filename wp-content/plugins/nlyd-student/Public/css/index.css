@@ -30,9 +30,9 @@ font-size:0.14rem;
     user-select:none;
 }
 /* mobile footer */
-.nl-foot-nav{
+/* .nl-foot-nav{
     display: none;
-}
+} */
 
 .nl-foot-icon,.nl-foot-name{
     text-align: center;
@@ -635,6 +635,9 @@ p.share-font{
     flex: 1;                  /* NEW, Spec - Opera 12.1, Firefox 20+ */
 }
 @media screen and (min-width: 1200px){
+    .nl-foot-nav{
+        display: none;
+    }
     .nl-page-form{
         border: 1px solid #f2f2f2;
         overflow: hidden;
