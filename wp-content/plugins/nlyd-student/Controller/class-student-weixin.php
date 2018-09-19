@@ -48,7 +48,7 @@ class Student_Weixin
     /**\
      * 微信网页授权获取code
      */
-    public function getWebCode(){
+    public function getWebCode($is_pay = false){
 
         if(empty($_GET['code'])){
             $redirect_url = home_url().$_SERVER["REQUEST_URI"];
@@ -69,7 +69,7 @@ class Student_Weixin
             header('Location:'.$url);
             exit;
         }else{
-            return $this->getWebAccessToken(true);
+            return $this->getWebAccessToken($is_pay);
         }
         exit;
     }
@@ -77,7 +77,7 @@ class Student_Weixin
     /**
      * 微信网页授权获取access_token
      */
-    function getWebAccessToken($type)
+    function getWebAccessToken($is_pay = false)
     {
         $code = $_GET['code'];
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
@@ -96,14 +96,25 @@ class Student_Weixin
         curl_close($ch);
 
         if (isset($data['errcode'])) {
-            echo '<h1>错误：</h1>'.$data['errcode'];
-            echo '<br/><h2>错误信息：</h2>'.$data['errmsg'];
-            exit;
+            if(is_ajax()){
+                wp_send_json_error(['info' => '获取微用户授权失败.请退出后重试']);
+            }else{
+                if($is_pay == true){
+                    return false;
+                }else{
+                    echo '<h1>错误：</h1>'.$data['errcode'];
+                    echo '<br/><h2>错误信息：</h2>'.$data['errmsg'];
+                    exit;
+                }
+            }
         }
-
 
         $access_token = $data['access_token'];
         $openid = $data['openid'];
+        if($is_pay == true){
+            return $openid;
+        }
+
         //是否存在用户
         global $wpdb;
         $users = $wpdb->get_row('SELECT ID,user_mobile,user_email FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
@@ -132,10 +143,14 @@ class Student_Weixin
         curl_close($ch);
         //返回的是一个数组，里面存放用户的信息
         $res = json_decode($res,true);
-        if (isset($res->errcode)) {
-            echo '<h1>错误：</h1>'.$res->errcode;
-            echo '<br/><h2>错误信息：</h2>'.$res->errmsg;
-            exit;
+        if (isset($res['errcode'])) {
+            if(is_ajax()){
+                wp_send_json_error(['info' => '获取微用户信息失败,请退出后重试']);
+            }else{
+                echo '<h1>错误：</h1>'.$res['errcode'];
+                echo '<br/><h2>错误信息：</h2>'.$res['errmsg'];
+                exit;
+            }
         }
         //保存用户信息
         $res['mobile'] = $mobile;

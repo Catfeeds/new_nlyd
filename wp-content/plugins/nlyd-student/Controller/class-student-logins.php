@@ -46,6 +46,10 @@ class Student_Logins
         load_view_template($view,$setting);
     }
     public function bindPhone(){
+        if(empty($_GET['access']) || empty($_GET['oid'])){
+            echo '参数错误';
+            exit;
+        }
         $data = [
             'uid' => $_GET['uid'],
             'access' => $_GET['access'],
