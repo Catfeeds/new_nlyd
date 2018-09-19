@@ -1367,7 +1367,13 @@ class Student_Matchs extends Student_Home
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
     }
-
+     /**
+     * 支付错误信息展示
+     */
+     public function payError(){
+        $view = student_view_path.CONTROLLER.'/payError.php';
+        load_view_template($view);
+    }
 
     /**
      * 战绩排名
@@ -2039,9 +2045,7 @@ class Student_Matchs extends Student_Home
         if(ACTION=='confirm'){//信息确认页
             wp_register_style( 'my-student-confirm', student_css_url.'confirm.css',array('my-student') );
             wp_enqueue_style( 'my-student-confirm' );
-
         }
-
         if(ACTION=='record'){//战绩排名页
             wp_register_script( 'student-share',student_js_url.'share/NativeShare.js', leo_student_version  );
             wp_enqueue_script( 'student-share' );
