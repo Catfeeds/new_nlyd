@@ -162,9 +162,9 @@ class Student_Ajax
             //print_r($where);
             //$sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time
                     FROM (
-                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score
+                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score, MAX(surplus_time) surplus_time
                             FROM `{$wpdb->prefix}order` a 
                             LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
                             {$where} 
@@ -172,7 +172,7 @@ class Student_Ajax
                             ) x 
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
                     {$age_where}
-                    GROUP BY x.user_id ORDER BY my_score DESC limit {$start},{$pageSize} ";
+                    GROUP BY x.user_id ORDER BY my_score DESC,surplus_time DESC  limit {$start},{$pageSize} ";
 
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -363,7 +363,7 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                //$a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
                 //var_dump($a);die;
                 break;
             default:
@@ -531,7 +531,7 @@ class Student_Ajax
         $coach_id = $_POST['coach_id'];
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.apply_status,
@@ -660,7 +660,7 @@ class Student_Ajax
         $team_id = $_POST['team_id'];
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.user_type,
@@ -714,7 +714,7 @@ class Student_Ajax
         $map[] = " a.post_type = 'team' ";
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
         $where = join(' and ',$map);
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.user_id,b.status,
@@ -918,7 +918,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
         if(isset($_POST['category_id'])) $category_id = $_POST['category_id'];
         $wap = array();
@@ -1206,7 +1206,7 @@ class Student_Ajax
         global $wpdb;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
@@ -1246,7 +1246,7 @@ class Student_Ajax
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
@@ -1276,7 +1276,10 @@ class Student_Ajax
         if(!empty($rows)){
             foreach ($rows as $k => $val){
                 //获取报名人数
-                $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} ";
+                $sql_ = "select count(a.id) total 
+                      from {$wpdb->prefix}order a 
+                      right join {$wpdb->prefix}users b on a.user_id = b.ID
+                      where match_id = {$val['ID']} and pay_status in(2,3,4) ";
                 $row = $wpdb->get_row($sql_,ARRAY_A);
                 $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
                 //前端需要的数组
@@ -1353,7 +1356,7 @@ class Student_Ajax
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 15;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         $where = join(' and ',$map);
@@ -1391,7 +1394,11 @@ class Student_Ajax
             $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
 
             //获取报名人数
-            $sql_ = "select count(id) total from {$wpdb->prefix}order where match_id = {$val['ID']} and pay_status in(2,3,4) ";
+            $sql_ = "select count(a.id) total 
+                      from {$wpdb->prefix}order a 
+                      right join {$wpdb->prefix}users b on a.user_id = b.ID
+                      where match_id = {$val['ID']} and pay_status in(2,3,4) ";
+            //print_r($sql_);
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
             //前端需要的数组
@@ -2232,7 +2239,7 @@ class Student_Ajax
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
                     //jsapi支付需要一个单独的页面获取openid
-                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'])];
+                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id'])];
 
 //                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
 //                    $params['open_id'] =$current_user->weChat_openid;
@@ -2339,7 +2346,7 @@ class Student_Ajax
         global $wpdb;
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $page < 1 && $page = 1;
-        $pageSize = 15;
+        $pageSize = 10;
         $which_cat = get_category_by_slug('news');
         $recentPosts = new WP_Query();
         $cat_query = $recentPosts->query('showposts='.$pageSize.'&cat='.$which_cat->cat_ID.'&paged='.$page);

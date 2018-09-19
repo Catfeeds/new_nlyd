@@ -64,7 +64,8 @@ class Student_Payment {
         $arr3 = [
             'zfb_pay',
             'zfb_returnUrl',
-            'zfb_notifyUrl',
+//            'zfb_notifyUrl',
+            'wx_api_pay'
         ];
 
         if(in_array($action,$arr3)){
@@ -137,19 +138,15 @@ class Student_Payment {
      */
     public function wx_api_pay(){
         global $wpdb,$current_user;
-        if($current_user->weChat_openid){
-            $open_id = $current_user->weChat_openid;
-        }else{
-            $wexinClass = new Student_Weixin();
-            $open_id = $wexinClass->getWebCode(true);
-        }
-        $result = $this->wx_jsApiPay($open_id);
-        if(!$result){
-            //TODO 显示错误
-        }else{
-
-        }
-
+//        if($current_user->weChat_openid){
+//            $open_id = $current_user->weChat_openid;
+//        }else{
+//            $wexinClass = new Student_Weixin();
+//            $open_id = $wexinClass->getWebCode(true);
+//        }
+//        $result = $this->wx_jsApiPay($open_id);
+        $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
+        load_view_template($view,array('param'=>['status' => false]));
     }
 
     /**
@@ -163,7 +160,7 @@ class Student_Payment {
 //            .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
             .$wpdb->prefix.'order WHERE id='.$id.' AND pay_status=1', ARRAY_A);
 
-        if(!$order) return false;
+        if(!$order) return ['status' => false, 'data' => '订单信息缺失,请联系客服'];
         $param = $this->getWxParam($order, true);
         $param['open_id'] = $open_id;
 //        if($current_user->weChat_openid){
@@ -177,16 +174,10 @@ class Student_Payment {
         $result = $this->payClass->jsApiPay($param);
 
         if($result != false){
-            if($result['status']){
-                return $result['data'];
-//                $view = student_view_path.CONTROLLER.'/jsapi.php';
-//                load_view_template($view,array('param'=>$result['data']));
-            }else{
-                return false;
-            }
+            return $result;
         }else{
             //发起支付失败
-            return false;
+            return ['status' => false, 'data' => '发起支付失败'];
         }
     }
 

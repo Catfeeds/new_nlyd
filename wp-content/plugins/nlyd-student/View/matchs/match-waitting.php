@@ -8,19 +8,19 @@
                 <?php //if( $current_project['match_type'] == 'first' || isset($_GET['wait']) ){?>
                     <div class="count-wrapper">
                         <p class="match-name c_blue"><?=$match_title?></p>
-                        <?php //if(!empty($next_project)):?>
+                        <?php if($current_project['time_type'] != 'end'):?>
                         <div class="match_tips">
                             <p class="match-detail fs_14 c_black">
                                 <span class="c_blue">即将进行：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>第<?=$next_more_num?>轮
                             </p>
                         </div>
-                        <?php //endif;?>
+                        <?php endif;?>
                         <?php if($answer_status == 1): ?>
                         <p class="fs_12 ta_c bottom_tips c_black">
                             您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛
                         </p>
                         <?php endif;?>
-                        <?php if(empty($answer_status) && empty($current_project['match_type'])): ?>
+                        <?php if((empty($answer_status) || $answer_status == -1) && empty($current_project['match_type'])): ?>
                         <?php
                             if(isset($current_project['time_type']) && $current_project['time_type'] == 'end' && empty($next_project)){
                                 $text = '本轮结束后查看答题详情';
