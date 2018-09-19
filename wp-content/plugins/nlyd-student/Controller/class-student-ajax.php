@@ -2231,14 +2231,17 @@ class Student_Ajax
                 $wxpay = new Student_Payment('wxpay');
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
-                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
-                    $params['open_id'] =$current_user->weChat_openid;
-                    $result = $wxpay->payClass->jsApiPay($params);
-                    if($result['status'] != false){
-                        wp_send_json_success(array('params' => $result['data'], 'info' => NULL));
-                    }else{
-                        wp_send_json_error(array('info'=>$result['data']));
-                    }
+                    //jsapi支付需要一个单独的页面获取openid
+                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'])];
+
+//                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
+//                    $params['open_id'] =$current_user->weChat_openid;
+//                    $result = $wxpay->payClass->jsApiPay($params);
+//                    if($result['status'] != false){
+//                        wp_send_json_success(array('params' => $result['data'], 'info' => NULL));
+//                    }else{
+//                        wp_send_json_error(array('info'=>$result['data']));
+//                    }
 //                    $result = ['status' => true, 'data' => home_url('payment/wxpay/type/wx_jsApiPay/id/').$order['id'].'.html'];
                 }else{
                     $result = $wxpay->payClass->h5UnifiedOrder($params);
@@ -2665,10 +2668,10 @@ class Student_Ajax
             //验证码绑定
             if($type == 'mobile'){
                 //判断当前手机是否已经存在
-                if($user)  wp_send_json_error(array('info'=>'当前手机号码已使用'));
+                if($user)  wp_send_json_error(array('info'=>'当前手机号码已绑定其它微信'));
                 if($bindType == 'code') $this->get_sms_code($_POST['mobile'],17,true,$_POST['send_code']);
             }else{
-                if($user)  wp_send_json_error(array('info'=>'当前邮箱已使用'));
+                if($user)  wp_send_json_error(array('info'=>'当前邮箱已绑定其它微信'));
                 if($bindType == 'code') $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
             }
             $user_id = $_POST['user_id'];
@@ -2688,7 +2691,7 @@ class Student_Ajax
             update_user_meta($user_id,'user_session_id',session_id());
             wp_set_current_user($user_id);
             wp_set_auth_cookie($user_id);
-            wp_send_json_success(['info' => '登录成功']);
+            wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
         }
 
 

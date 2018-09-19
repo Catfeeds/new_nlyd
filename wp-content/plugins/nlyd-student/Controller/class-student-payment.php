@@ -133,9 +133,29 @@ class Student_Payment {
     }
 
     /**
+     * 微信公众号支付页面
+     */
+    public function wx_api_pay(){
+        global $wpdb,$current_user;
+        if($current_user->weChat_openid){
+            $open_id = $current_user->weChat_openid;
+        }else{
+            $wexinClass = new Student_Weixin();
+            $open_id = $wexinClass->getWebCode(true);
+        }
+        $result = $this->wx_jsApiPay($open_id);
+        if(!$result){
+            //TODO 显示错误
+        }else{
+
+        }
+
+    }
+
+    /**
      * 微信公众号支付
      */
-    public function wx_jsApiPay(){
+    public function wx_jsApiPay($open_id){
         $id = intval($_GET['id']);
         global $wpdb,$current_user;
         $order = $wpdb->get_row(
@@ -145,7 +165,13 @@ class Student_Payment {
 
         if(!$order) return false;
         $param = $this->getWxParam($order, true);
-        $param['open_id'] = $current_user->weChat_openid;
+        $param['open_id'] = $open_id;
+//        if($current_user->weChat_openid){
+//            $param['open_id'] = $open_id;
+//        }else{
+//            //TODO 获取openid
+//            $param['open_id'] = false;
+//        }
         //请求数据
         //1.统一下单方法
         $result = $this->payClass->jsApiPay($param);
