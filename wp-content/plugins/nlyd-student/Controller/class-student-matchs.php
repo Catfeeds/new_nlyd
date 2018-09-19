@@ -597,9 +597,9 @@ class Student_Matchs extends Student_Home
                 //获取文章速读考题
                 //$category = get_term_by( 'slug', 'match-question', 'question_genre' );
                 $posts = get_posts(array(
-                        'numberposts' => 3, //输出的文章数量
+                        'numberposts' => 1, //输出的文章数量
                         'post_type' => 'question',  //自定义文章类型名称
-                        'orderby'=>'rand', //post_date rand
+                        'orderby'=>'post_date', //post_date rand
                         'tax_query'=>array(
                             array(
                                 'taxonomy'=>'question_genre', //自定义分类法名称
