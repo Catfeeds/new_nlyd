@@ -30,6 +30,7 @@
                                 <input  type="hidden" name="action" value="student_saveInfo"/>
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                 <input  type="hidden" name="meta_key" value="user_nicename"/>
+                                <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新</div>
                             </div>
                             <a class="form-input-row" href="<?=home_url('account/certification');?>" >
                                 <div class="form-input-label">实名认证</div>
@@ -52,7 +53,7 @@
                                 </div>
                             </a>
   
-                            <a class="a-btn" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</a>
+                            <!-- <a class="a-btn" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新个人资料</a> -->
                         </div>
                 
                     </form>
@@ -72,11 +73,11 @@ jQuery(document).ready(function($) {
                 data: formData,
                 success: function(data, textStatus, jqXHR){
                     $.alerts(data.data.info)
-                    if(data.success){
-                        if(data.data.url){
-                            window.location.href=data.data.url
-                        }
-                    }
+                    // if(data.success){
+                    //     if(data.data.url){
+                    //         window.location.href=data.data.url
+                    //     }
+                    // }
                     return false;
                 }
             });

@@ -26,7 +26,7 @@
                 if(leavePage && leavePage['match_id']===jQuery.Request('match_id') && leavePage['project_id']===jQuery.Request('project_id') && leavePage['match_more']===jQuery.Request('match_more')){
                     var leveTimes=parseInt(leavePage['leavePage'])
                     if(leveTimes>0 && leveTimes<3){
-                        jQuery.alerts('第'+leveTimes+'次离开考试页面,超过2次自动提交答题')
+                        jQuery.alerts('第'+leveTimes+'次离开考试页面,到达2次自动提交答题')
                     }
                     if(leveTimes>2){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
