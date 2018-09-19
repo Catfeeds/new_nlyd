@@ -58,6 +58,7 @@ jQuery(function($) {
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
+    breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>;//程序获取时间
     showTime=function(){  
@@ -237,7 +238,7 @@ jQuery(function($) {
     }
     function getNewline(val) {
         var str = new String(val); 
-        if(str.length>25){
+        if(str.length>breakRow){
             var bytesCount = 0;  
             var s="";
             for (var i = 0 ,n = str.length; i < n; i++) { 
@@ -245,7 +246,7 @@ jQuery(function($) {
                 //统计字符串的字符长度
                 bytesCount += 1;  
                 s += str.charAt(i);
-                if(bytesCount>=25){  
+                if(bytesCount>=breakRow){  
                     s = s + '</br>';
                     //重置
                     bytesCount=0;
