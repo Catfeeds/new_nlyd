@@ -1407,15 +1407,16 @@ class Student_Matchs extends Student_Home
         }else{
             $where = " WHERE b.match_id = {$_GET['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score , SUM(x.surplus_time) surplus_time
                     FROM (
-                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score
+                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score, MAX(surplus_time) surplus_time
                             FROM `{$wpdb->prefix}order` a 
                             LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
                             {$where}  
                             GROUP BY b.user_id,b.project_id 
                             ) x 
-                    GROUP BY x.user_id ORDER BY my_score DESC limit 0,10 ";
+                    GROUP BY x.user_id ORDER BY my_score DESC,surplus_time DESC  limit 0,10 ";
+            //print_r($sql);
             /*if($current_user->ID == 66){
                 print_r($sql);
             }*/
