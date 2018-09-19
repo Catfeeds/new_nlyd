@@ -127,6 +127,16 @@ jQuery(function($) {
             var pos = Math.round(Math.random() * (arr.length - 1));
             return arr[pos];
     }
+    function randZF5_1() {//生成随即字符
+            var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
+            var pos = Math.round(Math.random() * (arr.length - 6));
+            var newArr=[]
+            for(var i=0;i<5;i++){
+                newArr.push(arr[pos+i])
+            }
+            var newPos = Math.round(Math.random() * (newArr.length - 1));
+            return newArr[newPos]
+    }       
     function pushHZ(string) {
         var arr=[];
         var len=string.length;
@@ -151,7 +161,7 @@ jQuery(function($) {
         return x;
     }
     function compare(old) {//比较字符是否相同
-        var newStr=randZF();
+        var newStr=randZF5_1();
         var oldStr=old
         if(oldStr==newStr){
             return compare(oldStr)
@@ -162,18 +172,18 @@ jQuery(function($) {
     function levels(data,level,arrIndex,str,select) {
         var randIndex1 = Math.round(Math.random() * (arrIndex.length - 1));//随机取一个下标
         var arrtext=arrIndex[randIndex1]
-        var newArrIndex=[];
-        for(var i in arrIndex){
-            if(arrIndex[i]!=arrtext){
-                newArrIndex.push(arrIndex[i])
-            }
-        }
+        // var newArrIndex=[];
+        // for(var i in arrIndex){//去除已选中下标
+        //     if(arrIndex[i]!=arrtext){
+        //         newArrIndex.push(arrIndex[i])
+        //     }
+        // }
         var oldStr1=data.slice(arrtext,arrtext+1);
         var newStr1=compare(oldStr1);
         var newStrs= str.substring(0,arrtext) + newStr1 + str.substring(arrtext+1,data.length)
         
         if(level>0){
-            levels(data,level-1,newArrIndex,newStrs,select)
+            levels(data,level-1,arrIndex,newStrs,select)
         }else{
             select.push(newStrs)
         }
@@ -188,7 +198,9 @@ jQuery(function($) {
         var select=[];
         var checkIndex=[];//存储已选中下标，进行排除
         for(var k=0; k<len ; k++){
-            if(data.charCodeAt(k)<=255){
+            var code=data.charAt(k)
+            var reg=/^[\u4e00-\u9fa5]+$/;
+            if(!reg.test(code)){//如果不是汉字
                 checkIndex.push(k)
             }
         }
@@ -220,7 +232,6 @@ jQuery(function($) {
             select.splice(arr[randIndex], 0,right); //随机插入
             var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
-            console.log(ajaxData)
             var sessionData={
                 ajaxData:ajaxData,
                 match_id:$.Request('match_id'),
@@ -413,17 +424,5 @@ layui.use('layer', function(){
             
     });
 });
-    // var height= $('.matching-fastScan').height();
-    // var marginTop=height / 2;
-    // var top=$('.detail-content-wrapper').height() / 2;
-    // if(top>marginTop+50){
-    //     $('.matching-fastScan').css({
-    //         'margin-top':-marginTop+'px',
-    //         'top':top+'px',
-    //         'position': 'absolute',
-    //         'left': '5%',
-    //         'padding-top':'0',
-    //     })
-    // }
 })
 </script>

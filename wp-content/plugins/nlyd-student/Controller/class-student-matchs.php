@@ -351,12 +351,17 @@ class Student_Matchs extends Student_Home
         //print_r($project);
 
         //获取报名选手列表
-        $sql2 = "select SQL_CALC_FOUND_ROWS id,user_id,created_time from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and (pay_status=2 or pay_status=3 or pay_status=4) order by id desc limit 0,10";
+        $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
+                  from {$wpdb->prefix}order a
+                  right join {$wpdb->prefix}users b on a.user_id = b.ID
+                  where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
+                  order by a.id desc limit 0,10";
+        //var_dump($sql2);
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $order_total = $total['total'] > 0 ? $total['total'] : 0;
         if (!empty($orders)){
-            //print_r($orders);
+            //var_dump($orders);
             foreach ($orders as $k => $v){
                 $user = get_user_meta($v['user_id']);
                 $orders[$k]['nickname'] = $user['nickname'][0];
@@ -371,6 +376,7 @@ class Student_Matchs extends Student_Home
                 }
             }
         }
+
         if($match['is_me'] == 'y' && $match['match_status'] == -2){
             $start = reset($this->project_order_array);
             //print_r($this->project_order_array);
@@ -440,8 +446,8 @@ class Student_Matchs extends Student_Home
 
 
 
-        //print_r($this->next_project);
-       // print_r($this->current_project);
+        /*print_r($this->next_project);
+        print_r($this->current_project);*/
 
 
         //获取本轮比赛答案是否提交
@@ -471,7 +477,7 @@ class Student_Matchs extends Student_Home
         //未进入比赛缓冲时间设置
         $buffer_time = get_time()-$this->current_project['project_start_time'];
 
-        if(10 <= $buffer_time && $buffer_time <= 90 && empty($row['answer_status'])){
+        if(10 <= $buffer_time && $buffer_time <= 60 && empty($row['answer_status'])){
 
             $data['buffer_time'] = true;
             $data['buffer_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$this->current_project['match_more']);
@@ -1393,32 +1399,20 @@ class Student_Matchs extends Student_Home
 
             $title = $this->match_title;
         }else{
-            $where = " WHERE a.match_id = {$_GET['match_id']} AND a.pay_status = 4 ";
-            /*//判断是否存在分类id
-            if(!empty($_GET['category_id'])){
+            $where = " WHERE b.match_id = {$_GET['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
 
-                //获取当前分类下项目
-                $sql_ = "select ID from {$wpdb->prefix}posts where post_parent = {$_GET['category_id']}";
-                $match_category = $wpdb->get_results($sql_,ARRAY_A);
-                if(!empty($match_category)){
-                    $project_id = arr2str(array_column($match_category,'ID'));
-                    $where .= " and project_id in ({$project_id}) ";
-                }
-            }
-
-            if(!empty($_GET['project_id'])){
-                $where .= " and project_id = {$_GET['project_id']} ";
-            }
-
-            $sql = "select SQL_CALC_FOUND_ROWS a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
-            print_r($sql);*/
-
-            $sql = "SELECT SQL_CALC_FOUND_ROWS a.user_id ,SUM(b.my_score) my_score
-                    FROM `{$wpdb->prefix}order` a 
-                    LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
-                    {$where}
-                    GROUP BY a.user_id ORDER BY my_score DESC limit 0,10";
-            //print_r($sql);
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score 
+                    FROM (
+                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score
+                            FROM `{$wpdb->prefix}order` a 
+                            LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
+                            {$where}  
+                            GROUP BY b.user_id,b.project_id 
+                            ) x 
+                    GROUP BY x.user_id ORDER BY my_score DESC limit 0,10 ";
+            /*if($current_user->ID == 66){
+                print_r($sql);
+            }*/
             $rows = $wpdb->get_results($sql,ARRAY_A);
             //var_dump($rows);
             $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -1446,10 +1440,10 @@ class Student_Matchs extends Student_Home
                                 $group = '老年组';
                                 break;
                             case $age > 17:
-                                $group = '成人组';
+                                $group = '成年组';
                                 break;
                             case $age > 12:
-                                $group = '少儿组';
+                                $group = '少年组';
                                 break;
                             default:
                                 $group = '儿童组';
