@@ -2654,9 +2654,7 @@ class Student_Ajax
         }
 
 
-
         global $wpdb;
-
 
         if($bindType == 'code'){
             $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=""');
@@ -2672,7 +2670,7 @@ class Student_Ajax
             $user_id = $_POST['user_id'];
         }else{
             $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
-            //账号绑定
+            //账号直接登录, 不绑定微信
             //判断用户是否存在
             if($user){
                 $check = wp_check_password($_POST['password'],$user->user_pass);
@@ -2680,8 +2678,13 @@ class Student_Ajax
             }else{
                 wp_send_json_error(array('info'=>'该用户不存在'));
             }
-            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
+
+//            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
+            update_user_meta($user_id,'user_session_id',session_id());
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
+            wp_send_json_success(['info' => '登录成功']);
         }
 
 
