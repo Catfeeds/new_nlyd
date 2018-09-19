@@ -100,7 +100,7 @@ p.match-name{
 }
 .a-btn.back{
     position: relative;
-    top: 0;
+    top: -22px;
     margin-top: 15px;
     border: 1px solid #2484FE;
     color: #2484FE;

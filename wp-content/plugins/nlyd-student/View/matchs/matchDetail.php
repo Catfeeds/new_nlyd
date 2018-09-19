@@ -104,6 +104,10 @@
                         <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>">报名参赛</a>
                         <?php endif; ?>
                         <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
+                            <!-- <div class="a-btn two get_footer">
+                                <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                                <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
+                            </div> -->
                             <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
                         <?php endif;?>
                         <?php if($match['match_status'] == -3):?>

@@ -162,9 +162,9 @@ class Student_Ajax
             //print_r($where);
             //$sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time
                     FROM (
-                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score
+                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score, MAX(surplus_time) surplus_time
                             FROM `{$wpdb->prefix}order` a 
                             LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
                             {$where} 
@@ -172,7 +172,7 @@ class Student_Ajax
                             ) x 
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
                     {$age_where}
-                    GROUP BY x.user_id ORDER BY my_score DESC limit {$start},{$pageSize} ";
+                    GROUP BY x.user_id ORDER BY my_score DESC,surplus_time DESC  limit {$start},{$pageSize} ";
 
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -363,7 +363,7 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                //$a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
                 //var_dump($a);die;
                 break;
             default:

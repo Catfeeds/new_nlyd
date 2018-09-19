@@ -67,7 +67,6 @@ if(!class_exists('StudentController')){
 
             add_action('wp_head',array($this,'is_abnormal_login'));
 
-
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
         }

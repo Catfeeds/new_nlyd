@@ -400,7 +400,7 @@ layui.use('layer', function(){
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
                 ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: ['提交', '按错了', ]
+                ,btn: [ '按错了','提交',]
                 ,success: function(layero, index){
                     stop=true;
                 },
@@ -410,10 +410,11 @@ layui.use('layer', function(){
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
-                    submit(time,1);
                     stop=false;
                 }
                 ,btn2: function(index, layero){
+                    layer.closeAll();
+                    submit(time,1);
                     stop=false;
                 }
                 ,closeBtn:2

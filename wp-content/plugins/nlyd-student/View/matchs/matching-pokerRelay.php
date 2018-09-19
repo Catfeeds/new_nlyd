@@ -154,17 +154,16 @@ mTouch('body').on('tap','#sumbit',function(e){
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
             ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-            ,btn: ['提交', '按错了', ]
+            ,btn: [ '按错了', '提交',]
             ,success: function(layero, index){
             }
             ,yes: function(index, layero){
                 layer.closeAll();
-                setTimeout(function() {
-                    submit(time,1)
-                }, 1000);
             }
             ,btn2: function(index, layero){
                 //按钮【按钮二】的回调
+                layer.closeAll();
+                submit(time,1)
             }
             ,closeBtn:2
             ,btnAagn: 'c' //按钮居中
