@@ -2239,7 +2239,7 @@ class Student_Ajax
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
                     //jsapi支付需要一个单独的页面获取openid
-                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'])];
+                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id'])];
 
 //                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
 //                    $params['open_id'] =$current_user->weChat_openid;
