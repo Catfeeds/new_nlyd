@@ -294,7 +294,8 @@ jQuery(function($) {
                                             action:'pay',
                                             pay_type:pay_type,
                                             _wpnonce:$('#inputPay').val(),
-                                            serialnumber:serialnumber
+                                            serialnumber:serialnumber,
+                                            match_id:$.Request('match_id')
                                         }
                                         // alert(pay_type)
                                         if(pay_type){
@@ -329,7 +330,7 @@ jQuery(function($) {
                         }else{
                             if(res.data.info=="请先实名认证"){
                                 setTimeout(function(){
-                                    window.location.href=window.home_url+'/account/info/';
+                                    window.location.href=window.home_url+'/account/certification/match_id/'+$.Request('match_id');
                                 }, 1000);
                             }else{
                                 $.alerts(res.data.info)
