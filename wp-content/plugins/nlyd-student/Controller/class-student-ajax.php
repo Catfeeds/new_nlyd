@@ -2254,7 +2254,6 @@ class Student_Ajax
                     $result = $wxpay->payClass->h5UnifiedOrder($params);
                 }
 
-
                 break;
             case 'alipay':
 
@@ -2668,7 +2667,9 @@ class Student_Ajax
         }
 
 
+
         global $wpdb;
+
 
         if($bindType == 'code'){
             $user = $wpdb->get_row('SELECT ID,user_pass FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'") AND weChat_openid!=""');
@@ -2684,7 +2685,7 @@ class Student_Ajax
             $user_id = $_POST['user_id'];
         }else{
             $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
-            //账号直接登录, 不绑定微信
+            //账号绑定
             //判断用户是否存在
             if($user){
                 $check = wp_check_password($_POST['password'],$user->user_pass);
@@ -2705,7 +2706,6 @@ class Student_Ajax
         $mobile = $_POST['mobile'];
         $access_token = $_POST['access'];
         $open_id = $_POST['open'];
-
         require_once 'class-student-weixin.php';
         $weiLogin = new Student_Weixin();
         $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type,$bindType);
