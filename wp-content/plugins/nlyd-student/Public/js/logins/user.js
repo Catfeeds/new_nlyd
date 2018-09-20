@@ -8,6 +8,7 @@ jQuery(function($) {
     if(parseInt(window.innerWidth)<=1199){
         initHeight();//手机端最小高度为屏幕高度
     }
+function goCenter(){
     var height= $('.login_zoo').height();
     var marginTop=height / 2;
     var top=$('.wrapper_content').height() / 2;
@@ -19,7 +20,15 @@ jQuery(function($) {
             'position': 'absolute',
             'left': '0',
         })
+    }else{
+        $('.login_zoo').css({
+            'position': 'relative',
+            'margin-top':0,
+            'top':0,
+        })
     }
+}
+goCenter()
         sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
@@ -79,6 +88,7 @@ jQuery(function($) {
                 $('.nl-transform .login_icon.phone_blue').removeClass('phone_blue').addClass('phone_white')
                 $('.nl-transform .login_icon.lock_blue').removeClass('lock_blue').addClass('lock_white')
                 $('.nl-transform .login_icon.user_blue').removeClass('user_blue').addClass('user_white')
+                goCenter()
             });
         });
 
@@ -166,6 +176,7 @@ jQuery(function($) {
             $('.formName').text('手机快速登录')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
+            goCenter()
         })
         $('.login-by-psw').click(function(){//密码登录
             $('#loginFormFast')[0].reset();//重置表单
@@ -175,6 +186,7 @@ jQuery(function($) {
             $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
             $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
             $('.formName').text('手机快速登录')
+            goCenter()
         })
         
         $('.login-by-reset').click(function(){//忘记密码
@@ -185,6 +197,7 @@ jQuery(function($) {
             $('.formName').text('重置密码')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
+            goCenter()
         })
         
         $('.login-fast').click(function(){//注册tab页返回快速登录
@@ -196,7 +209,7 @@ jQuery(function($) {
             $('.formName').text('手机快速登录')
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
-
+            goCenter()
             //tabs切换
             $('.layui-tab-title li').eq(0).click()
         })

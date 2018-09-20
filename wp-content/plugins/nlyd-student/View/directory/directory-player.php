@@ -68,7 +68,7 @@ jQuery(function($) {
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var real_name=value.real_name ? value.real_name :'-';
-                                var user_id=value.user_id ? value.user_id :'-';
+                                var userID=value.userID ? value.userID :'-';
                                 var sex=value.sex ? value.sex :'-';
                                 var category_name=value.category_name ? value.category_name :'-';
                                 var level=value.level ? value.level :'-';
@@ -82,7 +82,7 @@ jQuery(function($) {
                                                 +'</div>'
                                             +'</td>'
                                             +'<td><div class="table_content">'+real_name+'</div></td>'
-                                            +'<td><div class="table_content">'+user_id+'</div></td>'
+                                            +'<td><div class="table_content">'+userID+'</div></td>'
                                             +'<td><div class="table_content">'+sex+'</div></td>'
                                             +'<td><div class="table_content">'+category_name+'</div></td>'
                                             +'<td><div class="table_content">'+level+'</div></td>'

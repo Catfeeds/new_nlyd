@@ -50,10 +50,11 @@ jQuery(function($) {
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
-    showHZ=5,//每5道题添加一个汉字
+    showHZ=6,//每5道题添加一个汉字
     itemAdd=2,//每隔itemAdd道题itemLen++
-    nandu=0,//难度系数，越小越难,有几个不同字符
-    nanduLen=3,//每nanduLen题nandu++
+    nandu=0,//难度系数，越小越难,有几个不同字符（可变项）
+    // nanduMax=4,//替换项的上线
+    nanduLen=6,//每nanduLen题nandu++
     stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
@@ -79,6 +80,7 @@ jQuery(function($) {
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }
+                
                 if(ajaxData.length%nanduLen==0){
                     nandu++
                 }
@@ -201,7 +203,7 @@ jQuery(function($) {
             var code=data.charAt(k)
             var reg=/^[\u4e00-\u9fa5]+$/;
             if(!reg.test(code)){//如果不是汉字
-                checkIndex.push(k)
+                checkIndex.push(k)   
             }
         }
         for(var i=0;i<total;i++){
@@ -299,10 +301,13 @@ jQuery(function($) {
 
     }
 
-
-    mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
-        var _this=$(this);
-        var isFalse=true;
+$('#selectWrapper .fastScan-item').each(function(){
+    // mTouch('#selectWrapper').on('tap','.fastScan-item',function(){
+    var _this=$(this)
+    new AlloyFinger(_this[0], {
+        tap: function () {
+            // var _this=$(this);
+            var isFalse=true;
             if(!_this.hasClass('noClick')){
                 var text=_this.text()
                 ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
@@ -329,8 +334,9 @@ jQuery(function($) {
                 }, 300);
                 clearTimeout(timer);
             }
-        
+        }
     })
+})
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
             isSubmit=true;
@@ -391,7 +397,9 @@ jQuery(function($) {
         }
     });
 layui.use('layer', function(){
-    mTouch('body').on('tap','#sumbit',function(e){
+    // mTouch('body').on('tap','#sumbit',function(e){
+    new AlloyFinger($('#sumbit')[0], {
+    tap:function(){
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1
@@ -422,7 +430,7 @@ layui.use('layer', function(){
                 ,shade: 0.3 //遮罩
                 ,isOutAnim:true//关闭动画
             });
-            
+        }
     });
 });
 })

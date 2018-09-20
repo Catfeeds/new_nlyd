@@ -85,7 +85,6 @@
                 if (target === currentTarget) {
                     //处理（执行）事件回调列表
                     this._execHandler(handlerList, eventType, target, event, true);
-
                     return; //已冒泡至顶，无需再冒泡
                 }
 
@@ -468,7 +467,6 @@
                 if (!el._m_touch_events[eventList.DOUBLE_TAP] || !el._m_touch_events[eventList.DOUBLE_TAP].length) {
                     triggerSingleTap(event);
                     lastTouchTime = now;
-
                     //如果距离上一次触屏的时长大于双击延时时长，延迟触发单击事件
                 } else if (now - lastTouchTime > config.doubleTapDelay) {
                     tapTimer = setTimeout(function() {
@@ -476,7 +474,6 @@
                     }, config.doubleTapDelay);
 
                     lastTouchTime = now;
-
                     //如果距离上一次触屏的时长在双击延时时长内
                     //则清除单击事件计时器，并触发双击事件
                 } else {
