@@ -1,3 +1,6 @@
+*{
+    touch-action: manipulation;
+}
 .nl-dark-blue{
     color: #4394F9;
 }

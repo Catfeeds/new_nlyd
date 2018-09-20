@@ -129,8 +129,12 @@ if(!class_exists('MatchController')){
                 $role = 'question_import';//权限名
                 $wp_roles->add_cap('administrator', $role);
 
+                $role = 'teams_import';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
             }
             add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'question_import', 'question_import', array($this,'questionImport') );
+            add_submenu_page( 'edit.php?post_type=question', '战队导入', '战队导入', 'teams_import', 'question_import', array($this,'questionImport') );
 
         }
 

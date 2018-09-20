@@ -93,3 +93,6 @@
 .matching-keyboard-row .matching-key:first-child{
     margin-left: 0;
 }
+.display_none{
+    display: none;
+}

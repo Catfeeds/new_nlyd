@@ -170,16 +170,20 @@ jQuery(function($) {
 
         }, 1000);
     }
-        mTouch('body').on('tap','.number',function(e){
+        // mTouch('body').on('tap','.number',function(e){
+$('.number').each(function(){
+    var _this=$(this)
+    new AlloyFinger(_this[0], {
+        tap: function () {
             var _this=$(this);
             if(!_this.hasClass('disabled')){
-            var flag=false;
-            $('.rand').each(function(){//所有数字按钮都已使用后
-                if(!$(this).hasClass('disabled')){
-                    flag=true;
-                    return false;
-                }
-            })
+                var flag=false;
+                $('.rand').each(function(){//所有数字按钮都已使用后
+                    if(!$(this).hasClass('disabled')){
+                        flag=true;
+                        return false;
+                    }
+                })
                 var number=_this.text();
                 var text=$('.answer').text()
                 // if(text=="本题无解"){
@@ -283,11 +287,26 @@ jQuery(function($) {
                         }
                     }
             }
-        });
-    // })
+        }
+    });
+})
     //删除tap事件
-    mTouch('body').on('tap','#del',function(e){
-        var _this=$(this);
+    // mTouch('body').on('tap','#del',function(e){
+new AlloyFinger($('#del')[0], {
+    touchStart: function () {
+        $('#del').addClass("opacity");
+    },
+    touchMove: function () {
+        $('#del').removeClass("opacity");
+    },
+    touchEnd: function () {
+        $('#del').removeClass("opacity");
+    },
+    touchCancel: function () {
+        $('#del').removeClass("opacity");
+    },
+    tap:function(e){
+        var _this=$('#del');
         // if(!_this.hasClass('disabled')){
         //     _this.addClass('disabled')
             var text=$('.answer').text()
@@ -317,23 +336,25 @@ jQuery(function($) {
                     }
                 // }
                 $('.answer').text(news)
-                _this.stop(true).animate({
-                    'opacity':'0.6',
-                    'filter': 'alpha(opacity=60)',
-                },50).animate({
-                    'opacity':'1',
-                    'filter': 'alpha(opacity=100)',
-                },50)
+                // _this.stop(true).animate({
+                //     'opacity':'0.6',
+                //     'filter': 'alpha(opacity=60)',
+                // },50).animate({
+                //     'opacity':'1',
+                //     'filter': 'alpha(opacity=100)',
+                // },50)
             }
             // else{
             //     _this.removeClass('disabled')
             // }
-        // }
+        }
     });
     //下一题tap事件
-    mTouch('body').on('tap','#next',function(e){
+    // mTouch('body').on('tap','#next',function(e){
+new AlloyFinger($('#next')[0], {
+    tap:function(e){
         $.DelSession('leavePage')
-        var _this=$(this);
+        var _this=$('#next');
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
             var text=$('.answer').text()
@@ -415,9 +436,12 @@ jQuery(function($) {
                 });
             }
         }
-    });
+    }
+});
     layui.use('layer', function(){
-        mTouch('body').on('tap','#sumbit',function(e){
+        // mTouch('body').on('tap','#sumbit',function(e){
+    new AlloyFinger($('#sumbit')[0], {
+        tap:function(){
             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                     type: 1
@@ -444,7 +468,7 @@ jQuery(function($) {
                     ,shade: 0.3 //遮罩
                     ,isOutAnim:true//关闭动画
                 });
-                
+            }
         });
     });
 

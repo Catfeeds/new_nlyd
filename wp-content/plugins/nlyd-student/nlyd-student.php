@@ -214,6 +214,10 @@ if(!class_exists('StudentController')){
             //手势操作
             wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-mTouch' );
+            // wp_register_script( 'student-fastclick',student_js_url.'Mobile/fastclick.js',array('jquery'), leo_student_version  );
+            // wp_enqueue_script( 'student-fastclick' );
+            wp_register_script( 'student-alloy_finger',student_js_url.'Mobile/alloy_finger.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-alloy_finger' );
             //引入layui
             wp_register_script( 'student-layui',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-layui' );

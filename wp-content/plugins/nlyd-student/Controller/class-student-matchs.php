@@ -1405,18 +1405,22 @@ class Student_Matchs extends Student_Home
 
             $title = $this->match_title;
         }else{
-            $where = " WHERE b.match_id = {$_GET['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score , SUM(x.surplus_time) surplus_time
-                    FROM (
-                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score, MAX(surplus_time) surplus_time
-                            FROM `{$wpdb->prefix}order` a 
-                            LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
-                            {$where}  
-                            GROUP BY b.user_id,b.project_id 
-                            ) x 
-                    GROUP BY x.user_id ORDER BY my_score DESC,surplus_time DESC  limit 0,10 ";
-            //print_r($sql);
+            $where = " WHERE a.match_id = {$_GET['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
+
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
+                    FROM(
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
+                        FROM `zlin_order` a 
+                        LEFT JOIN zlin_match_questions c ON a.user_id = c.user_id  and c.match_id = {$_GET['match_id']} 
+                        #where a.match_id = 56329
+                        {$where}
+                        GROUP BY user_id,project_id
+                    ) x
+                    GROUP BY user_id
+                    ORDER BY my_score DESC,surplus_time DESC
+                    limit 0,10
+                    ";
             /*if($current_user->ID == 66){
                 print_r($sql);
             }*/
