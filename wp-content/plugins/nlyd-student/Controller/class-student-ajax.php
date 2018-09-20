@@ -121,8 +121,9 @@ class Student_Ajax
             $rows = $wpdb->get_results($sql,ARRAY_A);
         }else{
 
-            $where = " WHERE b.match_id = {$_POST['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
+            $where = " WHERE a.match_id = {$_POST['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
             $age_where = '';
+            $left_where = '';
             //判断是否存在分类id
             if(!empty($_POST['category_id'])){
                 //获取当前分类下项目
@@ -130,11 +131,11 @@ class Student_Ajax
                 $category = $wpdb->get_results($sql_,ARRAY_A);
                 if(!empty($category)){
                     $project_id = arr2str(array_column($category,'ID'));
-                    $where .= " and b.project_id in ({$project_id}) ";
+                    $left_where .= " and c.project_id in ({$project_id}) ";
                 }
             }
             if(!empty($_POST['project_id'])){
-                $where .= " and b.project_id = {$_POST['project_id']} ";
+                $left_where .= " and c.project_id = {$_POST['project_id']} ";
             }
 
             if(!empty($_POST['age_group'])){
@@ -159,21 +160,26 @@ class Student_Ajax
             if(!empty($_POST['match_more'])){
                 $where .= " and b.match_more = {$_POST['match_more']} ";
             }
-            //print_r($where);
-            //$sql = "select a.user_id,SUM(a.score) my_score from (select user_id,project_id,match_more,surplus_time,MAX(my_score) score from {$wpdb->prefix}match_questions {$where} GROUP BY user_id,project_id) a GROUP BY user_id order by my_score desc limit {$start},{$pageSize} ";
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time
-                    FROM (
-                            SELECT b.user_id ,b.project_id,MAX(b.my_score) my_score, MAX(surplus_time) surplus_time
-                            FROM `{$wpdb->prefix}order` a 
-                            LEFT JOIN `{$wpdb->prefix}match_questions` b ON a.user_id = b.user_id
-                            {$where} 
-                            GROUP BY b.user_id,b.project_id 
-                            ) x 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
+                    FROM(
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
+                        FROM `zlin_order` a 
+                        LEFT JOIN zlin_match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
+                        #where a.match_id = 56329
+                        {$where}
+                        GROUP BY user_id,project_id
+                    ) x
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
                     {$age_where}
-                    GROUP BY x.user_id ORDER BY my_score DESC,surplus_time DESC  limit {$start},{$pageSize} ";
+                    GROUP BY user_id
+                    ORDER BY my_score DESC,surplus_time DESC
+                    limit {$start},{$pageSize}
+                    ";
 
+            /*if($current_user->ID == 66){
+                print_r($sql);
+            }*/
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
             //print_r($rows);
