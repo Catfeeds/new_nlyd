@@ -367,26 +367,82 @@ jQuery(function($) {
         $('#total').text(ajaxData.length)
         $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
-    mTouch('body').on('tap','.number',function(){
-        var _this=$(this);
-        var number=_this.attr('date-number');
-        var text=$('.answer').text()
-        if(text.length<21){
-            $('.answer').text(text+number)
-            _this.stop(true).animate({
-                'opacity':'0.6',
-                'filter': 'alpha(opacity=60)',
-            },50).animate({
-                'opacity':'1',
-                'filter': 'alpha(opacity=100)',
-            },50)
-        }
+    // mTouch('body').on('tap','.number',function(){
+    //     var _this=$(this);
+    //     var number=_this.attr('date-number');
+    //     var text=$('.answer').text()
+    //     if(text.length<21){
+    //         $('.answer').text(text+number)
+    //         _this.stop(true).animate({
+    //             'opacity':'0.6',
+    //             'filter': 'alpha(opacity=60)',
+    //         },50).animate({
+    //             'opacity':'1',
+    //             'filter': 'alpha(opacity=100)',
+    //         },50)
+    //     }
+
+    // })
+
+    $('.number').each(function(e){//数字键盘
+        var _this=$(this)
+        new AlloyFinger(_this[0], {
+                touchStart: function () {
+                    _this.addClass("opacity");
+                },
+                touchMove: function () {
+                    _this.removeClass("opacity");
+                },
+                touchEnd: function () {
+                    _this.removeClass("opacity");
+                },
+                touchCancel: function () {
+                    _this.removeClass("opacity");
+                },
+                tap: function () {
+                    var number=_this.attr('date-number');
+                    var text=$('.answer').text()
+                    if(text.length<21){
+                        $('.answer').text(text+number)
+                    }
+                }
+            })
 
     })
-    mTouch('body').on('tap','#del',function(){
-        var _this=$(this);
-        // if(!_this.hasClass('disabled')){
-        //     _this.addClass('disabled')
+
+
+    // mTouch('body').on('tap','#del',function(){
+    //     var _this=$(this);
+    //     var text=$('.answer').text()
+    //     var len=text.length;
+    //     if(len>0){
+    //         var news=text.substring(0,len-1)
+    //         $('.answer').text(news)
+    //         _this.stop(true).animate({
+    //             'opacity':'0.6',
+    //             'filter': 'alpha(opacity=60)',
+    //         },50).animate({
+    //             'opacity':'1',
+    //             'filter': 'alpha(opacity=100)',
+    //         },50)
+    //     }
+    // })
+
+    new AlloyFinger($('#del')[0], {//删除
+        touchStart: function () {
+            $('#del').addClass("opacity");
+        },
+        touchMove: function () {
+            $('#del').removeClass("opacity");
+        },
+        touchEnd: function () {
+            $('#del').removeClass("opacity");
+        },
+        touchCancel: function () {
+            $('#del').removeClass("opacity");
+        },
+        tap: function () {
+            var _this=$('#del');
             var text=$('.answer').text()
             var len=text.length;
             if(len>0){
@@ -400,71 +456,71 @@ jQuery(function($) {
                     'filter': 'alpha(opacity=100)',
                 },50)
             }
-            // else{
-            //     _this.removeClass('disabled')
-            // }
-        // }
-    })
+        }
+    });
     //下一题tap事件
-    mTouch('body').on('tap','#next',function(e){
-        var _this=$(this)
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            nextBtn_click++
-            if (type=='乘除运算') {
-                if(nextBtn_click%cx_interval_times==0){//难度控制
-                    level.symbol=1
-                    level.number++
-                    if(level.number>4){
-                        level.number=4
-                    }
-                }
-            }else{
-                if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
-                    level.symbol++
-                    if(level.symbol>4){
+    // mTouch('body').on('tap','#next',function(e){
+    new AlloyFinger($('#next')[0], {
+        tap: function () {
+            var _this=$('#next')
+            if(!_this.hasClass('disabled')){
+                _this.addClass('disabled')
+                nextBtn_click++
+                if (type=='乘除运算') {
+                    if(nextBtn_click%cx_interval_times==0){//难度控制
+                        level.symbol=1
                         level.number++
                         if(level.number>4){
-                            level.symbol=4
-                        }else{
-                            level.symbol=1
+                            level.number=4
+                        }
+                    }
+                }else{
+                    if(nextBtn_click%add_interval_times==0){//难度控制，每点三次，数字长度加1
+                        level.symbol++
+                        if(level.symbol>4){
+                            level.number++
+                            if(level.number>4){
+                                level.symbol=4
+                            }else{
+                                level.symbol=1
+                            }
                         }
                     }
                 }
-            }
-            var thisAjaxRow=ajaxData[ajaxData.length-1]
-            var yours=$('#answer').text()
-            var flag=true;
-            if(yours.length>0){
-                for(var i=0;i< yours.length;i++){
-                    if(yours.charAt(i)=="-"){
-                        if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
-                            flag=false;
-                            break;
+                var thisAjaxRow=ajaxData[ajaxData.length-1]
+                var yours=$('#answer').text()
+                var flag=true;
+                if(yours.length>0){
+                    for(var i=0;i< yours.length;i++){
+                        if(yours.charAt(i)=="-"){
+                            if(i!=0 || yours.length==1){//-是否出现在第一个或者出现-号长度为1
+                                flag=false;
+                                break;
+                            }
                         }
+                    } 
+                    
+                }
+                thisAjaxRow['yours']=yours;
+                if(flag){//符合parseInt函数
+                    if(parseInt(yours)==thisAjaxRow['rights']){
+                        thisAjaxRow['isRight']=true;
+                        $('#answer').removeClass('answer').addClass('right-fast')
+                    }else{
+                        thisAjaxRow['isRight']=false;
+                        $('#answer').removeClass('answer').addClass('error-fast')
                     }
-                } 
-                
-            }
-            thisAjaxRow['yours']=yours;
-            if(flag){//符合parseInt函数
-                if(parseInt(yours)==thisAjaxRow['rights']){
-                    thisAjaxRow['isRight']=true;
-                    $('#answer').removeClass('answer').addClass('right-fast')
                 }else{
                     thisAjaxRow['isRight']=false;
                     $('#answer').removeClass('answer').addClass('error-fast')
                 }
-            }else{
-                thisAjaxRow['isRight']=false;
-                $('#answer').removeClass('answer').addClass('error-fast')
+                setTimeout(function() {
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                    inItFastCalculation(level,type);
+                    nextQuestion()
+                    _this.removeClass('disabled')
+                }, 300);
             }
-            setTimeout(function() {
-                $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
-                inItFastCalculation(level,type);
-                nextQuestion()
-                _this.removeClass('disabled')
-            }, 300);
         }
         
     });
@@ -529,39 +585,41 @@ jQuery(function($) {
         }
     });  
 layui.use('layer', function(){
-    mTouch('body').on('tap','#sumbit',function(e){
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        layer.open({
-            type: 1
-            ,maxWidth:300
-            ,title: '提示' //不显示标题栏
-            ,skin:'nl-box-skin'
-            ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-            ,btn: [ '按错了','提交', ]
-            ,success: function(layero, index){
-            }
-            ,yes: function(index, layero){
-                layer.closeAll();
-            }
-            ,btn2: function(index, layero){
-                var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
-                thisAjaxRow['yours']=yours;
-                if(yours==thisAjaxRow['rights']){
-                    thisAjaxRow['isRight']=true;
-                }else{
-                    thisAjaxRow['isRight']=false;
+    // mTouch('body').on('tap','#sumbit',function(e){
+    new AlloyFinger($('#sumbit')[0], {
+        tap:function(){
+            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '提示' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                ,btn: [ '按错了','提交', ]
+                ,success: function(layero, index){
                 }
-                layer.closeAll();
-                submit(time,1);
-            }
-            ,closeBtn:2
-            ,btnAagn: 'c' //按钮居中
-            ,shade: 0.3 //遮罩
-            ,isOutAnim:true//关闭动画
-        });
-            
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    var thisAjaxRow=ajaxData[ajaxData.length-1]
+                    var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
+                    thisAjaxRow['yours']=yours;
+                    if(yours==thisAjaxRow['rights']){
+                        thisAjaxRow['isRight']=true;
+                    }else{
+                        thisAjaxRow['isRight']=false;
+                    }
+                    layer.closeAll();
+                    submit(time,1);
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
     });
 });
 

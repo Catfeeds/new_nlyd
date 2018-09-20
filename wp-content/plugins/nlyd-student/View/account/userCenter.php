@@ -178,7 +178,7 @@
     </div>
 </div>
 <script>
-
+jQuery(document).ready(function($) {
 layui.use('layer', function(){ //独立版的layer无需执行这一句
     <?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
     layer.open({
@@ -235,7 +235,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
       });
       <?php endif;?>
 });
-jQuery(document).ready(function($) {
+
     if(parseInt(window.innerWidth)<=1199) {
         var window_height=$(window).height();
         var height=window_height+'px'

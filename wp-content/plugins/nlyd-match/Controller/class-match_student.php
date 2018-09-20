@@ -57,49 +57,49 @@ class Match_student {
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-报名学员</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-比赛成绩</h1>
 
             <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
             <hr class="wp-header-end">
 
-<!--            <h2 class="screen-reader-text">过滤用户列表</h2>-->
-<!--            <ul class="subsubsub">-->
-<!--                <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（28）</span></a> |</li>-->
-<!--                <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>-->
-<!--                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（20）</span></a> |</li>-->
-<!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（7）</span></a></li>-->
-<!--            </ul>-->
+            <!--            <h2 class="screen-reader-text">过滤用户列表</h2>-->
+            <!--            <ul class="subsubsub">-->
+            <!--                <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（28）</span></a> |</li>-->
+            <!--                <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>-->
+            <!--                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（20）</span></a> |</li>-->
+            <!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（7）</span></a></li>-->
+            <!--            </ul>-->
             <form method="get">
 
-<!--                <p class="search-box">-->
-<!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-<!--                    <input type="search" id="user-search-input" name="s" value="">-->
-<!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
-<!--                </p>-->
+                <!--                <p class="search-box">-->
+                <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
+                <!--                    <input type="search" id="user-search-input" name="s" value="">-->
+                <!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
+                <!--                </p>-->
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
-<!--                    <div class="alignleft actions bulkactions">-->
-<!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
-<!--                    </div>-->
-<!--                    <div class="alignleft actions">-->
-<!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
-<!--                        <select name="new_role" id="new_role">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
-<!--                    </div>-->
-<!--                    <h2 class="screen-reader-text">用户列表导航</h2>-->
+                    <!--                    <div class="alignleft actions bulkactions">-->
+                    <!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
+                    <!--                            <option value="-1">批量操作</option>-->
+                    <!--                            <option value="delete">删除</option>-->
+                    <!--                        </select>-->
+                    <!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
+                    <!--                    </div>-->
+                    <!--                    <div class="alignleft actions">-->
+                    <!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
+                    <!--                        <select name="new_role" id="new_role">-->
+                    <!--                            <option value="">将角色变更为…</option>-->
+                    <!---->
+                    <!--                            <option value="subscriber">学生</option>-->
+                    <!--                            <option value="contributor">投稿者</option>-->
+                    <!--                            <option value="author">作者</option>-->
+                    <!--                            <option value="editor">教练</option>-->
+                    <!--                            <option value="administrator">管理员</option>		</select>-->
+                    <!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
+                    <!--                    </div>-->
+                    <!--                    <h2 class="screen-reader-text">用户列表导航</h2>-->
                     <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
                     </div>
@@ -127,49 +127,49 @@ class Match_student {
                         <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
                         <th scope="col" id="entry_time" class="manage-column column-entry_time">报名时间</th>
                         <th scope="col" id="score" class="manage-column column-score">个⼈⽐赛成绩</th>
-<!--                        <th scope="col" id="record" class="manage-column column-record">答题记录</th>-->
+                        <!--                        <th scope="col" id="record" class="manage-column column-record">答题记录</th>-->
 
                     </tr>
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
 
-                        <?php foreach ($rows as $row){
-                            $usermeta = get_user_meta($row['ID'], '', true);
+                    <?php foreach ($rows as $row){
+                        $usermeta = get_user_meta($row['ID'], '', true);
 //                            var_dump($usermeta);
-                         ?>
-                            <tr id="user-<?=$row['ID']?>">
-                                <th scope="row" class="check-column">
-                                    <label class="screen-reader-text" for="">选择</label>
-                                    <input type="checkbox" name="users[]" id="" class="subscriber" value="">
-                                </th>
-                                <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                                    <img alt="" src="<?=$usermeta['user_head'][0]?>" class="avatar avatar-32 photo" height="32" width="32">
-                                    <strong><?=$row['user_login']?></strong>
-<!--                                    <br>-->
-<!--                                    <div class="row-actions">-->
-<!--                                        <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=13&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
-<!--                                        <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=13&amp;_wpnonce=9783a8b758">删除</a> | </span>-->
-<!--                                    </div>-->
-<!--                                    <button type="button" class="toggle-row">-->
-<!--                                        <span class="screen-reader-text">显示详情</span>-->
-<!--                                    </button>-->
-                                </td>
-                                <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
+                        ?>
+                        <tr id="user-<?=$row['ID']?>">
+                            <th scope="row" class="check-column">
+                                <label class="screen-reader-text" for="">选择</label>
+                                <input type="checkbox" name="users[]" id="" class="subscriber" value="">
+                            </th>
+                            <td class="username column-username has-row-actions column-primary" data-colname="用户名">
+                                <img alt="" src="<?=$usermeta['user_head'][0]?>" class="avatar avatar-32 photo" height="32" width="32">
+                                <strong><?=$row['user_login']?></strong>
+                                <!--                                    <br>-->
+                                <!--                                    <div class="row-actions">-->
+                                <!--                                        <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=13&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
+                                <!--                                        <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=13&amp;_wpnonce=9783a8b758">删除</a> | </span>-->
+                                <!--                                    </div>-->
+                                <!--                                    <button type="button" class="toggle-row">-->
+                                <!--                                        <span class="screen-reader-text">显示详情</span>-->
+                                <!--                                    </button>-->
+                            </td>
+                            <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
 
-                                <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
+                            <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
 
-                                <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
-                                <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
-                                <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
-                                <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
-                                <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_login']?></a></td>
-                                <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
-                                <td class="role column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
-                                <td class="role column-score" data-colname="个人比赛成绩"><a href="admin.php?page=match_student-score&match_id=<?=$_GET['match_id']?>&student_id=<?=$row['ID']?>">个人比赛成绩</a></td>
-<!--                                <td class="role column-record" data-colname="答题记录">答题记录</td>-->
-                            </tr>
-                        <?php } ?>
+                            <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
+                            <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
+                            <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
+                            <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
+                            <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
+                            <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
+                            <td class="role column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
+                            <td class="role column-score" data-colname="个人比赛成绩"><a href="admin.php?page=match_student-score&match_id=<?=$_GET['match_id']?>&student_id=<?=$row['ID']?>">个人比赛成绩</a></td>
+                            <!--                                <td class="role column-record" data-colname="答题记录">答题记录</td>-->
+                        </tr>
+                    <?php } ?>
 
                     </tbody>
 
@@ -194,31 +194,31 @@ class Match_student {
                         <th scope="col" class="manage-column column-email">电子邮件</th>
                         <th scope="col" class="manage-column column-entry_time">报名时间</th>
                         <th scope="col" class="manage-column column-score">个人比赛成绩</th>
-<!--                        <th scope="col" class="manage-column column-record">答题记录</th>-->
+                        <!--                        <th scope="col" class="manage-column column-record">答题记录</th>-->
                     </tr>
                     </tfoot>
 
                 </table>
                 <div class="tablenav bottom">
 
-<!--                    <div class="alignleft actions bulkactions">-->
-<!--                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
-<!--                    </div>-->
-<!--                    <div class="alignleft actions">-->
-<!--                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>-->
-<!--                        <select name="new_role2" id="new_role2">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>-->
+                    <!--                    <div class="alignleft actions bulkactions">-->
+                    <!--                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">-->
+                    <!--                            <option value="-1">批量操作</option>-->
+                    <!--                            <option value="delete">删除</option>-->
+                    <!--                        </select>-->
+                    <!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
+                    <!--                    </div>-->
+                    <!--                    <div class="alignleft actions">-->
+                    <!--                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>-->
+                    <!--                        <select name="new_role2" id="new_role2">-->
+                    <!--                            <option value="">将角色变更为…</option>-->
+                    <!---->
+                    <!--                            <option value="subscriber">学生</option>-->
+                    <!--                            <option value="contributor">投稿者</option>-->
+                    <!--                            <option value="author">作者</option>-->
+                    <!--                            <option value="editor">教练</option>-->
+                    <!--                            <option value="administrator">管理员</option>		</select>-->
+                    <!--                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>-->
                     <div class="tablenav-pages">
                         <span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
@@ -257,7 +257,7 @@ class Match_student {
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=$match->post_title?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-比赛成绩</h1>
 
-<!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
+            <!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
 
             <hr class="wp-header-end">
 
@@ -299,118 +299,118 @@ class Match_student {
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                        <?php
-                        foreach ($rows as $row) {
+                    <?php
+                    foreach ($rows as $row) {
 //                            var_dump(json_decode($row['match_questions']));
 //                            var_dump(json_decode($row['questions_answer']));
 //                            var_dump(json_decode($row['my_answer']));
 //
 //                            die;
 
+                        ?>
+                        <tr style="background-color: #b3b3b3;color: #ffffff">
+                            <th scope="row" class="check-column">
+                                <label class="screen-reader-text" for="user_13">选择</label>
+
+                                <input type="checkbox" name="ids[]" class="subscriber" value="">
+                            </th>
+                            <td class="role column-project" data-colname="比赛项目"><?=$row['project_title']?></td>
+
+                            <td class="role column-match_more" data-colname="比赛轮数"><?=$row['match_more']?></td>
+                            <td class="role column-match_questions" data-colname="比赛考题">比赛考题</td>
+                            <td class="role column-questions_answer" data-colname="考题答案">考题答案</td>
+                            <td class="role column-my_answer" data-colname="我的答案">我的答案</td>
+                            <td class="role column-surplus_time" data-colname="剩余时间"><?=$row['surplus_time']?></td>
+                            <td class="role column-my_score" data-colname="我的成绩"><?=$row['my_score']?></td>
+                            <td class="role column-answer_status" data-colname="答题状态"><?=$row['answer_status']?></td>
+                            <td class="role column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
+                        </tr>
+                        <?php
+                        $match_questions_str = '';
+                        $questions_answer = json_decode($row['questions_answer'], true);
+
+                        $my_answer = json_decode($row['my_answer'], true);
+                        $match_questions = json_decode($row['match_questions'], true);
+
+                        //问题
+                        if(empty($match_questions)) continue;
+                        foreach ($match_questions as $k => $match_question){
+                            if(!is_array($match_question)){
+                                $match_questions_str = $match_question;
+                            }else{
+
+                                foreach ($match_question as $mqv){
+                                    $match_questions_str .= $mqv.',';
+                                }
+                            }
+                            $match_questions_str = substr($match_questions_str, 0, strlen($match_questions_str) -1);
+
+                            //正确答案
+                            if(isset($questions_answer[$k]['problem_select']) && is_array($questions_answer[$k]['problem_select'])){
+                                $q_answer = '';
+                                foreach ($questions_answer[$k]['problem_select'] as $qak => $qav){
+                                    if($questions_answer[$k]['problem_answer'][$qak] == 1){
+                                        //正确答案
+                                        $q_answer .= $qav.',';
+                                    }
+                                }
+                                $q_answer = substr($q_answer, 0, strlen($q_answer)-1);
+
+                            }else{
+                                $q_answer = $questions_answer[$k];
+                            }
+
+                            //我的答案
+                            if(is_array($my_answer[$k])){
+
+                                $m_answer = '';
+                                if(isset($questions_answer[$k]['problem_select'])){
+                                    //文章速度
+                                    //查询答案
+                                    foreach ($my_answer[$k] as $mav){
+                                        $m_answer .= $questions_answer[$k]['problem_select'][$mav].',';
+                                    }
+                                }else{
+                                    foreach ($my_answer[$k] as $mav){
+                                        $m_answer .= $mav.',';
+                                    }
+                                }
+
+
+
+                                $m_answer = substr($m_answer, 0, strlen($m_answer)-1);
+                            }else{
+                                $m_answer = $my_answer[$k];
+                            }
+
                             ?>
-                            <tr style="background-color: #b3b3b3;color: #ffffff">
+                            <tr>
+
                                 <th scope="row" class="check-column">
-                                                                      <label class="screen-reader-text" for="user_13">选择</label>
-
-                                    <input type="checkbox" name="ids[]" class="subscriber" value="">
                                 </th>
-                                <td class="role column-project" data-colname="比赛项目"><?=$row['project_title']?></td>
+                                <td class="role column-project" data-colname="比赛项目"></td>
 
-                                <td class="role column-match_more" data-colname="比赛轮数"><?=$row['match_more']?></td>
-                                <td class="role column-match_questions" data-colname="比赛考题">比赛考题</td>
-                                <td class="role column-questions_answer" data-colname="考题答案">考题答案</td>
-                                <td class="role column-my_answer" data-colname="我的答案">我的答案</td>
-                                <td class="role column-surplus_time" data-colname="剩余时间"><?=$row['surplus_time']?></td>
-                                <td class="role column-my_score" data-colname="我的成绩"><?=$row['my_score']?></td>
-                                <td class="role column-answer_status" data-colname="答题状态"><?=$row['answer_status']?></td>
-                                <td class="role column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
+                                <td class="role column-match_more" data-colname="比赛轮数"></td>
+                                <td class="role column-match_questions" data-colname="比赛考题"><?=$match_questions_str?></td>
+                                <td class="role column-questions_answer" data-colname="考题答案"><?=$q_answer?></td>
+                                <td class="role column-my_answer" data-colname="我的答案">
+                                    <span <?=$m_answer!=$q_answer ? 'style="color: #a20000"' : ''?>><?=$m_answer?></span>
+                                </td>
+                                <td class="role column-surplus_time" data-colname="剩余时间"></td>
+                                <td class="role column-my_score" data-colname="我的成绩"></td>
+                                <td class="role column-answer_status" data-colname="答题状态"></td>
+                                <td class="role column-answer_status" data-colname="创建时间"></td>
+
+
+
                             </tr>
                             <?php
                             $match_questions_str = '';
-                            $questions_answer = json_decode($row['questions_answer'], true);
 
-                            $my_answer = json_decode($row['my_answer'], true);
-                            $match_questions = json_decode($row['match_questions'], true);
-
-                            //问题
-                            if(empty($match_questions)) continue;
-                            foreach ($match_questions as $k => $match_question){
-                                if(!is_array($match_question)){
-                                    $match_questions_str = $match_question;
-                                }else{
-
-                                    foreach ($match_question as $mqv){
-                                        $match_questions_str .= $mqv.',';
-                                    }
-                                }
-                                $match_questions_str = substr($match_questions_str, 0, strlen($match_questions_str) -1);
-
-                                //正确答案
-                                if(isset($questions_answer[$k]['problem_select']) && is_array($questions_answer[$k]['problem_select'])){
-                                    $q_answer = '';
-                                    foreach ($questions_answer[$k]['problem_select'] as $qak => $qav){
-                                        if($questions_answer[$k]['problem_answer'][$qak] == 1){
-                                            //正确答案
-                                            $q_answer .= $qav.',';
-                                        }
-                                    }
-                                    $q_answer = substr($q_answer, 0, strlen($q_answer)-1);
-
-                                }else{
-                                    $q_answer = $questions_answer[$k];
-                                }
-
-                                //我的答案
-                                if(is_array($my_answer[$k])){
-
-                                    $m_answer = '';
-                                    if(isset($questions_answer[$k]['problem_select'])){
-                                        //文章速度
-                                        //查询答案
-                                        foreach ($my_answer[$k] as $mav){
-                                            $m_answer .= $questions_answer[$k]['problem_select'][$mav].',';
-                                        }
-                                    }else{
-                                        foreach ($my_answer[$k] as $mav){
-                                            $m_answer .= $mav.',';
-                                        }
-                                    }
-
-
-
-                                    $m_answer = substr($m_answer, 0, strlen($m_answer)-1);
-                                }else{
-                                    $m_answer = $my_answer[$k];
-                                }
-
-                        ?>
-                                <tr>
-
-                                    <th scope="row" class="check-column">
-                                    </th>
-                                        <td class="role column-project" data-colname="比赛项目"></td>
-
-                                        <td class="role column-match_more" data-colname="比赛轮数"></td>
-                                        <td class="role column-match_questions" data-colname="比赛考题"><?=$match_questions_str?></td>
-                                        <td class="role column-questions_answer" data-colname="考题答案"><?=$q_answer?></td>
-                                        <td class="role column-my_answer" data-colname="我的答案">
-                                            <span <?=$m_answer!=$q_answer ? 'style="color: #a20000"' : ''?>><?=$m_answer?></span>
-                                        </td>
-                                        <td class="role column-surplus_time" data-colname="剩余时间"></td>
-                                        <td class="role column-my_score" data-colname="我的成绩"></td>
-                                        <td class="role column-answer_status" data-colname="答题状态"></td>
-                                        <td class="role column-answer_status" data-colname="创建时间"></td>
-
-
-
-                                </tr>
-                        <?php
-                                $match_questions_str = '';
-
-                            }
                         }
+                    }
 
-                        ?>
+                    ?>
 
                     </tbody>
 
@@ -440,8 +440,8 @@ class Match_student {
                     <div class="alignleft actions">
 
 
-                    <br class="clear">
-                </div>
+                        <br class="clear">
+                    </div>
             </form>
 
             <br class="clear">
@@ -496,7 +496,7 @@ class Match_student {
 
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status,match_more FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
         if(!$match || $match['match_status'] != -3){
@@ -536,10 +536,40 @@ class Match_student {
         $page = intval($_GET['cpage']) < 1 ? 1 : intval($_GET['cpage']);
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,SUM(mq.my_score) as my_score,mq.answer_status,SUM(mq.surplus_time) AS surplus_time,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
-            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
-            LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=mq.user_id AND o.match_id=mq.match_id 
-            WHERE mq.match_id='.$post->ID.' GROUP BY user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,SUM(mq.my_score) as my_score,mq.answer_status,SUM(mq.surplus_time) AS surplus_time,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
+//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id
+//            LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=mq.user_id AND o.match_id=mq.match_id
+//            WHERE mq.match_id='.$post->ID.' GROUP BY user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,mq.answer_status,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
+//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id
+//            LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=u.ID AND o.match_id=mq.match_id AND o.pa_status IN(2,3,4)
+//            WHERE mq.match_id='.$post->ID.' AND mq.match_id='.$post->ID.' GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+
+        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time
+            FROM '.$wpdb->prefix.'order AS o 
+            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+            LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
+            WHERE o.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+//
+//        $totalRanking = $wpdb->get_results("SELECT x.user_id,SUM(x.my_score) my_score,SUM(x.surplus_time) surplus_time
+//                from
+//                (	SELECT a.user_id,c.project_id,MAX(c.my_score) my_score ,MAX(c.surplus_time) surplus_time
+//                    FROM `zlin_order` a
+//                   LEFT JOIN zlin_users b on a.user_id = b.ID  and b.ID != ''
+//                   LEFT JOIN zlin_match_questions c on a.match_id = c.match_id
+//                   WHERE a.match_id = 56318
+//                   GROUP BY a.user_id,c.project_id
+//                 ) x
+//                 GROUP BY user_id", ARRAY_A);
+//        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o
+//        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+//        WHERE o.order_type=1 AND (o.pay_status=2 OR o.pay_status=3 OR o.pay_status=4) AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
+//
+//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time
+//            FROM '.$wpdb->prefix.'order AS o
+//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+//            LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
+//            WHERE o.match_id='.$post->ID.' AND mq.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
         $count  = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -551,38 +581,39 @@ class Match_student {
             'current' => $page
         ));
 
-
+//        echo '<pre />';
+//        print_r($match);
         //剩余时间 | 正确率
-        for($i = 0; $i < count($totalRanking)-1; ++$i){
-            for ($j = $i+1; $j < count($totalRanking); ++$j){
-                if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
-                    if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
-                        $a = $totalRanking[$j];
-                        $totalRanking[$j] = $totalRanking[$i];
-                        $totalRanking[$j] = $a;
-                    }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){}
-                    //正确率, 获取分数最高一轮的正确率
-                    $iCorce = $this->getCorrect($totalRanking[$i]['user_id'],$totalRanking[$i]['project_id'],$post->ID);
-                    $jCorce = $this->getCorrect($totalRanking[$j]['user_id'],$totalRanking[$j]['project_id'],$post->ID);
-                    if($iCorce < $jCorce){
-                        $a = $totalRanking[$j];
-                        $totalRanking[$j] = $totalRanking[$i];
-                        $totalRanking[$j] = $a;
-                    }
-                }
-            }
-        }
-
+        //获取比赛轮数
 
         //查询每个学员每个小项目每一轮的分数
         foreach ($totalRanking as &$trv){
+            $trv['my_score'] = 0;
+            $trv['surplus_time'] = 0;
             foreach ($projectArr as $pak => $pav) {
                 $trv['projectScore'][$pak] = '';
-                $res = $wpdb->get_results('SELECT my_score,match_more FROM '.$wpdb->prefix.'match_questions AS mq 
-                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID']);
-                foreach ($res as $rv){
-                    $trv['projectScore'][$pak] .= ($rv->my_score ? $rv->my_score : 0).'/';
+                $res = $wpdb->get_results('SELECT my_score,match_more,MAX(my_score),MAX(surplus_time) as sum_score FROM '.$wpdb->prefix.'match_questions AS mq
+                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'], ARRAY_A);
+//                $res = $wpdb->get_results('SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
+//                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'].' GROUP BY user_id');
+
+                $moreArr = [];
+                for($mi = 1; $mi <= $match['match_more']; ++$mi){
+                    $moreArr[$mi] = '0/';
                 }
+                foreach ($res as $rv){
+                    if(isset($moreArr[$rv['match_more']])) $moreArr[$rv['match_more']] = $rv['my_score'].'/';
+//                    $trv['projectScore'][$pak] .= ( ? $rv->my_score : '0').'/';
+
+//                    $trv['projectScore'][$pak] = ($rv->my_score ? $rv->my_score : '0');
+
+                }
+                $trv['my_score'] += ($res[0] ? $res[0]['sum_score'] : 0);
+                $trv['surplus_time'] += ($res[0] ? $res[0]['surplus_time'] : 0);
+                foreach ($moreArr as $mav){
+                    $trv['projectScore'][$pak] .= $mav;
+                }
+                if(!$trv['projectScore'][$pak]) $trv['projectScore'][$pak] = '0/';
                 $trv['projectScore'][$pak] = substr($trv['projectScore'][$pak], 0, strlen($trv['projectScore'][$pak])-1);
 //                print_r($res);
             }
@@ -599,37 +630,61 @@ class Match_student {
             $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
         }
 
+
+        for($i = 0; $i < count($totalRanking)-1; ++$i){
+            for ($j = $i+1; $j < count($totalRanking); ++$j){
+                if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
+                    if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+                        $a = $totalRanking[$j];
+                        $totalRanking[$j] = $totalRanking[$i];
+                        $totalRanking[$i] = $a;
+                    }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){}
+                    //正确率, 获取分数最高一轮的正确率
+                    $iCorce = $this->getCorrect($totalRanking[$i]['user_id'],$totalRanking[$i]['project_id'],$post->ID);
+                    $jCorce = $this->getCorrect($totalRanking[$j]['user_id'],$totalRanking[$j]['project_id'],$post->ID);
+                    if($iCorce < $jCorce){
+                        $a = $totalRanking[$j];
+                        $totalRanking[$j] = $totalRanking[$i];
+                        $totalRanking[$i] = $a;
+                    }
+                }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
+                    $a = $totalRanking[$j];
+                    $totalRanking[$j] = $totalRanking[$i];
+                    $totalRanking[$i] = $a;
+                }
+            }
+        }
         ?>
 
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=$post->post_title?>-比赛排名</h1>
 
-<!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
+            <!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
 
             <hr class="wp-header-end">
 
 
             <form method="post" action="">
                 <p class="search-box">
-<!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-<!--                    <input type="search" id="user-search-input" name="s" value="">-->
-<!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
+                    <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
+                    <!--                    <input type="search" id="user-search-input" name="s" value="">-->
+                    <!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
                 </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
 
                     <div class="alignleft actions">
-<!--                        <label class="screen-reader-text" for="new_role">将年龄组变更为…</label>-->
-<!--                        <select name="age_group" id="age_group">-->
-<!---->
-<!--                            <option value="0" --><?//=//$group == 0 ? 'selected="selected"' : ''?><!--全部</option>-->
-<!--                            <option value="1" --><?//=//$group == 1 ? 'selected="selected"' : ''?><!--老年组</option>-->
-<!--                            <option value="2" --><?//=//$group == 2 ? 'selected="selected"' : ''?><!--成人组</option>-->
-<!--                            <option value="3" --><?//=//$group == 3 ? 'selected="selected"' : ''?><!--少年组</option>-->
-<!--                            <option value="4" --><?//=//$group == 4 ? 'selected="selected"' : ''?><!--儿童组</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
+                        <!--                        <label class="screen-reader-text" for="new_role">将年龄组变更为…</label>-->
+                        <!--                        <select name="age_group" id="age_group">-->
+                        <!---->
+                        <!--                            <option value="0" --><?//=//$group == 0 ? 'selected="selected"' : ''?><!--全部</option>-->
+                        <!--                            <option value="1" --><?//=//$group == 1 ? 'selected="selected"' : ''?><!--老年组</option>-->
+                        <!--                            <option value="2" --><?//=//$group == 2 ? 'selected="selected"' : ''?><!--成人组</option>-->
+                        <!--                            <option value="3" --><?//=//$group == 3 ? 'selected="selected"' : ''?><!--少年组</option>-->
+                        <!--                            <option value="4" --><?//=//$group == 4 ? 'selected="selected"' : ''?><!--儿童组</option>-->
+                        <!--                        </select>-->
+                        <!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
 
                     </div>
                     <div class="alignleft actions bulkactions">
@@ -665,11 +720,11 @@ class Match_student {
 
                             <th scope="col" id="" class="manage-column column-"><?=$titleV['post_title']?>得分</th>
                         <?php } ?>
-<!--                        <th scope="col" id="" class="manage-column column-">扑克接力得分</th>-->
-<!--                        <th scope="col" id="" class="manage-column column-">快眼扫描得分</th>-->
-<!--                        <th scope="col" id="" class="manage-column column-">文章速读得分</th>-->
-<!--                        <th scope="col" id="" class="manage-column column-">正向运算得分</th>-->
-<!--                        <th scope="col" id="" class="manage-column column-">逆向运算得分</th>-->
+                        <!--                        <th scope="col" id="" class="manage-column column-">扑克接力得分</th>-->
+                        <!--                        <th scope="col" id="" class="manage-column column-">快眼扫描得分</th>-->
+                        <!--                        <th scope="col" id="" class="manage-column column-">文章速读得分</th>-->
+                        <!--                        <th scope="col" id="" class="manage-column column-">正向运算得分</th>-->
+                        <!--                        <th scope="col" id="" class="manage-column column-">逆向运算得分</th>-->
                     </tr>
                     </thead>
 
@@ -700,7 +755,7 @@ class Match_student {
                             <?php } ?>
                         </tr>
                     <?php } ?>
-                  </tbody>
+                    </tbody>
 
                     <tfoot>
 
@@ -791,7 +846,7 @@ class Match_student {
 
             <div id="ajax-response"></div>
 
-<!--            <p>新建用户，并将用户加入此站点。</p>-->
+            <!--            <p>新建用户，并将用户加入此站点。</p>-->
             <form method="post" action="?page=match_student-add_student&match_id=<?=$match_id?>" name="createuser" id="createuser" class="validate" novalidate="novalidate">
                 <input name="action" type="hidden" value="createuser">
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="ce6b58ac15"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php">
@@ -843,26 +898,26 @@ class Match_student {
                 </thead>
 
                 <tbody id="the-list" data-wp-lists="list:user">
-                   <?php foreach ($rows as $row) {
-                       ?>
+                <?php foreach ($rows as $row) {
+                    ?>
 
-                       <tr>
-                           <th scope="row" class="check-column">
-                               <label class="screen-reader-text" for="user_13">选择</label>
+                    <tr>
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="user_13">选择</label>
 
-                               <input type="checkbox" name="ids[]" class="subscriber" value="">
-                           </th>
-                           <td class="role column-user_login" data-colname="用户名"><?=$row['user_login']?></td>
+                            <input type="checkbox" name="ids[]" class="subscriber" value="">
+                        </th>
+                        <td class="role column-user_login" data-colname="用户名"><?=$row['user_login']?></td>
 
-                           <td class="role column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
-                           <td class="role column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
-                           <td class="role column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                           <td class="role column-email" data-colname="电子邮件"><?=$row['user_email']?></td>
-                           <td class="role column-addS" data-colname="添加到比赛学员">
-                               <a href="javascript:;" class="joinMatch" data-id="<?=$post->ID?>" data-uid="<?=$row['uid']?>">加入比赛</a>
-                           </td>
-                       </tr>
-                   <?php } ?>
+                        <td class="role column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
+                        <td class="role column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
+                        <td class="role column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+                        <td class="role column-email" data-colname="电子邮件"><?=$row['user_email']?></td>
+                        <td class="role column-addS" data-colname="添加到比赛学员">
+                            <a href="javascript:;" class="joinMatch" data-id="<?=$post->ID?>" data-uid="<?=$row['uid']?>">加入比赛</a>
+                        </td>
+                    </tr>
+                <?php } ?>
 
 
                 </tbody>
