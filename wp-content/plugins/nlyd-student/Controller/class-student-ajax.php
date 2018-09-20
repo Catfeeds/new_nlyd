@@ -1403,7 +1403,7 @@ class Student_Ajax
             $sql_ = "select count(a.id) total 
                       from {$wpdb->prefix}order a 
                       right join {$wpdb->prefix}users b on a.user_id = b.ID
-                      where match_id = {$val['ID']} and pay_status in(2,3,4) ";
+                      where match_id = {$val['ID']} and pay_status in(2,3,4) and order_type=1";
             //print_r($sql_);
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
@@ -2733,14 +2733,22 @@ class Student_Ajax
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,d.certificate,
+//        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,d.certificate,
+//        CASE d.range
+//        WHEN 1 THEN "中国"
+//        WHEN 2 THEN "国际"
+//        ELSE "未知"
+//        END AS ranges
+//        FROM '.$wpdb->prefix.'directories AS d
+//        LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id
+//        WHERE d.type='.$type.' AND d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
+        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,d.certificate,
         CASE d.range 
         WHEN 1 THEN "中国" 
         WHEN 2 THEN "国际" 
         ELSE "未知" 
         END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
-        LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id 
         WHERE d.type='.$type.' AND d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
 
         foreach ($res as &$v){
