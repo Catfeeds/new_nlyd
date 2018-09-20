@@ -220,6 +220,11 @@ class Student_Ajax
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $list[$k]['ranking'] = $start+$k+1;
+                if($k != 0){
+                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                        $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                    }
+                }
 
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
@@ -672,8 +677,7 @@ class Student_Ajax
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.user_type,
                 a.status,IFNULL(b.read,'-') as `read`,
                 IFNULL(b.memory,'-') as memory,
-                IFNULL(b.compute,'-') as compute,
-                IFNULL(b.mental,'-') as mental 
+                IFNULL(b.compute,'-') as compute
                 from {$wpdb->prefix}match_team a
                 left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id 
                 where a.user_type = {$type} and a.status = 2 and a.team_id = {$team_id} 
@@ -689,12 +693,20 @@ class Student_Ajax
 
         if(!empty($rows)){
             foreach ($rows as $k => $v){
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname') and user_id = {$v['user_id']}";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname','user_real_name') and user_id = {$v['user_id']}";
                 $user = $wpdb->get_results($sql1,ARRAY_A);
                 $user_info = array_column($user,'meta_value','meta_key');
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-                $rows[$k]['nickname'] = $user_info['nickname'];
+
+                if(!empty($user_info['user_real_name'])){
+                    $user_real = unserialize($user_info['user_real_name']);
+//                    print_r($user_real);
+                    $rows[$k]['nickname'] = $user_real['real_name'];
+                }else{
+                    $rows[$k]['nickname'] = $user_info['nickname'];
+                }
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+                $rows[$k]['mental'] = '待定';
             }
         }
 
