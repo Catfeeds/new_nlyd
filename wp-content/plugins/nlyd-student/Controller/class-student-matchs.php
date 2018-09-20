@@ -1446,21 +1446,7 @@ class Student_Matchs extends Student_Home
                     $list[$k]['user_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                     if(!empty($user_real_name['real_age'])){
                         $age = $user_real_name['real_age'];
-                        switch ($age){
-                            case $age > 59:
-                                $group = '老年组';
-                                break;
-                            case $age > 17:
-                                $group = '成年组';
-                                break;
-                            case $age > 12:
-                                $group = '少年组';
-                                break;
-                            default:
-                                $group = '儿童组';
-                                break;
-                        }
-
+                        $group = getAgeGroupNameByAge($age);
                     }else{
                         $group = '-';
                     }
@@ -1474,7 +1460,12 @@ class Student_Matchs extends Student_Home
                     $list[$k]['city'] = $city;
                     $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                     $list[$k]['group'] = $group;
-                    $list[$k]['ranking'] = $k+1;
+                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                        $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                    }else{
+
+                        $list[$k]['ranking'] = $k+1;
+                    }
 
                     if($val['user_id'] == $current_user->ID){
                         $my_ranking = $list[$k];

@@ -219,7 +219,13 @@ class Student_Ajax
                 //$list[$k]['score'] = $val['my_score'];
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
-                $list[$k]['ranking'] = $start+$k+1;
+                //$list[$k]['ranking'] = $start+$k+1;
+                if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                    $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                }else{
+
+                    $list[$k]['ranking'] = $start+$k+1;
+                }
 
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
