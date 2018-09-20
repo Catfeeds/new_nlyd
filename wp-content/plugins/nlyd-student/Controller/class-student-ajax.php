@@ -2788,6 +2788,59 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'没有数据'));
     }
 
+    /**
+     * 根据搜索条件获取战队列表
+     */
+    public function getTeamsBySearch(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_search_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
+        $search = trim($_POST['search']);
+        $map = array();
+        $map[] = " a.post_status = 'publish' ";
+        $map[] = " a.post_type = 'team' ";
+        $map[] = " a.post_title LIKE '%$search%' ";
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 10;
+        $start = ($page-1)*$pageSize;
+        $where = join(' and ',$map);
+        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.user_id,b.status,
+                if(c.team_world != '',c.team_world,'--') as team_world,
+                if(c.team_director != '',c.team_director,'--') as team_director,
+                if(c.team_slogan != '',c.team_slogan,'--') as team_slogan,
+                if(c.team_leader != '',c.team_leader,'--') as team_leader
+                from {$wpdb->prefix}posts a  
+                left join {$wpdb->prefix}match_team b on a.ID = b.team_id and b.user_type = 1 and b.user_id = {$current_user->ID}
+                left join {$wpdb->prefix}team_meta c on a.ID = c.team_id 
+                where {$where} order by b.status desc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        // print_r($sql);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>'已经到底了'));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>'暂无战队'));
+        foreach ($rows as $k => $val ){
+
+            //获取领队
+            if(is_numeric($val['team_director'])){
+                $user = get_userdata( $val['team_director']);
+                if(!empty($user->data->display_name)){
+                    $rows[$k]['team_director'] = preg_replace('/, /','',$user->data->display_name);
+                }
+            }
+            //获取战队成员总数
+            $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}match_team where team_id = {$val['ID']} and status = 2 and user_type = 1");
+            $rows[$k]['team_total'] = $total;
+
+            $rows[$k]['team_url'] = home_url('/teams/teamDetail/team_id/'.$val['ID']);
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
 }
 
 new Student_Ajax();

@@ -536,14 +536,6 @@ class Match_student {
         $page = intval($_GET['cpage']) < 1 ? 1 : intval($_GET['cpage']);
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,SUM(mq.my_score) as my_score,mq.answer_status,SUM(mq.surplus_time) AS surplus_time,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
-//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id
-//            LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=mq.user_id AND o.match_id=mq.match_id
-//            WHERE mq.match_id='.$post->ID.' GROUP BY user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
-//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,mq.user_id,mq.project_id,mq.match_more,u.user_mobile,mq.answer_status,o.created_time FROM '.$wpdb->prefix.'match_questions AS mq
-//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id
-//            LEFT JOIN '.$wpdb->prefix.'order AS o ON o.user_id=u.ID AND o.match_id=mq.match_id AND o.pa_status IN(2,3,4)
-//            WHERE mq.match_id='.$post->ID.' AND mq.match_id='.$post->ID.' GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 
         $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time
             FROM '.$wpdb->prefix.'order AS o 
@@ -551,25 +543,6 @@ class Match_student {
             LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
             WHERE o.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 //
-//        $totalRanking = $wpdb->get_results("SELECT x.user_id,SUM(x.my_score) my_score,SUM(x.surplus_time) surplus_time
-//                from
-//                (	SELECT a.user_id,c.project_id,MAX(c.my_score) my_score ,MAX(c.surplus_time) surplus_time
-//                    FROM `zlin_order` a
-//                   LEFT JOIN zlin_users b on a.user_id = b.ID  and b.ID != ''
-//                   LEFT JOIN zlin_match_questions c on a.match_id = c.match_id
-//                   WHERE a.match_id = 56318
-//                   GROUP BY a.user_id,c.project_id
-//                 ) x
-//                 GROUP BY user_id", ARRAY_A);
-//        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o
-//        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
-//        WHERE o.order_type=1 AND (o.pay_status=2 OR o.pay_status=3 OR o.pay_status=4) AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
-//
-//        $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time
-//            FROM '.$wpdb->prefix.'order AS o
-//            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
-//            LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
-//            WHERE o.match_id='.$post->ID.' AND mq.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id ORDER BY my_score DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
         $count  = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -581,8 +554,6 @@ class Match_student {
             'current' => $page
         ));
 
-//        echo '<pre />';
-//        print_r($match);
         //剩余时间 | 正确率
         //获取比赛轮数
 
@@ -594,8 +565,6 @@ class Match_student {
                 $trv['projectScore'][$pak] = '';
                 $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
                  WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'], ARRAY_A);
-//                $res = $wpdb->get_results('SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
-//                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'].' GROUP BY user_id');
 
                 $moreArr = [];
                 $scoreArr = [];
@@ -608,10 +577,6 @@ class Match_student {
                     if(isset($moreArr[$rv['match_more']])) $moreArr[$rv['match_more']] = $rv['my_score'].'/';
                     $scoreArr[] = $rv['my_score'];
                     $surplus_timeArr[] = $rv['surplus_time'];
-//                    $trv['projectScore'][$pak] .= ( ? $rv->my_score : '0').'/';
-
-//                    $trv['projectScore'][$pak] = ($rv->my_score ? $rv->my_score : '0');
-
                 }
                 $trv['my_score'] += ($scoreArr != [] ? max($scoreArr) : 0);
                 $trv['surplus_time'] += ($surplus_timeArr != [] ? max($surplus_timeArr) : 0);
@@ -678,7 +643,13 @@ class Match_student {
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
-
+                    <div>
+                        <ul>
+                            <li>总排名</li>
+                            <li>分类排名</li>
+                            <li>单项排名</li>
+                        </ul>
+                    </div>
                     <div class="alignleft actions">
                         <!--                        <label class="screen-reader-text" for="new_role">将年龄组变更为…</label>-->
                         <!--                        <select name="age_group" id="age_group">-->

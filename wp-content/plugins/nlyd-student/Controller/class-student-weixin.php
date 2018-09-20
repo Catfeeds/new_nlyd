@@ -98,7 +98,6 @@ class Student_Weixin
         $data = curl_exec($ch);
         $data = json_decode($data,true);
         curl_close($ch);
-
         if (isset($data['errcode'])) {
             if(is_ajax()){
                 wp_send_json_error(['info' => '获取微用户授权失败.请退出后重试']);
