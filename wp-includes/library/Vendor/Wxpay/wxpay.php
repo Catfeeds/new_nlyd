@@ -128,13 +128,6 @@ class wxpay
     public function jsApiPay($params,$timeOut=6){
 
         $url = self::API_URL_PREFIX.self::UNIFIEDORDER_URL;
-        if($params['open_id'] == false){
-            //获取openid
-            require_once(dirname(__FILE__) . '/WxPay.JsApiPay.php');
-            $jsApiPay = new JsApiPay();
-            $params['open_id'] = $jsApiPay->GetOpenid();
-        }
-
         //检测必填参数
         //异步通知url未设置，则使用配置文件中的url
         $inputObj = new WxPayUnifiedOrder();

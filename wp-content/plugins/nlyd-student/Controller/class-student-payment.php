@@ -25,7 +25,8 @@ class Student_Payment {
                 //TODO 脑力运动测试账号
                 $interface_config['wx']['api'] = 'wxb575928422b38270';
                 $interface_config['wx']['merchant'] = '1514508211';
-                $interface_config['wx']['secret_key'] = '1f55ec97e01f249b4ac57b7c99777173';//H5支付使用
+//                $interface_config['wx']['secret_key'] = '1f55ec97e01f249b4ac57b7c99777173';//H5支付使用
+                $interface_config['wx']['secret_key'] = 'NSvMySxKLODh4TkQhAu4j5CTqF2TkpqV';//H5支付使用
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false  OR (isset($_GET['jspai']) && $_GET['jspai'] = 'y')) $interface_config['wx']['secret_key'] = 'NSvMySxKLODh4TkQhAu4j5CTqF2TkpqV';//JSAPI支付使用
 
 
@@ -64,10 +65,12 @@ class Student_Payment {
         $arr3 = [
             'zfb_pay',
             'zfb_returnUrl',
-//            'zfb_notifyUrl',
-            'wx_api_pay'
+            'zfb_notifyUrl',
         ];
 
+        if($action == 'wx_js_pay'){
+            $this->$action();
+        }
         if(in_array($action,$arr3)){
             //添加短标签
             add_shortcode('payment-home',array($this,$action));
@@ -136,17 +139,31 @@ class Student_Payment {
     /**
      * 微信公众号支付页面
      */
-    public function wx_api_pay(){
+    public function wx_js_pay(){
         global $wpdb,$current_user;
-//        if($current_user->weChat_openid){
-//            $open_id = $current_user->weChat_openid;
-//        }else{
-//            $wexinClass = new Student_Weixin();
-//            $open_id = $wexinClass->getWebCode(true);
-//        }
-//        $result = $this->wx_jsApiPay($open_id);
+        if($current_user->weChat_openid){
+            $open_id = $current_user->weChat_openid;
+        }else{
+            require_once 'class-student-weixin.php';
+            $wexinClass = new Student_Weixin('jsPayGetOpenId');
+            $open_id = $wexinClass->getWebCode(true);
+
+        }
+        if(!isset($_GET['match_id'])){
+            $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
+            load_view_template($view,array('param'=>['status' => false, 'data' => '订单信息不匹配,请联系客服'],'match_id' => 0));
+            exit;
+        }
+        if($open_id == false){
+            $result = ['status' => false, 'data' => '获取用户信息失败'];
+        }else{
+
+            $result = $this->wx_jsApiPay($open_id);
+        }
+        $match_id = isset($_GET['match_id']) ? $_GET['match_id'] : 0;
+//        add_shortcode('payment-home',array($this,'wx_js_pay'));
         $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
-        load_view_template($view,array('param'=>['status' => false]));
+        load_view_template($view,array('param'=>$result,'match_id' => $match_id));
     }
 
     /**
@@ -507,6 +524,7 @@ class Student_Payment {
      * 支付宝同步回调
      */
     public function zfb_returnUrl(){
+        file_put_contents('aaa.txt', '执行支付宝回调');
         global $wpdb,$current_user;
         $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
         wp_register_style( 'userCenter', student_css_url.'userCenter.css',array('my-student') );
