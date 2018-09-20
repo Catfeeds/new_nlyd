@@ -592,24 +592,29 @@ class Match_student {
             $trv['surplus_time'] = 0;
             foreach ($projectArr as $pak => $pav) {
                 $trv['projectScore'][$pak] = '';
-                $res = $wpdb->get_results('SELECT my_score,match_more,MAX(my_score),MAX(surplus_time) as sum_score FROM '.$wpdb->prefix.'match_questions AS mq
+                $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
                  WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'], ARRAY_A);
 //                $res = $wpdb->get_results('SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
 //                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'].' GROUP BY user_id');
 
                 $moreArr = [];
+                $scoreArr = [];
+                $surplus_timeArr = [];
                 for($mi = 1; $mi <= $match['match_more']; ++$mi){
                     $moreArr[$mi] = '0/';
                 }
+
                 foreach ($res as $rv){
                     if(isset($moreArr[$rv['match_more']])) $moreArr[$rv['match_more']] = $rv['my_score'].'/';
+                    $scoreArr[] = $rv['my_score'];
+                    $surplus_timeArr[] = $rv['surplus_time'];
 //                    $trv['projectScore'][$pak] .= ( ? $rv->my_score : '0').'/';
 
 //                    $trv['projectScore'][$pak] = ($rv->my_score ? $rv->my_score : '0');
 
                 }
-                $trv['my_score'] += ($res[0] ? $res[0]['sum_score'] : 0);
-                $trv['surplus_time'] += ($res[0] ? $res[0]['surplus_time'] : 0);
+                $trv['my_score'] += ($scoreArr != [] ? max($scoreArr) : 0);
+                $trv['surplus_time'] += ($surplus_timeArr != [] ? max($surplus_timeArr) : 0);
                 foreach ($moreArr as $mav){
                     $trv['projectScore'][$pak] .= $mav;
                 }

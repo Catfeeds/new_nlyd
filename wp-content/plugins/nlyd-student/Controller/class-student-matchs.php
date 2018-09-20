@@ -356,12 +356,11 @@ class Student_Matchs extends Student_Home
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
                   where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
                   order by a.id desc limit 0,10";
-        //var_dump($sql2);
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $order_total = $total['total'] > 0 ? $total['total'] : 0;
         if (!empty($orders)){
-            //var_dump($orders);
+            //print_r($orders);
             foreach ($orders as $k => $v){
                 $user = get_user_meta($v['user_id']);
                 $orders[$k]['nickname'] = $user['nickname'][0];

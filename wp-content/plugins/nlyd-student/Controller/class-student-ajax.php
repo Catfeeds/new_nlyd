@@ -175,12 +175,11 @@ class Student_Ajax
                     GROUP BY user_id
                     ORDER BY my_score DESC,surplus_time DESC
                     limit {$start},{$pageSize}
-                    ";
-
+                    ";  
+            
             /*if($current_user->ID == 66){
                 print_r($sql);
             }*/
-            //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
             //print_r($rows);
             $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -225,7 +224,6 @@ class Student_Ajax
                         $list[$k]['ranking'] = $list[$k-1]['ranking'];
                     }
                 }
-
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
                 }
@@ -697,14 +695,14 @@ class Student_Ajax
                 $user = $wpdb->get_results($sql1,ARRAY_A);
                 $user_info = array_column($user,'meta_value','meta_key');
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-
                 if(!empty($user_info['user_real_name'])){
                     $user_real = unserialize($user_info['user_real_name']);
 //                    print_r($user_real);
                     $rows[$k]['nickname'] = $user_real['real_name'];
                 }else{
                     $rows[$k]['nickname'] = $user_info['nickname'];
-                }
+                } 
+                
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
                 $rows[$k]['mental'] = '待定';
             }
@@ -1221,7 +1219,7 @@ class Student_Ajax
         }
 
         //获取报名选手列表
-        global $wpdb;
+        global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 10;
@@ -1233,6 +1231,10 @@ class Student_Ajax
                   where a.match_id = {$_POST['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
                   order by a.id desc limit {$start},{$pageSize} ";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
+        /*if($current_user->ID == 66){
+            print_r($sql2);
+             print_r($orders);
+        }*/
         //print_r($orders);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -1241,7 +1243,7 @@ class Student_Ajax
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
-            $orders[$k]['user_head'] = file_exists($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
+            $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);
                 $orders[$k]['real_age'] = $user_real['real_age'];
@@ -1251,6 +1253,7 @@ class Student_Ajax
                 $orders[$k]['nickname'] = $user['nickname'][0];
             }
         }
+
         //print_r($orders);
         wp_send_json_success(array('info'=>$orders));
     }
@@ -2772,7 +2775,6 @@ class Student_Ajax
                 $user_real_name['real_name'] = $usermeta['last_name'][0].$usermeta['first_name'][0];
             }
             $v->header_img = $usermeta['user_head'][0];
-
             $v->userID = $usermeta['user_ID'][0];
             $v->real_name = $user_real_name['real_name'];
             $v->sex = $usermeta['user_gender'][0];
