@@ -67,7 +67,7 @@
                                     <tbody id="flow">
                                         <?php if(!empty($list)){ ?>
                                         <?php foreach ($list as $k => $v){ ?>
-                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] ? 'nl-me' : '';?>">
+                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] && $my_ranking['ID'] == $v['ID'] ? 'nl-me' : '';?>">
                                             <td>
                                                 <div class="nl-circle <?= $k < 3 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                             </td>
