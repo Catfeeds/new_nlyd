@@ -23,7 +23,7 @@ return array(
         array(
             'post_title'=>'登录页面',
             'post_name'=>'logins',
-            'post_content'=>'[match-login]',
+            'post_content'=>'[student-login]',
             'url'=>'/logins',
         ),
         array(
@@ -64,7 +64,7 @@ return array(
         ),
         array(
             'post_title'=>'比赛页面',
-            'post_name'=>'match',
+            'post_name'=>'matchs',
             'post_content'=>'[match-home]',
             'url'=>'/matchs',
         ),

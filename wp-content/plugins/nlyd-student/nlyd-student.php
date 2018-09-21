@@ -205,34 +205,36 @@ if(!class_exists('StudentController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
+            if (!is_front_page()) {
 
-            wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-cookie' );
-            //序列化form表单Json对象
-            wp_register_script( 'student-serialize-object',student_js_url.'jquery.serialize-object.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-serialize-object' );
-            //手势操作
-            wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-mTouch' );
-            // wp_register_script( 'student-fastclick',student_js_url.'Mobile/fastclick.js',array('jquery'), leo_student_version  );
-            // wp_enqueue_script( 'student-fastclick' );
-            wp_register_script( 'student-alloy_finger',student_js_url.'Mobile/alloy_finger.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-alloy_finger' );
-            //引入layui
-            wp_register_script( 'student-layui',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-layui' );
-            // 表单验证语言包
-            wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-languages' );
+                wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-cookie' );
+                //序列化form表单Json对象
+                wp_register_script( 'student-serialize-object',student_js_url.'jquery.serialize-object.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-serialize-object' );
+                //手势操作
+                wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-mTouch' );
+                // wp_register_script( 'student-fastclick',student_js_url.'Mobile/fastclick.js',array('jquery'), leo_student_version  );
+                // wp_enqueue_script( 'student-fastclick' );
+                wp_register_script( 'student-alloy_finger',student_js_url.'Mobile/alloy_finger.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-alloy_finger' );
+                //引入layui
+                wp_register_script( 'student-layui',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-layui' );
+                // 表单验证语言包
+                wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-languages' );
 
-            wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-common' );
-            //引入layui
-            wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'),leo_student_version);
-            wp_enqueue_style( 'my-layui-css' );
+                wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-common' );
+                //引入layui
+                wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'),leo_student_version);
+                wp_enqueue_style( 'my-layui-css' );
 
-            wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
-            wp_enqueue_style( 'my-student' );
+                wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
+                wp_enqueue_style( 'my-student' );
+            }
             // //新闻列表css
             // wp_register_style( 'my-student-news-list', student_css_url.'news/news-list.css',array('my-student') );
             // wp_enqueue_style( 'my-student-news-list' );
