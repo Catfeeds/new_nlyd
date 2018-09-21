@@ -158,7 +158,7 @@ class Student_Ajax
             }
 
             if(!empty($_POST['match_more'])){
-                $where .= " and b.match_more = {$_POST['match_more']} ";
+                $where .= " and c.match_more = {$_POST['match_more']} ";
             }
 
             $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
