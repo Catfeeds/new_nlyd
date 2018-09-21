@@ -448,13 +448,6 @@ jQuery(function($) {
             if(len>0){
                 var news=text.substring(0,len-1)
                 $('.answer').text(news)
-                _this.stop(true).animate({
-                    'opacity':'0.6',
-                    'filter': 'alpha(opacity=60)',
-                },50).animate({
-                    'opacity':'1',
-                    'filter': 'alpha(opacity=100)',
-                },50)
             }
         }
     });

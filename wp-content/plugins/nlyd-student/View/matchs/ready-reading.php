@@ -39,7 +39,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    mTouch('body').on('tap','#complete',function(){//记忆完成
+    // mTouch('body').on('tap','#complete',function(){//记忆完成
+new AlloyFinger($('#complete')[0], {
+    tap:function(){
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
@@ -69,7 +71,8 @@ jQuery(function($) {
                 }
             })
         }
-    })
+    }
+})
     function submit(time,submit_type){//提交答案
         var my_answer={};
         var data={
