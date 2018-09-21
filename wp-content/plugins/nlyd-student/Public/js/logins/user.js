@@ -110,24 +110,20 @@ goCenter()
                 1000)  
             }  
         }
-        // $('.getCode').click(function(){//获取验证码
-$('.getCode').each(function(){
-    var _this=$(this);
-    new AlloyFinger(_this[0], {
-        tap:function(){
-            if(!_this.hasClass('disabled')){
-                var dom=_this.parents('form').find("input[name='user_login']")
+        $('.getCode').click(function(){//获取验证码
+            if(!$(this).hasClass('disabled')){
+                var dom=$(this).parents('form').find("input[name='user_login']")
                 var value=dom.val()
                 var allRules=$.validationLayui.allRules;//全局正则配置
                 var phone=allRules['phone'][0];
                 var email=allRules['email'][0];
                 var layVerify=dom.attr('lay-verify')
                 var message=allRules[layVerify][1];
-                var template=parseInt(_this.attr('data-sendCodeCase'));
+                var template=parseInt($(this).attr('data-sendCodeCase'));
 
                 if(layVerify=='phone'){//手机登录
                     if(phone.test(value)){
-                        var formData=_this.parents('form').serializeObject();
+                        var formData=$(this).parents('form').serializeObject();
                         var getTimestamp=new Date().getTime()
                         var action='get_sms_code'
                         var data={
@@ -138,16 +134,16 @@ $('.getCode').each(function(){
                         }
                         sendloginAjax(data)
                         var wait=60;  
-                        time(wait,_this)
+                        time(wait,$(this))
                     }else{
-                        // _this.parents('form').find("input[name='user_login']").focus()
+                        // $(this).parents('form').find("input[name='user_login']").focus()
                         $.alerts(message)
                         return false
                     }
                 }else if(layVerify=='phoneOrEmail'){//手机或邮箱登录
                     message=allRules['phoneOrEmail'];
                     if(phone.test(value) || email.test(value)){
-                        var formData=_this.parents('form').serializeObject();
+                        var formData=$(this).parents('form').serializeObject();
                         var getTimestamp=new Date().getTime()
                         var action='get_sms_code'
                         if(phone.test(value)){//手机号码登录
@@ -163,7 +159,7 @@ $('.getCode').each(function(){
                         }
                         sendloginAjax(data)
                         var wait=60;  
-                        time(wait,_this)
+                        time(wait,$(this))
                         return false
                     }else{
                         $.alerts(message)
@@ -171,12 +167,8 @@ $('.getCode').each(function(){
                     }
                 }
             }
-        }
-    })
-})
-        // $('.login-by-code').click(function(){//快速登录
-    new AlloyFinger($('.login-by-code')[0], {
-        tap:function(){
+        })
+        $('.login-by-code').click(function(){//快速登录
             $('#loginFormFast')[0].reset();//重置表单
             $('#loginFormPsw')[0].reset();//重置表单
             $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
@@ -185,13 +177,8 @@ $('.getCode').each(function(){
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             goCenter()
-        }
-    })
-        // $('.login-by-psw').click(function(){//密码登录
-$('.login-by-psw').each(function(){
-    var _this=$(this)    
-    new AlloyFinger(_this[0], {
-        tap:function(){
+        })
+        $('.login-by-psw').click(function(){//密码登录
             $('#loginFormFast')[0].reset();//重置表单
             $('#loginFormPsw')[0].reset();//重置表单
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
@@ -200,13 +187,9 @@ $('.login-by-psw').each(function(){
             $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
             $('.formName').text('手机快速登录')
             goCenter()
-        }
-    })
-})
+        })
         
-        // $('.login-by-reset').click(function(){//忘记密码
-    new AlloyFinger($('.login-by-reset')[0], {
-        tap:function(){
+        $('.login-by-reset').click(function(){//忘记密码
             $('#loginFormFast')[0].reset();//重置表单
             $('#loginFormPsw')[0].reset();//重置表单
             $('.iconLock').removeClass('display-hide').addClass('display-block');//icon
@@ -215,12 +198,9 @@ $('.login-by-psw').each(function(){
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             goCenter()
-        }
-    })
+        })
         
-        // $('.login-fast').click(function(){//注册tab页返回快速登录
-    new AlloyFinger($('.login-fast')[0], {
-        tap:function(){
+        $('.login-fast').click(function(){//注册tab页返回快速登录
             $('#loginFormFast')[0].reset();//重置表单
             $('#loginFormPsw')[0].reset();//重置表单
             
@@ -232,11 +212,8 @@ $('.login-by-psw').each(function(){
             goCenter()
             //tabs切换
             $('.layui-tab-title li').eq(0).click()
-        }
-    })
-        // $('.nl-agreement .pointer').click(function(){
-        new AlloyFinger($('.nl-agreement .pointer')[0], {
-            tap:function(){
+        })
+        $('.nl-agreement .pointer').click(function(){
                 var html=$('.userAgreement').html(); 
                 layer.open({
                     type: 1
@@ -259,6 +236,5 @@ $('.login-by-psw').each(function(){
                         layer.closeAll();
                     }
                 });
-            }
-        })
+            })
 })
