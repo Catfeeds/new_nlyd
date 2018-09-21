@@ -55,7 +55,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    mTouch('body').on('tap','#complete',function(){//记忆完成
+    // mTouch('body').on('tap','#complete',function(){//记忆完成
+new AlloyFinger($('#complete')[0], {
+    tap:function(){
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
@@ -84,7 +86,8 @@ jQuery(function($) {
                 }
             })
         }
-    })
+    }
+})
     function submit(time,submit_type){//提交答案
         var my_answer=[];
         var data={
@@ -231,41 +234,52 @@ jQuery(function($) {
         initWidth()
     }
     initPagation()
-    mTouch('body').on('tap','.matching-btn',function(e){
-            nowPage=1;
-            $('.matching-btn').removeClass('active');
-            $(this).addClass('active');
-            var text=parseInt($(this).text())
-            if(!isNaN(text)){
-                onePageItems=text;
-                $('.left').css('display','block')
-                $('.right').css('display','block')
-            }else{
-                onePageItems=false
-                $('.left').css('display','none')
-                $('.right').css('display','none')
+    // mTouch('body').on('tap','.matching-btn',function(e){
+    $('.matching-btn').each(function(){
+        var _this=$(this);
+        new AlloyFinger(_this[0], {
+            tap:function(){
+                nowPage=1;
+                $('.matching-btn').removeClass('active');
+                _this.addClass('active');
+                var text=parseInt(_this.text())
+                if(!isNaN(text)){
+                    onePageItems=text;
+                    $('.left').css('display','block')
+                    $('.right').css('display','block')
+                }else{
+                    onePageItems=false
+                    $('.left').css('display','none')
+                    $('.right').css('display','none')
+                }
+                initPagation()
             }
-            initPagation()
+        })
     })
     //左翻页
-    mTouch('body').on('tap','.left',function(e){
-        if($(this).hasClass('disabled')){
+    // mTouch('body').on('tap','.left',function(e){
+new AlloyFinger($('.left')[0], {
+    tap:function(){
+        if($('.left').hasClass('disabled')){
             return false;
         }else{
             nowPage--;
             initPagation()
         }
-    });
+    }
+});
     //右翻页
-    mTouch('body').on('tap','.right',function(e){
-        if($(this).hasClass('disabled')){
+    // mTouch('body').on('tap','.right',function(e){
+new AlloyFinger($('.right')[0], {
+    tap:function(){
+        if($('.right').hasClass('disabled')){
             return false;
         }else{
             nowPage++;
             initPagation()
         }
-
-    });
+    }
+});
 
 })
 </script>

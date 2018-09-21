@@ -149,32 +149,34 @@ jQuery(function($) {
 
 
 //提交tap事件
-    mTouch('body').on('tap','#sumbit',function(e){
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        layer.open({
-            type: 1
-            ,maxWidth:300
-            ,title: '提示' //不显示标题栏
-            ,skin:'nl-box-skin'
-            ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-            ,btn: ['按错了','提交',  ]
-            ,success: function(layero, index){
-            }
-            ,yes: function(index, layero){
-                layer.closeAll();
-            }
-            ,btn2: function(index, layero){
-                //按钮【按钮二】的回调
-                layer.closeAll();
-                submit(time,1)
-            }
-            ,closeBtn:2
-            ,btnAagn: 'c' //按钮居中
-            ,shade: 0.3 //遮罩
-            ,isOutAnim:true//关闭动画
-        });
-        
+    // mTouch('body').on('tap','#sumbit',function(e){
+    new AlloyFinger($('#sumbit')[0], {
+        tap:function(){
+            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '提示' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                ,btn: ['按错了','提交',  ]
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    layer.closeAll();
+                    submit(time,1)
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
     });
 })
 
@@ -182,51 +184,86 @@ jQuery(function($) {
     if($('.matching-reading').length<=1){
         $('.a-two.right').addClass('disabled')
     }
-    mTouch('body').on('tap','.a-two.left',function(e){//上一题
-        var left=$('.a-two.left');
-        var len=$('.matching-reading').length-1;
-        if(!left.hasClass('disabled')){
-            if(n>0){
-                n--
-                $('#number').text(n+1)
-                if(n==0){
-                    left.addClass('disabled')
-                }
-                $('.a-two.right').removeClass('disabled')
-                $('.matching-reading').each(function(){
-                    $(this).removeClass('active')
-                    if($(this).attr('data-index')==n){
-                        $(this).addClass('active')
-                    }
-                })
-                
+    // mTouch('body').on('tap','.a-two.left',function(e){//上一题
+    new AlloyFinger($('.a-two.left')[0], {
+        touchStart: function () {
+            var left=$('.a-two.left');
+            if(!left.hasClass('disabled')){
+                left.addClass("opacity");
             }
+        },
+        touchMove: function () {
+            $('.a-two.left').removeClass("opacity");
+        },
+        touchEnd: function () {
+            $('.a-two.left').removeClass("opacity");
+        },
+        touchCancel: function () {
+            $('.a-two.left').removeClass("opacity");
+        },
+        tap:function(){
+            var left=$('.a-two.left');
+            var len=$('.matching-reading').length-1;
+            if(!left.hasClass('disabled')){
+                if(n>0){
+                    n--
+                    $('#number').text(n+1)
+                    if(n==0){
+                        left.addClass('disabled')
+                    }
+                    $('.a-two.right').removeClass('disabled')
+                    $('.matching-reading').each(function(){
+                        $(this).removeClass('active')
+                        if($(this).attr('data-index')==n){
+                            $(this).addClass('active')
+                        }
+                    })
+                    
+                }
 
-        }else{
-            return false;
-        }
-        
-    });
-    mTouch('body').on('tap','.a-two.right',function(e){//下一题
-        var right=$('.a-two.right');
-        var len=$('.matching-reading').length-1;
-        if(!right.hasClass('disabled')){
-            if(n<len){
-                n++
-                $('#number').text(n+1)
-                if(n==len){
-                    right.addClass('disabled')  
-                }
-                $('.a-two.left').removeClass('disabled')  
-                $('.matching-reading').each(function(){
-                    $(this).removeClass('active')
-                    if($(this).attr('data-index')==n){
-                        $(this).addClass('active')
-                    }
-                })
+            }else{
+                return false;
             }
-        }else{
-            return false;
+        }
+    });
+    // mTouch('body').on('tap','.a-two.right',function(e){//下一题
+    new AlloyFinger($('.a-two.right')[0], {
+        touchStart: function () {
+            var right=$('.a-two.right');
+            if(!right.hasClass('disabled')){
+                $('.a-two.right').addClass("opacity");
+            }
+        },
+        touchMove: function () {
+            $('.a-two.right').removeClass("opacity");
+        },
+        touchEnd: function () {
+            $('.a-two.right').removeClass("opacity");
+        },
+        touchCancel: function () {
+            $('.a-two.right').removeClass("opacity");
+        },
+        tap:function(){
+            var right=$('.a-two.right');
+            var len=$('.matching-reading').length-1;
+            if(!right.hasClass('disabled')){
+                if(n<len){
+                    n++
+                    $('#number').text(n+1)
+                    if(n==len){
+                        right.addClass('disabled')  
+                    }
+                    $('.a-two.left').removeClass('disabled')  
+                    $('.matching-reading').each(function(){
+                        $(this).removeClass('active')
+                        if($(this).attr('data-index')==n){
+                            $(this).addClass('active')
+                        }
+                    })
+                }
+            }else{
+                return false;
+            }
         }
     });
 })

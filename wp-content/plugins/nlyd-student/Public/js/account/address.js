@@ -94,14 +94,31 @@ jQuery(function($) {
     //         _this.addClass('swipeleft')
     //     });
     // })
-    mTouch('body').on('swipeleft', '.address-row', function (e) {
-        var _this=$(this)
-        _this.addClass('swipeleft')
-    })
-    mTouch('body').on('swiperight', '.address-row', function (e) {
-        var _this=$(this)
-        _this.removeClass('swipeleft')
-    })
+$('.address-row').each(function(i){//左滑动
+     var _this=$(this)
+    new AlloyFinger(_this[0], {
+        touchMove:function(evt) {
+            if (Math.abs(evt.deltaX) >= Math.abs(evt.deltaY)) {
+                evt.preventDefault();
+            }
+        },
+        swipe:function(evt){
+            if(evt.direction==="Left"){
+                _this.addClass('swipeleft')
+            }else if(evt.direction==="Right"){
+                _this.removeClass('swipeleft')
+            }
+        }
+    });
+})
+    // mTouch('body').on('swipeleft', '.address-row', function (e) {
+    //     var _this=$(this)
+    //     _this.addClass('swipeleft')
+    // })
+    // mTouch('body').on('swiperight', '.address-row', function (e) {
+    //     var _this=$(this)
+    //     _this.removeClass('swipeleft')
+    // })
     // $('.address-row').each(function(i){//右滑动
     //     var _this=$(this)
     //     var dom=$(this)[0]

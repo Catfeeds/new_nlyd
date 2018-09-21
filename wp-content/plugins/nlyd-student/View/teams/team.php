@@ -40,6 +40,12 @@
                     </div>
                     <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
                         <p class="team-tips">*每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入</p>
+                        <div class="search-zoo" style="margin-bottom:10px">
+                            <i class="iconfont search-Icon">&#xe63b;</i>
+                            <form action="">
+                                <input type="text" class="serach-Input nl-foucs" placeholder="搜索名录/课程/教练等">
+                            </form>
+                        </div>
                     </div>
                 <?php }else{ ?>
                     <div class="no-info-page layui-row">
@@ -75,6 +81,14 @@ jQuery(function($) {
             clickable :true,
         },
     });  
+    
+    $("serach-Input").on('keypress', function(e) {
+        var keycode = e.keyCode;
+        var searchName = $(this).val();
+        if(keycode == '13') {
+            alert(1)
+        }
+    });
 layui.use(['layer','flow'], function(){
     var flow = layui.flow;//流加载
     //建造实例

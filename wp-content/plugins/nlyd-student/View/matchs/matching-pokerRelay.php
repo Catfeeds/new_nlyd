@@ -145,32 +145,34 @@ layui.use(['layer'], function(){
 
 
 //提交tap事件
-mTouch('body').on('tap','#sumbit',function(e){
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        layer.open({
-            type: 1
-            ,maxWidth:300
-            ,title: '提示' //不显示标题栏
-            ,skin:'nl-box-skin'
-            ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-            ,btn: [ '按错了', '提交',]
-            ,success: function(layero, index){
-            }
-            ,yes: function(index, layero){
-                layer.closeAll();
-            }
-            ,btn2: function(index, layero){
-                //按钮【按钮二】的回调
-                layer.closeAll();
-                submit(time,1)
-            }
-            ,closeBtn:2
-            ,btnAagn: 'c' //按钮居中
-            ,shade: 0.3 //遮罩
-            ,isOutAnim:true//关闭动画
-        });
-        
+// mTouch('body').on('tap','#sumbit',function(e){
+    new AlloyFinger($('#sumbit')[0], {
+        tap:function(){
+            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+            layer.open({
+                type: 1
+                ,maxWidth:300
+                ,title: '提示' //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                ,btn: [ '按错了', '提交',]
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    layer.closeAll();
+                    submit(time,1)
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+        }
     });
 })
     //设置扑克窗口宽度
@@ -197,7 +199,7 @@ mTouch('body').on('tap','#sumbit',function(e){
             _this.css('width',W1);            
         })
     }
-    initRight=function() {//控制滚动条
+    initScroll=function() {//控制滚动条
         if($('.poker-wrapper .poker.active').length>0){
             var active=$('.poker-wrapper .poker.active');
             var window=$('.poker-window').width();
@@ -217,25 +219,49 @@ mTouch('body').on('tap','#sumbit',function(e){
         }
     }
     initWidth();//设置扑克窗口宽度
-    mTouch('.porker-color').on('tap','.choose-color',function(e){
-        var _this=$(this);
-        var id=_this.attr('id')
-        $('.porker-color .choose-color').removeClass('active');
-        _this.addClass('active');
+    // mTouch('.porker-color').on('tap','.choose-color',function(e){
+    //     var _this=$(this);
+    //     var id=_this.attr('id')
+    //     $('.porker-color .choose-color').removeClass('active');
+    //     _this.addClass('active');
 
-        $('.choose-wrapper').removeClass('active');
-        $('.choose-wrapper.'+id).addClass('active');
-    })
-    mTouch('.poker-wrapper').on('tap','.poker',function (e) {
-        var _this=$(this)
-        var active=$('.poker-wrapper .poker.active')
-        active.removeClass('active');
-        _this.addClass('active');
-    })
-    
-    mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {//扑克选择区tap事件
-
+    //     $('.choose-wrapper').removeClass('active');
+    //     $('.choose-wrapper.'+id).addClass('active');
+    // })
+    // mTouch('.poker-wrapper').on('tap','.poker',function (e) {
+    //     var _this=$(this)
+    //     var active=$('.poker-wrapper .poker.active')
+    //     active.removeClass('active');
+    //     _this.addClass('active');
+    // })
+    $('.choose-color').each(function(){
         var _this=$(this);
+        new AlloyFinger(_this[0], {
+            tap:function(e){
+                var id=_this.attr('id')
+                $('.porker-color .choose-color').removeClass('active');
+                _this.addClass('active');
+
+                $('.choose-wrapper').removeClass('active');
+                $('.choose-wrapper.'+id).addClass('active');
+            }
+        })
+    })
+    $('.poker-wrapper .poker').each(function(){
+        var _this=$(this);
+        new AlloyFinger(_this[0], {
+            tap:function(e){
+                var active=$('.poker-wrapper .poker.active')
+                active.removeClass('active');
+                _this.addClass('active');
+            }
+        })
+    })
+    // mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {//扑克选择区tap事件
+$('.choose-poker').each(function(e){
+    var _this=$(this);
+    new AlloyFinger(_this[0], {
+        tap:function(){
            var text=_this.attr('data-text');
            var color=_this.attr('data-color');
            _this.addClass('active');
@@ -262,6 +288,7 @@ mTouch('body').on('tap','#sumbit',function(e){
                             +'<div class="poker-type">'+i+'</div>'
                         +'</div>'
                     +'</div>'
+            
             if($('.poker-wrapper .poker.active').length>0){//绑定事件
                 var active=$('.poker-wrapper .poker.active')
                 active.after(poker);
@@ -270,33 +297,48 @@ mTouch('body').on('tap','#sumbit',function(e){
                 $('.poker-wrapper .poker.active').removeClass('active')
                 $('.poker-wrapper').append(poker)
             }
-            initWidth();
-            initRight()
-        });
-    // })
-    //删除tap事件
-    mTouch('body').on('tap','#del',function(e){
-        if($('.poker-wrapper .poker.active').length>0){
-            var active=$('.poker-wrapper .poker.active');
-            var color=active.attr('data-color');
-            var text=active.attr('data-text');
-            $('.choose-wrapper.'+color).children('.choose-poker.active').each(function(){
-                if($(this).attr('data-text')==text){
-                    $(this).removeClass('active')
+
+            var newDom=$('.poker.active')
+            new AlloyFinger(newDom[0], {
+                tap:function(){
+                    var active=$('.poker-wrapper .poker.active')
+                    active.removeClass('active');
+                    newDom.addClass('active');
                 }
             })
-            if(active.prev('.poker').length>0){
-                active.prev('.poker').addClass('active');
-            }else{
-                active.next('.poker').addClass('active');
+            initWidth();
+            initScroll()
+        }
+    });
+});
+    //删除tap事件
+    // mTouch('body').on('tap','#del',function(e){
+    new AlloyFinger($('#del')[0], {
+        tap:function(){
+            if($('.poker-wrapper .poker.active').length>0){
+                var active=$('.poker-wrapper .poker.active');
+                var color=active.attr('data-color');
+                var text=active.attr('data-text');
+                $('.choose-wrapper.'+color).children('.choose-poker.active').each(function(){
+                    if($(this).attr('data-text')==text){
+                        $(this).removeClass('active')
+                    }
+                })
+                if(active.prev('.poker').length>0){
+                    active.prev('.poker').addClass('active');
+                }else{
+                    active.next('.poker').addClass('active');
+                }
+                active.remove()
+                initWidth()
+                initScroll()
             }
-            active.remove()
-            initWidth()
-            initRight()
         }
     });
     //前移tap事件
-    mTouch('body').on('tap','#prev',function(e){
+    // mTouch('body').on('tap','#prev',function(e){
+new AlloyFinger($('#prev')[0], {
+    tap:function(){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();
         var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
@@ -305,18 +347,20 @@ mTouch('body').on('tap','#sumbit',function(e){
             var html=active.prev('.poker').html();
             var color=active.prev('.poker').attr('data-color')
             var text=active.prev('.poker').attr('data-text')
-
             active.prev('.poker').addClass('active').html(htmlActive).attr('data-color',colorActive).attr('data-text',textActive)
             active.removeClass('active').html(html).attr('data-color',color).attr('data-text',text)
             if(colorActive!=color){
                 active.prev('.poker').removeClass(color).addClass(colorActive);
                 active.removeClass(colorActive).addClass(color);
             }
-            initRight()
+            initScroll()
         }
-    });
+    }
+});
     //后移tap事件
-    mTouch('body').on('tap','#next',function(e){
+    // mTouch('body').on('tap','#next',function(e){
+new AlloyFinger($('#next')[0], {
+    tap:function(){
         var active=$('.poker-wrapper .poker.active');
         var htmlActive=$('.poker-wrapper .poker.active').html();
         var colorActive=$('.poker-wrapper .poker.active').attr('data-color')
@@ -332,9 +376,10 @@ mTouch('body').on('tap','#sumbit',function(e){
                 active.next('.poker').removeClass(color).addClass(colorActive);
                 active.removeClass(colorActive).addClass(color);
             }
-            initRight()
+            initScroll()
         }
-    });
+    }
+});
 
     
 })
