@@ -107,7 +107,7 @@ layui.use(['layer','flow'], function(){
                             if(res.success){
                                 // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
                                 $.each(res.data.info,function(index,value){
-                                    var statue='<div class="team-join canJoin" data-id="'+value.ID+'">'
+                                    var statue='<div class="team-join canJoin" data-id="'+value.ID+'" data-name="'+value.post_title+'">'
                                                 +'<i class="iconfont">&#xe761;</i>'
                                             +'</div>';//可加入按钮
                                     var wait=""
@@ -203,7 +203,7 @@ layui.use(['layer','flow'], function(){
             ,title: '提示' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认加入大爱长青国际脑力战队？</div>'
+            ,content: '<div class="box-conent-wrapper">是否确认加入'+_this.attr('data-name')+'？</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 

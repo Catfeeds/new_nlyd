@@ -2,12 +2,10 @@
 .subject-title{
     margin-top: 20px;
     margin-bottom: 15px;
-    /* display: flex; */
 }
 .subject-title>div{
     height: 32px;
     line-height: 32px;
-    /* flex: 1; */
 }
 .subject-title-info a{
     display: block;
@@ -25,13 +23,6 @@
     border: 1px solid rgba(191, 190, 190, 1);
     color: rgba(191, 190, 190, 1);
 }
-
-/* .subject-row{
-    display: flex;
-} */
-/* .one-info{
-    flex: 1;
-} */
 .subject-title span{
     text-align: center;
 }
@@ -47,8 +38,7 @@
     bottom: 80px;
 }
 
-.your-answer,
-.right-answer{
+.answers{
     width: 100%;
     overflow: hidden;
     position: relative;
@@ -99,13 +89,13 @@ p.question{
 .porker-zoo{
     width: 80%;
     margin: auto;
-    height: 199px;
+    height: 427px;
     overflow: hidden;
 }
 .poker-window{
     position: relative;
     width: 100%;
-    height: 216px;
+    height: 444px;
     overflow-x: scroll;
     overflow-y: hidden;
 }
@@ -114,9 +104,10 @@ p.question{
     width: 100000px;
     left: 0;
     top: 0;
-    height: 199px;
 }
-
+.second_wap{
+    top: 250px
+}
 .poker{
     position: relative;
     float: left;
@@ -179,6 +170,11 @@ p.question{
 }
 .answer-zoo,.reading-answer{
      padding-bottom: 80px;
+}
+.porkerAnswer{
+    position: absolute;
+    top: 175px;
+    left: 0; 
 }
 /* 快速阅读 */
 .reading-answer{

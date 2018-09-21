@@ -47,8 +47,8 @@
                             </a>
                         <?php }?>
                         <div class="match_tips">
-                            <p class="c_black"><i class="iconfont c_orange">&#xe67b;</i> 比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。</p>
-                            <p class="c_black"><i class="iconfont c_orange">&#xe67b;</i> 比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。</p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> 比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。</p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> 比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。</p>
                         </div>
                     </div>
                 <?php //}else{ ?>
