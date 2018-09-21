@@ -50,7 +50,7 @@
                 <?php if(!empty($team['post_content'])):?>
                 <div class="teamDetail-row width-padding-pc have-metal layui-row layui-bg-white">
                     <div class="teamDetail-metal">简 介</div>
-                    <p class="width-padding"><?=$team['post_content']?></p>
+                    <div class="width-padding team-info-detail"><?=$team['post_content']?></div>
                 </div>
                 <?php endif;?>
                 <div class="teamDetail-row layui-row layui-bg-white">

@@ -51,7 +51,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    mTouch('body').on('tap','#complete',function(){//记忆完成
+    // mTouch('body').on('tap','#complete',function(){//记忆完成
+new AlloyFinger($('#complete')[0], {
+    tap:function(){
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
@@ -81,7 +83,8 @@ jQuery(function($) {
                 }
             })
         }
-    })
+    }
+})
     function submit(time,submit_type){//提交答案
         var my_answer=[];
         $('.matching-number-zoo .matching-number').each(function(){
@@ -138,19 +141,24 @@ jQuery(function($) {
             }, 1000);
         }
     });
-    mTouch('body').on('tap','.matching-btn',function(e){
+    // mTouch('body').on('tap','.matching-btn',function(e){
+    $('.matching-btn').each(function(){
         var _this=$(this);
-        $('.matching-btn').removeClass('active');
-        _this.addClass('active')
-        var text=parseInt(_this.text())
-        $('.matching-number').removeClass('border-right');
-        if(text!='NAN'){
-            $('.matching-number').each(function(j){
-                if((j+1)%text==0){
-                    $(this).addClass('border-right')
+        new AlloyFinger(_this[0], {
+            tap:function(){
+                $('.matching-btn').removeClass('active');
+                _this.addClass('active')
+                var text=parseInt(_this.text())
+                $('.matching-number').removeClass('border-right');
+                if(text!='NAN'){
+                    $('.matching-number').each(function(j){
+                        if((j+1)%text==0){
+                            $(this).addClass('border-right')
+                        }
+                    })
                 }
-            })
-        }
+            }
+        })
     })
 })
 </script>

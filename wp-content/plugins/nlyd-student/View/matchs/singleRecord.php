@@ -131,7 +131,7 @@ layui.use(['element','flow'], function(){
                                 var top3=value.ranking<=3 ? 'top3' : '';
                                 var nl_me='';
                                 if(res.data.my_ranking!=null){
-                                    if(value.ranking==res.data.my_ranking.ranking){
+                                    if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
                                         nl_me='nl-me'
                                         if(value.ranking!=1){
                                             $('#danxiang_me').html(Html).css('display','table-row');

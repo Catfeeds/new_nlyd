@@ -110,7 +110,7 @@
                             </div> -->
                             <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
                         <?php endif;?>
-                        <?php if($match['match_status'] == -3):?>
+                        <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
                             <a class="a-btn get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
                         <?php endif;?>
                         <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>

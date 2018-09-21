@@ -32,16 +32,49 @@ class Import {
      * usermeta
      */
     public function usermeta(){
+        die;
         set_time_limit(0);//0表示不限时
         global $wpdb;
 //                $res = $wpdb->get_results('SELECT * FROM '.$wpdb->usermeta, ARRAY_A);
 //        echo '<pre />';
+//        $page = isset($_POST['page']) ? intval($_POST['page']) : 2;
+//        $page < 1 && $page = 1;
+//        $pageSize = 20;
+//        $start = ($page-1)*$pageSize;
+//        global $wpdb;
+//        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,
+//        CASE d.range
+//        WHEN 1 THEN "中国"
+//        WHEN 2 THEN "国际"
+//        ELSE "未知"
+//        END AS ranges
+//        FROM '.$wpdb->prefix.'directories AS d
+//        LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id
+//        WHERE d.type=1 AND d.is_show=1 LIMIT '.$start.','.$pageSize);
+
+//        foreach ($res as &$v){
+//            $usermeta = get_user_meta($v->user_id,'', true);
+//
+//            $coachmeta = get_user_meta($v->coach_id,'user_real_name')[0];
+//            $user_real_name = unserialize($usermeta['user_real_name'][0]);
+//            $v->header_img = $usermeta['user_head'][0];
+//            $v->user_level = $usermeta['wp_user_level'][0];
+//
+//            $v->userID = $usermeta['user_ID'][0];
+//            $v->real_name = $user_real_name['real_name'];
+//            $v->sex = $usermeta['user_gender'][0];
+//            $v->coach_name = unserialize($coachmeta)['real_name'];
+//
+//        }
 //        print_r($res);
 //        die;
-//        $sql = 'DELETE FROM '.$wpdb->usermeta.' WHERE user_id>500';
-//        $wpdb->query($sql);
-//        die;
+        update_user_meta(26345,'user_gender','女');
+        $sql = 'SELECT * FROM '.$wpdb->usermeta.' WHERE user_id=26340';
+        $res = $wpdb->get_results($sql);
+        echo 111111;
+        var_dump($res);
 
+        die;
         $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE sex=1 OR sex=2 OR city!=null');
 
         foreach ($result as $res){
@@ -86,8 +119,70 @@ class Import {
      * 导入用户
      */
     public function users(){
+        die;
+        $aaa = wp_create_user('15828597927','123456');
+//        var_dump($aaa);
+        die;
+
         global $wpdb;
 
+        $sql = 'DELETE FROM '.$wpdb->prefix.'usermeta WHERE user_id>1';
+        $wpdb->query($sql);
+
+        die;
+        if(is_post()){
+            $display_name = mb_substr($_POST['display_name'], 0, 1).', '.mb_substr($_POST['display_name'], 1);
+            $user_id = wp_create_user($_POST['username'],get_time());
+            $wpdb->startTrans();
+            if($user_id){
+                $wpdb->update($wpdb->users,['display_name' => $display_name], ['ID' => $user_id]);
+                $bool = update_user_meta($user_id,'user_gender',$_POST['sex']);
+                update_user_meta($user_id,'first_name',mb_substr($_POST['display_name'], 0, 1));
+                update_user_meta($user_id,'last_name',mb_substr($_POST['display_name'], 1));
+                if($bool){
+                    $sql = 'INSERT INTO '.$wpdb->prefix.'directories (user_id,category_name,`level`,`type`,certificate) VALUES ('.$user_id.',"速记类","'.$_POST['level'].'",4,"'.$_POST['dds'].'")';
+                    if($wpdb->query($sql)){
+                        $wpdb->commit();
+                    }else{
+                        $wpdb->rollback();
+                        $msg = '创建名录失败';
+                    }
+                }else{
+                    $wpdb->rollback();
+                    $msg = '创建用户失败';
+                }
+
+            }else{
+                $wpdb->rollback();
+                $msg = '创建用户失败';
+            }
+            echo $msg;
+        }
+
+        ?>
+        <br />
+        <form action="" method="post">
+
+            <lable>姓名</lable>
+            <input type="text" name="display_name"><br />
+            <lable>性别</lable>
+            <input type="text" name="sex"><br />
+            <lable>用户名</lable>
+            <input type="text" name="username"><br />
+            <lable>等级</lable>
+            <input type="text" name="level"><br />
+            <lable>证书</lable>
+            <input type="text" name="dds"><br />
+            <input type="submit" value="提交">
+        </form>
+        <?php
+
+        die;
+//                $sql = 'DELETE FROM '.$wpdb->users.' WHERE ID>14';
+//        $wpdb->query($sql);
+//        die;
+
+//        die;
 
 //        $result = $wpdb->get_results('SELECT * FROM wp_users WHERE user_mobile="13072808482"');
 //        $result = $wpdb->get_results('SELECT * FROM sckm_members WHERE mem_mobile="13826121163"');
@@ -118,7 +213,7 @@ class Import {
 
 //                $regirestTime = date('Y-m-d H:i:s', $res->register_time);
 
-                $display_name = mb_substr($res->truename, 0, 1).','.mb_substr($res->truename, 1);
+                $display_name = mb_substr($res->truename, 0, 1).', '.mb_substr($res->truename, 1);
                 $display_name = $display_name == ',' ? '' : addslashes($display_name);
                 $res->nickname = addslashes($res->nickname);
                 $user_login = $res->mem_mobile ? $res->mem_mobile : $res->openid;
@@ -159,6 +254,7 @@ class Import {
                     if(preg_match('/一/',$level)) $level = 1;
                     if(preg_match('/国际/',$level)) $range = 2;
                     $type = 0;
+                    $c_name = '';
                     switch ($sv->search_type_id){
                         case 3:
                             $type = 4;
@@ -174,19 +270,20 @@ class Import {
                             break;
                         case 7:
                             $type = 1;
+                            switch ($sv->level){
+                                case '国际一级(记忆类)' OR '中国一级(记忆类)':
+                                    $c_name = '记忆类';
+                                    break;
+                                case '国际一级(心算类)' OR '中国一级(心算类)':
+                                    $c_name = '心算类';
+                                    break;
+                                case '国际一级(速读类)' OR '中国一级(速读类)':
+                                    $c_name = '速读类';
+                                    break;
+                            }
                             break;
                     }
-                    switch ($sv->level){
-                        case '国际一级(记忆类)':
-                            $c_name = '记忆类';
-                            break;
-                        case '国际一级(心算类)':
-                            $c_name = '心算类';
-                            break;
-                        case '国际一级(速读类)':
-                            $c_name = '速读类';
-                            break;
-                    }
+
                     $searchsSql2 = "('$res->id','$c_name','$level','$range','$type'),";
 
                 }
@@ -342,6 +439,7 @@ class Import {
      * 导入战队
      */
     public function import_teams(){
+        die;
         global $wpdb;
         $teamErrStr = '';
         $errStr = '';
@@ -370,24 +468,24 @@ class Import {
             ];
             $metaBool = $wpdb->insert($wpdb->prefix.'team_meta',$teamMetaData);
 
-            $users = $wpdb->get_results('SELECT * FROM sckm_team_members WHERE team_id='.$res->id);
-            foreach ($users as $usv){
-                $data = [
-                    'team_id' => $teamId,
-                    'user_id' => $usv->member_id,
-                    'user_type' => 1,
-                    'status' => 2,
-                    'created_time' => date('Y-m-d H:i:s',$usv->created),
-                ];
-                $bool = $wpdb->insert($wpdb->prefix.'match_team',$data);
-                if(!$bool){
-                    $errStr .= $usv->id.'插入失败, sql: '.$wpdb->last_query.'<br />';
-                }
-            }
-
-            if(!$bool){
-                $teamErrStr .= $res->id.'插入失败 <br />';
-            }
+//            $users = $wpdb->get_results('SELECT * FROM sckm_team_members WHERE team_id='.$res->id);
+//            foreach ($users as $usv){
+//                $data = [
+//                    'team_id' => $teamId,
+//                    'user_id' => $usv->member_id,
+//                    'user_type' => 1,
+//                    'status' => 2,
+//                    'created_time' => date('Y-m-d H:i:s',$usv->created),
+//                ];
+//                $bool = $wpdb->insert($wpdb->prefix.'match_team',$data);
+//                if(!$bool){
+//                    $errStr .= $usv->id.'插入失败, sql: '.$wpdb->last_query.'<br />';
+//                }
+//            }
+//
+//            if(!$bool){
+//                $teamErrStr .= $res->id.'插入失败 <br />';
+//            }
             if(!$metaBool){
                 $teamErrStr .= $res->id.':team: 插入失败 <br />';
             }

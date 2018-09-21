@@ -23,12 +23,8 @@
 .teamDetail-row.have-metal{
     padding-top: 35px;
 }
-.teamDetail-row p{
-    margin-bottom: 0;
+.teamDetail-row .team-info-detail{
     color: rgba(116, 116, 116, 1);
-    text-indent: 0.24rem;
-    width: -webkit-calc(100% - 30px);
-    width: calc(100% - 30px);
 }
 
 .teamDetail-metal{

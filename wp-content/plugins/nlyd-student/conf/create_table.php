@@ -285,6 +285,7 @@ function the_table_install () {
           `surplus_time` varchar(50) DEFAULT NULL COMMENT '消耗时间',
           `my_score` mediumint(10) DEFAULT NULL COMMENT '成绩',
           `answer_status` tinyint(2) DEFAULT NULL COMMENT '答题状态 -1：记忆完成 1：提交',
+          `submit_type` tinyint(2) DEFAULT '1' COMMENT '提交方式 1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切换,系统提交',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";

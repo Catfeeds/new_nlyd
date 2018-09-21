@@ -3,11 +3,11 @@
 
                     <div class="answer-zoo">
                         <div class="answerBtn">你的答案</div>
-                        <div class="your-answer">
+                        <div class="answers">
                             <div class="porker-zoo">
                                 <div class="poker-window">
                                 <?php if(!empty($my_answer)): ?>
-                                    <div class="poker-wrapper">
+                                    <div class="poker-wrapper your-answer first_wap">
                                         <?php foreach ($my_answer as $k => $v ){
                                             $val = str2arr($v,'-');
                                             switch ($val[0]){
@@ -41,15 +41,8 @@
                                         <?php } ?>
                                     </div>
                                 <?php endif;?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="answerBtn">正确答案</div>
-                        <div class="right-answer">
-                            <div class="porker-zoo">
-                                <div class="poker-window">
-                                    <?php if(!empty($questions_answer)): ?>
-                                    <div class="poker-wrapper">
+                                <?php if(!empty($questions_answer)): ?>
+                                    <div class="poker-wrapper right-answer second_wap">
                                         <?php foreach ($questions_answer as $k => $v ){
                                                 $val = str2arr($v,'-');
                                                 switch ($val[0]){
@@ -83,8 +76,8 @@
                                         <?php } ?>
                                     </div>
                                     <?php endif;?>
-                                </div>
                             </div>
                         </div>
+                        <div class="answerBtn porkerAnswer">正确答案</div>
                     </div>
                

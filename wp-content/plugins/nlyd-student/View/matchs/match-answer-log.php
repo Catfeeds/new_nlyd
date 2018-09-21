@@ -147,27 +147,27 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 
          <?php if($project_alias == 'pkjl'): ?>
             initWidth=function() {
-                var len=$('.your-answer .poker-wrapper .poker').length;
-                var width=$('.your-answer .poker-wrapper .poker').width()+2;
-                var marginRight=parseInt($('.your-answer .poker-wrapper .poker').css('marginRight'))
+                var len=$('.first_wap.poker-wrapper .poker').length;
+                var width=$('.first_wap.poker-wrapper .poker').width()+2;
+                var marginRight=parseInt($('.first_wap.poker-wrapper .poker').css('marginRight'))
                 var W=width*len+marginRight*(len-1)+'px';
-                $('.your-answer .poker-wrapper').css('width',W);
+                $('.first_wap.poker-wrapper').css('width',W);
 
-                var len1=$('.right-answer .poker-wrapper .poker').length;
-                var width1=$('.right-answer .poker-wrapper .poker').width()+2;
-                var marginRight1=parseInt($('.right-answer .poker-wrapper .poker').css('marginRight'))
+                var len1=$('.second_wap.poker-wrapper .poker').length;
+                var width1=$('.second_wap.poker-wrapper .poker').width()+2;
+                var marginRight1=parseInt($('.second_wap.poker-wrapper .poker').css('marginRight'))
                 var W1=width1*len1+marginRight1*(len1-1)+'px';
-                $('.right-answer .poker-wrapper').css('width',W1);
+                $('.second_wap.poker-wrapper').css('width',W1);
             }
             initWidth();
-            $('.your-answer .poker-window').scroll(function(){
-                var left=$(this).children('.poker-wrapper').position().left;
-                $('.right-answer .poker-window').scrollLeft(-left)
-            })
-            $('.right-answer .poker-window').scroll(function(){
-                var left=$(this).children('.poker-wrapper').position().left;
-                $('.your-answer .poker-window').scrollLeft(-left)
-            })
+            // $('.first_wap .poker-window').scroll(function(){
+            //     var left=$(this).children('.poker-wrapper').position().left;
+            //     $('.second_wap .poker-window').scrollLeft(-left)
+            // })
+            // $('.second_wap .poker-window').scroll(function(){
+            //     var left=$(this).children('.poker-wrapper').position().left;
+            //     $('.first_wap .poker-window').scrollLeft(-left)
+            // })
         <?php endif;?>
     })
 </script>
