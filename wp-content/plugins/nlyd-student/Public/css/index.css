@@ -529,6 +529,24 @@ a {
     width: 100%;
     position: relative;
 }
+.search-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 80px;
+    height: 35px;
+    border-top-right-radius: 17.5px;
+    border-bottom-right-radius: 17.5px;
+    padding: 0;
+    color: #fff;
+    display:table;
+}
+.search-btn span{
+    vertical-align:middle;
+    display:table-cell;
+    text-align: center;
+}
 .search-zoo .search-Icon {
     position: absolute;
     top: 50%;
@@ -829,3 +847,45 @@ p.share-font{
         margin-left: -100px;
     }
 }
+
+@media screen and (max-width: 1199px){
+    #page.boxed{
+        -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;
+        box-shadow: none!important;
+        }
+        #main,.wf-wrap{
+            padding: 0!important;
+        }
+        .content{
+            padding: 0!important;
+            padding-right: 0!important;
+            width: 100%!important;
+        }
+        .wf-container, .wf-container-main{
+            margin: 0!important;
+            overflow: hidden;
+        } 
+        .page-title{
+            display: none;
+        }
+        #header{
+            display: none;
+        }
+        #wpadminbar{
+            /* position: absolute; */
+            display: none;
+        }
+        #footer{
+            display: none;
+        }
+        .masthead,.mobile-header-space,.mobile-header-bar{
+                display: none!important;
+        }
+        .page-title{
+            display: none!important;
+        }
+        .scroll-top.on{
+            bottom: 70px;
+        }
+}  
