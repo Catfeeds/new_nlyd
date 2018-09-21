@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: myInterface 我的接口
+Plugin Name: Application Interface 项目接口
 Plugin URI: http://localhost/wordpress/
 Description: 接口设置
 Version: 1.0
@@ -323,6 +323,6 @@ if(!class_exists('myInterface')){
 
 }
 define( 'leo_user_interface_path', plugin_dir_path( __FILE__ ) );
-define( 'leo_user_interface_version','2.0.6' );//样式版本
+define( 'leo_user_interface_version','2.0.8' );//样式版本
 
 new myInterface();

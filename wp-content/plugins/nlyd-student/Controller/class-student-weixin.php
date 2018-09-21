@@ -10,11 +10,14 @@ class Student_Weixin
 
     public function __construct($action = '')
     {
-        if($action) $this->$action();
-        if($action != ''){
-            exit;
-        }else{
-            return;
+
+        if($action != 'jsPayGetOpenId'){
+            if($action) $this->$action();
+            if($action != ''){
+                exit;
+            }else{
+                return;
+            }
         }
         //添加短标签
 //        add_shortcode('student-weixin',array($this,$action));
@@ -41,7 +44,7 @@ class Student_Weixin
             global $current_user;
             wp_redirect(home_url('account'));
         }else{
-            $this->getWebCode(true);
+            $this->getWebCode();
         }
     }
 
@@ -49,10 +52,8 @@ class Student_Weixin
      * 微信网页授权获取code
      */
     public function getWebCode($is_pay = false){
-
         if(empty($_GET['code'])){
             $redirect_url = home_url().$_SERVER["REQUEST_URI"];
-
             //$redirect_uri = 'http://.miss4ever.com'.$_SERVER['REQUEST_URI'];
             //$response_type = 'wixin_return_code';
             //$scope = 'snsapi_userinfo';
@@ -66,7 +67,10 @@ class Student_Weixin
 //            $url .= '&scope=snsapi_login';
             $url .= '&#wechat_redirect';
 //            var_dump($url);return;
-            header('Location:'.$url);
+
+//            var_dump($url);
+//            wp_redirect($url);
+            Header('Location:'.$url);
             exit;
         }else{
             return $this->getWebAccessToken($is_pay);
@@ -94,7 +98,6 @@ class Student_Weixin
         $data = curl_exec($ch);
         $data = json_decode($data,true);
         curl_close($ch);
-
         if (isset($data['errcode'])) {
             if(is_ajax()){
                 wp_send_json_error(['info' => '获取微用户授权失败.请退出后重试']);

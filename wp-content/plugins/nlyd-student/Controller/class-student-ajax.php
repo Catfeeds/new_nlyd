@@ -164,8 +164,8 @@ class Student_Ajax
             $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
-                        FROM `zlin_order` a 
-                        LEFT JOIN zlin_match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
+                        FROM `{$wpdb->prefix}order` a 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
                         #where a.match_id = 56329
                         {$where}
                         GROUP BY user_id,project_id
@@ -175,12 +175,11 @@ class Student_Ajax
                     GROUP BY user_id
                     ORDER BY my_score DESC,surplus_time DESC
                     limit {$start},{$pageSize}
-                    ";
-
+                    ";  
+            
             /*if($current_user->ID == 66){
                 print_r($sql);
             }*/
-            //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
             //print_r($rows);
             $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -220,7 +219,11 @@ class Student_Ajax
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $list[$k]['ranking'] = $start+$k+1;
-
+                if($k != 0){
+                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                        $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                    }
+                }
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
                 }
@@ -672,8 +675,7 @@ class Student_Ajax
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.user_type,
                 a.status,IFNULL(b.read,'-') as `read`,
                 IFNULL(b.memory,'-') as memory,
-                IFNULL(b.compute,'-') as compute,
-                IFNULL(b.mental,'-') as mental 
+                IFNULL(b.compute,'-') as compute
                 from {$wpdb->prefix}match_team a
                 left join {$wpdb->prefix}user_skill_rank b on a.user_id = b.user_id 
                 where a.user_type = {$type} and a.status = 2 and a.team_id = {$team_id} 
@@ -689,12 +691,20 @@ class Student_Ajax
 
         if(!empty($rows)){
             foreach ($rows as $k => $v){
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname') and user_id = {$v['user_id']}";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_head','user_ID','nickname','user_real_name') and user_id = {$v['user_id']}";
                 $user = $wpdb->get_results($sql1,ARRAY_A);
                 $user_info = array_column($user,'meta_value','meta_key');
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-                $rows[$k]['nickname'] = $user_info['nickname'];
+                if(!empty($user_info['user_real_name'])){
+                    $user_real = unserialize($user_info['user_real_name']);
+//                    print_r($user_real);
+                    $rows[$k]['nickname'] = $user_real['real_name'];
+                }else{
+                    $rows[$k]['nickname'] = $user_info['nickname'];
+                } 
+                
                 $rows[$k]['user_head'] = !empty($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
+                $rows[$k]['mental'] = '待定';
             }
         }
 
@@ -1209,7 +1219,7 @@ class Student_Ajax
         }
 
         //获取报名选手列表
-        global $wpdb;
+        global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 10;
@@ -1221,6 +1231,10 @@ class Student_Ajax
                   where a.match_id = {$_POST['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
                   order by a.id desc limit {$start},{$pageSize} ";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
+        /*if($current_user->ID == 66){
+            print_r($sql2);
+             print_r($orders);
+        }*/
         //print_r($orders);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
@@ -1229,7 +1243,7 @@ class Student_Ajax
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
             $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
-            $orders[$k]['user_head'] = file_exists($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
+            $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);
                 $orders[$k]['real_age'] = $user_real['real_age'];
@@ -1239,6 +1253,7 @@ class Student_Ajax
                 $orders[$k]['nickname'] = $user['nickname'][0];
             }
         }
+
         //print_r($orders);
         wp_send_json_success(array('info'=>$orders));
     }
@@ -2760,7 +2775,6 @@ class Student_Ajax
                 $user_real_name['real_name'] = $usermeta['last_name'][0].$usermeta['first_name'][0];
             }
             $v->header_img = $usermeta['user_head'][0];
-
             $v->userID = $usermeta['user_ID'][0];
             $v->real_name = $user_real_name['real_name'];
             $v->sex = $usermeta['user_gender'][0];
@@ -2774,6 +2788,59 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'没有数据'));
     }
 
+    /**
+     * 根据搜索条件获取战队列表
+     */
+    public function getTeamsBySearch(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_search_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
+        $search = trim($_POST['search']);
+        $map = array();
+        $map[] = " a.post_status = 'publish' ";
+        $map[] = " a.post_type = 'team' ";
+        $map[] = " a.post_title LIKE '%$search%' ";
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 10;
+        $start = ($page-1)*$pageSize;
+        $where = join(' and ',$map);
+        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.user_id,b.status,
+                if(c.team_world != '',c.team_world,'--') as team_world,
+                if(c.team_director != '',c.team_director,'--') as team_director,
+                if(c.team_slogan != '',c.team_slogan,'--') as team_slogan,
+                if(c.team_leader != '',c.team_leader,'--') as team_leader
+                from {$wpdb->prefix}posts a  
+                left join {$wpdb->prefix}match_team b on a.ID = b.team_id and b.user_type = 1 and b.user_id = {$current_user->ID}
+                left join {$wpdb->prefix}team_meta c on a.ID = c.team_id 
+                where {$where} order by b.status desc limit $start,$pageSize";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        // print_r($sql);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>'已经到底了'));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>'暂无战队'));
+        foreach ($rows as $k => $val ){
+
+            //获取领队
+            if(is_numeric($val['team_director'])){
+                $user = get_userdata( $val['team_director']);
+                if(!empty($user->data->display_name)){
+                    $rows[$k]['team_director'] = preg_replace('/, /','',$user->data->display_name);
+                }
+            }
+            //获取战队成员总数
+            $total = $wpdb->get_var("select count(*) from {$wpdb->prefix}match_team where team_id = {$val['ID']} and status = 2 and user_type = 1");
+            $rows[$k]['team_total'] = $total;
+
+            $rows[$k]['team_url'] = home_url('/teams/teamDetail/team_id/'.$val['ID']);
+        }
+        //print_r($rows);
+        wp_send_json_success(array('info'=>$rows));
+    }
 }
 
 new Student_Ajax();

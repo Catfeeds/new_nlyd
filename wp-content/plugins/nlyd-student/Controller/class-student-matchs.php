@@ -356,12 +356,11 @@ class Student_Matchs extends Student_Home
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
                   where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
                   order by a.id desc limit 0,10";
-        //var_dump($sql2);
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $order_total = $total['total'] > 0 ? $total['total'] : 0;
         if (!empty($orders)){
-            //var_dump($orders);
+            //print_r($orders);
             foreach ($orders as $k => $v){
                 $user = get_user_meta($v['user_id']);
                 $orders[$k]['nickname'] = $user['nickname'][0];
@@ -1411,8 +1410,8 @@ class Student_Matchs extends Student_Home
             $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
-                        FROM `zlin_order` a 
-                        LEFT JOIN zlin_match_questions c ON a.user_id = c.user_id  and c.match_id = {$_GET['match_id']} 
+                        FROM `{$wpdb->prefix}order` a 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_GET['match_id']} 
                         #where a.match_id = 56329
                         {$where}
                         GROUP BY user_id,project_id
@@ -1421,6 +1420,7 @@ class Student_Matchs extends Student_Home
                     ORDER BY my_score DESC,surplus_time DESC
                     limit 0,10
                     ";
+            //print_r($sql);
             /*if($current_user->ID == 66){
                 print_r($sql);
             }*/
@@ -1446,21 +1446,7 @@ class Student_Matchs extends Student_Home
                     $list[$k]['user_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                     if(!empty($user_real_name['real_age'])){
                         $age = $user_real_name['real_age'];
-                        switch ($age){
-                            case $age > 59:
-                                $group = '老年组';
-                                break;
-                            case $age > 17:
-                                $group = '成年组';
-                                break;
-                            case $age > 12:
-                                $group = '少年组';
-                                break;
-                            default:
-                                $group = '儿童组';
-                                break;
-                        }
-
+                        $group = getAgeGroupNameByAge($age);
                     }else{
                         $group = '-';
                     }
@@ -1474,7 +1460,12 @@ class Student_Matchs extends Student_Home
                     $list[$k]['city'] = $city;
                     $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                     $list[$k]['group'] = $group;
-                    $list[$k]['ranking'] = $k+1;
+                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                        $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                    }else{
+
+                        $list[$k]['ranking'] = $k+1;
+                    }
 
                     if($val['user_id'] == $current_user->ID){
                         $my_ranking = $list[$k];
