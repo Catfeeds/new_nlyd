@@ -25,7 +25,7 @@
                         <?php } ?>
                         <?php endif; ?>
                     </div>
-                        <div class="nl-table-wapper">
+                        <div class="nl-table-wapper have-bottom-footer">
                             <table class="nl-table">
                                 <thead>
                                     <tr class='table-head'>
@@ -100,7 +100,10 @@ layui.use(['element','flow'], function(){
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
-                $('#danxiang_me').css('display','none');
+                if(fenleiPage==0){
+                     $('#danxiang_me').css('display','none');
+                }
+               
                 fenleiPage++
                 var lis = [];
                 var postData={
