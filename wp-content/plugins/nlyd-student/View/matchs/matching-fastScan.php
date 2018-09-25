@@ -89,7 +89,12 @@ jQuery(function($) {
                 clearTimeout(timer)
             }
             if(flaseQuestion<flaseMax){
-                timer=setTimeout("showTime()",1000);
+                if(getAjaxTime==_count_time+1){
+                    timer=setTimeout("showTime()",1000+answerHide*1000);
+                }else{
+                    timer=setTimeout("showTime()",1000);
+                }
+                
             }
             
 
@@ -289,7 +294,7 @@ jQuery(function($) {
                 $('.count_downs').removeClass('hide')
                 isMatching=!isMatching
             }else{
-                setTimeout(function() {
+                timers=setTimeout(function() {
                     $('.answer').addClass('hide').text('')
                     $('#selectWrapper').removeClass('hide')
                     $('.count_downs').removeClass('hide')
