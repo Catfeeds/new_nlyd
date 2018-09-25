@@ -129,26 +129,25 @@ jQuery(function($) {
             if(leave_page_time){
                 data['leave_page_time']=leave_page_time;
             }
-            console.log(data)
-            // $.ajax({
-            //     data:data,success:function(res,ajaxStatu,xhr){    
-            //         $.DelSession('match')
-            //         $.DelSession('leavePage')
-            //         if(res.success){
-            //             if(res.data.url){
-            //                 window.location.href=res.data.url
-            //             }
-            //         }else{
-            //             $('#load').css('display','none')
-            //             $.alerts(res.data.info)
-            //             isSubmit=false;
-            //         }
-            //     },
-            //     error: function(jqXHR, textStatus, errorMsg){
-            //         isSubmit=false;
-            //         $('#load').css('display','none')
-            //     }
-            // })
+            $.ajax({
+                data:data,success:function(res,ajaxStatu,xhr){    
+                    $.DelSession('match')
+                    $.DelSession('leavePage')
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url
+                        }
+                    }else{
+                        $('#load').css('display','none')
+                        $.alerts(res.data.info)
+                        isSubmit=false;
+                    }
+                },
+                error: function(jqXHR, textStatus, errorMsg){
+                    isSubmit=false;
+                    $('#load').css('display','none')
+                }
+            })
         }else{
             $.alerts('正在提交答案')
         }

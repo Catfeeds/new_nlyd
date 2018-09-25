@@ -384,7 +384,7 @@ class Student_Ajax
         $update_arr['surplus_time'] = $_POST['surplus_time'];
         $update_arr['my_score'] = $my_score;
         $update_arr['submit_type'] = isset($_POST['submit_type']) ? $_POST['submit_type'] : 1;
-        $update_arr['leave_page_time'] = isset($_POST['leave_page_time']) ? json_encode($_POST['submit_type']) : '';
+        $update_arr['leave_page_time'] = isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '';
         /*print_r($update_arr);
         die;*/
         $result = $wpdb->update($wpdb->prefix.'match_questions',$update_arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));

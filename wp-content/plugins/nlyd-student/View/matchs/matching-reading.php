@@ -66,14 +66,14 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
+    leaveMatchPage(function(data){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
+        submit(time,4,data.Time);
     })
     layui.use(['form'], function(){
 
     })
-    function submit(time,submit_type){//提交答案
+    function submit(time,submit_type,leave_page_time){//提交答案
         if(!isSubmit){
             $('#load').css('display','block')
             isSubmit=true;
@@ -99,6 +99,9 @@ jQuery(function($) {
                 match_action:'subjectReading',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+            }
+            if(leave_page_time){
+                data['leave_page_time']=leave_page_time;
             }
             $.ajax({
                 data:data,
