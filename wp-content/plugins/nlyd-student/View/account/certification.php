@@ -71,6 +71,7 @@
                                     </div>
                                 </div>
                                 <a class="a-btn" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</a>
+                                <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
                             </div>
                         </form>
                     <!-- <a class="a-btn certificationFormBtn">更新实名认证</a> -->
@@ -289,6 +290,8 @@ jQuery(document).ready(function($) {
                 fd.append('user_address[area]',data.field['user_address[area]']);
                 fd.append('user_address[city]',data.field['user_address[city]']);
                 fd.append('user_address[province]',data.field['user_address[province]']);
+                fd.append('type',$('.sbu_type').val());
+
                 if(match_id!=null){
                     fd.append('match_id',match_id);
                 }else{

@@ -32,6 +32,7 @@ class Student_Account extends Student_Home
         global $user_info,$wpdb;
         if($user_info){
 
+            
             //获取消息
             $message_total = $wpdb->get_row("select if(count(id)>0,count(id),0) total from {$wpdb->prefix}messages where user_id = {$user_info['user_id']} and read_status = 1 ");
 

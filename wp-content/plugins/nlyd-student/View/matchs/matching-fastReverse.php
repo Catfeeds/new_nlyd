@@ -61,6 +61,7 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        // console.log(data);
         submit(time,4);
     })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
@@ -124,6 +125,12 @@ jQuery(function($) {
                 match_action:'subjectFastReverse',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+            }
+            var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                if(leavePage.Time){
+                    data['leave_page_time']=leavePage.Time;
+                }
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){    

@@ -1,7 +1,7 @@
 
     function leaveMatchPage(submit) {//准备也页，比赛页
         
-        if(window.location.host=='ydbeta.gjnlyd.com'){
+        // if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -15,31 +15,35 @@
                         match_id:jQuery.Request('match_id'),
                         project_id:jQuery.Request('project_id'),
                         match_more:jQuery.Request('match_more'),
-                        leavePage:1
+                        leavePage:1,
+                        Time:[],
                     }
                     leavePage= sessionData
                 }
+                var key=leavePage['leavePage']-1;
+                leavePage['Time'][key]={out:new Date()}
                 jQuery.SetSession('leavePage',leavePage)
             })  
             jQuery(window).on("focus", function(e) {
                 var leavePage= jQuery.GetSession('leavePage','1');
                 if(leavePage && leavePage['match_id']===jQuery.Request('match_id') && leavePage['project_id']===jQuery.Request('project_id') && leavePage['match_more']===jQuery.Request('match_more')){
                     var leveTimes=parseInt(leavePage['leavePage'])
+                    leavePage['Time'][leveTimes-1]['back']=new Date()
+                    jQuery.SetSession('leavePage',leavePage)
                     if(leveTimes>0 && leveTimes<3){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,到达2次自动提交答题')
                     }
-                    if(leveTimes>2){
+                    if(leveTimes>=2){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
                             submit();
                         }, 1000);
-                        submit();
                     }
                 }else{
                     jQuery.DelSession('leavePage')
                 }
             });
-        }
+        // }
     }
 
     function leavePageLoad(url){//比赛纪录页

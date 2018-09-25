@@ -143,10 +143,10 @@ class Student_Ajax
                 $age_where = " WHERE ";
                 switch ($age){
                     case $age == 1:
-                        $age_where .= "  y.meta_value < 12 ";
+                        $age_where .= "  y.meta_value < 13 ";
                         break;
                     case $age == 2:
-                        $age_where .= "  (y.meta_value > 11 and y.meta_value < 18) ";
+                        $age_where .= "  (y.meta_value > 12 and y.meta_value < 18) ";
                         break;
                     case $age == 3:
                         $age_where .= "  (y.meta_value > 17 and y.meta_value < 60) ";
@@ -158,7 +158,7 @@ class Student_Ajax
             }
 
             if(!empty($_POST['match_more'])){
-                $where .= " and c.match_more = {$_POST['match_more']} ";
+                $left_where .= " and c.match_more = {$_POST['match_more']} ";
             }
 
             $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
@@ -208,7 +208,7 @@ class Student_Ajax
                 }
                 if(!empty($user_info['user_address'])){
                     $user_address = unserialize($user_info['user_address']);
-                    $city = $user_address['city'];
+                    $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
                 }else{
                     $city = '-';
                 }
@@ -383,6 +383,8 @@ class Student_Ajax
         $update_arr['my_answer'] = json_encode($my_answer);
         $update_arr['surplus_time'] = $_POST['surplus_time'];
         $update_arr['my_score'] = $my_score;
+        $update_arr['submit_type'] = isset($_POST['submit_type']) ? $_POST['submit_type'] : 1;
+        $update_arr['leave_page_time'] = isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '';
         /*print_r($update_arr);
         die;*/
         $result = $wpdb->update($wpdb->prefix.'match_questions',$update_arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
@@ -1572,6 +1574,55 @@ class Student_Ajax
                     if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'证件号格式不正确'));
                     if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
 
+                    //判断是否报名
+                    if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+
+                        $sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$_POST['meta_val']['real_name']}' ";
+
+                        $row = $wpdb->get_row($sql,ARRAY_A);
+                        //var_dump($row);die;
+                        if(empty($row)) wp_send_json_error(array('info'=>'该用户未在老平台报名<br/>请确认姓名的真实性'));
+                        if($row){
+
+                            //var_dump($row);die;
+                            $order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$current_user->ID} ");
+                            if(!empty($order_id)){
+
+                                //在平台创建订单
+                                $orde_data = array(
+                                            'user_id' => $current_user->ID,
+                                            'match_id' => 56522, //等待比赛创建后修改match_id
+                                            'order_type' =>1,
+                                            'pay_type' => 'wx',
+                                            'cost' => 0,
+                                            'pay_status' => 4,
+                                            'created_time' => get_time('mysql')
+                                        );
+                                $a = $wpdb->insert($wpdb->prefix.'order',$orde_data);
+                                $b = $wpdb->insert(
+                                                $wpdb->prefix.'match_sign',
+                                                array(
+                                                    'user_id'=>$current_user->ID,
+                                                    'match_id'=>56522,
+                                                    'created_time' => get_time('mysql')
+                                                )
+                                        );
+                                $c = $wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($user_id,$wpdb->insert_id)], ['id' => $wpdb->insert_id]);
+                                /*if($a && $b){
+
+                                    $wpdb->commit();
+                                    wp_send_json_success(array('info'=>'签到成功'));
+                                }else{
+
+                                    $wpdb->rollback();
+                                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败,请联系管理员'));
+                                }*/
+                            }else{
+                                wp_send_json_success(array('info'=>'签到成功'));
+                            }
+                        }
+                    }
+
                     if(!empty($_POST['user_gender'])){
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
                         unset($_POST['user_gender']);
@@ -1623,7 +1674,18 @@ class Student_Ajax
 
         }
         if($resul){
+            if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
+                if($a && $b && $c){
+
+                    $wpdb->commit();
+                    wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
+                }else{
+
+                    $wpdb->rollback();
+                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败,请联系管理员'));
+                }
+            }
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
             $success['info'] = '保存成功';
             $success['url'] = $url;
@@ -1640,11 +1702,16 @@ class Student_Ajax
     public function reckon_age(){
         if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
         if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>'证件号格式不正确'));
-        $sub_str = substr($_POST['real_ID'],6,4);
+        /*$sub_str = substr($_POST['real_ID'],6,4);
         $now = date_i18n("Y",get_time());
         $age = $now-$sub_str;
-        $age = $age >0 ? $age : 1;
-        if($age > 150){
+        $age = $age >0 ? $age : 1;*/
+        $age = birthday($_POST['real_ID']);
+        
+        if($age == -1){
+            wp_send_json_error(array('info'=>'年龄不能低于1岁,请确认身份证信息'));
+        }
+        if($age == -2){
             wp_send_json_error(array('info'=>'年龄超过150岁,请确认身份证信息'));
         }
         wp_send_json_success(array('info'=>$age));
@@ -2038,13 +2105,14 @@ class Student_Ajax
     }
 
     /**
-     * 用户退出
+     * 用户退出 
      */
     public function user_logout(){
 
         wp_logout();
         unset($_SESSION['login_time']);
         unset($_SESSION['user_info']);
+        unset($_SESSION['user_openid']);
         wp_send_json_success(array('info'=>'退出成功','url'=>home_url('logins/index/login_type/out')));
     }
 
@@ -2720,7 +2788,13 @@ class Student_Ajax
             update_user_meta($user_id,'user_session_id',session_id());
             wp_set_current_user($user_id);
             wp_set_auth_cookie($user_id);
-            wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
+
+            if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+                wp_send_json_success(array('info'=>'账户绑定完成,即将跳转', 'url' => home_url('account/certification/type/sign')));
+            }else{
+
+                wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
+            }
         }
 
 
@@ -2732,7 +2806,12 @@ class Student_Ajax
         $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type,$bindType);
 
         if($res){
-            wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
+            if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+                wp_send_json_success(array('info'=>'账户绑定完成,即将跳转', 'url' => home_url('account/certification/type/sign')));
+            }else{
+
+                wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
+            }
         }else{
             wp_send_json_error(array('info'=>'绑定失败'));
         }
