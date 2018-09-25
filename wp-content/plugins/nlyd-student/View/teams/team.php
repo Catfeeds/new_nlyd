@@ -38,14 +38,16 @@
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
-                    <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
+                    <div class="width-margin width-margin-pc layui-row">
                         <p class="team-tips">*每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入</p>
                         <div class="search-zoo" style="margin-bottom:10px">
                             <i class="iconfont search-Icon">&#xe63b;</i>
-                            <form action="">
-                                <input type="text" class="serach-Input nl-foucs" placeholder="搜索名录/课程/教练等">
-                            </form>
+                            <div class="search-btn bg_gradient_blue"><span>搜 索</span></div>
+                            <input type="text" class="serach-Input nl-foucs" placeholder="搜索战队">
                         </div>
+                    </div>
+                    <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
+                        
                     </div>
                 <?php }else{ ?>
                     <div class="no-info-page layui-row">
@@ -59,7 +61,8 @@
         </div>           
     </div>
 </div>
-
+<!-- 搜索 -->
+<input type="hidden" name="_wpnonce" id="searchTeam" value="<?=wp_create_nonce('student_get_team_search_code_nonce');?>">
 <!-- 加入战队 -->
 <input type="hidden" name="_wpnonce" id="setTeam" value="<?=wp_create_nonce('student_set_team_code_nonce');?>">
 <!-- 战队分页 -->
@@ -81,101 +84,114 @@ jQuery(function($) {
             clickable :true,
         },
     });  
-    
-    $("serach-Input").on('keypress', function(e) {
-        var keycode = e.keyCode;
-        var searchName = $(this).val();
-        if(keycode == '13') {
-            alert(1)
-        }
-    });
+var searchValue=""; 
 layui.use(['layer','flow'], function(){
     var flow = layui.flow;//流加载
-    //建造实例
-    // carousel.render({//轮播
-    //     elem: '#test1'
-    //     ,width: '100%' //设置容器宽度
-    //     ,arrow: 'none' //始终显示箭头
-    //     ,height:'172px'
-    //     ,interval:'2000'//自动切换的时间间隔
-    // });
 //--------------------分页--------------------------
-    flow.load({
-        elem: '#team-flow' //流加载容器
-        ,isAuto: false
-        ,isLazyimg: true
-        ,done: function(page, next){ //加载下一页
-            //模拟插入
-                var postData={
-                    action:'get_team_lists',
-                    _wpnonce:$("#getTeam").val(),
-                    page:page
-                }
-                var lis = [];
-                $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){  
-                    console.log(res)
-                        if(res.success){
-                            // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
-                            $.each(res.data.info,function(index,value){
-                                var statue='<div class="team-join canJoin" data-id="'+value.ID+'">'
-                                            +'<i class="iconfont">&#xe761;</i>'
-                                        +'</div>';//可加入按钮
-                                var wait=""
-                                if(typeof(value.user_id)!='undefined'&&value.user_id!=null&&value.user_id.length>0){
-                                    if(parseInt(value.status)==-1){//退队申请
-                                        statue='<div class="team-join myTeam" data-id="'+value.ID+'">'
-                                                    +'<i class="iconfont">&#xe62f;</i>'
-                                                +'</div>' 
-                                        wait='<div class="team-detail-row waitting">'
-                                                    +'<span class="team-info">退队申请审核中</span>'
-                                                +'</div>'
-                                    }else if(parseInt(value.status)==2){//我的战队
-                                        statue='<div class="team-join myTeam" data-id="'+value.ID+'">'
-                                                    +'<i class="iconfont">&#xe608;</i>'
-                                                +'</div>'  
-                                    }else if(parseInt(value.status)==1){//入队申请审核中
-                                        statue='<div class="team-join waitting" data-id="'+value.ID+'">'
-                                                    +'<i class="iconfont">&#xe62f;</i>'
-                                                +'</div>'  
-                                        wait='<div class="team-detail-row waitting">'
-                                                +'<span class="team-info">入队申请审核中</span>'
-                                            +'</div>'
-                                    }
-                                    
-                                }
-                                var dom='<a class="team-row" href="'+value.team_url+'">'+statue
-                                            +'<div class="team-detail">'
-                                                +'<div class="team-detail-row">'
-                                                    +'<span class="fs_16 c_blue">'+value.post_title+'</span>'
-                                                +'</div>'
-                                                +'<div class="team-detail-row">'
-                                                    +'<span class="team-info-label">战队负责人：</span>'
-                                                    +'<span class="team-info">'+value.team_director+'</span>'
-                                                +'</div>'
-                                                +'<div class="team-detail-row">'
-                                                    +'<span class="team-info-label">战队口号：</span>'
-                                                    +'<span class="team-info">'+value.team_slogan+'</span>'
-                                                +'</div>'
-                                                +'<div class="team-detail-row">'
-                                                    +'<span class="team-info-label">战队成员：</span>'
-                                                    +'<span class="team-info">'+value.team_total+'人</span>'
-                                                +'</div>'+wait
-                                            +'</div>'
-                                        +'</a>'   
-                                lis.push(dom)                           
-                            })  
-                            
-                            if (res.data.info.length<10) {
-                                next(lis.join(''),false) 
-                            }else{
-                                next(lis.join(''),true) 
-                            } 
-                        }else{
-                            next(lis.join(''),false)
-                        }
+        function pagation() {
+            flow.load({
+                elem: '#team-flow' //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    //模拟插入
+                    var postData={
+                        action:'getTeamsBySearch',
+                        _wpnonce:$('#searchTeam').val(),
+                        page:page,
+                        search:searchValue,
                     }
-                })         
+                    var lis = [];
+                    $.ajax({
+                        data:postData,success:function(res,ajaxStatu,xhr){  
+                            if(res.success){
+                                // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
+                                $.each(res.data.info,function(index,value){
+                                    var statue='<div class="team-join canJoin" data-id="'+value.ID+'" data-name="'+value.post_title+'">'
+                                                +'<i class="iconfont">&#xe761;</i>'
+                                            +'</div>';//可加入按钮
+                                    var wait=""
+                                    if(typeof(value.user_id)!='undefined'&&value.user_id!=null&&value.user_id.length>0){
+                                        if(parseInt(value.status)==-1){//退队申请
+                                            statue='<div class="team-join myTeam" data-id="'+value.ID+'">'
+                                                        +'<i class="iconfont">&#xe62f;</i>'
+                                                    +'</div>' 
+                                            wait='<div class="team-detail-row waitting">'
+                                                        +'<span class="team-info">退队申请审核中</span>'
+                                                    +'</div>'
+                                        }else if(parseInt(value.status)==2){//我的战队
+                                            statue='<div class="team-join myTeam" data-id="'+value.ID+'">'
+                                                        +'<i class="iconfont">&#xe608;</i>'
+                                                    +'</div>'  
+                                        }else if(parseInt(value.status)==1){//入队申请审核中
+                                            statue='<div class="team-join waitting" data-id="'+value.ID+'">'
+                                                        +'<i class="iconfont">&#xe62f;</i>'
+                                                    +'</div>'  
+                                            wait='<div class="team-detail-row waitting">'
+                                                    +'<span class="team-info">入队申请审核中</span>'
+                                                +'</div>'
+                                        }
+                                        
+                                    }
+                                    var dom='<a class="team-row" href="'+value.team_url+'">'+statue
+                                                +'<div class="team-detail">'
+                                                    +'<div class="team-detail-row">'
+                                                        +'<span class="fs_16 c_blue">'+value.post_title+'</span>'
+                                                    +'</div>'
+                                                    +'<div class="team-detail-row">'
+                                                        +'<span class="team-info-label">战队负责人：</span>'
+                                                        +'<span class="team-info">'+value.team_director+'</span>'
+                                                    +'</div>'
+                                                    +'<div class="team-detail-row">'
+                                                        +'<span class="team-info-label">战队口号：</span>'
+                                                        +'<span class="team-info">'+value.team_slogan+'</span>'
+                                                    +'</div>'
+                                                    +'<div class="team-detail-row">'
+                                                        +'<span class="team-info-label">战队成员：</span>'
+                                                        +'<span class="team-info">'+value.team_total+'人</span>'
+                                                    +'</div>'+wait
+                                                +'</div>'
+                                            +'</a>'   
+                                    lis.push(dom)                           
+                                })  
+                                
+                                if (res.data.info.length<10) {
+                                    next(lis.join(''),false) 
+                                }else{
+                                    next(lis.join(''),true) 
+                                } 
+                            }else{
+                                next(lis.join(''),false)
+                            }
+                        }
+                    })         
+                }
+            });
+        }
+        pagation()
+
+
+        new AlloyFinger($('.search-btn')[0], {
+        touchStart: function () {
+            $('.search-btn').addClass("opacity");
+        },
+        touchMove: function () {
+            $('.search-btn').removeClass("opacity");
+        },
+        touchEnd: function () {
+            $('.search-btn').removeClass("opacity");
+        },
+        touchCancel: function () {
+            $('.search-btn').removeClass("opacity");
+        },
+        tap: function () {
+            var _this=$('.search-btn');
+            var value=$('.serach-Input').val()
+            if(value!=searchValue){
+                searchValue=value;
+                $('#team-flow').empty()
+                pagation()
+            }
         }
     });
  //--------------------分页--------------------------  
@@ -187,7 +203,7 @@ layui.use(['layer','flow'], function(){
             ,title: '提示' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认加入大爱长青国际脑力战队？</div>'
+            ,content: '<div class="box-conent-wrapper">是否确认加入'+_this.attr('data-name')+'？</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 

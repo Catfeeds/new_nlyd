@@ -261,48 +261,6 @@ a.c_black3:hover{
 }
 @media screen and (max-width: 1199px){
     html{font-size:625%!important;}
-    /* .mui-bar{
-        display: block;
-    } */
-    #page.boxed{
-    -webkit-box-shadow: none!important;
-    -moz-box-shadow: none!important;
-    box-shadow: none!important;
-    }
-    #main,.wf-wrap{
-        padding: 0!important;
-    }
-    .content{
-        padding: 0!important;
-        padding-right: 0!important;
-        width: 100%!important;
-    }
-    .wf-container, .wf-container-main{
-        margin: 0!important;
-        overflow: hidden;
-    } 
-    .page-title{
-        display: none;
-    }
-    #header{
-        display: none;
-    }
-    #wpadminbar{
-        /* position: absolute; */
-        display: none;
-    }
-    #footer{
-        display: none;
-    }
-    .masthead,.mobile-header-space,.mobile-header-bar{
-         display: none!important;
-    }
-    .page-title{
-        display: none!important;
-    }
-    .scroll-top.on{
-        bottom: 70px;
-    }
     input::-webkit-input-placeholder {
         color:#b8bcbe;font-size:0.12rem;
     }
