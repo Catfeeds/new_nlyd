@@ -205,7 +205,7 @@ if(!class_exists('StudentController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
-            if (!is_front_page()) { 
+            if (!is_front_page()) {
                 wp_register_script( 'student-cookie',student_js_url.'cookie.url.config.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-cookie' );
                 //序列化form表单Json对象

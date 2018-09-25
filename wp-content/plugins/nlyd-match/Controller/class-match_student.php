@@ -505,30 +505,104 @@ class Match_student {
         }
 
         //查询比赛小项目
-        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
 
-        //是否选择组别分类
-        $group = 0;
-        if(is_post()){
-            $group = intval($_POST['age_group']);
+//        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
+        $projectArr = get_match_end_time($post->ID);
+
+        $categoryArr = []; //分类选项卡数组
+        foreach ($projectArr as $pak => $pav) {
+            //获取类别和项目选项卡
+            if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
+                $categoryArr['sjl']['post_title'] = '速记类';
+                $categoryArr['sjl']['ids'] .= $pav['match_project_id'].',';
+            } elseif (in_array($pav['project_alias'], ['kysm', 'wzsd'])) {
+                $categoryArr['sdl']['post_title'] = '速读类';
+                $categoryArr['sdl']['ids'] .= $pav['match_project_id'].',';
+            } elseif (in_array($pav['project_alias'], ['zxss', 'nxss'])) {
+                $categoryArr['ssl']['post_title'] = '速算类';
+                $categoryArr['ssl']['ids'] .= $pav['match_project_id'].',';;
+            }
         }
+        $where = '';
+        $score = 'my_score';
+        $selectArr = []; //循环查询分数数组
+        $op1 = true;
+        $op2 = false;
+        $op3 = false;
+        $selectType = 1;
+
         $ageWhere = '';
-        switch ($group){
-            case 4://儿童组
-                $ageWhere = ' AND um.mate_value<12';
-                break;
-            case 3://少年组
-                $ageWhere = ' AND um.mate_value>11 AND um.mate_value<18';
-                break;
-            case 2://成年组
-                $ageWhere = ' AND um.mate_value>17 AND um.mate_value<60';
-                break;
-            case 1://老年组
-                $ageWhere = ' AND um.mate_value>59';
-                break;
-            default://全部
+//       选项卡条件
+        if(isset($_GET['op1'])){
+            switch ($_GET['op1']){
+                case 1://总排名
+                    $selectArr = $projectArr;
+                    break;
+                case 2: //分类排名
+                    $op2 = true;
+                    $selectType = 2;
+                    $score = 'MAX(my_score) AS my_score';
+                    if(isset($_GET['op2'])){
+                        $selectArr = [$categoryArr[$_GET['op2']]];
+                        $where = ' AND project_id IN('.substr($categoryArr[$_GET['op2']]['ids'],0,strlen($categoryArr['sdl']['ids'])-1).') GROUP BY project_id';
+                    }else{
+                        //默认第一个分类
+                        $selectArr = [$categoryArr[key($categoryArr)]];
+                        $where = ' AND project_id IN('.substr($categoryArr[key($categoryArr)]['ids'],0,strlen($categoryArr['sdl']['ids'])-1).') GROUP BY project_id';
+                    }
+                    break;
+                case 3: //单项排名
+                    $op3 = true;
+                    $selectType = 3;
+                    $score = 'MAX(my_score) AS my_score';
+                    if(isset($_GET['op4'])){
+                        switch ($_GET['op4']){
+                            case 4://儿童组
+                                $ageWhere = ' AND  um.mate_value<12';
+                                break;
+                            case 3://少年组
+                                $ageWhere = ' AND um.mate_value>11 AND um.mate_value<18';
+                                break;
+                            case 2://成年组
+                                $ageWhere = ' AND um.mate_value>17 AND um.mate_value<60';
+                                break;
+                            case 1://老年组
+                                $ageWhere = ' AND um.mate_value>59';
+                                break;
+                            default://全部
 
+                        }
+                    }
+
+                    if(isset($_GET['op3'])){
+                        $where = ' AND project_id ='.$_GET['op3'].' GROUP BY match_id';
+                        foreach ($projectArr as $pak => $pav) {
+                            if($pav['match_project_id'] == $_GET['op3']){
+                                $post_title = $pav['post_title'];
+                                break;
+                            }
+                        }
+
+                    }else{
+                        //默认地一个项目
+                        $where = ' AND project_id ='.$projectArr[0]['match_project_id'].' GROUP BY match_id';
+                        $post_title = $projectArr[0]['post_title'];
+                    }
+                    $selectArr = [['post_title' => $post_title]];
+                    break;
+                default:
+                    $selectArr = $projectArr;
+            }
+        }else{
+            $selectArr = $projectArr;
         }
+//        var_dump($projectWhere);
+//        //是否选择组别分类
+//        $group = 0;
+//        if(is_post()){
+//            $group = intval($_POST['age_group']);
+//        }
+
 
 
         //查询每个参赛学员的总分排名
@@ -539,9 +613,10 @@ class Match_student {
 
         $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time
             FROM '.$wpdb->prefix.'order AS o 
-            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
-            LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
-            WHERE o.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+            LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
+            LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_age" 
+            LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID 
+            WHERE o.match_id='.$post->ID.' AND o.pay_status IN(2,3,4) AND u.ID != ""'.$ageWhere.' GROUP BY o.user_id DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 //
         $count  = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -554,36 +629,61 @@ class Match_student {
             'current' => $page
         ));
 
+//        echo '<pre />';
+//        var_dump($selectArr);
         //剩余时间 | 正确率
         //获取比赛轮数
 
         //查询每个学员每个小项目每一轮的分数
+        $whereT = 0;
         foreach ($totalRanking as &$trv){
             $trv['my_score'] = 0;
             $trv['surplus_time'] = 0;
-            foreach ($projectArr as $pak => $pav) {
+            $trv['projectScore'] = [];
+            foreach ($selectArr as  $pak => $pav) {
+                if($where == '' || $whereT == 1) {
+                    $where = ' AND project_id='.$pav['match_project_id'];
+                    $whereT = 1;
+                }
                 $trv['projectScore'][$pak] = '';
-                $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
-                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].' AND project_id='.$pav['ID'], ARRAY_A);
+                $res = $wpdb->get_results('SELECT '.$score.',match_more,surplus_time FROM '.$wpdb->prefix.'match_questions AS mq
+                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].$where, ARRAY_A);
 
+
+//            var_dump($where);
                 $moreArr = [];
                 $scoreArr = [];
                 $surplus_timeArr = [];
-                for($mi = 1; $mi <= $match['match_more']; ++$mi){
-                    $moreArr[$mi] = '0/';
+                if($selectType == 1){
+                    for($mi = 1; $mi <= $match['match_more']; ++$mi){
+                        $moreArr[$mi] = '0/';
+                    }
                 }
 
                 foreach ($res as $rv){
-                    if(isset($moreArr[$rv['match_more']])) $moreArr[$rv['match_more']] = $rv['my_score'].'/';
+                    if($selectType == 2){
+                        $moreArr[] = ($rv['my_score'] > 0 ? $rv['my_score'] : 0);
+                    }else{
+                        $moreArr[$rv['match_more']] = ($rv['my_score'] > 0 ? $rv['my_score'] : '0').'/';
+                    }
+
                     $scoreArr[] = $rv['my_score'];
                     $surplus_timeArr[] = $rv['surplus_time'];
                 }
+
                 $trv['my_score'] += ($scoreArr != [] ? max($scoreArr) : 0);
-                $trv['surplus_time'] += ($surplus_timeArr != [] ? max($surplus_timeArr) : 0);
+
                 foreach ($moreArr as $mav){
-                    $trv['projectScore'][$pak] .= $mav;
+                    if($selectType == 2){
+                        $trv['projectScore'][$pak] += $mav;
+                    }else{
+                        $trv['projectScore'][$pak] .= $mav;
+                    }
                 }
+                if($selectType == 2) $trv['projectScore'][$pak] .= '/';
+
                 if(!$trv['projectScore'][$pak]) $trv['projectScore'][$pak] = '0/';
+//                var_dump($trv['projectScore'][$pak]);
                 $trv['projectScore'][$pak] = substr($trv['projectScore'][$pak], 0, strlen($trv['projectScore'][$pak])-1);
 //                print_r($res);
             }
@@ -596,7 +696,7 @@ class Match_student {
             $trv['userID'] = $usermeta['user_ID'][0];
             $trv['real_name'] = $user_real_name;
             $trv['sex'] = $usermeta['user_gender'][0];
-            $trv['birthday'] = $usermeta['user_birthday'][0];
+            $trv['birthday'] = $usermeta['user_birthday'][0] ? $usermeta['user_birthday'][0] : '';
             $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
         }
 
@@ -624,6 +724,7 @@ class Match_student {
                 }
             }
         }
+//        var_dump($categoryArr);
         ?>
 
         <div class="wrap">
@@ -643,12 +744,69 @@ class Match_student {
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="8e15b92f19"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
-                    <div>
-                        <ul>
-                            <li>总排名</li>
-                            <li>分类排名</li>
-                            <li>单项排名</li>
-                        </ul>
+                    <style type="text/css">
+                        #oprion-box a{
+                            color: #282828;
+                            text-decoration: none;
+                        }
+                        #oprion-box > div{
+                            padding-top: 0.5em;
+                        }
+                        #oprion-box > div > span{
+                            display: inline-block;
+                            width: 5em;
+                            height: 1.5em;
+                            border-radius: 0.2em;
+                            text-align: center;
+                            line-height: 1.5em;
+                            cursor: pointer;
+                        }
+                        #option1 > span{
+                            background-color: rgba(151, 151, 151, 0.48);
+                            font-weight: bold;
+                        }
+                        #oprion-box .active{
+                            background-color: #45B29D;
+                        }
+                        #oprion-box .active a{
+
+                            color: #ffffff;
+                        }
+                    </style>
+                    <div id="oprion-box">
+                        <div id="option1">
+                            <span class="active"><a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=1')?>">总排名</a></span>
+                            <span><a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2')?>">分类排名</a></span>
+                            <span><a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=3')?>">单项排名</a></span>
+                        </div>
+                        <?php if($op2) { ?>
+                            <div id="option2">
+                                <?php foreach ($categoryArr as $cgk => $cgv){ ?>
+                                    <span class="active"><a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2='.$cgk)?>"><?=$cgv['post_title']?></a></span>
+                                <?php } ?>
+
+                            </div>
+                        <?php } ?>
+                        <?php if($op3){ ?>
+                            <div id="option3">
+
+                                <?php foreach ($projectArr as $pav2) { ?>
+                                    <span class="active"><a
+                                                href="<?= admin_url('admin.php?page=match_student-ranking&match_id=' . $post->ID . '&op1=3&op3=' . $pav2['match_project_id']) ?>"><?= $pav2['post_title'] ?></a></span>
+                                <?php } ?>
+                                <select name="" id="option4" onchange="window.location.href='<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=3&op3='.$pav2['match_project_id'].'&op4=')?>'+this.value">
+                                    <option value="0">全部</option>
+                                    <option value="4">儿童</option>
+                                    <option value="3">少年</option>
+                                    <option value="5">成人</option>
+                                    <option value="1">老年</option>
+                                </select>
+                            </div>
+                        <?php } ?>
+
+
+
+
                     </div>
                     <div class="alignleft actions">
                         <!--                        <label class="screen-reader-text" for="new_role">将年龄组变更为…</label>-->
@@ -691,8 +849,10 @@ class Match_student {
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                         <th scope="col" id="email" class="manage-column column-email">邮箱</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
-                        <th scope="col" id="total_score" class="manage-column column-total_score">总得分</th>
-                        <?php foreach ($projectArr as $titleV){ ?>
+                        <?php if($selectType == 1){ ?>
+                            <th scope="col" id="total_score" class="manage-column column-total_score">总得分</th>
+                        <?php } ?>
+                        <?php foreach ($selectArr as $titleV){ ?>
 
                             <th scope="col" id="" class="manage-column column-"><?=$titleV['post_title']?>得分</th>
                         <?php } ?>
@@ -725,7 +885,9 @@ class Match_student {
                             <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['telephone'] ? $raV['telephone'] : $raV['user_mobile']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-email" data-colname="邮箱"><span aria-hidden="true"><?=$raV['user_email']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-created_time" data-colname="报名时间"><span aria-hidden="true"><?=$raV['created_time']?></span><span class="screen-reader-text">-</span></td>
-                            <td class="name column-total_score" data-colname="总得分"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
+                            <?php if($selectType == 1){ ?>
+                                <td class="name column-total_score" data-colname="总得分"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
+                            <?php } ?>
                             <?php foreach ($raV['projectScore'] as $ravV){ ?>
                                 <td class="name column-total_score" data-colname=""><span aria-hidden="true"><?=$ravV?></span><span class="screen-reader-text">-</span></td>
                             <?php } ?>
@@ -750,8 +912,10 @@ class Match_student {
                         <th scope="col" class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-email">邮箱</th>
                         <th scope="col" class="manage-column column-created_time">报名时间</th>
-                        <th scope="col" class="manage-column column-total_score">总得分</th>
-                        <?php foreach ($projectArr as $titleV){ ?>
+                        <?php if($selectType == 1){ ?>
+                            <th scope="col" class="manage-column column-total_score">总得分</th>
+                        <?php } ?>
+                        <?php foreach ($selectArr as $titleV){ ?>
                             <th scope="col"class="manage-column column-"><?=$titleV['post_title']?>得分</th>
                         <?php } ?>
                     </tr>
