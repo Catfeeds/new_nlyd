@@ -112,24 +112,26 @@ function get_age_group(){
  * @param $age 年龄
  * 根据年龄获取组别名称
  */
-function getAgeGroupNameByAge($age){
-    switch ($age){
-        case $age > 59:
-            $group = '老年组';
-            break;
-        case $age > 17:
-            $group = '成年组';
-            break;
-        case $age > 11:
-            $group = '少年组';
-            break;
-        default:
-            $group = '儿童组';
-            break;
+if(!function_exists('getAgeGroupNameByAge')) {
+    function getAgeGroupNameByAge($age)
+    {
+        switch ($age) {
+            case $age > 59:
+                $group = '老年组';
+                break;
+            case $age > 17:
+                $group = '成年组';
+                break;
+            case $age > 12:
+                $group = '少年组';
+                break;
+            default:
+                $group = '儿童组';
+                break;
+        }
+        return $group;
     }
-    return $group;
 }
-
 /*
  * 文章速读选项
  * $index 选项索引
