@@ -1452,7 +1452,7 @@ class Student_Matchs extends Student_Home
                     }
                     if(!empty($user_info['user_address'])){
                         $user_address = unserialize($user_info['user_address']);
-                        $city = $user_address['city'];
+                        $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
                     }else{
                         $city = '-';
                     }

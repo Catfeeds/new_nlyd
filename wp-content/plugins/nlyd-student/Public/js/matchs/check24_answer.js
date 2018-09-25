@@ -82,7 +82,7 @@ for (i1=1;i1<=8;i1*=2)
 
 
 //-----------------------计算器----------------------------
-	  	function calculateResult(expression) {
+	  	/*function calculateResult(expression) {
 	    //    new_expression = "1.1+(2.1*3)-(((2.2*3)*((1.1+2.2)/3.3)-3.4*6)-(3.5*6))+3.6";
 			var new_expression=expression;
 			var wrongMessage = 'false';
@@ -106,7 +106,21 @@ for (i1=1;i1<=8;i1*=2)
 				new_expression = plusOrMinus(new_expression);
 			}
 			return new_expression
-		};
+		};*/
+		function calculateResult(content){
+	        try {
+	            return eval(content); // no exception occured
+	        } 
+	        catch (e) {
+	            if (e instanceof SyntaxError) { // Syntax error exception
+	                return 'Syntax error exception'; // exception occured
+	            }
+	            else {// Unspecified exceptions
+	                return 'Unspecified exceptions'; // exception occured
+	            }
+	        }
+    	}
+
 		function hasPlusOrMinus(expression) {
 			var hasPlusOrMinusReg =  /(\+|\-)/;
 			if (hasPlusOrMinusReg.test(expression)) {

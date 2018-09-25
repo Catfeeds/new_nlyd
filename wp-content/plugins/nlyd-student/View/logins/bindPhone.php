@@ -82,6 +82,7 @@
                                 <input type="hidden" name="user_id" value="<?=$data['uid']?>">
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
+                                <input type="hidden" name="type" value="<?=$_GET['sign']?>">
                                 <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPwd" lay-filter="bindPwd" lay-submit="">登 录</a>
                             </div>
                         </div>

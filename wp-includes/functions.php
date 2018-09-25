@@ -6287,7 +6287,6 @@ if(!function_exists('is_ajax')){
 if(!function_exists('load_view_template')){
     function load_view_template($path,$data=''){
         if(is_file($path)){
-
             if(!empty($data)){
                 extract($data);
             }
