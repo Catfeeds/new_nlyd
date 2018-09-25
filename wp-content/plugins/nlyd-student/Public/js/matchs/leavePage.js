@@ -1,7 +1,7 @@
 
     function leaveMatchPage(submit) {//准备也页，比赛页
         
-        if(window.location.host=='ydbeta.gjnlyd.com'){
+        // if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -36,16 +36,14 @@
                     if(leveTimes>=2){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
-                            // console.log(leavePage)
-                            submit(leavePage);
-                            // jQuery.alerts('提交')
+                            submit();
                         }, 1000);
                     }
                 }else{
                     jQuery.DelSession('leavePage')
                 }
             });
-        }
+        // }
     }
 
     function leavePageLoad(url){//比赛纪录页

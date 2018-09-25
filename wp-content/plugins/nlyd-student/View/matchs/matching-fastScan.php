@@ -43,9 +43,9 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(data){//窗口失焦提交
+    leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4,data.Time);
+        submit(time,4);
     })
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
@@ -342,7 +342,7 @@ $('#selectWrapper .fastScan-item').each(function(){
         }
     })
 })
-    function submit(time,submit_type,leave_page_time){//提交答案
+    function submit(time,submit_type){//提交答案
         if(!isSubmit){
             $('#load').css('display','block')
             isSubmit=true;
@@ -357,8 +357,11 @@ $('#selectWrapper .fastScan-item').each(function(){
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            if(leave_page_time){
-                data['leave_page_time']=leave_page_time;
+            var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                if(leavePage.Time){
+                    data['leave_page_time']=leavePage.Time;
+                }
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
