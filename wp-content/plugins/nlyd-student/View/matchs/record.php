@@ -51,8 +51,9 @@
                                             <td><span>项目总分</span></td>
                                             <td>组别</td>
                                         </tr>
-                                        <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
                                         <tr class="nl-me" id="allRanking">
+                                        <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
+                                        
                                             <td>
                                                 <div class="nl-circle <?= $my_ranking['ranking'] <= 3 ? 'top3' : '';?>"><?=$my_ranking['ranking']?></div>
                                             </td>
@@ -61,13 +62,14 @@
                                             <td><div class="table_content"><?=$my_ranking['city']?></div></td>
                                             <td><div class="table_content c_orange"><?=$my_ranking['score']?></div></td>
                                             <td><div class="table_content"><?=$my_ranking['group']?></div></td>
-                                        </tr>
+                                        
                                         <?php endif;?>
+                                        </tr>
                                     </thead>
                                     <tbody id="flow">
                                         <?php if(!empty($list)){ ?>
                                         <?php foreach ($list as $k => $v){ ?>
-                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] && $my_ranking['ID'] == $v['ID'] ? 'nl-me' : '';?>">
+                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] && $my_ranking['ID']==$v['ID'] ? 'nl-me' : '';?>">
                                             <td>
                                                 <div class="nl-circle <?= $k < 3 ? 'top3' : '';?>"><?=$v['ranking']?></div>
                                             </td>
@@ -259,7 +261,7 @@ layui.use(['element','flow'], function(){
             ,done: function(page, next){ //加载下一页
                 var lis = [];
                 if(hasTwoPage){//第二页的数据是否存在
-                    $('#allRanking').css('display','none')
+                    // $('#allRanking').css('display','none')
                     if(page==1){
                         next(lis.join(''),true)
                     }else{
@@ -271,15 +273,28 @@ layui.use(['element','flow'], function(){
                             page:page
                         }
                         $.ajax({
-                            data:postData,success:function(res,ajaxStatu,xhr){  
+                            data:postData,success:function(res,ajaxStatu,xhr){
                                 if(res.success){ 
+                                    if(res.data.my_ranking!=null){//我的成绩
+                                        var rows=res.data.my_ranking
+                                        var top3=rows.ranking<=3 ? "top3" : ''
+                                        var Html='<td>'
+                                                    +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
+                                                +'</td>'
+                                                +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                    }
                                     $.each(res.data.info,function(index,value){
                                         var nl_me='';
                                         if(res.data.my_ranking!=null){
                                             if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
                                                 nl_me='nl-me'
                                                 if(value.ranking!=1){
-                                                    $('#allRanking').css('display','table-row')
+                                                    // $('#allRanking').css('display','table-row')
+                                                    $('#allRanking').html(Html);
                                                 }
                                             }
                                         }  
@@ -319,7 +334,7 @@ layui.use(['element','flow'], function(){
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
-                $('#fenlei_me').css('display','none');
+                // $('#fenlei_me').css('display','none');
                 fenleiPage++
                 var lis = [];
                 var postData={
@@ -343,7 +358,6 @@ layui.use(['element','flow'], function(){
                                         +'<td><div class="table_content">'+rows.city+'</div></td>'
                                         +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
                                         +'<td><div class="table_content">'+rows.group+'</div></td>'
-                                // $('#fenlei_me').html(Html)
                             }
                             $.each(res.data.info,function(index,value){
                                 var top3=value.ranking<=3 ? 'top3' : '';
@@ -352,7 +366,7 @@ layui.use(['element','flow'], function(){
                                     if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
                                         nl_me='nl-me'
                                         if(value.ranking!=1){
-                                            $('#fenlei_me').html(Html).css('display','table-row');
+                                            $('#fenlei_me').html(Html);
                                         }
                                     }
                                 }  
@@ -389,7 +403,9 @@ layui.use(['element','flow'], function(){
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
-                $('#danxiang_me').css('display','none');
+                if(fenleiPage==0){
+                    $('#danxiang_me').css('display','none');
+                }
                 fenleiPage++
                 var lis = [];
                 var postData={

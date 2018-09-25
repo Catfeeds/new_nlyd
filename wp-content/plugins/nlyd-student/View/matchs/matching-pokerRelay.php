@@ -102,6 +102,7 @@ jQuery(function($) {
     });
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var my_answer=[];
             $('.poker-wrapper .poker').each(function(){
@@ -129,12 +130,14 @@ jQuery(function($) {
                             window.location.href=res.data.url
                         }   
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                    $('#load').css('display','none')
                 }
             })
         }else{
@@ -219,21 +222,6 @@ layui.use(['layer'], function(){
         }
     }
     initWidth();//设置扑克窗口宽度
-    // mTouch('.porker-color').on('tap','.choose-color',function(e){
-    //     var _this=$(this);
-    //     var id=_this.attr('id')
-    //     $('.porker-color .choose-color').removeClass('active');
-    //     _this.addClass('active');
-
-    //     $('.choose-wrapper').removeClass('active');
-    //     $('.choose-wrapper.'+id).addClass('active');
-    // })
-    // mTouch('.poker-wrapper').on('tap','.poker',function (e) {
-    //     var _this=$(this)
-    //     var active=$('.poker-wrapper .poker.active')
-    //     active.removeClass('active');
-    //     _this.addClass('active');
-    // })
     $('.choose-color').each(function(){
         var _this=$(this);
         new AlloyFinger(_this[0], {

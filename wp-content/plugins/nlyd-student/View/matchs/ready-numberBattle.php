@@ -57,6 +57,7 @@ new AlloyFinger($('#complete')[0], {
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
+            $('#load').css('display','block')
             var data={
                 action:'memory_complete',
                 _wpnonce:$('#inputComplete').val(),
@@ -73,12 +74,14 @@ new AlloyFinger($('#complete')[0], {
                             window.location.href=res.data.url;
                         }   
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         _this.removeClass('disabled')
                     }
                     
                 },
                 error: function(jqXHR, textStatus, errorMsg){
+                    $('#load').css('display','none')
                     _this.removeClass('disabled')
                 }
             })
@@ -86,6 +89,7 @@ new AlloyFinger($('#complete')[0], {
     }
 })
     function submit(time,submit_type){//提交答案
+        $('#load').css('display','block')
         var my_answer=[];
         $('.matching-number-zoo .matching-number').each(function(){
             my_answer.push('')
@@ -102,7 +106,8 @@ new AlloyFinger($('#complete')[0], {
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         $.ajax({
-            data:data,success:function(res,ajaxStatu,xhr){  
+            data:data,
+            success:function(res,ajaxStatu,xhr){  
                 $.DelSession('leavePage')
                 if(res.success){
                     //return false;
@@ -112,8 +117,12 @@ new AlloyFinger($('#complete')[0], {
                         },300)
                     }
                 }else{
+                    $('#load').css('display','none')
                     $.alerts(res.data.info)
                 }
+            },
+            error: function(jqXHR, textStatus, errorMsg){
+                $('#load').css('display','none')
             }
         })
     } 

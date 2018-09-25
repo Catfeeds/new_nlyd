@@ -89,7 +89,12 @@ jQuery(function($) {
                 clearTimeout(timer)
             }
             if(flaseQuestion<flaseMax){
-                timer=setTimeout("showTime()",1000);
+                if(getAjaxTime==_count_time+1){
+                    timer=setTimeout("showTime()",1000+answerHide*1000);
+                }else{
+                    timer=setTimeout("showTime()",1000);
+                }
+                
             }
             
 
@@ -289,7 +294,7 @@ jQuery(function($) {
                 $('.count_downs').removeClass('hide')
                 isMatching=!isMatching
             }else{
-                setTimeout(function() {
+                timers=setTimeout(function() {
                     $('.answer').addClass('hide').text('')
                     $('#selectWrapper').removeClass('hide')
                     $('.count_downs').removeClass('hide')
@@ -339,6 +344,7 @@ $('#selectWrapper .fastScan-item').each(function(){
 })
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var data={
                 action:'answer_submit',
@@ -360,12 +366,14 @@ $('#selectWrapper .fastScan-item').each(function(){
                             window.location.href=res.data.url
                         }
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                     $('#load').css('display','none')
                 }
             })
         }else{
