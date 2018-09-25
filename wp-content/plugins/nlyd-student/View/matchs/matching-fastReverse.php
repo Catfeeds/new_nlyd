@@ -59,9 +59,10 @@
 <script>
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
+    leaveMatchPage(function(data){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
+        // console.log(data);
+        submit(time,4,data.Time);
     })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
@@ -110,7 +111,7 @@ jQuery(function($) {
         }).removeClass('disabled')
         $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
     }
-    function submit(time,submit_type){//提交答案
+    function submit(time,submit_type,leave_page_time){//提交答案
         if(!isSubmit){
             $('#load').css('display','block')
             isSubmit=true;
@@ -125,25 +126,29 @@ jQuery(function($) {
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){    
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        $('#load').css('display','none')
-                        $.alerts(res.data.info)
-                        isSubmit=false;
-                    }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    isSubmit=false;
-                    $('#load').css('display','none')
-                }
-            })
+            if(leave_page_time){
+                data['leave_page_time']=leave_page_time;
+            }
+            console.log(data)
+            // $.ajax({
+            //     data:data,success:function(res,ajaxStatu,xhr){    
+            //         $.DelSession('match')
+            //         $.DelSession('leavePage')
+            //         if(res.success){
+            //             if(res.data.url){
+            //                 window.location.href=res.data.url
+            //             }
+            //         }else{
+            //             $('#load').css('display','none')
+            //             $.alerts(res.data.info)
+            //             isSubmit=false;
+            //         }
+            //     },
+            //     error: function(jqXHR, textStatus, errorMsg){
+            //         isSubmit=false;
+            //         $('#load').css('display','none')
+            //     }
+            // })
         }else{
             $.alerts('正在提交答案')
         }
