@@ -340,12 +340,15 @@ class Download
             //获取类别和项目选项卡
             if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
                 $categoryArr['sjl']['post_title'] = '速记类';
+                if(!isset($categoryArr['sjl']['ids'])) $categoryArr['sjl']['ids'] = '';
                 $categoryArr['sjl']['ids'] .= $pav['match_project_id'].',';
             } elseif (in_array($pav['project_alias'], ['kysm', 'wzsd'])) {
                 $categoryArr['sdl']['post_title'] = '速读类';
+                if(!isset($categoryArr['sdl']['ids'])) $categoryArr['sdl']['ids'] = '';
                 $categoryArr['sdl']['ids'] .= $pav['match_project_id'].',';
             } elseif (in_array($pav['project_alias'], ['zxss', 'nxss'])) {
                 $categoryArr['ssl']['post_title'] = '速算类';
+                if(!isset($categoryArr['ssl']['ids'])) $categoryArr['ssl']['ids'] = '';
                 $categoryArr['ssl']['ids'] .= $pav['match_project_id'].',';;
             }
         }
@@ -357,15 +360,17 @@ class Download
         $op3 = false;
         $selectType = 1;
 
-
+        $downloadParam = '';
         $ageWhere = '';
 //       选项卡条件
         if(isset($_GET['op1'])){
             switch ($_GET['op1']){
                 case 1://总排名
                     $selectArr = $projectArr;
+                    $downloadParam .= '&op1=1';
                     break;
                 case 2: //分类排名
+                    $downloadParam .= '&op1=2';
                     $op2 = true;
                     $selectType = 2;
                     $score = 'MAX(my_score) AS my_score';
@@ -378,8 +383,10 @@ class Download
                         $where = ' AND project_id IN('.substr($categoryArr[key($categoryArr)]['ids'],0,strlen($categoryArr['sdl']['ids'])-1).') GROUP BY project_id';
                         $_GET['op2'] = key($categoryArr);
                     }
+                    $downloadParam .= '&op2='.$_GET['op2'];
                     break;
                 case 3: //单项排名
+                    $downloadParam .= '&op1=3';
                     $op3 = true;
                     $selectType = 3;
                     $score = 'MAX(my_score) AS my_score';
@@ -398,8 +405,9 @@ class Download
                                 $ageWhere = ' AND um.meta_value>59';
                                 break;
                             default://全部
-
                         }
+                    }else{
+                        $_GET['op4'] = 0;
                     }
 
                     if(isset($_GET['op3'])){
@@ -418,6 +426,7 @@ class Download
                         $_GET['op3'] = $projectArr[0]['match_project_id'];
                     }
                     $selectArr = [['post_title' => $post_title]];
+                    $downloadParam .= '&op3='.$_GET['op3'].'&op4='.$_GET['op4'];;
                     break;
                 default:
                     $selectArr = $projectArr;
@@ -436,6 +445,7 @@ class Download
 
         //查询每个参赛学员的总分排名
         //分页
+        $_GET['cpage'] = isset($_GET['cpage']) ? $_GET['cpage'] : 1;
         $page = intval($_GET['cpage']) < 1 ? 1 : intval($_GET['cpage']);
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
@@ -526,6 +536,7 @@ class Download
                 $trv['projectScore'][$pak] = substr($trv['projectScore'][$pak], 0, strlen($trv['projectScore'][$pak])-1);
 //                print_r($res);
             }
+
             $usermeta = get_user_meta($trv['user_id'], '', true);
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
             $age = $user_real_name['real_age'];
@@ -535,28 +546,24 @@ class Download
             $trv['userID'] = $usermeta['user_ID'][0];
             $trv['real_name'] = $user_real_name;
             $trv['sex'] = $usermeta['user_gender'][0];
-            $trv['birthday'] = $usermeta['user_birthday'][0] ? $usermeta['user_birthday'][0] : '';
+            $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '';
             $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
         }
-//        ECHO '<pre />';
-//        var_dump($totalRanking);
-        $ranking = 1;
+        $rankingType = 1;
         for($i = 0; $i < count($totalRanking); ++$i){
-            $rankingAuto = true;
-            $rankingAuto2 = false;
             if(isset($totalRanking[$i+1])){
 //                var_dump(2222222);
                 for ($j = $i+1; $j < count($totalRanking); ++$j){
                     if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
-                        if($totalRanking[$i]['my_score'] < 1){
-                            $rankingAuto = false;
-                        }elseif($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
-                            $rankingAuto2 = true;
+//                        if($totalRanking[$i]['my_score'] < 1){
+//                            $rankingAuto = false;
+//                        }else
+                        if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+
                             $a = $totalRanking[$j];
                             $totalRanking[$j] = $totalRanking[$i];
                             $totalRanking[$i] = $a;
                         }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){
-                            $rankingAuto = false;
                             //TODO 正确率, 获取分数最高一轮的正确率
 //                    $iCorce = $this->getCorrect($totalRanking[$i]['user_id'],$totalRanking[$i]['project_id'],$post->ID);
 //                    $jCorce = $this->getCorrect($totalRanking[$j]['user_id'],$totalRanking[$j]['project_id'],$post->ID);
@@ -567,23 +574,33 @@ class Download
 //                    }
                         }
                     }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
-                        $rankingAuto2 = true;
                         $a = $totalRanking[$j];
                         $totalRanking[$j] = $totalRanking[$i];
                         $totalRanking[$i] = $a;
                     }
                 }
             }
-            $totalRanking[$i]['ranking'] = $ranking;
-//            if($i == count($totalRanking)-2) $totalRanking[$i+1]['ranking'] = $ranking+1;
-            ($rankingAuto || $rankingAuto2) && ++$ranking;
-        }
 
+
+
+        }
+        $ranking = 1;
+        foreach ($totalRanking as $k => $v){
+
+            $totalRanking[$k]['ranking'] = $ranking;
+            if(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time']){
+
+            }else{
+                ++$ranking;
+            }
+
+
+        }
 
         $filename = 'match_ranking_';
         $filename .= strtotime(current_time('mysql')).".xls";
-//        $path = self::$downloadPath.$filename;
-//        file_put_contents($path,$html);
+        //        $path = self::$downloadPath.$filename;
+        //        file_put_contents($path,$html);
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
@@ -613,8 +630,13 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-        $a = 'J';
-        foreach ($projectArr as $titleV){
+        if($selectType == 1){
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $a = 'K';
+        }else{
+            $a = 'J';
+        }
+        foreach ($selectArr as $titleV){
             ++$a;
             $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
 
@@ -635,9 +657,13 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
 
-
-        $a = 'J';
-        foreach ($projectArr as $titleV){
+        if($selectType == 1){
+            $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+            $a = 'K';
+        }else{
+            $a = 'J';
+        }
+        foreach ($selectArr as $titleV){
             ++$a;
             $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
 
@@ -648,12 +674,20 @@ class Download
         $objPHPExcel->getActiveSheet()->mergeCells('A1:'.--$a.'1');
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$a.'1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-
-        for ($b = 'A'; $b <= 'J'; ++$b){
+        if($selectType == 1){
+            $a = 'K';
+        }else{
+            $a = 'J';
+        }
+        for ($b = 'A'; $b <= $a; ++$b){
             $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
         }
-        $a = 'K';
-        foreach ($projectArr as $titleV){
+        if($selectType == 1){
+            $a = 'L';
+        }else{
+            $a = 'K';
+        }
+        foreach ($selectArr as $titleV){
             $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
             ++$a;
         }
@@ -667,14 +701,24 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '手机');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '邮箱');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '报名时间');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '总得分');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '名次');
+        if($selectType == 1){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '总得分');
+            $a = 'K';
+        }else{
+            $a = 'J';
+        }
 
-        for ($b = 'A'; $b <= 'J'; ++$b){
+        for ($b = 'A'; $b <= $a; ++$b){
             $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
         }
 
-        $a = 'K';
-        foreach ($projectArr as $titleV){
+        if($selectType == 1){
+            $a = 'L';
+        }else{
+            $a = 'K';
+        }
+        foreach ($selectArr as $titleV){
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV['post_title'].'得分');
             $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             ++$a;
@@ -683,21 +727,31 @@ class Download
 
         $k = 0;
         foreach ($totalRanking as $raV){
-
+            $mobile = $raV['telephone'] ? $raV['telephone'] : $raV['user_mobile'];
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['userID']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['real_name']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['sex']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['age']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['ageGroup']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['address']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['telephone']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$mobile);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['user_email']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['created_time']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['my_score']);
-            for ($b = 'A'; $b <= 'J'; ++$b){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['ranking']);
+            if($selectType == 1){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['my_score']);
+                $a = 'K';
+            }else{
+                $a = 'J';
+            }
+            for ($b = 'A'; $b <= $a; ++$b){
                 $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
             }
-            $a = 'K';
+            if($selectType == 1){
+                $a = 'L';
+            }else{
+                $a = 'K';
+            }
             foreach ($raV['projectScore'] as $ravV){
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
                 $objPHPExcel->getActiveSheet()->getStyle($a.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
@@ -709,7 +763,6 @@ class Download
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
-
 
 
 

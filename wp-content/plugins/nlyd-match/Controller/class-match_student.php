@@ -514,12 +514,15 @@ class Match_student {
             //获取类别和项目选项卡
             if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
                 $categoryArr['sjl']['post_title'] = '速记类';
+                if(!isset($categoryArr['sjl']['ids'])) $categoryArr['sjl']['ids'] = '';
                 $categoryArr['sjl']['ids'] .= $pav['match_project_id'].',';
             } elseif (in_array($pav['project_alias'], ['kysm', 'wzsd'])) {
                 $categoryArr['sdl']['post_title'] = '速读类';
+                if(!isset($categoryArr['sdl']['ids'])) $categoryArr['sdl']['ids'] = '';
                 $categoryArr['sdl']['ids'] .= $pav['match_project_id'].',';
             } elseif (in_array($pav['project_alias'], ['zxss', 'nxss'])) {
                 $categoryArr['ssl']['post_title'] = '速算类';
+                if(!isset($categoryArr['ssl']['ids'])) $categoryArr['ssl']['ids'] = '';
                 $categoryArr['ssl']['ids'] .= $pav['match_project_id'].',';;
             }
         }
@@ -531,14 +534,17 @@ class Match_student {
         $op3 = false;
         $selectType = 1;
 
+        $downloadParam = '';
         $ageWhere = '';
 //       选项卡条件
         if(isset($_GET['op1'])){
             switch ($_GET['op1']){
                 case 1://总排名
                     $selectArr = $projectArr;
+                    $downloadParam .= '&op1=1';
                     break;
                 case 2: //分类排名
+                    $downloadParam .= '&op1=2';
                     $op2 = true;
                     $selectType = 2;
                     $score = 'MAX(my_score) AS my_score';
@@ -551,8 +557,10 @@ class Match_student {
                         $where = ' AND project_id IN('.substr($categoryArr[key($categoryArr)]['ids'],0,strlen($categoryArr['sdl']['ids'])-1).') GROUP BY project_id';
                         $_GET['op2'] = key($categoryArr);
                     }
+                    $downloadParam .= '&op2='.$_GET['op2'];
                     break;
                 case 3: //单项排名
+                    $downloadParam .= '&op1=3';
                     $op3 = true;
                     $selectType = 3;
                     $score = 'MAX(my_score) AS my_score';
@@ -571,8 +579,9 @@ class Match_student {
                                 $ageWhere = ' AND um.meta_value>59';
                                 break;
                             default://全部
-
                         }
+                    }else{
+                        $_GET['op4'] = 0;
                     }
 
                     if(isset($_GET['op3'])){
@@ -591,6 +600,7 @@ class Match_student {
                         $_GET['op3'] = $projectArr[0]['match_project_id'];
                     }
                     $selectArr = [['post_title' => $post_title]];
+                    $downloadParam .= '&op3='.$_GET['op3'].'&op4='.$_GET['op4'];;
                     break;
                 default:
                     $selectArr = $projectArr;
@@ -609,6 +619,7 @@ class Match_student {
 
         //查询每个参赛学员的总分排名
         //分页
+        $_GET['cpage'] = isset($_GET['cpage']) ? $_GET['cpage'] : 1;
         $page = intval($_GET['cpage']) < 1 ? 1 : intval($_GET['cpage']);
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
@@ -708,28 +719,24 @@ class Match_student {
             $trv['userID'] = $usermeta['user_ID'][0];
             $trv['real_name'] = $user_real_name;
             $trv['sex'] = $usermeta['user_gender'][0];
-            $trv['birthday'] = $usermeta['user_birthday'][0] ? $usermeta['user_birthday'][0] : '';
+            $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '';
             $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
         }
-//        ECHO '<pre />';
-//        var_dump($totalRanking);
-        $ranking = 1;
+        $rankingType = 1;
         for($i = 0; $i < count($totalRanking); ++$i){
-            $rankingAuto = true;
-            $rankingAuto2 = false;
             if(isset($totalRanking[$i+1])){
 //                var_dump(2222222);
                 for ($j = $i+1; $j < count($totalRanking); ++$j){
                     if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
-                        if($totalRanking[$i]['my_score'] < 1){
-                            $rankingAuto = false;
-                        }elseif($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
-                            $rankingAuto2 = true;
+//                        if($totalRanking[$i]['my_score'] < 1){
+//                            $rankingAuto = false;
+//                        }else
+                        if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+
                             $a = $totalRanking[$j];
                             $totalRanking[$j] = $totalRanking[$i];
                             $totalRanking[$i] = $a;
                         }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){
-                            $rankingAuto = false;
                             //TODO 正确率, 获取分数最高一轮的正确率
 //                    $iCorce = $this->getCorrect($totalRanking[$i]['user_id'],$totalRanking[$i]['project_id'],$post->ID);
 //                    $jCorce = $this->getCorrect($totalRanking[$j]['user_id'],$totalRanking[$j]['project_id'],$post->ID);
@@ -740,16 +747,27 @@ class Match_student {
 //                    }
                         }
                     }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
-                        $rankingAuto2 = true;
                         $a = $totalRanking[$j];
                         $totalRanking[$j] = $totalRanking[$i];
                         $totalRanking[$i] = $a;
                     }
                 }
             }
-            $totalRanking[$i]['ranking'] = $ranking;
-//            if($i == count($totalRanking)-2) $totalRanking[$i+1]['ranking'] = $ranking+1;
-            ($rankingAuto || $rankingAuto2) && ++$ranking;
+
+
+
+        }
+        $ranking = 1;
+        foreach ($totalRanking as $k => $v){
+
+            $totalRanking[$k]['ranking'] = $ranking;
+            if(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time']){
+
+            }else{
+                ++$ranking;
+            }
+
+
         }
 //        var_dump($categoryArr);
         ?>
@@ -841,7 +859,7 @@ class Match_student {
                     </div>
                     <div class="alignleft actions bulkactions">
 
-                        <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID?>" class="button">导出排名</a>
+                        <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID.$downloadParam?>" class="button">导出排名</a>
                     </div>
                     <div class="tablenav-pages one-page">
 
