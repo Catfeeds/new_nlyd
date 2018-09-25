@@ -75,6 +75,7 @@ jQuery(function($) {
     })
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var my_answer={}
             $('.matching-reading').each(function(){
@@ -108,12 +109,14 @@ jQuery(function($) {
                             window.location.href=res.data.url
                         }   
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                     $('#load').css('display','none')
                 }
             })
         }else{

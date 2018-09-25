@@ -112,6 +112,7 @@ jQuery(function($) {
     }
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var data={
                 action:'answer_submit',
@@ -133,12 +134,14 @@ jQuery(function($) {
                             window.location.href=res.data.url
                         }
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                    $('#load').css('display','none')
                 }
             })
         }else{
@@ -336,17 +339,7 @@ new AlloyFinger($('#del')[0], {
                     }
                 // }
                 $('.answer').text(news)
-                // _this.stop(true).animate({
-                //     'opacity':'0.6',
-                //     'filter': 'alpha(opacity=60)',
-                // },50).animate({
-                //     'opacity':'1',
-                //     'filter': 'alpha(opacity=100)',
-                // },50)
             }
-            // else{
-            //     _this.removeClass('disabled')
-            // }
         }
     });
     //下一题tap事件
