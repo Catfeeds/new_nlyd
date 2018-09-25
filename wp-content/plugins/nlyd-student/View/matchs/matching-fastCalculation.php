@@ -367,23 +367,6 @@ jQuery(function($) {
         $('#total').text(ajaxData.length)
         $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
-    // mTouch('body').on('tap','.number',function(){
-    //     var _this=$(this);
-    //     var number=_this.attr('date-number');
-    //     var text=$('.answer').text()
-    //     if(text.length<21){
-    //         $('.answer').text(text+number)
-    //         _this.stop(true).animate({
-    //             'opacity':'0.6',
-    //             'filter': 'alpha(opacity=60)',
-    //         },50).animate({
-    //             'opacity':'1',
-    //             'filter': 'alpha(opacity=100)',
-    //         },50)
-    //     }
-
-    // })
-
     $('.number').each(function(e){//数字键盘
         var _this=$(this)
         new AlloyFinger(_this[0], {
@@ -409,25 +392,6 @@ jQuery(function($) {
             })
 
     })
-
-
-    // mTouch('body').on('tap','#del',function(){
-    //     var _this=$(this);
-    //     var text=$('.answer').text()
-    //     var len=text.length;
-    //     if(len>0){
-    //         var news=text.substring(0,len-1)
-    //         $('.answer').text(news)
-    //         _this.stop(true).animate({
-    //             'opacity':'0.6',
-    //             'filter': 'alpha(opacity=60)',
-    //         },50).animate({
-    //             'opacity':'1',
-    //             'filter': 'alpha(opacity=100)',
-    //         },50)
-    //     }
-    // })
-
     new AlloyFinger($('#del')[0], {//删除
         touchStart: function () {
             $('#del').addClass("opacity");
@@ -519,6 +483,7 @@ jQuery(function($) {
     });
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var data={
                 action:'answer_submit',
@@ -540,12 +505,14 @@ jQuery(function($) {
                             window.location.href=res.data.url
                         }
                     }else{
-                        $.alerts(res.data.info)
-                        isSubmit=false;
+                         $('#load').css('display','none')
+                         $.alerts(res.data.info)
+                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                     $('#load').css('display','none')
                 }
             })
         }else{

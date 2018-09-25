@@ -89,6 +89,7 @@ jQuery(function($) {
     });
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
+            $('#load').css('display','block')
             isSubmit=true;
             var my_answer=[];
             $('.matching-number-zoo .matching-number').each(function(){
@@ -114,24 +115,20 @@ jQuery(function($) {
                             window.location.href=res.data.url
                         }   
                     }else{
+                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
+                     $('#load').css('display','none')
                 }
             })
         }else{
             $.alerts('正在提交答案')
         }
     }
-    // mTouch('body').on('tap','.matching-number',function(e){
-
-    //     $('.matching-number').removeClass('active');
-    //     $(this).addClass('active');
-        
-    // })
     $('.matching-number').each(function(){//填充区域
         var _this=$(this);
         new AlloyFinger(_this[0], {
@@ -153,27 +150,6 @@ jQuery(function($) {
             }
         })
     })
-    // mTouch('body').on('tap','.number',function(e){
-    //     var _this=$(this);
-    //     // if(!_this.hasClass('opcity')){
-    //     //     _this.addClass('opcity')
-    //         var number=_this.attr('date-number');
-    //         var active=$('.matching-number.active');
-    //         var len=$('.matching-number').length;
-    //         if(!$('.matching-number').eq(len-1).hasClass('active')){
-    //             active.text(number).removeClass('active').next('.matching-number').addClass('active');
-    //         }else{
-    //             active.text(number);
-    //         }
-    //         _this.stop(true).animate({
-    //             'opacity':'0.6',
-    //             'filter': 'alpha(opacity=60)',
-    //         },50).animate({
-    //             'opacity':'1',
-    //             'filter': 'alpha(opacity=100)',
-    //         },50)
-    //     // }
-    // })
     $('.number').each(function(){//数字键盘
         var _this=$(this);
         new AlloyFinger(_this[0], {
@@ -256,14 +232,6 @@ jQuery(function($) {
                 active.text('');
 
             }
-            // _this.stop(true).animate({
-            //     'opacity':'0.6',
-            //     'filter': 'alpha(opacity=60)',
-            // },50).animate({
-            //     'opacity':'1',
-            //     'filter': 'alpha(opacity=100)',
-            // },50)
-        // }
         }
     })
     //前插tap事件
@@ -311,13 +279,6 @@ jQuery(function($) {
             }else{
                 $('.matching-number.active').text('')
             }
-            // _this.stop(true).animate({
-            //     'opacity':'0.6',
-            //     'filter': 'alpha(opacity=60)',
-            // },50).animate({
-            //     'opacity':'1',
-            //     'filter': 'alpha(opacity=100)',
-            // },50)
         }
     });
     //后插tap事件
@@ -366,13 +327,6 @@ jQuery(function($) {
                     }
                 }
             })
-            // _this.stop(true).animate({
-            //     'opacity':'0.6',
-            //     'filter': 'alpha(opacity=60)',
-            // },50).animate({
-            //     'opacity':'1',
-            //     'filter': 'alpha(opacity=100)',
-            // },50)
         }
     });
 layui.use('layer', function(){
