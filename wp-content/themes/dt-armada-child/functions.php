@@ -112,22 +112,25 @@ function get_age_group(){
  * @param $age 年龄
  * 根据年龄获取组别名称
  */
-function getAgeGroupNameByAge($age){
-    switch ($age){
-        case $age > 59:
-            $group = '老年组';
-            break;
-        case $age > 17:
-            $group = '成年组';
-            break;
-        case $age > 11:
-            $group = '少年组';
-            break;
-        default:
-            $group = '儿童组';
-            break;
+if(!function_exists('getAgeGroupNameByAge')) {
+    function getAgeGroupNameByAge($age)
+    {
+        switch ($age) {
+            case $age > 59:
+                $group = '老年组';
+                break;
+            case $age > 17:
+                $group = '成年组';
+                break;
+            case $age > 12:
+                $group = '少年组';
+                break;
+            default:
+                $group = '儿童组';
+                break;
+        }
+        return $group;
     }
-    return $group;
 }
 
 /*
@@ -168,17 +171,27 @@ function poker_create($order=true){
  */
 function chinanum($num){
     $china = array(
-                1=>'一',
-                2=>'二',
-                3=>'三',
-                4=>'四',
-                5=>'五',
-                6=>'六',
-                7=>'七',
-                8=>'八',
-                9=>'九',
-                10=>'十',
-            );
+        1=>'一',
+        2=>'二',
+        3=>'三',
+        4=>'四',
+        5=>'五',
+        6=>'六',
+        7=>'七',
+        8=>'八',
+        9=>'九',
+        10=>'十',
+        11=>'十一',
+        12=>'十二',
+        13=>'十三',
+        14=>'十四',
+        15=>'十五',
+        16=>'十六',
+        17=>'十七',
+        18=>'十八',
+        19=>'十九',
+        20=>'二十',
+    );
     return $china[$num];
 }
 

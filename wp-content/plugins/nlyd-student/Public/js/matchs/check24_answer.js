@@ -85,7 +85,7 @@ for (i1=1;i1<=8;i1*=2)
 	function calculateResult(content){
 		try {
 			return eval(content); // no exception occured
-		} 
+		}
 		catch (e) {
 			if (e instanceof SyntaxError) { // Syntax error exception
 				return 'Syntax error exception'; // exception occured

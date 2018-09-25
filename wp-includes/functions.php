@@ -6287,7 +6287,6 @@ if(!function_exists('is_ajax')){
 if(!function_exists('load_view_template')){
     function load_view_template($path,$data=''){
         if(is_file($path)){
-
             if(!empty($data)){
                 extract($data);
             }
@@ -6418,6 +6417,25 @@ function get_match_end_time($match_id){
     }
 
     return $rows;
+}
+
+function getAgeGroupNameByAge($age)
+{
+    switch ($age) {
+        case $age > 59:
+            $group = '老年组';
+            break;
+        case $age > 17:
+            $group = '成年组';
+            break;
+        case $age > 12:
+            $group = '少年组';
+            break;
+        default:
+            $group = '儿童组';
+            break;
+    }
+    return $group;
 }
 
 
