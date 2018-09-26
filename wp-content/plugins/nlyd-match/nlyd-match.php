@@ -432,7 +432,7 @@ if(!class_exists('MatchController')){
                 unset( $columns['date'] );
                 $columns['match_status'] = '状态';
                 $columns['author'] = '发布人';
-                $columns['students'] = '比赛成绩';
+                $columns['students'] = '报名人数';
                 $columns['match_ranking'] = '比赛排名';
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
@@ -572,11 +572,12 @@ if(!class_exists('MatchController')){
                     echo $str;
                     break;
                 case 'match_ranking':
-                    if($row['match_status'] == -3){
-                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
-                    }else{
-                        echo '比赛未结束';
-                    }
+                    echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+//                    if($row['match_status'] == -3){
+//                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+//                    }else{
+//                        echo '比赛未结束';
+//                    }
 
                     break;
                 case 'match_brainpower':

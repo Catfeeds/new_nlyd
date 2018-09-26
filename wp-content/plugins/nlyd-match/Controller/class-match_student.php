@@ -146,14 +146,12 @@ class Match_student {
                             <td class="username column-username has-row-actions column-primary" data-colname="用户名">
                                 <img alt="" src="<?=$usermeta['user_head'][0]?>" class="avatar avatar-32 photo" height="32" width="32">
                                 <strong><?=$row['user_login']?></strong>
-                                <!--                                    <br>-->
-                                <!--                                    <div class="row-actions">-->
-                                <!--                                        <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=13&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
-                                <!--                                        <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=13&amp;_wpnonce=9783a8b758">删除</a> | </span>-->
-                                <!--                                    </div>-->
-                                <!--                                    <button type="button" class="toggle-row">-->
-                                <!--                                        <span class="screen-reader-text">显示详情</span>-->
-                                <!--                                    </button>-->
+                                <div class="row-actions">
+                                    <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
+                                    <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
+                                    <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $match->ID . '&student_id='.$row['ID'])?>" aria-label="">答题记录</a></span>
+                                </div>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
                             </td>
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
 
@@ -240,22 +238,39 @@ class Match_student {
         $match_id = intval($_GET['match_id']);
         $user_id = intval($_GET['student_id']);
         global $wpdb;
+
         $match = get_post($match_id);
-        $user = get_user_by('ID',$user_id);
+//        $user = get_user_by('ID',$user_id);
         $usermeta = get_user_meta($user_id, '', true);
+        //获取当前比赛所有项目
+        $projectArr = get_match_end_time($match_id);
+//        var_dump($projectArr);
+
+        //当前选择项目, 没有,默认第一个
+        $proId = isset($_GET['proId']) ? $_GET['proId'] : $projectArr[0]['match_project_id'];
+
+        //获取当期项目总轮数
+        $match_moreAll = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id.' AND user_id='.$user_id.' AND project_id='.$proId.' GROUP BY project_id,user_id');
+
+        //获取当前项目当前轮数, 没有默认第一轮
+        $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
+
         //查询成绩
+
+
         $rows = $wpdb->get_results('SELECT mq.match_more,mq.match_questions,mq.questions_answer,mq.my_answer,mq.surplus_time,mq.my_score,p.post_title AS project_title,mq.created_time,
-              CASE mq.answer_status 
-              WHEN -1 THEN "记忆完成" 
-              WHEN 1 THEN "提交" 
-              END AS answer_status 
-              FROM '.$wpdb->prefix.'match_questions AS mq 
-              LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id 
+              CASE mq.answer_status
+              WHEN -1 THEN "记忆完成"
+              WHEN 1 THEN "提交"
+              END AS answer_status
+              FROM '.$wpdb->prefix.'match_questions AS mq
+              LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id
               WHERE mq.user_id='.$user_id.' AND mq.match_id='.$match_id.' ORDER BY mq.match_more ASC', ARRAY_A);
+
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-比赛成绩</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-答题记录</h1>
 
             <!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
 
@@ -271,14 +286,27 @@ class Match_student {
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="5ce30f05fd"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
+                        <?php foreach ($projectArr as $pav){ ?>
+                            <span><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$pav['match_project_id'])?>"><?=$pav['post_title']?></a></span>
+                        <?php } ?>
 
+<!--                        <span><a href="">逆向速算</a></span>-->
+<!--                        <span><a href="">逆向速算</a></span>-->
+<!--                        <span><a href="">逆向速算</a></span>-->
                     </div>
-                    <div class="alignleft actions">
 
-                    </div>
                     <br class="clear">
+                    <div class="alignleft actions">
+                        <?php for($i = 1; $i <= $match_moreAll; ++$i){ ?>
+                            <span><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$proId.'&more='.$i)?>">第<?=$i?>轮</a></span>
+                        <?php } ?>
+<!--                        <span><a href="">第一轮</a></span>-->
+<!--                        <span><a href="">第二轮</a></span>-->
+<!--                        <span><a href="">第三轮</a></span>-->
+<!--                        <span><a href="">第四轮</a></span>-->
+                    </div>
                 </div>
-                <h2 class="screen-reader-text">用户列表</h2>
+                <h2 class="screen-reader-text">答题记录</h2>
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
@@ -913,14 +941,7 @@ class Match_student {
                                 <input type="checkbox" name="users[]" id="" class="subscriber" value="">
                             </th>
 
-                            <td class="name column-ID" data-colname="学员ID"><span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
-                                <div class="row-actions">
-<!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
-<!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
-                                    <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $post->ID . '&student_id='.$raV['user_id'])?>" aria-label="阅读13038661930的文章">答题记录</a></span>
-                                </div>
-                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
-                            </td>
+                            <td class="name column-ID" data-colname="学员ID"><span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
                             <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
                             <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
