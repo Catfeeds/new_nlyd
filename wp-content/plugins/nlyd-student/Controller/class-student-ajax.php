@@ -1727,8 +1727,12 @@ class Student_Ajax
                 }
                 break;
             case 'mobile':
+                $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+
                 break;
             case 'email':
+                $this->get_smtp_code($_POST['user_email'],21,true,$_POST['verify_code']);
+
                 break;
             case 'weChat':
                 break;
@@ -1839,7 +1843,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if($template != 17 && $template != 19){
+        if(!in_array($template,array(17,19,21))){
             $user  = get_user_by( 'mobile', $mobile );
 
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
@@ -1906,7 +1910,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if($template != 17 && $template != 19){
+        if(!in_array($template,array(17,19,21))){
             $user  = get_user_by( 'email', $email );
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
         }
