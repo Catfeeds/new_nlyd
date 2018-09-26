@@ -1727,11 +1727,19 @@ class Student_Ajax
                 }
                 break;
             case 'mobile':
-                $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+
+                if(!reg_match($_POST['user_mobile'],'m')) wp_send_json_error(array('info'=>'手机格式有误'));
+
+                if($_POST['step'] == 'one'){
+                    $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+                }else{
+                    $this->get_sms_code($_POST['user_mobile'],16,true,$_POST['verify_code']);
+                }
 
                 break;
             case 'email':
-                $this->get_smtp_code($_POST['user_email'],21,true,$_POST['verify_code']);
+                if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>'邮箱格式有误'));
+                $this->get_smtp_code($_POST['user_email'],16,true,$_POST['verify_code']);
 
                 break;
             case 'weChat':
@@ -1843,7 +1851,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if(!in_array($template,array(17,19,21))){
+        if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'mobile', $mobile );
 
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
@@ -1910,7 +1918,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if(!in_array($template,array(17,19,21))){
+        if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'email', $email );
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
         }
