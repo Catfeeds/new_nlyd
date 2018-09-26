@@ -20,35 +20,35 @@
                             <div class="form-input-row">
                                 <div class="form-input-label">登陆密码</div>
                                 <div class="nl-input">**********</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/pass')?>">修改</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定手机</div>
                                 <?php if(!empty($user_info['user_mobile'])){?>
                                 <div class="nl-input"><?=hideStar($user_info['user_mobile'])?></div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>">修改</a>
                                 <?php }else{ ?>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">去设置</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>">去设置</a>
                                 <?php } ?>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定邮箱</div>
                                 <?php if(!empty($user_info['user_email'])){?>
                                     <div class="nl-input"><?=hideStar($user_info['user_email'])?></div>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">修改</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>">修改</a>
                                 <?php }else{ ?>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">去设置</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>">去设置</a>
                                 <?php } ?>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定微信</div>
                                 <div class="nl-input">不听不听</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">解绑</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/weChat')?>">解绑</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定QQ</div>
                                 <div class="nl-input">一时发疯，回不了神</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting')?>">解绑</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/qq')?>">解绑</a>
                             </div>
                         </div>
                     </div>
