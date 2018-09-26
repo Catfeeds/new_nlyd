@@ -40,13 +40,13 @@
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <input name='meta_val' value="<?=$user_info['contact']?>" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <div class="nl-input" lay-verify="phone"><?=$user_info['contact']?></div>
                                 <input type="hidden" name="mobile" value="<?=$user_info['user_mobile']?>" />
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="21">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php if($_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
@@ -55,11 +55,11 @@
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
                             <?php } ?>
@@ -69,11 +69,11 @@
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
                                 <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
                             <?php if($_GET['type'] == 'mobile' && !isset($_GET['confirm']) ){ ?>
@@ -94,6 +94,9 @@
         // $('.safetySetting').click(function(){
         //     $('#safetySetting').click()
         // })
+        $('.phone_number').focusout(function(){
+            var _this=$(this).
+        })
         sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
