@@ -1720,7 +1720,7 @@ class Student_Ajax
 
                     $new_pass = wp_hash_password( $_POST['confirm_pass'] );
 
-                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID',$current_user->ID));
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID'=>$current_user->ID));
 
                 }else{
                     wp_send_json_error(array('info'=>'老密码不正确'));
@@ -1732,15 +1732,23 @@ class Student_Ajax
 
                 if($_POST['step'] == 'one'){
                     $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+                    unset($_SESSION['sms']);
+                    wp_send_json_success(array('info'=>'验证成功','url'=>home_url('/safety/safetySetting/type/mobile/confirm/1')));
                 }else{
+
                     $this->get_sms_code($_POST['user_mobile'],16,true,$_POST['verify_code']);
+                    $user  = get_user_by( 'mobile', $_POST['user_mobile'] );
+                    if(!empty($user)) wp_send_json_error(array('info'=>'该手机号已被占用'));
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_mobile']),array('ID'=>$current_user->ID));
                 }
 
                 break;
             case 'email':
                 if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>'邮箱格式有误'));
                 $this->get_smtp_code($_POST['user_email'],16,true,$_POST['verify_code']);
-
+                $user  = get_user_by( 'email', $_POST['user_email'] );
+                if(!empty($user)) wp_send_json_error(array('info'=>'该邮箱号已被占用'));
+                $result = $wpdb->update($wpdb->prefix.'users',array('user_email'=>$_POST['user_email']),array('ID'=>$current_user->ID));
                 break;
             case 'weChat':
                 break;
@@ -1748,6 +1756,12 @@ class Student_Ajax
                 break;
             default:
                 wp_send_json_error(array('info'=>'未知的操作请求'));
+        }
+
+        if($result){
+            wp_send_json_success(array('info'=>'更新成功','url'=>home_url('account/secure/')));
+        }else{
+            wp_send_json_error(array('info'=>'更新失败'));
         }
     }
 

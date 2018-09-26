@@ -2198,7 +2198,7 @@ class wpdb {
 		$conditions = implode( ' AND ', $conditions );
 
 		$sql = "UPDATE `$table` SET $fields WHERE $conditions";
-        //var_dump($this->prepare( $sql, $values ));
+        //print_r($this->prepare( $sql, $values ));
 		$this->check_current_query = false;
 		return $this->query( $this->prepare( $sql, $values ) );
 	}
