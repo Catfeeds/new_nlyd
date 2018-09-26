@@ -572,11 +572,12 @@ if(!class_exists('MatchController')){
                     echo $str;
                     break;
                 case 'match_ranking':
-                    if($row['match_status'] == -3){
-                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
-                    }else{
-                        echo '比赛未结束';
-                    }
+                    echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+//                    if($row['match_status'] == -3){
+//                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
+//                    }else{
+//                        echo '比赛未结束';
+//                    }
 
                     break;
                 case 'match_brainpower':
