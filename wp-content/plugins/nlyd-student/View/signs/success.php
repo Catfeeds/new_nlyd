@@ -19,15 +19,15 @@
                     <p class="signs_title fs_16 c_black">“达智优”2018脑力世界杯中国赛</p>
                     <div class="signs_row fs_16">
                         <span class="signs_label c_black">选手姓名：</span>
-                        <span class="signs_value">孙中则</span>
+                        <span class="signs_value"><?=$real_name?></span>
                     </div>
                     <div class="signs_row fs_16">
                         <span class="signs_label c_black">证件号码：</span>
-                        <span class="signs_value">5111**********5144</span>
+                        <span class="signs_value"><?=$real_ID?></span>
                     </div>
                     <div class="signs_row fs_16">
                         <span class="signs_label c_black">城市信息：</span>
-                        <span class="signs_value">内蒙古巴彦卓尔</span>
+                        <span class="signs_value"><?=$address?></span>
                     </div>
                     <a href="<?=home_url('/matchs');?>" class="go_match"><span>去赛事中心</span></a>
                 </div>
