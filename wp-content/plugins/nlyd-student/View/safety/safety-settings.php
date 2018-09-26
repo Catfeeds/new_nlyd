@@ -20,6 +20,7 @@
                             <input type="hidden" name="action" value="secure_save">
                             <?php if($_GET['type'] == 'pass'){ ?>
                             <!-- 重置密码 -->
+                            <input type="hidden" name="save_type" value="pass">
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
                                 <input name='old_pass' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
@@ -35,6 +36,7 @@
                             <?php } ?>
                             <?php if($_GET['type'] == 'mobile'){ ?>
                             <!-- 更换手机号 -->
+                            <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
@@ -48,6 +50,7 @@
                             </div>
                             <?php if($_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
+                            <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
@@ -62,6 +65,7 @@
                             <?php } ?>
                             <?php if($_GET['type'] == 'email'){ ?>
                             <!-- 绑定更换邮箱 -->
+                            <input type="hidden" name="save_type" value="email">
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
                                 <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
@@ -97,6 +101,7 @@
             $.ajax({
                 data: formData,
                 success: function(data, textStatus, jqXHR){
+                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
                         if(data.data.url){
