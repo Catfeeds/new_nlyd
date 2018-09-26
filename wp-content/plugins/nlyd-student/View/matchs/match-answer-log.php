@@ -160,14 +160,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 $('.second_wap.poker-wrapper').css('width',W1);
             }
             initWidth();
-            // $('.first_wap .poker-window').scroll(function(){
-            //     var left=$(this).children('.poker-wrapper').position().left;
-            //     $('.second_wap .poker-window').scrollLeft(-left)
-            // })
-            // $('.second_wap .poker-window').scroll(function(){
-            //     var left=$(this).children('.poker-wrapper').position().left;
-            //     $('.first_wap .poker-window').scrollLeft(-left)
-            // })
+            
         <?php endif;?>
     })
 </script>

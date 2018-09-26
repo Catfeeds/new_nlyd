@@ -66,8 +66,32 @@ class Student_Safety extends Student_Home
      *
      **/
      public function safetySetting(){
+        global $user_info;
+
+        //重置密码/更换手机号/绑定手机号/绑定邮箱
+         switch ($_GET['type']){
+             case 'pass':
+                $title = '密码重置';
+                break;
+             case 'mobile':
+                 $title = '手机绑定';
+                 break;
+             case 'email':
+                 $title = '邮箱绑定';
+                 break;
+             case 'weChat':
+                 $title = '微信绑定';
+                 break;
+             case 'qq':
+                 $title = 'QQ绑定';
+                 break;
+             default:
+                 $title='安全中心';
+                 break;
+         }
+
         $view = student_view_path.CONTROLLER.'/safety-settings.php';
-        load_view_template($view);
+        load_view_template($view,array('user_info'=>$user_info,'title'=>$title));
     }
 
 

@@ -11,82 +11,100 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">重置密码/更换手机号/绑定手机号/绑定邮箱</h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
                     <form class="nl-page-form width-margin-pc layui-form" lay-filter='safetySetting'>
                         <div class="form-inputs">
+                            <input type="hidden" name="action" value="secure_save">
+                            <?php if($_GET['type'] == 'pass'){ ?>
                             <!-- 重置密码 -->
+                            <input type="hidden" name="save_type" value="pass">
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
-                                <input name='meta_val' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='old_pass' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">新密码</div>
-                                <input name='meta_val' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='new_pass' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">再次输入</div>
-                                <input name='meta_val' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='confirm_pass' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php } ?>
+                            <?php if($_GET['type'] == 'mobile'){ ?>
+                             <?php if(!isset($_GET['confirm'])){ ?>
                             <!-- 更换手机号 -->
+                            <input type="hidden" name="save_type" value="mobile">
+                            <input type="hidden" name="step" value="one">
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <div class="nl-input"><?=$user_info['contact']?></div>
+                                <input type="hidden" lay-verify="phone" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="21">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php }?>
+                            <?php if(!empty($user_info['user_mobile']) && $_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
+                            <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <input name='user_mobile' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php } ?>
+                            <?php } ?>
+                            <?php if($_GET['type'] == 'email'){ ?>
                             <!-- 绑定更换邮箱 -->
+                            <input type="hidden" name="save_type" value="email">
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
-                                <input name='meta_val' value="" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
+                                <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
-                            <a class="a-btn" style="display:none;" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
+                            <?php }?>
+                            <?php if($_GET['type']=='mobile' && !isset($_GET['confirm']) ){ ?>
+                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">下一步</a>
+                            <?php }else{ ?>
+                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
+                            <?php } ?>
                         </div>
                     </form>
                 </div>
-                <a class="a-btn safetySetting">更 新</a>
+                <!-- <a class="a-btn safetySetting">更 新</a> -->
             </div>
         </div>           
     </div>
 </div>
 <script>
     jQuery(document).ready(function($) {
-        $('.safetySetting').click(function(){
-            $('#safetySetting').click()
-        })
-        sendloginAjax=function(url,formData){
+        // $('.safetySetting').click(function(){
+        //     $('#safetySetting').click()
+        // })
+        sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({
-                type: "POST",
-                url: url,
                 data: formData,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
+                    console.log(data)
                     $.alerts(data.data.info)
                     if(data.success){
                         if(data.data.url){
@@ -105,7 +123,7 @@
             // 自定义验证规则
             form.verify($.validationLayui.allRules);
             form.on('submit(safetySetting)', function(data){
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
         });
@@ -149,7 +167,7 @@
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(data)
                     var wait=60;  
                     time(wait,$(this))
                 }else{
@@ -158,7 +176,6 @@
                     return false
                 }
             }else if(layVerify=='email'){//手机或邮箱登录
-                message=allRules['phoneOrEmail'];
                 if( email.test(value)){
                     var formData=$(this).parents('form').serializeObject();
                     var getTimestamp=new Date().getTime()
@@ -170,7 +187,7 @@
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(data)
                     var wait=60;  
                     time(wait,$(this))
                     return false

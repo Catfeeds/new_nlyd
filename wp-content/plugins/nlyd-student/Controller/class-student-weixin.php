@@ -234,6 +234,9 @@ class Student_Weixin
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;
         if($type == false) {
+            
+            if($_SESSION['user_openid']) wp_redirect(home_url('account/certification/type/sign'));
+            
             wp_redirect(home_url('account'));//跳转到用户中心
             exit;
         }

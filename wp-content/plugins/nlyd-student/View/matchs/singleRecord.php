@@ -34,7 +34,7 @@
                                         <td><span>ID</span></td>
                                         <td>城市</td>
                                         <td><span>项目总分</span></td>
-                                        <td>组别</td>
+                                        <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
                                     </tr>  
                                     <tr class="nl-me" id="danxiang_me">
                             

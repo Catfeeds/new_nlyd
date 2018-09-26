@@ -1580,14 +1580,14 @@ class Student_Ajax
                         $sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$_POST['meta_val']['real_name']}' ";
 
                         $row = $wpdb->get_row($sql,ARRAY_A);
-                        //var_dump($row);die;
-                        if(empty($row)) wp_send_json_error(array('info'=>'该用户未在老平台报名<br/>请确认姓名的真实性'));
+                         //var_dump($row);die;
+                        if(empty($row)) wp_send_json_error(array('info'=>'该用户未在老平台进行比赛报名<br/>请确认该姓名的真实性'));
                         if($row){
 
-                            //var_dump($row);die;
                             $order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$current_user->ID} ");
-                            if(!empty($order_id)){
-
+                            if(empty($order_id)){
+                                
+                                $wpdb->startTrans();
                                 //在平台创建订单
                                 $orde_data = array(
                                             'user_id' => $current_user->ID,
@@ -1599,6 +1599,7 @@ class Student_Ajax
                                             'created_time' => get_time('mysql')
                                         );
                                 $a = $wpdb->insert($wpdb->prefix.'order',$orde_data);
+                                $orders_id = $wpdb->insert_id;
                                 $b = $wpdb->insert(
                                                 $wpdb->prefix.'match_sign',
                                                 array(
@@ -1607,18 +1608,21 @@ class Student_Ajax
                                                     'created_time' => get_time('mysql')
                                                 )
                                         );
-                                $c = $wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($user_id,$wpdb->insert_id)], ['id' => $wpdb->insert_id]);
+                                $c = $wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($current_user->ID,$orders_id)], ['id' => $orders_id]);
+                                //wp_send_json_error(array('info'=>$orders_id.'====='.$a.'----'.$b.'==='.$c));
+                                
+                                //var_dump($a.'----'.$b);die;
                                 /*if($a && $b){
 
                                     $wpdb->commit();
-                                    wp_send_json_success(array('info'=>'签到成功'));
+                                    wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
                                 }else{
 
                                     $wpdb->rollback();
-                                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败,请联系管理员'));
+                                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败<br/>请联系管理员'));
                                 }*/
                             }else{
-                                wp_send_json_success(array('info'=>'签到成功'));
+                                wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
                             }
                         }
                     }
@@ -1674,6 +1678,7 @@ class Student_Ajax
 
         }
         if($resul){
+
             if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
                 if($a && $b && $c){
@@ -1683,15 +1688,80 @@ class Student_Ajax
                 }else{
 
                     $wpdb->rollback();
-                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败,请联系管理员'));
+                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败<br/>请联系管理员'));
                 }
             }
+
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
             $success['info'] = '保存成功';
             $success['url'] = $url;
             wp_send_json_success($success);
         }else{
             wp_send_json_success(array('info'=>'设置失败'));
+        }
+    }
+
+
+    public function secure_save(){
+
+        global $wpdb,$current_user;
+
+        switch ($_POST['save_type']){
+            case 'pass':
+                if(wp_check_password($_POST['old_pass'],$current_user->user_pass)){
+
+                    if($_POST['new_pass'] != $_POST['confirm_pass'] ){
+                        wp_send_json_error(array('info'=>'新密码两次输入不一致'));
+                    }
+
+                    if(wp_check_password($_POST['confirm_pass'],$current_user->user_pass)){
+                        wp_send_json_error(array('info'=>'新旧密码不能一致'));
+                    }
+
+                    $new_pass = wp_hash_password( $_POST['confirm_pass'] );
+
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID'=>$current_user->ID));
+
+                }else{
+                    wp_send_json_error(array('info'=>'老密码不正确'));
+                }
+                break;
+            case 'mobile':
+
+                if(!reg_match($_POST['user_mobile'],'m')) wp_send_json_error(array('info'=>'手机格式有误'));
+
+                if($_POST['step'] == 'one'){
+                    $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+                    unset($_SESSION['sms']);
+                    wp_send_json_success(array('info'=>'验证成功','url'=>home_url('/safety/safetySetting/type/mobile/confirm/1')));
+                }else{
+
+                    $this->get_sms_code($_POST['user_mobile'],16,true,$_POST['verify_code']);
+                    $user  = get_user_by( 'mobile', $_POST['user_mobile'] );
+                    if(!empty($user)) wp_send_json_error(array('info'=>'该手机号已被占用'));
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_mobile']),array('ID'=>$current_user->ID));
+                }
+
+                break;
+            case 'email':
+                if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>'邮箱格式有误'));
+                $this->get_smtp_code($_POST['user_email'],16,true,$_POST['verify_code']);
+                $user  = get_user_by( 'email', $_POST['user_email'] );
+                if(!empty($user)) wp_send_json_error(array('info'=>'该邮箱号已被占用'));
+                $result = $wpdb->update($wpdb->prefix.'users',array('user_email'=>$_POST['user_email']),array('ID'=>$current_user->ID));
+                break;
+            case 'weChat':
+                break;
+            case 'qq':
+                break;
+            default:
+                wp_send_json_error(array('info'=>'未知的操作请求'));
+        }
+
+        if($result){
+            wp_send_json_success(array('info'=>'更新成功','url'=>home_url('account/secure/')));
+        }else{
+            wp_send_json_error(array('info'=>'更新失败'));
         }
     }
 
@@ -1795,7 +1865,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if($template != 17 && $template != 19){
+        if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'mobile', $mobile );
 
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
@@ -1862,7 +1932,7 @@ class Student_Ajax
         }
 
         //如果不是注册操作,判断是否为平台用户
-        if($template != 17 && $template != 19){
+        if(!in_array($template,array(16,17,19,21))){
             $user  = get_user_by( 'email', $email );
             if(empty($user)) wp_send_json_error(array('info'=>'您不是平台用户,请先进行注册'));
         }
@@ -2783,13 +2853,13 @@ class Student_Ajax
                 wp_send_json_error(array('info'=>'该用户不存在'));
             }
 
-//            if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
+        //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
             update_user_meta($user_id,'user_session_id',session_id());
             wp_set_current_user($user_id);
             wp_set_auth_cookie($user_id);
-
-            if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+            //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
+            if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
                 wp_send_json_success(array('info'=>'账户绑定完成,即将跳转', 'url' => home_url('account/certification/type/sign')));
             }else{
 
@@ -2806,12 +2876,13 @@ class Student_Ajax
         $res = $weiLogin->getUserInfo($access_token, $open_id, true, $user_id, $mobile,$type,$bindType);
 
         if($res){
-            if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+            if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
                 wp_send_json_success(array('info'=>'账户绑定完成,即将跳转', 'url' => home_url('account/certification/type/sign')));
             }else{
 
                 wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
             }
+            //wp_send_json_success(array('info'=>'绑定成功', 'url' => home_url('account')));
         }else{
             wp_send_json_error(array('info'=>'绑定失败'));
         }
