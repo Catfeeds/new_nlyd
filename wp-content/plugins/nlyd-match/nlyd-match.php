@@ -432,7 +432,7 @@ if(!class_exists('MatchController')){
                 unset( $columns['date'] );
                 $columns['match_status'] = '状态';
                 $columns['author'] = '发布人';
-                $columns['students'] = '比赛成绩';
+                $columns['students'] = '报名人数';
                 $columns['match_ranking'] = '比赛排名';
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
