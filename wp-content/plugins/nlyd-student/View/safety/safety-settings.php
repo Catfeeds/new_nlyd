@@ -11,7 +11,7 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">重置密码/更换手机号/绑定手机号/绑定邮箱</h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
@@ -45,6 +45,7 @@
                                 <div class="form-input-label">验证码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php if($_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
                             <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
                             <div class="form-input-row">
@@ -57,11 +58,12 @@
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
+                            <?php } ?>
                             <?php if($_GET['type'] == 'email'){ ?>
                             <!-- 绑定更换邮箱 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
-                                <input name='meta_val' value="" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
+                                <input name='meta_val' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
                             </div>
                             <div class="form-input-row">
@@ -69,7 +71,11 @@
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
+                            <?php if($_GET['type'] == 'mobile' && !isset($_GET['confirm']) ){ ?>
+                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">下一步</a>
+                            <?php }else{ ?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
+                            <?php } ?>
                         </div>
                     </form>
                 </div>
