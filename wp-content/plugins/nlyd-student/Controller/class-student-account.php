@@ -186,7 +186,7 @@ class Student_Account extends Student_Home
     public function secure(){
 
         global $user_info;
-
+        //print_r($user_info);
         $data = array('user_info'=>$user_info);
 
         $view = student_view_path.CONTROLLER.'/secure.php';

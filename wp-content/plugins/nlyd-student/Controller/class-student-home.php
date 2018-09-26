@@ -55,7 +55,11 @@ class Student_Home
             $user_info['user_head'] = isset($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
             $user_info['user_mobile'] = !empty($current_user->user_mobile) ? $current_user->user_mobile : '';
             $user_info['user_email'] = !empty($current_user->user_email) ? $current_user->user_email : '';
+            $user_info['user_email'] = !empty($current_user->user_email) ? $current_user->user_email : '';
             $user_info['contact'] = !empty($current_user->user_mobile) ? hideStar($current_user->user_mobile) : hideStar($current_user->user_email);
+
+            $user_info['qq_union_id'] = !empty($current_user->qq_union_id) ? $current_user->qq_union_id : '';
+            $user_info['weChat_openid'] = !empty($current_user->weChat_openid) ? $current_user->weChat_openid : '';
 
             $user_info['user_address'] = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
             $user_info['user_real_name'] = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
