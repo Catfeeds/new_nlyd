@@ -13,17 +13,17 @@ class Student_Logins
     public $action;
     public function __construct($action)
     {
-        if(is_user_logged_in()) wp_redirect(home_url('account'));
-
+        
         if($_SESSION['user_openid'] == false){
-            
+
+            if(is_user_logged_in()) wp_redirect(home_url('account'));    
             if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
 
                 wp_redirect(home_url('weixin/webLogin'));
                 exit;
             }
+            $this->action = $action;
         }
-        $this->action = $action;
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 

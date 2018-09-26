@@ -60,7 +60,7 @@ if(!class_exists('StudentController')){
             //$this->plugin_activation_cretable();
 
             //引入学生端公用css/js
-            add_action('wp_enqueue_scripts', array($this,'scripts_default'));
+            add_action('wp_enqueue_scripts', array($this,'scripts_default'),10,2);
 
             //登录时执行
             add_action('wp_login',array( $this, 'logging_in' ));

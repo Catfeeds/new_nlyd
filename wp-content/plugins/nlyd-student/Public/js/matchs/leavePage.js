@@ -1,7 +1,7 @@
 
     function leaveMatchPage(submit) {//准备也页，比赛页
         
-        // if(window.location.host=='ydbeta.gjnlyd.com'){
+         if(window.location.host=='ydbeta.gjnlyd.com'){
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -43,7 +43,7 @@
                     jQuery.DelSession('leavePage')
                 }
             });
-        // }
+         }
     }
 
     function leavePageLoad(url){//比赛纪录页
