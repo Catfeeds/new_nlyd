@@ -1732,15 +1732,23 @@ class Student_Ajax
 
                 if($_POST['step'] == 'one'){
                     $this->get_sms_code($_POST['user_mobile'],21,true,$_POST['verify_code']);
+                    unset($_SESSION['sms']);
+                    wp_send_json_success(array('info'=>'验证成功','url'=>home_url('/safety/safetySetting/type/mobile/confirm/1')));
                 }else{
+
                     $this->get_sms_code($_POST['user_mobile'],16,true,$_POST['verify_code']);
+                    $user  = get_user_by( 'mobile', $_POST['user_mobile'] );
+                    if(!empty($user)) wp_send_json_error(array('info'=>'该手机号已被占用'));
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_mobile']),array('ID'=>$current_user->ID));
                 }
 
                 break;
             case 'email':
                 if(!reg_match($_POST['user_email'],'e')) wp_send_json_error(array('info'=>'邮箱格式有误'));
                 $this->get_smtp_code($_POST['user_email'],16,true,$_POST['verify_code']);
-
+                $user  = get_user_by( 'email', $_POST['user_email'] );
+                if(!empty($user)) wp_send_json_error(array('info'=>'该邮箱号已被占用'));
+                $result = $wpdb->update($wpdb->prefix.'users',array('user_email'=>$_POST['user_email']),array('ID'=>$current_user->ID));
                 break;
             case 'weChat':
                 break;

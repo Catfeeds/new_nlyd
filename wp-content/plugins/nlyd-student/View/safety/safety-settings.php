@@ -35,26 +35,29 @@
                             </div>
                             <?php } ?>
                             <?php if($_GET['type'] == 'mobile'){ ?>
+                             <?php if(!isset($_GET['confirm'])){ ?>
                             <!-- 更换手机号 -->
                             <input type="hidden" name="save_type" value="mobile">
+                            <input type="hidden" name="step" value="one">
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <div class="nl-input" lay-verify="phone"><?=$user_info['contact']?></div>
-                                <input type="hidden" name="mobile" value="<?=$user_info['user_mobile']?>" />
+                                <div class="nl-input"><?=$user_info['contact']?></div>
+                                <input type="hidden" lay-verify="phone" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="21">发送验证码</a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">验证码</div>
                                 <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php }?>
                             <?php if(!empty($user_info['user_mobile']) && $_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
                             <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <input name='user_mobile' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
                             </div>
                             <div class="form-input-row">
@@ -76,7 +79,7 @@
                                 <input name='verify_code' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
-                            <?php if(!empty($user_info['user_mobile']) && !isset($_GET['confirm']) ){ ?>
+                            <?php if($_GET['type']=='mobile' && !isset($_GET['confirm']) ){ ?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">下一步</a>
                             <?php }else{ ?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
