@@ -21,15 +21,15 @@
                             <!-- 重置密码 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
-                                <input name='meta_val' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='old_pass' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">新密码</div>
-                                <input name='meta_val' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='new_pass' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">再次输入</div>
-                                <input name='meta_val' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='confirm_pass' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
                             <?php if($_GET['type'] == 'mobile'){ ?>
@@ -63,7 +63,7 @@
                             <!-- 绑定更换邮箱 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
-                                <input name='meta_val' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
+                                <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="邮箱地址" class="nl-input nl-foucs" lay-verify="email">
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
                             </div>
                             <div class="form-input-row">
