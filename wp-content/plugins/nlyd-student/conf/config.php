@@ -80,6 +80,12 @@ return array(
             'post_content'=>'[timer-index]',
             'url'=>'/timer',
         ),
+        array(
+            'post_title'=>'微信登录',
+            'post_name'=>'weixin',
+            'post_content'=>'[student-weixin]',
+            'url'=>'/weixin',
+        ),
 
     ),
 );
