@@ -344,7 +344,11 @@ $('#selectWrapper .fastScan-item').each(function(){
 })
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
-            $('#load').css('display','block')
+            $('#load').css({
+                'display':'block',
+                'opacity': '1',
+                'visibility': 'visible',
+            })
             isSubmit=true;
             var data={
                 action:'answer_submit',
@@ -372,14 +376,22 @@ $('#selectWrapper .fastScan-item').each(function(){
                             window.location.href=res.data.url
                         }
                     }else{
-                        $('#load').css('display','none')
+                        $('#load').css({
+                            'display':'none',
+                            'opacity': '0',
+                            'visibility': 'hidden',
+                        })
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
-                     $('#load').css('display','none')
+                        $('#load').css({
+                            'display':'none',
+                            'opacity': '0',
+                            'visibility': 'hidden',
+                        })
                 }
             })
         }else{
