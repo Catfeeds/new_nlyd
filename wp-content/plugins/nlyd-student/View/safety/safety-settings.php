@@ -42,13 +42,8 @@
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-<<<<<<< HEAD
-                                <div class="nl-input" lay-verify="phone"><?=$user_info['contact']?></div>
-                                <input type="hidden" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
-=======
                                 <div class="nl-input"><?=$user_info['contact']?></div>
                                 <input type="hidden" lay-verify="phone" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
->>>>>>> 5230e5dd8e65f2feac4acc6636f361d51234ed7f
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="21">发送验证码</a>
                             </div>
                             <div class="form-input-row">
