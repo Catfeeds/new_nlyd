@@ -298,7 +298,10 @@ class Student_Signs
      * 默认公用js/css引入
      */
     public function scripts_default(){ 
-
+        if(ACTION == 'success'){
+            wp_register_style( 'my-signs-success', student_css_url.'signs/success.css',array('my-student') );
+            wp_enqueue_style( 'my-signs-success' );
+        }
         //wp_register_script( 'my-student-sign', student_js_url.'student-sign.js',array('jquery'),leo_student_version);
         //wp_enqueue_script( 'my-student-sign' );           
 
