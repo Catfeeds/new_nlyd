@@ -17,6 +17,7 @@
                 <div class="have-bottom">
                     <form class="nl-page-form width-margin-pc layui-form" lay-filter='safetySetting'>
                         <div class="form-inputs">
+                            <?php if($_GET['type'] == 'pass'){ ?>
                             <!-- 重置密码 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
@@ -30,6 +31,8 @@
                                 <div class="form-input-label">再次输入</div>
                                 <input name='meta_val' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php } ?>
+                            <?php if($_GET['type'] == 'mobile'){ ?>
                             <!-- 更换手机号 -->
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
@@ -52,6 +55,8 @@
                                 <div class="form-input-label">验证码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php } ?>
+                            <?php if($_GET['type'] == 'email'){ ?>
                             <!-- 绑定更换邮箱 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">邮箱地址</div>
@@ -62,6 +67,7 @@
                                 <div class="form-input-label">验证码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
+                            <?php }?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
                         </div>
                     </form>

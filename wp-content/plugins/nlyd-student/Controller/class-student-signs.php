@@ -20,12 +20,12 @@ class Student_Signs
             $this->index();
             die;
         }else{
+            $action = $action != 'success' ? 'signs' : $action;
             add_action('wp_enqueue_scripts', array($this,'scripts_default'),10,7);
-            add_shortcode('student-signs',array($this,'signs'));
+            add_shortcode('student-signs',array($this,$action));
         }
     }
 
-    
     /**
     签到操作
     */
@@ -36,6 +36,18 @@ class Student_Signs
         $this->getWebCode();
     }
 
+
+    /**
+     * 签到成功页面
+     */
+    public function success(){
+
+        $view = student_view_path.CONTROLLER.'/success.php';
+        load_view_template($view);
+    }
+
+
+    /*二维码页面展示*/
     public function signs(){ ?>
 
     <script type="text/javascript">
