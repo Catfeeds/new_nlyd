@@ -245,9 +245,25 @@ class Match_student {
         //获取当前比赛所有项目
         $projectArr = get_match_end_time($match_id);
 //        var_dump($projectArr);
-
+//
+//        die;
         //当前选择项目, 没有,默认第一个
-        $proId = isset($_GET['proId']) ? $_GET['proId'] : $projectArr[0]['match_project_id'];
+        if(isset($_GET['proId'])){
+            foreach ($projectArr as $pav){
+                if($pav['match_project_id'] == $_GET['proId']){
+                    $currentProject = $pav;
+                    break;
+                }
+            }
+        }else{
+            $currentProject = $projectArr[0];
+        }
+        if(!isset($currentProject)){
+            echo '比赛项目参数错误';
+            exit;
+        }
+
+        $proId = $currentProject['match_project_id'];
 
         //获取当期项目总轮数
         $match_moreAll = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id.' AND user_id='.$user_id.' AND project_id='.$proId.' GROUP BY project_id,user_id');
@@ -256,16 +272,128 @@ class Match_student {
         $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
 
         //查询成绩
+        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,
+              CASE answer_status 
+              WHEN -1 THEN "记忆完成" 
+              WHEN 1 THEN "提交" 
+              END AS answer_status 
+              FROM '.$wpdb->prefix.'match_questions  
+              WHERE match_id='.$match_id.' AND project_id='.$proId.' AND user_id='.$user_id.' AND match_more='.$current_match_more, ARRAY_A);
+        $is_view = true;
+        if(!$row){
+            echo '本轮比赛无记录';
+            $is_view = false;
+        }elseif ($row['answer_status'] != 1){
+            echo '本轮成绩未提交';
+            $is_view = false;
+        }
+
+        //生成答题记录数组
+        $match_questions = json_decode($row['match_questions'],true);
+        $questions_answer = json_decode($row['questions_answer'],true);
+        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+        if(in_array($currentProject['project_alias'],array('wzsd'))){
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
+
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
+                    }
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+            }
+
+        }
+        elseif ($currentProject['project_alias'] == 'nxss'){
+
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            /*print_r($answer_array);
+            print_r($questions_answer);*/
+            //die;
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
+
+            /*if(!empty($match_questions)){
+                $twentyfour = new TwentyFour();
+                foreach ($match_questions as $val){
+                    $results = $twentyfour->calculate($val);
+                    //print_r($results);
+                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
+                }
+                $questions_answer = $arr;
+            }*/
+        }
+        else{
+
+            if(!empty($questions_answer)){
+                $len = count($questions_answer);
+                $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                $error_len = count($error_arr);
+                $success_len = $len - $error_len;
+            }else{
+                $my_answer = array();
+                $error_arr = array();
+                $success_len = 0;
+                $len = 0;
+            }
+        }
+
+        //获取本轮排名
+        $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$match_id} and project_id = {$proId} and match_more = {$current_match_more} group by my_score desc,surplus_time desc";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
 
 
-        $rows = $wpdb->get_results('SELECT mq.match_more,mq.match_questions,mq.questions_answer,mq.my_answer,mq.surplus_time,mq.my_score,p.post_title AS project_title,mq.created_time,
-              CASE mq.answer_status
-              WHEN -1 THEN "记忆完成"
-              WHEN 1 THEN "提交"
-              END AS answer_status
-              FROM '.$wpdb->prefix.'match_questions AS mq
-              LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id
-              WHERE mq.user_id='.$user_id.' AND mq.match_id='.$match_id.' ORDER BY mq.match_more ASC', ARRAY_A);
+        $ranking = array_search($user_id,array_column($rows,'user_id'))+1;
+        $data = array(
+            'project_alias'=>$currentProject['project_alias'],
+            'str_len'=>$len,
+            'match_more_cn'=>chinanum($_GET['match_more']),
+            'success_length'=>$success_len,
+            'use_time'=>$currentProject['child_count_down']-$row['surplus_time'],
+            'surplus_time'=>$row['surplus_time'],
+            'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
+            'ranking'=>$ranking,
+            'match_questions'=>$match_questions,
+            'questions_answer'=>$questions_answer,
+            'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
+            'my_score'=>$row['my_score'],
+            'project_title'=>$currentProject['post_title'],
+            'match_title'=>$match->post_title,
+            'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+//            'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
+        );
+
+
+
+//        $rows = $wpdb->get_results('SELECT mq.match_more,mq.match_questions,mq.questions_answer,mq.my_answer,mq.surplus_time,mq.my_score,p.post_title AS project_title,mq.created_time,
+//              CASE mq.answer_status
+//              WHEN -1 THEN "记忆完成"
+//              WHEN 1 THEN "提交"
+//              END AS answer_status
+//              FROM '.$wpdb->prefix.'match_questions AS mq
+//              LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mq.project_id
+//              WHERE mq.user_id='.$user_id.' AND mq.match_id='.$match_id.' ORDER BY mq.match_more ASC', ARRAY_A);
 
 
         ?>
@@ -285,28 +413,63 @@ class Match_student {
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="5ce30f05fd"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
-                    <div class="alignleft actions bulkactions">
+                    <style type="text/css">
+                        #op1 a, #op2 a{
+                            color: #282828;
+                            text-decoration: none;
+
+                        }
+                        #op1, #op2{
+                            padding-top: 0.5em;
+                        }
+                        #op1 > span,#op2 > span{
+                            display: inline-block;
+                            width: 5em;
+                            height: 1.5em;
+                            border-radius: 0.2em;
+                            text-align: center;
+                            line-height: 1.5em;
+                            cursor: pointer;
+                        }
+                        #op1 > span{
+                            background-color: rgba(151, 151, 151, 0.48);
+                            font-weight: bold;
+                        }
+                        #op1 .active,#op2 .active{
+                            background-color: #45B29D;
+                        }
+                        #op1 .active a,#op2 .active a{
+
+                            color: #ffffff;
+                        }
+                    </style>
+                    <div class="alignleft actions bulkactions" id="op1">
                         <?php foreach ($projectArr as $pav){ ?>
-                            <span><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$pav['match_project_id'])?>"><?=$pav['post_title']?></a></span>
+                            <span class="<?=$proId==$pav['match_project_id'] ? 'active' : ''; ?>"><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$pav['match_project_id'])?>"><?=$pav['post_title']?></a></span>
                         <?php } ?>
 
-<!--                        <span><a href="">逆向速算</a></span>-->
-<!--                        <span><a href="">逆向速算</a></span>-->
-<!--                        <span><a href="">逆向速算</a></span>-->
+                        <!--                        <span><a href="">逆向速算</a></span>-->
+                        <!--                        <span><a href="">逆向速算</a></span>-->
+                        <!--                        <span><a href="">逆向速算</a></span>-->
                     </div>
 
                     <br class="clear">
-                    <div class="alignleft actions">
+                    <div class="alignleft actions" id="op2">
                         <?php for($i = 1; $i <= $match_moreAll; ++$i){ ?>
-                            <span><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$proId.'&more='.$i)?>">第<?=$i?>轮</a></span>
+                            <span class="<?=$current_match_more==$i ? 'active' : ''; ?>"><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$proId.'&more='.$i)?>">第<?=$i?>轮</a></span>
                         <?php } ?>
-<!--                        <span><a href="">第一轮</a></span>-->
-<!--                        <span><a href="">第二轮</a></span>-->
-<!--                        <span><a href="">第三轮</a></span>-->
-<!--                        <span><a href="">第四轮</a></span>-->
+                        <!--                        <span><a href="">第一轮</a></span>-->
+                        <!--                        <span><a href="">第二轮</a></span>-->
+                        <!--                        <span><a href="">第三轮</a></span>-->
+                        <!--                        <span><a href="">第四轮</a></span>-->
                     </div>
                 </div>
                 <h2 class="screen-reader-text">答题记录</h2>
+                <br class="clear">
+                <div><span>成绩:</span> <span> <?=$data['my_score']?></span></div>
+                <div><span>本轮排名:</span> <span> <?=$data['ranking']?></span></div>
+                <!--                <div><span>使用时间:</span> <span> --><?//=$data['use_time']?><!--</span></div>-->
+                <div><span>剩余时间:</span> <span> <?=$data['surplus_time']?></span></div>
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
@@ -314,101 +477,35 @@ class Match_student {
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="project" class="manage-column column-project">比赛项目</th>
-                        <th scope="col" id="match_more" class="manage-column column-match_more">比赛轮数</th>
                         <th scope="col" id="match_questions" class="manage-column column-match_questions">比赛考题</th>
                         <th scope="col" id="questions_answer" class="manage-column column-questions_answer">考题答案</th>
                         <th scope="col" id="my_answer" class="manage-column column-my_answer">我的答案</th>
-                        <th scope="col" id="surplus_time" class="manage-column column-surplus_time">剩余时间</th>
-                        <th scope="col" id="my_score" class="manage-column column-my_score">我的成绩</th>
-                        <th scope="col" id="answer_status" class="manage-column column-answer_status">答题状态</th>
-                        <th scope="col" id="created_time" class="manage-column column-created_time">创建时间</th>
+                        <th scope="col" id="is_correct" class="manage-column column-is_correct">是否正确</th>
                     </tr>
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
+                    <!--                        </tr>-->
                     <?php
-                    foreach ($rows as $row) {
-//                            var_dump(json_decode($row['match_questions']));
-//                            var_dump(json_decode($row['questions_answer']));
-//                            var_dump(json_decode($row['my_answer']));
+                    //                                            echo '<pre />';
+                    //                                            var_dump($data);
+                    //                                            die;
+                    ////
+                    if($data['match_questions'])
+                        foreach ($data['match_questions'] as $k => $match_question){
+                            if(in_array($data['project_alias'], ['nxss', 'kysm'])){
+                                if(is_array($match_question)){
 //
-//                            die;
-
-                        ?>
-                        <tr style="background-color: #b3b3b3;color: #ffffff">
-                            <th scope="row" class="check-column">
-                                <label class="screen-reader-text" for="user_13">选择</label>
-
-                                <input type="checkbox" name="ids[]" class="subscriber" value="">
-                            </th>
-                            <td class="role column-project" data-colname="比赛项目"><?=$row['project_title']?></td>
-
-                            <td class="role column-match_more" data-colname="比赛轮数"><?=$row['match_more']?></td>
-                            <td class="role column-match_questions" data-colname="比赛考题">比赛考题</td>
-                            <td class="role column-questions_answer" data-colname="考题答案">考题答案</td>
-                            <td class="role column-my_answer" data-colname="我的答案">我的答案</td>
-                            <td class="role column-surplus_time" data-colname="剩余时间"><?=$row['surplus_time']?></td>
-                            <td class="role column-my_score" data-colname="我的成绩"><?=$row['my_score']?></td>
-                            <td class="role column-answer_status" data-colname="答题状态"><?=$row['answer_status']?></td>
-                            <td class="role column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
-                        </tr>
-                        <?php
-                        $match_questions_str = '';
-                        $questions_answer = json_decode($row['questions_answer'], true);
-
-                        $my_answer = json_decode($row['my_answer'], true);
-                        $match_questions = json_decode($row['match_questions'], true);
-
-                        //问题
-                        if(empty($match_questions)) continue;
-                        foreach ($match_questions as $k => $match_question){
-                            if(!is_array($match_question)){
-                                $match_questions_str = $match_question;
-                            }else{
-
-                                foreach ($match_question as $mqv){
-                                    $match_questions_str .= $mqv.',';
-                                }
-                            }
-                            $match_questions_str = substr($match_questions_str, 0, strlen($match_questions_str) -1);
-
-                            //正确答案
-                            if(isset($questions_answer[$k]['problem_select']) && is_array($questions_answer[$k]['problem_select'])){
-                                $q_answer = '';
-                                foreach ($questions_answer[$k]['problem_select'] as $qak => $qav){
-                                    if($questions_answer[$k]['problem_answer'][$qak] == 1){
-                                        //正确答案
-                                        $q_answer .= $qav.',';
+                                    foreach ($match_questions as $mqv){
+                                        $str = '';
+                                        if(is_array($match_question)){
+                                            foreach ($mqv as $mqv2){
+                                                $str .= $mqv2.' , ';
+                                            }
+                                        }
                                     }
                                 }
-                                $q_answer = substr($q_answer, 0, strlen($q_answer)-1);
-
-                            }else{
-                                $q_answer = $questions_answer[$k];
-                            }
-
-                            //我的答案
-                            if(is_array($my_answer[$k])){
-
-                                $m_answer = '';
-                                if(isset($questions_answer[$k]['problem_select'])){
-                                    //文章速度
-                                    //查询答案
-                                    foreach ($my_answer[$k] as $mav){
-                                        $m_answer .= $questions_answer[$k]['problem_select'][$mav].',';
-                                    }
-                                }else{
-                                    foreach ($my_answer[$k] as $mav){
-                                        $m_answer .= $mav.',';
-                                    }
-                                }
-
-
-
-                                $m_answer = substr($m_answer, 0, strlen($m_answer)-1);
-                            }else{
-                                $m_answer = $my_answer[$k];
+                                $match_question = substr($str,0,strlen($str)-2);
                             }
 
                             ?>
@@ -416,27 +513,62 @@ class Match_student {
 
                                 <th scope="row" class="check-column">
                                 </th>
-                                <td class="role column-project" data-colname="比赛项目"></td>
+                                <td class="role column-match_questions" data-colname="比赛考题"><?=$match_question?></td>
 
-                                <td class="role column-match_more" data-colname="比赛轮数"></td>
-                                <td class="role column-match_questions" data-colname="比赛考题"><?=$match_questions_str?></td>
-                                <td class="role column-questions_answer" data-colname="考题答案"><?=$q_answer?></td>
-                                <td class="role column-my_answer" data-colname="我的答案">
-                                    <span <?=$m_answer!=$q_answer ? 'style="color: #a20000"' : ''?>><?=$m_answer?></span>
+                                <?php if($data['project_alias'] == 'wzsd'){ ?>
+
+                                    <?php
+                                    $str = '';
+                                    $correct = null;
+                                    foreach ($data['questions_answer'][$k]['problem_select'] as $qk => $questions_answer){
+                                        if(in_array($qk,$data['questions_answer'][$k]['problem_answer'])){
+                                            $str .= '<span style="color: #6d82cc">' .($qk+1).'.'.$questions_answer.'</span> <br /> ';
+                                            $correct = $qk;
+                                        }else{
+                                            $str .= ($qk+1).'.'.$questions_answer.' <br /> ';
+                                        }
+                                    }
+                                    $data['my_answer'][$k][0];
+
+//                                        if($str != '') $str = substr($str, 0, strlen($str)-1);
+                                    ?>
+                                    <td class="role column-questions_answer" data-colname="考题答案"><?=$str?></td>
+                                    <td class="role column-my_answer" data-colname="我的答案">
+                                        <?=$data['my_answer'][$k][0] != '' ? $data['my_answer'][$k][0]+1 : '未作答'?>
+                                    </td>
+                                <?php }else{ ?>
+                                    <td class="role column-questions_answer" data-colname="考题答案"><?=$data['questions_answer'][$k]?></td>
+                                    <td class="role column-my_answer" data-colname="我的答案">
+                                        <?=$data['my_answer'][$k] != '' ? $data['my_answer'][$k] : '未作答'?>
+                                    </td>
+                                <?php } ?>
+
+                                <td class="role column-is_correct" data-colname="是否正确">
+                                    <?php if($data['answer_array'] != null){ ?>
+                                        <span style="color:<?=$data['answer_array'][$k] == 'true' ? '#0073aa' : '#ca4a1f'?>">
+                                            <?=$data['answer_array'][$k] == 'true' ? '正确' : '错误'?>
+
+                                        </span>
+                                    <?php }else{ ?>
+                                        <?php if($data['project_alias'] == 'wzsd'){ ?>
+                                            <span style="color:<?=(string)$correct === (string)$data['my_answer'][$k][0] ? '#0073aa' : '#ca4a1f'?>">
+                                            <?=(string)$data['my_answer'][$k][0] === (string)(string)$correct ? '正确' : '错误'?>
+                                            </span>
+                                        <?php }else{ ?>
+                                            <span style="color:<?=(string)$data['my_answer'][$k] === (string)$data['questions_answer'][$k] ? '#0073aa' : '#ca4a1f'?>">
+                                            <?=(string)$data['my_answer'][$k] === (string)$data['questions_answer'][$k] ? '正确' : '错误'?>
+                                            </span>
+                                        <?php } ?>
+                                    <?php } ?>
+
+
                                 </td>
-                                <td class="role column-surplus_time" data-colname="剩余时间"></td>
-                                <td class="role column-my_score" data-colname="我的成绩"></td>
-                                <td class="role column-answer_status" data-colname="答题状态"></td>
-                                <td class="role column-answer_status" data-colname="创建时间"></td>
-
-
-
                             </tr>
                             <?php
                             $match_questions_str = '';
 
                         }
-                    }
+
 
                     ?>
 
@@ -448,15 +580,10 @@ class Match_student {
                             <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-project">比赛项目</th>
-                        <th scope="col" class="manage-column column-match_more">比赛轮数</th>
                         <th scope="col" class="manage-column column-match_questions">比赛考题</th>
                         <th scope="col" class="manage-column column-questions_answer">考题答案</th>
                         <th scope="col" class="manage-column column-my_answer">我的答案</th>
-                        <th scope="col" class="manage-column column-surplus_time">剩余时间</th>
-                        <th scope="col" class="manage-column column-my_score">我的成绩</th>
-                        <th scope="col" class="manage-column column-answer_status">答题状态</th>
-                        <th scope="col" class="manage-column column-created_time">创建时间</th>
+                        <th scope="col" class="manage-column column-is_correct">是否正确</th>
                     </tr>
                     </tfoot>
 
@@ -527,32 +654,27 @@ class Match_student {
         $match = $wpdb->get_row('SELECT match_status,match_more FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
-        if(!$match || $match['match_status'] != -3){
-            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
-            return;
-        }
+//        if(!$match || $match['match_status'] != -3){
+//            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
+//            return;
+//        }
 
         //查询比赛小项目
-
-//        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
         $projectArr = get_match_end_time($post->ID);
 
         $categoryArr = []; //分类选项卡数组
         foreach ($projectArr as $pak => $pav) {
             //获取类别和项目选项卡
             if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
-                $categoryArr['sjl']['post_title'] = '速记类';
-                if(!isset($categoryArr['sjl']['ids'])) $categoryArr['sjl']['ids'] = '';
-                $categoryArr['sjl']['ids'] .= $pav['match_project_id'].',';
+                $cate = ['str' => 'sjl','name' => '速记类'];
             } elseif (in_array($pav['project_alias'], ['kysm', 'wzsd'])) {
-                $categoryArr['sdl']['post_title'] = '速读类';
-                if(!isset($categoryArr['sdl']['ids'])) $categoryArr['sdl']['ids'] = '';
-                $categoryArr['sdl']['ids'] .= $pav['match_project_id'].',';
+                $cate = ['str' => 'sdl','name' => '速读类'];
             } elseif (in_array($pav['project_alias'], ['zxss', 'nxss'])) {
-                $categoryArr['ssl']['post_title'] = '速算类';
-                if(!isset($categoryArr['ssl']['ids'])) $categoryArr['ssl']['ids'] = '';
-                $categoryArr['ssl']['ids'] .= $pav['match_project_id'].',';;
+                $cate = ['str' => 'ssl','name' => '速算类'];
             }
+            $categoryArr[$cate['str']]['post_title'] = $cate['name'];
+            if(!isset($categoryArr[$cate['str']]['ids'])) $categoryArr['sjl']['ids'] = '';
+            $categoryArr[$cate['str']]['ids'] .= $pav['match_project_id'].',';
         }
         $where = '';
         $score = 'my_score';
@@ -611,7 +733,6 @@ class Match_student {
                     }else{
                         $_GET['op4'] = 0;
                     }
-
                     if(isset($_GET['op3'])){
                         $where = ' AND project_id ='.$_GET['op3'].' GROUP BY match_id';
                         foreach ($projectArr as $pak => $pav) {
@@ -620,7 +741,6 @@ class Match_student {
                                 break;
                             }
                         }
-
                     }else{
                         //默认地一个项目
                         $where = ' AND project_id ='.$projectArr[0]['match_project_id'].' GROUP BY match_id';
@@ -636,14 +756,6 @@ class Match_student {
         }else{
             $selectArr = $projectArr;
         }
-//        var_dump($projectWhere);
-//        //是否选择组别分类
-//        $group = 0;
-//        if(is_post()){
-//            $group = intval($_POST['age_group']);
-//        }
-
-
 
         //查询每个参赛学员的总分排名
         //分页
@@ -661,16 +773,16 @@ class Match_student {
 //
 //        var_dump($wpdb->last_query);
 //        die;
-        $count  = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
-        $pageAll = ceil($count['count']/$pageSize);
-        $pageHtml = paginate_links( array(
-            'base' => add_query_arg( 'cpage', '%#%' ),
-            'format' => '',
-            'prev_text' => __('&laquo;'),
-            'next_text' => __('&raquo;'),
-            'total' => $pageAll,
-            'current' => $page
-        ));
+//        $count  = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+//        $pageAll = ceil($count['count']/$pageSize);
+//        $pageHtml = paginate_links( array(
+//            'base' => add_query_arg( 'cpage', '%#%' ),
+//            'format' => '',
+//            'prev_text' => __('&laquo;'),
+//            'next_text' => __('&raquo;'),
+//            'total' => $pageAll,
+//            'current' => $page
+//        ));
 
 //        echo '<pre />';
 //        var_dump($selectArr);
@@ -699,8 +811,6 @@ class Match_student {
                 $res = $wpdb->get_results('SELECT '.$score.',match_more,surplus_time,project_id FROM '.$wpdb->prefix.'match_questions AS mq 
                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].$where, ARRAY_A);
 
-
-//            var_dump($where);
                 $moreArr = [];
                 $scoreArr = [];
                 $surplus_timeArr = [];
@@ -781,21 +891,16 @@ class Match_student {
                     }
                 }
             }
-
-
-
         }
+        //名次
         $ranking = 1;
         foreach ($totalRanking as $k => $v){
-
             $totalRanking[$k]['ranking'] = $ranking;
             if(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time']){
 
             }else{
                 ++$ranking;
             }
-
-
         }
 //        var_dump($categoryArr);
         ?>

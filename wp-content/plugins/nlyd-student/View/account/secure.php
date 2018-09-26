@@ -40,16 +40,20 @@
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>">去设置</a>
                                 <?php } ?>
                             </div>
+                            <?php if(!empty($user_info['weChat_openid'])){ ?>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定微信</div>
-                                <div class="nl-input">不听不听</div>
-                                <span class="form-input-right c_blue clear" data-type="weChat">解绑</span>
+                                <div class="nl-input">*******</div>
+                                <span class="form-input-right c_blue clear">解绑</span>
                             </div>
+                            <?php } ?>
+                            <?php if(!empty($user_info['qq_union_id'])){ ?>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定QQ</div>
-                                <div class="nl-input">一时发疯，回不了神</div>
-                                <span class="form-input-right c_blue clear" data-type="qq">解绑</span>
+                                <div class="nl-input">*******</div>
+                                <span class="form-input-right c_blue clear">解绑</span>
                             </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

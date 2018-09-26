@@ -1702,6 +1702,9 @@ class Student_Ajax
     }
 
 
+    /**
+     * 安全中心修改
+     */
     public function secure_save(){
 
         global $wpdb,$current_user;
@@ -1751,11 +1754,14 @@ class Student_Ajax
                 $result = $wpdb->update($wpdb->prefix.'users',array('user_email'=>$_POST['user_email']),array('ID'=>$current_user->ID));
                 break;
             case 'weChat':
+                $result = update_user_meta($current_user->ID,'user_weChat',$_POST['user_weChat']);
                 break;
             case 'qq':
+                $result = update_user_meta($current_user->ID,'user_qq',$_POST['user_qq']);
                 break;
             default:
                 wp_send_json_error(array('info'=>'未知的操作请求'));
+                break;
         }
 
         if($result){
@@ -1765,6 +1771,29 @@ class Student_Ajax
         }
     }
 
+
+    /**
+     * 解绑微信/QQ
+     */
+    public function untie(){
+        global $wpdb,$current_user;
+        switch ($_POST['type']){
+            case 'weChat':
+                $result = $wpdb->update($wpdb->prefix.'users',array('weChat_openid'=>''),array('ID'=>$current_user->ID));
+                break;
+            case 'qq':
+                $result = $wpdb->update($wpdb->prefix.'users',array('qq_union_id'=>''),array('ID'=>$current_user->ID));
+                break;
+            default:
+                wp_send_json_error(array('info'=>'未知的操作请求'));
+                break;
+        }
+        if($result){
+            wp_send_json_success(array('info'=>'解绑成功','url'=>home_url('account/secure/')));
+        }else{
+            wp_send_json_error(array('info'=>'解绑失败'));
+        }
+    }
 
     /**
      * 通过身份证自动计算年龄
