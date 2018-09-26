@@ -66,8 +66,7 @@ class Student_Safety extends Student_Home
      *
      **/
      public function safetySetting(){
-        global $current_user;
-        var_dump($check = wp_check_password('leo626',$current_user->user_pass));
+
         $view = student_view_path.CONTROLLER.'/safety-settings.php';
         load_view_template($view);
     }

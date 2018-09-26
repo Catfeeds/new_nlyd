@@ -25,11 +25,11 @@ class Student_Signs
         }
     }
 
-    
     /**
     签到操作
     */
     public function index(){
+        die;
 
     	if(isset($_SESSION['user_openid'])) unset($_SESSION['user_openid']);
 
