@@ -62,30 +62,26 @@
                                 <div class="form-input-label">验证码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
-                            <a class="a-btn" style="display:none;" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
+                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>
                         </div>
                     </form>
                 </div>
-                <a class="a-btn safetySetting">更 新</a>
+                <!-- <a class="a-btn safetySetting">更 新</a> -->
             </div>
         </div>           
     </div>
 </div>
 <script>
     jQuery(document).ready(function($) {
-        $('.safetySetting').click(function(){
-            $('#safetySetting').click()
-        })
-        sendloginAjax=function(url,formData){
+        // $('.safetySetting').click(function(){
+        //     $('#safetySetting').click()
+        // })
+        sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({
-                type: "POST",
-                url: url,
                 data: formData,
-                dataType:'json',
-                timeout:3000,
                 success: function(data, textStatus, jqXHR){
                     $.alerts(data.data.info)
                     if(data.success){
@@ -105,7 +101,7 @@
             // 自定义验证规则
             form.verify($.validationLayui.allRules);
             form.on('submit(safetySetting)', function(data){
-                sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data.field)
+                sendloginAjax(data.field)
                 return false;
             });
         });
@@ -149,7 +145,7 @@
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(data)
                     var wait=60;  
                     time(wait,$(this))
                 }else{
@@ -158,7 +154,6 @@
                     return false
                 }
             }else if(layVerify=='email'){//手机或邮箱登录
-                message=allRules['phoneOrEmail'];
                 if( email.test(value)){
                     var formData=$(this).parents('form').serializeObject();
                     var getTimestamp=new Date().getTime()
@@ -170,7 +165,7 @@
                         template:template,
                         tamp:getTimestamp,
                     }
-                    sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
+                    sendloginAjax(data)
                     var wait=60;  
                     time(wait,$(this))
                     return false
