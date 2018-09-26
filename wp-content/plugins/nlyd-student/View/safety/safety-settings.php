@@ -108,7 +108,7 @@
                     $.alerts(data.data.info)
                     if(data.success){
                         if(data.data.url){
-                            setTimeout(() => {
+                            setTimeout(function(){
                                 window.location.href=data.data.url
                             }, 1600);
                         }

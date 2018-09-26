@@ -43,12 +43,12 @@
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定微信</div>
                                 <div class="nl-input">不听不听</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/weChat')?>">解绑</a>
+                                <span class="form-input-right c_blue clear" data-type="weChat">解绑</span>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">绑定QQ</div>
                                 <div class="nl-input">一时发疯，回不了神</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/qq')?>">解绑</a>
+                                <span class="form-input-right c_blue clear" data-type="qq">解绑</span>
                             </div>
                         </div>
                     </div>
@@ -57,3 +57,26 @@
         </div>           
     </div>
 </div>
+<script>
+jQuery(document).ready(function($) {
+    $('.clear').click(function(){//解绑
+        var type=$(this).attr('data-type')
+        var postData={untie:type}
+        $.ajax({
+            data: postData,
+            success: function(data, textStatus, jqXHR){
+                console.log(data)
+                $.alerts(data.data.info)
+                if(data.success){
+                    if(data.data.url){
+                        setTimeout(function() {
+                            window.location.href=data.data.url
+                        }, 1000);
+                    }
+                }
+                return false;
+            }
+        });
+    })
+});
+</script>
