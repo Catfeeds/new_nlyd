@@ -40,6 +40,7 @@
                             </div>
                         </div>
                     </div>
+                    <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
                 </div>
                 <div class="a-btn" id="complete">记忆完成</div>
             </div>
@@ -199,6 +200,9 @@ new AlloyFinger($('#complete')[0], {
         for(var i = page*oneItems ;i < endData; i++){
             pageData.push(data[i])
         }
+        var number=oneItems*pages;
+        number=number>len ? len : number;
+        $('#number').text(number);
         return {left:left,right:right,showData:pageData}
     }
 
