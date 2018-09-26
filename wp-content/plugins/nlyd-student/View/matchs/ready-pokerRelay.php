@@ -61,7 +61,6 @@ new AlloyFinger($('#complete')[0], {
         var _this=$(this);
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
-            $('#load').css('display','block')
             var data={
                 action:'memory_complete',
                 _wpnonce:$('#inputComplete').val(),
@@ -78,13 +77,11 @@ new AlloyFinger($('#complete')[0], {
                             window.location.href=res.data.url
                         }
                     }else{
-                        $('#load').css('display','none')
                         $.alerts(res.data.info)
                         _this.removeClass('disabled')
                     }
                 },
                 error: function(jqXHR, textStatus, errorMsg){
-                    $('#load').css('display','none')
                     _this.removeClass('disabled')
                 }
             })
