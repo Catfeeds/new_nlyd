@@ -94,9 +94,6 @@
         // $('.safetySetting').click(function(){
         //     $('#safetySetting').click()
         // })
-        $('.phone_number').focusout(function(){
-            var _this=$(this).
-        })
         sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址
