@@ -65,7 +65,10 @@
 jQuery(document).ready(function($) {
     $('.clear').click(function(){//解绑
         var type=$(this).attr('data-type')
-        var postData={untie:type}
+        var postData={
+            action:'untie',
+            type:type
+        }
         $.ajax({
             data: postData,
             success: function(data, textStatus, jqXHR){
