@@ -90,7 +90,11 @@ new AlloyFinger($('#complete')[0], {
     }
 })
     function submit(time,submit_type){//提交答案
-        $('#load').css('display','block')
+        $('#load').css({
+                'display':'block',
+                'opacity': '1',
+                'visibility': 'visible',
+            })
         var my_answer=[];
         var data={
             action:'answer_submit',
@@ -118,12 +122,20 @@ new AlloyFinger($('#complete')[0], {
                         window.location.href=res.data.url
                     }   
                 }else{
-                    $('#load').css('display','none')
+                    $('#load').css({
+                            'display':'none',
+                            'opacity': '0',
+                            'visibility': 'hidden',
+                        })
                     $.alerts(res.data.info)
                 }
             },
             error: function(jqXHR, textStatus, errorMsg){
-                $('#load').css('display','none')
+                $('#load').css({
+                            'display':'none',
+                            'opacity': '0',
+                            'visibility': 'hidden',
+                        })
             }
         })
     }

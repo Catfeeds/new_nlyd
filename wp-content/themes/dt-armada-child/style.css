@@ -49,7 +49,7 @@ a:active,button:active,.opacity{
     background-size: contain!important;
     border-radius:0 !important;
 }
-.spinner-loader .load-wrap{
+.spinner-loader .load-wrap,#load .load-wrap{
     position: absolute;
     top: 50%;
     left: 50%;
