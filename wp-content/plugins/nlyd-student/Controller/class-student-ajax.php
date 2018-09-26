@@ -1718,7 +1718,7 @@ class Student_Ajax
                         wp_send_json_error(array('info'=>'新旧密码不能一致'));
                     }
 
-                    $user_pass = wp_hash_password( $_POST['old_pass'] );
+                    $new_pass = wp_hash_password( $_POST['confirm_pass'] );
 
                 }else{
                     wp_send_json_error(array('info'=>'老密码不正确'));
