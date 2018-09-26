@@ -17,19 +17,20 @@
                 <div class="have-bottom">
                     <form class="nl-page-form width-margin-pc layui-form" lay-filter='safetySetting'>
                         <div class="form-inputs">
+                            <input type="hidden" name="action" value="secure_save">
                             <?php if($_GET['type'] == 'pass'){ ?>
                             <!-- 重置密码 -->
                             <div class="form-input-row">
                                 <div class="form-input-label">旧密码</div>
-                                <input name='meta_val' value="" type="password" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='old_pass' value="" type="text" placeholder="旧密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">新密码</div>
-                                <input name='meta_val' value="" type="text" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='new_pass' value="" type="password" placeholder="新密码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label">再次输入</div>
-                                <input name='meta_val' value="" type="text" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='confirm_pass' value="" type="password" placeholder="再次输入" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
                             <?php if($_GET['type'] == 'mobile'){ ?>
