@@ -37,7 +37,8 @@
                             <p class="c_blue" style="margin-bottom:0">更换后可使用新手机号登陆，当前手机号13982242710</p>
                             <div class="form-input-row">
                                 <div class="form-input-label">手机号码</div>
-                                <input name='meta_val' value="" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <input name='meta_val' value="<?=$user_info['contact']?>" type="tel" placeholder="手机号码" class="nl-input nl-foucs" lay-verify="phone">
+                                <input type="hidden" name="mobile" value="<?=$user_info['user_mobile']?>" />
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="19">发送验证码</a>
                             </div>
                             <div class="form-input-row">

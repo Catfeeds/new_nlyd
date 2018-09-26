@@ -1704,7 +1704,7 @@ class Student_Ajax
 
     public function secure_save(){
 
-        global $current_user;
+        global $wpdb,$current_user;
 
         switch ($_POST['save_type']){
             case 'pass':
@@ -1719,6 +1719,8 @@ class Student_Ajax
                     }
 
                     $new_pass = wp_hash_password( $_POST['confirm_pass'] );
+
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID',$current_user->ID));
 
                 }else{
                     wp_send_json_error(array('info'=>'老密码不正确'));

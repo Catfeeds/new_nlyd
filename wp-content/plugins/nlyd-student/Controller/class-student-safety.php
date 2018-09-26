@@ -66,9 +66,11 @@ class Student_Safety extends Student_Home
      *
      **/
      public function safetySetting(){
-
+        global $user_info;
+        var_dump($user_info['contact']);
+        var_dump($user_info['user_mobile']);
         $view = student_view_path.CONTROLLER.'/safety-settings.php';
-        load_view_template($view);
+        load_view_template($view,array('user_info'=>$user_info));
     }
 
 
