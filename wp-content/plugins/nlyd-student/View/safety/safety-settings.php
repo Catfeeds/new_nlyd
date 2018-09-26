@@ -48,7 +48,7 @@
                                 <div class="form-input-label">验证码</div>
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
-                            <?php if($_GET['confirm'] == 1){ ?>
+                            <?php if(!empty($user_info['user_mobile']) && $_GET['confirm'] == 1){ ?>
                             <!-- 绑定手机号 -->
                             <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0">绑定后可使用手机号登陆</p>
@@ -76,7 +76,7 @@
                                 <input name='meta_val' value="" type="tel" placeholder="验证码" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
-                            <?php if($_GET['type'] == 'mobile' && !isset($_GET['confirm']) ){ ?>
+                            <?php if(!empty($user_info['user_mobile']) && !isset($_GET['confirm']) ){ ?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">下一步</a>
                             <?php }else{ ?>
                             <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit="">更 新</a>

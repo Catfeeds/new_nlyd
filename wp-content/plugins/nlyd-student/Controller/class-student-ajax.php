@@ -1720,7 +1720,7 @@ class Student_Ajax
 
                     $new_pass = wp_hash_password( $_POST['confirm_pass'] );
 
-                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID',$current_user->ID));
+                    $result = $wpdb->update($wpdb->prefix.'users',array('user_pass'=>$new_pass),array('ID'=>$current_user->ID));
 
                 }else{
                     wp_send_json_error(array('info'=>'老密码不正确'));
@@ -1748,6 +1748,12 @@ class Student_Ajax
                 break;
             default:
                 wp_send_json_error(array('info'=>'未知的操作请求'));
+        }
+
+        if($result){
+            wp_send_json_success(array('info'=>'更新成功','url'=>home_url('account/secure/')));
+        }else{
+            wp_send_json_error(array('info'=>'更新失败'));
         }
     }
 
