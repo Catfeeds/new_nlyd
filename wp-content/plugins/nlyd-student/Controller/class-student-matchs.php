@@ -225,8 +225,18 @@ class Student_Matchs extends Student_Home
 
         global $wpdb,$current_user;
 
-        //获取比赛详情
-        $sql = "select a.ID,a.post_title,a.post_content,b.match_start_time,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_address,b.match_cost,
+        if(isset($_GET['test'])){
+            $this->redis->delete('match_content'.$match_id);
+        }
+
+        $match_redis = $this->redis->get('match_content'.$match_id);
+        if(!empty($match_redis)){
+            $rows = json_decode($match_redis,true);
+        }
+        else{
+
+            //获取比赛详情
+            $sql = "select a.ID,a.post_title,a.post_content,b.match_start_time,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_address,b.match_cost,
                     b.match_address,b.entry_end_time,b.match_category_order,b.str_bit,b.match_status,c.user_id,c.pay_status,
                     case b.match_status 
                         when -3 then '已结束' 
@@ -240,8 +250,11 @@ class Student_Matchs extends Student_Home
                     left join {$wpdb->prefix}order c on a.ID = c.match_id and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                     where a.ID = {$match_id}
                     ";
-        //print_r($sql);
-        $rows = $wpdb->get_results($sql,ARRAY_A);
+            //print_r($sql);
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+            $this->redis->setex('match_content'.$match_id,3600,json_encode($rows));
+        }
+
         if(empty($rows)){
             //$this->get_404('数据错误');
             return $rows;
@@ -1641,14 +1654,22 @@ class Student_Matchs extends Student_Home
 
         global $wpdb;
         //对比赛项目进行排序
-        $sql1 = "SELECT b.post_title,c.meta_value as project_alias,a.post_id match_id,a.match_project_id,a.project_use_time,a.match_more,a.project_start_time,a.project_time_interval,a.str_bit,a.child_count_down
+        $match_project = $this->redis->get('match_project'.$match_id);
+        if(!empty($match_project)){
+            $rows = json_decode($match_project,true);
+            //var_dump($rows);
+        }else{
+
+            $sql1 = "SELECT b.post_title,c.meta_value as project_alias,a.post_id match_id,a.match_project_id,a.project_use_time,a.match_more,a.project_start_time,a.project_time_interval,a.str_bit,a.child_count_down
                          FROM {$wpdb->prefix}match_project a
                          LEFT JOIN {$wpdb->prefix}posts b ON a.match_project_id = b.ID
                          LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_project_id = c.post_id AND meta_key = 'project_alias'
                          WHERE a.post_id = {$match_id} ORDER BY a.project_start_time ASC , a.id ASC 
                          ";
-        //print_r($sql1);
-        $rows = $wpdb->get_results($sql1,ARRAY_A);
+            //print_r($sql1);
+            $rows = $wpdb->get_results($sql1,ARRAY_A);
+            $this->redis->setex('match_project'.$match_id,3600,json_encode($rows));
+        }
         if(empty($rows)){
             $this->get_404(array('message'=>'该比赛未绑定比赛项','match_url'=>home_url('/matchs/info/match_id/'.$match_id)));
             die;

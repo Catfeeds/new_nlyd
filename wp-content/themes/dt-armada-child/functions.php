@@ -8,6 +8,43 @@
 //设置时区
 //date_default_timezone_set('Asia/Shanghai');
 
+
+/**
+ * 计算年龄
+ */
+if(!function_exists('birthday')){
+
+    function birthday($id){
+
+        if(empty($id)) return '';
+        $birthday=strtotime(substr($id,6,8));
+
+        $new_time = time();
+        $nowYear = (int) date("Y",$new_time);
+        $nowMonth = (int) date('md',$new_time);
+        // $nowDay = date('d',time());
+
+        $birthYear = (int) date("Y",$birthday);
+        $birthMonth = (int) date("md",$birthday);
+        //$birthDay = date("d",$birthday);
+        //var_dump($nowMonth);
+        $age = $nowYear - $birthYear ;
+        if($age < 1){
+            return -1;
+        }
+        if($age  > 150){
+            return -2;
+        }
+        if($birthMonth < $nowMonth)//生日的 小于 现在的日月  就加一岁
+        {
+            $age +=1;
+        }
+
+        return $age;
+
+    }
+}
+
 /**
  * 计算比赛结束时间
  * @param $match_id

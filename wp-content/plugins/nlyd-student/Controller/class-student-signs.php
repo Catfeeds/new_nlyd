@@ -42,8 +42,19 @@ class Student_Signs
      */
     public function success(){
 
+        if(is_user_logged_in()){
+            global $wpdb,$current_user;
+            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender') ",ARRAY_A);
+            $user_info = array_column($rows,'meta_value','meta_key');
+            $user_address = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
+            $user_real_name = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
+
+            $real_ID = isset($user_real_name['real_ID']) ? hideStar($user_real_name['real_ID']) : '';
+            $real_name = isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '';
+            //var_dump($user_info);
+        }
         $view = student_view_path.CONTROLLER.'/success.php';
-        load_view_template($view);
+        load_view_template($view,array('real_ID'=>$real_ID,'real_name'=>$real_name,'address'=>$user_address['province'].$user_address['city'].$user_address['area']));
     }
 
 
@@ -207,7 +218,7 @@ class Student_Signs
 		            	//$.alerts('即将跳转到实名认证页');
 		                alert('签到成功');
 		                setTimeout(function(){
-		                    window.location.href='<?=home_url('matchs')?>';
+		                    window.location.href='<?=home_url('signs/success/')?>';
 		                    return false;
 		                },1500)
             		</script>
@@ -244,7 +255,7 @@ class Student_Signs
 			            	//$.alerts('即将跳转到实名认证页');
 			                alert('签到成功');
 			                setTimeout(function(){
-			                    window.location.href='<?=home_url('matchs')?>';
+			                    window.location.href='<?=home_url('signs/success/')?>';
 			                    return false;
 			                },1500)
 	            		</script>

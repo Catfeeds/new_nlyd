@@ -408,7 +408,10 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         $result = $wpdb->update($wpdb->prefix.'match_questions',array('answer_status'=>-1),array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
-        if($result){
+
+        $answer_status = $wpdb->get_var("select answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}");
+
+        if($result || $answer_status == -1){
             $url = home_url('matchs/answerMatch/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more']);
             if(isset($_POST['questions_id']) && !empty($_POST['questions_id'])){
                 $url .= '&questions_id='.$_POST['questions_id'];
@@ -1622,7 +1625,7 @@ class Student_Ajax
                                     wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败<br/>请联系管理员'));
                                 }*/
                             }else{
-                                wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
+                                wp_send_json_success(array('info'=>'签到成功','url'=>home_url('signs/success/')));
                             }
                         }
                     }
@@ -1684,7 +1687,7 @@ class Student_Ajax
                 if($a && $b && $c){
 
                     $wpdb->commit();
-                    wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
+                    wp_send_json_success(array('info'=>'签到成功','url'=>home_url('signs/success/')));
                 }else{
 
                     $wpdb->rollback();
