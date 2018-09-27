@@ -3046,7 +3046,10 @@ class Student_Ajax
      * 战队排名
      */
     public function teamRanking(){
-        global $wpdb;
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_ranking_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
+        global $wpdb,$current_user;
         $match_id = intval($_POST['match_id']);
         if($match_id < 1) wp_send_json_error(['info' => '比赛参数错误']);
         $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
@@ -3066,6 +3069,7 @@ class Student_Ajax
                     WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' 
                     LIMIT {$start},{$pageSize}";
         $result = $wpdb->get_results($sql, ARRAY_A);
+        if(!$result) wp_send_json_error(['info' => '没有数据']);
         //处理每个战队的成员
         $teamsUsers = []; //每个战队的每个成员
         foreach ($result as $resV){
@@ -3091,8 +3095,9 @@ class Student_Ajax
                           ORDER BY my_score DESC limit 0,5
                        ";
             $row = $wpdb->get_row($sql,ARRAY_A);
-            $tuV2['my_score'] = $row['my_score'];
-            $tuV2['surplus_time'] = $row['surplus_time'];
+            $tuV2['my_team'] = in_array($current_user->ID,explode(',',$tuV2['user_ids'])) ? 'y' : 'n';
+            $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
+            $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
             $totalRanking[] = $tuV2;
         }
         //排序
@@ -3152,6 +3157,7 @@ class Student_Ajax
                 ++$ranking;
             }
         }
+        wp_send_json_success(['info' => $totalRanking]);
     }
 }
 

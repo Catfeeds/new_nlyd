@@ -133,7 +133,7 @@
                         </li>
 
                         <!-- 邮寄地址 -->
-                        <li class="nl-match">
+                        <!-- <li class="nl-match">
                             <div class="nl-match-header ">
                                 <span class="fs_16 c_blue">邮寄地址</span>
                                 <a class="nl-match-people c_blue" href="<?=home_url('/account/address/match_id/'.$_GET['match_id'])?>">增加/修改</a>
@@ -142,21 +142,18 @@
                                 <?php if(!empty($address)){ ?>
                                 <div class="nl-match-detail">
                                     <div class="nl-match-label">收货人姓名：</div>
-                                    <!-- <span >收货人姓名：</span> -->
                                     <div class="nl-match-info">
                                         <input class="c_black" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
                                     <div class="nl-match-label">联系电话：</div>
-                                    <!-- <span >联系电话：</span> -->
                                     <div class="nl-match-info">
                                         <input class="c_black" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
                                     <div class="nl-match-label">收货地址：</div>
-                                    <!-- <span >收货地址：</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black">
                                         <?=$address['user_address']?>
@@ -168,7 +165,7 @@
                                 暂无地址
                                 <?php } ?>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                     <input type="hidden" name="action" value="entry_pay">
                     <input type="hidden" name="_wpnonce" id="payForm" value="<?=wp_create_nonce('student_go_pay_code_nonce');?>">
