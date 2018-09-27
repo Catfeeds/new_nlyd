@@ -194,7 +194,7 @@ class Student_Signs
 			?>
 				<script type="text/javascript">
             	//$.alerts('即将跳转到实名认证页');
-                alert('该用户未在老平台进行比赛报名\n请确认该姓名的真实性');
+                alert('该用户未成功匹配参数资格\n请确认该选手实名信息');
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
