@@ -3078,8 +3078,8 @@ class Student_Ajax
                        ";
             $row = $wpdb->get_row($sql,ARRAY_A);
             $tuV2['my_team'] = in_array($current_user->ID,$tuV2['user_ids']) ? 'y' : 'n';
-            $tuV2['my_score'] = $row['my_score'];
-            $tuV2['surplus_time'] = $row['surplus_time'];
+            $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
+            $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
             $totalRanking[] = $tuV2;
         }
         //排序
