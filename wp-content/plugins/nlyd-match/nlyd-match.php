@@ -56,7 +56,6 @@ if(!class_exists('MatchController')){
             //用户新增时添加html
             add_filter('user_contactmethods',array($this,'add_input_html'));
 
-            add_filter('register_form',array($this,'additional_profile_fields'));
 
             //自定义文章页
             add_action( 'init', array($this,'create_match_view'));
@@ -125,9 +124,6 @@ if(!class_exists('MatchController')){
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }
 
-        public function additional_profile_fields(){
-            var_dump(1);
-        }
 
         public function add_input_html($user_contactmethods){
             $user_contactmethods['user_mobile'] = '用户手机';
