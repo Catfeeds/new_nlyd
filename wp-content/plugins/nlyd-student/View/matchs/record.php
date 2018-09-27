@@ -247,6 +247,7 @@ jQuery(function($) {
         var flow = layui.flow;//流加载
         var hasTwoPage=false;
         var userid=$('#meid').text();
+        var lastItem={AllMy:{},fenlei:{},danxiang:{}}
         <?php
         
         //  if($count >10 ): 
@@ -267,7 +268,7 @@ jQuery(function($) {
         
         })
 
-      initAllMy= function(myPage) {//总排名，个人成绩
+        initAllMy= function(myPage) {//总排名，个人成绩
             flow.load({
                     elem: '#flow' //流加载容器
                     ,isAuto: false
@@ -287,12 +288,15 @@ jQuery(function($) {
                                     action:'get_score_ranking',
                                     _wpnonce:$('#inputRank').val(),
                                     match_id:$.Request('match_id'),
-                                    page:myPage
+                                    page:myPage,
+                                    lastItem:lastItem['AllMy'],
                                 }
                                 $.ajax({
                                     data:postData,
                                     success:function(res,ajaxStatu,xhr){
                                         if(res.success){ 
+                                            var itemLen=res.data.info.length;
+                                            lastItem['AllMy']=itemLen>0 ? res.data.info[itemLen-1] : {};
                                             if(res.data.my_ranking!=null){//我的成绩
                                                 var rows=res.data.my_ranking
                                                 var top3=rows.ranking<=3 ? "top3" : ''
@@ -349,71 +353,74 @@ jQuery(function($) {
 
         initAllMy(0);
         initFenlei=function(fenleiPage,category_id) {//分类排行
-                flow.load({
-                    elem: '#flow-fenlei' //流加载容器
-                    ,isAuto: false
-                    ,isLazyimg: true
-                    ,done: function(page, next){ //加载下一页
-                        // $('#fenlei_me').css('display','none');
-                        fenleiPage++
-                        var lis = [];
-                        var postData={
-                            action:'get_score_ranking',
-                            _wpnonce:$('#inputRank').val(),
-                            match_id:$.Request('match_id'),
-                            category_id:category_id,
-                            page:fenleiPage
-                        }
-                        $.ajax({
-                                data:postData,success:function(res,ajaxStatu,xhr){  
-                                if(res.success){ 
-                                    if(res.data.my_ranking!=null){//我的成绩
-                                        var rows=res.data.my_ranking
-                                        var top3=rows.ranking<=3 ? "top3" : ''
-                                        var Html='<td>'
-                                                    +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
-                                                +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                                +'<td><div class="table_content">'+rows.group+'</div></td>'
-                                    }
-                                    $.each(res.data.info,function(index,value){
-                                        var top3=value.ranking<=3 ? 'top3' : '';
-                                        var nl_me='';
-                                        if(res.data.my_ranking!=null){
-                                            if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
-                                                nl_me='nl-me'
-                                                if(value.ranking!=1){
-                                                    $('#fenlei_me').html(Html);
-                                                }
-                                            }
-                                        }  
-                                        var dom='<tr class="'+nl_me+'">'
-                                                    +'<td>'
-                                                        +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
-                                                    +'</td>'
-                                                    +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                    +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                                    +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                    +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                                    +'<td><div class="table_content">'+value.group+'</div></td>'
-                                                +'</tr>'
-                                        lis.push(dom)                           
-                                    })  
-                                    if (res.data.info.length<10) {
-                                        next(lis.join(''),false)
-                                    }else{
-                                        next(lis.join(''),true)
-                                    }
-                                }else{
-                                    next(lis.join(''),false)
-                                }
-                            }
-                        }) 
+            flow.load({
+                elem: '#flow-fenlei' //流加载容器
+                ,isAuto: false
+                ,isLazyimg: true
+                ,done: function(page, next){ //加载下一页
+                    // $('#fenlei_me').css('display','none');
+                    fenleiPage++
+                    var lis = [];
+                    var postData={
+                        action:'get_score_ranking',
+                        _wpnonce:$('#inputRank').val(),
+                        match_id:$.Request('match_id'),
+                        category_id:category_id,
+                        page:fenleiPage,
+                        lastItem:lastItem['fenlei'],
                     }
-                });
+                    $.ajax({
+                            data:postData,success:function(res,ajaxStatu,xhr){  
+                            if(res.success){ 
+                                var itemLen=res.data.info.length;
+                                lastItem['fenlei']=itemLen>0 ? res.data.info[itemLen-1] : {};
+                                if(res.data.my_ranking!=null){//我的成绩
+                                    var rows=res.data.my_ranking
+                                    var top3=rows.ranking<=3 ? "top3" : ''
+                                    var Html='<td>'
+                                                +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
+                                            +'</td>'
+                                            +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                            +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
+                                            +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                            +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
+                                            +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                }
+                                $.each(res.data.info,function(index,value){
+                                    var top3=value.ranking<=3 ? 'top3' : '';
+                                    var nl_me='';
+                                    if(res.data.my_ranking!=null){
+                                        if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
+                                            nl_me='nl-me'
+                                            if(value.ranking!=1){
+                                                $('#fenlei_me').html(Html);
+                                            }
+                                        }
+                                    }  
+                                    var dom='<tr class="'+nl_me+'">'
+                                                +'<td>'
+                                                    +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
+                                                +'</td>'
+                                                +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
+                                                +'<td><div class="table_content">'+value.city+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
+                                                +'<td><div class="table_content">'+value.group+'</div></td>'
+                                            +'</tr>'
+                                    lis.push(dom)                           
+                                })  
+                                if (res.data.info.length<10) {
+                                    next(lis.join(''),false)
+                                }else{
+                                    next(lis.join(''),true)
+                                }
+                            }else{
+                                next(lis.join(''),false)
+                            }
+                        }
+                    }) 
+                }
+            });
         }
         initFenlei(0,$('.fenlei .classify-active').attr('data-post-id'))
         initDanxiang=function(fenleiPage,project_id,age_group){//单项排行
@@ -433,13 +440,16 @@ jQuery(function($) {
                             _wpnonce:$('#inputRank').val(),
                             match_id:$.Request('match_id'),
                             project_id:project_id,
-                            page:fenleiPage
+                            page:fenleiPage,
+                            lastItem:lastItem['danxiang']
                         }
                         
                         if(typeof(age_group)!='undefined'){
                             postData.age_group=age_group;
                         }
                         $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
+                            var itemLen=res.data.info.length;
+                            lastItem['danxiang']=itemLen>0 ? res.data.info[itemLen-1] : {};
                             if(res.success){ 
                                 if(res.data.my_ranking!=null){//我的成绩
                                     var rows=res.data.my_ranking
