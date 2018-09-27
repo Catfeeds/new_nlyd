@@ -3031,7 +3031,7 @@ class Student_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_ranking_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
-        global $wpdb;
+        global $wpdb,$current_user;
         $match_id = intval($_POST['match_id']);
         if($match_id < 1) wp_send_json_error(['info' => '比赛参数错误']);
         $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
@@ -3077,6 +3077,7 @@ class Student_Ajax
                           ORDER BY my_score DESC limit 0,5
                        ";
             $row = $wpdb->get_row($sql,ARRAY_A);
+            $tuV2['my_team'] = in_array($current_user->ID,$tuV2['user_ids']) ? 'y' : 'n';
             $tuV2['my_score'] = $row['my_score'];
             $tuV2['surplus_time'] = $row['surplus_time'];
             $totalRanking[] = $tuV2;

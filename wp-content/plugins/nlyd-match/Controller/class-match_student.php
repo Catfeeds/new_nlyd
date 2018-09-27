@@ -669,7 +669,7 @@ class Match_student {
         $op3 = isset($_GET['op3']) ? $_GET['op3'] : $projectArr[0]['match_project_id']; //三级选项卡, 默认第一个项目
         $op4 = isset($_GET['op4']) ? $_GET['op4'] : 0; //四级选项卡, 默认全部年龄
         $op5 = isset($_GET['op5']) ? $_GET['op5'] : 1; //五级选项卡(总排名和战队排名), 默认总排名
-        $downloadParam = "&op1={$op1}&op2={$op2}&op3={$op3}&op4={$op4}";
+        $downloadParam = "&op1={$op1}&op2={$op2}&op3={$op3}&op4={$op4}&op5={$op5}";
 //        leo_dump($op2);
         $data = [];
         if($op1 == 1){
