@@ -215,8 +215,8 @@ if(!class_exists('StudentController')){
                 wp_register_script( 'student-alloy_finger',student_js_url.'Mobile/alloy_finger.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-alloy_finger' );
                 //引入layui
-                wp_register_script( 'student-layui',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
-                wp_enqueue_script( 'student-layui' );
+                wp_register_script( 'student-layui-home',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
+                wp_enqueue_script( 'student-layui-home' );
                 // 表单验证语言包
                 wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-languages' );
@@ -224,8 +224,8 @@ if(!class_exists('StudentController')){
                 wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-common' );
                 //引入layui
-                wp_register_style( 'my-layui-css', student_css_url.'layui.css',array('style'),leo_student_version);
-                wp_enqueue_style( 'my-layui-css' );
+                wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
+                wp_enqueue_style( 'my-layui-css-home' );
 
                 wp_register_style( 'my-student', student_css_url.'index.css',array('style'), leo_student_version);
                 wp_enqueue_style( 'my-student' );

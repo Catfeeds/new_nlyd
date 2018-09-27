@@ -170,8 +170,8 @@ layui.use(['layer','flow'], function(){
         }
         pagation()
 
-
-        new AlloyFinger($('.search-btn')[0], {
+if($('.search-btn').length>0){
+    new AlloyFinger($('.search-btn')[0], {
         touchStart: function () {
             $('.search-btn').addClass("opacity");
         },
@@ -194,6 +194,7 @@ layui.use(['layer','flow'], function(){
             }
         }
     });
+}
  //--------------------分页--------------------------  
     $('body').on('click','.canJoin',function(){
         var _this=$(this);

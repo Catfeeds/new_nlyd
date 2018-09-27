@@ -220,15 +220,6 @@ jQuery(function($) {
         var hasTwoPage=false;
         var userid=$('#meid').text();
         var lastItem={lastItem_1:{},lastItem_2:{},lastItem_3:{}}
-        <?php
-        
-        //  if($count >10 ): 
-        //  
-        //  hasTwoPage=true;
-        // 
-        // endif;
-        
-         ?>
         var isClick={}
         element.on('tab(tabs)', function(){//tabs
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
