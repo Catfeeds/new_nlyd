@@ -3023,6 +3023,118 @@ class Student_Ajax
         //print_r($rows);
         wp_send_json_success(array('info'=>$rows));
     }
+
+    /**
+     * 战队排名
+     */
+    public function teamRanking(){
+        global $wpdb;
+        $match_id = intval($_POST['match_id']);
+        if($match_id < 1) wp_send_json_error(['info' => '比赛参数错误']);
+        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => '当前比赛未结束']);
+
+
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        if($page < 1) $page = 1;
+        $pageSize = 1;
+        $start = ($page-1)*$pageSize;
+
+        //战队排名
+        //获取参加比赛的成员
+        $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
+                    LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
+                    LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' 
+                    LIMIT {$start},{$pageSize}";
+        $result = $wpdb->get_results($sql, ARRAY_A);
+        //处理每个战队的成员
+        $teamsUsers = []; //每个战队的每个成员
+        foreach ($result as $resV){
+            if(!isset($teamsUsers[$resV['ID']])) {
+                $teamsUsers[$resV['ID']] = [];
+                $teamsUsers[$resV['ID']]['user_ids'] = [];
+                $teamsUsers[$resV['ID']]['team_name'] = $resV['post_title'];
+                $teamsUsers[$resV['ID']]['team_id'] = $resV['ID'];
+            }
+            $teamsUsers[$resV['ID']]['user_ids'][] = $resV['user_id'];
+        }
+        foreach ($teamsUsers as &$tuV){
+            $tuV['user_ids'] = join(',',$tuV['user_ids']);
+        }
+        $totalRanking = [];
+        foreach ($teamsUsers as $tuV2){
+            //每个战队的分数
+            $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM `{$wpdb->prefix}match_questions` AS mq 
+                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                          GROUP BY mq.project_id,mq.user_id) AS child  
+                          ORDER BY my_score DESC limit 0,5
+                       ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            $tuV2['my_score'] = $row['my_score'];
+            $tuV2['surplus_time'] = $row['surplus_time'];
+            $totalRanking[] = $tuV2;
+        }
+        //排序
+        for($i = 0; $i < count($totalRanking); ++$i){
+            if(isset($totalRanking[$i+1])){
+                for ($j = $i+1; $j < count($totalRanking); ++$j){
+                    if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
+//                       if($totalRanking[$i]['my_score'] < 1){
+//                           $rankingAuto = false;
+//                       }else
+                        if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+
+                            $a = $totalRanking[$j];
+                            $totalRanking[$j] = $totalRanking[$i];
+                            $totalRanking[$i] = $a;
+                        }
+                    }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
+                        $a = $totalRanking[$j];
+                        $totalRanking[$j] = $totalRanking[$i];
+                        $totalRanking[$i] = $a;
+                    }
+                }
+            }
+        }
+        //名次
+        if($page > 1){
+            $ranking = intval($_POST['ranking']);
+            if($ranking < 1) wp_send_json_error(['info' => '排名参数错误!']);
+            //查询上一页最后一名
+            $start -= 1;
+            $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
+                    LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
+                    LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' 
+                    LIMIT {$start},1";
+            $rowPrev = $wpdb->get_row($sql, ARRAY_A);
+            $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM `{$wpdb->prefix}match_questions` AS mq 
+                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$rowPrev['team_id']}
+                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$rowPrev['team_id']} AND mq.user_id IN({$rowPrev['user_ids']}) 
+                          GROUP BY mq.project_id,mq.user_id) AS child  
+                          ORDER BY my_score DESC limit 0,5
+                       ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+            $rowPrev['my_score'] = $row['my_score'];
+            $rowPrev['surplus_time'] = $row['surplus_time'];
+
+            if(!($row['my_score'] == $totalRanking[0]['my_score'] && $row['surplus_time']<$totalRanking[0]['surplus_time'])){
+                ++$ranking;
+            }
+        }else{
+            $ranking = $page;
+        }
+        foreach ($totalRanking as $k => $v){
+            $totalRanking[$k]['ranking'] = $ranking;
+            if(!(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time'])){
+                ++$ranking;
+            }
+        }
+    }
 }
 
 new Student_Ajax();
