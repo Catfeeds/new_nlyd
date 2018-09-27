@@ -3051,6 +3051,7 @@ class Student_Ajax
                     WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' 
                     LIMIT {$start},{$pageSize}";
         $result = $wpdb->get_results($sql, ARRAY_A);
+        if(!$result) wp_send_json_error(['info' => '没有数据']);
         //处理每个战队的成员
         $teamsUsers = []; //每个战队的每个成员
         foreach ($result as $resV){
