@@ -3028,6 +3028,9 @@ class Student_Ajax
      * 战队排名
      */
     public function teamRanking(){
+        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_ranking_code_nonce') ) {
+            wp_send_json_error(array('info'=>'非法操作'));
+        }
         global $wpdb;
         $match_id = intval($_POST['match_id']);
         if($match_id < 1) wp_send_json_error(['info' => '比赛参数错误']);
@@ -3134,6 +3137,7 @@ class Student_Ajax
                 ++$ranking;
             }
         }
+        wp_send_json_success(['info' => $totalRanking]);
     }
 }
 
