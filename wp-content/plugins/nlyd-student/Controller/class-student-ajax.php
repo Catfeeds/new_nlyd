@@ -1584,7 +1584,7 @@ class Student_Ajax
 
                         $row = $wpdb->get_row($sql,ARRAY_A);
                          //var_dump($row);die;
-                        if(empty($row)) wp_send_json_error(array('info'=>'该用户未在老平台进行比赛报名<br/>请确认该姓名的真实性'));
+                        if(empty($row)) wp_send_json_error(array('info'=>'该用户未成功匹配参数资格<br/>请确认该选手实名信息'));
                         if($row){
 
                             $order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$current_user->ID} ");
