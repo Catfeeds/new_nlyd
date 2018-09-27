@@ -21,14 +21,14 @@
                     leavePage= sessionData
                 }
                 var key=leavePage['leavePage']-1;
-                leavePage['Time'][key]={out:new Date()}
+                leavePage['Time'][key]={out:new Date().Format("yyyy-MM-dd hh:mm:ss")}
                 jQuery.SetSession('leavePage',leavePage)
             })  
             jQuery(window).on("focus", function(e) {
                 var leavePage= jQuery.GetSession('leavePage','1');
                 if(leavePage && leavePage['match_id']===jQuery.Request('match_id') && leavePage['project_id']===jQuery.Request('project_id') && leavePage['match_more']===jQuery.Request('match_more')){
                     var leveTimes=parseInt(leavePage['leavePage'])
-                    leavePage['Time'][leveTimes-1]['back']=new Date()
+                    leavePage['Time'][leveTimes-1]['back']=new Date().Format("yyyy-MM-dd hh:mm:ss")
                     jQuery.SetSession('leavePage',leavePage)
                     if(leveTimes>0 && leveTimes<3){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,到达2次自动提交答题')

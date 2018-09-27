@@ -70,6 +70,7 @@
 <!-- 获取最新比赛倒计时 -->
 <input type="hidden" name="_wpnonce" id="inputNewMatch" value="<?=wp_create_nonce('student_get_count_down_code_nonce');?>">
 <script>
+    
 jQuery(function($) { 
     if(window.wait_match == ''){
         $('.countdown-time').hide();
