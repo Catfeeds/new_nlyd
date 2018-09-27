@@ -49,8 +49,13 @@ if(!class_exists('MatchController')){
             return $actions;
         }
         public function main(){
-            //屏蔽非分词类型的文章，例如文章post，上面的英文就是这个意思
+
+            //屏蔽文章类型的不必要操作按键
             add_action('post_row_actions', array($this,'Yct_Row_actions'), 10, 2);
+
+            //用户新增时添加html
+            add_filter('user_contactmethods',array($this,'add_input_html'));
+
 
             //自定义文章页
             add_action( 'init', array($this,'create_match_view'));
@@ -117,6 +122,12 @@ if(!class_exists('MatchController')){
 
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
+        }
+
+
+        public function add_input_html($user_contactmethods){
+            $user_contactmethods['user_mobile'] = '用户手机';
+            return $user_contactmethods;
         }
 
         /**
