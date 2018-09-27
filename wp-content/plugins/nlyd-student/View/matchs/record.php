@@ -311,12 +311,11 @@ jQuery(function($) {
                         $.ajax({
                             data:postData,
                             success:function(res,ajaxStatu,xhr){
-                                console.log(res)
-                                isClick[arg['data_id']]=true
+                                isClick[arg['data_id']]=true;
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
                                     lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
-                                    
+                                if(!arg['team']){//非战队
                                     if(res.data.my_ranking!=null){//我的成绩
                                         var rows=res.data.my_ranking
                                         var Html='<td>'
@@ -334,7 +333,6 @@ jQuery(function($) {
                                             if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
                                                 nl_me='nl-me'
                                                 if(value.ranking!=1){
-                                                    // $('#allRanking').css('display','table-row')
                                                     $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
                                                 }
                                             }
@@ -351,6 +349,43 @@ jQuery(function($) {
                                                 +'</tr>'
                                         lis.push(dom)                           
                                     })
+                                }else{//战队
+                                    if(res.data.my_ranking!=null){//我的成绩
+                                        var rows=res.data.my_ranking
+                                        var Html='<td>'
+                                                    +'<div class="nl-circle">'+rows.ranking+'</div>'
+                                                +'</td>'
+                                                +'<td><div class="table_content">'+rows.user_name+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.city+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                    }
+                                    $.each(res.data.info,function(index,value){
+                                        var nl_me='';
+                                        if(value.my_team=="y"){//我的战队
+                                            nl_me='nl-me';
+                                            if(value.ranking!=1){
+                                                var Html='<td>'
+                                                            +'<div class="nl-circle">'+value.ranking+'</div>'
+                                                        +'</td>'
+                                                        +'<td><div class="table_content">'+value.team_name+'</div></td>'
+                                                        +'<td><div class="table_content c_orange">'+value.team_id+'</div></td>'
+                                                        +'<td><div class="table_content c_orange">'+value.my_score+'</div></td>'
+                                                $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
+                                            }
+                                        }
+                                        var dom='<tr class="'+nl_me+'">'
+                                                    +'<td>'
+                                                        +'<div class="nl-circle">'+value.ranking+'</div>'
+                                                    +'</td>'
+                                                    +'<td><div class="table_content">'+value.team_name+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.team_id+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.my_score+'</div></td>'
+                                                +'</tr>'
+                                        lis.push(dom)                           
+                                    })
+                                }
                                     if (res.data.info.length<10) {
                                         next(lis.join(''),false)
                                     }else{
