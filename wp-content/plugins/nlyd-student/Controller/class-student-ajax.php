@@ -189,6 +189,12 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无列表信息'));
 
+        $end = end($rows);
+        $last = array(
+            'score'=>$end['my_score'],
+            'surplus_time'=>$end['surplus_time'],
+        );
+
         $list = array();
         foreach ($rows as $k => $val){
             $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age') ";
@@ -218,12 +224,24 @@ class Student_Ajax
                 //$list[$k]['score'] = $val['my_score'];
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $list[$k]['surplus_time'] = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 $list[$k]['ranking'] = $start+$k+1;
+
+                $my_score = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $surplus_time = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 if($k != 0){
-                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                    if(($my_score == $rows[$k-1]['my_score'] && $surplus_time == $rows[$k-1]['surplus_time']) || ($my_score == 0 &&  $rows[$k-1]['my_score'] == 0)){
                         $list[$k]['ranking'] = $list[$k-1]['ranking'];
                     }
                 }
+                $last = !empty($_POST['lastItem']) ? $_POST['lastItem'] : $last;
+                if( $surplus_time == 0 && !empty($last) ){
+                    if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
+                        $list[$k]['ranking'] = $_POST['lastItem']['ranking'];
+                    }
+                }
+
+
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
                 }
@@ -1417,7 +1435,7 @@ class Student_Ajax
             }else{
                 $val['match_status'] = $match_status = 2;   //比赛中
             }
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
 
             //获取报名人数
             $sql_ = "select count(a.id) total 
