@@ -316,7 +316,7 @@ class Download
     /**
      * 导出比赛排名
      */
-    public function match_ranking(){
+    public function match_rankingsss(){
 
         global $wpdb;
 
@@ -325,32 +325,39 @@ class Download
         $match = $wpdb->get_row('SELECT match_status,match_more FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
+        $matchEnd = true;
         if(!$match || $match['match_status'] != -3){
-            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
-            return;
+//            echo '<br /><h2 style="color: #a80000">比赛未结束!</h2>';
+//            return;
+            $matchEnd = false;
         }
 
         //查询比赛小项目
-
-//        $projectArr = $wpdb->get_results('SELECT ID,post_title FROM '.$wpdb->posts.' WHERE post_type="project" AND post_status="publish"', ARRAY_A);
         $projectArr = get_match_end_time($post->ID);
 
         $categoryArr = []; //分类选项卡数组
-        foreach ($projectArr as $pak => $pav) {
+        $currentDateTime = get_time('mysql');
+        foreach ($projectArr as $pak => &$pav) {
+            if($currentDateTime < $pav['project_end_time']){
+                //未结束
+                $pav['is_end'] = 'false';
+            }else{
+                //已结束
+                $pav['is_end'] = 'true';
+            }
+            $project_id_array[] = $pav['match_project_id'];
             //获取类别和项目选项卡
             if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
-                $categoryArr['sjl']['post_title'] = '速记类';
-                if(!isset($categoryArr['sjl']['ids'])) $categoryArr['sjl']['ids'] = '';
-                $categoryArr['sjl']['ids'] .= $pav['match_project_id'].',';
+                $cate = ['str' => 'sjl','name' => '速记类'];
             } elseif (in_array($pav['project_alias'], ['kysm', 'wzsd'])) {
-                $categoryArr['sdl']['post_title'] = '速读类';
-                if(!isset($categoryArr['sdl']['ids'])) $categoryArr['sdl']['ids'] = '';
-                $categoryArr['sdl']['ids'] .= $pav['match_project_id'].',';
+                $cate = ['str' => 'sdl','name' => '速读类'];
             } elseif (in_array($pav['project_alias'], ['zxss', 'nxss'])) {
-                $categoryArr['ssl']['post_title'] = '速算类';
-                if(!isset($categoryArr['ssl']['ids'])) $categoryArr['ssl']['ids'] = '';
-                $categoryArr['ssl']['ids'] .= $pav['match_project_id'].',';;
+                $cate = ['str' => 'ssl','name' => '速算类'];
             }
+            $categoryArr[$cate['str']]['is_end'] = $categoryArr[$cate['str']]['is_end'] == 'false' ? 'false' : $pav['is_end'];
+            $categoryArr[$cate['str']]['post_title'] = $cate['name'];
+            if(!isset($categoryArr[$cate['str']]['ids'])) $categoryArr['sjl']['ids'] = '';
+            $categoryArr[$cate['str']]['ids'] .= $pav['match_project_id'].',';
         }
         $where = '';
         $score = 'my_score';
@@ -409,23 +416,23 @@ class Download
                     }else{
                         $_GET['op4'] = 0;
                     }
-
                     if(isset($_GET['op3'])){
                         $where = ' AND project_id ='.$_GET['op3'].' GROUP BY match_id';
-                        foreach ($projectArr as $pak => $pav) {
-                            if($pav['match_project_id'] == $_GET['op3']){
-                                $post_title = $pav['post_title'];
+
+                        reset($projectArr);
+                        foreach ($projectArr as $pakOp3 => $pavOp3) {
+                            if($pavOp3['match_project_id'] == $_GET['op3']){
+                                $selects = $pavOp3;
                                 break;
                             }
                         }
-
                     }else{
                         //默认地一个项目
                         $where = ' AND project_id ='.$projectArr[0]['match_project_id'].' GROUP BY match_id';
-                        $post_title = $projectArr[0]['post_title'];
+                        $selects = $projectArr[0];
                         $_GET['op3'] = $projectArr[0]['match_project_id'];
                     }
-                    $selectArr = [['post_title' => $post_title]];
+                    $selectArr = [$selects];
                     $downloadParam .= '&op3='.$_GET['op3'].'&op4='.$_GET['op4'];;
                     break;
                 default:
@@ -434,14 +441,6 @@ class Download
         }else{
             $selectArr = $projectArr;
         }
-//        var_dump($projectWhere);
-//        //是否选择组别分类
-//        $group = 0;
-//        if(is_post()){
-//            $group = intval($_POST['age_group']);
-//        }
-
-
 
         //查询每个参赛学员的总分排名
         //分页
@@ -477,28 +476,30 @@ class Download
 
         //查询每个学员每个小项目每一轮的分数
         $whereT = 0;
-
         foreach ($totalRanking as &$trv){
             $trv['my_score'] = 0;
             $trv['surplus_time'] = 0;
             $trv['projectScore'] = [];
-            foreach ($selectArr as  $pak => $pav) {
-                $trv['projectScore'][$pak] = 0;
+            reset($selectArr);
+            foreach ($selectArr as  $paks => $pavs) {
+                if($pavs['is_end'] == 'false') {
+                    unset($trv['projectScore']);
+                    continue;//未结束
+                }
+                $trv['projectScore'][$paks] = 0;
                 if($where == '' || $whereT == 1) {
-                    $where = ' AND project_id='.$pav['match_project_id'];
+                    $where = ' AND project_id='.$pavs['match_project_id'];
                     $whereT = 1;
                 }
                 if($selectType == 2){
-                    $trv['projectScore'][$pak] = 0;
+                    $trv['projectScore'][$paks] = 0;
                 }else{
-                    $trv['projectScore'][$pak] = '';
+                    $trv['projectScore'][$paks] = '';
                 }
 //                $trv['projectScore'][$pak] = '';
                 $res = $wpdb->get_results('SELECT '.$score.',match_more,surplus_time,project_id FROM '.$wpdb->prefix.'match_questions AS mq 
                 WHERE match_id='.$post->ID.' AND user_id='.$trv['user_id'].$where, ARRAY_A);
 
-
-//            var_dump($where);
                 $moreArr = [];
                 $scoreArr = [];
                 $surplus_timeArr = [];
@@ -524,19 +525,18 @@ class Download
 
                 foreach ($moreArr as $mav){
                     if($selectType == 2){
-                        $trv['projectScore'][$pak] += $mav;
+                        $trv['projectScore'][$paks] += $mav;
                     }else{
-                        $trv['projectScore'][$pak] .= $mav;
+                        $trv['projectScore'][$paks] .= $mav;
                     }
                 }
-                if($selectType == 2) $trv['projectScore'][$pak] .= '/';
+                if($selectType == 2) $trv['projectScore'][$paks] .= '/';
 
-                if(!$trv['projectScore'][$pak]) $trv['projectScore'][$pak] = '0/';
+                if(!$trv['projectScore'][$paks]) $trv['projectScore'][$paks] = '0/';
 //                var_dump($trv['projectScore'][$pak]);
-                $trv['projectScore'][$pak] = substr($trv['projectScore'][$pak], 0, strlen($trv['projectScore'][$pak])-1);
+                $trv['projectScore'][$paks] = substr($trv['projectScore'][$paks], 0, strlen($trv['projectScore'][$paks])-1);
 //                print_r($res);
             }
-
             $usermeta = get_user_meta($trv['user_id'], '', true);
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
             $age = $user_real_name['real_age'];
@@ -580,21 +580,16 @@ class Download
                     }
                 }
             }
-
-
-
         }
+        //名次
         $ranking = 1;
         foreach ($totalRanking as $k => $v){
-
             $totalRanking[$k]['ranking'] = $ranking;
             if(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time']){
 
             }else{
                 ++$ranking;
             }
-
-
         }
 
         $filename = 'match_ranking_';
@@ -630,6 +625,7 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+
         if($selectType == 1){
             $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
             $a = 'K';
@@ -637,9 +633,10 @@ class Download
             $a = 'J';
         }
         foreach ($selectArr as $titleV){
-            ++$a;
-            $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
-
+            if($titleV['is_end'] == 'true'){
+                ++$a;
+                $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
+            }
         }
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
@@ -664,8 +661,11 @@ class Download
             $a = 'J';
         }
         foreach ($selectArr as $titleV){
-            ++$a;
-            $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
+            if($titleV['is_end'] == 'true'){
+                ++$a;
+                $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
+            }
+
 
         }
 
@@ -768,6 +768,525 @@ class Download
 
 
 
+    }
+
+
+    /**
+     * 比赛排名
+     */
+    public function match_ranking(){
+        global $wpdb;
+        //首先获取当前比赛
+        $post = get_post(intval($_GET['match_id']));
+        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+
+        //TODO 判断比赛是否结束
+        $matchEnd = true;
+        if(!$match || $match['match_status'] != -3){
+            $matchEnd = false;
+        }
+        $rankingView = ['status' => true];
+
+        //查询比赛小项目
+        $projectArr = get_match_end_time($post->ID);
+        $categoryArr = []; //分类选项卡数组
+        $currentDateTime = get_time('mysql');
+        //选项卡查询
+        $op1 = isset($_GET['op1']) ? $_GET['op1'] : 3; //一级选项卡, 默认单项排名
+        $op2 = isset($_GET['op2']) ? $_GET['op2'] : 'sdl'; //二级选项卡, 默认第一个分类
+        $op3 = isset($_GET['op3']) ? $_GET['op3'] : $projectArr[0]['match_project_id']; //三级选项卡, 默认第一个项目
+        $op4 = isset($_GET['op4']) ? $_GET['op4'] : 0; //四级选项卡, 默认全部年龄
+        $op5 = isset($_GET['op5']) ? $_GET['op5'] : 1; //五级选项卡(总排名和战队排名), 默认总排名
+        $downloadParam = "&op1={$op1}&op2={$op2}&op3={$op3}&op4={$op4}";
+//        leo_dump($op2);
+        $data = [];
+        $fileRankingName = $post->post_title.'_';
+        if($op1 == 1){
+            if($matchEnd == false){
+                $rankingView = ['status' => false, 'msg' => '当前比赛未结束!'];
+            }else{
+                $data = $this->getAllRankingData($match,$projectArr,$op5);
+            }
+            $fileRankingName .= ($op5 == 2 ? '战队' : '个人');
+        }elseif ($op1 == 2){
+            //获取当前分类的id字符串
+            $project_id_array = [];//项目id数组
+            $project_alias_arr = [];// 分类下的项目数组
+            switch ($op2){
+                case 'sdl':
+                    $project_alias_arr = ['option' => ['wzsd','kysm'], 'name' => '速读类'];
+                    break;
+                case 'ssl':
+                    $project_alias_arr = ['option' => ['zxss','nxss'], 'name' => '速算类'];
+                    break;
+                case 'sjl':
+                    $project_alias_arr = ['option' => ['szzb','pkjl'], 'name' => '速记类'];
+                    break;
+                default:
+                    exit('参数错误');
+            }
+            $cateName = '';
+            foreach ($projectArr as $pavGetIds){
+                if(in_array($pavGetIds['project_alias'],$project_alias_arr['option'])){
+                    if($currentDateTime < $pavGetIds['project_end_time']){
+                        $rankingView = ['status' => false, 'msg' => '当前分类未结束!'];
+                        break;
+                    }
+                    $project_id_array[] = $pavGetIds['match_project_id'];
+                    $cateName = $project_alias_arr['name'];
+                };
+            }
+            $fileRankingName .= $cateName;
+            if($rankingView['status'] == true){
+                $data = $this->getCategoryRankingData($match,join(',',$project_id_array),$op4);
+            }
+
+        }elseif ($op1 == 3){
+
+            foreach ($projectArr as $pavGetIds){
+                if($pavGetIds['match_project_id'] == $op3){
+                    if($currentDateTime < $pavGetIds['project_end_time']){
+                        $rankingView = ['status' => false, 'msg' => '当前项目未结束!'];
+                        break;
+                    }
+                    $fileRankingName .= $pavGetIds['post_title'];
+                }
+            }
+
+            switch ($op4){
+                case 4:
+                    $fileRankingName .= '_儿童组';
+                    break;
+                case 3:
+                    $fileRankingName .= '_少年组';
+                    break;
+                case 2:
+                    $fileRankingName .= '_成年组';
+                    break;
+                case 1:
+                    $fileRankingName .= '_老年组';
+                    break;
+                default:
+
+            }
+            if($rankingView['status'] == true) $data = $this->getCategoryRankingData($match,$op3,$op4);
+        }else{
+            exit('参数错误!');
+        }
+        if($rankingView['status'] == false) exit($rankingView['msg']);
+
+        $filename = $fileRankingName.'排名_';
+        $filename .= strtotime(current_time('mysql')).".xls";
+
+
+        //        $path = self::$downloadPath.$filename;
+        //        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        $objPHPExcel = new \PHPExcel();
+        //边框
+
+        //居中显示
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
+
+        //行高
+        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(30);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(40);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(25);
+
+        if($op1 == 1 && $op5 == 2){
+            //战队
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
+
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $fileRankingName);
+
+            //加粗
+            $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+
+
+            $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+            for ($b = 'A'; $b <= 'D'; ++$b){
+                $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+                $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
+
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '名次');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '战队');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', 'ID');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '总成绩');
+
+
+
+            $k = 0;
+            foreach ($data as $raV){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['ranking']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['team_name']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['team_id']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['my_score']);
+                for ($b = 'A'; $b <= 'D'; ++$b){
+                    $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
+                }
+                ++$k;
+            }
+         } else{
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+            $end = 'K';
+            if(isset($data[0]['projectScore'])) {
+                $a = 'L';
+                foreach ($projectArr as $titleV) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
+                    ++$end;
+                    ++$a;
+                }
+            }
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $fileRankingName);
+
+            //加粗
+            $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+
+            if(isset($data[0]['projectScore'])) {
+                $a = 'K';
+                foreach ($projectArr as $titleV) {
+                    ++$a;
+                    $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
+                }
+            }
+            $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$end.'1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:'.--$end.'1');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$end.'1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+
+
+            for ($b = 'A'; $b <= 'K'; ++$b){
+                $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+            }
+
+            if(isset($data[0]['projectScore'])) {
+                $a = 'L';
+                foreach ($projectArr as $titleV) {
+                    $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+                    ++$a;
+                }
+            }
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '学员ID');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '真实姓名');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '性别');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '年龄');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '年龄组别');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '所在地区');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '手机');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '邮箱');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '报名时间');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '名次');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '得分');
+            for ($b = 'A'; $b <= 'K'; ++$b){
+                $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            }
+
+            if(isset($data[0]['projectScore'])) {
+                $a = 'L';
+                foreach ($projectArr as $titleV) {
+                    $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+                    ++$a;
+                }
+            }
+
+            if(isset($data[0]['projectScore'])) {
+                $a = 'L';
+                foreach ($projectArr as $titleV) {
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV['post_title'].'得分');
+                    $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+                    ++$a;
+                }
+            }
+
+            $k = 0;
+            foreach ($data as $raV){
+                $mobile = $raV['telephone'] ? $raV['telephone'] : $raV['user_mobile'];
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['userID']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['real_name']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['sex']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['age']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['ageGroup']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['address']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$mobile);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['user_email']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['created_time']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['ranking']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['my_score']);
+
+                for ($b = 'A'; $b <= 'K'; ++$b){
+                    $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
+                }
+
+                if(isset($data[0]['projectScore'])) {
+                    $a = 'L';
+                    foreach ($raV['projectScore'] as $ravV) {
+                        $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
+                        $objPHPExcel->getActiveSheet()->getStyle($a.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
+                        ++$a;
+                    }
+
+                }
+                ++$k;
+            }
+
+        }
+
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+
+    }
+
+    /**
+     * 排名分类和单项数据
+     */
+    public function getCategoryRankingData($match,$projectIdStr,$ageType){
+        global $wpdb;
+        //获取每个用户的每个分类的分数和排名
+        switch ($ageType){
+            case 4://儿童组
+                $ageWhere = ' y.meta_value<13';
+                break;
+            case 3://少年组
+                $ageWhere = ' y.meta_value>12 AND y.meta_value<18';
+                break;
+            case 2://成年组
+                $ageWhere = ' y.meta_value>17 AND y.meta_value<60';
+                break;
+            case 1://老年组
+                $ageWhere = ' y.meta_value>59';
+                break;
+            default://全部
+                $ageWhere = ' 1=1';
+        }
+        $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id
+                    FROM(
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,a.created_time 
+                        FROM `{$wpdb->prefix}order` a 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr})                   
+                        WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1
+                        GROUP BY user_id,project_id
+                    ) x
+                    left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 
+                    left join `{$wpdb->users}` u on u.ID=y.user_id 
+                    WHERE {$ageWhere}
+                    GROUP BY user_id
+                    ORDER BY my_score DESC,surplus_time DESC", ARRAY_A);
+
+        $list = array();
+        $start = 0;
+        foreach ($result as $k => $val){
+//            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
+            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
+            $info = $wpdb->get_results($sql1,ARRAY_A);
+
+
+            if(!empty($info)){
+                $user_info = array_column($info,'meta_value','meta_key');
+                $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
+
+                $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+                if(!empty($user_info['user_age'])){
+                    $age = $user_info['user_age'];
+                    $group = getAgeGroupNameByAge($age);
+
+                }else{
+                    $group = '-';
+                }
+                if(!empty($user_info['user_address'])){
+                    $user_address = unserialize($user_info['user_address']);
+//                    $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
+                    $city = $user_address['province'].$user_address['city'];
+                }else{
+                    $city = '-';
+                }
+
+                $result[$k]['userID'] = $user_info['user_ID'];
+                $result[$k]['address'] = $city;
+                //$list[$k]['score'] = $val['my_score'];
+                $result[$k]['ageGroup'] = $group;
+                $result[$k]['age'] = $age;
+                $result[$k]['sex'] = $user_info['user_gender'] ? $user_info['user_gender'] : '-';
+                $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
+                $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $result[$k]['my_score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $result[$k]['ranking'] = $start+$k+1;
+                if($k != 0){
+                    if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
+                        $result[$k]['ranking'] = $result[$k-1]['ranking'];
+                    }
+                }
+//                if($val['user_id'] == $current_user->ID){
+//                    $my_ranking = $list[$k];
+//                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 排名总数据
+     */
+    public function getAllRankingData($match,$projectArr,$op5){
+        global $wpdb;
+
+        if($op5 == 1){
+            //个人排名
+            //先查询所有成员
+            $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time,um.meta_value AS user_age 
+               FROM '.$wpdb->prefix.'order AS o
+               LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+               LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_age"
+               LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
+               WHERE o.match_id='.$match['match_id'].' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id ORDER BY u.ID ASC', ARRAY_A);
+
+            //查询每个成员分数
+            foreach ($totalRanking as &$trv){
+                $trv['my_score'] = 0;
+                $trv['surplus_time'] = 0;
+                $trv['projectScore'] = []; //项目分数数组
+                foreach ($projectArr as $paks => $pavs) {
+                    $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time,project_id FROM '.$wpdb->prefix.'match_questions 
+                        WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'], ARRAY_A);
+                    $scoreArr = [];//项目所有分数数组
+                    $surplus_timeArr = [];//项目所有剩余时间数组
+                    $moreArr = []; //每一轮分数数组
+                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
+                    for($mi = 1; $mi <= $match_more_all; ++$mi){
+                        $moreArr[$mi] = '0';
+                    }
+                    foreach ($res as $resV){
+                        $surplus_timeArr[] = $resV['surplus_time'];
+                        $scoreArr[] = $resV['my_score'];
+                        $moreArr[$resV['match_more']] = $resV['my_score'] ? $resV['my_score'] : '0';
+                    }
+                    $trv['projectScore'][$paks] = join('/', $moreArr);//每个项目分数字符串
+                    $trv['my_score'] += $scoreArr == [] ? 0 : max($scoreArr);//每个项目最大分数和
+                    $trv['surplus_time'] += $scoreArr == [] ? 0 : max($surplus_timeArr);//每个项目最大剩余时间和
+                }
+
+                $usermeta = get_user_meta($trv['user_id'], '', true);
+                $user_real_name = unserialize($usermeta['user_real_name'][0]);
+                $age = $user_real_name['real_age'];
+                $user_real_name = $user_real_name['real_name'];
+                $trv['age'] = $age;
+                $trv['ageGroup'] = getAgeGroupNameByAge($age);
+                $trv['userID'] = $usermeta['user_ID'][0];
+                $trv['real_name'] = $user_real_name;
+                $trv['sex'] = $usermeta['user_gender'][0];
+                $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '-';
+                $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
+            }
+
+        }else{
+            //战队排名
+            //获取参加比赛的成员
+            $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
+                    LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
+                    LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!=''";
+            $result = $wpdb->get_results($sql, ARRAY_A);
+            //处理每个战队的成员
+            $teamsUsers = []; //每个战队的每个成员
+            foreach ($result as $resV){
+                if(!isset($teamsUsers[$resV['ID']])) {
+                    $teamsUsers[$resV['ID']] = [];
+                    $teamsUsers[$resV['ID']]['user_ids'] = [];
+                    $teamsUsers[$resV['ID']]['team_name'] = $resV['post_title'];
+                    $teamsUsers[$resV['ID']]['team_id'] = $resV['ID'];
+                }
+                $teamsUsers[$resV['ID']]['user_ids'][] = $resV['user_id'];
+            }
+            foreach ($teamsUsers as &$tuV){
+                $tuV['user_ids'] = join(',',$tuV['user_ids']);
+            }
+            $totalRanking = [];
+            foreach ($teamsUsers as $tuV2){
+                //每个战队的分数
+                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM `{$wpdb->prefix}match_questions` AS mq 
+                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                          GROUP BY mq.project_id,mq.user_id) AS child  
+                          ORDER BY my_score DESC limit 0,5
+                       ";
+                $row = $wpdb->get_row($sql,ARRAY_A);
+                $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
+                $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
+                $totalRanking[] = $tuV2;
+            }
+        }
+
+        //排序
+        for($i = 0; $i < count($totalRanking); ++$i){
+            if(isset($totalRanking[$i+1])){
+                for ($j = $i+1; $j < count($totalRanking); ++$j){
+                    if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
+//                       if($totalRanking[$i]['my_score'] < 1){
+//                           $rankingAuto = false;
+//                       }else
+                        if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+
+                            $a = $totalRanking[$j];
+                            $totalRanking[$j] = $totalRanking[$i];
+                            $totalRanking[$i] = $a;
+                        }
+                    }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
+                        $a = $totalRanking[$j];
+                        $totalRanking[$j] = $totalRanking[$i];
+                        $totalRanking[$i] = $a;
+                    }
+                }
+            }
+        }
+        //名次
+        $ranking = 1;
+        foreach ($totalRanking as $k => $v){
+            $totalRanking[$k]['ranking'] = $ranking;
+            if(!(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time'])){
+                ++$ranking;
+            }
+        }
+        return $totalRanking;
     }
 }
 new Download();

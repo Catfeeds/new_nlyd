@@ -1081,7 +1081,7 @@ class Match_student {
                 $result[$k]['address'] = $city;
                 //$list[$k]['score'] = $val['my_score'];
                 $result[$k]['ageGroup'] = $group;
-                $result[$k]['user_age'] = $age;
+                $result[$k]['age'] = $age;
                 $result[$k]['sex'] = $user_info['user_gender'] ? $user_info['user_gender'] : '-';
                 $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
                 $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
