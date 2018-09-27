@@ -46,43 +46,43 @@
 }
 .my-match{
     width: 30px;
-    background-position: -204px 3px;
+    background-position: -3px 3px;
 }
 .my-train{
     width: 31px;
-    background-position: -240px 3px;
+    background-position: -37px 3px;
 }
 .my-course{
     width: 28px;
-    background-position: -65px 3px;
+    background-position: -73px 3px;
 }
 .my-coach{
     width: 30px;
-    background-position: -134px 3px;
+    background-position: -106px 3px;
 }
 .my-order{
     width: 30px;
-    background-position: 0 0;
+    background-position: -137px 3px;
 }
 .my-kaoji{
     width: 30px;
-    background-position: -31px 3px;
+    background-position: -168px 3px;
 }
 .my-tuiguang{
-    width: 30px;
-    background-position: -276px 3px;
+    width: 32px;
+    background-position: -201px 3px;
 }
 .my-secure{
     width: 30px;
-    background-position: -99px 3px;
+    background-position: -237px 3px;
 }
 .my-setting{
-    width: 30px;
-    background-position: -312px 3px;
+    width: 32px;
+    background-position: -270px 3px;
 }
 .my-wallet{
     width: 30px;
-    background-position: -168px 3px;
+    background-position: -306px 3px;
 }
 .userCenter-detail a:active{
     background: #e7ebf1;
