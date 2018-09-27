@@ -189,12 +189,6 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无列表信息'));
 
-        $end = end($rows);
-        $last = array(
-            'score'=>$end['my_score'],
-            'surplus_time'=>$end['surplus_time'],
-        );
-
         $list = array();
         foreach ($rows as $k => $val){
             $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age') ";
@@ -234,13 +228,19 @@ class Student_Ajax
                         $list[$k]['ranking'] = $list[$k-1]['ranking'];
                     }
                 }
-                $last = !empty($_POST['lastItem']) ? $_POST['lastItem'] : $last;
-                if( $surplus_time == 0 && !empty($last) ){
-                    if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
-                        $list[$k]['ranking'] = $_POST['lastItem']['ranking'];
-                    }
+                if( !empty($_POST['lastItem']) ){
+                    $last = $_POST['lastItem'];
+                    if($my_score == 0 && $my_score == $last['score']){
+                        $list[$k]['ranking'] = $last['ranking'];
+                    }else if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
+                        $list[$k]['ranking'] = $last['ranking'];
+                    }/*else{
+                        if($current_user->ID == 66){
+                            var_dump($my_score == $last['score']);
+                            var_dump($surplus_time == $last['surplus_time']);
+                        }
+                    }*/
                 }
-
 
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
