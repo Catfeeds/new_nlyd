@@ -218,12 +218,30 @@ class Student_Ajax
                 //$list[$k]['score'] = $val['my_score'];
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $list[$k]['surplus_time'] = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 $list[$k]['ranking'] = $start+$k+1;
+
+                $my_score = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $surplus_time = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 if($k != 0){
-                    if($val['my_score'] == $rows[$k-1]['my_score'] && $val['surplus_time'] == $rows[$k-1]['surplus_time']){
+                    if(($my_score == $rows[$k-1]['my_score'] && $surplus_time == $rows[$k-1]['surplus_time']) || ($my_score == 0 &&  $rows[$k-1]['my_score'] == 0)){
                         $list[$k]['ranking'] = $list[$k-1]['ranking'];
                     }
                 }
+                if( !empty($_POST['lastItem']) ){
+                    $last = $_POST['lastItem'];
+                    if($my_score == 0 && $my_score == $last['score']){
+                        $list[$k]['ranking'] = $last['ranking'];
+                    }else if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
+                        $list[$k]['ranking'] = $last['ranking'];
+                    }/*else{
+                        if($current_user->ID == 66){
+                            var_dump($my_score == $last['score']);
+                            var_dump($surplus_time == $last['surplus_time']);
+                        }
+                    }*/
+                }
+
                 if($val['user_id'] == $current_user->ID){
                     $my_ranking = $list[$k];
                 }
@@ -1417,7 +1435,7 @@ class Student_Ajax
             }else{
                 $val['match_status'] = $match_status = 2;   //比赛中
             }
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
 
             //获取报名人数
             $sql_ = "select count(a.id) total 
