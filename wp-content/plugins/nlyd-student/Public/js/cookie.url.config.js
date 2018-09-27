@@ -95,12 +95,12 @@ Alert.prototype={
 	// var end_time = new Date(v.match_start_time).getTime();//月份是实际月份-1
 	// var sys_second = (end_time-serverTimes)/1000;
 	// <span data-seconds="sys_second"></span>
-	// $('span').countdown(function(s, d){//倒计时
+	// $('span').countdown(function(S, d){//倒计时
 	// 	var h=d.hour<10 ? '0'+d.hour : d.hour;
 	// 	var m=d.minute<10 ? '0'+d.minute : d.minute;
 	// 	var s=d.second<10 ? '0'+d.second : d.second;
 	// 	var time=d.day+'天'+h+':'+m+':'+s;
-	// 	var items = $(this).text(time);
+	//  $(this).text(time);
 	// });
 	})(jQuery);
 

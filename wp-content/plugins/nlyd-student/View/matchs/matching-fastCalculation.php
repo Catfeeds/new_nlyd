@@ -146,17 +146,16 @@ jQuery(function($) {
                     sys_second=wax_and_wane_time -1 ;
                     nextBtn_click=0;
                 }else{
-                    clearInterval(timer);
-                    var thisAjaxRow=ajaxData[ajaxData.length-1]
                     var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
-                    thisAjaxRow['yours']=yours;
-                    if(yours==thisAjaxRow['rights']){
-                        thisAjaxRow['isRight']=true;
+                    ajaxData[ajaxData.length-1]['yours']=yours;
+                    if(yours==ajaxData[ajaxData.length-1]['rights']){
+                        ajaxData[ajaxData.length-1]['isRight']=true;
                         $('#answer').removeClass('answer').addClass('right-fast')
                     }else{
-                        thisAjaxRow['isRight']=false;
+                        ajaxData[ajaxData.length-1]['isRight']=false;
                         $('#answer').removeClass('answer').addClass('error-fast')
                     }
+                    clearInterval(timer);
                 }
                 if(n_type<=2){
                     $('.count_downs').text('初始中...').attr('data-seconds',sys_second)

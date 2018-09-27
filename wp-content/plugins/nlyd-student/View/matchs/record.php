@@ -31,9 +31,9 @@
                    
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
-                        <li class="layui-this">单项排名</li>
-                        <li>分类排名</li>
-                        <li>总排名</li>
+                        <li class="layui-this" data-id="1">单项排名</li>
+                        <li data-id="2">分类排名</li>
+                        <li data-id="3">总排名</li>
                         <div class="nl-transform">单项排名</div>
                     </ul>
                     <?php endif;?>
@@ -41,7 +41,7 @@
                         <!-- 单项排名 -->
                         <div class="layui-tab-item layui-show">
                             <?php if(!empty($default_category)): ?>
-                            <div class="btn-wrapper one-rank">
+                            <div class="btn-wrapper one_1">
                                 <div class="btn-zoo">
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
@@ -52,11 +52,6 @@
                                     </div>
                                 </div>    
                             </div>
-                            <!-- <div class="btn-wrapper">
-                                <?php foreach ($default_category as $k =>$val){ ?>
-                                <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=$val['post_title']?></div>
-                                <?php } ?>
-                            </div> -->
                             <?php endif;?>
                             <div class="nl-table-wapper have-bottom-footer" style="min-height:145px;">
                                 <table class="nl-table">
@@ -82,11 +77,11 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr class="nl-me"  id="danxiang_me">
+                                        <tr class="nl-me"  id="rank_1">
                                         
                                         </tr>
                                     </thead>
-                                    <tbody id="flow-one">
+                                    <tbody id="flow_1">
                         
                                     </tbody>
                                 </table>
@@ -95,10 +90,10 @@
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">
-                            <div class="btn-wrapper">
+                            <div class="btn-wrapper one_2">
                                 <?phP if(!empty($match_category)): ?>
                                 <?php foreach ($match_category as $k => $v){ ?>
-                                <div class="btn-wrap fenlei">
+                                <div class="btn-wrap">
                                     <div class="classify-btn <?=$k==0 ? 'classify-active' : '';?>" data-post-id="<?=$v['ID']?>"><?=$v['post_title']?></div>
                                 </div>
                                 <?php }?>
@@ -115,10 +110,10 @@
                                             <td><span>项目总分</span></td>
                                             <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
                                         </tr>
-                                        <tr class="nl-me" id="fenlei_me">
+                                        <tr class="nl-me" id="rank_2">
                                         </tr>
                                     </thead>
-                                    <tbody id="flow-fenlei">
+                                    <tbody id="flow_2">
                                     
                                     </tbody>
                                 </table>
@@ -127,7 +122,7 @@
 
                         <!-- 总排名 -->
                         <div class="layui-tab-item">
-                            <div class="btn-wrapper all_rank">
+                            <div class="btn-wrapper one_3">
                                 <div class="btn-wrap">
                                     <div class="classify-btn classify-active" data-post-id="0">个人排名</div>
                                 </div>
@@ -138,7 +133,7 @@
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
                                     <thead>
-                                        <tr class='table-head'>
+                                        <tr class='table-head' id="one_3_head">
                                             <td>名次</td>
                                             <td>学员姓名</td>
                                             <td><span>ID</span></td>
@@ -146,36 +141,12 @@
                                             <td><span>项目总分</span></td>
                                             <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
                                         </tr>
-                                        <tr class="nl-me" id="allRanking">
-                                        <!-- <?php if(!empty($my_ranking) && $list[0]['ranking']!=$my_ranking['ranking'] ): ?>
-                                        
-                                            <td>
-                                                <div class="nl-circle <?= $my_ranking['ranking'] <= 3 ? 'top3' : '';?>"><?=$my_ranking['ranking']?></div>
-                                            </td>
-                                            <td><div class="table_content"><div class="table_content"><?=$my_ranking['user_name']?></div></td>
-                                            <td id="meid"><div class="table_content c_orange"><?=$my_ranking['ID']?></div></td>
-                                            <td><div class="table_content"><?=$my_ranking['city']?></div></td>
-                                            <td><div class="table_content c_orange"><?=$my_ranking['score']?></div></td>
-                                            <td><div class="table_content"><?=$my_ranking['group']?></div></td>
-                                        
-                                        <?php endif;?> -->
+                                        <tr class="nl-me" id="rank_3">
+
                                         </tr>
                                     </thead>
-                                    <tbody id="flow">
-                                        <!-- <?php if(!empty($list)){ ?>
-                                        <?php foreach ($list as $k => $v){ ?>
-                                        <tr class="<?= $my_ranking['ranking']==$v['ranking'] && $my_ranking['ID']==$v['ID'] ? 'nl-me' : '';?>">
-                                            <td>
-                                                <div class="nl-circle <?= $k < 3 ? 'top3' : '';?>"><?=$v['ranking']?></div>
-                                            </td>
-                                            <td><div class="table_content"><?=$v['user_name']?></div></td>
-                                            <td><div class="table_content c_orange"><?=$v['ID']?></div></td>
-                                            <td><div class="table_content"><?=$v['city']?></div></td>
-                                            <td><div class="table_content c_orange"><?=$v['score']?></div></td>
-                                            <td><div class="table_content"><?=$v['group']?></div></td>
-                                        </tr>
-                                        <?php } ?>
-                                        <?php }?> -->
+                                    <tbody id="flow_3">
+  
                                     </tbody>
                                 </table>
                             </div>
@@ -230,7 +201,7 @@ jQuery(function($) {
     })
     $('.a-btn').click(function(){//查看本项目比赛详情
         var match_id=<?=$_GET['match_id']?>;
-        var project_id=$('.one-rank .classify-active').attr('data-post-id')
+        var project_id=$('.one_1 .classify-active').attr('data-post-id')
         var href=window.home_url+'/matchs/singleRecord/match_id/'+match_id+'/project_id/'+project_id;
         window.location.href=href;
     })
@@ -247,7 +218,7 @@ jQuery(function($) {
         var flow = layui.flow;//流加载
         var hasTwoPage=false;
         var userid=$('#meid').text();
-        var lastItem={AllMy:{},fenlei:{},danxiang:{}}
+        var lastItem={lastItem_1:{},lastItem_2:{},lastItem_3:{}}
         <?php
         
         //  if($count >10 ): 
@@ -257,7 +228,7 @@ jQuery(function($) {
         // endif;
         
          ?>
-         
+        var isClick={}
         element.on('tab(tabs)', function(){//tabs
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
             var html=$(this).html();
@@ -265,286 +236,162 @@ jQuery(function($) {
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).html(html)
-        
-        })
-
-        initAllMy= function(myPage) {//总排名，个人成绩
-            flow.load({
-                    elem: '#flow' //流加载容器
-                    ,isAuto: false
-                    ,isLazyimg: true
-                    ,done: function(page, next){ //加载下一页
-                        if(myPage==0){
-                            $('#allRanking').css('display','none');
-                        }
-                        myPage++
-                        var lis = [];
-                        // if(hasTwoPage){//第二页的数据是否存在
-                            // $('#allRanking').css('display','none')
-                            // if(page==1){
-                            //     next(lis.join(''),true)
-                            // }else{
-                                var postData={
-                                    action:'get_score_ranking',
-                                    _wpnonce:$('#inputRank').val(),
-                                    match_id:$.Request('match_id'),
-                                    page:myPage,
-                                    lastItem:lastItem['AllMy'],
-                                }
-                                $.ajax({
-                                    data:postData,
-                                    success:function(res,ajaxStatu,xhr){
-                                        if(res.success){ 
-                                            var itemLen=res.data.info.length;
-                                            lastItem['AllMy']=itemLen>0 ? res.data.info[itemLen-1] : {};
-                                            if(res.data.my_ranking!=null){//我的成绩
-                                                var rows=res.data.my_ranking
-                                                var top3=rows.ranking<=3 ? "top3" : ''
-                                                var Html='<td>'
-                                                            +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
-                                                        +'</td>'
-                                                        +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                                        +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
-                                                        +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                                        +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                                        +'<td><div class="table_content">'+rows.group+'</div></td>'
-                                            }
-                                            $.each(res.data.info,function(index,value){
-                                                var nl_me='';
-                                                if(res.data.my_ranking!=null){
-                                                    if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
-                                                        nl_me='nl-me'
-                                                        if(value.ranking!=1){
-                                                            // $('#allRanking').css('display','table-row')
-                                                            $('#allRanking').html(Html).css('display','table-row');
-                                                        }
-                                                    }
-                                                }  
-                                                var dom='<tr class="'+nl_me+'">'
-                                                            +'<td>'
-                                                                +'<div class="nl-circle">'+value.ranking+'</div>'
-                                                            +'</td>'
-                                                            +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                            +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                                            +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                            +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                                            +'<td><div class="table_content">'+value.group+'</div></td>'
-                                                        +'</tr>'
-                                                lis.push(dom)                           
-                                            })
-                                            if (res.data.info.length<10) {
-                                                next(lis.join(''),false)
-                                            }else{
-                                                next(lis.join(''),true)
-                                            }
-                                        }else{
-                                            // $.alerts('没有更多了')
-                                            next(lis.join(''),false)
-                                        }
-                                    }
-                                }) 
-                            // }
-                        // }else{
-                        //     next(lis.join(''),false)
-                        // }
-                    }
-            })
-        }
-
-        initAllMy(0);
-        initFenlei=function(fenleiPage,category_id) {//分类排行
-            flow.load({
-                elem: '#flow-fenlei' //流加载容器
-                ,isAuto: false
-                ,isLazyimg: true
-                ,done: function(page, next){ //加载下一页
-                    // $('#fenlei_me').css('display','none');
-                    fenleiPage++
-                    var lis = [];
-                    var postData={
-                        action:'get_score_ranking',
-                        _wpnonce:$('#inputRank').val(),
-                        match_id:$.Request('match_id'),
-                        category_id:category_id,
-                        page:fenleiPage,
-                        lastItem:lastItem['fenlei'],
-                    }
-                    $.ajax({
-                            data:postData,success:function(res,ajaxStatu,xhr){  
-                            if(res.success){ 
-                                var itemLen=res.data.info.length;
-                                lastItem['fenlei']=itemLen>0 ? res.data.info[itemLen-1] : {};
-                                if(res.data.my_ranking!=null){//我的成绩
-                                    var rows=res.data.my_ranking
-                                    var top3=rows.ranking<=3 ? "top3" : ''
-                                    var Html='<td>'
-                                                +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
-                                            +'</td>'
-                                            +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                            +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
-                                            +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                            +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                            +'<td><div class="table_content">'+rows.group+'</div></td>'
-                                }
-                                $.each(res.data.info,function(index,value){
-                                    var top3=value.ranking<=3 ? 'top3' : '';
-                                    var nl_me='';
-                                    if(res.data.my_ranking!=null){
-                                        if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
-                                            nl_me='nl-me'
-                                            if(value.ranking!=1){
-                                                $('#fenlei_me').html(Html);
-                                            }
-                                        }
-                                    }  
-                                    var dom='<tr class="'+nl_me+'">'
-                                                +'<td>'
-                                                    +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                                +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                                +'<td><div class="table_content">'+value.group+'</div></td>'
-                                            +'</tr>'
-                                    lis.push(dom)                           
-                                })  
-                                if (res.data.info.length<10) {
-                                    next(lis.join(''),false)
-                                }else{
-                                    next(lis.join(''),true)
-                                }
-                            }else{
-                                next(lis.join(''),false)
-                            }
-                        }
-                    }) 
+            if(!isClick[data_id]){
+                var datas={data_id:data_id,myPage:0,category_id:null,project_id:null,age_group:null}
+                if(data_id==2){
+                    datas['category_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
+                }else if(data_id==1){
+                    datas['project_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
+                    datas['age_group']=$("#show_text").text();
                 }
-            });
-        }
-        initFenlei(0,$('.fenlei .classify-active').attr('data-post-id'))
-        initDanxiang=function(fenleiPage,project_id,age_group){//单项排行
-            
+                pagation(datas)
+            }
+        })
+        
+        pagation= function(arg) {//总排名，个人成绩
             flow.load({
-                    elem: '#flow-one' //流加载容器
+                    elem: '#flow_'+arg['data_id'] //流加载容器
                     ,isAuto: false
                     ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
-                        if(fenleiPage==0){
-                            $('#danxiang_me').css('display','none');
+                        if(arg['myPage']==0){
+                            $('#rank_'+arg['data_id']).css('display','none');
                         }
-                        fenleiPage++
+                        arg['myPage']++
                         var lis = [];
                         var postData={
                             action:'get_score_ranking',
                             _wpnonce:$('#inputRank').val(),
                             match_id:$.Request('match_id'),
-                            project_id:project_id,
-                            page:fenleiPage,
-                            lastItem:lastItem['danxiang']
+                            page:arg['myPage'],
                         }
-                        
-                        if(typeof(age_group)!='undefined'){
-                            postData.age_group=age_group;
+                        if(arg['myPage']>1){
+                            postData['lastItem']=lastItem['lastItem_'+arg['data_id']];
                         }
-                        $.post(window.admin_ajax+"?date="+new Date().getTime(),postData,function(res){
-                            var itemLen=res.data.info.length;
-                            lastItem['danxiang']=itemLen>0 ? res.data.info[itemLen-1] : {};
-                            if(res.success){ 
-                                if(res.data.my_ranking!=null){//我的成绩
-                                    var rows=res.data.my_ranking
-                                    var top3=rows.ranking<=3 ? "top3" : ''
-                                    var Html='<td>'
-                                                    +'<div class="nl-circle '+top3+'">'+rows.ranking+'</div>'
+                        if(arg['category_id']){
+                            postData['category_id']=arg['category_id'];
+                        }
+                        if(arg['project_id']){
+                            postData['project_id']=arg['project_id'];
+                        }
+                        if(arg['age_group']){
+                            postData['age_group']=arg['age_group'];
+                        }
+                        $.ajax({
+                            data:postData,
+                            success:function(res,ajaxStatu,xhr){
+                                console.log(res)
+                                isClick[arg['data_id']]=true
+                                if(res.success){ 
+
+                                    var itemLen=res.data.info.length;
+                                    lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
+                                    
+                                    if(res.data.my_ranking!=null){//我的成绩
+                                        var rows=res.data.my_ranking
+                                        var Html='<td>'
+                                                    +'<div class="nl-circle">'+rows.ranking+'</div>'
                                                 +'</td>'
                                                 +'<td><div class="table_content">'+rows.user_name+'</div></td>'
                                                 +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
                                                 +'<td><div class="table_content">'+rows.city+'</div></td>'
                                                 +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
                                                 +'<td><div class="table_content">'+rows.group+'</div></td>'
-                                    // $('#danxiang_me').html(Html)
-                                }
-                                $.each(res.data.info,function(index,value){
-                                    var top3=value.ranking<=3 ? 'top3' : '';
-                                    var nl_me='';
-                                    if(res.data.my_ranking!=null){
-                                        if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
-                                            nl_me='nl-me'
-                                            if(value.ranking!=1){
-                                                $('#danxiang_me').html(Html).css('display','table-row');
+                                    }
+                                    $.each(res.data.info,function(index,value){
+                                        var nl_me='';
+                                        if(res.data.my_ranking!=null){
+                                            if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
+                                                nl_me='nl-me'
+                                                if(value.ranking!=1){
+                                                    // $('#allRanking').css('display','table-row')
+                                                    $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
+                                                }
                                             }
-                                        }
-                                    }  
-                                    var dom='<tr class="'+nl_me+'">'
-                                                +'<td>'
-                                                    +'<div class="nl-circle '+top3+'">'+value.ranking+'</div>'
-                                                +'</td>'
-                                                +'<td><div class="table_content">'+value.user_name+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
-                                                +'<td><div class="table_content">'+value.city+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
-                                                +'<td><div class="table_content">'+value.group+'</div></td>'
-                                            +'</tr>'
-                                    lis.push(dom)                           
-                                })  
-                                if (res.data.info.length<10) {
-                                    next(lis.join(''),false)
+                                        }  
+                                        var dom='<tr class="'+nl_me+'">'
+                                                    +'<td>'
+                                                        +'<div class="nl-circle">'+value.ranking+'</div>'
+                                                    +'</td>'
+                                                    +'<td><div class="table_content">'+value.user_name+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.ID+'</div></td>'
+                                                    +'<td><div class="table_content">'+value.city+'</div></td>'
+                                                    +'<td><div class="table_content c_orange">'+value.score+'</div></td>'
+                                                    +'<td><div class="table_content">'+value.group+'</div></td>'
+                                                +'</tr>'
+                                        lis.push(dom)                           
+                                    })
+                                    if (res.data.info.length<10) {
+                                        next(lis.join(''),false)
+                                    }else{
+                                        next(lis.join(''),true)
+                                    }
                                 }else{
-                                    next(lis.join(''),true)
+                                    next(lis.join(''),false)
                                 }
-                            }else{
-                                next(lis.join(''),false)
                             }
                         }) 
                     }
-                });
+            })
         }
-        initDanxiang(0,$('.one-rank .classify-active').attr('data-post-id'))
-    })
-    $('body').click(function(e){
-        if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
-            $('.ul-select').removeClass('ul-select-show')
-        }
-    })
-    $('.classify-btn').click(function(){//选择比赛项目
-        var _this=$(this);
-        if(!_this.hasClass('classify-active')){
-            _this.parents('.btn-wrapper').find('.classify-btn').removeClass('classify-active');
-            _this.addClass('classify-active');
-            if(_this.parents('.btn-wrapper').hasClass('one-rank')){//单项排名
-                var id=_this.attr('data-post-id');
-                $('#flow-one').empty();
-                initDanxiang(0,id,$('#show_text').attr('data-group'))
-            }else if(_this.parents('.btn-wrapper').hasClass('all_rank')){//总排名
-                var id=_this.attr('data-post-id');
-                $('#flow').empty();
-                if(id=='0'){//个人排名
-                    initAllMy(0)
-                }else if(id=="1"){//战队排名
-
+        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group')})
+        $('body').click(function(e){
+            if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
+                $('.ul-select').removeClass('ul-select-show')
+            }
+        })
+        $('.classify-btn').click(function(){//选择比赛项目
+            var _this=$(this);
+            if(!_this.hasClass('classify-active')){
+                _this.parents('.btn-wrapper').find('.classify-btn').removeClass('classify-active');
+                _this.addClass('classify-active');
+                if(_this.parents('.btn-wrapper').hasClass('one_1')){//单项排名
+                    var id=_this.attr('data-post-id');
+                    $('#flow_1').empty();
+                    
+                pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group')})
+                    // initDanxiang(0,id,$('#show_text').attr('data-group'))
+                }else if(_this.parents('.btn-wrapper').hasClass('one_3')){//总排名
+                    var id=_this.attr('data-post-id');
+                    $('#flow_3').empty();
+                    if(id=='0'){//个人排名
+                        var html_='<td>名次</td>'
+                                +'<td>学员姓名</td>'
+                                +'<td><span>ID</span></td>'
+                                +'<td>城市</td>'
+                                +'<td><span>项目总分</span></td>'
+                                +'<td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>'
+                        $('#one_3_head').html(html_)
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null})
+                    }else if(id=="1"){//战队排名
+                        var html_='<td>名次</td>'
+                                +'<td>2018脑力世界杯战队名称</td>'
+                                +'<td><span>ID</span></td>'
+                                +'<td><span>总成绩</span></td>'
+                        $('#rank_3').css('display','none');
+                        $('#one_3_head').html(html_)
+                    }
+                }else{//分类排名
+                    var id=_this.attr('data-post-id');
+                    $('#flow_2').empty();
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:id,project_id:null,age_group:null})
                 }
-                // $('#flow').empty();
-                // initFenlei(0,id)
-            }else{//分类排名
-                var id=_this.attr('data-post-id');
-                $('#flow-fenlei').empty();
-                initFenlei(0,id)
             }
-        }
-    })
-    $('.show-type').click(function(){//下拉
-        var _this=$(this);
-        var select= $("#show_text").text()
-        var thisText=_this.text();
-        _this.parents('td').find('.ul-select').toggleClass("ul-select-show");
-        if(select!=thisText){
-            if(_this.attr('id')!='show-type' || !_this.attr('id')){
-                var data_group=_this.attr('data-group')
-                $('#flow-one').empty();
-                $('#show_text').text(thisText).attr('data-group',data_group)
-                initDanxiang(0,$('.one-rank .classify-active').attr('data-post-id'),data_group)
+        })
+        $('.show-type').click(function(){//下拉
+            var _this=$(this);
+            var select= $("#show_text").text()
+            var thisText=_this.text();
+            _this.parents('td').find('.ul-select').toggleClass("ul-select-show");
+            if(select!=thisText){
+                if(_this.attr('id')!='show-type' || !_this.attr('id')){
+                    var data_group=_this.attr('data-group')
+                    $('#flow_1').empty();
+                    $('#show_text').text(thisText).attr('data-group',data_group)
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group})
+                }
             }
-        }
+        })
     })
 })
 </script>
