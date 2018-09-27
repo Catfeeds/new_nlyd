@@ -189,6 +189,7 @@
     </div>
 </div>
 <input type="hidden" name="_wpnonce" id="inputRank" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
+<input type="hidden" name="_wpnonce" id="teamRank" value="<?=wp_create_nonce('student_get_team_ranking_code_nonce');?>">
 <script>
  
 jQuery(function($) { 
@@ -237,7 +238,7 @@ jQuery(function($) {
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).html(html)
             if(!isClick[data_id]){
-                var datas={data_id:data_id,myPage:0,category_id:null,project_id:null,age_group:null}
+                var datas={data_id:data_id,myPage:0,category_id:null,project_id:null,age_group:null,team:false}
                 if(data_id==2){
                     datas['category_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
                 }else if(data_id==1){
@@ -248,7 +249,7 @@ jQuery(function($) {
             }
         })
         
-        pagation= function(arg) {//总排名，个人成绩
+        pagation = function(arg) {//总排名，个人成绩
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
                     ,isAuto: false
@@ -257,33 +258,62 @@ jQuery(function($) {
                         if(arg['myPage']==0){
                             $('#rank_'+arg['data_id']).css('display','none');
                         }
+                        if(arg['data_id']==3){//总排名
+                            if(arg['team']){//战队
+                                var html_='<td>名次</td>'
+                                +'<td>2018脑力世界杯战队名称</td>'
+                                +'<td><span>ID</span></td>'
+                                +'<td><span>总成绩</span></td>'
+                            }else{//个人
+                                var html_='<td>名次</td>'
+                                +'<td>学员姓名</td>'
+                                +'<td><span>ID</span></td>'
+                                +'<td>城市</td>'
+                                +'<td><span>项目总分</span></td>'
+                                +'<td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>'
+                            }
+                            $('#one_3_head').html(html_)
+                        }
                         arg['myPage']++
                         var lis = [];
-                        var postData={
-                            action:'get_score_ranking',
-                            _wpnonce:$('#inputRank').val(),
-                            match_id:$.Request('match_id'),
-                            page:arg['myPage'],
+                        var postData={}
+                        if(!arg['team']){//不是战队列表
+                            postData={
+                                action:'get_score_ranking',
+                                _wpnonce:$('#inputRank').val(),
+                                match_id:$.Request('match_id'),
+                                page:arg['myPage'],
+                            }
+                            if(arg['category_id']){
+                                postData['category_id']=arg['category_id'];
+                            }
+                            if(arg['project_id']){
+                                postData['project_id']=arg['project_id'];
+                            }
+                            if(arg['age_group']){
+                                postData['age_group']=arg['age_group'];
+                            }
+                            if(arg['myPage']>1){
+                                postData['lastItem']=lastItem['lastItem_'+arg['data_id']];
+                            }
+                        }else{//战队
+                            postData={
+                                action:'teamRanking',
+                                _wpnonce:$('#teamRank').val(),
+                                match_id:$.Request('match_id'),
+                                page:arg['myPage'],
+                            }
+                            if(arg['myPage']>1){
+                                postData['ranking']=lastItem['lastItem_'+arg['data_id']];
+                            }
                         }
-                        if(arg['myPage']>1){
-                            postData['lastItem']=lastItem['lastItem_'+arg['data_id']];
-                        }
-                        if(arg['category_id']){
-                            postData['category_id']=arg['category_id'];
-                        }
-                        if(arg['project_id']){
-                            postData['project_id']=arg['project_id'];
-                        }
-                        if(arg['age_group']){
-                            postData['age_group']=arg['age_group'];
-                        }
+
                         $.ajax({
                             data:postData,
                             success:function(res,ajaxStatu,xhr){
                                 console.log(res)
                                 isClick[arg['data_id']]=true
                                 if(res.success){ 
-
                                     var itemLen=res.data.info.length;
                                     lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
                                     
@@ -334,7 +364,8 @@ jQuery(function($) {
                     }
             })
         }
-        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group')})
+
+        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group'),team:false})
         $('body').click(function(e){
             if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
                 $('.ul-select').removeClass('ul-select-show')
@@ -348,33 +379,19 @@ jQuery(function($) {
                 if(_this.parents('.btn-wrapper').hasClass('one_1')){//单项排名
                     var id=_this.attr('data-post-id');
                     $('#flow_1').empty();
-                    
-                pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group')})
-                    // initDanxiang(0,id,$('#show_text').attr('data-group'))
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group'),team:false})
                 }else if(_this.parents('.btn-wrapper').hasClass('one_3')){//总排名
                     var id=_this.attr('data-post-id');
                     $('#flow_3').empty();
                     if(id=='0'){//个人排名
-                        var html_='<td>名次</td>'
-                                +'<td>学员姓名</td>'
-                                +'<td><span>ID</span></td>'
-                                +'<td>城市</td>'
-                                +'<td><span>项目总分</span></td>'
-                                +'<td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>'
-                        $('#one_3_head').html(html_)
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null,team:false})
                     }else if(id=="1"){//战队排名
-                        var html_='<td>名次</td>'
-                                +'<td>2018脑力世界杯战队名称</td>'
-                                +'<td><span>ID</span></td>'
-                                +'<td><span>总成绩</span></td>'
-                        $('#rank_3').css('display','none');
-                        $('#one_3_head').html(html_)
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null,team:true})
                     }
                 }else{//分类排名
                     var id=_this.attr('data-post-id');
                     $('#flow_2').empty();
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:id,project_id:null,age_group:null})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:id,project_id:null,age_group:null,team:false})
                 }
             }
         })
@@ -388,7 +405,7 @@ jQuery(function($) {
                     var data_group=_this.attr('data-group')
                     $('#flow_1').empty();
                     $('#show_text').text(thisText).attr('data-group',data_group)
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group,team:false})
                 }
             }
         })
