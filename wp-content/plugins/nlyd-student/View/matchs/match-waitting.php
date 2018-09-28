@@ -90,8 +90,8 @@
         $(window).on("focus", function(e) {
             var leavePageWaitting= $.GetSession('leavePageWaitting','1');
             if(leavePageWaitting && leavePageWaitting['match_id']===$.Request('match_id')){
-                window.location.reload()
                 $.DelSession('leavePageWaitting')
+                window.location.reload()
             }
         });
         <?php endif;?>

@@ -418,6 +418,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
+                clearTimeout(timer);
                 submit(0,3)
             }, 1000);
         }
