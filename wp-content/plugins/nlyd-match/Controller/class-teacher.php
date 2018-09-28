@@ -57,9 +57,9 @@ class Teacher
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.display_name,b.user_login,b.user_email,a.id,a.coach_id,a.read,a.memory,a.compute
-                    FROM {$wpdb->prefix}users b  
-                    LEFT JOIN {$wpdb->prefix}coach_skill a ON a.coach_id = b.ID 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,b.user_email,a.id,a.coach_id,a.read,a.memory,a.compute  
+                    FROM {$wpdb->prefix}coach_skill a  
+                    LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
                     WHERE a.coach_id > 0 
                     LIMIT {$start},{$pageSize}";
         $rows = $wpdb->get_results($sql, ARRAY_A);
@@ -79,13 +79,6 @@ class Teacher
 
             <a href="<?=admin_url('admin.php?page=teacher-add')?>" class="page-title-action">添加教练</a>
 
-
-<!--                <p class="search-box">-->
-<!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-<!--                    <input type="search" id="user-search-input" name="s" value="">-->
-<!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
-<!--                </p>-->
-
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="31db78f456"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php?paged=1">
                 <div class="tablenav top">
 
@@ -96,6 +89,11 @@ class Teacher
 <!--                        </select>-->
 <!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
                     </div>
+                    <p class="search-box">
+                        <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                        <input type="search" id="user-search-input" name="s" value="">
+                        <input type="submit" id="search-submit" class="button" value="搜索用户">
+                    </p>
                     <div class="tablenav-pages one-page">
                         <?=$pageHtml?>
                     </div>
@@ -121,7 +119,16 @@ class Teacher
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                    <?php foreach ($rows as $row){ ?>
+                    <?php
+                    foreach ($rows as $row){
+                        //有多少学员
+                        $student_num = $wpdb->get_var("SELECT COUNT(id) FROM `{$wpdb->prefix}my_coach` WHERE coach_id={$row['coach_id']}");
+                        $student_num = $student_num > 0 ? $student_num : 0;
+                        //教练信息
+
+                        //有多少类别
+
+                        ?>
                         <tr id="user-3">
                             <th scope="row" class="check-column">
                                 <label class="screen-reader-text" for="user_3">选择15982345102</label>
@@ -146,7 +153,7 @@ class Teacher
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="name column-name" data-colname="查看学员">
-                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?>" aria-label="">查看学员</a></span>
+                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'] ?>" aria-label=""><?=$student_num?></a></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
