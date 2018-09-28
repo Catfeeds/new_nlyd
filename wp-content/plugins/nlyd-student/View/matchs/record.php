@@ -252,7 +252,7 @@ jQuery(function($) {
                         if(arg['data_id']==3){//总排名
                             if(arg['team']){//战队
                                 var html_='<td>名次</td>'
-                                +'<td>2018脑力世界杯战队名称</td>'
+                                +'<td>战队名称</td>'
                                 +'<td><span>ID</span></td>'
                                 +'<td><span>总成绩</span></td>'
                             }else{//个人

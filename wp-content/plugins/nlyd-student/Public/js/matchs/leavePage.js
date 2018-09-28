@@ -30,10 +30,10 @@
                     var leveTimes=parseInt(leavePage['leavePage'])
                     leavePage['Time'][leveTimes-1]['back']=new Date().Format("yyyy-MM-dd hh:mm:ss")
                     jQuery.SetSession('leavePage',leavePage)
-                    if(leveTimes>0 && leveTimes<3){
-                        jQuery.alerts('第'+leveTimes+'次离开考试页面,到达2次自动提交答题')
+                    if(leveTimes>0 && leveTimes<1){
+                        jQuery.alerts('第'+leveTimes+'次离开考试页面,到达1次自动提交答题')
                     }
-                    if(leveTimes>=2){
+                    if(leveTimes>=1){
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
                             submit();
