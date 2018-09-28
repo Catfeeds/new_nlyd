@@ -841,7 +841,10 @@ class Match_student {
                                     <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                                     <input id="cb-select-all-1" type="checkbox">
                                 </td>
-                                <th scope="col" id="ID" class="manage-column column-ID">名次</th>
+                                <th scope="col" id="ID" class="manage-column column-username column-primary">
+
+                                        <span>名次</span>
+                                </th>
                                 <th scope="col" id="real_name" class="manage-column column-real_name">战队</th>
                                 <th scope="col" id="sex" class="manage-column column-sex">ID</th>
                                 <th scope="col" id="birthday" class="manage-column column-birthday">总成绩</th>
@@ -854,7 +857,10 @@ class Match_student {
                                         <label class="screen-reader-text" for="user_13"></label>
                                         <input type="checkbox" name="users[]" id="" class="subscriber" value="">
                                     </th>
-                                    <td class="name column-ID" data-colname="名次"><span aria-hidden="true"><?=$raV['ranking']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="username column-username has-row-actions column-primary" data-colname="名次">
+                                        <strong><?=$raV['ranking']?></strong><br>
+                                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                                    </td>
                                     <td class="name column-real_name" data-colname="战队"><span aria-hidden="true"><?=$raV['team_name']?></span><span class="screen-reader-text"></span></td>
                                     <td class="name column-sex" data-colname="ID"><span aria-hidden="true"><?=$raV['team_id']?></span><span class="screen-reader-text">-</span></td>
                                     <td class="name column-birthday" data-colname="总成绩"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
@@ -867,7 +873,8 @@ class Match_student {
                                     <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                                     <input id="cb-select-all-2" type="checkbox">
                                 </td>
-                                <th scope="col" class="manage-column column-ID">名次</th>
+
+                                <th scope="col" class="manage-column column-ID column-primary">名次</th>
                                 <th scope="col" class="manage-column column-real_name">战队</th>
                                 <th scope="col" class="manage-column column-sex">ID</th>
                                 <th scope="col" class="manage-column column-birthday">总成绩</th>
@@ -884,7 +891,7 @@ class Match_student {
                                     <input id="cb-select-all-1" type="checkbox">
                                 </td>
 
-                                <th scope="col" id="ID" class="manage-column column-ID">学员ID</th>
+                                <th scope="col" id="ID" class="manage-column column-ID column-primary">学员ID</th>
                                 <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
                                 <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                                 <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
@@ -926,7 +933,10 @@ class Match_student {
                                         <input type="checkbox" name="users[]" id="" class="subscriber" value="">
                                     </th>
 
-                                    <td class="name column-ID" data-colname="学员ID"><span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="name column-ID column-primary" data-colname="学员ID">
+                                        <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
+                                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                                    </td>
                                     <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
                                     <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
                                     <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
@@ -962,7 +972,7 @@ class Match_student {
                                     <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                                     <input id="cb-select-all-2" type="checkbox">
                                 </td>
-                                <th scope="col" class="manage-column column-ID">学员ID</th>
+                                <th scope="col" class="manage-column column-ID column-primary">学员ID</th>
                                 <th scope="col" class="manage-column column-real_name">姓名</th>
                                 <th scope="col" class="manage-column column-sex">性别</th>
                                 <th scope="col" class="manage-column column-birthday">年龄</th>
@@ -1081,7 +1091,7 @@ class Match_student {
                 $result[$k]['address'] = $city;
                 //$list[$k]['score'] = $val['my_score'];
                 $result[$k]['ageGroup'] = $group;
-                $result[$k]['user_age'] = $age;
+                $result[$k]['age'] = $age;
                 $result[$k]['sex'] = $user_info['user_gender'] ? $user_info['user_gender'] : '-';
                 $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
                 $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;

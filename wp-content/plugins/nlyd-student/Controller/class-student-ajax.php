@@ -3058,7 +3058,7 @@ class Student_Ajax
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         if($page < 1) $page = 1;
-        $pageSize = 1;
+        $pageSize = 10;
         $start = ($page-1)*$pageSize;
 
         //战队排名

@@ -49,8 +49,13 @@ if(!class_exists('MatchController')){
             return $actions;
         }
         public function main(){
-            //屏蔽非分词类型的文章，例如文章post，上面的英文就是这个意思
+
+            //屏蔽文章类型的不必要操作按键
             add_action('post_row_actions', array($this,'Yct_Row_actions'), 10, 2);
+
+            //用户新增时添加html
+            add_filter('user_contactmethods',array($this,'add_input_html'));
+
 
             //自定义文章页
             add_action( 'init', array($this,'create_match_view'));
@@ -117,6 +122,12 @@ if(!class_exists('MatchController')){
 
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
+        }
+
+
+        public function add_input_html($user_contactmethods){
+            $user_contactmethods['user_mobile'] = '用户手机';
+            return $user_contactmethods;
         }
 
         /**
@@ -426,7 +437,9 @@ if(!class_exists('MatchController')){
          */
         public function add_new_match_columns($columns){
             if($this->post_type == 'team'){
-                $columns['team_student'] = '查看成员';
+                $columns['team_student'] = '战队成员';
+                $columns['into_apply_num'] = '入队申请';
+                $columns['out_apply_num'] = '退队申请';
                 return $columns;
             }elseif ($this->post_type == 'match'){
                 unset( $columns['date'] );
@@ -601,8 +614,25 @@ if(!class_exists('MatchController')){
                     echo $str;
                     break;
                 case 'team_student':
-                    //删除比赛必须要先关闭比赛
-                    echo '<a href="?post_type=team&page=team-student&id='.$id.'" class="">查看成员</a>';
+                    //删除比赛必须要先关闭比赛,每个战队的成员数量
+                    $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
+                    LEFT JOIN {$wpdb->users} AS u ON mt.user_id=u.ID WHERE mt.status=2 AND mt.team_id={$id} AND u.ID!=''");
+                    $student_num = $student_num ? $student_num : 0;
+                    echo '<a href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=1').'" class="">'.$student_num.'人</a>';
+                    break;
+                case 'into_apply_num':
+                    //入队申请
+                    $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
+                    LEFT JOIN {$wpdb->users} AS u  ON mt.user_id=u.ID WHERE mt.status=1 AND mt.team_id={$id} AND u.ID!=''");
+                    $student_num = $student_num ? $student_num : 0;
+                    echo '<a href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=2').'" class="">'.$student_num.'人</a>';
+                    break;
+                case 'out_apply_num':
+                    //退队申请
+                    $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
+                    LEFT JOIN {$wpdb->users} AS u  ON mt.user_id=u.ID WHERE status=-1 AND team_id={$id} AND u.ID!=''");
+                    $student_num = $student_num ? $student_num : 0;
+                    echo '<a href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=3').'" class="">'.$student_num.'人</a>';
                     break;
                 default:
                     break;

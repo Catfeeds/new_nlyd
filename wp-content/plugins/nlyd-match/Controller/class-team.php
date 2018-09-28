@@ -28,12 +28,62 @@ if(!class_exists('Team')){
         public function student(){
             $id = intval($_GET['id']);
             $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+            //状态
+            $type = isset($_GET['team_type']) ? intval($_GET['team_type']) : 1;
+            $user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : 1; //成员类型 1=学生 2=教练
+
+            global $wpdb;
+            //每个状态的数据数量
+            $member_num = 0; // 所有战队成员数量
+            $into_apply_num = 0; //申请入队数量
+            $out_apply_num = 0; //申请退队数量
+            $refuse_num = 0; //已拒绝数量
+            $out_num = 0; //已退出数量
+            $match_num = 0; //教练成员数量
+            $student_num = 0; //学生成员数量
+            $num_sql = "SELECT COUNT(mt.id) FROM {$wpdb->prefix}match_team AS mt right JOIN {$wpdb->users} AS u ON u.ID=mt.user_id WHERE team_id={$id} AND ";
+
+            $member_num_val = $wpdb->get_var($num_sql."mt.status=2 AND u.ID!=''");
+            $into_apply_num_val = $wpdb->get_var($num_sql."mt.status=1 AND u.ID != ''");
+            $out_apply_num_val = $wpdb->get_var($num_sql."mt.status=-1 AND u.ID != ''");
+            $refuse_num_val = $wpdb->get_var($num_sql."mt.status=-2 AND u.ID != ''");
+            $out_num_val = $wpdb->get_var($num_sql."mt.status=-3 AND u.ID != ''");
+            $member_num_val && $member_num = $member_num_val;
+            $into_apply_num_val && $into_apply_num = $into_apply_num_val;
+            $out_apply_num_val && $out_apply_num = $out_apply_num_val;
+            $refuse_num_val && $refuse_num = $refuse_num_val;
+            $out_num_val && $out_num = $out_num_val;
+            $user_type_where = '';
+            switch ($type){
+                case 1://战队成员
+                    $status = 2;
+                    $user_type_where = ' AND user_type='.$user_type;
+                    $match_num_val = $wpdb->get_var($num_sql."mt.status=2 AND user_type=2 AND u.ID != ''");
+                    $student_num_val = $wpdb->get_var($num_sql."mt.status=2 AND user_type=1 AND u.ID != ''");
+                    $match_num_val && $match_num = $match_num_val;
+                    $student_num_val && $student_num = $student_num_val;
+                    break;
+                case 2://入队申请
+                    $status = 1;
+                    break;
+                case 3://退队申请
+                    $status = -1;
+                    break;
+                case 4://已拒绝
+                    $status = -2;
+                    break;
+                case 5://已退出
+                    $status = -3;
+                    break;
+                default:
+                    exit('状态参数错误');
+            }
+
             $page < 1 && $page = 1;
             $pageSize = 20;
             $start = ($page-1)*$pageSize;
-            global $wpdb;
             $sql = 'SELECT SQL_CALC_FOUND_ROWS 
-            m.id,u.user_login,u.display_name,u.user_email,u.user_mobile,m.status,
+            m.id,u.user_login,u.display_name,u.user_email,u.user_mobile,m.status,m.user_id,
             CASE m.status WHEN -3 THEN "'. "<span style='color:#6a1c25'>已退出</span>" .'" 
             WHEN -2 THEN "'. "<span style='color:rgba(191,34,49,0.91)'>已拒绝</span>" .'" 
             WHEN -1 THEN "'. "<span style='color:#61655b'>退队申请</span>" .'" 
@@ -42,7 +92,7 @@ if(!class_exists('Team')){
             END AS status_title 
             FROM '.$wpdb->prefix.'match_team AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
-            WHERE m.team_id='.$id.' AND m.user_type=1 AND m.status!=-2 
+            WHERE m.team_id='.$id.' AND m.status='.$status.$user_type_where.' AND u.ID !=""  
             ORDER BY m.status ASC 
             LIMIT '.$start.','.$pageSize;
             $rows = $wpdb->get_results($sql, ARRAY_A);
@@ -56,6 +106,7 @@ if(!class_exists('Team')){
                 'total' => $pageAll,
                 'current' => $page
             ));
+
         ?>
             <div class="wrap">
                 <h1 class="wp-heading-inline"><?=get_post($id)->post_title?>-战队成员</h1>
@@ -63,12 +114,25 @@ if(!class_exists('Team')){
 
                 <form method="get" onsubmit="return false;">
 
-<!--                    <p class="search-box">-->
-<!--                        <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-<!--                        <input type="search" id="user-search-input" name="s" value="">-->
-<!--                        <input type="submit" id="" class="button" value="搜索用户"></p>-->
 
                     <input type="hidden" id="_wpnonce" name="_wpnonce" value="31db78f456"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+
+                        <br class="clear">
+                        <ul class="subsubsub">
+                            <li class="member"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=1')?>" class="<?=$type === 1 ? 'current' : ''?>" aria-current="page">战队成员<span class="count">（<?=$member_num?>）</span></a> |</li>
+                            <li class="into-apply"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=2')?>" class="<?=$type === 2 ? 'current' : ''?>">入队申请<span class="count">（<?=$into_apply_num?>）</span></a> |</li>
+                            <li class="out-apply"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=3')?>" class="<?=$type === 3 ? 'current' : ''?>">退队申请<span class="count">（<?=$out_apply_num?>）</span></a> |</li>
+                            <li class="already_refuse"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=4')?>" class="<?=$type === 4 ? 'current' : ''?>">已拒绝<span class="count">（<?=$refuse_num?>）</span></a>|</li>
+                            <li class="already_out"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=5')?>" class="<?=$type === 5 ? 'current' : ''?>">已退出<span class="count">（<?=$out_num?>）</span></a></li>
+                        </ul>
+                        <br class="clear">
+                        <?php if($type === 1){ ?>
+                        <ul class="subsubsub">
+                            <li class="into-apply"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=1&user_type=1')?>" class="<?=$type === 1 && $user_type === 1 ? 'current' : ''?>">学生<span class="count">（<?=$student_num?>）</span></a> |</li>
+                            <li class="member"><a href="<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=1&user_type=2')?>"  class="<?=$type === 1 && $user_type === 2 ? 'current' : ''?>" aria-current="page">教练<span class="count">（<?=$match_num?>）</span></a> |</li>
+                        </ul>
+                        <br class="clear">
+                        <?php } ?>
 
                         <div class="alignleft actions bulkactions">
                             <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
@@ -80,6 +144,11 @@ if(!class_exists('Team')){
                             </select>
                             <input type="submit" id="doaction" class="button action  all-btn" value="应用">
                         </div>
+                        <p class="search-box">
+                            <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                            <input type="search" id="user-search-input" name="s" value="">
+                            <input type="submit" id="" class="button" value="搜索用户">
+                        </p>
 
                         <div class="tablenav-pages one-page">
                             <?=$pageHtml?>
@@ -98,16 +167,22 @@ if(!class_exists('Team')){
                                 </a>
                             </th>
                             <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                            <th scope="col" id="status" class="manage-column column-status status">状态</th>
                             <th scope="col" id="email" class="manage-column column-email sortable desc">
                                 <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                             </th>
                             <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
-                            <th scope="col" id="status" class="manage-column column-status status">状态</th>
+                            <th scope="col" id="age" class="manage-column column-age">年龄</th>
+                            <th scope="col" id="sex" class="manage-column column-age">性别</th>
                         </tr>
                         </thead>
 
                         <tbody id="the-list" data-wp-lists="list:user">
-                            <?php foreach ($rows as $row){ ?>
+                            <?php
+                                foreach ($rows as $row){
+                                    $usermeta = get_user_meta($row['user_id']);
+                                    $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
+                                ?>
 
                                 <tr id="user-5" data-id="<?=$row['id']?>">
                                     <th scope="row" class="check-column">
@@ -131,10 +206,13 @@ if(!class_exists('Team')){
                                         </div>
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
-                                    <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=str_replace(', ','',$row['display_name'])?></span><span class="screen-reader-text">未知</span></td>
+                                    <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span><span class="screen-reader-text">未知</span></td>
+
+                                    <td class="status column-status status" data-colname="状态"><?=$row['status_title']?></td>
                                     <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
                                     <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                                    <td class="status column-status status" data-colname="状态"><?=$row['status_title']?></td>
+                                    <td class="mobile column-age" data-colname="年龄"><?=isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '-'?></td>
+                                    <td class="mobile column-sex" data-colname="性别"><?=isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '-'?></td>
 
                                 </tr>
                             <?php } ?>
@@ -150,11 +228,13 @@ if(!class_exists('Team')){
                                 <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                             </th>
                             <th scope="col" class="manage-column column-name">姓名</th>
+                            <th scope="col" class="manage-column column-status status">状态</th>
                             <th scope="col" class="manage-column column-email sortable desc">
                                 <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
                             </th>
                             <th scope="col" class="manage-column column-mobile">手机</th>
-                            <th scope="col" class="manage-column column-status status">状态</th>
+                            <th scope="col" class="manage-column column-age">年龄</th>
+                            <th scope="col" class="manage-column column-sex">性别</th>
 
                         </tr>
                         </tfoot>
