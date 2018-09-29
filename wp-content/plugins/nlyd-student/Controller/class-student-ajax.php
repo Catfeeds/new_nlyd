@@ -119,7 +119,8 @@ class Student_Ajax
             $sql = "select user_id,my_score from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} order by my_score desc,surplus_time desc limit {$start},{$pageSize} ";
             //print_r($sql);
             $rows = $wpdb->get_results($sql,ARRAY_A);
-        }else{
+        }
+        else{
 
             $where = " WHERE a.match_id = {$_POST['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
             $age_where = '';
@@ -161,31 +162,32 @@ class Student_Ajax
                 $left_where .= " and c.match_more = {$_POST['match_more']} ";
             }
 
-            $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
-                    FROM(
-                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
-                        FROM `{$wpdb->prefix}order` a 
-                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
-                        #where a.match_id = 56329
-                        {$where}
-                        GROUP BY user_id,project_id
-                    ) x
-                    left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
-                    {$age_where}
-                    GROUP BY user_id
-                    ORDER BY my_score DESC,surplus_time DESC
-                    limit {$start},{$pageSize}
-                    ";  
+            $sql3 = "SELECT x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
+                        FROM(
+                            SELECT a.user_id,a.match_id,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time 
+                            FROM `{$wpdb->prefix}order` a 
+                            LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
+                            #where a.match_id = 56329
+                            {$where}
+                            GROUP BY user_id,project_id
+                        ) x
+                        left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
+                        {$age_where}
+                        GROUP BY user_id
+                        ORDER BY my_score DESC,surplus_time DESC,x.user_id DESC";
             
-            /*if($current_user->ID == 66){
+            /*if($current_user->ID == 63){
                 print_r($sql);
             }*/
-            $rows = $wpdb->get_results($sql,ARRAY_A);
+            $rows = $wpdb->get_results($sql3,ARRAY_A);
             //print_r($rows);
-            $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+            
         }
-        $maxPage = ceil( ($total['total']/$pageSize) );
-        if($_POST['page'] > $maxPage && count($rows) != 0) wp_send_json_error(array('info'=>'已经到底了'));
+        $total = count($rows);
+        $remainder = $total%$pageSize;
+        $maxPage = ceil($total/$pageSize);
+
+        if($_POST['page'] > $maxPage && $total != 0) wp_send_json_error(array('info'=>'已经到底了'));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无列表信息'));
 
@@ -234,12 +236,7 @@ class Student_Ajax
                         $list[$k]['ranking'] = $last['ranking'];
                     }else if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
                         $list[$k]['ranking'] = $last['ranking'];
-                    }/*else{
-                        if($current_user->ID == 66){
-                            var_dump($my_score == $last['score']);
-                            var_dump($surplus_time == $last['surplus_time']);
-                        }
-                    }*/
+                    }
                 }
 
                 if($val['user_id'] == $current_user->ID){
@@ -247,8 +244,13 @@ class Student_Ajax
                 }
             }
         }
+        if($maxPage == $_POST['page']){
+            $pageSize = $remainder;
+        }  
+            
+        $list2 = array_slice($list,$start,$pageSize);
 
-        wp_send_json_success(array('info'=>$list,'my_ranking'=>$my_ranking));
+        wp_send_json_success(array('info'=>$list2,'my_ranking'=>$my_ranking));
 
     }
 
@@ -1385,12 +1387,13 @@ class Student_Ajax
             $order = ' b.entry_end_time asc ';
         }
         else{
-            $map[] = " b.match_status != -3  and b.match_status != 1 ";    //近期
+            $map[] = " (b.match_status = -2  or b.match_status = 2) ";    //比赛
             $match_type = 'recent';
             $order = ' b.match_start_time asc ';
         }
         //获取最新比赛倒计时
         $sql1 = "select match_start_time from {$wpdb->prefix}match_meta where match_status = -2 order by match_start_time desc ";
+
         $row = $wpdb->get_row($sql1);
         if(!empty($row)){
             $start_time = $row->match_start_time;
@@ -1414,6 +1417,10 @@ class Student_Ajax
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
         //print_r($sql);
+        /*if($current_user->ID == 66){
+                print_r($sql);
+        }*/
+        
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -1426,6 +1433,11 @@ class Student_Ajax
             //修改比赛状态
             $match = get_match_end_time($val['ID']);
             $end_time = end($match)['project_end_time'];
+            /*if($current_user->ID == 66){
+                print_r($val);
+                var_dump($end_time);
+                echo "<hr/>";
+            }*/
             if(strtotime($val['entry_end_time']) < get_time() && get_time() < strtotime($val['match_start_time'])){
                 $val['match_status'] = $match_status = -2;  //等待开赛
             }elseif (get_time() < strtotime($val['entry_end_time'])){
@@ -1435,6 +1447,8 @@ class Student_Ajax
             }else{
                 $val['match_status'] = $match_status = 2;   //比赛中
             }
+
+            
             $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
 
             //获取报名人数
