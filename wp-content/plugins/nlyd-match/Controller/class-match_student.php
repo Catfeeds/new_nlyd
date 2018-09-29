@@ -1097,7 +1097,10 @@ class Match_student {
                 $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $result[$k]['my_score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
 
-                $result[$k]['ranking'] = $start+$k+1;
+                if($val['my_score'] > 0){
+                    ++$start;
+                }
+                $result[$k]['ranking'] = $start;
                 if($k != 0){
                     if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
                         $result[$k]['ranking'] = $result[$k-1]['ranking'];
