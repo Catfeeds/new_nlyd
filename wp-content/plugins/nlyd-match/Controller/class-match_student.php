@@ -1177,7 +1177,7 @@ class Match_student {
             $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
                     LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
                     LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
-                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title!=''";
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title=!''";
             $result = $wpdb->get_results($sql, ARRAY_A);
             //处理每个战队的成员
             $teamsUsers = []; //每个战队的每个成员
@@ -1197,7 +1197,7 @@ class Match_student {
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
                 $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,MAX(created_microtime) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
                           LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                           WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
                           GROUP BY mq.project_id,mq.user_id) AS child  
