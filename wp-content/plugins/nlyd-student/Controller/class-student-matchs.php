@@ -472,7 +472,18 @@ class Student_Matchs extends Student_Home
         $data['match_status'] = $this->match['match_status'];
         $data['next_project'] = $this->next_project;
         $data['current_project'] = $this->current_project;
-        $data['count_down'] = $this->current_project['project_end_time']-get_time();
+
+        if($this->redis->get('start_count_down'.$current_user->ID)){
+            $data['count_down'] = $this->redis->get('start_count_down'.$current_user->ID)-get_time();
+        }else{
+
+            $count_down = $this->current_project['project_end_time']+rand(1,10);
+            $data['count_down'] = $count_down-get_time();
+
+            $this->redis->setex('start_count_down'.$current_user->ID,$count_down,$count_down);
+        }
+        //$data['count_down'] = $this->current_project['project_end_time']-get_time();
+
         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
 
         if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
@@ -558,7 +569,7 @@ class Student_Matchs extends Student_Home
 
             }else{
 
-                $this->get_404(array('message'=>'非法操作','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                $this->get_404(array('message'=>'该轮比赛已开始,尽快返回等待页','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
                 return;
             }
 
@@ -730,19 +741,18 @@ class Student_Matchs extends Student_Home
             }
 
         }
-        var_dump($this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time());
         //var_dump(date_i18n('H:i:s',$this->project_end_time));
         //var_dump($this->current_project);
         $data = array(
             'questions'=>$question,
             'match_title'=>$this->match_title,
             'match_more_cn'=>chinanum($this->current_more),
-            'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time()+rand(1,10),
+            'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time(),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
             'answer_total'=>isset($answer_total) ? $answer_total : 1,
         );
-        var_dump($data);
+        //var_dump($data);
         //$data['count_down'] = 3000;
 
         if(in_array($this->project_alias,array('zxss','kysm'))){
