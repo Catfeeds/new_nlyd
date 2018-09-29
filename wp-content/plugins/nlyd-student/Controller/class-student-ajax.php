@@ -225,22 +225,25 @@ class Student_Ajax
                 ///////
                 $my_score = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $surplus_time = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
-                if($k != 0){
-                    if(($my_score == $rows[$k-1]['my_score'] && $surplus_time == $rows[$k-1]['surplus_time']) || ($my_score == 0 &&  $rows[$k-1]['my_score'] == 0)){
-                        $list[$k]['ranking'] = $list[$k-1]['ranking'];
-                    }
-                }
-                if( !empty($_POST['lastItem']) ){
-                    $last = $_POST['lastItem'];
-                    if($my_score == 0 && $my_score == $last['score']){
-                        $list[$k]['ranking'] = $last['ranking'];
-                    }else if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
-                        $list[$k]['ranking'] = $last['ranking'];
-                    }
-                }
+                if($val['my_score']==0){
 
-                if($val['user_id'] == $current_user->ID){
-                    $my_ranking = $list[$k];
+                    if($k != 0){
+                        if(($my_score == $rows[$k-1]['my_score'] && $surplus_time == $rows[$k-1]['surplus_time']) || ($my_score == 0 &&  $rows[$k-1]['my_score'] == 0)){
+                            $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                        }
+                    }
+                    if( !empty($_POST['lastItem']) ){
+                        $last = $_POST['lastItem'];
+                        if($my_score == 0 && $my_score == $last['score']){
+                            $list[$k]['ranking'] = $last['ranking'];
+                        }else if($my_score == $last['score'] && $surplus_time == $last['surplus_time']){
+                            $list[$k]['ranking'] = $last['ranking'];
+                        }
+                    }
+
+                    if($val['user_id'] == $current_user->ID){
+                        $my_ranking = $list[$k];
+                    }
                 }
             }
         }

@@ -62,8 +62,7 @@ jQuery(function($) {
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>;//程序获取时间
-    showTime=function(){
-        
+    showTime=function(){  
         if(!stop){
             _count_time--
         }
@@ -81,6 +80,7 @@ jQuery(function($) {
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }
+                
                 if(ajaxData.length%nanduLen==0){
                     nandu++
                 }
@@ -96,6 +96,8 @@ jQuery(function($) {
                     timer=setTimeout("showTime()",1000);
                 }
             }
+            
+
     }  
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
@@ -299,7 +301,6 @@ jQuery(function($) {
                     $('.count_downs').removeClass('hide')
                 }, flashTime*1000);
             }
-            
             //计时器
             _count_time=answerTime
             showTime()
@@ -315,7 +316,6 @@ $('#selectWrapper .fastScan-item').each(function(){
             var isFalse=true;
             if(!_this.hasClass('noClick')){
                 var text=_this.text()
-                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
                 ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
                 if(text==ajaxData[ajaxData.length-1].rights){//选择正确
                     ajaxData[ajaxData.length-1].isRight=true;
@@ -325,7 +325,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                     ajaxData[ajaxData.length-1].isRight=false;
                     _this.addClass('error-fastScan')
                 }
-                
+                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }

@@ -460,7 +460,7 @@ class Student_Matchs extends Student_Home
 
         /*print_r($this->next_project);
         print_r($this->current_project);*/
-
+        //var_dump($this->current_project);
 
         //获取本轮比赛答案是否提交
         $sql = "select my_answer,answer_status from {$wpdb->prefix}match_questions where match_id = {$this->match_id} and project_id = {$this->current_project['project_id']} and match_more = {$this->current_project['match_more']}";
@@ -473,15 +473,20 @@ class Student_Matchs extends Student_Home
         $data['next_project'] = $this->next_project;
         $data['current_project'] = $this->current_project;
 
+        //$this->redis->delete('start_count_down'.$current_user->ID);
         if($this->redis->get('start_count_down'.$current_user->ID)){
+
             $data['count_down'] = $this->redis->get('start_count_down'.$current_user->ID)-get_time();
+
         }else{
 
             $count_down = $this->current_project['project_end_time']+rand(1,10);
             $data['count_down'] = $count_down-get_time();
 
-            $this->redis->setex('start_count_down'.$current_user->ID,$count_down,$count_down);
+            $this->redis->setex('start_count_down'.$current_user->ID.'',$data['count_down'],$count_down);
         }
+
+
         //$data['count_down'] = $this->current_project['project_end_time']-get_time();
 
         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
@@ -1159,6 +1164,16 @@ class Student_Matchs extends Student_Home
         $end_time = $this->current_project['project_start_time'] + $this->default_count_down;
         //print_r(date_i18n('Y-m-d H:i:s',$end_time));
 
+        //$this->redis->delete('answer_log'.$current_user->ID);
+        if($this->redis->get('answer_log'.$current_user->ID)){
+            $next_count_down = $this->redis->get('answer_log'.$current_user->ID)-get_time();
+           // var_dump($next_count_down);
+        }else{
+            $down = $this->current_project['project_end_time']+rand(1,10);
+
+            $this->redis->setex('answer_log'.$current_user->ID,$down-get_time(),$down);
+            $next_count_down = $down-get_time();
+        }
         $data = array(
             'project_alias'=>$this->project_alias,
             'next_type'=>$next_type,

@@ -462,19 +462,19 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input date-picker" id="match_start_time" placeholder="比赛时间">
+                <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
         <!--<div class="layui-form-item">
             <label class="layui-form-label">报名开始时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?/*=$this->meta['entry_start_time']*/?>" name="match[entry_start_time]" class="layui-input date-picker" id="entry_start_time" placeholder="报名开始时间">
+                <input type="text" value="<?/*=$this->meta['entry_start_time']*/?>" name="match[entry_start_time]" class="layui-input date-picker" readonly  id="entry_start_time" placeholder="报名开始时间">
             </div>
         </div>-->
         <div class="layui-form-item">
             <label class="layui-form-label">报名结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" id="entry_end_time" placeholder="报名结束时间">
+                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
             </div>
         </div>
         <div class="layui-form-item">
@@ -624,7 +624,7 @@ class Match
                         <input class="layui-input" type="text" name="match[match_project][<?=$k?>][match_more]" value="<?=!empty($v['match_more']) ? $v['match_more'] : '';?>" placeholder="比赛轮数"/>
                     </div>
                     <div class="layui-input-inline">
-                        <input class="layui-input date-picker" type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=!empty($v['project_start_time']) ? $v['project_start_time'] : '';?>" id="id<?=$k?>" placeholder="开始时间"/>
+                        <input class="layui-input date-picker" readonly  type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=!empty($v['project_start_time']) ? $v['project_start_time'] : '';?>" id="id<?=$k?>" placeholder="开始时间"/>
                     </div>
                     <div class="layui-input-inline">
                         <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_washing_out]" value="<?=!empty($v['project_washing_out']) ? $v['project_washing_out'] : '';?>" placeholder="淘汰率或淘汰人数"/>
