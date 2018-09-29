@@ -730,18 +730,19 @@ class Student_Matchs extends Student_Home
             }
 
         }
+        var_dump($this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time());
         //var_dump(date_i18n('H:i:s',$this->project_end_time));
         //var_dump($this->current_project);
         $data = array(
             'questions'=>$question,
             'match_title'=>$this->match_title,
             'match_more_cn'=>chinanum($this->current_more),
-            'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time(),
+            'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time()+rand(1,10),
             'project_title'=>$this->project_title,
             'project_alias'=>$this->project_alias,
             'answer_total'=>isset($answer_total) ? $answer_total : 1,
         );
-        //var_dump($data);
+        var_dump($data);
         //$data['count_down'] = 3000;
 
         if(in_array($this->project_alias,array('zxss','kysm'))){

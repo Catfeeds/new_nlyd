@@ -100,9 +100,9 @@ class Student_Ajax
      */
     public function get_score_ranking(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         //获取当前项目排名
         global $wpdb,$current_user;
@@ -210,7 +210,7 @@ class Student_Ajax
                 }
                 if(!empty($user_info['user_address'])){
                     $user_address = unserialize($user_info['user_address']);
-                    $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
+                    $city = $user_address['city'] == '市辖区' ? $user_address['province'] : $user_address['city'];
                 }else{
                     $city = '-';
                 }
@@ -221,7 +221,7 @@ class Student_Ajax
                 $list[$k]['group'] = $group;
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $list[$k]['surplus_time'] = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
-                $list[$k]['ranking'] = $start+$k+1;
+                $list[$k]['ranking'] = $k+1;
 
                 $my_score = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $surplus_time = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
@@ -245,7 +245,13 @@ class Student_Ajax
             }
         }
         if($maxPage == $_POST['page']){
-            $pageSize = $remainder;
+            if($total < $pageSize){
+                $pageSize = $total;
+            }else{
+                
+                $pageSize = $remainder < 1 ? $pageSize : $remainder;
+            }
+               // $pageSize = $remainder;
         }  
             
         $list2 = array_slice($list,$start,$pageSize);
@@ -259,9 +265,10 @@ class Student_Ajax
      */
     public function answer_submit(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_answer_submit_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_answer_submit_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         ini_set('post_max_size','10M');
 
         if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
@@ -422,9 +429,10 @@ class Student_Ajax
      */
     public function memory_complete(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_memory_complete_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_memory_complete_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
@@ -448,9 +456,10 @@ class Student_Ajax
      */
     public function get_count_down(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_count_down_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_count_down_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         //获取最新比赛倒计时
         $sql1 = "select a.match_id,a.match_start_time,b.user_id from {$wpdb->prefix}match_meta a
@@ -472,9 +481,10 @@ class Student_Ajax
      */
     public function entry_pay(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_go_pay_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_go_pay_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['match_id']) || empty($_POST['project_id'])  || !isset($_POST['cost'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
@@ -617,9 +627,10 @@ class Student_Ajax
      */
     public function set_team(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_team_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_team_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         //$_POST['team_id'] = 407;
         if(empty($_POST['team_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
@@ -747,9 +758,10 @@ class Student_Ajax
      */
     public function get_team_lists(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         $map = array();
         $map[] = " a.post_status = 'publish' ";
@@ -802,9 +814,10 @@ class Student_Ajax
      */
     public function choose_address(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_choose_address_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_choose_address_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         $rows = $this->get_address(false);
 
         wp_send_json_success(array('info'=>home_url('matchs/confirm&match_id='.$_POST['match_id'].'&address_id='.$_POST['id'])));
@@ -815,9 +828,10 @@ class Student_Ajax
      * 设置默认地址
      */
     public function set_default_address(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_default_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_default_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         if(empty($_POST['id'])) wp_send_json_error(array('info'=>'参数错误'));
 
@@ -846,9 +860,9 @@ class Student_Ajax
 
         if($json){
 
-            if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_address_code_nonce') ) {
+            /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_address_code_nonce') ) {
                 wp_send_json_error(array('info'=>'非法操作'));
-            }
+            }*/
         }
 
         if(empty($_POST['id'])) wp_send_json_error(array('info'=>'参数错误'));
@@ -870,9 +884,11 @@ class Student_Ajax
      * 删除地址
      */
     public function remove_address(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_remove_address_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_remove_address_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
         $result = $wpdb->delete($wpdb->prefix.'my_address',array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
@@ -889,9 +905,9 @@ class Student_Ajax
      */
     public function save_address(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_save_address_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_save_address_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         global $wpdb,$current_user;
 
@@ -1129,9 +1145,10 @@ class Student_Ajax
      */
     public function set_coach(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_coach_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         //判断是否登录
         if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
@@ -1175,9 +1192,10 @@ class Student_Ajax
      *设置/取消主训教练
      */
     public function set_major_coach(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_major_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_set_major_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
         if( empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
@@ -1223,9 +1241,11 @@ class Student_Ajax
      * 报名参赛
      */
     public function entry_match(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_entry_match_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_entry_match_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
@@ -1240,9 +1260,10 @@ class Student_Ajax
      * 比赛详情页报名选手列表获取
      */
     public function get_entry_list(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_entry_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_entry_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         //获取报名选手列表
         global $wpdb,$current_user;
@@ -1369,9 +1390,10 @@ class Student_Ajax
      */
     public function get_match_list(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_match_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_match_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         $map = array();
         $map[] = " a.post_status = 'publish' ";
@@ -1510,9 +1532,9 @@ class Student_Ajax
      */
     public function student_saveInfo(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_saveInfo_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_saveInfo_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         if(empty($_POST['meta_key'])) wp_send_json_error(array('info'=>'meta_key不能为空'));
         //if(empty($_POST['meta_val'])) wp_send_json_error(array('info'=>'值不能为空'));
@@ -1857,9 +1879,9 @@ class Student_Ajax
      */
     public function student_savePass(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_savePass_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_savePass_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         if(empty($_POST['password'])) wp_send_json_error(array('info'=>'新密码不能为空'));
         if(!empty($_POST['password']) && $_POST['confirm_password'] !== $_POST['password']) wp_send_json_error(array('info'=>'两次密码不一致'));
@@ -2024,9 +2046,9 @@ class Student_Ajax
      */
     public function student_login(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_login_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_login_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         switch ($_POST['login_type']){
             case 'mobile':
@@ -2090,9 +2112,9 @@ class Student_Ajax
      */
     public function student_register(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_register_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_register_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>'账号不能为空'));
         if(empty($_POST['verify_code'])) wp_send_json_error(array('info'=>'验证码不能为空'));
@@ -2131,9 +2153,9 @@ class Student_Ajax
      */
     public function student_reset(){
 
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_reset_code_nonce') ) {
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_reset_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         if(empty($_POST['user_login'])) wp_send_json_error(array('info'=>'账号不能为空'));
 
@@ -2429,9 +2451,11 @@ class Student_Ajax
      * 支付
      */
     public function pay(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         if($current_user->ID < 1 || !$current_user->ID){
             wp_send_json_error(['info' => '您暂未登录', 'url' => home_url('logins')]);
@@ -2502,9 +2526,11 @@ class Student_Ajax
      * 意见反馈
      */
     public function feedback(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_ranking_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb, $current_user;
         $contact = $_POST['contact'];//联系方式
         $content = $_POST['content'];//内容41
@@ -2634,9 +2660,11 @@ class Student_Ajax
      * 提交订单
      */
     public function subGoodsOrder(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_sub_order_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_sub_order_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         $user_id = $current_user->ID;
         $address_id = intval($_POST['address']);
@@ -2743,9 +2771,11 @@ class Student_Ajax
      * 确认收货
      */
     public function collectGoods(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_collect_goods_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_collect_goods_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         $id = intval($_POST['id']);
         $bool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 4], ['id' => $id, 'pay_stats' => 3, 'user_id' => $current_user->ID]);
@@ -2758,9 +2788,11 @@ class Student_Ajax
      * 可取消状态 :  未支付
      */
     public function cancelOrder(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_cancel_goods_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_cancel_goods_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         $serialnumber = trim($_POST['serialnumber']);
         global $wpdb;
         if($wpdb->query('UPDATE '.$wpdb->prefix.'order SET pay_status=5 WHERE pay_status=1 AND serialnumber='.$serialnumber))
@@ -2783,9 +2815,11 @@ class Student_Ajax
      * 更换我的主训教练
      */
     public function replaceMajorCoach(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_replace_major_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_replace_major_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
         //判断是否登录
@@ -2823,9 +2857,11 @@ class Student_Ajax
      * 学生解除教练关系
      */
     public function relieveMyCoach(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
         //判断是否登录
@@ -2854,9 +2890,11 @@ class Student_Ajax
      * 判断当前类别当前用户是是否存在主训教练
      */
     public function searchCurrentCoach(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_coach_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         $category_id = intval($_POST['category_id']);
         global $wpdb,$current_user;
         if($category_id < 1){
@@ -2875,9 +2913,10 @@ class Student_Ajax
      * 微信授权登录绑定手机或邮箱
      */
     public function wxWebLoginBindMobile(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_current_wx_web_login_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
 
         $bindType = $_POST['type'];
         if($bindType != 'code' && $bindType != 'username') wp_send_json_error(array('info'=>'参数错误'));
@@ -3007,9 +3046,11 @@ class Student_Ajax
      * 根据搜索条件获取战队列表
      */
     public function getTeamsBySearch(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_search_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_search_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
+
         global $wpdb,$current_user;
         $search = trim($_POST['search']);
         $map = array();
@@ -3061,9 +3102,10 @@ class Student_Ajax
      * 战队排名
      */
     public function teamRanking(){
-        if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_ranking_code_nonce') ) {
+
+        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_team_ranking_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
-        }
+        }*/
         global $wpdb,$current_user;
         $match_id = intval($_POST['match_id']);
         if($match_id < 1) wp_send_json_error(['info' => '比赛参数错误']);
