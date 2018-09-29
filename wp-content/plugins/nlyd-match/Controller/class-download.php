@@ -1223,7 +1223,7 @@ class Download
             $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
                     LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
                     LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
-                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!=''";
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title!=''";
             $result = $wpdb->get_results($sql, ARRAY_A);
             //处理每个战队的成员
             $teamsUsers = []; //每个战队的每个成员
