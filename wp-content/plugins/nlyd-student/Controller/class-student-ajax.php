@@ -3148,9 +3148,10 @@ class Student_Ajax
             $totalRanking = [];
 
             foreach ($teamsUsers as $tuV2){
+
                 //每个战队的分数
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM `{$wpdb->prefix}match_questions` AS mq 
+                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
                           LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                           WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
                           GROUP BY mq.project_id,mq.user_id) AS child  
@@ -3159,6 +3160,7 @@ class Student_Ajax
                 $row = $wpdb->get_row($sql,ARRAY_A);
                 $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
                 $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
+                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
                 $totalRanking[] = $tuV2;
             }
             //排序
@@ -3174,6 +3176,12 @@ class Student_Ajax
                                 $a = $totalRanking[$j];
                                 $totalRanking[$j] = $totalRanking[$i];
                                 $totalRanking[$i] = $a;
+                            }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){
+                                if($totalRanking[$j]['created_microtime'] < $totalRanking[$i]['created_microtime']){
+                                    $a = $totalRanking[$j];
+                                    $totalRanking[$j] = $totalRanking[$i];
+                                    $totalRanking[$i] = $a;
+                                }
                             }
                         }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
                             $a = $totalRanking[$j];

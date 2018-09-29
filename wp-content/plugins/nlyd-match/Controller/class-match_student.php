@@ -1197,7 +1197,7 @@ class Match_student {
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
                 $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,MAX(created_microtime) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
                           LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                           WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
                           GROUP BY mq.project_id,mq.user_id) AS child  
