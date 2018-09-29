@@ -1061,7 +1061,7 @@ class Match_student {
                     ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC ", ARRAY_A);
 
         $list = array();
-        $start = 0;
+        $ranking = 1;
         foreach ($result as $k => $val){
 //            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
             $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
@@ -1096,16 +1096,14 @@ class Match_student {
                 $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
                 $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $result[$k]['my_score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $result[$k]['ranking'] = $ranking;
+                if($val['my_score'] > 0) ++$ranking;
 
-                if($val['my_score'] > 0){
-                    ++$start;
-                }
-                $result[$k]['ranking'] = $start;
-                if($k != 0){
-                    if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
-                        $result[$k]['ranking'] = $result[$k-1]['ranking'];
-                    }
-                }
+//                if($k != 0){
+//                    if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
+//                        $result[$k]['ranking'] = $result[$k-1]['ranking'];
+//                    }
+//                }
 //                if($val['user_id'] == $current_user->ID){
 //                    $my_ranking = $list[$k];
 //                }
@@ -1179,7 +1177,7 @@ class Match_student {
             $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
                     LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
                     LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
-                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title=!''";
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title!=''";
             $result = $wpdb->get_results($sql, ARRAY_A);
             //处理每个战队的成员
             $teamsUsers = []; //每个战队的每个成员

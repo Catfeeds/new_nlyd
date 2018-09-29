@@ -3187,10 +3187,18 @@ class Student_Ajax
             $ranking = 1;
             foreach ($totalRanking as $k => $v){
                 $totalRanking[$k]['ranking'] = $ranking;
-                if(!(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time'])){
+                if( $totalRanking[$k]['my_score'] > 0){
                     ++$ranking;
                 }
             }
+
+//            $ranking = 1;
+//            foreach ($totalRanking as $k => $v){
+//                $totalRanking[$k]['ranking'] = $ranking;
+//                if(!(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time'])){
+//                    ++$ranking;
+//                }
+//            }
             $data = $totalRanking;
             $redis->setex('team_ranking_'.$match_id, 3600*24*7,json_encode($data));
         }
