@@ -94,6 +94,7 @@ jQuery(document).ready(function($) {
             laydate.render({
                 elem: '#'+id
                 ,type: 'datetime'
+                ,format: 'yyyy-MM-dd HH:mm'
             });
       })
     })
