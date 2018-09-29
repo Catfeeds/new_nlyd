@@ -230,7 +230,7 @@ class Student_Matchs extends Student_Home
         }
 
         $match_redis = $this->redis->get('match_content'.$match_id);
-        if(!empty($match_redis)){
+        if(!empty($match_redis) && ACTION != 'info'){
             $rows = json_decode($match_redis,true);
         }
         else{
@@ -1655,7 +1655,7 @@ class Student_Matchs extends Student_Home
         global $wpdb;
         //对比赛项目进行排序
         $match_project = $this->redis->get('match_project'.$match_id);
-        if(!empty($match_project)){
+        if(!empty($match_project) && ACTION != 'info'){
             $rows = json_decode($match_project,true);
             //var_dump($rows);
         }else{

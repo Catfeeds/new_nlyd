@@ -301,7 +301,9 @@ function the_table_install () {
           `my_score` mediumint(10) DEFAULT NULL COMMENT '成绩',
           `answer_status` tinyint(2) DEFAULT NULL COMMENT '答题状态 -1：记忆完成 1：提交',
           `submit_type` tinyint(2) DEFAULT '1' COMMENT '提交方式 1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切换,系统提交',
+          `leave_page_time` text DEFAULT NULL COMMENT '记录每次离开页面的时间',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+          `created_microtime` float(8,5) DEFAULT NULL COMMENT '提交时间毫秒',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
