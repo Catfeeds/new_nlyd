@@ -1076,10 +1076,238 @@ class Download
 
     }
 
+
     /**
      * 排名分类和单项数据
      */
     public function getCategoryRankingData($match,$projectIdStr,$ageType){
+        global $wpdb;
+        //获取每个用户的每个分类的分数和排名
+        switch ($ageType){
+            case 4://儿童组
+                $ageWhere = ' y.meta_value<13';
+                break;
+            case 3://少年组
+                $ageWhere = ' y.meta_value>12 AND y.meta_value<18';
+                break;
+            case 2://成年组
+                $ageWhere = ' y.meta_value>17 AND y.meta_value<60';
+                break;
+            case 1://老年组
+                $ageWhere = ' y.meta_value>59';
+                break;
+            default://全部
+                $ageWhere = ' 1=1';
+        }
+
+        $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id,x.created_microtime  
+                    FROM(
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
+                        FROM `{$wpdb->prefix}order` a 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr})                 
+                        WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
+                        GROUP BY user_id,project_id
+                    ) x
+                    left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 
+                    left join `{$wpdb->users}` u on u.ID=y.user_id 
+                    WHERE {$ageWhere}
+                    GROUP BY user_id
+                    ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC ", ARRAY_A);
+
+        $list = array();
+        $ranking = 1;
+        foreach ($result as $k => $val){
+//            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
+            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
+            $info = $wpdb->get_results($sql1,ARRAY_A);
+
+            if(!empty($info)){
+                $user_info = array_column($info,'meta_value','meta_key');
+                $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
+
+                $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+                if(!empty($user_info['user_age'])){
+                    $age = $user_info['user_age'];
+                    $group = getAgeGroupNameByAge($age);
+
+                }else{
+                    $group = '-';
+                }
+                if(!empty($user_info['user_address'])){
+                    $user_address = unserialize($user_info['user_address']);
+//                    $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
+                    $city = $user_address['province'].$user_address['city'];
+                }else{
+                    $city = '-';
+                }
+
+                $result[$k]['userID'] = $user_info['user_ID'];
+                $result[$k]['address'] = $city;
+                //$list[$k]['score'] = $val['my_score'];
+                $result[$k]['ageGroup'] = $group;
+                $result[$k]['age'] = $age;
+                $result[$k]['sex'] = $user_info['user_gender'] ? $user_info['user_gender'] : '-';
+                $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
+                $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $result[$k]['my_score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                $result[$k]['ranking'] = $ranking;
+                if($val['my_score'] > 0) ++$ranking;
+
+//                if($k != 0){
+//                    if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
+//                        $result[$k]['ranking'] = $result[$k-1]['ranking'];
+//                    }
+//                }
+//                if($val['user_id'] == $current_user->ID){
+//                    $my_ranking = $list[$k];
+//                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * 排名总数据
+     */
+    public function getAllRankingData($match,$projectArr,$op5){
+        global $wpdb;
+
+        if($op5 == 1){
+            //个人排名
+            //先查询所有成员
+            $totalRanking = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.telephone,u.user_email,o.user_id,mq.project_id,u.user_mobile,o.created_time,um.meta_value AS user_age 
+               FROM '.$wpdb->prefix.'order AS o
+               LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+               LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_age"
+               LEFT JOIN '.$wpdb->prefix.'match_questions AS mq ON mq.user_id=u.ID
+               WHERE o.match_id='.$match['match_id'].' AND o.pay_status IN(2,3,4) AND u.ID != "" GROUP BY o.user_id ORDER BY u.ID ASC', ARRAY_A);
+
+            //查询每个成员分数
+            foreach ($totalRanking as &$trv){
+                $trv['my_score'] = 0;
+                $trv['surplus_time'] = 0;
+                $trv['created_microtime'] = 0;
+                $trv['projectScore'] = []; //项目分数数组
+                foreach ($projectArr as $paks => $pavs) {
+                    $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time,project_id,created_microtime FROM '.$wpdb->prefix.'match_questions 
+                        WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'], ARRAY_A);
+                    $scoreArr = [];//项目所有分数数组
+                    $surplus_timeArr = [];//项目所有剩余时间数组
+                    $created_microtimeArrr = [];//项目所提交毫秒数组
+                    $moreArr = []; //每一轮分数数组
+                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
+                    for($mi = 1; $mi <= $match_more_all; ++$mi){
+                        $moreArr[$mi] = '0';
+                    }
+                    foreach ($res as $resV){
+                        $surplus_timeArr[] = $resV['surplus_time'];
+                        $scoreArr[] = $resV['my_score'];
+                        $created_microtimeArrr[] = $resV['created_microtime'];
+                        $moreArr[$resV['match_more']] = $resV['my_score'] ? $resV['my_score'] : '0';
+                    }
+                    $trv['projectScore'][$paks] = join('/', $moreArr);//每个项目分数字符串
+                    $trv['my_score'] += $scoreArr == [] ? 0 : max($scoreArr);//每个项目最大分数和
+                    $trv['surplus_time'] += $scoreArr == [] ? 0 : max($surplus_timeArr);//每个项目最大剩余时间和
+                    $trv['created_microtime'] += $created_microtimeArrr == [] ? 0 : max($created_microtimeArrr);//每个项目提交毫秒时间和
+                }
+
+                $usermeta = get_user_meta($trv['user_id'], '', true);
+                $user_real_name = unserialize($usermeta['user_real_name'][0]);
+                $age = $user_real_name['real_age'];
+                $user_real_name = $user_real_name['real_name'];
+                $trv['age'] = $age;
+                $trv['ageGroup'] = getAgeGroupNameByAge($age);
+                $trv['userID'] = $usermeta['user_ID'][0];
+                $trv['real_name'] = $user_real_name;
+                $trv['sex'] = $usermeta['user_gender'][0];
+                $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '-';
+                $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
+            }
+
+        }else{
+            //战队排名
+
+            //获取参加比赛的成员
+            $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
+                    LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON o.user_id=mt.user_id AND mt.status=2 
+                    LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=mt.team_id 
+                    WHERE o.match_id={$match['match_id']} AND o.pay_status IN(2,3,4) AND mt.team_id!='' AND p.post_title!=''";
+            $result = $wpdb->get_results($sql, ARRAY_A);
+            //处理每个战队的成员
+            $teamsUsers = []; //每个战队的每个成员
+            foreach ($result as $resV){
+                if(!isset($teamsUsers[$resV['ID']])) {
+                    $teamsUsers[$resV['ID']] = [];
+                    $teamsUsers[$resV['ID']]['user_ids'] = [];
+                    $teamsUsers[$resV['ID']]['team_name'] = $resV['post_title'];
+                    $teamsUsers[$resV['ID']]['team_id'] = $resV['ID'];
+                }
+                $teamsUsers[$resV['ID']]['user_ids'][] = $resV['user_id'];
+            }
+            foreach ($teamsUsers as &$tuV){
+                $tuV['user_ids'] = join(',',$tuV['user_ids']);
+            }
+            $totalRanking = [];
+            foreach ($teamsUsers as $tuV2){
+                //每个战队的分数
+                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,MAX(created_microtime) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
+                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                          GROUP BY mq.project_id,mq.user_id) AS child  
+                          ORDER BY my_score DESC limit 0,5
+                       ";
+                $row = $wpdb->get_row($sql,ARRAY_A);
+                $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
+                $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
+                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
+                $totalRanking[] = $tuV2;
+            }
+        }
+
+        //排序
+        for($i = 0; $i < count($totalRanking); ++$i){
+            if(isset($totalRanking[$i+1])){
+                for ($j = $i+1; $j < count($totalRanking); ++$j){
+                    if($totalRanking[$i]['my_score'] == $totalRanking[$j]['my_score']){
+//                       if($totalRanking[$i]['my_score'] < 1){
+//                           $rankingAuto = false;
+//                       }else
+                        if($totalRanking[$j]['surplus_time'] > $totalRanking[$i]['surplus_time']){
+
+                            $a = $totalRanking[$j];
+                            $totalRanking[$j] = $totalRanking[$i];
+                            $totalRanking[$i] = $a;
+                        }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){
+                            if($totalRanking[$j]['created_microtime'] < $totalRanking[$i]['created_microtime']){
+                                $a = $totalRanking[$j];
+                                $totalRanking[$j] = $totalRanking[$i];
+                                $totalRanking[$i] = $a;
+                            }
+                        }
+                    }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
+                        $a = $totalRanking[$j];
+                        $totalRanking[$j] = $totalRanking[$i];
+                        $totalRanking[$i] = $a;
+                    }
+                }
+            }
+        }
+        //名次
+        $ranking = 1;
+        foreach ($totalRanking as $k => $v){
+            $totalRanking[$k]['ranking'] = $ranking;
+            if( $totalRanking[$k]['my_score'] > 0){
+                ++$ranking;
+            }
+        }
+        return $totalRanking;
+    }
+
+    /**
+     * 排名分类和单项数据 TODO 备份
+     */
+    public function getCategoryRankingData_bak($match,$projectIdStr,$ageType){
         global $wpdb;
         //获取每个用户的每个分类的分数和排名
         switch ($ageType){
@@ -1164,9 +1392,9 @@ class Download
     }
 
     /**
-     * 排名总数据
+     * 排名总数据 备份 TODO 备份
      */
-    public function getAllRankingData($match,$projectArr,$op5){
+    public function getAllRankingData_back($match,$projectArr,$op5){
         global $wpdb;
 
         if($op5 == 1){
