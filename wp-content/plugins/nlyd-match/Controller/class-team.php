@@ -88,7 +88,7 @@ if(!class_exists('Team')){
             CASE m.status WHEN -3 THEN "'. "<span style='color:#6a1c25'>已退出</span>" .'" 
             WHEN -2 THEN "'. "<span style='color:rgba(191,34,49,0.91)'>已拒绝</span>" .'" 
             WHEN -1 THEN "'. "<span style='color:#61655b'>退队申请</span>" .'" 
-            WHEN 1 THEN "'."<span style='color:#006E26'>入队申请</span>".'" 
+            WHEN 1 THEN "'. "<span style='color:#bf0000'>入队申请</span>" .'" 
             WHEN 2 THEN "'."<span style='color:#0073aa'>战队成员</span>".'" 
             END AS status_title 
             FROM '.$wpdb->prefix.'match_team AS m 

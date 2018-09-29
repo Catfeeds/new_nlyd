@@ -166,7 +166,7 @@ class Teacher
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="name column-apply_student" data-colname="申请中">
-                                <span aria-hidden="true"><a <?=$student_apply_num>0 ? 'style="color: #C40000"' : ''?> href="<?php echo '?page=teacher-student&id='.$row['coach_id'].'&student_type=2' ?>" aria-label=""><?=$student_apply_num?>个</a></span>
+                                <span aria-hidden="true"><a <?=$student_apply_num>0 ? 'style="color: #C40000"' : ''?> href="<?php echo '?page=teacher-student&id='.$row['coach_id'].'&type=1' ?>" aria-label=""><?=$student_apply_num?>个</a></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
                             <td class="name column-mobile" data-colname="手机">
@@ -417,8 +417,9 @@ class Teacher
      */
     public function student(){
         global $current_user,$wpdb;
+
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
-        $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
+        $type = isset($_GET['type']) ? intval($_GET['type']) : 2;
         $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
         $postsRows = $wpdb->get_results($sql,ARRAY_A);
         $catArr = [];
@@ -450,7 +451,7 @@ class Teacher
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
-        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,u.ID AS user_id, 
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
                 WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
@@ -479,7 +480,6 @@ class Teacher
         <div class="wrap">
             <h1 class="wp-heading-inline">学员</h1>
             <ul id="tab">
-                <li class="<?php if($type == 0) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=0'.'&id='.$coach_id?>'">所有</li>
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>
 
@@ -545,6 +545,8 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="age" class="manage-column column-age">年龄</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                         <th scope="col" id="type" class="manage-column column-type">类别</th>
                         <th scope="col" id="email" class="manage-column column-email sortable desc">
@@ -556,7 +558,11 @@ class Teacher
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                         <?php foreach ($rows as $row){ ?>
+                         <?php
+                         foreach ($rows as $row){
+                             $usermeta = get_user_meta($row['user_id']);
+                             $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
+                         ?>
                              <tr id="user-5" data-id="<?=$row['id']?>">
                                  <th scope="row" class="check-column check" >
                                      <label class="screen-reader-text">选择</label>
@@ -578,7 +584,11 @@ class Teacher
                                          <?php }?>
                                      </div>
                                  </td>
-                                 <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=str_replace(', ', '', $row['display_name'])?></span><span class="screen-reader-text">未知</span></td>
+                                 <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span><span class="screen-reader-text">未知</span></td>
+                                 <td class="mobile column-sex" data-colname="性别"><?=isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '-'?></td>
+                                 <td class="mobile column-age" data-colname="年龄"><?=isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '-'?></td>
+
+
                                  <td class="email column-mobile" data-colname="手机"><a href="tel:<?=$row['user_mobile']?>"><?=$row['user_mobile']?></a></td>
                                  <td class="email column-type" data-colname="类别"><?=$row['post_title']?></td>
                                  <td class="email column-email" data-colname="电子邮件"><a href="mailto:456789@qq.com"><?=$row['user_email']?></a></td>
@@ -599,6 +609,8 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col"  class="manage-column column-name">姓名</th>
+                        <th scope="col"  class="manage-column column-sex">性别</th>
+                        <th scope="col"  class="manage-column column-age">年龄</th>
                         <th scope="col"  class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-type">类别</th>
                         <th scope="col" class="manage-column column-email sortable desc">
