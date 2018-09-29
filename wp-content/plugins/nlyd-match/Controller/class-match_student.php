@@ -1046,9 +1046,9 @@ class Match_student {
                 $ageWhere = ' 1=1';
         }
 
-        $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id 
+        $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id,x.created_microtime  
                     FROM(
-                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,a.created_time 
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
                         FROM `{$wpdb->prefix}order` a 
                         LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr})                 
                         WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
@@ -1058,7 +1058,7 @@ class Match_student {
                     left join `{$wpdb->users}` u on u.ID=y.user_id 
                     WHERE {$ageWhere}
                     GROUP BY user_id
-                    ORDER BY my_score DESC,surplus_time DESC ", ARRAY_A);
+                    ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC ", ARRAY_A);
 
         $list = array();
         $start = 0;
@@ -1131,12 +1131,14 @@ class Match_student {
             foreach ($totalRanking as &$trv){
                 $trv['my_score'] = 0;
                 $trv['surplus_time'] = 0;
+                $trv['created_microtime'] = 0;
                 $trv['projectScore'] = []; //项目分数数组
                 foreach ($projectArr as $paks => $pavs) {
-                    $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time,project_id FROM '.$wpdb->prefix.'match_questions 
+                    $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time,project_id,created_microtime FROM '.$wpdb->prefix.'match_questions 
                         WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'], ARRAY_A);
                     $scoreArr = [];//项目所有分数数组
                     $surplus_timeArr = [];//项目所有剩余时间数组
+                    $created_microtimeArrr = [];//项目所提交毫秒数组
                     $moreArr = []; //每一轮分数数组
                     $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
                     for($mi = 1; $mi <= $match_more_all; ++$mi){
@@ -1145,11 +1147,13 @@ class Match_student {
                     foreach ($res as $resV){
                         $surplus_timeArr[] = $resV['surplus_time'];
                         $scoreArr[] = $resV['my_score'];
+                        $created_microtimeArrr[] = $resV['created_microtime'];
                         $moreArr[$resV['match_more']] = $resV['my_score'] ? $resV['my_score'] : '0';
                     }
                     $trv['projectScore'][$paks] = join('/', $moreArr);//每个项目分数字符串
                     $trv['my_score'] += $scoreArr == [] ? 0 : max($scoreArr);//每个项目最大分数和
                     $trv['surplus_time'] += $scoreArr == [] ? 0 : max($surplus_timeArr);//每个项目最大剩余时间和
+                    $trv['created_microtime'] += $created_microtimeArrr == [] ? 0 : max($created_microtimeArrr);//每个项目提交毫秒时间和
                 }
 
                 $usermeta = get_user_meta($trv['user_id'], '', true);
@@ -1191,8 +1195,8 @@ class Match_student {
             $totalRanking = [];
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time FROM `{$wpdb->prefix}match_questions` AS mq 
+                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,MAX(created_microtime) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
                           LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                           WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
                           GROUP BY mq.project_id,mq.user_id) AS child  
@@ -1201,6 +1205,7 @@ class Match_student {
                 $row = $wpdb->get_row($sql,ARRAY_A);
                 $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
                 $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
+                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
                 $totalRanking[] = $tuV2;
             }
         }
@@ -1218,6 +1223,12 @@ class Match_student {
                             $a = $totalRanking[$j];
                             $totalRanking[$j] = $totalRanking[$i];
                             $totalRanking[$i] = $a;
+                        }elseif ($totalRanking[$j]['surplus_time'] == $totalRanking[$i]['surplus_time']){
+                            if($totalRanking[$j]['created_microtime'] < $totalRanking[$i]['created_microtime']){
+                                $a = $totalRanking[$j];
+                                $totalRanking[$j] = $totalRanking[$i];
+                                $totalRanking[$i] = $a;
+                            }
                         }
                     }elseif ($totalRanking[$j]['my_score'] > $totalRanking[$i]['my_score']){
                         $a = $totalRanking[$j];
@@ -1231,7 +1242,7 @@ class Match_student {
         $ranking = 1;
         foreach ($totalRanking as $k => $v){
             $totalRanking[$k]['ranking'] = $ranking;
-            if(!(isset($totalRanking[$k+1]) && $totalRanking[$k+1]['my_score'] == $totalRanking[$k]['my_score'] && $totalRanking[$k+1]['surplus_time'] == $totalRanking[$k]['surplus_time'])){
+            if( $totalRanking[$k]['my_score'] > 0){
                 ++$ranking;
             }
         }
