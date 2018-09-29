@@ -162,9 +162,9 @@ class Student_Ajax
                 $left_where .= " and c.match_more = {$_POST['match_more']} ";
             }
 
-            $sql3 = "SELECT x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
+            $sql3 = "SELECT x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time ,x.created_microtime
                         FROM(
-                            SELECT a.user_id,a.match_id,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time 
+                            SELECT a.user_id,a.match_id,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime ,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time 
                             FROM `{$wpdb->prefix}order` a 
                             LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
                             #where a.match_id = 56329
@@ -174,8 +174,8 @@ class Student_Ajax
                         left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
                         {$age_where}
                         GROUP BY user_id
-                        ORDER BY my_score DESC,surplus_time DESC,x.user_id DESC";
-            
+                        ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC";
+            //print_r($sql3);
             /*if($current_user->ID == 63){
                 print_r($sql);
             }*/
@@ -405,6 +405,7 @@ class Student_Ajax
         $update_arr['my_score'] = $my_score;
         $update_arr['submit_type'] = isset($_POST['submit_type']) ? $_POST['submit_type'] : 1;
         $update_arr['leave_page_time'] = isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '';
+        $update_arr['created_microtime'] = str2arr(microtime(),' ')[0];
         /*print_r($update_arr);
         die;*/
         $result = $wpdb->update($wpdb->prefix.'match_questions',$update_arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
