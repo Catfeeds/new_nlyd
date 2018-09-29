@@ -241,9 +241,9 @@ class Student_Ajax
                         }
                     }
 
-                    if($val['user_id'] == $current_user->ID){
-                        $my_ranking = $list[$k];
-                    }
+                }
+                if($val['user_id'] == $current_user->ID){
+                    $my_ranking = $list[$k];
                 }
             }
         }
