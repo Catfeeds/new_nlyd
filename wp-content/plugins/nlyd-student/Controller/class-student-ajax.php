@@ -222,7 +222,7 @@ class Student_Ajax
                 $list[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $list[$k]['surplus_time'] = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 $list[$k]['ranking'] = $k+1;
-
+                ///////
                 $my_score = $val['my_score'] > 0 ? $val['my_score'] : 0;
                 $surplus_time = $val['surplus_time'] > 0 ? $val['surplus_time'] : 0;
                 if($k != 0){
