@@ -473,20 +473,6 @@ class Student_Matchs extends Student_Home
         $data['next_project'] = $this->next_project;
         $data['current_project'] = $this->current_project;
 
-        //$this->redis->delete('start_count_down'.$current_user->ID);
-        if($this->redis->get('start_count_down'.$current_user->ID)){
-
-            $data['count_down'] = $this->redis->get('start_count_down'.$current_user->ID)-get_time();
-
-        }else{
-
-            $count_down = $this->current_project['project_end_time']+rand(1,10);
-            $data['count_down'] = $count_down-get_time();
-
-            $this->redis->setex('start_count_down'.$current_user->ID.'',$data['count_down'],$count_down);
-        }
-
-
         //$data['count_down'] = $this->current_project['project_end_time']-get_time();
 
         $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
@@ -497,6 +483,18 @@ class Student_Matchs extends Student_Home
         $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$data['next_more_num']);
         $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
         $data['project_num'] = !empty($this->next_project) ? $this->next_project['project_num'] : $this->current_project['project_num'];
+
+        if($this->redis->get('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'])){
+
+            $data['count_down'] = $this->redis->get('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'])-get_time();
+
+        }else{
+
+            $count_down = $this->current_project['project_end_time']+rand(1,5);
+            $data['count_down'] = $count_down-get_time();
+
+            $this->redis->setex('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'],$data['count_down'],$count_down);
+        }
 
         if(isset($this->current_project['time_type']) && $this->current_project['time_type'] == 'end' && empty($this->next_project)){
             $data['match_url'] = home_url('matchs/record/match_id/'.$this->match_id);
@@ -1165,13 +1163,13 @@ class Student_Matchs extends Student_Home
         //print_r(date_i18n('Y-m-d H:i:s',$end_time));
 
         //$this->redis->delete('answer_log'.$current_user->ID);
-        if($this->redis->get('answer_log'.$current_user->ID)){
-            $next_count_down = $this->redis->get('answer_log'.$current_user->ID)-get_time();
-           // var_dump($next_count_down);
+        if($this->redis->get('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more)){
+            $next_count_down = $this->redis->get('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more)-get_time();
+            // var_dump($next_count_down);
         }else{
-            $down = $this->current_project['project_end_time']+rand(1,10);
+            $down = $this->current_project['project_end_time']+rand(1,5);
 
-            $this->redis->setex('answer_log'.$current_user->ID,$down-get_time(),$down);
+            $this->redis->setex('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more,$down-get_time(),$down);
             $next_count_down = $down-get_time();
         }
         $data = array(
