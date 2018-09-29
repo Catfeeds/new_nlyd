@@ -625,14 +625,18 @@ if(!class_exists('MatchController')){
                     $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
                     LEFT JOIN {$wpdb->users} AS u  ON mt.user_id=u.ID WHERE mt.status=1 AND mt.team_id={$id} AND u.ID!=''");
                     $student_num = $student_num ? $student_num : 0;
-                    echo '<a href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=2').'" class="">'.$student_num.'人</a>';
+                    $color = 'style="color:#424242"';
+                    if($student_num>0) $color = 'style="color:#bf0000"';
+                    echo '<a '.$color.' href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=2').'" class="">'.$student_num.'个</a>';
                     break;
                 case 'out_apply_num':
                     //退队申请
                     $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
                     LEFT JOIN {$wpdb->users} AS u  ON mt.user_id=u.ID WHERE status=-1 AND team_id={$id} AND u.ID!=''");
                     $student_num = $student_num ? $student_num : 0;
-                    echo '<a href="'.admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=3').'" class="">'.$student_num.'人</a>';
+                    $color = 'style="color:#424242"';
+                    if($student_num>0) $color = 'style="color:#bf0000"';
+                    echo '<a '.$color. ' href="' .admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=3').'" class="">'.$student_num.'个</a>';
                     break;
                 default:
                     break;
