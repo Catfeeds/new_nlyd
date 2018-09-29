@@ -60,8 +60,8 @@ jQuery(function($) {
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
-    _count_time=<?=$child_count_down?>,//初始答题时间,会变化
-    getAjaxTime=<?=$child_count_down?>;//程序获取时间
+    _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
+    getAjaxTime=<?=$child_count_down?>+1;//程序获取时间
     showTime=function(){  
         if(!stop){
             _count_time--
@@ -93,8 +93,14 @@ jQuery(function($) {
                 
             }else{
                 if(flaseQuestion<flaseMax){
-                    timer=setTimeout("showTime()",1000);
+                    if(_count_time+1==getAjaxTime){
+                        timer=setTimeout("showTime()",1000+answerHide*1000);
+                    }else{
+                        timer=setTimeout("showTime()",1000);
+                    }
+                    
                 }
+
             }
             
 
