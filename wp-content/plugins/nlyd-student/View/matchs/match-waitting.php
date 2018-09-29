@@ -80,7 +80,6 @@
          window.addEventListener('popstate', function () {
              history.pushState(null, null, document.URL);
          });
-
         $(window).on("blur",function(){
             var sessionData={
                 match_id:$.Request('match_id')

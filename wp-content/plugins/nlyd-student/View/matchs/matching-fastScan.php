@@ -62,7 +62,8 @@ jQuery(function($) {
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>;//程序获取时间
-    showTime=function(){  
+    showTime=function(){
+        
         if(!stop){
             _count_time--
         }
@@ -80,24 +81,21 @@ jQuery(function($) {
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }
-                
                 if(ajaxData.length%nanduLen==0){
                     nandu++
                 }
                 initBuild(itemLen,items,nandu,false)
                 showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
                 clearTimeout(timer)
-            }
-            if(flaseQuestion<flaseMax){
-                if(getAjaxTime==_count_time+1){
+                if(flaseQuestion<flaseMax){
                     timer=setTimeout("showTime()",1000+answerHide*1000);
-                }else{
-                    timer=setTimeout("showTime()",1000);
                 }
                 
+            }else{
+                if(flaseQuestion<flaseMax){
+                    timer=setTimeout("showTime()",1000);
+                }
             }
-            
-
     }  
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
@@ -282,7 +280,6 @@ jQuery(function($) {
             $('.answer').html(getNewline(row.rights)).removeClass('hide');
             $('.count_downs').addClass('hide');
             $('#selectWrapper').addClass('hide');
-            $('#selectWrapper .fastScan-item').removeClass('error-fastScan').removeClass('noClick').removeClass('right-fastScan')
             $('#selectWrapper .fastScan-item').each(function(i){
                 var _this=$(this);
                 var text=row['question'][i]
@@ -292,14 +289,17 @@ jQuery(function($) {
                 $('.answer').addClass('hide').text('');
                 $('#selectWrapper').removeClass('hide')
                 $('.count_downs').removeClass('hide')
+                $('#selectWrapper .fastScan-item').removeClass('error-fastScan').removeClass('noClick').removeClass('right-fastScan')
                 isMatching=!isMatching
             }else{
                 timers=setTimeout(function() {
                     $('.answer').addClass('hide').text('')
                     $('#selectWrapper').removeClass('hide')
+                    $('#selectWrapper .fastScan-item').removeClass('error-fastScan').removeClass('noClick').removeClass('right-fastScan')
                     $('.count_downs').removeClass('hide')
                 }, flashTime*1000);
             }
+            
             //计时器
             _count_time=answerTime
             showTime()
@@ -315,6 +315,7 @@ $('#selectWrapper .fastScan-item').each(function(){
             var isFalse=true;
             if(!_this.hasClass('noClick')){
                 var text=_this.text()
+                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
                 ajaxData[ajaxData.length-1].yours=text;//存储我的答案;
                 if(text==ajaxData[ajaxData.length-1].rights){//选择正确
                     ajaxData[ajaxData.length-1].isRight=true;
@@ -324,7 +325,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                     ajaxData[ajaxData.length-1].isRight=false;
                     _this.addClass('error-fastScan')
                 }
-                $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
+                
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }
@@ -418,7 +419,6 @@ $('#selectWrapper .fastScan-item').each(function(){
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                clearTimeout(timer);
                 submit(0,3)
             }, 1000);
         }

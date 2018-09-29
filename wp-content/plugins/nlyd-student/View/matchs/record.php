@@ -247,7 +247,7 @@ jQuery(function($) {
                     ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
                         if(arg['myPage']==0){
-                            $('#rank_'+arg['data_id']).css('display','none');
+                            $('#rank_'+arg['data_id']).empty()
                         }
                         if(arg['data_id']==3){//总排名
                             if(arg['team']){//战队
@@ -302,6 +302,7 @@ jQuery(function($) {
                         $.ajax({
                             data:postData,
                             success:function(res,ajaxStatu,xhr){
+                                console.log(res)
                                 isClick[arg['data_id']]=true;
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
@@ -316,18 +317,18 @@ jQuery(function($) {
                                                 +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
                                                 +'<td><div class="table_content">'+rows.city+'</div></td>'
                                                 +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                                +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.group+'</div></td>';
+                                        if(rows.ranking>3){
+                                            $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
+                                        }
                                     }
                                     $.each(res.data.info,function(index,value){
                                         var nl_me='';
                                         if(res.data.my_ranking!=null){
                                             if(value.ranking==res.data.my_ranking.ranking && value.ID==res.data.my_ranking.ID){
                                                 nl_me='nl-me'
-                                                if(value.ranking!=1){
-                                                    $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
-                                                }
                                             }
-                                        }  
+                                        }
                                         var dom='<tr class="'+nl_me+'">'
                                                     +'<td>'
                                                         +'<div class="nl-circle">'+value.ranking+'</div>'
@@ -341,30 +342,22 @@ jQuery(function($) {
                                         lis.push(dom)                           
                                     })
                                 }else{//战队
-                                    if(res.data.my_ranking!=null){//我的成绩
-                                        var rows=res.data.my_ranking
+                                    if(res.data.my_team){//我的战队
+                                        var rows=res.data.my_team
                                         var Html='<td>'
                                                     +'<div class="nl-circle">'+rows.ranking+'</div>'
                                                 +'</td>'
-                                                +'<td><div class="table_content">'+rows.user_name+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+rows.ID+'</div></td>'
-                                                +'<td><div class="table_content">'+rows.city+'</div></td>'
-                                                +'<td><div class="table_content c_orange">'+rows.score+'</div></td>'
-                                                +'<td><div class="table_content">'+rows.group+'</div></td>'
+                                                +'<td><div class="table_content">'+rows.team_name+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.team_id+'</div></td>'
+                                                +'<td><div class="table_content c_orange">'+rows.my_score+'</div></td>'
+                                        if(rows.ranking>3){
+                                            $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
+                                        }
                                     }
                                     $.each(res.data.info,function(index,value){
                                         var nl_me='';
-                                        if(value.my_team=="y"){//我的战队
+                                        if(res.data.my_team && value.team_id==res.data.my_team.team_id){//我的战队
                                             nl_me='nl-me';
-                                            if(value.ranking!=1){
-                                                var Html='<td>'
-                                                            +'<div class="nl-circle">'+value.ranking+'</div>'
-                                                        +'</td>'
-                                                        +'<td><div class="table_content">'+value.team_name+'</div></td>'
-                                                        +'<td><div class="table_content c_orange">'+value.team_id+'</div></td>'
-                                                        +'<td><div class="table_content c_orange">'+value.my_score+'</div></td>'
-                                                $('#rank_'+arg['data_id']).html(Html).css('display','table-row');
-                                            }
                                         }
                                         var dom='<tr class="'+nl_me+'">'
                                                     +'<td>'
