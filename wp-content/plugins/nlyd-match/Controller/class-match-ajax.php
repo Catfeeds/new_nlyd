@@ -261,31 +261,42 @@ class Match_Ajax
             $id = intval($_POST['id']);
             $idWhere = 'id='.$id;
         }
-        $user = $wpdb->get_results('SELECT u.ID,u.user_mobile,u.display_name,m.category_id,mu.display_name AS coach_name FROM '.$wpdb->prefix.'my_coach AS m 
+        $user = $wpdb->get_results('SELECT u.ID AS user_id,u.user_mobile,u.display_name,m.category_id,mu.display_name AS coach_name,mu.ID,m.coach_id,um.meta_value AS user_real_name,u.user_email FROM '.$wpdb->prefix.'my_coach AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON m.user_id=u.ID 
             LEFT JOIN '.$wpdb->users.' AS mu ON m.coach_id=mu.ID 
+            LEFT JOIN '.$wpdb->prefix.'usermeta AS um ON um.user_id=u.ID AND um.meta_key="user_real_name"  
             WHERE m.'.$idWhere.' AND m.`apply_status`=1',ARRAY_A);
 
+        //TODO
         $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE '.$idWhere.' AND `apply_status`=1';
         if($status != -1  && $status != 2){
             wp_send_json_error(array('info' => '操作失败,状态参数异常'));
         }
+
+
+//        leo_dump($user);
+//        die;
         $bool = $wpdb->query($sql);
 //        $bool = true;
         if($bool) {
             //TODO 发送通知
-            $ali = new AliSms();
+            //获取教练姓名
+            $coach_user_meta = get_user_meta($user[0]['coach_id']);
+            if(!$coach_user_meta) wp_send_json_error(['info' => '未获取到教练信息']);
+            if(isset($coach_user_meta['user_real_name'][0]) && !empty($coach_user_meta['user_real_name'][0])){
+                $coach_real_name = unserialize($coach_user_meta['user_real_name'][0])['real_name'];
+            }elseif(isset($coach_user_meta['last_name'][0]) && isset($coach_user_meta['first_name'][0]) && !empty($coach_user_meta['first_name'][0]) && !empty($coach_user_meta['first_name'][0])){
+                $coach_real_name = $coach_user_meta['last_name'][0].$coach_user_meta['first_name'][0];
+            }else{
+                $coach_real_name = $coach_user_meta['nickname'][0];
+            }
             $sendErr = "\n";
             $categoryArr = []; //post数据数组. 避免重复查询
             foreach ($user as $v){
-                //如果display_name没有或者user_mobile没有就去寻找默认收货地址中的电话号码和收件人
-                if(!$v['display_name'] || !$v['user_mobile']){
-                    $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$v['ID'], ARRAY_A);
-                    $real_name = $address['fullname'];
-                    $mobile = $address['telephone'];
-                }else{
-                    $real_name = explode(', ', $v['display_name'])[0].explode(', ', $v['display_name'])[1];
-                    $mobile = $v['user_mobile'];
+                $userContact = $this->getMobileOrEmailAndRealname($v['user_id'],$v['user_mobile'], $v['user_email']);
+                if($userContact == false){
+                    $sendErr .= $v['user_login'].': 用户信息不完整, 未发送信息'."\n";
+                    continue;
                 }
                 //查询类别名称
                 if(isset($categoryArr[$v['category_id']])){
@@ -294,10 +305,16 @@ class Match_Ajax
                     $post_title = get_post($v['category_id'])->post_title;
                     $categoryArr[$v['category_id']] = $post_title;
                 }
-                $result = $ali->sendSms($mobile, 10, array('user'=>$real_name,'cate'=>$post_title, 'coach' => explode(', ', $v['coach_name'])[0].explode(', ', $v['coach_name'])[1], 'type' => $statusName));
-                if(!$result){
-                    $sendErr .= $real_name.': '.$mobile.'短信发送失败'."\n";
+
+                if($userContact['type'] == 'mobile'){
+                    $ali = new AliSms();
+                    $result = $ali->sendSms($userContact['contact'], 10, array('user'=>$userContact['real_name'],'cate'=>$post_title, 'coach' => $coach_real_name, 'type' => $statusName));
+                    if(!$result) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'短信发送失败'."\n";
+                }else{
+                    $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].',您申请的'.$post_title.'教练'.$coach_real_name.'已'.$statusName);
+                    if($result !== true) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'邮件发送失败'."\n";
                 }
+
             }
 
             wp_send_json_success(array('info'=>'操作成功'.$sendErr));
@@ -344,30 +361,36 @@ class Match_Ajax
             $id = intval($_POST['id']);
         }
 
-        $users = $wpdb->get_results('SELECT u.user_mobile,u.ID,u.display_name,m.team_id FROM '.$wpdb->prefix.'match_team AS m 
+        $users = $wpdb->get_results('SELECT u.user_mobile,u.ID,u.display_name,m.team_id,u.user_login,u.user_email FROM '.$wpdb->prefix.'match_team AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
             WHERE m.id IN('.$id.') AND m.status='.$status, ARRAY_A);
-
+        if(!$users) wp_send_json_error(['info' => '获取申请学员失败']);
         $sql = 'UPDATE '.$wpdb->prefix.'match_team SET status='.$teamStatus.' WHERE status='.$status.' AND id IN('.$id.')';
         //战队名称
         $post_title = get_post($users[0]['team_id'])->post_title;
+        if(!$post_title) wp_send_json_error(['info' => '获取战队名称失败']);
         $bool = $wpdb->query($sql);
+//        $bool = true;
         if($bool){
             //TODO 发送通知
-            $ali = new AliSms();
 
             $sendErr = "\n";
             foreach ($users as $v){
-                if(!$v['display_name'] || !$v['user_mobile']){
-                    $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$v['ID'], ARRAY_A);
-                    $real_name = $address['fullname'];
-                    $mobile = $address['telephone'];
-                }else{
-                    $real_name = explode(', ', $v['display_name'])[0].explode(', ', $v['display_name'])[1];
-                    $mobile = $v['user_mobile'];
+                $userContact = $this->getMobileOrEmailAndRealname($v['user_id'],$v['user_mobile'], $v['user_email']);
+                if($userContact == false){
+                    $sendErr .= $v['user_login'].': 用户信息不完整, 未发送信息'."\n";
+                    continue;
                 }
-                $result = $ali->sendSms($mobile, 9, array('user'=>$real_name, 'applytype' => $statusName, 'team' => $post_title, 'type' => $typeName));
-                if(!$result) $sendErr .= $real_name.': '.$mobile."发送短信失败\n";
+
+                if($userContact['type'] == 'mobile'){
+                    $ali = new AliSms();
+                    $result = $ali->sendSms($userContact['contact'], 9, array('user'=>$userContact['real_name'], 'applytype' => $statusName, 'team' => $post_title, 'type' => $typeName));
+                    if(!$result) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'短信发送失败'."\n";
+                }else{
+                    $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].',您申请'.$statusName.'战队'.$post_title.'已'.$typeName);
+                    if($result !== true) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'邮件发送失败'."\n";
+                }
+
             }
             wp_send_json_success(array('info'=>'操作成功'.$sendErr));
         }else{
@@ -500,17 +523,37 @@ class Match_Ajax
                 //保存第三方信息
                 $wpdb->update($wpdb->prefix.'order_refund', ['refund_lowdown' => serialize($result['data'])], ['id' => $orderRefundId]);
                 //发送短信
+
+
                 $ali = new AliSms();
                 if(!$order['telephone']){
-                    $order['telephone'] = $wpdb->get_var('SELECT user_mobile FROM '.$wpdb->users.' WHERE ID='.$order['user_id']);
-                    $order['fullname'] = get_user_meta($order['user_id'],'user_real_name')[0]['real_name'];
-                }
-                $result = $ali->sendSms($order['telephone'], 8, array('user'=> $order['funllname'], 'order' => $order['serialnumber'], 'cost' => $refundFee));
-                if($result){
-                    $sendMsg = ', 已发送短信通知';
+                    $user = $wpdb->get_row('SELECT ID AS user_id,user_mobile,user_email FROM '.$wpdb->users.' WHERE ID='.$order['user_id'] ,ARRAY_A);
+                    if(!$user) {
+                        $sendMsg = ', 用户信息不完整, 未发送信息';
+                    }else{
+                        $userContact = $this->getMobileOrEmailAndRealname($order['user_id'],$user['user_mobile'], $user['user_email']);
+                        if($userContact == false){
+                            $sendMsg = ', 用户信息不完整, 未发送信息';
+                        }else{
+                            if($userContact['type'] == 'mobile'){
+                                $ali = new AliSms();
+                                $result = $ali->sendSms($userContact['contact'], 8, array('user'=> $userContact['real_name'], 'order' => $order['serialnumber'], 'cost' => $refundFee));
+                                $sendMsg = !$result ? '短信发送失败' : '已发送短信通知';
+                            }else{
+                                $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].', 您的订单号为'.$order['serialnumber'].'的订单已退款,退款金额'.$refundFee.',请注意查收');
+                                $sendMsg = !$result ? '邮件发送失败' : '已发送邮件通知';
+                            }
+                        }
+                    }
                 }else{
-                    $sendMsg = ', 短信发送失败';
+                    $result = $ali->sendSms($order['telephone'], 8, array('user'=> $order['funllname'], 'order' => $order['serialnumber'], 'cost' => $refundFee));
+                    if($result){
+                        $sendMsg = ', 已发送短信通知';
+                    }else{
+                        $sendMsg = ', 短信发送失败';
+                    }
                 }
+
                 $wpdb->commit();
                 wp_send_json_success(array('info'=> '申请退款成功'.$sendMsg));
             }else{
@@ -750,35 +793,42 @@ class Match_Ajax
         if(!$res) wp_send_json_error(['info' => '该学员不存在或已解除']);
 
         //获取用户信息
-        $user = $wpdb->get_row('SELECT ID,user_mobile,display_name FROM '.$wpdb->users.' WHERE ID='.$res['user_id'], ARRAY_A);
+        $user = $wpdb->get_row('SELECT ID,user_mobile,display_name,user_email FROM '.$wpdb->users.' WHERE ID='.$res['user_id'], ARRAY_A);
 
-        //获取教练名字
-        $coach = $wpdb->get_row('SELECT ID,display_name FROM '.$wpdb->users.' WHERE ID='.$res['coach_id'], ARRAY_A);
 
         if(!$user) wp_send_json_error(['info' => '该学员不存在']);
 
-        //学员名字和手机
-        if(!$user['display_name'] || !$user['user_mobile']){
-            $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$user['ID'], ARRAY_A);
-            $real_name = $address['fullname'];
-            $mobile = $address['telephone'];
-        }else{
-            $real_name = explode(', ', $user['display_name'])[0].explode(', ', $user['display_name'])[1];
-            $mobile = $user['user_mobile'];
-        }
-
-
-        //教练名字
-        $coach_real_name = explode(', ', $user['display_name'])[0].explode(', ', $user['display_name'])[1];
 
         //开始解除
         $bool = $wpdb->update($wpdb->prefix.'my_coach', ['apply_status' => 3], ['id' => $id]);
         if($bool){
             //TODO 发送短信通知学员
-            //类别名称
+            //教练名字
+
+            $user_coach_meta = get_user_meta($res['coach_id']);
+            if(isset($user_user_meta['user_real_name'][0]) && !empty($user_coach_meta['user_real_name'][0])){
+                $coach_real_name = unserialize($user_coach_meta['user_real_name'][0])['real_name'];
+            }elseif(isset($user_coach_meta['last_name'][0]) && isset($user_coach_meta['first_name'][0]) && !empty($user_coach_meta['first_name'][0]) && !empty($user_coach_meta['first_name'][0])){
+                $coach_real_name = $user_coach_meta['last_name'][0].$user_coach_meta['first_name'][0];
+            }elseif(isset($user_coach_meta['nickname'][0])){
+                $coach_real_name = $user_coach_meta['nickname'][0];
+            }else{
+                $coach_real_name = '';
+            }
+
             $post_title = get_post($res['category_id'])->post_title;
-            $ali = new AliSms();
-            $result = $ali->sendSms($mobile, 7, array('user'=> $real_name, 'cate' => $post_title, 'coach' => $coach_real_name));
+            $userContact = $this->getMobileOrEmailAndRealname($user['ID'],$user['user_mobile'], $user['user_email']);
+            if($userContact == false){
+                $sendMsg = ', 用户信息不完整, 未发送信息';
+            }else{
+                if($userContact['type'] == 'mobile'){
+                    $ali = new AliSms();
+                    $result = $ali->sendSms($userContact['contact'], 7, array('user'=> $userContact['real_name'], 'cate' => $post_title, 'coach' => $coach_real_name));
+                }else{
+                    $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].'您好，您的'.$post_title.'教练'.$coach_real_name.'解除了与您的教学关系，您可登录系统查看');
+                }
+            }
+
             wp_send_json_success(['info' => '已解除教学关系']);
 
         }else{
@@ -981,6 +1031,120 @@ class Match_Ajax
             $wpdb->commit();
             wp_send_json_success(['info' => '问题已删除']);
         }
+    }
+
+    /**
+     * 根据user_id user_mobile user_email获取发动信息的手机号码或者邮箱
+     */
+    public function getMobileOrEmailAndRealname($user_id, $mobile, $email){
+
+        if(empty($mobile) && empty($email)) return false;
+        global $wpdb;
+        if(empty($mobile)){
+            $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$user_id, ARRAY_A);
+            if(isset($address['telephone']) && !empty($address['telephone'])){
+                $mobile = $address['telephone'];
+            }else{
+                //如果收货地址也不存在, 就使用邮箱
+                if(empty($email)){
+                    return false;//邮箱和手机都没有
+                }
+            }
+        }
+        //获取真实姓名
+        $user_user_meta = get_user_meta($user_id);
+        if(isset($user_user_meta['user_real_name'][0]) && !empty($user_user_meta['user_real_name'][0])){
+            $real_name = unserialize($user_user_meta['user_real_name'][0])['real_name'];
+        }elseif(isset($user_user_meta['last_name'][0]) && isset($user_user_meta['first_name'][0]) && !empty($user_user_meta['first_name'][0]) && !empty($user_user_meta['first_name'][0])){
+            $real_name = $user_user_meta['last_name'][0].$user_user_meta['first_name'][0];
+        }elseif(isset($user_user_meta['nickname'][0])){
+            $real_name = $user_user_meta['nickname'][0];
+        }else{
+            $real_name = $mobile != '' && !empty($mobile) ? $mobile : $email;
+        }
+
+        if(!isset($real_name)) return false;
+        $type = $mobile != '' && !empty($mobile) ? 'mobile' : 'email';
+        $contact = $mobile != '' && !empty($mobile) ? $mobile : $email;
+        return ['contact' => $contact, 'type' => $type, 'real_name' => $real_name];
+
+    }
+    /**
+     * 邮件发送
+     * @param $to               收件人邮箱
+     * @param string $subject   标题
+     * @param $name             发送人名称
+     * @param string $body      内容
+     * @param null $attachment  附件
+     * @return bool|string
+     * @throws phpmailerException
+     */
+    public function send_mail($email,$title,$data,$attachment = null){
+        $interface_config = get_option('interface_config');
+        $config = $interface_config['smtp'];
+        if(empty($config)) wp_send_json_error(array('info'=>'邮件接口未配置'));
+
+        if(!is_file(LIBRARY_PATH.'Vendor/PHPMailer/class.phpmailer.php')) wp_send_json_error(array('info'=>'找不到邮件接口文件'));
+        include_once (LIBRARY_PATH.'Vendor/PHPMailer/class.phpmailer.php');
+        include_once (LIBRARY_PATH.'Vendor/SMTP.php');
+        /*ini_set("display_errors","On");
+        error_reporting(E_ALL);*/
+
+        $mail = new PHPMailer(); //PHPMailer对象
+
+        $mail->CharSet = 'UTF-8'; //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+
+        $mail->IsSMTP(); // 设定使用SMTP服务
+
+        $mail->SMTPDebug = 0; // 关闭SMTP调试功能
+
+        // 1 = errors and messages
+
+        // 2 = messages only
+        //print_r($config);die;
+        $mail->SMTPAuth = true; // 启用 SMTP 验证功能
+
+        $mail->SMTPSecure = 'ssl'; // 使用安全协议
+
+        $mail->Host = $config['host']; // SMTP 服务器
+
+        $mail->Port = $config['port']; // SMTP服务器的端口号
+
+        $mail->Username = $config['user_name']; // SMTP服务器用户名
+
+        $mail->Password = !empty($config['user_warrant']) ? $config['user_warrant'] : $config['user_pass']; // SMTP服务器密码
+
+        $mail->SetFrom($config['from_email'], $config['from_name']);
+
+        $replyEmail = $config['reply_email']?$config['reply_email']:$config['from_email'];
+
+        $replyName = $config['reply_name']?$config['reply_name']:$config['from_name'];
+
+        $mail->AddReplyTo($replyEmail, $replyName);
+
+        $smtp = new \library\Smtp();
+//        $result = $smtp->get_smtp_template($data,$template);
+
+        $mail->Subject = $title;
+
+        $mail->AltBody = "为了查看该邮件，请切换到支持 HTML 的邮件客户端";
+
+        $mail->MsgHTML($data);    //发送内容
+
+        $mail->AddAddress($email, $config['from_name']);
+
+        if(is_array($attachment)){ // 添加附件
+
+            foreach ($attachment as $file){
+
+                is_file($file) && $mail->AddAttachment($file);
+
+            }
+
+        }
+
+        return $mail->Send() ? true : $mail->ErrorInfo;
+
     }
 
 }

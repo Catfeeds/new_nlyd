@@ -825,6 +825,43 @@ if(!function_exists('is_ajax')){
 
 }
 
+/**
+ * 根据user_id user_mobile user_email获取发送信息的手机号码或者邮箱和真实姓名
+ */
+function getMobileOrEmailAndRealname($user_id, $mobile, $email){
+
+    if(empty($mobile) && empty($email)) return false;
+    global $wpdb;
+    if(empty($mobile)){
+        $address = $wpdb->get_row('SELECT telephone,fullname FROM '.$wpdb->prefix.'my_address WHERE is_default=1 AND user_id='.$user_id, ARRAY_A);
+        if(isset($address['telephone']) && !empty($address['telephone'])){
+            $mobile = $address['telephone'];
+        }else{
+            //如果收货地址也不存在, 就使用邮箱
+            if(empty($email)){
+                return false;//邮箱和手机都没有
+            }
+        }
+    }
+    //获取真实姓名
+    $user_user_meta = get_user_meta($user_id);
+    if(isset($user_user_meta['user_real_name'][0]) && !empty($user_user_meta['user_real_name'][0])){
+        $real_name = unserialize($user_user_meta['user_real_name'][0])['real_name'];
+    }elseif(isset($user_user_meta['last_name'][0]) && isset($user_user_meta['first_name'][0]) && !empty($user_user_meta['first_name'][0]) && !empty($user_user_meta['first_name'][0])){
+        $real_name = $user_user_meta['last_name'][0].$user_user_meta['first_name'][0];
+    }elseif(isset($user_user_meta['nickname'][0])){
+        $real_name = $user_user_meta['nickname'][0];
+    }else{
+        $real_name = $mobile != '' && !empty($mobile) ? $mobile : $email;
+    }
+
+    if(!isset($real_name)) return false;
+    $type = $mobile != '' && !empty($mobile) ? 'mobile' : 'email';
+    $contact = $mobile != '' && !empty($mobile) ? $mobile : $email;
+    return ['contact' => $contact, 'type' => $type, 'real_name' => $real_name];
+
+}
+
 add_action("user_register", "set_user_admin_bar_false_by_default", 10, 1);
 function set_user_admin_bar_false_by_default($user_id) {
     update_user_meta( $user_id, 'show_admin_bar_front', 'false' );
