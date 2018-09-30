@@ -86,12 +86,17 @@ jQuery(function($) {
                 var _this=$(this);
                 var id=_this.attr('data-id');
                 my_answer[id]=[];
+                var flag=false;
                 _this.find('.select_answer').each(function(e){
                     var __this=$(this);
                     if(__this.is(':checked')){
-                        my_answer[id].push(__this.attr('data-name'))
-                    }
+                        flag=true;
+                        my_answer[id].push(__this.attr('data-name'));
+                    };
                 })
+                if(!flag){//未作答
+                    my_answer[id]=['-1']
+                }
             })
             
             var data={
