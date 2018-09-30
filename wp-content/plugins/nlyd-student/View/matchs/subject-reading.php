@@ -24,10 +24,15 @@
                         $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select : '--';
                     }
                 }
+                global $current_user;
+                if($current_user->ID == 63){
+
+                    var_dump($my_select .'=='. $questions_select);
+                }
             ?>
             <div class="one-ques">
                 <p class="question"><?=$num?>、<?=$val?></p>
-                <p class="yours">你的答案：<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : '未作答';?></span></p>
+                <p class="yours">你的答案：<span class="<?=$my_answer_select == $questions_answer_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : '未作答';?></span></p>
                 <p class="rights">正确答案：<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
             </div>
             <?php } ?>

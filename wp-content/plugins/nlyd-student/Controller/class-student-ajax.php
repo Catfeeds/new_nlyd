@@ -298,8 +298,7 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
-        if($row['answer_status'] == 1) wp_send_json_error(array('info'=>'答案已提交'));
-
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>'答案已提交','url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
         //计算成绩
         //print_r($_POST['match_action']);die;
         $update_arr = array();
@@ -364,6 +363,7 @@ class Student_Ajax
                 $update_arr['questions_answer'] = json_encode($questions_answer);
                 break;
             case 'subjectReading': //文章速读
+                //var_dump($_POST);die;
                 $questions_answer = json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -1456,14 +1456,14 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>'暂无比赛'));
         foreach ($rows as $k => $val){
 
-            //修改比赛状态
+            /*//修改比赛状态
             $match = get_match_end_time($val['ID']);
             $end_time = end($match)['project_end_time'];
             /*if($current_user->ID == 66){
                 print_r($val);
                 var_dump($end_time);
                 echo "<hr/>";
-            }*/
+            }
             if(strtotime($val['entry_end_time']) < get_time() && get_time() < strtotime($val['match_start_time'])){
                 $val['match_status'] = $match_status = -2;  //等待开赛
             }elseif (get_time() < strtotime($val['entry_end_time'])){
@@ -1475,7 +1475,7 @@ class Student_Ajax
             }
 
             
-            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));*/
 
             //获取报名人数
             $sql_ = "select count(a.id) total 

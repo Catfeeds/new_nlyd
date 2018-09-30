@@ -210,7 +210,52 @@ class Student_Matchs extends Student_Home
         /*$a = new TwentyFour();
        var_dump($a->calculate(array(5,5,5,9)));*/
 
-        global $wpdb;
+        global $wpdb,$current_user;
+
+        //if($current_user->ID == 66){}
+
+        $map = array();
+        $map[] = ' a.post_type = "match" ';
+        $map[] = ' a.post_status = "publish" ';
+        $map[] = ' c.meta_value="ON" ';
+        $where = join(' and ',$map);
+        $filed = 'a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time,c.meta_value as match_switch';
+        $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
+                LEFT JOIN {$wpdb->prefix}match_meta b ON a.ID = b.match_id
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
+                WHERE {$where}
+                ORDER BY b.match_start_time DESC
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //var_dump($rows);
+        if(!empty($rows)){
+            //var_dump($rows);
+            $new_time = get_time('mysql');
+            foreach ($rows as $v){
+
+                if($v['match_switch'] == 'ON'){
+
+                    $rows = get_match_end_time($v['match_id']);
+                    $start_time = reset($rows)['project_start_time'];
+                    $end_time = end($rows)['project_end_time'];
+
+
+                    if($new_time < $v['entry_end_time']){     //报名中
+                        $save = array('match_status'=>1);
+                    }else if($v['entry_end_time'] < $new_time && $new_time < $start_time){       //等待开赛
+                        $save = array('match_status'=>-2);
+                    }else if($start_time < $new_time && $new_time < $end_time){       //比赛中
+                        $save = array('match_status'=>2);
+                    }else if($end_time < $new_time){
+                        $save = array('match_status'=>-3);
+                    }
+                    //var_dump($v['match_id']);
+                    //var_dump($save);
+                    $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
+                    //var_dump($a);
+                }
+            }
+        }
 
         $row = $wpdb->get_row('SELECT ID FROM '.$wpdb->prefix.'posts WHERE post_status="publish" AND post_type="match"');
 
@@ -625,7 +670,7 @@ class Student_Matchs extends Student_Home
                 $posts = get_posts(array(
                         'numberposts' => 1, //输出的文章数量
                         'post_type' => 'question',  //自定义文章类型名称
-                        'orderby'=>'post_date', //post_date rand
+                        'orderby'=>'rand', //post_date rand
                         'tax_query'=>array(
                             array(
                                 'taxonomy'=>'question_genre', //自定义分类法名称
@@ -982,6 +1027,7 @@ class Student_Matchs extends Student_Home
      * 比赛项目答题结果页
      */
     public function answerLog(){
+
 
         if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
             $this->get_404('参数错误');
