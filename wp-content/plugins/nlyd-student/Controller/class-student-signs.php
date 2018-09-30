@@ -16,7 +16,7 @@ class Student_Signs
     public function __construct($action)
     {
 
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false){
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false && ACTION == 'index'){
             $this->index();
             die;
         }else{
@@ -183,7 +183,9 @@ class Student_Signs
                     return false;
                 },1500)
             </script>
-        <?php }
+        <?php
+            exit;
+        }
         else{
 
         	$sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$meta['real_name']}' ";
@@ -200,7 +202,10 @@ class Student_Signs
                     return false;
                 },1500)
             </script>
-            <?php }else{
+            <?php
+                exit;
+            }
+            else{
             	$order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$users->ID} ");
             	//var_dump($order_id);die;
             	if(!empty($order_id)){
@@ -223,7 +228,9 @@ class Student_Signs
 		                },1500)
             		</script>
             	<?php
-            	}else{
+                    exit;
+            	}
+            	else{
 
 						$wpdb->startTrans();
                         //在平台创建订单
@@ -260,7 +267,9 @@ class Student_Signs
 			                },1500)
 	            		</script>
                     	<?php
-                        }else{
+                            exit;
+                        }
+                        else{
                         	$wpdb->rollback();
                     	?>
                     	<script type="text/javascript">
@@ -271,7 +280,9 @@ class Student_Signs
             	}
             }
         }
-        var_dump($meta);die;
+
+        die;
+        var_dump($meta);
 
     }
 
