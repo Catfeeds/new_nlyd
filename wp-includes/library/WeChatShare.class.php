@@ -3,11 +3,11 @@
  * 
  * 微信分享接口
  */
-
+namespace library;
 class WeChatShare{
 
-  private $appId = 'wx0bd09c8eb544aa6e';
-  private $appSecret = 'b120c7e485a08ac4fec5fd6b0eebaa12';
+  private $appId = 'wxb575928422b38270';
+  private $appSecret = '1f55ec97e01f249b4ac57b7c99777173';
 
   /*public function __construct($appId, $appSecret) {
     $this->appId = $appId;
@@ -102,17 +102,18 @@ class WeChatShare{
   }
 
   private function httpGet($url) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_URL, $url);
 
-    $res = curl_exec($curl);
-    curl_close($curl);
 
-    return $res;
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($curl, CURLOPT_URL, $url);
+
+      $res = curl_exec($curl);
+      curl_close($curl);
+      return $res;
   }
 }
 

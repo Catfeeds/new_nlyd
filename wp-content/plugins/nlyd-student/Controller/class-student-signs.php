@@ -6,7 +6,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-
+use library\WeChatShare;
 class Student_Signs
 {
 
@@ -312,8 +312,17 @@ class Student_Signs
         exit;
     }
 
-    
+    /**
+     * 微信定位
+     */
+    public function weChatLocation(){
 
+        $jssdk = new WeChatShare();
+        $signPackage = $jssdk->GetSignPackage();
+
+        $view = student_view_path.CONTROLLER.'/location.php';
+        load_view_template($view,array('jdk',$signPackage));
+    }
 
 
     /**
@@ -324,8 +333,11 @@ class Student_Signs
             wp_register_style( 'my-signs-success', student_css_url.'signs/success.css',array('my-student') );
             wp_enqueue_style( 'my-signs-success' );
         }
-        //wp_register_script( 'my-student-sign', student_js_url.'student-sign.js',array('jquery'),leo_student_version);
-        //wp_enqueue_script( 'my-student-sign' );           
+        if(ACTION == 'weChatLocation'){
+
+            wp_register_script( 'weChat-js-sdk', 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js',array('jquery'),leo_student_version);
+            wp_enqueue_script( 'weChat-js-sdk' );
+        }
 
     }
 }
