@@ -906,37 +906,40 @@ class Match_Ajax
         if($match_id < 1 || $user_id < 1) wp_send_json_error(array('info'=>'非法操作'));
         global $wpdb;
         //判断是否已报名该比赛
-        $orderRes = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'order WHERE user_id='.$user_id.' AND match_id='.$match_id.' AND order_type=1');
+        $orderRes = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'order WHERE user_id='.$user_id.' AND match_id='.$match_id.' AND order_type=1 AND pay_status IN(2,3,4)');
         if($orderRes) wp_send_json_error(array('info'=>'此学员已报名该比赛'));
+        //清除未支付的当前学员当前比赛的订单
+        $wpdb->query('DELETE FROM '.$wpdb->prefix.'order WHERE user_id='.$user_id.' AND match_id='.$match_id.' AND order_type=1 AND pay_status NOT IN(2,3,4)');
+
         //判断是否有主训和默认收货地址
         //主训
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
-        $postsRows = $wpdb->get_results($sql,ARRAY_A);
-        foreach ($postsRows as $prow){
-            //每个类别得主训
-            $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE apply_status=2 AND major=1 AND category_id='.$prow['ID']);
-            if(!$res){
-                wp_send_json_error(array('info'=>'当前学员未设置'.$prow['post_title'].'主训教练!'));
-                return;
-            }
-        }
-        //默认收货地址
-        $addressRes = $wpdb->get_row('SELECT fullname,telephone,country,province,city,area,address FROM '.$wpdb->prefix.'my_address WHERE user_id='.$user_id.' AND is_default=1', ARRAY_A);
-        if(!$addressRes){
-            wp_send_json_error(array('info'=>'当前学员未设置默认收货地址!'));
-            return;
-        }
+//        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+//        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+//        foreach ($postsRows as $prow){
+//            //每个类别得主训
+//            $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'my_coach WHERE apply_status=2 AND major=1 AND category_id='.$prow['ID']);
+//            if(!$res){
+//                wp_send_json_error(array('info'=>'当前学员未设置'.$prow['post_title'].'主训教练!'));
+//                return;
+//            }
+//        }
+//        //默认收货地址
+//        $addressRes = $wpdb->get_row('SELECT fullname,telephone,country,province,city,area,address FROM '.$wpdb->prefix.'my_address WHERE user_id='.$user_id.' AND is_default=1', ARRAY_A);
+//        if(!$addressRes){
+//            wp_send_json_error(array('info'=>'当前学员未设置默认收货地址!'));
+//            return;
+//        }
         $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id);
         //新增订单
         $orderInsertData = [
             'user_id' => $user_id,
             'match_id'=>$match_id,
-            'cost'=> $cost,
-            'fullname'=>$addressRes['fullname'],
-            'telephone'=>$addressRes['telephone'],
-            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
+            'cost'=> 0,
+//            'fullname'=>$addressRes['fullname'],
+//            'telephone'=>$addressRes['telephone'],
+//            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
             'order_type'=>1,
-            'pay_status'=>2,
+            'pay_status'=>4,
             'created_time'=>get_time('mysql'),
         ];
 
