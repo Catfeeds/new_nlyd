@@ -61,9 +61,10 @@ jQuery(document).ready(function($) {
             }
          }else{
             if(isAndroid){
-                if(!mqqbrowser() && !isQQInstalled()){//非QQ浏览器，QQ内置浏览器
+                if(!mqqbrowser() && !isQQInstalled() && !isChrome()){//非QQ浏览器，QQ内置浏览器
                     $("input[type='file']").attr('capture','camera');
                 }
+                
                 if(isWeiXin()){
                     $("input[type='file']").attr('capture','camera');
                 }
@@ -185,6 +186,15 @@ jQuery(document).ready(function($) {
         var u=navigator.userAgent
         //Safari                      Chrome            傲游              
         if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function isChrome() {
+        var u=navigator.userAgent
+        //Chrome
+        if (/Chrome/.test(u)) {
             return true;
         }else{
             return false;
