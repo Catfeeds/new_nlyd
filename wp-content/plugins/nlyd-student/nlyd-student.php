@@ -83,28 +83,19 @@ if(!class_exists('StudentController')){
             $type = 'other';
             //分别进行判断
             if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
-            {
-                //$type = 'ios';
-            ?>
-                <!--ios操作判断-->
+            { ?>
+                <!--$type = 'ios';-->
 
 
 
-
-
-            <?php }
-
+            <?php
+            }
             if(strpos($agent, 'android'))
-            {
-                //$type = 'android';
-            ?>
-                <!--非ios操作判断-->
-
-
+            { ?>
+                <!--$type = 'android';-->
 
 
             <?php }
-            //var_dump($type);
         }
 
         public function logging_in($user_login){
