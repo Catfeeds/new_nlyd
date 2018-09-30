@@ -55,17 +55,19 @@ jQuery(function($) {
     nandu=0,//难度系数，越小越难,有几个不同字符（可变项）
     // nanduMax=4,//替换项的上线
     nanduLen=6,//每nanduLen题nandu++
-    stop=false,//停止计时
+    // stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
-    flaseMax=111111111,//错题数量
+    flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
+    // fetchPage_time=0;
     getAjaxTime=<?=$child_count_down?>+1;//程序获取时间
-    showTime=function(){  
-        if(!stop){
+    showTime=function(){ 
+        // fetchPage_time=0 
+        // if(!stop){
             _count_time--
-        }
+        // }
             var day = Math.floor((_count_time / 3600) / 24);
             var hour = Math.floor((_count_time / 3600) % 24);
             var minute = Math.floor((_count_time / 60) % 60);
@@ -105,6 +107,7 @@ jQuery(function($) {
             
 
     }  
+
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
     if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
@@ -113,6 +116,7 @@ jQuery(function($) {
         flaseQuestion=matchSession['flaseQuestion'];
         nandu=matchSession['nandu'];
         itemLen=matchSession['itemLen'];
+        // fetchPage_time=1
     }
     if(!isMatching){
         // $('.matching-fastScan').css('paddingTop','40%');
@@ -308,7 +312,12 @@ jQuery(function($) {
                 }, flashTime*1000);
             }
             //计时器
-            _count_time=answerTime
+            // if(fetchPage_time!=0){
+            //     _count_time=fetchPage_time
+            // }else{
+                _count_time=answerTime
+            // }
+             
             showTime()
 
     }
@@ -437,7 +446,6 @@ layui.use('layer', function(){
     // mTouch('body').on('tap','#sumbit',function(e){
     new AlloyFinger($('#sumbit')[0], {
     tap:function(){
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         layer.open({
                 type: 1
                 ,maxWidth:300
@@ -447,20 +455,21 @@ layui.use('layer', function(){
                 ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
                 ,btn: [ '按错了','提交',]
                 ,success: function(layero, index){
-                    stop=true;
+                    // stop=true;
                 },
                 cancel: function(index, layero){
                     layer.closeAll();
-                    stop=false;
+                    // stop=false;
                 }
                 ,yes: function(index, layero){
                     layer.closeAll();
-                    stop=false;
+                    // stop=false;
                 }
                 ,btn2: function(index, layero){
                     layer.closeAll();
+                    var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
                     submit(time,1);
-                    stop=false;
+                    // stop=false;
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中

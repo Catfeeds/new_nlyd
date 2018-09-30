@@ -77,21 +77,64 @@ if(!class_exists('StudentController')){
         /*
          * 判断登录系统or浏览器
          */
-        public function is_device_browser(){
+         public function is_device_browser(){
             //全部变成小写字母
             $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
             $type = 'other';
             //分别进行判断
             if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
             { ?>
-
+                <script>
+                    function isWeiXin(){
+                        var ua = window.navigator.userAgent.toLowerCase();
+                        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
+                    function isSafari() {
+                        var u=navigator.userAgent
+                        //Safari                      Chrome          //火狐傲游Chrome    //百度UC.360,sougou,                  
+                        if (/Safari/.test(u) && !/Chrome/.test(u) && !/iOS/.test(u) && !/rowser/.test(u) && !/baidu/.test(u)) {
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
+                    if(!isWeiXin()){
+                        if(!isSafari()){
+                            alert('请使用微信或Safari浏览器打开')
+                            window.opener=null;
+                            window.open('','_self');
+                            window.close();
+                        }
+                    }
+                </script>
 
 
             <?php
             }
             if(strpos($agent, 'android'))
             { ?>
-
+                <script>
+                    function isWeiXin(){
+                        var ua = window.navigator.userAgent.toLowerCase();
+                        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    }
+                    if(!isWeiXin()){
+                        if(!window.chrome){
+                            alert('请使用微信或谷歌浏览器打开')
+                            window.opener=null;
+                            window.open('','_self');
+                            window.close();
+                        }
+                    }
+                </script>
 
             <?php }
         }
