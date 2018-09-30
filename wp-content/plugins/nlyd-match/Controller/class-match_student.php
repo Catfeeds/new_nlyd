@@ -785,7 +785,7 @@ class Match_student {
                             <div id="option2">
 
                                 <span class="<?php if($op2 == 'sdl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sdl')?>">速度类</a>
+                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sdl')?>">速读类</a>
                                 </span>
                                 <span class="<?php if($op2 == 'sjl'){ ?>active<?php } ?>">
                                     <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sjl')?>">速记类</a>
@@ -935,6 +935,13 @@ class Match_student {
 
                                     <td class="name column-ID column-primary" data-colname="学员ID">
                                         <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
+
+                                        <div class="row-actions">
+                                            <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
+                                            <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
+                                            <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $post->ID . '&student_id='.$raV['user_id'])?>" aria-label="">答题记录</a></span>
+                                        </div>
+
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
                                     <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
