@@ -61,6 +61,18 @@ class Smtp
                 $title = '信息变更验证码';
                 $body .=  "验证码{$data['code']}，您正在尝试变更重要信息，请妥善保管账户信息。";
                 break;
+            case 14:
+                $title = '申请战队';
+                $body .=  "尊敬的{$data['teams']}您好，ID为{$data['user_id']}的学员向您发送了“{$data['applyType']}”申请，请您尽快登录系统处理该申请。";
+                break;
+            case 13:
+                $title = '申请教练';
+                $body .=  "尊敬的{$data['coach']}您好, ID为{$data['userID']}的学员申请您成为其{$data['cate']}教练, 请您尽快登录系统处理该申请";
+                break;
+            case 12:
+                $title = '解除教练';
+                $body .=  "尊敬的{$data['coach']}您好，ID为{$data['userID']}的学员解除了与您的{$data['cate']}教练关系，您可登录系统查看详情。";
+                break;
             default:
                 $template['code'] =  'SMS_119635020';
                 $title = '邮件测试';

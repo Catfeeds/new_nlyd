@@ -644,6 +644,7 @@ class Student_Ajax
         //开启事务,发送短信失败回滚
         $wpdb->startTrans();
         if($_POST['handle'] == 'join'){ //加入战队
+            $applyTypeName = '加入战队';
             $sql .= " and status > -2 ";
             $row = $wpdb->get_row($sql);
             if(!empty($row)){
@@ -670,6 +671,7 @@ class Student_Ajax
             }
             $msgTemplate = 11;
         }else{
+            $applyTypeName = '退出战队';
             $sql .= " and team_id = {$_POST['team_id']} and status = 2 ";
             //print_r($sql);die;
             $row = $wpdb->get_row($sql);
@@ -684,12 +686,24 @@ class Student_Ajax
         if($result){
             $wpdb->commit();
             /***短信通知战队负责人****/
-            $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
+            $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID,u.user_email AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
-            $userID = get_user_meta($current_user->ID, 'user_ID')[0];
-            $ali = new AliSms();
-//            print_r($director);die;
-            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
+            if($director){
+                $userContact = getMobileOrEmailAndRealname($director['ID'], $director['user_mobile'], $director['user_email']);
+                if($userContact){
+                    $userID = get_user_meta($current_user->ID, 'user_ID')[0];
+                    if($userContact['type'] == 'mobile'){
+                        $ali = new AliSms();
+                        $result = $ali->sendSms($userContact['contact'], $msgTemplate, array('teams'=>$userContact['real_name'], 'user_id' => $userID));
+                    }else{
+                        $result = send_mail($userContact['contact'], 14, ['teams' => $userContact['real_name'], 'userID' => $userID, 'applyType' => $applyTypeName]);
+                    }
+                }
+            }
+//            $userID = get_user_meta($current_user->ID, 'user_ID')[0];
+//            $ali = new AliSms();
+////            print_r($director);die;
+//            $result = $ali->sendSms($director['user_mobile'], $msgTemplate, array('teams'=>str_replace(', ', '', $director['display_name']), 'user_id' => $userID));
             /***********end************/
             wp_send_json_success(array('info'=>'操作成功,等待战队受理'));
         }
@@ -1177,13 +1191,28 @@ class Student_Ajax
 
 
         if($result){
-            /***********发送短信通知教练*************/
+            /***********发送短信或邮件通知教练*************/
             //获取教练信息
-            $coach = $wpdb->get_row('SELECT user_mobile,display_name,ID AS uid FROM '.$wpdb->users.' WHERE ID='.$_POST['coach_id'], ARRAY_A);
-            $post_title = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID='.$_POST['category_id']);
-            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
-            $ali = new AliSms();
-            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
+            $coach = $wpdb->get_row('SELECT user_mobile,display_name,ID AS uid,user_email FROM '.$wpdb->users.' WHERE ID='.$_POST['coach_id'], ARRAY_A);
+
+            if($coach){
+                $userContact = getMobileOrEmailAndRealname($coach['uid'], $coach['user_mobile'], $coach['user_email']);
+                if($userContact){
+                    $post_title = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID='.$_POST['category_id']);
+                    $userID = get_user_meta($current_user->ID, 'user_ID')[0];
+                    if($userContact['type'] == 'mobile'){
+                        $ali = new AliSms();
+                        $result = $ali->sendSms($userContact['contact'], 13, array('coach'=>$userContact['real_name'], 'user' => $userID ,'cate' => $post_title));
+                    }else{
+                        $result = send_mail($userContact['contact'], 13, ['coach' => $userContact['real_name'], 'userID' => $userID, 'cate' => $post_title]);
+                    }
+                }
+            }
+
+//            $post_title = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID='.$_POST['category_id']);
+//            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+//            $ali = new AliSms();
+//            $result = $ali->sendSms($coach['user_mobile'], 13, array('coach'=>str_replace(', ', '', $coach['display_name']), 'user' => $userID ,'cate' => $post_title));
             /******************end*******************/
             wp_send_json_success(array('info'=>'申请成功,请等待教练同意'));
         }
@@ -2871,19 +2900,29 @@ class Student_Ajax
         if($current_user->ID < 1) wp_send_json_error(array('info'=>'未登录'));
 
         //判断当前是否是已申请的教练
-        $row = $wpdb->get_row("select mc.id,mc.apply_status,mc.major,u.user_mobile,p.post_title,display_name,u.ID as uid from {$wpdb->prefix}my_coach as mc 
+        $row = $wpdb->get_row("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,display_name,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
         where mc.coach_id = {$_POST['coach_id']} and mc.user_id = $current_user->ID and mc.category_id = {$_POST['category_id']} and mc.apply_status=2",ARRAY_A);
         if(empty($row)) wp_send_json_error(array('info'=>'数据错误'));
         if($row['apply_status'] != 2) wp_send_json_error(array('该教练还不是你的教练'));
-        $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+
         //改变状态
         $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id']);
         if($update){
             //TODO 发送短信通知教练 ===================================
-            $ali = new AliSms();
-            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
+            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
+                if($userContact){
+                    if($userContact['type'] == 'mobile'){
+                        $ali = new AliSms();
+                        $result = $ali->sendSms($userContact['contact'], 14, array('coach'=>$userContact['real_name'], 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
+                    }else{
+                        $result = send_mail($userContact['contact'], 12, ['coach' => $userContact['real_name'], 'userID' => $userID, 'cate' => $row['post_title']]);
+                    }
+                }
+//            $ali = new AliSms();
+//            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             wp_send_json_success(['info' => '解除教学关系成功']);
         }
         wp_send_json_error(array('info'=>'解除教学关系失败'));

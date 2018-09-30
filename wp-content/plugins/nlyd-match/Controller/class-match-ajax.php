@@ -369,8 +369,8 @@ class Match_Ajax
         //战队名称
         $post_title = get_post($users[0]['team_id'])->post_title;
         if(!$post_title) wp_send_json_error(['info' => '获取战队名称失败']);
-//        $bool = $wpdb->query($sql);
-        $bool = true;
+        $bool = $wpdb->query($sql);
+//        $bool = true;
         if($bool){
             //TODO 发送通知
 
