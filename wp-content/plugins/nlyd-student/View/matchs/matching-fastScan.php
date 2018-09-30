@@ -58,7 +58,7 @@ jQuery(function($) {
     stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
-    flaseMax=10,//错题数量
+    flaseMax=111111111,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
     getAjaxTime=<?=$child_count_down?>+1;//程序获取时间
@@ -407,6 +407,8 @@ $('#selectWrapper .fastScan-item').each(function(){
     }
     if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
+        clearTimeout(timer);
+        $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
         setTimeout(function(){
             submit(0,3)
         }, 1000);
@@ -424,6 +426,8 @@ $('#selectWrapper .fastScan-item').each(function(){
             }else{
                 $.alerts('比赛结束')
             }
+            clearTimeout(timer);
+            $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
             setTimeout(function() {
                 submit(0,3)
             }, 1000);
