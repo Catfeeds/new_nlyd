@@ -172,7 +172,7 @@ if(!class_exists('StudentController')){
                 $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
                 left join {$wpdb->prefix}order b on a.match_id = b.match_id
                 left join {$wpdb->prefix}posts c on a.match_id = c.ID
-                WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
+                WHERE a.match_status = -2 AND a.match_start_time >= NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
                 ORDER BY match_start_time asc limit 1
                 ";
                 //print_r($sql);
