@@ -24,7 +24,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','2.0.8' );
+            define( 'leo_student_version','2.0.8.3' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -67,8 +67,44 @@ if(!class_exists('StudentController')){
 
             add_action('wp_head',array($this,'is_abnormal_login'));
 
+            //判断登录系统or浏览器
+            $this->is_device_browser();
+
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
+        }
+
+        /*
+         * 判断登录系统or浏览器
+         */
+        public function is_device_browser(){
+            //全部变成小写字母
+            $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+            $type = 'other';
+            //分别进行判断
+            if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
+            {
+                //$type = 'ios';
+            ?>
+                <!--ios操作判断-->
+
+
+
+
+
+            <?php }
+
+            if(strpos($agent, 'android'))
+            {
+                //$type = 'android';
+            ?>
+                <!--非ios操作判断-->
+
+
+
+
+            <?php }
+            //var_dump($type);
         }
 
         public function logging_in($user_login){
