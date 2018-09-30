@@ -84,7 +84,6 @@ if(!class_exists('StudentController')){
             //分别进行判断
             if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
             { ?>
-                <!--$type = 'ios';-->
 
 
 
@@ -92,7 +91,6 @@ if(!class_exists('StudentController')){
             }
             if(strpos($agent, 'android'))
             { ?>
-                <!--$type = 'android';-->
 
 
             <?php }
