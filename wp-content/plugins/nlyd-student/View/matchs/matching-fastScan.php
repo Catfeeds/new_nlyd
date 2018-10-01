@@ -422,7 +422,7 @@ $('#selectWrapper .fastScan-item').each(function(){
             $.alerts('正在提交答案')
         }
     }
-    if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
+    if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         clearTimeout(timer);
         $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
