@@ -67,73 +67,10 @@ if(!class_exists('StudentController')){
 
             add_action('wp_head',array($this,'is_abnormal_login'));
 
-            //判断登录系统or浏览器
-            $this->is_device_browser();
-
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
         }
 
-        /*
-         * 判断登录系统or浏览器
-         */
-         public function is_device_browser(){
-            //全部变成小写字母
-            $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            $type = 'other';
-            //分别进行判断
-            if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
-            { ?>
-                <script>
-                    function isWeiXin(){
-                        var ua = window.navigator.userAgent.toLowerCase();
-                        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }
-                    function isSafari() {
-                        var u=navigator.userAgent
-                        //Safari                      Chrome          //火狐傲游Chrome    //百度UC.360,sougou,
-                        if (/Safari/.test(u) && !/Chrome/.test(u) && !/iOS/.test(u) && !/rowser/.test(u) && !/baidu/.test(u)) {
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }
-                    if(!isWeiXin()){
-                        if(!isSafari()){
-                            alert('请使用微信或Safari浏览器打开')
-                            window.history.back(-1);
-                        }
-                    }
-                </script>
-
-
-            <?php
-            }
-            if(strpos($agent, 'android'))
-            { ?>
-                <script>
-                    function isWeiXin(){
-                        var ua = window.navigator.userAgent.toLowerCase();
-                        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-                            return true;
-                        }else{
-                            return false;
-                        }
-                    }
-                    if(!isWeiXin()){
-                        if(!window.chrome){
-                            alert('请使用微信或谷歌浏览器打开')
-                            window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
-                        }
-                    }
-                </script>
-
-            <?php }
-        }
 
         public function logging_in($user_login){
             $user = get_user_by( 'login', $user_login );
@@ -350,15 +287,13 @@ if(!class_exists('StudentController')){
                     if(!isWeiXin()){
                         if(!window.chrome){
                             alert('请使用微信或谷歌浏览器打开')
-                            // window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
+                            window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
                         }
                     }
                 </script>
 
-            <?php }
+            <?php } ?>
 
-
-            ?>
             <script>window.admin_ajax  = '<?= admin_url('admin-ajax.php' );?>';</script>
             <script>window.plugins_url  = '<?= plugins_url('',dirname(__FILE__));?>';</script>
             <script>window.home_url  = '<?= home_url();?>';</script>
