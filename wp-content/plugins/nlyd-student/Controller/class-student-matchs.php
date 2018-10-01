@@ -670,7 +670,7 @@ class Student_Matchs extends Student_Home
                 $posts = get_posts(array(
                         'numberposts' => 1, //输出的文章数量
                         'post_type' => 'question',  //自定义文章类型名称
-                        'orderby'=>'rand', //post_date rand
+                        'orderby'=>'post_date', //post_date rand
                         'tax_query'=>array(
                             array(
                                 'taxonomy'=>'question_genre', //自定义分类法名称
@@ -1218,6 +1218,7 @@ class Student_Matchs extends Student_Home
             $this->redis->setex('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more,$down-get_time(),$down);
             $next_count_down = $down-get_time();
         }
+        //print_r($row);
         $data = array(
             'project_alias'=>$this->project_alias,
             'next_type'=>$next_type,
@@ -1242,6 +1243,8 @@ class Student_Matchs extends Student_Home
             'next_project_url'=>$next_project_url,
             'wait_url' =>$wait_url,
             'record_url'=>home_url('matchs/record/match_id/'.$this->match_id.'/last/answerLog'),
+            'match_row'=>$row
+        ,
         );
         //var_dump($data['end_time_count_down']);
         /********测试使用*********/
@@ -1619,7 +1622,7 @@ class Student_Matchs extends Student_Home
     public function get_match_questions($match_id,$project_id,$match_more){
 
         global $wpdb,$current_user;
-        $sql = "select a.answer_status,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title
+        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title
                     from {$wpdb->prefix}match_questions a 
                     left join {$wpdb->prefix}posts b on a.project_id = b.ID
                     where a.user_id = {$current_user->ID} and a.match_id = {$match_id} and a.project_id = {$project_id} and a.match_more = {$match_more}

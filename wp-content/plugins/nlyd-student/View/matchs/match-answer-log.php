@@ -69,6 +69,30 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                             <?php endif;?>
                         </div>
                     </div>
+
+                    <?php
+
+                        if($match_row['submit_type'] == 2){
+                            $error='由于比赛过程中错误达上限，该轮答案由系统强制提交';
+                        }elseif($match_row['submit_type'] == 3){
+                            $error='由于比赛过程中时间达上限，该轮答案由系统强制提交';
+                        }elseif ($match_row['submit_type'] == 4){
+                            $error='由于比赛过程中有切出系统行为，该轮答案由系统强制提交';
+                            if(!empty($match_row['leave_page_time'])){
+                                $arr = json_decode($match_row['leave_page_time'],true);
+                                $end_time = end($arr)['out'];
+                                //print_r($end_time);
+                            }
+                        }
+                    ?>
+
+                    <h6><?=$error?></h6>
+
+                    <?php if(!empty($end_time)): ?>
+                        <h7><?=$end_time?></h7>
+                    <?php endif;?>
+
+
                     <?php
                     switch ($project_alias){
                         case 'szzb':    //数字争霸
