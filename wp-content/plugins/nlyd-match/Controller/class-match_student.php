@@ -1573,16 +1573,15 @@ class Match_student {
             $searchCode = isset($_GET['searchCode']) ? $_GET['searchCode'] : $_POST['searchCode'];
             if($searchCode != ''){
                 global $wpdb;
-                $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um2.meta_value AS user_level,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
-            LEFT JOIN '.$wpdb->usermeta.' AS um ON u.ID=um.user_id AND um.meta_key="user_ID" 
-            LEFT JOIN '.$wpdb->usermeta.' AS um2 ON u.ID=um2.user_id AND um2.meta_key="'.$wpdb->prefix.'user_level" 
-            LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
-            LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' AND o.pay_status IN(2,3,4) 
-            WHERE um2.meta_value=0 AND o.id is NULL 
-            AND (u.user_login LIKE "%'.$searchCode.'%" 
-            OR u.user_mobile LIKE "%'.$searchCode.'%" 
-            OR u.user_email LIKE "%'.$searchCode.'%" 
-            OR um.meta_value LIKE "%'.$searchCode.'%") LIMIT '.$start.','.$pageSize, ARRAY_A);
+                $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
+                LEFT JOIN '.$wpdb->usermeta.' AS um ON u.ID=um.user_id AND um.meta_key="user_ID" 
+                LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
+                LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' AND o.pay_status IN(2,3,4) 
+                WHERE o.id is NULL 
+                AND (u.user_login LIKE "%'.$searchCode.'%" 
+                OR u.user_mobile LIKE "%'.$searchCode.'%" 
+                OR u.user_email LIKE "%'.$searchCode.'%" 
+                OR um.meta_value LIKE "%'.$searchCode.'%") LIMIT '.$start.','.$pageSize, ARRAY_A);
 
                 $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
                 $pageAll = ceil($count['count']/$pageSize);
