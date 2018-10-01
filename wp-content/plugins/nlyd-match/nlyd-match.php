@@ -614,7 +614,7 @@ if(!class_exists('MatchController')){
                     echo $str;
                     break;
                 case 'team_student':
-                    //删除比赛必须要先关闭比赛,每个战队的成员数量
+                    //每个战队的成员数量
                     $student_num = $wpdb->get_var("SELECT COUNT(mt.id) FROM `{$wpdb->prefix}match_team` AS mt 
                     LEFT JOIN {$wpdb->users} AS u ON mt.user_id=u.ID WHERE mt.status=2 AND mt.team_id={$id} AND u.ID!=''");
                     $student_num = $student_num ? $student_num : 0;
