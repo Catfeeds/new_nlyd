@@ -101,7 +101,7 @@ new AlloyFinger($('#complete')[0], {
                     if(res.success){
                         if(res.data.url){
                             window.location.href=res.data.url;
-                            $.DelSession('ready_shuzi',sessionData)
+                            $.DelSession('ready_shuzi')
                         }   
                     }else{
                         $.alerts(res.data.info)
