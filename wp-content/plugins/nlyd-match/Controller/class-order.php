@@ -99,6 +99,7 @@ class Order {
         LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=o.match_id 
         WHERE '.$pay_status.'   
         ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+//        leo_dump($rows);
 //        var_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -136,7 +137,11 @@ class Order {
             </div>
 
 
-
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索订单:</label>
+                <input type="text" id="searchs" name="s" placeholder="订单号/手机号" value="">
+                <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
+            </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="0f5195546a"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
@@ -228,11 +233,11 @@ class Order {
                                     </div>
                                     <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                 </td>
-                                <td class="name column-username" data-colname="用户名"><span aria-hidden="true">—</span><span class="screen-reader-text"><?=$row['user_login']?></span></td>
+                                <td class="name column-username" data-colname="用户名"><span aria-hidden="true"><?=$row['user_login']?></span><span class="screen-reader-text">—</span></td>
                                 <td class="email column-post_title" data-colname=""><?=$row['post_title']?></td>
                                 <td class="email column-real_name" data-colname="">
                                     <?php if($row['meta_value']){?>
-                                        <?php echo isset(unserialize($row['meta_value'])['real_name']) ? unserialize($row['meta_value'])['real_name'] : '无'; ?>
+                                        <?php echo isset(unserialize($row['meta_value'])['real_name']) ? unserialize($row['meta_value'])['real_name'] : '-'; ?>
                                     <?php }else{ ?>
                                         无
                                     <?php } ?>
