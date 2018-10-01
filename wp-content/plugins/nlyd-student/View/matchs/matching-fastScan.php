@@ -136,8 +136,8 @@ jQuery(function($) {
 
         })
     }else{
-        if(fetchPage_time==0){
-            initBuild(itemLen,items,nandu,true)
+        if(fetchPage_time==0){//倒计时结束，加载下一题
+            initBuild(itemLen,items,nandu,false)
         }
         showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
     }

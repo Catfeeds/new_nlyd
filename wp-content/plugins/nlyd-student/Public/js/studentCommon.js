@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
             if(errorMsg=='timeout'){
-                $.alerts('网络超时，请重试');  
+                $.alerts('网络质量差,请重试');
             }      
         }
     } );
