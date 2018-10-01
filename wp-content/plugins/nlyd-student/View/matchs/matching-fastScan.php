@@ -58,13 +58,13 @@ jQuery(function($) {
     // stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
-    flaseMax=10,//错题数量
+    flaseMax=1111111111,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
-    // fetchPage_time=0;
+    fetchPage_time=0;
     getAjaxTime=<?=$child_count_down?>+1;//程序获取时间
     showTime=function(){ 
-        // fetchPage_time=0 
+        fetchPage_time=getAjaxTime
         // if(!stop){
             _count_time--
         // }
@@ -95,12 +95,16 @@ jQuery(function($) {
                 
             }else{
                 if(flaseQuestion<flaseMax){
+                    var matchSessions=$.GetSession('match','true');
+                    if(matchSessions && matchSessions['match_id']===$.Request('match_id') && matchSessions['project_id']===$.Request('project_id') && matchSessions['match_more']===$.Request('match_more')){
+                        matchSessions['fetchPage_time']=_count_time;//记录_count_time
+                        $.SetSession('match',matchSessions);
+                    }
                     if(_count_time+1==getAjaxTime){
                         timer=setTimeout("showTime()",1000+answerHide*1000);
                     }else{
                         timer=setTimeout("showTime()",1000);
                     }
-                    
                 }
 
             }
@@ -116,7 +120,7 @@ jQuery(function($) {
         flaseQuestion=matchSession['flaseQuestion'];
         nandu=matchSession['nandu'];
         itemLen=matchSession['itemLen'];
-        // fetchPage_time=1
+        fetchPage_time=matchSession['fetchPage_time']?matchSession['fetchPage_time']:0;
     }
     if(!isMatching){
         // $('.matching-fastScan').css('paddingTop','40%');
@@ -132,6 +136,9 @@ jQuery(function($) {
 
         })
     }else{
+        if(fetchPage_time==0){
+            initBuild(itemLen,items,nandu,true)
+        }
         showQusetion(ajaxData[ajaxData.length-1],answerHide,getAjaxTime)
     }
     function getHZ() {//生成随即汉字
@@ -312,11 +319,12 @@ jQuery(function($) {
                 }, flashTime*1000);
             }
             //计时器
-            // if(fetchPage_time!=0){
-            //     _count_time=fetchPage_time
-            // }else{
+
+            if(fetchPage_time!=0){
+                _count_time=fetchPage_time
+            }else{
                 _count_time=answerTime
-            // }
+            }
              
             showTime()
 
