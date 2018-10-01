@@ -785,7 +785,7 @@ class Match_student {
                             <div id="option2">
 
                                 <span class="<?php if($op2 == 'sdl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sdl')?>">速度类</a>
+                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sdl')?>">速读类</a>
                                 </span>
                                 <span class="<?php if($op2 == 'sjl'){ ?>active<?php } ?>">
                                     <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sjl')?>">速记类</a>
@@ -935,6 +935,13 @@ class Match_student {
 
                                     <td class="name column-ID column-primary" data-colname="学员ID">
                                         <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
+
+                                        <div class="row-actions">
+                                            <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
+                                            <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
+                                            <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $post->ID . '&student_id='.$raV['user_id'])?>" aria-label="">答题记录</a></span>
+                                        </div>
+
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
                                     <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
@@ -1554,30 +1561,32 @@ class Match_student {
 
         if(is_post() || isset($_GET['searchCode'])){
             $searchCode = isset($_GET['searchCode']) ? $_GET['searchCode'] : $_POST['searchCode'];
-            global $wpdb;
-            $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um2.meta_value AS user_level,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
+            if($searchCode != ''){
+                global $wpdb;
+                $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS o.id AS oid,u.ID AS uid,u.user_login,u.user_mobile,u.user_email,um.meta_value AS user_ID,um2.meta_value AS user_level,um3.meta_value AS user_real_name FROM '.$wpdb->users.' AS u 
             LEFT JOIN '.$wpdb->usermeta.' AS um ON u.ID=um.user_id AND um.meta_key="user_ID" 
             LEFT JOIN '.$wpdb->usermeta.' AS um2 ON u.ID=um2.user_id AND um2.meta_key="'.$wpdb->prefix.'user_level" 
             LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
-            LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' 
+            LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' AND o.pay_status IN(2,3,4) 
             WHERE um2.meta_value=0 AND o.id is NULL 
             AND (u.user_login LIKE "%'.$searchCode.'%" 
             OR u.user_mobile LIKE "%'.$searchCode.'%" 
             OR u.user_email LIKE "%'.$searchCode.'%" 
             OR um.meta_value LIKE "%'.$searchCode.'%") LIMIT '.$start.','.$pageSize, ARRAY_A);
 
+                $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+                $pageAll = ceil($count['count']/$pageSize);
+                $pageHtml = paginate_links( array(
+                    'base' => add_query_arg( 'cpage', '%#%' ),
+                    'format' => '',
+                    'prev_text' => __('&laquo;'),
+                    'next_text' => __('&raquo;'),
+                    'total' => $pageAll,
+                    'current' => $page,
+                    'add_fragment' => '&searchCode='.$searchCode,
+                ));
+            }
 
-            $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
-            $pageAll = ceil($count['count']/$pageSize);
-            $pageHtml = paginate_links( array(
-                'base' => add_query_arg( 'cpage', '%#%' ),
-                'format' => '',
-                'prev_text' => __('&laquo;'),
-                'next_text' => __('&raquo;'),
-                'total' => $pageAll,
-                'current' => $page,
-                'add_fragment' => '&searchCode='.$searchCode,
-            ));
         }
         ?>
         <div class="wrap">

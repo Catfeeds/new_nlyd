@@ -229,7 +229,7 @@ layui.use(['element','layer','flow'], function(){
             ,title: '提示' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'team-join1' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认加入大爱长青国际脑力战队？</div>'
+            ,content: '<div class="box-conent-wrapper">是否确认加入<?=$team['post_title']?>？</div>'
             ,btn: ['再想想', '确认', ]
             ,success: function(layero, index){
                 
@@ -272,7 +272,7 @@ layui.use(['element','layer','flow'], function(){
                 ,title: '提示' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'team-leave1' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否确认退出大爱长青国际脑力战队？</div>'
+                ,content: '<div class="box-conent-wrapper">是否确认退出<?=$team['post_title']?>？</div>'
                 ,btn: ['再想想', '确认', ]
                 ,success: function(layero, index){
                     

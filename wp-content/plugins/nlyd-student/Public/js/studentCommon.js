@@ -61,9 +61,10 @@ jQuery(document).ready(function($) {
             }
          }else{
             if(isAndroid){
-                if(!mqqbrowser() && !isQQInstalled()){//非QQ浏览器，QQ内置浏览器
+                if(!mqqbrowser() && !isQQInstalled() && !isChrome()){//非QQ浏览器，QQ内置浏览器
                     $("input[type='file']").attr('capture','camera');
                 }
+                
                 if(isWeiXin()){
                     $("input[type='file']").attr('capture','camera');
                 }
@@ -190,6 +191,15 @@ jQuery(document).ready(function($) {
             return false;
         }
     }
+    function isChrome() {
+        var u=navigator.userAgent
+        //Chrome
+        if (/Chrome/.test(u)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
     share=function(){//分享功能
 
         if('ontouchstart' in window){//移动端
@@ -280,6 +290,27 @@ jQuery(document).ready(function($) {
             }      
         }
     } );
+    // var visibilityChange; 
+    // if (typeof document.hidden !== "undefined") {
+    //     visibilityChange = "visibilitychange";
+    // } else if (typeof document.mozHidden !== "undefined") {
+    //     visibilityChange = "mozvisibilitychange";
+    // } else if (typeof document.msHidden !== "undefined") {
+    //     visibilityChange = "msvisibilitychange";
+    // } else if (typeof document.webkitHidden !== "undefined") {
+    //     visibilityChange = "webkitvisibilitychange";
+    // }
+
+    // document.addEventListener(visibilityChange, function() {
+    //     var isHidden = document.hidden;
+    //     if (isHidden) {
+    //     alert('当焦点不在当前窗口时的网页标题')
+    //     } else {
+    //         alert('你回来了')
+    //     }
+    // });
+
+// 初始化
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
     addcamera()
