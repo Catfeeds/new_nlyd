@@ -75,7 +75,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         if($match_row['submit_type'] == 2){
                             $error='由于比赛过程中错误达上限，该轮答案由系统强制提交';
                         }elseif($match_row['submit_type'] == 3){
-                            $error='由于比赛过程中时间达上限，该轮答案由系统强制提交';
+                            $error='由于比赛倒计时结束，该轮比赛答题由系统自动提交';
                         }elseif ($match_row['submit_type'] == 4){
                             $error='由于比赛过程中有切出系统行为，该轮答案由系统强制提交';
                             if(!empty($match_row['leave_page_time'])){
@@ -140,6 +140,8 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
           leavePageLoad('<?=$wait_url?>');
+        // var getTime=<?=$next_count_down?>;
+        // var now_Time=new Date().getTime()
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';
@@ -158,6 +160,16 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 }
             }
         });
+        // if($('.count_down').length>0){
+        //     new AlloyFinger($('body')[0], {
+        //         touchEnd: function () {
+        //             var nowTime=new Date().getTime()
+        //             if(nowTime-now_Time>=getTime){
+        //                 window.location.href=$('.count_down').parents('.a-btn').attr('href');
+        //             }
+        //         },
+        //     })
+        // }
         <?php endif;?>
 
          <?php if($project_alias == 'pkjl'): ?>
@@ -177,5 +189,6 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             initWidth();
             
         <?php endif;?>
+
     })
 </script>

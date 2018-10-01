@@ -301,10 +301,11 @@ class Student_Ajax
         if($row['answer_status'] == 1) wp_send_json_success(array('info'=>'答案已提交','url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
         //计算成绩
         //print_r($_POST['match_action']);die;
+        //var_dump($_POST);die;
         $update_arr = array();
         switch ($_POST['match_action']){
             case 'subjectNumberBattle':    //数字争霸
-                $questions_answer = json_decode($row['questions_answer']);
+                $questions_answer = !empty($_POST['match_questions']) ? $_POST['match_questions'] : json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
@@ -314,9 +315,13 @@ class Student_Ajax
                 if ($error_len == 0){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
+
+                $update_arr['match_questions'] = json_encode($questions_answer);
+                $update_arr['questions_answer'] = json_encode($questions_answer);
+
                 break;
             case 'subjectPokerRelay':    //扑克接力
-                $questions_answer = json_decode($row['questions_answer']);
+                $questions_answer = !empty($_POST['match_questions']) ? $_POST['match_questions'] : json_decode($row['questions_answer'],true);
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
@@ -326,6 +331,10 @@ class Student_Ajax
                 if ($error_len == 0){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
+
+                $update_arr['match_questions'] = json_encode($questions_answer);
+                $update_arr['questions_answer'] = json_encode($questions_answer);
+
                 break;
             case 'subjectfastScan':    //快眼扫描
             case 'subjectFastCalculation':    //正向速算
@@ -439,7 +448,14 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
-        $result = $wpdb->update($wpdb->prefix.'match_questions',array('answer_status'=>-1),array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
+        $arr = array('answer_status'=>-1);
+        if( $_POST['type']=='pkjl' || $_POST['type']=='szzb'){
+            if(empty($_POST['match_questions'])) wp_send_json_error(array('info'=>'题目记忆失败,请联系管理员'));
+            $arr['match_questions'] = json_encode($_POST['match_questions']);
+            $arr['questions_answer'] = json_encode($_POST['match_questions']);
+        }
+        //var_dump($_POST);die;
+        $result = $wpdb->update($wpdb->prefix.'match_questions',$arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
 
         $answer_status = $wpdb->get_var("select answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}");
 

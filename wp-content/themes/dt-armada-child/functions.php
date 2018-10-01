@@ -200,7 +200,14 @@ function poker_create($order=true){
     return $poker;
 }
 
-//for($i == 0,$i<180)
+/*for($i == 0;$i<180;++$i){
+    $rows[] = poker_create();
+}
+var_dump($rows);
+$file_path = leo_student_path."conf/poker_create.json";
+$fp = fopen($file_path, "w");
+fwrite($fp, json_encode($rows));
+fclose($fp);*/
 
 
 /**
@@ -267,6 +274,15 @@ function rang_str_arr($length){
     }
     return $newarr;
 }
+
+/*for($i == 0;$i<180;++$i){
+    $rows[] = rang_str_arr(100);
+}
+var_dump($rows);
+$file_path = leo_student_path."conf/rang_str.json";
+$fp = fopen($file_path, "w");
+fwrite($fp, json_encode($rows));
+fclose($fp);*/
 
 /**
  * 自定义var_dump输出展示

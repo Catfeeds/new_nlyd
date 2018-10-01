@@ -207,12 +207,12 @@ if ( ! function_exists( 'presscore_setup_floating_menu' ) ) :
 
 		?>
 		<script type="text/javascript">
-			dtGlobals.logoEnabled = <?php echo absint($show_logo); ?>;
-			dtGlobals.logoURL = '<?php echo $logo_src; ?>';
-			dtGlobals.logoW = '<?php echo absint($w); ?>';
-			dtGlobals.logoH = '<?php echo absint($h); ?>';
-			smartMenu = <?php echo absint($show_menu); ?>;
-		</script>
+            dtGlobals.logoEnabled = <?php echo absint($show_logo); ?>;
+            dtGlobals.logoURL = '<?php echo $logo_src; ?>';
+            dtGlobals.logoW = '<?php echo absint($w); ?>';
+            dtGlobals.logoH = '<?php echo absint($h); ?>';
+            smartMenu = <?php echo absint($show_menu); ?>;
+        </script>
 		<?php
 	}
 

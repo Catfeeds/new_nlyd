@@ -365,7 +365,7 @@ new AlloyFinger($('#del')[0], {
     // mTouch('body').on('tap','#next',function(e){
 new AlloyFinger($('#next')[0], {
     tap:function(e){
-        $.DelSession('leavePage')
+        // $.DelSession('leavePage')
         var _this=$('#next');
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
