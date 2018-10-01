@@ -304,7 +304,7 @@ class Student_Ajax
         $update_arr = array();
         switch ($_POST['match_action']){
             case 'subjectNumberBattle':    //数字争霸
-                $questions_answer = $_POST['questions_answer'];
+                $questions_answer = json_decode($row['questions_answer']);
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
@@ -316,7 +316,7 @@ class Student_Ajax
                 }
                 break;
             case 'subjectPokerRelay':    //扑克接力
-                $questions_answer = $_POST['questions_answer'];
+                $questions_answer = json_decode($row['questions_answer']);
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
@@ -411,7 +411,6 @@ class Student_Ajax
         }
         $update_arr['answer_status'] = 1;
         $update_arr['my_answer'] = json_encode($my_answer);
-        $update_arr['questions_answer'] = json_encode($questions_answer);
         $update_arr['surplus_time'] = $_POST['surplus_time'];
         $update_arr['my_score'] = $my_score;
         $update_arr['submit_type'] = isset($_POST['submit_type']) ? $_POST['submit_type'] : 1;
@@ -440,7 +439,12 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
-        $result = $wpdb->update($wpdb->prefix.'match_questions',array('answer_status'=>-1),array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
+        $arr = array('answer_status'=>-1);
+        if( $_POST['match_type']=='pkjl' || $_POST['match_type']=='szzb'){
+            $arr['match_questions'] = json_encode($_POST['match_questions']);
+            $arr['questions_answer'] = json_encode($_POST['match_questions']);
+        }
+        $result = $wpdb->update($wpdb->prefix.'match_questions',$arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
 
         $answer_status = $wpdb->get_var("select answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}");
 
