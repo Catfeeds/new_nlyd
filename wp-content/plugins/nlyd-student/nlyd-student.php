@@ -67,34 +67,12 @@ if(!class_exists('StudentController')){
 
             add_action('wp_head',array($this,'is_abnormal_login'));
 
-            //判断登录系统or浏览器
-            $this->is_device_browser();
 
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
         }
 
-        /*
-         * 判断登录系统or浏览器
-         */
-        public function is_device_browser(){
-            //全部变成小写字母
-            $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            $type = 'other';
-            //分别进行判断
-            if(strpos($agent, 'iphone') || strpos($agent, 'ipad'))
-            { ?>
 
-
-
-            <?php
-            }
-            if(strpos($agent, 'android'))
-            { ?>
-
-
-            <?php }
-        }
 
         public function logging_in($user_login){
             $user = get_user_by( 'login', $user_login );
