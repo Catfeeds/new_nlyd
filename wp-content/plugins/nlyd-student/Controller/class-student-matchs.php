@@ -537,7 +537,7 @@ class Student_Matchs extends Student_Home
 
         }else{
 
-            $count_down = $this->current_project['project_end_time']+rand(1,5);
+            $count_down = $this->current_project['project_end_time']+rand(1,3);
             $data['count_down'] = $count_down-get_time();
 
             $this->redis->setex('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'],$data['count_down'],$count_down);
@@ -1217,7 +1217,7 @@ class Student_Matchs extends Student_Home
             $next_count_down = $this->redis->get('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more)-get_time();
             // var_dump($next_count_down);
         }else{
-            $down = $this->current_project['project_end_time']+rand(1,5);
+            $down = $this->current_project['project_end_time']+rand(1,3);
 
             $this->redis->setex('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more,$down-get_time(),$down);
             $next_count_down = $down-get_time();
