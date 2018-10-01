@@ -800,27 +800,27 @@ class Download
         $downloadParam = "&op1={$op1}&op2={$op2}&op3={$op3}&op4={$op4}";
 //        leo_dump($op2);
         $data = [];
-        $fileRankingName = $post->post_title.'_';
+        $fileRankingName = '';
         if($op1 == 1){
             if($matchEnd == false){
                 $rankingView = ['status' => false, 'msg' => '当前比赛未结束!'];
             }else{
                 $data = $this->getAllRankingData($match,$projectArr,$op5);
             }
-            $fileRankingName .= ($op5 == 2 ? '战队' : '个人');
+            $fileRankingName .= ($op5 == 2 ? 'team' : 'personal');
         }elseif ($op1 == 2){
             //获取当前分类的id字符串
             $project_id_array = [];//项目id数组
             $project_alias_arr = [];// 分类下的项目数组
             switch ($op2){
                 case 'sdl':
-                    $project_alias_arr = ['option' => ['wzsd','kysm'], 'name' => '速读类'];
+                    $project_alias_arr = ['option' => ['wzsd','kysm'], 'name' => 'read'];
                     break;
                 case 'ssl':
-                    $project_alias_arr = ['option' => ['zxss','nxss'], 'name' => '速算类'];
+                    $project_alias_arr = ['option' => ['zxss','nxss'], 'name' => 'count'];
                     break;
                 case 'sjl':
-                    $project_alias_arr = ['option' => ['szzb','pkjl'], 'name' => '速记类'];
+                    $project_alias_arr = ['option' => ['szzb','pkjl'], 'name' => 'remember'];
                     break;
                 default:
                     exit('参数错误');
@@ -849,22 +849,22 @@ class Download
                         $rankingView = ['status' => false, 'msg' => '当前项目未结束!'];
                         break;
                     }
-                    $fileRankingName .= $pavGetIds['post_title'];
+                    $fileRankingName .= $pavGetIds['project_alias'];
                 }
             }
 
             switch ($op4){
                 case 4:
-                    $fileRankingName .= '_儿童组';
+                    $fileRankingName .= '_children';
                     break;
                 case 3:
-                    $fileRankingName .= '_少年组';
+                    $fileRankingName .= '_juvenile';
                     break;
                 case 2:
-                    $fileRankingName .= '_成年组';
+                    $fileRankingName .= '_adult';
                     break;
                 case 1:
-                    $fileRankingName .= '_老年组';
+                    $fileRankingName .= '_old';
                     break;
                 default:
 
@@ -875,8 +875,7 @@ class Download
         }
         if($rankingView['status'] == false) exit($rankingView['msg']);
 
-        $filename = $fileRankingName.'排名_';
-        $filename .= strtotime(current_time('mysql')).".xls";
+        $filename = $fileRankingName.'_'.date('Y-m-d', get_time()).'_'.get_time().".xls";
 
 
         //        $path = self::$downloadPath.$filename;

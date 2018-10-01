@@ -265,7 +265,7 @@ if(!class_exists('StudentController')){
                     if(!isWeiXin()){
                         if(!isSafari()){
                             alert('请使用微信或Safari浏览器打开')
-                            // window.history.back(-1);
+                            window.history.back(-1);
                         }
                     }
                 </script>

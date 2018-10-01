@@ -35,14 +35,24 @@ class Match_student {
 
     public function studentLists(){
         $match = get_post($_GET['match_id']);
+        $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
         global $wpdb;
+        $searchWhere = '';
+        $joinSql = '';
+        if($searchStr != ''){
+            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%")';
+            $joinSql = ' LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID"';
+        }
+
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
-        WHERE o.order_type=1 AND (o.pay_status=2 OR o.pay_status=3 OR o.pay_status=4) AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
+        '.$joinSql.'
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -57,7 +67,7 @@ class Match_student {
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-比赛成绩</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-学员列表</h1>
 
             <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
@@ -72,11 +82,11 @@ class Match_student {
             <!--            </ul>-->
             <form method="get">
 
-                <!--                <p class="search-box">-->
-                <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-                <!--                    <input type="search" id="user-search-input" name="s" value="">-->
-                <!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
-                <!--                </p>-->
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
