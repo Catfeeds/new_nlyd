@@ -304,7 +304,7 @@ class Student_Ajax
         $update_arr = array();
         switch ($_POST['match_action']){
             case 'subjectNumberBattle':    //数字争霸
-                $questions_answer = json_decode($row['questions_answer']);
+                $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
@@ -316,7 +316,7 @@ class Student_Ajax
                 }
                 break;
             case 'subjectPokerRelay':    //扑克接力
-                $questions_answer = json_decode($row['questions_answer']);
+                $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 //print_r($questions_answer);
 
