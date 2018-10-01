@@ -75,7 +75,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         if($match_row['submit_type'] == 2){
                             $error='由于比赛过程中错误达上限，该轮答案由系统强制提交';
                         }elseif($match_row['submit_type'] == 3){
-                            $error='由于比赛过程中时间达上限，该轮答案由系统强制提交';
+                            $error='由于比赛倒计时结束，该轮比赛答题由系统自动提交';
                         }elseif ($match_row['submit_type'] == 4){
                             $error='由于比赛过程中有切出系统行为，该轮答案由系统强制提交';
                             if(!empty($match_row['leave_page_time'])){
