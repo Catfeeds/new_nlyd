@@ -723,7 +723,7 @@ class Student_Matchs extends Student_Home
 
             }
         }
-        elseif ($this->project_alias == 'pkjl'){
+        /*elseif ($this->project_alias == 'pkjl'){
             //$this->redis->del('wzsd_question'.$current_user->ID);
             //var_dump($this->redis->get('wzsd_question'.$current_user->ID));
             if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
@@ -758,7 +758,7 @@ class Student_Matchs extends Student_Home
 
                 $match_questions = $questions_answer = $question = $rang_array;
             }
-        }
+        }*/
 
         //保存题目
         $sql = "select id,user_id,match_id,project_id,match_questions,answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$match_more}";
