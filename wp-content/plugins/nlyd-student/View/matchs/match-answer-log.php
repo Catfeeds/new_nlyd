@@ -85,11 +85,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                             }
                         }
                     ?>
-
-                    <h6><?=$error?></h6>
-
+                    <div style="color:#CF1818;"><?=$error?></div>
                     <?php if(!empty($end_time)): ?>
-                        <h7><?=$end_time?></h7>
+                        <div>切出页面时间：<span class="c_blue"><?=$end_time?></span></div>
                     <?php endif;?>
 
 
@@ -119,16 +117,14 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     }
                     ?>
                 </div>
-                <?php if(!empty($end_time_count_down)):?>
+                <!-- <?php if(!empty($end_time_count_down)):?>
                     <div class="a-btn" style="display: none"><span class="count_down next_more_down" data-seconds="<?=$end_time_count_down?>">00:00:00</span></div>
-                <?php endif;?>
+                <?php endif;?> -->
                 <?php if($next_type == 1 && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_project_url?>">距下一轮开赛&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
-                    <!-- <a href="<?=$next_project_url?>">下一轮</a> -->
                 <?php endif;?>
                 <?php if($next_type == 2 && !isset($_GET['type'])): ?>
                     <div class="a-btn" href="<?=$next_project_url?>">距下一项目开赛 <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
-                     <!-- <a href="<?=$next_project_url?>">下一项目</a> -->
                 <?php endif;?>
                 <?php if($next_type == 3):?>
                     <a class="a-btn" href="<?=$next_project_url?>">下一项已开赛,进入比赛</a>
@@ -140,12 +136,6 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         </div>
     </div>
 </div>
-
-<input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple/>
-<input  type="hidden" name="meta_key" value="user_head"/>
-<input  type="hidden" name="action" value="student_saveInfo"/>
-<input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
-
 <script>
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
@@ -159,9 +149,10 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             var time=D+h+':'+m+':'+s;
             $(this).attr('data-seconds',S).text(time)
             if(S==0){
+                var href=_this.parents('.a-btn').attr('href');
                 $.DelSession('leavePageWaits')
-                if(_this.parents('.a-btn').attr('href')){
-                    window.location.href=_this.parents('.a-btn').attr('href')
+                if(href){
+                    window.location.href=href
                 }else{
                     window.location.reload();
                 }
