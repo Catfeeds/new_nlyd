@@ -122,7 +122,7 @@ class Student_Ajax
         }
         else{
 
-            $where = " WHERE a.match_id = {$_POST['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
+            $where = " WHERE a.match_id = {$_POST['match_id']} AND (a.pay_status = 4 or a.pay_status = 2) and a.order_type = 1 ";
             $age_where = '';
             $left_where = '';
             //判断是否存在分类id
@@ -402,7 +402,7 @@ class Student_Ajax
                 }
 
                 //修改其分类
-                //$a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
+                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
                 //var_dump($a);die;
                 break;
             default:

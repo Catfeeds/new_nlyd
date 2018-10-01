@@ -286,10 +286,31 @@ jQuery(document).ready(function($) {
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
             if(errorMsg=='timeout'){
-                $.alerts('网络超时，请重试');  
+                $.alerts('网络质量差,请重试');
             }      
         }
     } );
+    // var visibilityChange; 
+    // if (typeof document.hidden !== "undefined") {
+    //     visibilityChange = "visibilitychange";
+    // } else if (typeof document.mozHidden !== "undefined") {
+    //     visibilityChange = "mozvisibilitychange";
+    // } else if (typeof document.msHidden !== "undefined") {
+    //     visibilityChange = "msvisibilitychange";
+    // } else if (typeof document.webkitHidden !== "undefined") {
+    //     visibilityChange = "webkitvisibilitychange";
+    // }
+
+    // document.addEventListener(visibilityChange, function() {
+    //     var isHidden = document.hidden;
+    //     if (isHidden) {
+    //     alert('当焦点不在当前窗口时的网页标题')
+    //     } else {
+    //         alert('你回来了')
+    //     }
+    // });
+
+// 初始化
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
     addcamera()
