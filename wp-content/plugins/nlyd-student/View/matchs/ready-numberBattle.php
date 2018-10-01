@@ -61,11 +61,9 @@ jQuery(function($) {
             var questions_answers=JsonData;
             var pos = Math.round(Math.random() * (questions_answers.length - 1));
             var xx=questions_answers[pos]
-            console.log(xx)
             questions_answer=xx.sort(function() {
                 return .5 - Math.random();
             });
-            console.log(questions_answer)
             var sessionData={
                 match_id:$.Request('match_id'),
                 project_id:$.Request('project_id'),
