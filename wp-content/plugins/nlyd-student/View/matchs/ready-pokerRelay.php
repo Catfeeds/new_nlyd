@@ -75,7 +75,6 @@ new AlloyFinger($('#complete')[0], {
                 match_questions:questions_answer,
                 type:'pkjl'
             }
-            console.log(questions_answer)
             $.ajax({
                 data:data,
                 success:function(res,ajaxStatu,xhr){
@@ -232,11 +231,11 @@ new AlloyFinger($('#complete')[0], {
             var matchSession=$.GetSession('ready_poker','true');
             if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
                 data_match=matchSession['data_match'];
-                questions_answers=matchSession['questions_answers']
+                questions_answer=matchSession['questions_answer']
             }else{
-                var questions_answers=JsonData;
-                var pos = Math.round(Math.random() * (questions_answers.length - 1));
-                questions_answer=questions_answers[pos]
+                var _answers=JsonData;
+                var pos = Math.round(Math.random() * (_answers.length - 1));
+                questions_answer=_answers[pos]
                 $.each(questions_answer,function(i,v){
                     var item=v.split('-')
                     data_match.push(item)
@@ -246,7 +245,7 @@ new AlloyFinger($('#complete')[0], {
                     match_id:$.Request('match_id'),
                     project_id:$.Request('project_id'),
                     match_more:$.Request('match_more'),
-                    questions_answers:questions_answer
+                    questions_answer:questions_answer
                 }
                 $.SetSession('ready_poker',sessionData)
             }
