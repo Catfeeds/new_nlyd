@@ -290,6 +290,27 @@ jQuery(document).ready(function($) {
             }      
         }
     } );
+    // var visibilityChange; 
+    // if (typeof document.hidden !== "undefined") {
+    //     visibilityChange = "visibilitychange";
+    // } else if (typeof document.mozHidden !== "undefined") {
+    //     visibilityChange = "mozvisibilitychange";
+    // } else if (typeof document.msHidden !== "undefined") {
+    //     visibilityChange = "msvisibilitychange";
+    // } else if (typeof document.webkitHidden !== "undefined") {
+    //     visibilityChange = "webkitvisibilitychange";
+    // }
+
+    // document.addEventListener(visibilityChange, function() {
+    //     var isHidden = document.hidden;
+    //     if (isHidden) {
+    //     alert('当焦点不在当前窗口时的网页标题')
+    //     } else {
+    //         alert('你回来了')
+    //     }
+    // });
+
+// 初始化
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
     addcamera()
