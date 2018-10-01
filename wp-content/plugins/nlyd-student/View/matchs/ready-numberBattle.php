@@ -29,12 +29,12 @@
                     </div>
                     <div class="matching-number-zoo">
                         <div class="Glass"></div>
-                        <?php if(!empty($questions)):
+                        <!-- <?php if(!empty($questions)):
                             foreach ($questions as $v){
                         ?>
                         <div class="matching-number"><?=$v?></div>
                             <?php } ?>
-                        <?php endif;?>
+                        <?php endif;?> -->
                     </div>
                 </div>
                 <div class="a-btn" id="complete">记忆完成</div>
@@ -51,9 +51,29 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var data_match=[]
-    var questions_answers=[]
-    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>';
+    var questions_answer=[]
+    var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
+    $.getJSON(file_path,function(JsonData){
+        var matchSession=$.GetSession('ready_shuzi','true');
+        if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+            questions_answer=matchSession['questions_answer']
+        }else{
+            var questions_answers=JsonData;
+            var pos = Math.round(Math.random() * (questions_answers.length - 1));
+            questions_answer=questions_answers[pos]
+            var sessionData={
+                match_id:$.Request('match_id'),
+                project_id:$.Request('project_id'),
+                match_more:$.Request('match_more'),
+                questions_answer:questions_answer
+            }
+            $.SetSession('ready_shuzi',sessionData)
+        }
+        $.each(questions_answer,function(i,v){
+            var dom='<div class="matching-number">'+v+'</div>';
+            $('.matching-number-zoo').append(dom)
+        })
+    })
     // mTouch('body').on('tap','#complete',function(){//记忆完成
 new AlloyFinger($('#complete')[0], {
     tap:function(){
@@ -67,7 +87,7 @@ new AlloyFinger($('#complete')[0], {
                 project_id:<?=$_GET['project_id']?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'numberBattle',
-                match_questions:questions_answers,
+                match_questions:questions_answer,
                 type:'szzb'
             }
             $.ajax({
@@ -76,6 +96,7 @@ new AlloyFinger($('#complete')[0], {
                     if(res.success){
                         if(res.data.url){
                             window.location.href=res.data.url;
+                            $.DelSession('ready_shuzi',sessionData)
                         }   
                     }else{
                         $.alerts(res.data.info)
