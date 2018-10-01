@@ -133,6 +133,7 @@ new AlloyFinger($('#complete')[0], {
             match_questions:questions_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
+
         var leavePage= $.GetSession('leavePage','1');
             if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
                 if(leavePage.Time){
