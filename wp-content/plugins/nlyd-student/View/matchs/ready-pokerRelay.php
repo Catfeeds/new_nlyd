@@ -57,7 +57,7 @@ jQuery(function($) {
         submit(time,4);
     })
     var data_match=[];
-    var questions_answers=[]
+    var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     // mTouch('body').on('tap','#complete',function(){//记忆完成
 new AlloyFinger($('#complete')[0], {
@@ -72,12 +72,13 @@ new AlloyFinger($('#complete')[0], {
                 project_id:<?=$_GET['project_id']?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'pokerRelay',
-                match_questions:questions_answers,
+                match_questions:questions_answer,
                 type:'pkjl'
             }
+            console.log(questions_answer)
             $.ajax({
                 data:data,
-                success:function(res,ajaxStatu,xhr){  
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         if(res.data.url){
                             window.location.href=res.data.url
@@ -235,7 +236,8 @@ new AlloyFinger($('#complete')[0], {
             }else{
                 var questions_answers=JsonData;
                 var pos = Math.round(Math.random() * (questions_answers.length - 1));
-                $.each(questions_answers[pos],function(i,v){
+                questions_answer=questions_answers[pos]
+                $.each(questions_answer,function(i,v){
                     var item=v.split('-')
                     data_match.push(item)
                 })
@@ -244,7 +246,7 @@ new AlloyFinger($('#complete')[0], {
                     match_id:$.Request('match_id'),
                     project_id:$.Request('project_id'),
                     match_more:$.Request('match_more'),
-                    questions_answers:JsonData
+                    questions_answers:questions_answer
                 }
                 $.SetSession('ready_poker',sessionData)
             }

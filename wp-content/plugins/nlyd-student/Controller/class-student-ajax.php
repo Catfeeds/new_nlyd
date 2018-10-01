@@ -440,10 +440,12 @@ class Student_Ajax
 
         global $wpdb,$current_user;
         $arr = array('answer_status'=>-1);
-        if( $_POST['match_type']=='pkjl' || $_POST['match_type']=='szzb'){
+        if( $_POST['type']=='pkjl' || $_POST['type']=='szzb'){
+            if(empty($_POST['match_questions'])) wp_send_json_error(array('info'=>'题目记忆失败,请联系管理员'));
             $arr['match_questions'] = json_encode($_POST['match_questions']);
             $arr['questions_answer'] = json_encode($_POST['match_questions']);
         }
+        //var_dump($_POST);die;
         $result = $wpdb->update($wpdb->prefix.'match_questions',$arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
 
         $answer_status = $wpdb->get_var("select answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}");
