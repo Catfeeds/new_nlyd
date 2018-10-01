@@ -58,7 +58,7 @@ jQuery(function($) {
     // stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
-    flaseMax=1111111111,//错题数量
+    flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
     _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
     fetchPage_time=0;
