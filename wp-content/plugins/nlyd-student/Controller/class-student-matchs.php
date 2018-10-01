@@ -548,7 +548,7 @@ class Student_Matchs extends Student_Home
         //未进入比赛缓冲时间设置
         $buffer_time = get_time()-$this->current_project['project_start_time'];
 
-        if(10 <= $buffer_time && $buffer_time <= 60 && empty($row['answer_status'])){
+        if(1 <= $buffer_time && $buffer_time <= 59 && empty($row['answer_status'])){
 
             $data['buffer_time'] = true;
             $data['buffer_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$this->current_project['match_more']);
