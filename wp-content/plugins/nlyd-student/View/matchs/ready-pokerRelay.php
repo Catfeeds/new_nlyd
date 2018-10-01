@@ -69,6 +69,8 @@ new AlloyFinger($('#complete')[0], {
                 project_id:<?=$_GET['project_id']?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'pokerRelay',
+                match_questions:data_match,
+                type:'pkjl'
             }
             $.ajax({
                 data:data,
@@ -120,6 +122,7 @@ new AlloyFinger($('#complete')[0], {
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
+                        $.DelSession('ready_poker')
                     }   
                 }else{
                     $('#load').css({
@@ -181,7 +184,9 @@ new AlloyFinger($('#complete')[0], {
         $('.poker-wrapper').css('width',W);
     }
     // initWidth()
-    var AllData=<?=empty($questions) ? '" "' : $questions;?>;
+    // var AllData=<?=empty($questions) ? '" "' : $questions;?>;
+    var data_match=[]
+    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>';
     var nowPage=1;//当前页
     var onePageItems=false;//false则展示所有
     pagation=function name(data,pages,oneItems) {//数据分页获取数据
@@ -220,46 +225,70 @@ new AlloyFinger($('#complete')[0], {
 
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
-        var data=pagation(AllData,nowPage,onePageItems)
-        $('.poker-wrapper').empty()
-        if(data.left){
-            $('.left').removeClass('disabled')
-        }else{
-            $('.left').addClass('disabled')
-        }
-        if(data.right){
-            $('.right').removeClass('disabled')
-        }else{
-            $('.right').addClass('disabled')
-        }
-        $.each(data.showData,function(index,value){
-            var i='';
-            if(value[0]=='club'){
-                i='<i class="iconfont">&#xe635;</i>'
-            }else if(value[0]=='heart'){
-                i='<i class="iconfont">&#xe638;</i>'
-            }else if(value[0]=='spade'){
-                i='<i class="iconfont">&#xe636;</i>'
-            }else if(value[0]=='diamond'){
-                i='<i class="iconfont">&#xe634;</i>'
+        $.getJSON(file_path,function(JsonData){
+
+            var matchSession=$.GetSession('ready_poker','true');
+            if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+                data_match=matchSession['data_match']
+            }else{
+                var questions_answers=JsonData;
+                var pos = Math.round(Math.random() * (questions_answers.length - 1));
+                $.each(questions_answers[pos],function(i,v){
+                    var item=v.split('-')
+                    data_match.push(item)
+                })
+                var sessionData={
+                    data_match:data_match,
+                    match_id:$.Request('match_id'),
+                    project_id:$.Request('project_id'),
+                    match_more:$.Request('match_more'),
+                }
+                $.SetSession('ready_poker',sessionData)
             }
-            var dom='<div class="poker '+value[0]+'">'
-                        +'<div class="Glass"></div>'
-                        +'<div class="poker-detail poker-top">'
-                            +'<div class="poker-name">'+value[1]+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
+
+            var data=pagation(data_match,nowPage,onePageItems)
+       
+        
+            $('.poker-wrapper').empty()
+            if(data.left){
+                $('.left').removeClass('disabled')
+            }else{
+                $('.left').addClass('disabled')
+            }
+            if(data.right){
+                $('.right').removeClass('disabled')
+            }else{
+                $('.right').addClass('disabled')
+            }
+            $.each(data.showData,function(index,value){
+                var i='';
+                if(value[0]=='club'){
+                    i='<i class="iconfont">&#xe635;</i>'
+                }else if(value[0]=='heart'){
+                    i='<i class="iconfont">&#xe638;</i>'
+                }else if(value[0]=='spade'){
+                    i='<i class="iconfont">&#xe636;</i>'
+                }else if(value[0]=='diamond'){
+                    i='<i class="iconfont">&#xe634;</i>'
+                }
+                var dom='<div class="poker '+value[0]+'">'
+                            +'<div class="Glass"></div>'
+                            +'<div class="poker-detail poker-top">'
+                                +'<div class="poker-name">'+value[1]+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                            +'<div class="poker-logo">'
+                                +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                            +'</div>'
+                            +'<div class="poker-detail poker-bottom">'
+                                +'<div class="poker-name">'+value[1]+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
                         +'</div>'
-                        +'<div class="poker-logo">'
-                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
-                        +'</div>'
-                        +'<div class="poker-detail poker-bottom">'
-                            +'<div class="poker-name">'+value[1]+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                    +'</div>'
-            $('.poker-wrapper').append(dom)
+                $('.poker-wrapper').append(dom)
+            })
+            initWidth()
         })
-        initWidth()
     }
     initPagation()
     // mTouch('body').on('tap','.matching-btn',function(e){

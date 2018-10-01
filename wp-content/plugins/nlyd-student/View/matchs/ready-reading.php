@@ -35,9 +35,6 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
-
-    var file_path = '<?=leo_student_path."conf/poker_create.json";?>';
-
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
