@@ -63,7 +63,7 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    if($('.count_down').attr('data-seconds')<=0){//进入页面判断时间是否结束
+    if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
             submit(0,3)

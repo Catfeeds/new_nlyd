@@ -65,7 +65,7 @@ jQuery(function($) {
         submit(time,4);
     })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
-    var sys_second=$('.count_down').attr('data-seconds');//倒计时的时间
+    var sys_second=<?=$count_down?>;//倒计时的时间
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
     if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
