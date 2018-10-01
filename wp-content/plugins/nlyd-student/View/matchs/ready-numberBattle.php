@@ -130,6 +130,7 @@ new AlloyFinger($('#complete')[0], {
             my_answer:my_answer,
             match_action:'subjectNumberBattle',
             surplus_time:time,
+            match_questions:questions_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         var leavePage= $.GetSession('leavePage','1');
