@@ -236,7 +236,11 @@ new AlloyFinger($('#complete')[0], {
             }else{
                 var _answers=JsonData;
                 var pos = Math.round(Math.random() * (_answers.length - 1));
-                questions_answer=_answers[pos]
+                
+                var xx=_answers[pos]
+                questions_answer=xx.sort(function() {
+                    return .5 - Math.random();
+                });
                 $.each(questions_answer,function(i,v){
                     var item=v.split('-')
                     data_match.push(item)

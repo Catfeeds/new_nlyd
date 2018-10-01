@@ -140,7 +140,8 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
     jQuery(function($) {
         <?php if(!isset($_GET['type'])): ?>
           leavePageLoad('<?=$wait_url?>');
-        var getTime=<?=$next_count_down?>;
+        // var getTime=<?=$next_count_down?>;
+        // var now_Time=new Date().getTime()
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'天' : '';
@@ -159,11 +160,16 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 }
             }
         });
-        // new AlloyFinger($('body')[0], {
-        //     touchEnd: function () {
-        //         var nowTime=new data()
-        //     },
-        // })
+        // if($('.count_down').length>0){
+        //     new AlloyFinger($('body')[0], {
+        //         touchEnd: function () {
+        //             var nowTime=new Date().getTime()
+        //             if(nowTime-now_Time>=getTime){
+        //                 window.location.href=$('.count_down').parents('.a-btn').attr('href');
+        //             }
+        //         },
+        //     })
+        // }
         <?php endif;?>
 
          <?php if($project_alias == 'pkjl'): ?>
