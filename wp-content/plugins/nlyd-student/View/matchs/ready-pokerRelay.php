@@ -56,6 +56,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var data_match=[];
+    var questions_answers=[]
+    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     // mTouch('body').on('tap','#complete',function(){//记忆完成
 new AlloyFinger($('#complete')[0], {
     tap:function(){
@@ -69,7 +72,7 @@ new AlloyFinger($('#complete')[0], {
                 project_id:<?=$_GET['project_id']?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'pokerRelay',
-                match_questions:data_match,
+                match_questions:questions_answers,
                 type:'pkjl'
             }
             $.ajax({
@@ -185,8 +188,6 @@ new AlloyFinger($('#complete')[0], {
     }
     // initWidth()
     // var AllData=<?=empty($questions) ? '" "' : $questions;?>;
-    var data_match=[]
-    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>';
     var nowPage=1;//当前页
     var onePageItems=false;//false则展示所有
     pagation=function name(data,pages,oneItems) {//数据分页获取数据
@@ -229,7 +230,8 @@ new AlloyFinger($('#complete')[0], {
 
             var matchSession=$.GetSession('ready_poker','true');
             if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-                data_match=matchSession['data_match']
+                data_match=matchSession['data_match'];
+                questions_answers=matchSession['questions_answers']
             }else{
                 var questions_answers=JsonData;
                 var pos = Math.round(Math.random() * (questions_answers.length - 1));
@@ -242,6 +244,7 @@ new AlloyFinger($('#complete')[0], {
                     match_id:$.Request('match_id'),
                     project_id:$.Request('project_id'),
                     match_more:$.Request('match_more'),
+                    questions_answers:JsonData
                 }
                 $.SetSession('ready_poker',sessionData)
             }

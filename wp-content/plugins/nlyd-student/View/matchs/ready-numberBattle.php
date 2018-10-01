@@ -51,6 +51,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var data_match=[]
+    var questions_answers=[]
+    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>';
     // mTouch('body').on('tap','#complete',function(){//记忆完成
 new AlloyFinger($('#complete')[0], {
     tap:function(){
@@ -64,6 +67,8 @@ new AlloyFinger($('#complete')[0], {
                 project_id:<?=$_GET['project_id']?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'numberBattle',
+                match_questions:questions_answers,
+                type:'szzb'
             }
             $.ajax({
                 data:data,
