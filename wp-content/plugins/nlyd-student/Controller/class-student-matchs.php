@@ -960,7 +960,7 @@ class Student_Matchs extends Student_Home
 
         }
 
-        $count_down = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+        $count_down = $this->redis->get('count_down'.$current_user->ID.'_'.$_GET['match_id'].'_'.$this->project_alias.$this->current_more);
 
         $data = array(
             'match_title'=>$this->match_title,
@@ -1036,12 +1036,12 @@ class Student_Matchs extends Student_Home
         global $wpdb,$current_user;
 
         //清空倒计时
-        if(!empty($this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more))){
-            $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+        if(!empty($this->redis->get('count_down'.$current_user->ID.'_'.$_GET['match_id'].'_'.$this->project_alias.$this->current_more))){
+            $this->redis->del('count_down'.$current_user->ID.'_'.$_GET['match_id'].'_'.$this->project_alias.$this->current_more);
         }
         //清空题目
-        if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
+        if(!empty($this->redis->get($this->project_alias.'_question'.'_'.$_GET['match_id'].'_'.$current_user->ID.'_'.$this->current_more))){
+            $this->redis->del($this->project_alias.'_question'.'_'.$_GET['match_id'].'_'.$current_user->ID.'_'.$this->current_more);
         }
 
 

@@ -200,6 +200,8 @@ function poker_create($order=true){
     return $poker;
 }
 
+//for($i == 0,$i<180)
+
 
 /**
  * 比赛轮数简单转换
