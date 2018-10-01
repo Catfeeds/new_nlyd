@@ -439,7 +439,12 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more'])) wp_send_json_error(array('info'=>'参数错误'));
 
         global $wpdb,$current_user;
-        $result = $wpdb->update($wpdb->prefix.'match_questions',array('answer_status'=>-1),array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
+        $arr = array('answer_status'=>-1);
+        if( $_POST['match_type']=='pkjl' || $_POST['match_type']=='szzb'){
+            $arr['match_questions'] = json_encode($_POST['match_questions']);
+            $arr['questions_answer'] = json_encode($_POST['match_questions']);
+        }
+        $result = $wpdb->update($wpdb->prefix.'match_questions',$arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
 
         $answer_status = $wpdb->get_var("select answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}");
 
