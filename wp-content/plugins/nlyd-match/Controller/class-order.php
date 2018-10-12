@@ -43,8 +43,8 @@ class Order {
         o.cost,
         um.meta_key,
         um.meta_value,
+        o.telephone,
         IFNULL(o.fullname,"-") AS fullname,
-        IFNULL(o.telephone,"-") AS telephone,
         IFNULL(o.address,"-") AS address,
         IFNULL(o.express_number,"-") AS express_number,
         IFNULL(o.express_company,"-") AS express_company,
@@ -52,6 +52,7 @@ class Order {
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
         CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
+        u.user_mobile,
         p.post_title,
         o.order_type,
         o.pay_status,
@@ -64,6 +65,12 @@ class Order {
         $start = ($page-1)*$pageSize;
 
         $type = isset($_GET['type']) ? intval($_GET['type']) : 1;
+        $orderType = isset($_GET['orderType']) ? intval($_GET['orderType']) : 1;
+        $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
+        $searchWhere = '';
+        if($searchStr != ''){
+            $searchWhere = ' AND (um.meta_value LIKE "%'.$searchStr.'%" OR o.serialnumber LIKE "%'.$searchStr.'%" OR u.user_mobile LIKE "%'.$searchStr.'%" OR o.telephone LIKE "%'.$searchStr.'%")';
+        }
         if($type < 1) $type = 1;
         switch ($type){
             case 1:
@@ -93,11 +100,19 @@ class Order {
             default:
                 return false;
         }
+        $orderTypeWhere = '';
+        switch ($orderType){
+            case 2:
+                $orderTypeWhere = ' AND order_type=1';
+                break;
+            case 3:
+                $orderTypeWhere = ' AND order_type=2';
+        }
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS '.$this->getSelectField().' FROM '.$wpdb->prefix.'order AS o
         LEFT JOIN '.$wpdb->prefix.'users AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'usermeta AS um ON u.ID=um.user_id AND um.meta_key="user_real_name" 
         LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=o.match_id 
-        WHERE '.$pay_status.'   
+        WHERE '.$pay_status.$orderTypeWhere.$searchWhere.'   
         ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 //        leo_dump($rows);
 //        var_dump($rows);
@@ -125,22 +140,29 @@ class Order {
 <!--            </ul>-->
             <div>
                 <ul id="tab">
-                    <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=1'">全部</li>
-                    <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=2'">待支付</li>
-                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3'">已支付</li>
-                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4'">待收货</li>
-                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5'">已完成</li>
-                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6'">待退款</li>
-                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7'">已退款</li>
-                    <li class="<?php if($type == 8) echo 'active'?>" onclick="window.location.href='?page=order&type=8'">已失效</li>
+                    <li class="<?php if($orderType == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=1'">全部</li>
+                    <li class="<?php if($orderType == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=2'">比赛订单</li>
+                    <li class="<?php if($orderType == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=3'">商品订单</li>
                 </ul>
             </div>
-
-
+            <br class="clear">
+            <br class="clear">
+            <div>
+                <ul id="tab">
+                    <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=1&orderType=<?=$orderType?>'">全部</li>
+                    <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=2&orderType=<?=$orderType?>'">待支付</li>
+                    <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=3&orderType=<?=$orderType?>'">已支付</li>
+                    <li class="<?php if($type == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=4&orderType=<?=$orderType?>'">待收货</li>
+                    <li class="<?php if($type == 5) echo 'active'?>" onclick="window.location.href='?page=order&type=5&orderType=<?=$orderType?>'">已完成</li>
+                    <li class="<?php if($type == 6) echo 'active'?>" onclick="window.location.href='?page=order&type=6&orderType=<?=$orderType?>'">待退款</li>
+                    <li class="<?php if($type == 7) echo 'active'?>" onclick="window.location.href='?page=order&type=7&orderType=<?=$orderType?>'">已退款</li>
+                    <li class="<?php if($type == 8) echo 'active'?>" onclick="window.location.href='?page=order&type=8&orderType=<?=$orderType?>'">已失效</li>
+                </ul>
+            </div>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索订单:</label>
-                <input type="text" id="searchs" name="s" placeholder="订单号/手机号" value="">
-                <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
+                <input type="text" id="searchs" style="width: 16em;" name="s" placeholder="订单号/手机号/真实姓名/证件号码" value="<?=$searchStr?>">
+                <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=order&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索订单">
             </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="0f5195546a"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
@@ -224,12 +246,21 @@ class Order {
                                                         echo '<span class="edit"><a href="?page=order-send&id='.$row['id'].'" class="deliver">查看发货</a> </span>';
                                                     }
                                                     break;
+//                                                case 5:
+//                                                    echo '<span class="delete"><a class="recovery-order" href="javascript:;">恢复订单</a>  </span>';
+//                                                    break;
                                             }
                                         if($row['pay_status'] != -2 && $row['pay_status'] != 1 && $row['pay_status'] != 5){
                                             //不是已退款,不是未支付,不是失效订单
                                             echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial='.$row['serialnumber'].'">退款</a>  </span>';
                                         }
+                                        if($row['pay_status'] != 5){
+                                            //不是已退款,不是未支付,不是失效订单
+                                            echo '<span class="delete"><a class="close-order" href="javascript:;">删除订单(慎重)</a>  </span>';
+                                        }
+
                                         ?>
+
                                     </div>
                                     <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                 </td>
@@ -243,7 +274,7 @@ class Order {
                                     <?php } ?>
                                 </td>
                                 <td class="role column-role" data-colname="收件人"><?=$row['fullname']?></td>
-                                <td class="posts column-telephone" data-colname="联系电话"><?=$row['telephone']?></td>
+                                <td class="posts column-telephone" data-colname="联系电话"><?=!empty($row['telephone']) ? $row['telephone'] : $row['user_mobile']?></td>
                                 <td class="posts column-address" data-colname="收货地址"><?=$row['address']?></td>
                                 <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type_title']?></td>
                                 <td class="posts column-express_number" data-colname="快递单号"><?=$row['express_number']?></td>
