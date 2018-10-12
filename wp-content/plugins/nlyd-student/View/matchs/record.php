@@ -229,7 +229,7 @@ jQuery(function($) {
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).html(html)
             if(!isClick[data_id]){
-                var datas={data_id:data_id,myPage:0,category_id:null,project_id:null,age_group:null,team:false}
+                var datas={data_id:data_id,myPage:1,category_id:null,project_id:null,age_group:null,team:false}
                 if(data_id==2){
                     datas['category_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
                 }else if(data_id==1){
@@ -246,7 +246,7 @@ jQuery(function($) {
                     ,isAuto: false
                     ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
-                        if(arg['myPage']==0){
+                        if(arg['myPage']==1){
                             $('#rank_'+arg['data_id']).empty()
                         }
                         if(arg['data_id']==3){//总排名
@@ -265,7 +265,6 @@ jQuery(function($) {
                             }
                             $('#one_3_head').html(html_)
                         }
-                        arg['myPage']++
                         var lis = [];
                         var postData={}
                         if(!arg['team']){//不是战队列表
@@ -302,7 +301,8 @@ jQuery(function($) {
                         $.ajax({
                             data:postData,
                             success:function(res,ajaxStatu,xhr){
-                                console.log(res)
+                                arg['myPage']++
+                                console.log(postData)
                                 isClick[arg['data_id']]=true;
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
@@ -378,13 +378,17 @@ jQuery(function($) {
                                 }else{
                                     next(lis.join(''),false)
                                 }
+                            },
+                            error:function(){
+                                $.alerts('网络质量差,请重试')
+                                next(lis.join(''),true)
                             }
                         }) 
                     }
             })
         }
 
-        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group'),team:false})
+        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group'),team:false})
         $('body').click(function(e){
             if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
                 $('.ul-select').removeClass('ul-select-show')
@@ -398,19 +402,19 @@ jQuery(function($) {
                 if(_this.parents('.btn-wrapper').hasClass('one_1')){//单项排名
                     var id=_this.attr('data-post-id');
                     $('#flow_1').empty();
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group'),team:false})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group'),team:false})
                 }else if(_this.parents('.btn-wrapper').hasClass('one_3')){//总排名
                     var id=_this.attr('data-post-id');
                     $('#flow_3').empty();
                     if(id=='0'){//个人排名
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null,team:false})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,team:false})
                     }else if(id=="1"){//战队排名
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:null,age_group:null,team:true})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,team:true})
                     }
                 }else{//分类排名
                     var id=_this.attr('data-post-id');
                     $('#flow_2').empty();
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:id,project_id:null,age_group:null,team:false})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:id,project_id:null,age_group:null,team:false})
                 }
             }
         })
@@ -424,7 +428,7 @@ jQuery(function($) {
                     var data_group=_this.attr('data-group')
                     $('#flow_1').empty();
                     $('#show_text').text(thisText).attr('data-group',data_group)
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:0,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group,team:false})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group,team:false})
                 }
             }
         })

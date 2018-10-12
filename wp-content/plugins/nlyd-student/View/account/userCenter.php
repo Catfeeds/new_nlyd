@@ -73,7 +73,7 @@
                         <?php endif;?>
                         记忆<span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 |
                         速读<span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span>级 |
-                        速算<span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
+                        心算<span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
                     </span>
                 </div>
                 <?php }else{ ?>

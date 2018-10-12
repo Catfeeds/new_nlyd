@@ -15,8 +15,7 @@ jQuery(function($) {
         var flow = layui.flow;//流加载
         flow.load({
             elem: '#flow-list' //流加载容器
-            ,scrollElem: '#flow-list' //滚动条所在元素，一般不用填，此处只是演示需要。
-            ,isAuto: false
+            ,isAuto: true
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
@@ -79,6 +78,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label">报名费用：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                                +'<a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
@@ -127,8 +127,8 @@ jQuery(function($) {
                                     $(this).text("报名结束");
                                 }
                             });
-                        }
-                    })  
+                    }
+                })  
                      
             }
         });

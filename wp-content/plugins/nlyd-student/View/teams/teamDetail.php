@@ -146,7 +146,8 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){ 
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){ 
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -172,6 +173,10 @@ layui.use(['element','layer','flow'], function(){
                         }else{
                             next(lis.join(''),false)
                         }
+                    },
+                    error:function(){
+                        $.alerts('网络质量差,请重试')
+                        next(lis.join(''),true)
                     }
                 })         
         }
@@ -179,8 +184,8 @@ layui.use(['element','layer','flow'], function(){
 //-----------------------认证教练分页-------------------
     flow.load({
         elem: '#flow-table1' //流加载容器
-        ,isAuto: false
-        ,isLazyimg: true
+        // ,isAuto: false
+        // ,isLazyimg: true
         ,done: function(page, next){ //加载下一页
             //模拟插入
                 var postData={
@@ -191,7 +196,8 @@ layui.use(['element','layer','flow'], function(){
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){ 
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){ 
                         if(res.success){ 
                             $.each(res.data.info,function(index,value){
                                 var dom='<tr>'
@@ -217,6 +223,10 @@ layui.use(['element','layer','flow'], function(){
                         }else{
                             next(lis.join(''),false)
                         }
+                    },
+                    error:function(){
+                        $.alerts('网络质量差,请重试')
+                        next(lis.join(''),true)
                     }
                 })         
         }
