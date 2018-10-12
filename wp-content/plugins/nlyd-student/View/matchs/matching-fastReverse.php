@@ -141,6 +141,7 @@ jQuery(function($) {
                     $.DelSession('match')
                     $.DelSession('leavePage')
                     if(res.success){
+                        isSubmit=false;
                         if(res.data.url){
                             window.location.href=res.data.url
                         }

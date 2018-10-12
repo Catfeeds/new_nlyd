@@ -109,6 +109,7 @@ jQuery(document).ready(function($) {
         var certificationSelectData= [
             {key:'sf',value:'身份证'},
             {key:'jg',value:'军官证'},
+            {key:'hz',value:'护照'},
             {key:'tb',value:'台胞证'},
             {key:'ga',value:'港澳证'},
         ];

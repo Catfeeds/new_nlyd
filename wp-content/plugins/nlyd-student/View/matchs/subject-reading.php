@@ -24,11 +24,11 @@
                         $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select : '--';
                     }
                 }
-                global $current_user;
+                /*global $current_user;
                 if($current_user->ID == 63){
 
                     var_dump($my_select .'=='. $questions_select);
-                }
+                }*/
             ?>
             <div class="one-ques">
                 <p class="question"><?=$num?>、<?=$val?></p>

@@ -1213,17 +1213,26 @@ class Match_student {
             $totalRanking = [];
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
-                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
-                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
-                          GROUP BY mq.project_id,mq.user_id) AS child  
-                          ORDER BY my_score DESC limit 0,5
-                       ";
-                $row = $wpdb->get_row($sql,ARRAY_A);
-                $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
-                $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
-                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
+            
+             
+             $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                  (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
+                  LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                  GROUP BY mq.project_id,mq.user_id) AS child  
+                  GROUP BY user_id 
+                  ORDER BY my_score DESC limit 0,5
+               ";        
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                // leo_dump($wpdb->last_query);
+				$tuV2['my_score'] = 0;
+				$tuV2['surplus_time'] = 0;
+				$tuV2['created_microtime'] = 0;
+                foreach ($rows as $key => $value) {
+                	$tuV2['my_score'] += $value['my_score'];
+				$tuV2['surplus_time'] += $value['surplus_time'];
+				$tuV2['created_microtime'] += $value['created_microtime'];
+                }
                 $totalRanking[] = $tuV2;
             }
         }
