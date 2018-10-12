@@ -51,7 +51,7 @@ class Match_student {
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         '.$joinSql.'
-        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
 
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -1564,7 +1564,7 @@ class Match_student {
         $match_id = intval($_GET['match_id']);
         $post = get_post($match_id);
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
-        $pageSize = 1;
+        $pageSize = 10;
         $start = ($page - 1)*$pageSize;
         $searchCode = '';
         $rows = [];

@@ -171,7 +171,7 @@ class Download
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
-        WHERE o.order_type=1 AND o.pay_status!=-2 AND o.match_id='.$match->ID.' LIMIT '.$start.','.$pageSize, ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status!=-2 AND o.match_id='.$match->ID, ARRAY_A);
 
 
 
