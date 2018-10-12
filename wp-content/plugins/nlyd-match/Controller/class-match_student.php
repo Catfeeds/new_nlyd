@@ -67,7 +67,7 @@ class Match_student {
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-学员列表</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-报名选手</h1>
 
             <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
