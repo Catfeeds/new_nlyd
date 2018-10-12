@@ -178,8 +178,8 @@ if(!class_exists('StudentController')){
                 ";
                 //print_r($sql);
                 $row = $wpdb->get_row($sql,ARRAY_A);
-
-                if(!empty($row)){
+                
+                if(!empty($row)){   
                     $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-get_time();
                     $this->wait_match['match_url'] = home_url('matchs/matching/match_id/'.$row['match_id']);
                     $this->wait_match['waiting_url'] = home_url('matchs/matchWaitting/match_id/'.$row['match_id']);

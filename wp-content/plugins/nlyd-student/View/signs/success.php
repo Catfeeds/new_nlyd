@@ -36,7 +36,7 @@
                     <div class="img-box logo_img">
                         <img src="<?=student_css_url.'image/nlyd-big.png'?>">
                     </div> 
-                    <!--<p class="ta_c fs_16">脑力世界杯赛事</p>-->
+                    <p class="ta_c fs_16">脑力世界杯组委会</p>
                 </div>
             </div>
         </div>           

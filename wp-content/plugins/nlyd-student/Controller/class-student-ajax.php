@@ -1905,21 +1905,27 @@ class Student_Ajax
      * 通过身份证自动计算年龄
      */
     public function reckon_age(){
-        if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
-        if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>'证件号格式不正确'));
-        /*$sub_str = substr($_POST['real_ID'],6,4);
-        $now = date_i18n("Y",get_time());
-        $age = $now-$sub_str;
-        $age = $age >0 ? $age : 1;*/
-        $age = birthday($_POST['real_ID']);
         
-        if($age == -1){
-            wp_send_json_error(array('info'=>'年龄不能低于1岁,请确认身份证信息'));
+        if(empty($_POST['real_ID'])) wp_send_json_error(array('info'=>'证件号不能为空'));
+        if(strlen($_POST['real_ID']) == 18){
+            if(!reg_match($_POST['real_ID'],'sf')) wp_send_json_error(array('info'=>'证件号格式不正确'));
+            /*$sub_str = substr($_POST['real_ID'],6,4);
+            $now = date_i18n("Y",get_time());
+            $age = $now-$sub_str;
+            $age = $age >0 ? $age : 1;*/
+            $age = birthday($_POST['real_ID']);
+            
+            if($age == -1){
+                wp_send_json_error(array('info'=>'年龄不能低于1岁,请确认身份证信息'));
+            }
+            if($age == -2){
+                wp_send_json_error(array('info'=>'年龄超过150岁,请确认身份证信息'));
+            }
+            wp_send_json_success(array('info'=>$age));
+        }else{
+            wp_send_json_success(array('info'=>1));
         }
-        if($age == -2){
-            wp_send_json_error(array('info'=>'年龄超过150岁,请确认身份证信息'));
-        }
-        wp_send_json_success(array('info'=>$age));
+        
     }
 
     /**
@@ -3179,7 +3185,8 @@ class Student_Ajax
         $redis = new Redis();
         $redis->connect('127.0.0.1',6379,1);
         $redis->auth('leo626');
-//        $redis->delete('team_ranking_'.$match_id);
+       // $redis->delete('team_ranking_'.$match_id);
+
         if(!$data = $redis->get('team_ranking_'.$match_id)){
             //获取参加比赛的成员
             $sql = "SELECT p.post_title,p.ID,o.user_id FROM `{$wpdb->prefix}order` AS o 
@@ -3208,17 +3215,39 @@ class Student_Ajax
             foreach ($teamsUsers as $tuV2){
 
                 //每个战队的分数
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
-                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
-                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
-                          GROUP BY mq.project_id,mq.user_id) AS child  
-                          ORDER BY my_score DESC limit 0,5
-                       ";
-                $row = $wpdb->get_row($sql,ARRAY_A);
-                $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
-                $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
-                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
+                // $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                //           (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
+                //           LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                //           WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                //           GROUP BY mq.project_id,mq.user_id) AS child  
+                //           ORDER BY my_score DESC limit 0,5
+                //        ";
+
+                //  $row = $wpdb->get_row($sql,ARRAY_A);
+                // $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
+                // $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
+                // $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
+                // $totalRanking[] = $tuV2;
+                 
+                 
+             $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                  (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
+                  LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                  GROUP BY mq.project_id,mq.user_id) AS child  
+                  GROUP BY user_id 
+                  ORDER BY my_score DESC limit 0,5
+               ";      
+                   $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                $tuV2['my_score'] = 0;
+                $tuV2['surplus_time'] = 0;
+                $tuV2['created_microtime'] = 0;
+                foreach ($rows as $key => $value) {
+                    $tuV2['my_score'] += $value['my_score'];
+                    $tuV2['surplus_time'] += $value['surplus_time'];
+                    $tuV2['created_microtime'] += $value['created_microtime'];
+                }
                 $totalRanking[] = $tuV2;
             }
             //排序

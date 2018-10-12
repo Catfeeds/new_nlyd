@@ -121,6 +121,7 @@ jQuery(function($) {
                 success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
                     if(res.success){
+                        isSubmit=false;
                         if(res.data.url){
                             window.location.href=res.data.url
                         }   

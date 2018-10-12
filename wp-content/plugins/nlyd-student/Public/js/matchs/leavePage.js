@@ -37,7 +37,7 @@
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
                         setTimeout(function() {
                             submit();
-                        }, 1000);
+                        }, 3000);
                     }
                 }else{
                     jQuery.DelSession('leavePage')

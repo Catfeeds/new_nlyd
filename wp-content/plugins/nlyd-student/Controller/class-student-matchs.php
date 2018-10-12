@@ -1578,7 +1578,12 @@ class Student_Matchs extends Student_Home
         global $wpdb,$current_user;
         $sql = "select user_id from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and  project_id = {$_GET['project_id']}";
         $user_id = $wpdb->get_results($sql);
-
+	//中国赛加赛成绩查看页
+	/***************必要代码*****************/
+        if($_GET['match_id'] == 56522 && $_GET['project_id'] == 52704){
+            $this->default_match_more += 1;
+        }
+	/*****************勿删**************/
         $data = array(
             'my_log'=>!empty($user_id) ? true : false,
             'project_title'=>$this->project_key_array[$_GET['project_id']]['post_title'],
