@@ -34,12 +34,12 @@
                             </div>
                             <a class="form-input-row" href="<?=home_url('account/certification');?>" >
                                 <div class="form-input-label">实名认证</div>
-                                <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
+                                <span class="form-input-right c_blue">修改实名认证</span>
                                 <div class="nl-input"><?=$user_info['real_ID']?></div>
                             </a>
                             <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                                 <div class="form-input-label">收货地址</div>
-                                <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
+                                <span class="form-input-right c_blue">修改收货地址</span>
                                 <div  class="nl-input">  
                                     <?php if($user_address){ ?>
                                         <p class="accept-address">

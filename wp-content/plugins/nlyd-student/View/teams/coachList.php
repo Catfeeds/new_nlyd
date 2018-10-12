@@ -531,7 +531,7 @@ layui.use(['element','flow','layer','form'], function(){
                     $.ajax({
                         data:postData,
                         success:function(res,ajaxStatu,xhr){
-                        isClick[category_id]=true
+                            isClick[category_id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var detailFooter="";

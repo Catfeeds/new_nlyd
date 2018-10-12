@@ -31,7 +31,7 @@
                                     <td>学员姓名</td>
                                     <td>ID</td>
                                     <td>性别</td>
-                                    <td>速算级别</td>
+                                    <td>心算级别</td>
                                     <td>主训教练</td>
                                 </tr>
                             </thead>
@@ -51,7 +51,6 @@ jQuery(function($) {
 //--------------------分页--------------------------
         flow.load({
             elem: '#flow-table' //流加载容器
-            ,scrollElem: '#flow-table' 
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页

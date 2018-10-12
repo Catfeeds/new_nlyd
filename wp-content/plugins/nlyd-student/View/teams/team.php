@@ -103,7 +103,8 @@ layui.use(['layer','flow'], function(){
                     }
                     var lis = [];
                     $.ajax({
-                        data:postData,success:function(res,ajaxStatu,xhr){  
+                        data:postData,
+                        success:function(res,ajaxStatu,xhr){  
                             if(res.success){
                                 // 战队状态 -3:已退出;-2:已拒绝;-1:退队申请;1:入队申请;2:我的战队  
                                 $.each(res.data.info,function(index,value){
@@ -163,6 +164,10 @@ layui.use(['layer','flow'], function(){
                             }else{
                                 next(lis.join(''),false)
                             }
+                        },
+                        error:function(){
+                            $.alerts('网络质量差,请重试')
+                            next(lis.join(''),true)
                         }
                     })         
                 }

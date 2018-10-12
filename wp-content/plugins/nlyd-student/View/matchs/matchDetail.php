@@ -46,7 +46,10 @@
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名费用：</div>
-                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
+                                        <div class="nl-match-info c_black">
+                                        ¥<?=$match['match_cost']?>
+                                        <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>
+                                        </div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
@@ -157,22 +160,24 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
-        
+        var match_page=1;
         flow.load({
             elem: '#flow-table' //流加载容器
-            ,isAuto: false
-            ,isLazyimg: true
+            // ,isAuto: false
+            // ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'get_entry_list',
                     _wpnonce:$('#inputPlayer').val(),
-                    page:page,
+                    page:match_page,
                     match_id:<?=$_GET['match_id']?>,
                     match_end_date:new Date().getTime()
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){
+                        match_page++
                         var domTime=$('#time_count').attr('data-end').replace(/-/g,'/');
                         var end_time = new Date(domTime).getTime();//月份是实际月份-1
                         var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
@@ -211,6 +216,10 @@ jQuery(function($) {
                         }else{
                             next(lis.join(''),false)
                         }
+                    },
+                    error:function(){
+                        $.alerts('网络质量差,请重试')
+                        next(lis.join(''),true)
                     }
                 })       
             }
