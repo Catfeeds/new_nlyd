@@ -20,42 +20,52 @@ class Download
 
     public function order(){
 
-        global $wpdb;
-        $bool = $wpdb->update($wpdb->prefix.'match_questions', ['my_score' => 0,'surplus_time' => ''],['match_id' => 56522, 'project_id' => 52701]);
+//        global $wpdb;
+//        $bool = $wpdb->update($wpdb->prefix.'match_questions', ['my_score' => 0,'surplus_time' => ''],['match_id' => 56522, 'project_id' => 52701]);
+////
+////        var_dump($wpdb->last_query);
+////        die;
+//        $times = 15*60;
+//        $sql = "SELECT b.`truename`,a.member_id,a.score,a.cost_time,a.created,a.round FROM `sckm_match_games` a left JOIN sckm_members b ON a.member_id = b.id WHERE a.match_id = 238 AND game_type='wzsd'";
+//        $rows = $wpdb->get_results($sql,ARRAY_A);
 //
-//        var_dump($wpdb->last_query);
+//        foreach ($rows as $row){
+//            $sql1 = "SELECT * FROM `zlin_usermeta` WHERE meta_value LIKE '%{$row['truename']}%' ";
+//            $row2 = $wpdb->get_row($sql1,ARRAY_A);
+//            print_r($row);
+//            echo '</br>';
+//            if(!$row2) continue;
+//            $sub = $times-$row['cost_time'];
+//            $wpdb->query("UPDATE {$wpdb->prefix}match_questions SET my_score={$row['score']},surplus_time={$sub} WHERE match_id=56522 AND project_id=52701 AND match_more={$row['round']} AND user_id={$row2['user_id']}");
+//        }
+////        echo '<pre />';
+////        print_r($rows);
 //        die;
-        $times = 15*60;
-        $sql = "SELECT b.`truename`,a.member_id,a.score,a.cost_time,a.created,a.round FROM `sckm_match_games` a left JOIN sckm_members b ON a.member_id = b.id WHERE a.match_id = 238 AND game_type='wzsd'";
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-
-        foreach ($rows as $row){
-            $sql1 = "SELECT * FROM `zlin_usermeta` WHERE meta_value LIKE '%{$row['truename']}%' ";
-            $row2 = $wpdb->get_row($sql1,ARRAY_A);
-            print_r($row);
-            echo '</br>';
-            if(!$row2) continue;
-            $sub = $times-$row['cost_time'];
-            $wpdb->query("UPDATE {$wpdb->prefix}match_questions SET my_score={$row['score']},surplus_time={$sub} WHERE match_id=56522 AND project_id=52701 AND match_more={$row['round']} AND user_id={$row2['user_id']}");
-        }
+//        $wpdb->query('UPDATE '.$wpdb->prefix.'match_question SET my_score=0,surplus_time=0,created_microtime=0 WHERE match_id=56522 AND project_id=52704');
+//        $rows = $wpdb->get_results("SELECT member_id,score,total_score,high_score,round,game_type,cost_time FROM sckm_match_games WHERE match_id=238 AND member_id=20977", ARRAY_A);
+//        foreach ($rows as $row){
+//            $wpdb->query("UPDATE {$wpdb->prefix}match_question SET my_score={$row['score']} WHERE match_id=56522 AND project_id=52701 AND match_more={$row['round']} AND user_id={}");
+//        }
+//
+//
 //        echo '<pre />';
 //        print_r($rows);
-        die;
-        $wpdb->query('UPDATE '.$wpdb->prefix.'match_question SET my_score=0,surplus_time=0,created_microtime=0 WHERE match_id=56522 AND project_id=52704');
-        $rows = $wpdb->get_results("SELECT member_id,score,total_score,high_score,round,game_type,cost_time FROM sckm_match_games WHERE match_id=238 AND member_id=20977", ARRAY_A);
-        foreach ($rows as $row){
-            $wpdb->query("UPDATE {$wpdb->prefix}match_question SET my_score={$row['score']} WHERE match_id=56522 AND project_id=52701 AND match_more={$row['round']} AND user_id={}");
-        }
-
-
-        echo '<pre />';
-        print_r($rows);
-
-        die;
+//
+//        die;
         global $wpdb;
         if(empty($_POST['start_date']) || empty($_POST['end_date'])) exit('请选择日期');
         $start = date_i18n('Y-m-d H:i:s', strtotime($_POST['start_date']));
         $end = date_i18n('Y-m-d H:i:s', strtotime($_POST['end_date']));
+        $orderType = isset($_POST['order_type']) ? intval($_POST['order_type']) : 1;
+
+        $orderTypeWhere = '';
+        switch ($orderType){
+            case 2:
+                $orderTypeWhere = ' AND order_type=1';
+                break;
+            case 3:
+                $orderTypeWhere = ' AND order_type=2';
+        }
 
         $rows = $wpdb->get_results('SELECT
         o.serialnumber,
@@ -65,7 +75,7 @@ class Download
         IFNULL(o.address,"-") AS address,
         IFNULL(o.express_number,"-") AS express_number,
         IFNULL(o.express_company,"-") AS express_company,
-        CASE o.order_type WHEN 1 THEN "比赛订单" ELSE "-" END AS order_type,
+        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "商品订单" ELSE "-" END AS order_type,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
         CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "支付完成" ELSE "-" END AS pay_title,
         u.user_login,
@@ -75,7 +85,7 @@ class Download
         FROM '.$wpdb->prefix.'order AS o
         LEFT JOIN '.$wpdb->users.' AS u ON o.user_id=u.ID
         LEFT JOIN '.$wpdb->posts.' AS p ON o.match_id=p.ID
-        WHERE o.created_time BETWEEN "'.$start.'" AND "'.$end.'"', ARRAY_A);
+        WHERE o.created_time BETWEEN "'.$start.'" AND "'.$end.'"'.$orderTypeWhere, ARRAY_A);
 
 
         $date = date_i18n('YmdHis', strtotime($_POST['start_date'])).'-'.date_i18n('YmdHis', strtotime($_POST['end_date']));
