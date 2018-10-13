@@ -1759,7 +1759,7 @@ function get_posts( $args = null ) {
 	$r['ignore_sticky_posts'] = true;
 	$r['no_found_rows'] = true;
 
-	$get_posts = new WP_Query;var_dump($r);die;
+	$get_posts = new WP_Query;
 	return $get_posts->query($r);
 
 }
