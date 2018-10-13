@@ -31,6 +31,22 @@ function the_table_install () {
 
     }*/
 
+
+    $table_name = $wpdb->prefix . "user_post_use";  //用户文章速读使用记录  储存文章速读
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(20) NOT NULL,
+            `post_id` text COMMENT '已使用的文章id',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "user_train_logs";  //训练记录表  储存用户训练
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在

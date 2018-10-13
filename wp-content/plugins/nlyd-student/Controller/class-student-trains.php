@@ -101,15 +101,24 @@ class Student_Trains extends Student_Home
     }
 
     /**
+     * 初始页面
+     */
+    public function initial(){
+
+        if(empty($_GET['type'])) $this->get_404('参数错误');
+
+        $view = student_view_path.CONTROLLER.'/initial.php';
+        load_view_template($view);
+
+    }
+
+    /**
      * 答题页面
      */
     public function answer(){
 
-        if(empty($_GET['type'])) $this->get_404('参数错误');
-
         $view = student_view_path.CONTROLLER.'/answer.php';
         load_view_template($view);
-
     }
 
     /**
@@ -131,7 +140,7 @@ class Student_Trains extends Student_Home
 
 
         //比赛初始页面
-        if(ACTION == 'answer'){
+        if(ACTION == 'initial'){
 
             // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
             // wp_enqueue_script( 'student-mTouch' );
@@ -175,7 +184,7 @@ class Student_Trains extends Student_Home
         }
 
         //比赛记忆后答题页面
-        if(ACTION == 'answer'){
+        if(ACTION == 'answerMatch'){
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($_GET['type']=='wzsd'){//文章速读
