@@ -3,14 +3,14 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <!-- <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span> -->
+                        <span class="c_black match_info_font">第一轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="1200">00:00:00</span>
