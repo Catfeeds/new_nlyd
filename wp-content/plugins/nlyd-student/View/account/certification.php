@@ -19,7 +19,8 @@
                             <div class="form-inputs">
                                 <div class="form-input-row">
                                     <div class="form-input-label">国籍</div>
-                                    <input class="nl-input" value='' readonly  id="trigger4" placeholder="选择国籍">
+                                    <input class="nl-input" name="nationality" value='' readonly  id="trigger4" placeholder="选择国籍">
+                                    <input type="hidden" name="nationality_pic" value=''  id="src">
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>
                                     
                                 </div>
@@ -290,6 +291,7 @@ jQuery(document).ready(function($) {
                 // console.log(data)
                 $('#trigger4').val(data[0]['value'])
                 $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
+                $('#src').val(data[0]['src'])
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
                     $('#age').css('display','block')
@@ -369,7 +371,7 @@ jQuery(document).ready(function($) {
             var form = layui.form
             form.render();
             // 自定义验证规则
-            form.verify($.validationLayui.allRules);
+            //form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
