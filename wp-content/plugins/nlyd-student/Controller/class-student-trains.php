@@ -92,7 +92,7 @@ class Student_Trains extends Student_Home
        /**
      * 脑力世界杯专项训练准备页
      */
-     public function nlsjbReady(){
+     public function ready(){
         $view = student_view_path.CONTROLLER.'/nlsjb-ready.php';
         load_view_template($view);
     }
