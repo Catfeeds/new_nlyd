@@ -38,11 +38,11 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">姓 名</div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" lay-verify="chineseName" class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" class="nl-input nl-foucs" lay-verify="required">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">性 别</div>
-                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
+                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input">
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
-                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">所在城市</div>
