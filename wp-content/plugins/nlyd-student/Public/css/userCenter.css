@@ -84,6 +84,10 @@
     width: 30px;
     background-position: -306px 3px;
 }
+.edit-info{
+    width: 30px;
+    background-position: -306px 3px;
+}
 .userCenter-detail a:active{
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
@@ -386,6 +390,9 @@
     .userCenter-detail a:nth-last-child(2){
         border-bottom: none;
     }
+    .userCenter-detail a:nth-last-child(3){
+        border-bottom: none;
+    }
 }
 @media screen and (max-width: 374px){
 /* iphone6以下 */
@@ -406,6 +413,9 @@
         border-right: none;
     }
     .userCenter-detail a:nth-last-child(1){
+        border-bottom: none;
+    }
+    .userCenter-detail a:nth-last-child(2){
         border-bottom: none;
     }
 }
