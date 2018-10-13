@@ -81,7 +81,7 @@
                             </div>
                         </a>
                         <div class="form-input-row">
-                            <div class="form-input-label">国籍</div>
+                            <div class="form-input-label">国 籍</div>
                             <input class="nl-input" name="nationality" value='' readonly  id="trigger4" placeholder="选择国籍">
                             <input type="hidden" name="nationality_pic" value=''  id="src">
                             <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>

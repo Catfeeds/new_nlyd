@@ -3343,6 +3343,47 @@ class Student_Ajax
 
         wp_send_json_success(['info' => $data, 'my_team' => $my_team]);
     }
+
+
+    /**
+     * 训练答案提交
+     */
+    public function trains_submit(){
+
+        global $current_user;
+
+        ini_set('post_max_size','20M');
+
+        switch ($_POST['match_action']){
+            case 'szzb':
+                break;
+            case 'kysm':
+                break;
+            case 'wzsd':
+                break;
+            case 'pkjl':
+                break;
+            case 'zxss':
+                break;
+            case 'nxss':
+                break;
+            default:
+                break;
+        }
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'genre_id'=>$_POST['genre_id'],
+            'project_type'=>$_POST['project_type'],
+            'train_questions'=>json_encode($_POST['train_questions']),
+            'train_answer'=>json_encode($_POST['train_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
+            'surplus_time'=>$_POST['surplus_time'],
+            'my_score'=>$my_score,
+            'created_time'=>get_time('mysql'),
+        );
+
+    }
+
 }
 
 new Student_Ajax();
