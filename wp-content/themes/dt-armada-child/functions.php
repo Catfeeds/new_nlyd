@@ -906,8 +906,22 @@ remove_action( 'wp_head', 'rel_canonical' );
 if(!is_admin()){
     show_admin_bar(false);
 }
-
-
+add_filter('manage_users_columns', 'add_user_nickname_column');
+function add_user_nickname_column($columns) {
+    unset($columns['name']);
+    $columns['real_name'] = '姓名';
+    return $columns;
+}
+add_action('manage_users_custom_column',  'show_user_nickname_column_content', 20, 3);
+function show_user_nickname_column_content($value, $column_name, $user_id) {
+    switch ($column_name){
+        case 'real_name':
+            $real_name = isset(get_user_meta($user_id, 'user_real_name')[0]) ? get_user_meta($user_id, 'user_real_name')[0]['real_name'] : '-';
+            return $real_name;
+            break;
+    }
+    return $value;
+}
 //引入url重写规则
 //require_once(ABSPATH.'wp-includes/library/RewriteRule.class.php');
 

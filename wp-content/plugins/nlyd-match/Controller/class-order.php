@@ -175,13 +175,20 @@ class Order {
 <!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
 
                     </div>
-
-                    <div class="alignleft actions">
+                <br class="clear">
+                    <div class="alignleft">
                         <form action="?page=download&action=order" method="post">
 
-                            <label class="" for="" style="height: 28px;line-height: 28px;display: inline-block;vertical-align: top">导出订单</label>
+<!--                            <label class="" for="" style="height: 28px;line-height: 28px;display: inline-block;vertical-align: top">导出订单</label>-->
                             <input class="date-picker" style="height: 28px" type="text" id="start_date" name="start_date" /> -
                             <input style="height: 28px" type="text" name="end_date" class="date-picker"  id="end_date" />
+
+
+                            <select name="order_type" id="" style="height: 28px;">
+                                <option value="1">全部</option>
+                                <option value="2">比赛订单</option>
+                                <option value="3">商品订单</option>
+                            </select>
                             <input type="submit" name="changeit" id="changeit" class="button" value="导出">
                         </form>
                     </div>
