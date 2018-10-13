@@ -896,23 +896,30 @@ class Match_Ajax
             }
             //删除meta
             $meta = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_meta WHERE match_id={$id}");
-            $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
-            if(!$metaBool && $meta){
-                $wpdb->rollback();
-                wp_send_json_error(['info' => '比赛外键删除失败']);
+            if($meta){
+                $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
+                if(!$metaBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '比赛外键删除失败']);
+                }
             }
             //删除订单
-            $order = $wpdb->get_row("SELECT ");
-            $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id]);
-            if(!$orderBool){
-                $wpdb->rollback();
-                wp_send_json_error(['info' => '订单删除失败']);
+            $order = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}order WHERE match_id={$id} AND order_type=1");
+            if($order){
+                $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id, 'order_type' => 1]);
+                if(!$orderBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '订单删除失败']);
+                }
             }
             //删除答题记录
-            $questionBool = $wpdb->delete($wpdb->prefix.'question', ['match_id' => $id]);
-            if(!$questionBool){
-                $wpdb->rollback();
-                wp_send_json_error(['info' => '答题记录删除失败']);
+            $question = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_questions WHERE match_id={$id}");
+            if($question){
+                $questionBool = $wpdb->delete($wpdb->prefix.'match_questions', ['match_id' => $id]);
+                if(!$questionBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '答题记录删除失败']);
+                }
             }
             $wpdb->commit();
             wp_send_json_success(['info' => '比赛已删除']);
