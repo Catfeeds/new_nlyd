@@ -1674,11 +1674,12 @@ class Student_Ajax
                 case 'user_real_name':
 
                     //验证格式
+                    if(empty($_POST['meta_val']['nationality']) || empty($_POST['meta_val']['nationality_pic'])) wp_send_json_error(array('info'=>'国籍必选'));
                     if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'请选择证件类型'));
                     //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
                     //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));
                     if(!reg_match($_POST['meta_val']['real_ID'],$_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'证件号格式不正确'));
-                    if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
+                    //if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
 
                     //判断是否报名
                     if(isset($_POST['type']) && $_POST['type'] == 'sign'){

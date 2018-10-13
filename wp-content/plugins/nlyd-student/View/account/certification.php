@@ -19,9 +19,10 @@
                             <div class="form-inputs">
                                 <div class="form-input-row">
                                     <div class="form-input-label">国籍</div>
-                                    <input class="nl-input" value='' readonly  id="trigger4" placeholder="选择国籍">
-                                    <input type="hidden" name="" id="src" value=''>
+                                    <input class="nl-input" name="nationality" value='' readonly  id="trigger4" placeholder="选择国籍">
+                                    <input type="hidden" name="nationality_pic" value=''  id="src">
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>
+                                    
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件类型</div>
@@ -45,7 +46,7 @@
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
-                                    <input class="nl-input" value='' readonly  id="birthdaySelect" placeholder="选择生日">
+                                    <input class="nl-input" name="birthday" value='' readonly  id="birthdaySelect" placeholder="选择生日">
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
@@ -372,7 +373,7 @@ jQuery(document).ready(function($) {
             var form = layui.form
             form.render();
             // 自定义验证规则
-            form.verify($.validationLayui.allRules);
+            // form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
@@ -389,7 +390,9 @@ jQuery(document).ready(function($) {
                 fd.append('user_address[city]',data.field['user_address[city]']);
                 fd.append('user_address[province]',data.field['user_address[province]']);
                 fd.append('type',$('.sbu_type').val());
-
+                fd.append('nationality',data.field['nationality']);
+                fd.append('nationality_pic',data.field['nationality_pic']);
+                fd.append('birthday',data.field['birthday']);
                 if(match_id!=null){
                     fd.append('match_id',match_id);
                 }else{
