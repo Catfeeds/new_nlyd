@@ -89,7 +89,7 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
-        function pagation(id){
+        function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
                 ,isAuto: false
@@ -98,7 +98,7 @@ jQuery(function($) {
                     var postData={
                         action:'get_match_list',
                         _wpnonce:$('#inputMatch').val(),
-                        page:page,
+                        page:match_page,
                         match_type:'',
                     }
                     if(parseInt(id)==1){//报名
@@ -110,8 +110,9 @@ jQuery(function($) {
                     }
                     var lis = [];
                     $.ajax({
-                        data: postData,success:function(res,ajaxStatu,xhr){
-                            console.log(res)
+                        data: postData,
+                        success:function(res,ajaxStatu,xhr){
+                            match_page++
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
@@ -205,6 +206,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label">报名费用：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                                +'<a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime
@@ -249,13 +251,17 @@ jQuery(function($) {
                                     }, 1000);
                                 }
                             });
-                        }   
+                        },
+                        error:function(){
+                            $.alerts('网络质量差,请重试')
+                            next(lis.join(''),true)
+                        }
                     })       
                 }
             });
         }
         var isClick={}
-        pagation($('.layui-this').attr('data-id'))
+        pagation($('.layui-this').attr('data-id'),1)
         element.on('tab(tabs)', function(){//tabs
             var left=$(this).position().left;
             var id=$(this).attr('data-id')
@@ -263,7 +269,7 @@ jQuery(function($) {
                 'transform':'translate3d('+left+'px, -5px, 0px)'
             })
             if(!isClick[id]){
-                pagation(id)
+                pagation(id,1)
             }
         });
     })

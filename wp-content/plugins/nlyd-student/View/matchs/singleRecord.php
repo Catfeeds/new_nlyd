@@ -103,8 +103,6 @@ layui.use(['element','flow'], function(){
                 if(fenleiPage==0){
                      $('#danxiang_me').css('display','none');
                 }
-               
-                fenleiPage++
                 var lis = [];
                 var postData={
                     action:'get_score_ranking',
@@ -115,7 +113,9 @@ layui.use(['element','flow'], function(){
                     page:fenleiPage
                 }
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){  
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){  
+                        fenleiPage++
                         if(res.success){
                             var Html="";
                             if(res.data.my_ranking!=null){//我的成绩
@@ -161,6 +161,10 @@ layui.use(['element','flow'], function(){
                         }else{
                             next(lis.join(''),false)
                         }
+                    },
+                    error:function(){
+                        $.alerts('网络质量差,请重试')
+                        next(lis.join(''),true)
                     }
                 }) 
             }

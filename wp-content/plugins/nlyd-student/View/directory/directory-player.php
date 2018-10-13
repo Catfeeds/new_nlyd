@@ -53,7 +53,6 @@ jQuery(function($) {
 //--------------------分页--------------------------
         flow.load({
             elem: '#flow-table' //流加载容器
-            ,scrollElem: '#flow-table' 
             ,isAuto: false
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
