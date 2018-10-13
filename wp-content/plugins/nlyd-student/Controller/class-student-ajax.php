@@ -1674,7 +1674,22 @@ class Student_Ajax
                 case 'user_real_name':
 
                     //验证格式
-                    if(empty($_POST['meta_val']['nationality']) || empty($_POST['meta_val']['nationality_pic'])) wp_send_json_error(array('info'=>'国籍必选'));
+                    if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>'国籍必选'));
+
+                    update_user_meta($current_user->ID,'user_nationality',$_POST['nationality']);
+                    update_user_meta($current_user->ID,'user_nationality_pic',$_POST['nationality_pic']);
+
+                    if($_POST['nationality'] != '中华人民共和国'){
+                        if(empty($_POST['birthday']))wp_send_json_error(array('info'=>'生日必选'));
+                        update_user_meta($current_user->ID,'user_birthday',$_POST['birthday']);
+
+                        $birthday_year= (int) substr($_POST['birthday'],0,4);
+                        $new_year = (int) date_i18n('Y',get_time());
+                        $age = $new_year - $birthday_year;
+
+                        $_POST['meta_val']['real_age'] = $age;
+                    }
+
                     if(empty($_POST['meta_val']['real_type'])) wp_send_json_error(array('info'=>'请选择证件类型'));
                     //if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'真实姓名不能为空'));
                     //if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>'证件号不能玩为空'));

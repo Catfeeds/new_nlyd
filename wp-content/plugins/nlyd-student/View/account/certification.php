@@ -19,9 +19,9 @@
                             <div class="form-inputs">
                                 <div class="form-input-row">
                                     <div class="form-input-label">国籍</div>
-                                    <input class="nl-input" name="nationality" value='' readonly  id="trigger4" placeholder="选择国籍">
-                                    <input type="hidden" name="nationality_pic" value=''  id="src">
-                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>
+                                    <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="选择国籍">
+                                    <input type="hidden" name="nationality_pic" value='<?=$user_info['user_nationality_pic']?>'  id="src">
+                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'/image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
                                     
                                 </div>
                                 <div class="form-input-row">
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
-                                    <input class="nl-input" name="birthday" value='' readonly  id="birthdaySelect" placeholder="选择生日">
+                                    <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="选择生日">
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
