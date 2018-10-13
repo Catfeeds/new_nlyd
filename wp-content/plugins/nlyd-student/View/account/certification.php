@@ -18,6 +18,10 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom" lay-filter='certificationForm'>
                             <div class="form-inputs">
                                 <div class="form-input-row">
+                                    <div class="form-input-label">国籍</div>
+                                    <input class="nl-input" value=''  id="trigger4" placeholder="选择证件类型">
+                                </div>
+                                <div class="form-input-row">
                                     <div class="form-input-label">证件类型</div>
                                     <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="选择证件类型" class="nl-input" lay-verify="required">
                                     <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
@@ -205,6 +209,31 @@ jQuery(document).ready(function($) {
             }
         });
 
+        // 模拟手机下拉列表，选择国籍
+        var sexSelectData= ['男','女',]
+        var posiotionSex=[0];//初始化位置，高亮展示
+        if($('#trigger4').val().length>0 && $('#trigger4').val()){
+            $.each(sexSelectData,function(index,value){
+                if(value==$('#trigger4').val()){
+                    posiotionSex=[index]
+                    return false;
+                }
+            })
+        }
+        var mobileSelect4 = new MobileSelect({
+            trigger: '#trigger4',
+            title: '国籍',
+            wheels: [
+                {data: sexSelectData}
+            ],
+            position:posiotionSex, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd:function(indexArr, data){
+                // console.log(data);
+            },
+            callback:function(indexArr, data){
+                $('#trigger4').val(data[0])
+            }
+        });
 
         sendloginAjax=function(formData){
             //type：确定回调函数
