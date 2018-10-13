@@ -19,7 +19,9 @@
                             <div class="form-inputs">
                                 <div class="form-input-row">
                                     <div class="form-input-label">国籍</div>
-                                    <input class="nl-input" value=''  id="trigger4" placeholder="选择证件类型">
+                                    <input class="nl-input" value='' readonly  id="trigger4" placeholder="选择国籍">
+                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>
+                                    
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件类型</div>
@@ -41,9 +43,16 @@
                                     <div class="form-input-label">性 别</div>
                                     <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input" lay-verify="required">
                                 </div>
-                                <div class="form-input-row">
+                                <div class="form-input-row" id="birth" style="display:none">
+                                    <div class="form-input-label">生 日</div>
+                                    <input class="nl-input" value='' readonly  id="birthdaySelect" placeholder="选择生日">
+                                    <input  type="hidden" id="year" name="user_birthday[year]" value=""/>
+                                    <input  type="hidden" id="month" name="user_birthday[month]" value="">
+                                    <input  type="hidden" id="day" name="user_birthday[day]" value=""/>
+                                </div>
+                                <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
-                                    <input type="text" name="meta_val[real_age]" id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">所在城市</div>
@@ -88,6 +97,7 @@
 </div>
 <script>
 jQuery(document).ready(function($) {
+
         $("input[name='meta_val[real_ID]']").focusout(function(){//身份证号码输入框失焦事件
             var value=$(this).val();
             var datas={
@@ -208,14 +218,60 @@ jQuery(document).ready(function($) {
                 $('#areaSelect').val(text);
             }
         });
+        //选择生日
+        var posiotionBirthday=[0,0,0];//初始化位置，高亮展示
+        // if($('#birthdaySelect').val().length>0 && $('#birthdaySelect').val()){
+        //     var birthdayValue=$('#birthdaySelect').val()
+        //     $.each($.validationLayui.allArea.area,function(index,value){
+        //         if(birthdayValue.indexOf(value.value)!=-1){
+        //             // console.log(value)
+        //             posiotionBirthday=[index,0,0];
+        //             $.each(value.childs,function(i,v){
+        //                 if(birthdayValue.indexOf(v.value)!=-1){
+        //                     posiotionBirthday=[index,i,0];
+        //                     $.each(v.childs,function(j,val){
+        //                         if(birthdayValue.indexOf(val.value)!=-1){
+        //                             posiotionBirthday=[index,i,j];
+        //                         }
+        //                     })
+        //                 }
+        //             })
+        //         }
+        //     })
+        // }
+        var mobileSelect5 = new MobileSelect({
+            trigger: '#birthdaySelect',
+            title: '生日',
+            wheels: [
+                {data:  $.validationLayui.dates},
+            ],
+            position:posiotionBirthday, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd:function(indexArr, data){
 
+            },
+            callback:function(indexArr, data){
+                var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value'];
+                $('#year').val(data[0]['value'])
+                $('#month').val(data[1]['value'])
+                $('#day').val(data[2]['value'])
+                $('#birthdaySelect').val(text);
+            }
+        });
+
+        if($('#trigger4').val()=="中华人民共和国"){
+            $('#birth').css('display','none')
+            $('#age').css('display','block')
+        }else{
+            $('#birth').css('display','block')
+            $('#age').css('display','none')
+        }
         // 模拟手机下拉列表，选择国籍
-        var sexSelectData= ['男','女',]
-        var posiotionSex=[0];//初始化位置，高亮展示
+        var contrySelectData=$.validationLayui.contry;
+        var posiotioncontry=[0];//初始化位置，高亮展示
         if($('#trigger4').val().length>0 && $('#trigger4').val()){
-            $.each(sexSelectData,function(index,value){
+            $.each(contrySelectData,function(index,value){
                 if(value==$('#trigger4').val()){
-                    posiotionSex=[index]
+                    posiotioncontry=[index]
                     return false;
                 }
             })
@@ -224,14 +280,23 @@ jQuery(document).ready(function($) {
             trigger: '#trigger4',
             title: '国籍',
             wheels: [
-                {data: sexSelectData}
+                {data: contrySelectData}
             ],
-            position:posiotionSex, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            position:posiotioncontry, //初始化定位 打开时默认选中的哪个 如果不填默认为0
             transitionEnd:function(indexArr, data){
                 // console.log(data);
             },
             callback:function(indexArr, data){
-                $('#trigger4').val(data[0])
+                // console.log(data)
+                $('#trigger4').val(data[0]['value'])
+                $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
+                if(data[0]['value']=="中华人民共和国"){
+                    $('#birth').css('display','none')
+                    $('#age').css('display','block')
+                }else{
+                    $('#birth').css('display','block')
+                    $('#age').css('display','none')
+                }
             }
         });
 

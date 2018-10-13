@@ -218,7 +218,13 @@
 				if(_this.jsonType){
 					for(var j=0; j<wheelsData[i].data.length; j++){
 					//行
-						tempHTML += '<li data-id="'+wheelsData[i].data[j][_this.keyMap.id]+'">'+wheelsData[i].data[j][_this.keyMap.value]+'</li>';
+						var img='';
+						if(!wheelsData[i].data[j]['src']){
+							tempHTML += '<li data-id="'+wheelsData[i].data[j][_this.keyMap.id]+'">'+wheelsData[i].data[j][_this.keyMap.value]+'</li>';
+						}else{
+							img="<img style='width:16px;height:11px;float:right;margin-top:15px' src='"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+wheelsData[i].data[j]['src']+".png'>"
+							tempHTML += '<li data-id="'+wheelsData[i].data[j][_this.keyMap.id]+'">'+img+wheelsData[i].data[j][_this.keyMap.value]+'</li>';
+						}
 					}
 				}else{
 					for(var j=0; j<wheelsData[i].data.length; j++){
