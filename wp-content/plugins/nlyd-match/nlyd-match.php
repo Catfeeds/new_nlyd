@@ -33,7 +33,10 @@ if(!class_exists('MatchController')){
         {
 //            unset($actions['inline hide-if-no-js']);
             if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem')) ){
-                if($this->post_type == 'match') unset($actions['trash']);
+                if($this->post_type == 'match') {
+                    unset($actions['trash']);
+                    unset($actions['delete']);
+                }
                 unset($actions['view']);
 
             }elseif ($this->post_type == 'question'){
