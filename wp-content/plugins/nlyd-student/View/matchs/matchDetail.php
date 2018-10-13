@@ -46,14 +46,12 @@
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名费用：</div>
-                                        <div class="nl-match-info c_black">
-                                        ¥<?=$match['match_cost']?>
-                                        <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>
-                                        </div>
+                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label">报名截止：</div>
                                         <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
+                                        
                                     </div>
                                 </div>
                             </li>
@@ -62,6 +60,7 @@
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
                                     <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> ">比赛项目</span>
+                                    <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>

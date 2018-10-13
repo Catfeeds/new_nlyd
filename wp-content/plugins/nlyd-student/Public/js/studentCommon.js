@@ -108,7 +108,7 @@ jQuery(document).ready(function($) {
 
     })
     $('body').on('click','.disabled_a',function(){//当前功能暂未开放，敬请期待
-        $.alerts('当前功能暂未开放，敬请期待')
+        $.alerts(common.disabled)
         return false;
         
     })
@@ -229,7 +229,7 @@ jQuery(document).ready(function($) {
                
                 if(isSafari()){//Safari
                     // var dom='点击正下方<i class="iconfont" style="font-size:0.20rem">&#xe68d;</i>按钮分享给好友或朋友圈'
-                    var dom='请使用浏览器自带分享功能'
+                    var dom=common.share
                     $.alerts(dom)
                 }else if(isWeiXin()){
                     $(this).parents('.selectBottom').removeClass('selectBottom-show');
@@ -241,7 +241,7 @@ jQuery(document).ready(function($) {
                                     +'<div class="img-box share-box">'
                                         +'<img src="'+src+'">'
                                     +'</div>'
-                                    +'<p class="share-font">点击右上角分享给好友或朋友圈</p>'
+                                    +'<p class="share-font">'+common.click+'</p>'
                                 +'</div>'
                         $('body').append(dom)
                     }
@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
             if(errorMsg=='timeout'){
-                $.alerts('网络质量差,请重试');
+                $.alerts(common.slow);
             }      
         }
     } );

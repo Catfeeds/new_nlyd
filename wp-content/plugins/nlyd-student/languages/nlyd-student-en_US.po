@@ -1,0 +1,173 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Application Student 项目学生端\n"
+"POT-Creation-Date: 2018-10-13 17:55+0800\n"
+"PO-Revision-Date: 2018-10-13 18:06+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: nlyd-student.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: Controller/class-student-account.php:269
+msgid "报名结束"
+msgstr "End of registration"
+
+#: Controller/class-student-account.php:270
+msgid "开赛日期"
+msgstr ""
+
+#: Controller/class-student-account.php:271
+msgid "比赛地点"
+msgstr ""
+
+#: Controller/class-student-account.php:272
+msgid "报名费用"
+msgstr ""
+
+#: Controller/class-student-account.php:273
+msgid "报名截止"
+msgstr ""
+
+#: Controller/class-student-account.php:274
+msgid "已报选手"
+msgstr ""
+
+#: Controller/class-student-account.php:275
+msgid "查看详情"
+msgstr ""
+
+#: Controller/class-student-account.php:276
+msgid "参赛须知"
+msgstr ""
+
+#: Controller/class-student-account.php:288
+msgid "是否确认设为默认地址"
+msgstr ""
+
+#: Controller/class-student-account.php:289
+msgid "设为默认"
+msgstr ""
+
+#: Controller/class-student-account.php:290
+msgid "默认地址"
+msgstr ""
+
+#: Controller/class-student-account.php:291
+msgid "提示"
+msgstr ""
+
+#: Controller/class-student-account.php:292
+msgid "再想想"
+msgstr ""
+
+#: Controller/class-student-account.php:293
+msgid "确认"
+msgstr ""
+
+#: Controller/class-student-account.php:294
+msgid "是否确认删除地址"
+msgstr ""
+
+#: nlyd-student.php:224
+msgid "已加载全部数据"
+msgstr "complete"
+
+#: nlyd-student.php:225
+msgid "加载更多"
+msgstr "more"
+
+#: nlyd-student.php:232
+msgid "必填项不能为空"
+msgstr "no empty"
+
+#: nlyd-student.php:233
+msgid "手机号格式不正确"
+msgstr "Phone number is incorrect"
+
+#: nlyd-student.php:234
+msgid "邮箱格式不正确"
+msgstr "Mailbox format is incorrect"
+
+#: nlyd-student.php:235
+msgid "链接格式不正确"
+msgstr ""
+
+#: nlyd-student.php:236
+msgid "只能填写数字"
+msgstr ""
+
+#: nlyd-student.php:237
+msgid "日期格式不正确"
+msgstr ""
+
+#: nlyd-student.php:238
+msgid "请输入正确的身份证号"
+msgstr ""
+
+#: nlyd-student.php:239
+msgid "手机号或邮箱格式不正确"
+msgstr ""
+
+#: nlyd-student.php:240
+msgid "密码必须是6位以上含字母及数字"
+msgstr ""
+
+#: nlyd-student.php:241
+msgid "两次输入密码不一致"
+msgstr ""
+
+#: nlyd-student.php:242
+msgid "姓名格式不正确"
+msgstr ""
+
+#: nlyd-student.php:248
+msgid "当前功能暂未开放，敬请期待"
+msgstr ""
+
+#: nlyd-student.php:249
+msgid "请使用浏览器自带分享功能"
+msgstr ""
+
+#: nlyd-student.php:250
+msgid "点击右上角分享给好友或朋友圈"
+msgstr ""
+
+#: nlyd-student.php:251
+msgid "网络质量差,请重试"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Application Student 项目学生端"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://localhost/wordpress/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "学生端功能集合"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "leo"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "--"
+msgstr ""
+
+#~ msgid "你好"
+#~ msgstr "hello"

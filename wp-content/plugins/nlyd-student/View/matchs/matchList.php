@@ -206,7 +206,6 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label">报名费用：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">¥'+v.match_cost+'</span>'
-                                                                +'<a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime
@@ -214,6 +213,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label">已报选手：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'

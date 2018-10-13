@@ -7,11 +7,11 @@ jQuery(function($) {
                     layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '提示' //不显示标题栏
+                    ,title: _address.tips //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper">是否确认设为默认地址</div>'
-                    ,btn: ['再想想', '确认', ]
+                    ,content: '<div class="box-conent-wrapper">'+_address.setDefault+'</div>'
+                    ,btn: [_address.think, _address.sure, ]
                     ,success: function(layero, index){
 
                     }
@@ -28,8 +28,8 @@ jQuery(function($) {
                             data: postData,success:function(res,ajaxStatu,xhr){
                                 $.alerts(res.data.info)
                                 if(res.success){
-                                    $('.default-address.set-address').text('设为默认').removeClass('set-address');
-                                    _this.text('默认地址').addClass('set-address');
+                                    $('.default-address.set-address').text(_address.setDefault).removeClass('set-address');
+                                    _this.text(_address.default).addClass('set-address');
                                 }
                             }
                         })
@@ -50,8 +50,8 @@ jQuery(function($) {
                 ,title: '提示' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否确认删除地址</div>'
-                ,btn: ['再想想', '确认', ]
+                ,content: '<div class="box-conent-wrapper">'+_address.delete+'</div>'
+                ,btn: [_address.think, _address.sure, ]
                 ,success: function(layero, index){
 
                 }
