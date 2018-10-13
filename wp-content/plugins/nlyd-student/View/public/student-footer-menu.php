@@ -15,7 +15,7 @@
         </div>
         <div class="nl-foot-name">首页</div>
     </a>
-    <a class="nl-foot-item flex1 <?=CONTROLLER == 'train' ? 'active':'';?> " href="<?=home_url('/train');?>">
+    <a class="nl-foot-item flex1 <?=CONTROLLER == 'train' ? 'active':'';?> " href="<?=home_url('/trains');?>">
         <div class="nl-foot-icon">
             <div class="footer-train"></div>
         </div>

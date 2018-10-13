@@ -81,7 +81,27 @@ class Student_Trains extends Student_Home
         $view = student_view_path.CONTROLLER.'/concatUS.php';
         load_view_template($view);
     }
-
+   /**
+     * 脑力世界杯专项训练列表
+     */
+     public function nlsjbList(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-list.php';
+        load_view_template($view);
+    }
+       /**
+     * 脑力世界杯专项训练准备页
+     */
+     public function nlsjbReady(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-ready.php';
+        load_view_template($view);
+    }
+       /**
+     * 脑力世界杯专项训练自定义设置页
+     */
+     public function nlsjbSetting(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-setting.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */
