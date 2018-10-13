@@ -14,9 +14,7 @@
                     <?=$genre_title?>
                 </h1>
             </header>
-        </div>
-
-        <?php
+            <?php
             switch ($_GET['type']){
                 case 'szzb':
         ?>
@@ -287,6 +285,7 @@
                 ?>
 
         <?php } ?>
+        </div>
     </div>
-    <a href="<?=home_url('trains/answer/type/'.$_GET['type'])?>">訓練</a>
+    <a class="a-btn" href="<?=home_url('trains/answer/type/'.$_GET['type'])?>">训 练</a>
 </div>
