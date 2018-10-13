@@ -6,9 +6,10 @@ Description: 学生端功能集合
 Version: 1.0
 Author: leo
 Author URI: --
+Text Domain: nlyd-student
 */
 
-
+load_plugin_textdomain( 'nlyd-student', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 //判断插件是否启用
 if(!class_exists('StudentController')){
 
