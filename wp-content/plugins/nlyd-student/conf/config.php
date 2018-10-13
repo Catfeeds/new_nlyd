@@ -48,6 +48,7 @@ return array(
             'post_title'=>'我的钱包',
             'post_name'=>'wallet',
             'post_content'=>'[wallet-home]',
+            'post_content'=>'[wallet-home]',
             'url'=>'/wallet',
         ),
         array(
@@ -61,6 +62,12 @@ return array(
             'post_name'=>'payment',
             'post_content'=>'[payment-home]',
             'url'=>'/payment',
+        ),
+        array(
+            'post_title'=>'订单页面',
+            'post_name'=>'orders',
+            'post_content'=>'[order-home]',
+            'url'=>'/orders',
         ),
         array(
             'post_title'=>'比赛页面',
@@ -85,6 +92,12 @@ return array(
             'post_name'=>'weixin',
             'post_content'=>'[student-weixin]',
             'url'=>'/weixin',
+        ),
+        array(
+            'post_title'=>'训练页面',
+            'post_name'=>'trains',
+            'post_content'=>'[train-home]',
+            'url'=>'/trains',
         ),
 
     ),

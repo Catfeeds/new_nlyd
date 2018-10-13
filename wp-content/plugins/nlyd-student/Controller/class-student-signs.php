@@ -151,7 +151,7 @@ class Student_Signs
 
         if(empty($users) || (!$users->user_mobile && !$users->user_email)){
             $users_id = $users->ID == true ? $users->ID : 0;
-            $url = home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/loginType/sign');
+            $url = home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/loginType/sign/id/'.$_GET['id']);
         ?>
             <script type="text/javascript">
                 alert("你是新用户或未进行手机绑定\n即将跳转到绑定页");
@@ -172,7 +172,7 @@ class Student_Signs
         $meta = get_user_meta($users->ID,'user_real_name')[0];
         //var_dump($users->ID);die;
         if(empty($meta['real_name'])){
-            $url = home_url('account/certification/type/sign');
+            $url = home_url('account/certification/type/sign/id/'.$_GET['id']);
             //add_shortcode('student-signs',array($this,'signs'));
         ?>
             <script type="text/javascript">
@@ -192,7 +192,7 @@ class Student_Signs
             $row = $wpdb->get_row($sql,ARRAY_A);
          	//var_dump($row);die;
             if(empty($row)){
-				$url = home_url('account/certification/type/sign');
+				$url = home_url('account/certification/type/sign/id/'.$_GET['id']);
 			?>
 				<script type="text/javascript">
             	//$.alerts('即将跳转到实名认证页');
@@ -206,14 +206,14 @@ class Student_Signs
                 exit;
             }
             else{
-            	$order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$users->ID} ");
+            	$order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and user_id = {$users->ID} ");
             	//var_dump($order_id);die;
             	if(!empty($order_id)){
             		$b = $wpdb->insert(
                                         $wpdb->prefix.'match_sign',
                                         array(
                                             'user_id'=>$users->ID,
-                                            'match_id'=>56522,
+                                            'match_id'=>$_GET['id'],
                                             'created_time' => get_time('mysql')
                                         )
                                 );
@@ -223,7 +223,7 @@ class Student_Signs
 		            	//$.alerts('即将跳转到实名认证页');
 		                alert('签到成功');
 		                setTimeout(function(){
-		                    window.location.href='<?=home_url('signs/success/')?>';
+		                    window.location.href='<?=home_url('signs/success/id/'.$_GET['id'])?>';
 		                    return false;
 		                },1500)
             		</script>
