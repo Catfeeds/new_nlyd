@@ -70,6 +70,17 @@ class Student_Trains extends Student_Home
         load_view_template($view,array('list'=>$list));
     }
 
+    /**
+     * 答题页面
+     */
+    public function answer(){
+
+
+        $view = student_view_path.CONTROLLER.'/answer.php';
+        //load_view_template($view,array('list'=>$list));
+
+    }
+
 
     /**
      * 默认公用js/css引入
