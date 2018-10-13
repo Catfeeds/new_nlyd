@@ -62,20 +62,7 @@
                                             <td><span>ID</span></td>
                                             <td>城市</td>
                                             <td><span>项目总分</span></td>
-                                            <td class="select-td">
-                                                <div class="td-type">
-                                                    <div class="show-type" id="show-type" data-group=""><span id="show_text">全部</span><i class="iconfont">&#xe644;</i></div>
-                                                    <ul class="ul-select" >
-                                                        <li class="show-type" data-group="">全部</li>
-                                                        <?php
-                                                            $group = get_age_group();
-                                                            foreach ($group as $k =>$y){
-                                                        ?>
-                                                        <li class="show-type" data-group="<?=$k?>"><?=$y;?></li>
-                                                        <?php }?>
-                                                    </ul>
-                                                </div>
-                                            </td>
+                                            <td>组别</td>
                                         </tr>
                                         <tr class="nl-me"  id="rank_1">
                                         
@@ -99,7 +86,7 @@
                                 <?php }?>
                                 <?php endif;?>
                             </div>
-                            <div class="nl-table-wapper">
+                            <div class="nl-table-wapper"  style="min-height:145px;">
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head'>
@@ -108,7 +95,20 @@
                                             <td><span>ID</span></td>
                                             <td>城市</td>
                                             <td><span>项目总分</span></td>
-                                            <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
+                                            <td class="select-td">
+                                                <div class="td-type">
+                                                    <div class="show-type" id="show-type" data-group=""><span id="show_text">全部</span><i class="iconfont">&#xe644;</i></div>
+                                                    <ul class="ul-select" >
+                                                        <li class="show-type" data-group="">全部</li>
+                                                        <?php
+                                                            $group = get_age_group();
+                                                            foreach ($group as $k =>$y){
+                                                        ?>
+                                                        <li class="show-type" data-group="<?=$k?>"><?=$y;?></li>
+                                                        <?php }?>
+                                                    </ul>
+                                                </div>
+                                            </td>
                                         </tr>
                                         <tr class="nl-me" id="rank_2">
                                         </tr>
@@ -139,7 +139,7 @@
                                             <td><span>ID</span></td>
                                             <td>城市</td>
                                             <td><span>项目总分</span></td>
-                                            <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
+                                            <td>组别</td>
                                         </tr>
                                         <tr class="nl-me" id="rank_3">
 
@@ -230,11 +230,12 @@ jQuery(function($) {
             }).html(html)
             if(!isClick[data_id]){
                 var datas={data_id:data_id,myPage:1,category_id:null,project_id:null,age_group:null,team:false}
-                if(data_id==2){
+                if(data_id==2){//分类
                     datas['category_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
-                }else if(data_id==1){
+                    datas['age_group']=$("#show-type").attr('data-group');
+                }else if(data_id==1){//单项
                     datas['project_id']=$('.one_'+data_id+' .classify-active').attr('data-post-id');
-                    datas['age_group']=$("#show_text").text();
+                    datas['age_group']='';
                 }
                 pagation(datas)
             }
@@ -243,8 +244,9 @@ jQuery(function($) {
         pagation = function(arg) {//总排名，个人成绩
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
-                    ,isAuto: false
-                    ,isLazyimg: true
+                    // ,scrollElem:'#flow_'+arg['data_id']
+                    // ,isAuto: false
+                    // ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
                         if(arg['myPage']==1){
                             $('#rank_'+arg['data_id']).empty()
@@ -426,9 +428,9 @@ jQuery(function($) {
             if(select!=thisText){
                 if(_this.attr('id')!='show-type' || !_this.attr('id')){
                     var data_group=_this.attr('data-group')
-                    $('#flow_1').empty();
+                    $('#flow_2').empty();
                     $('#show_text').text(thisText).attr('data-group',data_group)
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:data_group,team:false})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:$('.one_2 .classify-active').attr('data-post-id'),project_id:null,age_group:data_group,team:false})
                 }
             }
         })
