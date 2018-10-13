@@ -3350,6 +3350,7 @@ class Student_Ajax
      */
     public function trains_submit(){
 
+        if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>'参数错误'));
         global $wpdb,$current_user;
 
         ini_set('post_max_size','20M');

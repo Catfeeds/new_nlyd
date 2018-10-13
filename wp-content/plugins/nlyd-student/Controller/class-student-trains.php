@@ -175,7 +175,7 @@ class Student_Trains extends Student_Home
         }
 
         //比赛记忆后答题页面
-        if(ACTION == 'answerMatch'){
+        if(ACTION == 'answer'){
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($_GET['type']=='wzsd'){//文章速读
