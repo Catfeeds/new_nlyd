@@ -97,11 +97,11 @@ goCenter()
         function time(wait,o){//倒计时
             if (wait == 0) {  
                 o.removeClass("disabled");            
-                o.text("获取验证码")  
+                o.text(_user.get)  
                 wait = 60;  
             } else {  
                 o.addClass("disabled");  
-                o.text("重新发送(" + wait + ")")
+                o.text(_user.resend+"(" + wait + ")")
 
                 wait--;  
                 setTimeout(function() {  
@@ -173,7 +173,7 @@ goCenter()
             $('#loginFormPsw')[0].reset();//重置表单
             $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
             $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
+            $('.formName').text(_user.fast)
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             goCenter()
@@ -185,7 +185,7 @@ goCenter()
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
             $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
+            $('.formName').text(_user.fast)
             goCenter()
         })
         
@@ -194,7 +194,7 @@ goCenter()
             $('#loginFormPsw')[0].reset();//重置表单
             $('.iconLock').removeClass('display-hide').addClass('display-block');//icon
             $('.iconPhone').removeClass('display-block').addClass('display-hide');//icon
-            $('.formName').text('重置密码')
+            $('.formName').text(_user.new)
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             goCenter()
@@ -206,7 +206,7 @@ goCenter()
             
             $('.iconLock').removeClass('display-block').addClass('display-hide');//icon
             $('.iconPhone').removeClass('display-hide').addClass('display-block');//icon
-            $('.formName').text('手机快速登录')
+            $('.formName').text(_user.fast)
             $('.tabs-wraps').removeClass('display-block').addClass('display-hide');
             $('.'+$(this).attr('data-show')).removeClass('display-hide').addClass('display-block');
             goCenter()
@@ -222,7 +222,7 @@ goCenter()
                     ,area: '300px;'
                     ,shade: 0.8
                     ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-                    ,btn: ['我同意以上协议']
+                    ,btn: [_user.agree]
                     ,btnAlign: 'c'
                     ,moveType: 1 //拖拽模式，0或者1
                     ,content: '<div class="width-margin width-margin-pc userAgreement-content">'+html+'</div>'

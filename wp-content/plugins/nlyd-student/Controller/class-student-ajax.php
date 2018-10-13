@@ -3350,22 +3350,60 @@ class Student_Ajax
      */
     public function trains_submit(){
 
-        global $current_user;
+        if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>'参数错误'));
+        global $wpdb,$current_user;
 
         ini_set('post_max_size','20M');
 
-        switch ($_POST['match_action']){
+        switch ($_POST['project_type']){
             case 'szzb':
+            case 'pkjl':
+
+                $len = count($_POST['train_questions']);
+                //print_r($questions_answer);
+                $error_len = count(array_diff_assoc($_POST['train_questions'],$_POST['my_score']));
+
+                $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+                $my_score = ($len-$error_len)*$score;
+
+                if ($error_len == 0){
+                    $my_score += $_POST['surplus_time'] * 1;
+                }
+
                 break;
             case 'kysm':
+            case 'zxss':
+            case 'nxss':
+
+                $data_arr = $_POST['my_answer'];
+
+                if(!empty($data_arr)){
+                    $match_questions = array_column($data_arr,'question');
+                    $questions_answer = array_column($data_arr,'rights');
+                    $my_answer = array_column($data_arr,'yours');
+                }
+                if($_POST['match_action'] == 'subjectFastReverse'){
+                    $isRight = array_column($data_arr,'isRight');
+                    $success_len = 0;
+                    if(!empty($isRight)){
+                        $count_value = array_count_values($isRight);
+                        $success_len += $count_value['true'];
+                    }
+                    $answer['examples'] = $questions_answer;
+                    $answer['result'] = $isRight;
+                    $questions_answer = $answer;
+
+                    $my_score = $success_len * 10;
+
+                }else{
+
+                    $len = count($match_questions);
+                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $my_score = ($len-$error_len)*10;
+                }
                 break;
             case 'wzsd':
-                break;
-            case 'pkjl':
-                break;
-            case 'zxss':
-                break;
-            case 'nxss':
+
                 break;
             default:
                 break;
@@ -3381,6 +3419,17 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
+
+        $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
+        $id = $wpdb->insert_id;
+        if($result){
+            if($_POST['project_type'] == 'wasd'){
+
+            }
+            wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
+        }else{
+            wp_send_json_error(array('info'=>'提交失败'));
+        }
 
     }
 

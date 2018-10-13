@@ -29,22 +29,70 @@
                     </div>
                     <div class="matching-number-zoo">
                         <div class="Glass"></div>
-                        <!-- <?php if(!empty($questions)):
-                            foreach ($questions as $v){
-                        ?>
-                        <div class="matching-number"><?=$v?></div>
-                            <?php } ?>
-                        <?php endif;?> -->
                     </div>
                 </div>
-                <div class="a-btn" id="complete">记忆完成</div>
+                <a class="a-btn" id="complete" href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
             </div>
         </div>
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputComplete" value="<?=wp_create_nonce('student_memory_complete_code_nonce');?>">
-<input type="hidden" name="match_more" id="inputMatchMore" value="<?=isset($_GET['match_more']) ? $_GET['match_more'] : 1;?>"/>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
+<div class="layui-fluid noCopy">
+    <div class="layui-row">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+            <header class="mui-bar mui-bar-nav">
+                <h1 class="mui-title"><?=$match_title?></h1>
+            </header>
+            <div class="layui-row nl-border nl-content">
+                <div class="remember width-margin width-margin-pc">
+                    <div class="matching-row">
+                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_blue ml_10 match_info_font">
+                            <i class="iconfont">&#xe685;</i>
+                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                        </span>
+                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                    </div>
+                    <div class="matching-row">
+                        <div class="matching-row-label">辅助操作</div>
+                        <div class="matching-row-list">
+                            <div class="matching-btn c_white" id="prev">前插一位</div>
+                            <div class="matching-btn c_white" id="next">后插一位</div>
+                        </div>
+                    </div>
+                    <div class="matching-number-zoo">
+                        <?php for($i=0;$i<$str_length;++$i){ ?>
+                            <div class="matching-number <?=$i==0?'active':'';?>"></div>
+                        <?php } ?>
+                    </div>
+
+                    <div class="matching-keyboard">
+                        <div class="matching-keyboard-row">
+                            <div class="matching-key fs_18 c_white number" date-number="1">1</div>
+                            <div class="matching-key fs_18 c_white number" date-number="2">2</div>
+                            <div class="matching-key fs_18 c_white number" date-number="3">3</div>
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="matching-key fs_18 c_white number" date-number="4">4</div>
+                            <div class="matching-key fs_18 c_white number" date-number="5">5</div>
+                            <div class="matching-key fs_18 c_white number" date-number="6">6</div>
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="matching-key fs_18 c_white number" date-number="7">7</div>
+                            <div class="matching-key fs_18 c_white number" date-number="8">8</div>
+                            <div class="matching-key fs_18 c_white number" date-number="9">9</div>
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="matching-key fs_16 c_white" id="del">删除</div>
+                            <div class="matching-key fs_18 c_white number" date-number="0">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 jQuery(function($) { 
     var questions_answer=[]
@@ -117,11 +165,10 @@ new AlloyFinger($('#complete')[0], {
             my_answer.push('')
         })
         var data={
-            action:'answer_submit',
+            action:'trains_submit',
             _wpnonce:$('#inputSubmit').val(),
             match_more:$('#inputMatchMore').val(),
             my_answer:my_answer,
-            match_action:'subjectNumberBattle',
             surplus_time:time,
             match_questions:questions_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切

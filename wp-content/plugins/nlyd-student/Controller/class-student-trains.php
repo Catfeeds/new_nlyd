@@ -101,18 +101,32 @@ class Student_Trains extends Student_Home
     }
 
     /**
+     * 初始页面
+     */
+    public function initial(){
+
+        if(empty($_GET['type'])) $this->get_404('参数错误');
+
+        $view = student_view_path.CONTROLLER.'/initial.php';
+        load_view_template($view);
+
+    }
+
+    /**
      * 答题页面
      */
     public function answer(){
 
-        if(empty($_GET['type'])) $this->get_404('参数错误');
-
         $view = student_view_path.CONTROLLER.'/answer.php';
-        load_view_template($view,array('list'=>$list));
-
+        load_view_template($view);
     }
 
+    /**
+     * 训练答题记录
+     */
+    public function logs(){
 
+    }
 
     /**
      * 默认公用js/css引入
@@ -126,7 +140,7 @@ class Student_Trains extends Student_Home
 
 
         //比赛初始页面
-        if(ACTION == 'answer'){
+        if(ACTION == 'initial'){
 
             // wp_register_script( 'student-mTouch',student_js_url.'Mobile/mTouch.js',array('jquery'), leo_student_version  );
             // wp_enqueue_script( 'student-mTouch' );

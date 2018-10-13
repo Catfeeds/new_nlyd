@@ -14,13 +14,13 @@ layui.define('jquery', function(exports){
       var scrollElem = $(options.scrollElem || document); //滚动条所在元素
       var mb = options.mb || 50; //与底部的临界距离
       var isAuto = 'isAuto' in options ? options.isAuto : true; //是否自动滚动加载
-      var end = options.end || '<span class="fs_14 c_black3">已加载全部数据</span>'; //“末页”显示文案
+      var end = options.end || '<span class="fs_14 c_black3">'+layUI.complete+'</span>'; //“末页”显示文案
       
       //滚动条所在元素是否为document
       var notDocment = options.scrollElem && options.scrollElem !== document;
       
       //加载更多
-      var ELEM_TEXT = '<a href="javascript:;" class="fs_14 c_blue"><span>加载更多</span></a>'
+      var ELEM_TEXT = '<a href="javascript:;" class="fs_14 c_blue"><span>'+layUI.more+'</span></a>'
       ,more = $('<div class="layui-flow-more">'+ ELEM_TEXT +'</div>');
       
       if(!elem.find('.layui-flow-more')[0]){
