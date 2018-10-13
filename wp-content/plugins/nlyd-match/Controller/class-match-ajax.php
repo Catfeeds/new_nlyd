@@ -879,16 +879,44 @@ class Match_Ajax
      */
     public function delMatch(){
         $id = intval($_POST['id']);
+        //删除订单 meta 分数
+
+
+
         if($id < 1) wp_send_json_error(['info' => '参数错误']);
         //判断是否是已关闭的比赛(回收站中的)
         $post = get_post($id);
         if($post->post_status == 'trash'){
+            global $wpdb;
+            $wpdb->startTrans();
             //删除post
-            if(wp_delete_post($id)){
-                wp_send_json_success(['info' => '比赛已删除']);
-            }else{
-                wp_send_json_error(['info' => '删除失败']);
+            if(!wp_delete_post($id)){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '比赛删除失败']);
             }
+            //删除meta
+            $meta = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_meta WHERE match_id={$id}");
+            $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
+            if(!$metaBool && $meta){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '比赛外键删除失败']);
+            }
+            //删除订单
+            $order = $wpdb->get_row("SELECT ");
+            $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id]);
+            if(!$orderBool){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '订单删除失败']);
+            }
+            //删除答题记录
+            $questionBool = $wpdb->delete($wpdb->prefix.'question', ['match_id' => $id]);
+            if(!$questionBool){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '答题记录删除失败']);
+            }
+            $wpdb->commit();
+            wp_send_json_success(['info' => '比赛已删除']);
+
         }else{
             wp_send_json_error(['info' => '请先关闭比赛']);
         }
