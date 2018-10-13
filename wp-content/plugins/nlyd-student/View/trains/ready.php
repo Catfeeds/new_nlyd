@@ -288,5 +288,5 @@
 
         <?php } ?>
     </div>
-    <a href="<?=home_url('answer/type/'.$_GET['type'])?>">訓練</a>
+    <a href="<?=home_url('trains/answer/type/'.$_GET['type'])?>">訓練</a>
 </div>
