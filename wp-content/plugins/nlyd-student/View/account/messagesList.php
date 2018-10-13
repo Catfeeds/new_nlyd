@@ -13,7 +13,7 @@
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">我的消息</h1>
+                <h1 class="mui-title"><?=__('我的消息', 'nlyd-student')?></h1>
             </header>
                 <div class="layui-row nl-border nl-content">
                     <div class="width-margin flow-default" id="flow-list">
@@ -27,14 +27,14 @@
                 <a class="mui-pull-left nl-goback static" href="<?=home_url('/account/')?>">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">我的消息</h1>
+                <h1 class="mui-title"><?=__('我的消息', 'nlyd-student')?></h1>
             </header>
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMessage1040@2x.png'?>">
                         </div>
-                        <p class="no-info-text">暂无任何站内消息</p>
+                        <p class="no-info-text"><?=__('暂无任何站内消息', 'nlyd-student')?></p>
                     </div>
                 </div>
             </div>

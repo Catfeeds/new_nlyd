@@ -2,7 +2,7 @@
     <a class="mui-pull-left nl-goback">
         <i class="iconfont">&#xe610;</i>
     </a>
-    <h1 class="mui-title">比赛规则</h1>
+    <h1 class="mui-title"><?=__('比赛规则', 'nlyd-student')?></h1>
 </header>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -264,7 +264,8 @@
                 </div>
             </div>           
         </div>-->
-        <?=$post_content?>
+      <?=$post_content?>
+
     </div>
 </div>
 

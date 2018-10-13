@@ -5,18 +5,18 @@
             <header class="mui-bar mui-bar-nav layui-bg-white">
                 <div class="search-zoo">
                     <i class="iconfont search-Icon">&#xe63b;</i>
-                    <input type="text" class="serach-Input nl-foucs" placeholder="搜索名录/课程/教练等">
+                    <input type="text" class="serach-Input nl-foucs" placeholder="<?=__('搜索名录/课程/教练等', 'nlyd-student')?>">
                 </div>
             </header>
             <div class="layui-row nl-border nl-content  layui-bg-white">
                 <!-- 头部导航 -->
                 <div class="layui-row width-padding">
                     <div class="top-nav">
-                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/student/index');?>">首 页</a></div>
-                        <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('directory');?>">名 录</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a">课 程</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>">商 城</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a">公 益</a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn active"><a class="fs_16 c_blue"  href="<?=home_url('directory');?>"><?=__('名 录', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('课 程', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('公 益', 'nlyd-student')?></a></div>
                     </div>
                 </div>
                
@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>认证教练名录</p>
+                                        <p><?=__('认证教练名录', 'nlyd-student')?></p>
                                         <p>BRAIN COACH</p> 
                                     </div>
                                 </div>
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>脑力健将名录</p>
+                                        <p><?=__('脑力健将名录', 'nlyd-student')?></p>
                                         <p>BRAIN POWER</p> 
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>脑力战队名录</p>
+                                        <p><?=__('脑力战队名录', 'nlyd-student')?></p>
                                         <p>BRAIN TEAM</p> 
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>记忆水平认证名录</p>
+                                        <p><?=__('记忆水平认证名录', 'nlyd-student')?></p>
                                         <p>BRAIN COALEVELCH</p> 
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>速读水平认证名录</p>
+                                        <p><?=__('速读水平认证名录', 'nlyd-student')?></p>
                                         <p>SOEED READING</p> 
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>心算水平认证名录</p>
+                                        <p><?=__('心算水平认证名录', 'nlyd-student')?></p>
                                         <p>MENTAL LEVEL</p> 
                                     </div>
                                 </div>

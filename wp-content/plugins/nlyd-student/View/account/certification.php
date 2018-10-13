@@ -10,7 +10,7 @@
                     <a class="mui-pull-left nl-goback">
                         <i class="iconfont">&#xe610;</i>
                     </a>
-                    <h1 class="mui-title">实名认证</h1>
+                    <h1 class="mui-title"><?=__('实名认证', 'nlyd-student')?></h1>
                 </header>
             </div> 
             <div class="layui-row nl-border nl-content">
@@ -18,49 +18,49 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom" lay-filter='certificationForm'>
                             <div class="form-inputs">
                                 <div class="form-input-row">
-                                    <div class="form-input-label">国 籍</div>
-                                    <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="选择国籍">
+                                    <div class="form-input-label"><?=__('国 籍', 'nlyd-student')?></div>
+                                    <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=$user_info['user_nationality_pic']?>'  id="src">
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
                                     
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">证件类型</div>
-                                    <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="选择证件类型" class="nl-input" lay-verify="required">
+                                    <div class="form-input-label"><?=__('证件类型', 'nlyd-student')?></div>
+                                    <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="<?=__('选择证件类型', 'nlyd-student')?>" class="nl-input" lay-verify="required">
                                     <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
                                     <input  type="hidden" name="action" value="student_saveInfo"/>
                                     <input type="hidden" name="_wpnonce" id="student_saveInfo_code_nonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                                     <input  type="hidden" name="meta_key" value="user_real_name"/>
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">证件号码</div>
-                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="输入证件上的真实证件号" lay-verify="required"  class="nl-input nl-foucs">
+                                    <div class="form-input-label"><?=__('证件号码', 'nlyd-student')?></div>
+                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">姓 名</div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="输入证件上的真实姓名" class="nl-input nl-foucs" lay-verify="required">
+                                    <div class="form-input-label"><?=__('姓 名', 'nlyd-student')?></div>
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">性 别</div>
-                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="请选择您的性别" class="nl-input">
+                                    <div class="form-input-label"><?=__('性 别', 'nlyd-student')?></div>
+                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
-                                    <div class="form-input-label">生 日</div>
-                                    <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="选择生日">
+                                    <div class="form-input-label"><?=__('生 日', 'nlyd-student')?></div>
+                                    <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="<?=__('选择生日', 'nlyd-student')?>">
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
-                                    <div class="form-input-label">年 龄</div>
-                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="年龄"  class="nl-input nl-foucs">
+                                    <div class="form-input-label"><?=__('年 龄', 'nlyd-student')?></div>
+                                    <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="<?=__('年龄', 'nlyd-student')?>"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label">所在城市</div>
+                                    <div class="form-input-label"><?=__('所在城市', 'nlyd-student')?></div>
                                     <input readonly id="areaSelect" type="text" placeholder="所在城市" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
                                     <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
                                 <div class="layui-bg-white img-zoos">
-                                    <p class="tps">上传身份证</p>
+                                    <p class="tps"><?=__('上传身份证', 'nlyd-student')?></p>
                                         <?php if(!empty($user_info['user_ID_Card'])){ ?>
                                         <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
                                         <div class="post-img no-dash">
@@ -81,7 +81,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a class="a-btn" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit="">更新实名认证</a>
+                                <a class="a-btn" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><?=__('更新实名认证', 'nlyd-student')?></a>
                                 <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
                             </div>
                         </form>
@@ -119,11 +119,11 @@ jQuery(document).ready(function($) {
         })
         //模拟手机下拉列表，选择证件类型
         var certificationSelectData= [
-            {key:'sf',value:'身份证'},
-            {key:'jg',value:'军官证'},
-            {key:'hz',value:'护照'},
-            {key:'tb',value:'台胞证'},
-            {key:'ga',value:'港澳证'},
+            {key:'sf',value:'<?=__('身份证', 'nlyd-student')?>'},
+            {key:'jg',value:'<?=__('军官证', 'nlyd-student')?>'},
+            {key:'hz',value:'<?=__('护照', 'nlyd-student')?>'},
+            {key:'tb',value:'<?=__('台胞证', 'nlyd-student')?>'},
+            {key:'ga',value:'<?=__('港澳证', 'nlyd-student')?>'},
         ];
         var posiotionCertification=[0]
         if(typeof($('#trigger1').val())!='undefined'){
@@ -152,7 +152,7 @@ jQuery(document).ready(function($) {
             }
         });
         // 模拟手机下拉列表，选择性别
-        var sexSelectData= ['男','女',]
+        var sexSelectData= ['<?=__('男', 'nlyd-student')?>','<?=__('女', 'nlyd-student')?>',]
         var posiotionSex=[0];//初始化位置，高亮展示
         if($('#trigger3').val().length>0 && $('#trigger3').val()){
             $.each(sexSelectData,function(index,value){
@@ -164,7 +164,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect2 = new MobileSelect({
             trigger: '#trigger3',
-            title: '性别',
+            title: '<?=__('性别', 'nlyd-student')?>',
             wheels: [
                 {data: sexSelectData}
             ],

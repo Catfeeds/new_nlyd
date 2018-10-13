@@ -15,7 +15,7 @@
                 <div class="item-wrapper">
                     <div class="center-detail">
                         <div class="system-font">
-                            <p>认证教练名录</p>
+                            <p><?=__('认证教练名录', 'nlyd-student')?></p>
                             <p>BRAIN COACH</p> 
                         </div>
                     </div>
@@ -26,13 +26,13 @@
                     <div class="nl-table-wapper">
                         <table class="nl-table" id="flow-table">
                             <tr>
-                                <td>头像</td>
-                                <td>教练姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>心算级别</td>
-                                <td>速读级别</td>
-                                <td>速记级别</td>
+                                <td><?=__('头像', 'nlyd-student')?></td>
+                                <td><?=__('教练姓名', 'nlyd-student')?></td>
+                                <td><?=__('ID', 'nlyd-student')?></td>
+                                <td><?=__('性别', 'nlyd-student')?></td>
+                                <td><?=__('心算级别', 'nlyd-student')?></td>
+                                <td><?=__('速读级别', 'nlyd-student')?></td>
+                                <td><?=__('记忆级别', 'nlyd-student')?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -40,12 +40,12 @@
                                         <img src="<?=student_css_url.'image/icons/match-big.png'?>">
                                     </div>
                                 </td>
-                                <td>教练姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>心算级别</td>
-                                <td>速读级别</td>
-                                <td>速记级别</td>
+                                <td><?=__('教练姓名', 'nlyd-student')?></td>
+                                <td><?=__('ID', 'nlyd-student')?></td>
+                                <td><?=__('性别', 'nlyd-student')?></td>
+                                <td><?=__('心算级别', 'nlyd-student')?></td>
+                                <td><?=__('速读级别', 'nlyd-student')?></td>
+                                <td><?=__('记忆级别', 'nlyd-student')?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -53,12 +53,12 @@
                                         <img src="<?=student_css_url.'image/icons/match-big.png'?>">
                                     </div>
                                 </td>
-                                <td>教练姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>心算级别</td>
-                                <td>速读级别</td>
-                                <td>速记级别</td>
+                                <td><?=__('教练姓名', 'nlyd-student')?></td>
+                                <td><?=__('ID', 'nlyd-student')?></td>
+                                <td><?=__('性别', 'nlyd-student')?></td>
+                                <td><?=__('心算级别', 'nlyd-student')?></td>
+                                <td><?=__('速读级别', 'nlyd-student')?></td>
+                                <td><?=__('记忆级别', 'nlyd-student')?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -66,12 +66,12 @@
                                         <img src="<?=student_css_url.'image/icons/match-big.png'?>">
                                     </div>
                                 </td>
-                                <td>教练姓名</td>
-                                <td>ID</td>
-                                <td>性别</td>
-                                <td>心算级别</td>
-                                <td>速读级别</td>
-                                <td>速记级别</td>
+                                <td><?=__('教练姓名', 'nlyd-student')?></td>
+                                <td><?=__('ID', 'nlyd-student')?></td>
+                                <td><?=__('性别', 'nlyd-student')?></td>
+                                <td><?=__('心算级别', 'nlyd-student')?></td>
+                                <td><?=__('速读级别', 'nlyd-student')?></td>
+                                <td><?=__('记忆级别', 'nlyd-student')?></td>
                             </tr>
                         </table>
                     </div>

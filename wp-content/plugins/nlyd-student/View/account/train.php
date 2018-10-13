@@ -12,15 +12,15 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">我的训练</h1>
+            <h1 class="mui-title"><?=__('我的训练', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="no-info-page">
                     <div class="no-info-img">
                         <img src="<?=student_css_url.'image/noInfo/noTrain1045@2x.png'?>">
                     </div>
-                    <p class="no-info-text">您暂无训练记录</p>
-                    <a class="a-btn">现在去训练</a>
+                    <p class="no-info-text"><?=__('您暂无训练记录', 'nlyd-student')?></p>
+                    <a class="a-btn"><?=__('现在去训练', 'nlyd-student')?></a>
                 </div>
             </div>
         </div>           
