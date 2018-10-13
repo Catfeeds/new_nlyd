@@ -23,15 +23,16 @@
                 <div class="nl-page-form layui-form width-margin-pc have-bottom" lay-filter="nicenameForm">   
 
                     <div class="nl-form-tips width-padding width-padding-pc">
-                        <h5>训练项目</h5>
-                        <!-- <span>速记类</span> -->
+                        <h5 style="margin-bottom:0">训练项目</h5>
                     </div>
                     <?php
                     if (empty($list)){ ?>
                         <div>暂无专项训练</div>;
                     <?php }else{ ?>
                         <?php foreach ($list as $v){ ?>
-                            <span><?=$v["title"]?></span>
+                            <div class="nl-form-tips width-padding width-padding-pc">
+                                <span><?=$v["title"]?></span>
+                            </div>
                             <?php foreach ($v["children"] as $val){ ?>
                                 <div class="form-inputs">
                                     <a class="form-input-row" href="<?=home_url('trains/ready/type/'.$val->project_alias.'/genre_id/'.$genre_id.'/id/'.$val->ID)?>" >

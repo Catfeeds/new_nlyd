@@ -253,13 +253,14 @@ jQuery(document).ready(function($) {
         });
 
         if($('#trigger4').val()=="中华人民共和国"){
-            $('#birth').css('display','none')
+            // $('#birth').css('display','none')
             $('#age').css('display','block')
-            $('#birthdaySelect').val();
+            $('#birthdaySelect').attr('value','')
+            console.log($('#birthdaySelect'))
         }else{
             $('#birth').css('display','block');
-            $('#age').css('display','none');
-            $('#meta_val[real_age]').val();
+            // $('#age').css('display','none');
+            console.log($('input[name="meta_val[real_age]"]'))
         }
         // 模拟手机下拉列表，选择国籍
         var contrySelectData=$.validationLayui.contry;
@@ -288,13 +289,16 @@ jQuery(document).ready(function($) {
                 $('#src').val(data[0]['src'])
                 $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
-                    $('#birth').css('display','none')
+                    // $('#birth').css('display','none')
                     $('#age').css('display','block')
-                    $('#birthdaySelect').val();
+
+                    $('#birthdaySelect').attr('value','');
+                    console.log($('#birthdaySelect'))
                 }else{
                     $('#birth').css('display','block');
-                    $('#age').css('display','none');
-                    $('#meta_val[real_age]').val();
+                    // $('#age').css('display','none');
+                    $('#meta_val[real_age]').attr('value','');
+                    console.log($('#meta_val[real_age]'))
                 }
             }
         });
