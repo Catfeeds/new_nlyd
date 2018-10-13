@@ -2,8 +2,7 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_public_view.'leftMenu.php';
-            
+            require_once leo_student_public_view.'leftMenu.php';
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
@@ -11,7 +10,7 @@
                     <i class="iconfont">&#xe610;</i>
                 </a>
                 <h1 class="mui-title">
-                脑力世界杯专项训练
+                <?=$post_title?>
                 </h1>
             </header>
             <div class="layui-row nl-border nl-content">
@@ -21,73 +20,31 @@
                 　　 <br><span class="fs_12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本版块供选手针对该赛事各项目开展自我训练，相关挑战指标可根据自身水平自行设定，循序渐进，以逐步提高实战能力。</span>
                 　　 <br><span class="fs_12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This section for the athletes to carry out self-training for the events, the users can set different time and difficulty by themself to gradually improve their actual ability.</span>
                 </div>
-                <div class="nl-page-form layui-form width-margin-pc have-bottom" lay-filter='nicenameForm'>   
+                <div class="nl-page-form layui-form width-margin-pc have-bottom" lay-filter="nicenameForm">   
 
                     <div class="nl-form-tips width-padding width-padding-pc">
-                        <h5>训练项目</h5>
-                        <!-- <span>速记类</span> -->
+                        <h5 style="margin-bottom:0">训练项目</h5>
                     </div>
-                    <?php if (empty($list)){ ?>
-                    <div>暂无专项训练</div>
+                    <?php
+                    if (empty($list)){ ?>
+                        <div>暂无专项训练</div>;
                     <?php }else{ ?>
-                    <?php foreach ($list as $v){ ?>
-                    <!-- <li>
-                        <a href="<?=home_url('trains/answer/id/'.$v->ID)?>"><?=$v->post_title?></a>
-                    </li> -->
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/ready/id/'.$v->ID)?>" >
-                            <div class="form-input-label"><?=$v->post_title?></div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
+                        <?php foreach ($list as $v){ ?>
+                            <div class="nl-form-tips width-padding width-padding-pc">
+                                <span><?=$v["title"]?></span>
+                            </div>
+                            <?php foreach ($v["children"] as $val){ ?>
+                                <div class="form-inputs">
+                                    <a class="form-input-row" href="<?=home_url('trains/ready/type/'.$val->project_alias.'/genre_id/'.$genre_id.'/id/'.$val->ID)?>" >
+                                        <div class="form-input-label"><?=$val->post_title?></div>
+                                        <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
+                                    </a>
+                                </div>
+                            <?php }?>
+                        <?php }?>
                     <?php }?>
-                    <?php }?>
-                    <!-- <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">数字争霸</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">扑克接力</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
-
-                    <div class="nl-form-tips width-padding width-padding-pc">
-                        <span>速读类</span>
-                    </div>
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">快眼扫描</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">文章速读</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
-
-                    <div class="nl-form-tips width-padding width-padding-pc">
-                        <span>速算类</span>
-                    </div>
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">正向速算</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div>
-                    <div class="form-inputs">
-                        <a class="form-input-row" href="<?=home_url('trains/trainHomePage');?>" >
-                            <div class="form-input-label">逆向速算</div>
-                            <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
-                        </a>
-                    </div> -->
                 </div>
             </div>
-        </div>           
+        </div>
     </div>
 </div>
