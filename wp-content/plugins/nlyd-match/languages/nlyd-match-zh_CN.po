@@ -1,0 +1,347 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Application Match 比赛管理\n"
+"POT-Creation-Date: 2018-10-13 16:19+0800\n"
+"PO-Revision-Date: 2018-10-13 16:19+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: nlyd-match.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: Controller/class-feedback.php:41 Controller/class-match_student.php:66
+#: Controller/class-match_student.php:1802 Controller/class-order.php:124
+#: Controller/class-order.php:449 Controller/class-teacher.php:74
+#: Controller/class-teacher.php:472 Controller/class-team.php:105
+msgid "&laquo;"
+msgstr ""
+
+#: Controller/class-feedback.php:42 Controller/class-match_student.php:67
+#: Controller/class-match_student.php:1803 Controller/class-order.php:125
+#: Controller/class-order.php:450 Controller/class-teacher.php:75
+#: Controller/class-teacher.php:473 Controller/class-team.php:106
+msgid "&raquo;"
+msgstr ""
+
+#: View/edit.php:67
+msgid "Enter title here"
+msgstr ""
+
+#: View/edit.php:92
+msgid "Get Shortlink"
+msgstr ""
+
+#: View/edit.php:142
+#, php-format
+msgid "Word count: %s"
+msgstr ""
+
+#. translators: 1: Name of most recent post author, 2: Post edited date, 3: Post edited time
+#: View/edit.php:150
+#, php-format
+msgid "Last edited by %1$s on %2$s at %3$s"
+msgstr ""
+
+#: View/edit.php:150 View/edit.php:153
+msgid "F j, Y"
+msgstr ""
+
+#: View/edit.php:150 View/edit.php:153
+msgid "g:i a"
+msgstr ""
+
+#. translators: 1: Post edited date, 2: Post edited time
+#: View/edit.php:153
+#, php-format
+msgid "Last edited on %1$s at %2$s"
+msgstr ""
+
+#: nlyd-match.php:987
+msgctxt "post type 名称"
+msgid "战队"
+msgstr ""
+
+#: nlyd-match.php:988
+msgctxt "post type 单个 item 时的名称，因为英文有复数"
+msgid "战队"
+msgstr ""
+
+#: nlyd-match.php:989
+msgctxt "添加新内容的链接名称"
+msgid "新建战队"
+msgstr ""
+
+#: nlyd-match.php:990
+msgid "新建 战队"
+msgstr ""
+
+#: nlyd-match.php:991
+msgid "编辑战队"
+msgstr ""
+
+#: nlyd-match.php:992
+msgid "新战队"
+msgstr ""
+
+#: nlyd-match.php:993
+msgid "所有战队"
+msgstr ""
+
+#: nlyd-match.php:994 nlyd-match.php:1046 nlyd-match.php:1096
+#: nlyd-match.php:1145 nlyd-match.php:1195 nlyd-match.php:1247
+#: nlyd-match.php:1300
+msgid "查看"
+msgstr ""
+
+#: nlyd-match.php:995 nlyd-match.php:1047 nlyd-match.php:1097
+#: nlyd-match.php:1146 nlyd-match.php:1196 nlyd-match.php:1248
+#: nlyd-match.php:1301
+msgid "搜索"
+msgstr ""
+
+#: nlyd-match.php:996
+msgid "没有找到有关战队"
+msgstr ""
+
+#: nlyd-match.php:997
+msgid "回收站里面没有相关战队"
+msgstr ""
+
+#: nlyd-match.php:1039
+msgctxt "post type 名称"
+msgid "比赛 记录"
+msgstr ""
+
+#: nlyd-match.php:1040 nlyd-match.php:1189
+msgctxt "post type 单个 item 时的名称，因为英文有复数"
+msgid "Movie"
+msgstr ""
+
+#: nlyd-match.php:1041
+msgctxt "添加新内容的链接名称"
+msgid "新建比赛"
+msgstr ""
+
+#: nlyd-match.php:1042
+msgid "新建 比赛"
+msgstr ""
+
+#: nlyd-match.php:1043
+msgid "编辑比赛"
+msgstr ""
+
+#: nlyd-match.php:1044
+msgid "新比赛"
+msgstr ""
+
+#: nlyd-match.php:1045
+msgid "所有比赛"
+msgstr ""
+
+#: nlyd-match.php:1048
+msgid "没有找到有关比赛"
+msgstr ""
+
+#: nlyd-match.php:1049
+msgid "回收站里面没有相关比赛"
+msgstr ""
+
+#: nlyd-match.php:1090
+msgctxt "post type 名称"
+msgid "比赛 类型"
+msgstr ""
+
+#: nlyd-match.php:1091
+msgctxt "添加新内容的链接名称"
+msgid "新建类型"
+msgstr ""
+
+#: nlyd-match.php:1092
+msgid "新建 类型"
+msgstr ""
+
+#: nlyd-match.php:1093
+msgid "编辑类型"
+msgstr ""
+
+#: nlyd-match.php:1094
+msgid "新类型"
+msgstr ""
+
+#: nlyd-match.php:1095
+msgid "比赛类型"
+msgstr ""
+
+#: nlyd-match.php:1098 nlyd-match.php:1147
+msgid "没有找到有关比赛类型"
+msgstr ""
+
+#: nlyd-match.php:1099 nlyd-match.php:1148
+msgid "回收站里面没有相关比赛类型"
+msgstr ""
+
+#: nlyd-match.php:1139
+msgctxt "post type 名称"
+msgid "比赛 类别"
+msgstr ""
+
+#: nlyd-match.php:1140
+msgctxt "添加新内容的链接名称"
+msgid "新建类别"
+msgstr ""
+
+#: nlyd-match.php:1141
+msgid "新建 类别"
+msgstr ""
+
+#: nlyd-match.php:1142
+msgid "编辑类别"
+msgstr ""
+
+#: nlyd-match.php:1143
+msgid "新类别"
+msgstr ""
+
+#: nlyd-match.php:1144
+msgid "比赛类别"
+msgstr ""
+
+#: nlyd-match.php:1188
+msgctxt "post type 名称"
+msgid "比赛 项目"
+msgstr ""
+
+#: nlyd-match.php:1190
+msgctxt "添加新内容的链接名称"
+msgid "新建项目"
+msgstr ""
+
+#: nlyd-match.php:1191
+msgid "新建 项目"
+msgstr ""
+
+#: nlyd-match.php:1192
+msgid "编辑项目"
+msgstr ""
+
+#: nlyd-match.php:1193
+msgid "新项目"
+msgstr ""
+
+#: nlyd-match.php:1194
+msgid "比赛项目"
+msgstr ""
+
+#: nlyd-match.php:1197 nlyd-match.php:1302
+msgid "没有找到有关比赛项目"
+msgstr ""
+
+#: nlyd-match.php:1198 nlyd-match.php:1303
+msgid "回收站里面没有相关比赛项目"
+msgstr ""
+
+#: nlyd-match.php:1240
+msgctxt "post type 名称"
+msgid "题库"
+msgstr ""
+
+#: nlyd-match.php:1241
+msgctxt "post type 单个 item 时的名称，因为英文有复数"
+msgid "题库"
+msgstr ""
+
+#: nlyd-match.php:1242
+msgctxt "添加新内容的链接名称"
+msgid "新建题目"
+msgstr ""
+
+#: nlyd-match.php:1243
+msgid "新建 题目"
+msgstr ""
+
+#: nlyd-match.php:1244
+msgid "编辑题目"
+msgstr ""
+
+#: nlyd-match.php:1245
+msgid "新题目"
+msgstr ""
+
+#: nlyd-match.php:1246
+msgid "所有题目"
+msgstr ""
+
+#: nlyd-match.php:1249
+msgid "没有找到有关题目"
+msgstr ""
+
+#: nlyd-match.php:1250
+msgid "回收站里面没有相关题目"
+msgstr ""
+
+#: nlyd-match.php:1293
+msgctxt "post type 名称"
+msgid "题目 问题"
+msgstr ""
+
+#: nlyd-match.php:1294
+msgctxt "post type 单个 item 时的名称，因为英文有复数"
+msgid "Problem"
+msgstr ""
+
+#: nlyd-match.php:1295
+msgctxt "添加新内容的链接名称"
+msgid "新建问题"
+msgstr ""
+
+#: nlyd-match.php:1296
+msgid "新建 问题"
+msgstr ""
+
+#: nlyd-match.php:1297
+msgid "编辑问题"
+msgstr ""
+
+#: nlyd-match.php:1298
+msgid "新问题"
+msgstr ""
+
+#: nlyd-match.php:1299
+msgid "问题"
+msgstr ""
+
+#: nlyd-match.php:1380 nlyd-match.php:1398
+msgid "事实上"
+msgstr "sssssssssssssssssssssssssssssssss"
+
+#. Plugin Name of the plugin/theme
+msgid "Application Match 比赛管理"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://localhost/wordpress/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "后台比赛管理"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "leo"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "--"
+msgstr ""
