@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Application Match 比赛管理\n"
-"POT-Creation-Date: 2018-10-13 16:19+0800\n"
-"PO-Revision-Date: 2018-10-13 16:19+0800\n"
+"POT-Creation-Date: 2018-10-13 16:56+0800\n"
+"PO-Revision-Date: 2018-10-13 16:56+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -22,18 +22,22 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #: Controller/class-feedback.php:41 Controller/class-match_student.php:66
-#: Controller/class-match_student.php:1802 Controller/class-order.php:124
+#: Controller/class-match_student.php:1803 Controller/class-order.php:124
 #: Controller/class-order.php:449 Controller/class-teacher.php:74
 #: Controller/class-teacher.php:472 Controller/class-team.php:105
 msgid "&laquo;"
 msgstr ""
 
 #: Controller/class-feedback.php:42 Controller/class-match_student.php:67
-#: Controller/class-match_student.php:1803 Controller/class-order.php:125
+#: Controller/class-match_student.php:1804 Controller/class-order.php:125
 #: Controller/class-order.php:450 Controller/class-teacher.php:75
 #: Controller/class-teacher.php:473 Controller/class-team.php:106
 msgid "&raquo;"
 msgstr ""
+
+#: Controller/class-match_student.php:1297
+msgid "我是谁"
+msgstr "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 #: View/edit.php:67
 msgid "Enter title here"
@@ -322,10 +326,6 @@ msgstr ""
 msgid "问题"
 msgstr ""
 
-#: nlyd-match.php:1380 nlyd-match.php:1398
-msgid "事实上"
-msgstr "sssssssssssssssssssssssssssssssss"
-
 #. Plugin Name of the plugin/theme
 msgid "Application Match 比赛管理"
 msgstr ""
@@ -345,3 +345,6 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "--"
 msgstr ""
+
+#~ msgid "事实上"
+#~ msgstr "sssssssssssssssssssssssssssssssss"
