@@ -18,13 +18,13 @@
                     <a class="mui-pull-left nl-goback static" onclick="window.location.href = '<?=$url?>'">
                         <i class="iconfont">&#xe610;</i>
                     </a>
-                    <h1 class="mui-title">收货地址管理</h1>
+                    <h1 class="mui-title">收件地址管理</h1>
                 </header>
                 <div class="layui-row nl-border nl-content">
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label">姓名</div>
-                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="请填写收货人姓名" class="nl-input nl-foucs" lay-verify="chineseName">
+                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="请填写联系人姓名" class="nl-input nl-foucs" lay-verify="chineseName">
                             <input name='action' value='save_address' type="hidden">
                             <input type="hidden" name="_wpnonce"  value="<?=wp_create_nonce('student_save_address_code_nonce');?>">
                             <input type="hidden" name="id"  value="<?php echo isset($row['id']) ? $row['id'] : 0; ?>">

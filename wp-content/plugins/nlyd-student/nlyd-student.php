@@ -221,6 +221,7 @@ if(!class_exists('StudentController')){
                 wp_register_script( 'student-layui-home',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-layui-home' );
                 // 表单验证语言包
+                
                 wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-languages' );
 
