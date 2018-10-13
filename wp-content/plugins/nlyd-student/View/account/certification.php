@@ -20,8 +20,8 @@
                                 <div class="form-input-row">
                                     <div class="form-input-label">国籍</div>
                                     <input class="nl-input" value='' readonly  id="trigger4" placeholder="选择国籍">
+                                    <input type="hidden" name="" id="src" value=''>
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src=""></span>
-                                    
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label">证件类型</div>
@@ -46,9 +46,6 @@
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
                                     <input class="nl-input" value='' readonly  id="birthdaySelect" placeholder="选择生日">
-                                    <input  type="hidden" id="year" name="user_birthday[year]" value=""/>
-                                    <input  type="hidden" id="month" name="user_birthday[month]" value="">
-                                    <input  type="hidden" id="day" name="user_birthday[day]" value=""/>
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
@@ -251,9 +248,6 @@ jQuery(document).ready(function($) {
             },
             callback:function(indexArr, data){
                 var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value'];
-                $('#year').val(data[0]['value'])
-                $('#month').val(data[1]['value'])
-                $('#day').val(data[2]['value'])
                 $('#birthdaySelect').val(text);
             }
         });
@@ -261,9 +255,11 @@ jQuery(document).ready(function($) {
         if($('#trigger4').val()=="中华人民共和国"){
             $('#birth').css('display','none')
             $('#age').css('display','block')
+            $('#birthdaySelect').val();
         }else{
-            $('#birth').css('display','block')
-            $('#age').css('display','none')
+            $('#birth').css('display','block');
+            $('#age').css('display','none');
+            $('#meta_val[real_age]').val();
         }
         // 模拟手机下拉列表，选择国籍
         var contrySelectData=$.validationLayui.contry;
@@ -289,13 +285,16 @@ jQuery(document).ready(function($) {
             callback:function(indexArr, data){
                 // console.log(data)
                 $('#trigger4').val(data[0]['value'])
+                $('#src').val(data[0]['src'])
                 $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
                     $('#age').css('display','block')
+                    $('#birthdaySelect').val();
                 }else{
-                    $('#birth').css('display','block')
-                    $('#age').css('display','none')
+                    $('#birth').css('display','block');
+                    $('#age').css('display','none');
+                    $('#meta_val[real_age]').val();
                 }
             }
         });
