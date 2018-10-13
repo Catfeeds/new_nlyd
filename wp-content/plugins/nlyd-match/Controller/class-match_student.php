@@ -23,12 +23,16 @@ class Match_student {
             $role = 'match_student_add_student';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'match_student_bonus';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
         }
 
         add_menu_page('报名学员', '报名学员', 'match_student', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
         add_submenu_page('match_student','个人成绩','个人成绩','match_student_score','match_student-score',array($this,'studentScore'));
         add_submenu_page('match_student','比赛排名','比赛排名','match_student_ranking','match_student-ranking',array($this,'matchRanking'));
         add_submenu_page('match_student','新增报名学员','新增报名学员','match_student_add_student','match_student-add_student',array($this,'addStudent'));
+        add_submenu_page('match_student','奖金明细','奖金明细','match_student_bonus','match_student-bonus',array($this,'match_bonus'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
 
@@ -688,6 +692,7 @@ class Match_student {
             }else{
                 $data = $this->getAllRankingData($match,$projectArr,$op5);
             }
+            $bonusUrlPrama = 'type=all';
         }elseif ($op1 == 2){
             //获取当前分类的id字符串
             $project_id_array = [];//项目id数组
@@ -717,6 +722,7 @@ class Match_student {
             if($rankingView['status'] == true){
                 $data = $this->getCategoryRankingData($match,join(',',$project_id_array),$op4);
             }
+            $bonusUrlPrama = 'type=category&param='.$op2.'&age='.$op4;
         }elseif ($op1 == 3){
             foreach ($projectArr as $pavGetIds){
                 if($pavGetIds['match_project_id'] == $op3 && $currentDateTime < $pavGetIds['project_end_time']){
@@ -725,6 +731,7 @@ class Match_student {
                 }
             }
             if($rankingView['status'] == true) $data = $this->getCategoryRankingData($match,$op3,$op4);
+            $bonusUrlPrama = 'type=project&param='.$op3;
         }else{
             exit('参数错误!');
         }
@@ -798,12 +805,18 @@ class Match_student {
                                     <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sdl')?>">速读类</a>
                                 </span>
                                 <span class="<?php if($op2 == 'sjl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sjl')?>">速记类</a>
+                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=sjl')?>">记忆类</a>
                                 </span>
                                 <span class="<?php if($op2 == 'ssl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=ssl')?>">速算类</a>
+                                    <a href="<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2=ssl')?>">心算类</a>
                                 </span>
-
+                                <select name="" id="option4" onchange="window.location.href='<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=2&op2='.$op2.'&op4=')?>'+this.value">
+                                    <option <?php if($op4 == '0'){ ?>selected="selected"<?php } ?> value="0">全部</option>
+                                    <option <?php if($op4 == '4'){ ?>selected="selected"<?php } ?> value="4">儿童组</option>
+                                    <option <?php if($op4 == '3'){ ?>selected="selected"<?php } ?> value="3">少年组</option>
+                                    <option <?php if($op4 == '2'){ ?>selected="selected"<?php } ?> value="2">成年组</option>
+                                    <option <?php if($op4 == '1'){ ?>selected="selected"<?php } ?> value="1">老年组</option>
+                                </select>
 
                             </div>
                         <?php } ?>
@@ -815,13 +828,7 @@ class Match_student {
                                         <a href="<?= admin_url('admin.php?page=match_student-ranking&match_id=' . $post->ID . '&op1=3&op3=' . $pav2['match_project_id']) ?>"><?= $pav2['post_title'] ?></a>
                                     </span>
                                 <?php } ?>
-                                <select name="" id="option4" onchange="window.location.href='<?=admin_url('admin.php?page=match_student-ranking&match_id='.$post->ID.'&op1=3&op3='.$op3.'&op4=')?>'+this.value">
-                                    <option <?php if($op4 == '0'){ ?>selected="selected"<?php } ?> value="0">全部</option>
-                                    <option <?php if($op4 == '4'){ ?>selected="selected"<?php } ?> value="4">儿童组</option>
-                                    <option <?php if($op4 == '3'){ ?>selected="selected"<?php } ?> value="3">少年组</option>
-                                    <option <?php if($op4 == '2'){ ?>selected="selected"<?php } ?> value="2">成年组</option>
-                                    <option <?php if($op4 == '1'){ ?>selected="selected"<?php } ?> value="1">老年组</option>
-                                </select>
+
                             </div>
                         <?php } ?>
 
@@ -830,9 +837,10 @@ class Match_student {
 
                     <div class="alignleft actions">
                     </div>
-                    <div class="alignleft actions bulkactions">
+                    <div class="alignleft bulkactions">
                         <?php if($rankingView['status'] == true){ ?>
-                            <a href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID.$downloadParam?>" class="button">导出排名</a>
+                            <a style="display: inline-block" href="admin.php?page=download&action=match_ranking&match_id=<?=$post->ID.$downloadParam?>" class="button">导出排名</a>
+                            <a style="display: inline-block" href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$post->ID.'&'.$bonusUrlPrama)?>" class="button">奖金明细</a>
                         <?php } ?>
                     </div>
                     <div class="tablenav-pages one-page">
@@ -1279,6 +1287,200 @@ class Match_student {
     /*
      * ========================================================================================
      */
+
+
+    /**
+     * 比赛奖金明细
+     * 字段 ID 姓名 奖项及金额 奖金总额 税后发放额 收款二维码 身份证号 电话号码 所属战队 发放状态
+     */
+    public function match_bonus(){
+        $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
+        $type = isset($_GET['type']) ? trim($_GET['type']) : '';
+        $param = isset($_GET['param']) ? trim($_GET['param']) : '';
+        $match_id < 1 && exit('match_id参数错误');
+        $projectArr = get_match_end_time($match_id);
+        $category = 'sdl';
+        $project_id = $projectArr[0]['match_project_id'];
+        $ageOption = 0;
+        switch ($type){
+            case 'all':
+
+                break;
+            case 'category':
+                $category = $param;
+                break;
+            case 'project':
+                $project_id = $param;
+                break;
+            default:
+                exit('类型参数错误');
+        }
+
+        //查询比赛小项目
+
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">奖金明细</h1>
+
+            <a href="javascript:;" class="page-title-action">导出当前</a>
+            <a href="javascript:;" class="page-title-action">导出所有</a>
+
+            <hr class="wp-header-end">
+
+            <style type="text/css">
+                #oprion-box a{
+                    color: #282828;
+                    text-decoration: none;
+                }
+                #oprion-box > div{
+                    padding-top: 0.5em;
+                }
+                #oprion-box > div > span{
+                    display: inline-block;
+                    width: 5em;
+                    height: 1.5em;
+                    border-radius: 0.2em;
+                    text-align: center;
+                    line-height: 1.5em;
+                    cursor: pointer;
+                }
+                #option1 > span{
+                    background-color: rgba(151, 151, 151, 0.48);
+                    font-weight: bold;
+                }
+                #oprion-box .active{
+                    background-color: #45B29D;
+                }
+                #oprion-box .active a{
+
+                    color: #ffffff;
+                }
+            </style>
+            <div id="oprion-box">
+                    <div id="option2">
+
+                            <span class="<?php if($category == 'sdl'){ ?>active<?php } ?>">
+                                <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=sdl&age=0')?>">速读类</a>
+                            </span>
+                        <span class="<?php if($category == 'sjl'){ ?>active<?php } ?>">
+                                    <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=sjl&age=0')?>">记忆类</a>
+                                </span>
+                        <span class="<?php if($category == 'ssl'){ ?>active<?php } ?>">
+                                    <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=ssl&age=0')?>">心算类</a>
+                                </span>
+                        <select name="" id="option4" onchange="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param='.$category.'&age=')?>'+this.value">
+                            <option <?php if($ageOption == '0'){ ?>selected="selected"<?php } ?> value="0">全部</option>
+                            <option <?php if($ageOption == '4'){ ?>selected="selected"<?php } ?> value="4">儿童组</option>
+                            <option <?php if($ageOption == '3'){ ?>selected="selected"<?php } ?> value="3">少年组</option>
+                            <option <?php if($ageOption == '2'){ ?>selected="selected"<?php } ?> value="2">成年组</option>
+                            <option <?php if($ageOption == '1'){ ?>selected="selected"<?php } ?> value="1">老年组</option>
+                        </select>
+
+                    </div>
+
+
+
+                    <div id="option3">
+
+                        <?php foreach ($projectArr as $pav2) { ?>
+                            <span class="<?php if($project_id == $pav2['match_project_id']){ ?>active<?php } ?>">
+                                        <a href="<?= admin_url('admin.php?page=match_student-bonus&match_id=' . $match_id . '&type=project&param=' . $pav2['match_project_id']) ?>"><?= $pav2['post_title'] ?></a>
+                                    </span>
+                        <?php } ?>
+
+                    </div>
+
+            </div>
+
+
+
+
+            <div class="tablenav top">
+
+
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
+                        <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
+                        <th scope="col" id="email" class="manage-column column-email sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=email&amp;order=asc"><span>邮箱</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" id="role" class="manage-column column-role">角色</th>
+                        <th scope="col" id="posts" class="manage-column column-posts num">文章</th>
+                        <th scope="col" id="mycred_default" class="manage-column column-mycred_default sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=mycred_default&amp;order=asc"><span>积分</span><span class="sorting-indicator"></span></a>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <tr id="user-5">
+                        <td class="username column-username has-row-actions column-primary" data-colname="用户名">
+                            <img alt="" src="http://2.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="http://1.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32">
+                            <strong><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">13982242710</a></strong>
+                            <br>
+                            <div class="row-actions">
+                                <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>
+                                <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=5&amp;_wpnonce=23f417e0dc">删除</a> | </span>
+                                <span class="view"><a href="http://127.0.0.1/nlyd/author/13982242710/" aria-label="阅读13982242710的文章">查看</a></span>
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="real_name column-real_name" data-colname="姓名">-</td>
+                        <td class="mobile column-mobile" data-colname="手机">13982242710</td>
+                        <td class="email column-email" data-colname="邮箱"><a href="mailto:"></a></td>
+                        <td class="role column-role" data-colname="角色">学生</td>
+                        <td class="posts column-posts num" data-colname="文章">0</td>
+                        <td class="mycred_default column-mycred_default" data-colname="积分">
+                            <div id="mycred-user-5-balance-mycred_default"> <span>10</span> </div>
+                            <div id="mycred-user-5-balance-mycred_default"><small style="display:block;"><strong>Total</strong>: <span>10</span></small></div>
+                            <div class="row-actions">
+                                <span class="history"><a href="http://127.0.0.1/nlyd/wp-admin/admin.php?page=mycred&amp;user=5">历史记录</a> | </span>
+                                <span class="adjust">
+                                    <a href="javascript:void(0)" class="mycred-open-points-editor" data-userid="5" data-current="10" data-total="10" data-type="mycred_default" data-username="13982242710" data-zero="0">调整</a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-username column-primary sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=login&amp;order=asc"><span>用户名</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" class="manage-column column-real_name">姓名</th>
+                        <th scope="col" class="manage-column column-mobile">手机</th>
+                        <th scope="col" class="manage-column column-email sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=email&amp;order=asc"><span>邮箱</span><span class="sorting-indicator"></span></a>
+                        </th>
+                        <th scope="col" class="manage-column column-role">角色</th>
+                        <th scope="col" class="manage-column column-posts num">文章</th>
+                        <th scope="col" class="manage-column column-mycred_default sortable desc">
+                            <a href="http://127.0.0.1/nlyd/wp-admin/users.php?orderby=mycred_default&amp;order=asc"><span>积分</span><span class="sorting-indicator"></span></a>
+                        </th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                    <br class="clear">
+                </div>
+
+
+            <br class="clear">
+        </div>
+        <?php
+
+    }
 
     /**
      * 排名分类和单项数据,战队排名算法备份
