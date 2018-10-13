@@ -45,29 +45,59 @@ class Student_Trains extends Student_Home
     }
 
     public function lists(){
+
         if(empty($_GET['id'])) $this->get_404('参数错误');
+
+        //获取当前
+        $row = get_post($_GET['id']);
 
         $args = array(
             'post_type' => array('match-category'),
             'post_status' => array('publish'),
             'post_parent'=>$_GET['id'],
-            'order' => 'DESC',
-            'orderby' => 'ID',
+            'order' => 'ASC',
+            'orderby' => 'menu_order',
         );
         $the_query = new WP_Query( $args );
-        $ids = arr2str(array_column((array)$the_query->posts,'ID'));
-        //print_r($ids);
-        global $wpdb;
-        $sql = "SELECT ID,post_title FROM {$wpdb->prefix}posts WHERE post_parent in($ids)";
-        $rows = $wpdb->get_results($sql);
-        if(!empty($rows)){
-            $list = $rows;
-        }else{
-            $list = $the_query->posts;
+        if(!empty($the_query->posts)){
+            $list = array();
+            foreach ($the_query->posts as $v){
+                $list[$v->ID]['title'] = $v->post_title;
+            }
+            //print_r($list);
+            $ids = arr2str(array_column((array)$the_query->posts,'ID'));
+
+            global $wpdb;
+            $sql = "SELECT ID,post_title,post_parent FROM {$wpdb->prefix}posts WHERE post_parent in($ids) ORDER BY menu_order ASC ";
+            $rows = $wpdb->get_results($sql);
+            if(!empty($rows)){
+                foreach ($rows as $val){
+
+                    $val->project_alias = get_post_meta($val->ID,'project_alias')[0];
+                    $list[$val->post_parent]['children'][] = $val;
+                }
+            }
+            //print_r($list);
         }
 
         $view = student_view_path.CONTROLLER.'/lists.php';
-        load_view_template($view,array('list'=>$list));
+        load_view_template($view,array('list'=>$list,'post_title'=>$row->post_title,'genre_id'=>$_GET['id']));
+    }
+
+    /**
+     * 专项训练准备页
+     */
+    public function ready(){
+        if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])) $this->get_404('参数错误');
+
+        $genre = get_post($_GET['genre_id']);
+
+        $project = get_post($_GET['id']);
+
+        //print_r($row);
+        $view = student_view_path.CONTROLLER.'/ready.php';
+
+        load_view_template($view,array('project_title'=>$project->post_title,'genre_title'=>$genre->post_title));
     }
 
     /**
@@ -89,13 +119,7 @@ class Student_Trains extends Student_Home
         $view = student_view_path.CONTROLLER.'/nlsjb-list.php';
         load_view_template($view);
     }
-       /**
-     * 脑力世界杯专项训练准备页
-     */
-     public function ready(){
-        $view = student_view_path.CONTROLLER.'/nlsjb-ready.php';
-        load_view_template($view);
-    }
+
        /**
      * 脑力世界杯专项训练自定义设置页
      */

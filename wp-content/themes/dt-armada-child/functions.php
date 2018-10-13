@@ -944,31 +944,27 @@ if(is_admin()){
 //后台用户列表自定义字段===========================================================================end
 
     //后台用户列表自定义搜索字段==========================begin
-//    add_action('pre_user_query', 'wpdaxue_pre_user_query');
-//    function wpdaxue_pre_user_query($user_search) {
-//        global $wpdb;
-//
-//        var_dump($user_search->query_vars);
-//        $vars = $user_search->query_vars;
-//        if (!is_null($vars['search'])) {
-//            // 出于某种原因，搜索词被星号包括，删除它们
-//            $search = preg_replace('/^\*/', '', $vars['search']);
-//            $search = preg_replace('/\*$/', '', $search);
-//
-//            //搜索公开显示名
-//            if(!empty($search)){
-//                $user_search->query_where = substr(trim($user_search->query_where), 0, -1) . " OR display_name LIKE '%". $search . "%')";
-//            }
-//            //搜索名字和姓氏
-//            $user_search->query_from .= " INNER JOIN {$wpdb->usermeta} m1 ON " .
-//                "{$wpdb->users}.ID=m1.user_id AND (m1.meta_key='first_name')";
-//            $user_search->query_from .= " INNER JOIN {$wpdb->usermeta} m2 ON " .
-//                "{$wpdb->users}.ID=m2.user_id AND (m2.meta_key='last_name')";
-//            $names_where = $wpdb->prepare("m1.meta_value LIKE '%s' OR m2.meta_value LIKE '%s'", "%{$search}%", "%$search%");
-//            $user_search->query_where = str_replace('WHERE 1=1 AND (', "WHERE 1=1 AND ({$names_where} OR ", $user_search->query_where);
-//        }
-//        return $user_search;
-//    }
+    add_action('pre_user_query', 'wpdaxue_pre_user_query');
+    function wpdaxue_pre_user_query($user_search) {
+        global $wpdb;
+        $vars = $user_search->query_vars;
+        if (!is_null($vars['search'])) {
+            // 出于某种原因，搜索词被星号包括，删除它们
+            $search = preg_replace('/^\*/', '', $vars['search']);
+            $search = preg_replace('/\*$/', '', $search);
+
+            //搜索手机号码
+            if(!empty($search)){
+                $user_search->query_where = substr(trim($user_search->query_where), 0, -1) . " OR user_mobile LIKE '%". $search . "%' OR user_email LIKE '%". $search . "%')";
+            }
+            //搜索名字和姓氏
+            $user_search->query_from .= " LEFT JOIN {$wpdb->usermeta} m1 ON " .
+                "{$wpdb->users}.ID=m1.user_id AND (m1.meta_key='user_real_name')";
+            $names_where = "m1.meta_value LIKE '%$search%'";
+            $user_search->query_where = str_replace('WHERE 1=1 AND (', "WHERE 1=1 AND ({$names_where} OR ", $user_search->query_where);
+        }
+        return $user_search;
+    }
     //后台用户列表自定义搜索字段==========================end
 
 }
