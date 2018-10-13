@@ -17,6 +17,11 @@ if(!function_exists('birthday')){
     function birthday($id){
 
         if(empty($id)) return '';
+        $birthday_year= (int) substr($id,6,4);
+        $new_year = (int) date_i18n('Y',get_time());
+        $age = $new_year - $birthday_year;
+        return $age;
+
         $birthday=strtotime(substr($id,6,8));
 
         $new_time = time();
