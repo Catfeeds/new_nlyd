@@ -27,7 +27,7 @@
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
-                <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a>
+                <!-- <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a> -->
                 <?php endif;?>
                 <div class="radius-zoo">
                     <!-- 头像 -->
@@ -157,6 +157,13 @@
                             </div>
                         </div>
                         <div class="userCenter-detail-foot">我的钱包</div>
+                    </a>
+                    <a class="c_black8"  href="<?=home_url('account/info');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper edit-info">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot">基本信息</div>
                     </a>
                 </div>
             </div>

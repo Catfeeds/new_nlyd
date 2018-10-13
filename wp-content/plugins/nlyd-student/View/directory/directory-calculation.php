@@ -51,8 +51,8 @@ jQuery(function($) {
 //--------------------分页--------------------------
         flow.load({
             elem: '#flow-table' //流加载容器
-            ,isAuto: false
-            ,isLazyimg: true
+            // ,isAuto: false
+            // ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'getDirectories',
