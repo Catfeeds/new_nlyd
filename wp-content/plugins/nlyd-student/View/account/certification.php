@@ -18,7 +18,7 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom" lay-filter='certificationForm'>
                             <div class="form-inputs">
                                 <div class="form-input-row">
-                                    <div class="form-input-label">国籍</div>
+                                    <div class="form-input-label">国 籍</div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="选择国籍">
                                     <input type="hidden" name="nationality_pic" value='<?=$user_info['user_nationality_pic']?>'  id="src">
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
@@ -218,25 +218,24 @@ jQuery(document).ready(function($) {
         });
         //选择生日
         var posiotionBirthday=[0,0,0];//初始化位置，高亮展示
-        // if($('#birthdaySelect').val().length>0 && $('#birthdaySelect').val()){
-        //     var birthdayValue=$('#birthdaySelect').val()
-        //     $.each($.validationLayui.allArea.area,function(index,value){
-        //         if(birthdayValue.indexOf(value.value)!=-1){
-        //             // console.log(value)
-        //             posiotionBirthday=[index,0,0];
-        //             $.each(value.childs,function(i,v){
-        //                 if(birthdayValue.indexOf(v.value)!=-1){
-        //                     posiotionBirthday=[index,i,0];
-        //                     $.each(v.childs,function(j,val){
-        //                         if(birthdayValue.indexOf(val.value)!=-1){
-        //                             posiotionBirthday=[index,i,j];
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
+        if($('#birthdaySelect').val().length>0 && $('#birthdaySelect').val()){
+            var birthdayValue=$('#birthdaySelect').val().split('-')
+            $.each($.validationLayui.dates,function(index,value){
+                if(birthdayValue[0]==value.value){
+                    posiotionBirthday=[index,0,0];
+                    $.each(value.childs,function(i,v){
+                        if(birthdayValue[1]==v.value){
+                            posiotionBirthday=[index,i,0];
+                            $.each(v.childs,function(j,val){
+                                if(birthdayValue[2]==val.value){
+                                    posiotionBirthday=[index,i,j];
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
         var mobileSelect5 = new MobileSelect({
             trigger: '#birthdaySelect',
             title: '生日',
@@ -267,7 +266,7 @@ jQuery(document).ready(function($) {
         var posiotioncontry=[0];//初始化位置，高亮展示
         if($('#trigger4').val().length>0 && $('#trigger4').val()){
             $.each(contrySelectData,function(index,value){
-                if(value==$('#trigger4').val()){
+                if(value['value']==$('#trigger4').val()){
                     posiotioncontry=[index]
                     return false;
                 }
