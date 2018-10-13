@@ -87,11 +87,11 @@ jQuery(function($) {
     function time(wait,o){//倒计时
         if (wait == 0) {  
             o.removeClass("disabled");            
-            o.text("获取验证码")  
+            o.text(_bindPhone.get)  
             wait = 60;  
         } else {  
             o.addClass("disabled");  
-            o.text("重新发送(" + wait + ")")
+            o.text(_bindPhone.resend+"(" + wait + ")")
 
             wait--;  
             setTimeout(function() {  

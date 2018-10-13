@@ -220,16 +220,36 @@ if(!class_exists('StudentController')){
                 //引入layui
                 wp_register_script( 'student-layui-home',student_js_url.'layui/layui.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-layui-home' );
+                wp_localize_script('student-layui-home','layUI',[
+                    'complete'=>__('已加载全部数据','nlyd-student'),
+                    'more'=>__('加载更多','nlyd-student'),
+                ]);
                 // 表单验证语言包
                 
                 wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-languages' );
                 wp_localize_script('student-languages','verify_ZH',[
-                    'name'=>__('你好','nlyd-match'),
+                    'required'=>__('必填项不能为空','nlyd-student'),
+                    'phone'=>__('手机号格式不正确','nlyd-student'),
+                    'email'=>__('邮箱格式不正确','nlyd-student'),
+                    'url'=>__('链接格式不正确','nlyd-student'),
+                    'number'=>__('只能填写数字','nlyd-student'),
+                    'date'=>__('日期格式不正确','nlyd-student'),
+                    'identity'=>__('请输入正确的身份证号','nlyd-student'),
+                    'phoneOrEmail'=>__('手机号或邮箱格式不正确','nlyd-student'),
+                    'password'=>__('密码必须是6位以上含字母及数字','nlyd-student'),
+                    'differPass'=>__('两次输入密码不一致','nlyd-student'),
+                    'chineseName'=>__('姓名格式不正确','nlyd-student'),
                 ]);
 
                 wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-common' );
+                wp_localize_script('student-common','common',[
+                    'disabled'=>__('当前功能暂未开放，敬请期待','nlyd-student'),
+                    'share'=>__('请使用浏览器自带分享功能','nlyd-student'),
+                    'click'=>__('点击右上角分享给好友或朋友圈','nlyd-student'),
+                    'slow'=>__('网络质量差,请重试','nlyd-student'),
+                ]);
                 //引入layui
                 wp_register_style( 'my-layui-css-home', student_css_url.'layui.css',array('style'),leo_student_version);
                 wp_enqueue_style( 'my-layui-css-home' );

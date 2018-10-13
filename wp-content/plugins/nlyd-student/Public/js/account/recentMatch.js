@@ -52,7 +52,7 @@ jQuery(function($) {
                                     var end_time = new Date(v.entry_end_time).getTime();//月份是实际月份-1
                                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                     var sys_second = (end_time-serverTimes)/1000;
-                                    var sys_second_text=sys_second>0 ? '' :  "报名结束";
+                                    var sys_second_text=sys_second>0 ? '' :  _recentMatch.stop;
                                     var dom='<li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">'
                                                 +'<div class="nl-match">'
                                                     +'<div class="nl-match-header">'
@@ -62,43 +62,43 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">开赛日期：</div>'
+                                                            +'<div class="nl-match-label">'+_recentMatch.date+'：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.match_start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">比赛地点：</div>'
+                                                            +'<div class="nl-match-label">'+_recentMatch.address+'：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.match_address+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">报名费用：</div>'
+                                                            +'<div class="nl-match-label">'+_recentMatch.money+'：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">¥'+v.match_cost+'</span>'
-                                                                +'<a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">报名截止：</div>'
+                                                            +'<div class="nl-match-label">'+_recentMatch.end+'：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black getTimes" data-seconds="'+sys_second+'">'
                                                                 +sys_second_text+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">已报选手：</div>'
+                                                            +'<div class="nl-match-label">'+_recentMatch.player+'：</div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                                +'<span class="c_black">'+v.entry_total+_recentMatch.people+'</span>'
+                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">'+_recentMatch.must+'</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
 
                                                     +'<div class="nl-match-footer flex-h">'
                                                         +'<div class="nl-match-button flex1">'
-                                                            +'<button type="button" class="'+onBtn+'"  href="'+v.left_url+'">查看详情</button>'
+                                                            +'<button type="button" class="'+onBtn+'"  href="'+v.left_url+'">'+_recentMatch.look+'</button>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'
@@ -117,14 +117,14 @@ jQuery(function($) {
                             }
                             $('.getTimes').countdown(function(S, d){//倒计时
                                 if(S>0){
-                                    var D=d.day>0 ? d.day+'天' : '';
+                                    var D=d.day>0 ? d.day+_recentMatch.day : '';
                                     var h=d.hour<10 ? '0'+d.hour : d.hour;
                                     var m=d.minute<10 ? '0'+d.minute : d.minute;
                                     var s=d.second<10 ? '0'+d.second : d.second;
                                     var time=D+h+':'+m+':'+s;
                                     $(this).text(time);
                                 }else{
-                                    $(this).text("报名结束");
+                                    $(this).text(_recentMatch.stop);
                                 }
                             });
                     }

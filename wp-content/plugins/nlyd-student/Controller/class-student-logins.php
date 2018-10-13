@@ -70,10 +70,21 @@ class Student_Logins
         if($this->action=='' || $this->action=='index'){
             wp_register_script( 'student-user',student_js_url.'logins/user.js',array('jquery'), leo_student_version  ,true);
             wp_enqueue_script( 'student-user' );
+            wp_localize_script('student-user','_user',[
+                'get'=>__('获取验证码','nlyd-student'),
+                'resend'=>__('重新发送','nlyd-student'),
+                'fast'=>__('手机快速登录','nlyd-student'),
+                'new'=>__('重置密码','nlyd-student'),
+                'agree'=>__('我同意以上协议','nlyd-student'),
+            ]);
         }
         if($this->action=='bindPhone'){
             wp_register_script( 'student-bindPhone',student_js_url.'logins/bindPhone.js',array('jquery'), leo_student_version  ,true);
             wp_enqueue_script( 'student-bindPhone' );
+            wp_localize_script('student-bindPhone','_bindPhone',[
+                'get'=>__('获取验证码','nlyd-student'),
+                'resend'=>__('重新发送','nlyd-student'),
+            ]);
         }
     }
 }

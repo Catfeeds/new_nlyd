@@ -265,6 +265,18 @@ class Student_Account extends Student_Home
         if(ACTION=='recentMatch'){//我的比赛
             wp_register_script( 'student-recentMatch',student_js_url.'account/recentMatch.js',array('jquery'), leo_student_version ,true );
             wp_enqueue_script( 'student-recentMatch' );
+            wp_localize_script('student-recentMatch','_recentMatch',[
+                'stop'=>__('报名结束','nlyd-student'),
+                'date'=>__('开赛日期','nlyd-student'),
+                'address'=>__('比赛地点','nlyd-student'),
+                'money'=>__('报名费用','nlyd-student'),
+                'end'=>__('报名截止','nlyd-student'),
+                'player'=>__('已报选手','nlyd-student'),
+                'look'=>__('查看详情','nlyd-student'),
+                'must'=>__('参赛须知','nlyd-student'),
+                'people'=>__('人','nlyd-student'),
+                'day'=>__('天','nlyd-student'),
+            ]);
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
         }
@@ -274,6 +286,15 @@ class Student_Account extends Student_Home
             // wp_enqueue_script( 'student-mTouch' );
             wp_register_script( 'student-address',student_js_url.'account/address.js',array('jquery'), leo_student_version ,true );
             wp_enqueue_script( 'student-address' );
+            wp_localize_script('student-address','_address',[
+                'set'=>__('是否确认设为默认地址','nlyd-student'),
+                'setDefault'=>__('设为默认','nlyd-student'),
+                'default'=>__('默认地址','nlyd-student'),
+                'tips'=>__('提示','nlyd-student'),
+                'think'=>__('再想想','nlyd-student'),
+                'sure'=>__('确认','nlyd-student'),
+                'delete'=>__('是否确认删除地址','nlyd-student'),
+            ]);
             wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
             wp_enqueue_style( 'my-student-address' );
         }
