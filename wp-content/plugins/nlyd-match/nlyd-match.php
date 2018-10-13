@@ -6,7 +6,9 @@ Description: 后台比赛管理
 Version: 1.0
 Author: leo
 Author URI: --
+Text Domain: nlyd-match
 */
+load_plugin_textdomain( 'nlyd-match', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 if(!class_exists('MatchController')){
 
     class MatchController{
