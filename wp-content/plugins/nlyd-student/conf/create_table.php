@@ -31,6 +31,29 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "user_train_logs";  //训练记录表  储存用户训练
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) NOT NULL,
+          `genre_id` int(20) NOT NULL,
+          `project_type` varchar(50) NOT NULL COMMENT '训练类型:szzb pkjl kysm等',
+          `train_questions` longtext COMMENT '训练题目',
+          `train_answer` longtext COMMENT '标准答案',
+          `my_answer` longtext COMMENT '我的答案',
+          `surplus_time` tinyint(8) DEFAULT NULL COMMENT '剩余时间',
+          `my_score` int(10) DEFAULT NULL COMMENT '成绩',
+          `created_time` datetime DEFAULT NULL,
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+
     $table_name = $wpdb->prefix . "match_sign";  //签到表  储存用户签到
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
