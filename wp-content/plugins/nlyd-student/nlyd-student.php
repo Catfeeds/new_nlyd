@@ -224,6 +224,9 @@ if(!class_exists('StudentController')){
                 
                 wp_register_script( 'student-languages',student_js_url.'validator/verify-ZH-CN.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-languages' );
+                wp_localize_script('student-languages','verify_ZH',[
+                    'name'=>__('你好','nlyd-match'),
+                ]);
 
                 wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
                 wp_enqueue_script( 'student-common' );
