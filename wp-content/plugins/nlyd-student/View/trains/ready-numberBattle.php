@@ -9,8 +9,8 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <!-- <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span> -->
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="1200">00:00:00</span>
@@ -50,24 +50,24 @@ jQuery(function($) {
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
     $.getJSON(file_path,function(JsonData){
-        var matchSession=$.GetSession('ready_shuzi','true');
-        if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-            questions_answer=matchSession['questions_answer']
-        }else{
+        // var matchSession=$.GetSession('ready_shuzi','true');
+        // if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+        //     questions_answer=matchSession['questions_answer']
+        // }else{
             var questions_answers=JsonData;
             var pos = Math.round(Math.random() * (questions_answers.length - 1));
             var xx=questions_answers[pos]
             questions_answer=xx.sort(function() {
                 return .5 - Math.random();
             });
-            var sessionData={
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
-                questions_answer:questions_answer
-            }
-            $.SetSession('ready_shuzi',sessionData)
-        }
+            // var sessionData={
+            //     match_id:$.Request('match_id'),
+            //     project_id:$.Request('project_id'),
+            //     match_more:$.Request('match_more'),
+            //     questions_answer:questions_answer
+            // }
+            // $.SetSession('ready_shuzi',sessionData)
+        // }
         $.each(questions_answer,function(i,v){
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
@@ -91,7 +91,7 @@ new AlloyFinger($('#complete')[0], {
                     if(res.success){
                         if(res.data.url){
                             window.location.href=res.data.url;
-                            $.DelSession('ready_shuzi')
+                            // $.DelSession('ready_shuzi')
                         }   
                     }else{
                         $.alerts(res.data.info)
@@ -119,8 +119,6 @@ new AlloyFinger($('#complete')[0], {
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
             match_more:$('#inputMatchMore').val(),
             my_answer:my_answer,
             match_action:'subjectNumberBattle',
@@ -129,16 +127,16 @@ new AlloyFinger($('#complete')[0], {
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
 
-        var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+        // var leavePage= $.GetSession('leavePage','1');
+        //     if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+        //         if(leavePage.Time){
+        //             data['leave_page_time']=leavePage.Time;
+        //         }
+        //     }
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
+                // $.DelSession('leavePage')
                 if(res.success){
                     //return false;
                     if(res.data.url){
@@ -164,12 +162,12 @@ new AlloyFinger($('#complete')[0], {
             }
         })
     } 
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
-    }
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     setTimeout(function() {
+    //         submit(0,3)
+    //     }, 1000);
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
