@@ -3350,12 +3350,25 @@ class Student_Ajax
      */
     public function trains_submit(){
 
-        global $current_user;
+        global $wpdb,$current_user;
 
         ini_set('post_max_size','20M');
 
-        switch ($_POST['match_action']){
+        switch ($_POST['project_type']){
             case 'szzb':
+            case 'pkjl':
+
+                $len = count($_POST['train_questions']);
+                //print_r($questions_answer);
+                $error_len = count(array_diff_assoc($_POST['train_questions'],$_POST['my_score']));
+
+                $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+                $my_score = ($len-$error_len)*$score;
+
+                if ($error_len == 0){
+                    $my_score += $_POST['surplus_time'] * 1;
+                }
+
                 break;
             case 'kysm':
                 break;
@@ -3381,6 +3394,14 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
+
+        $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
+        $id = $wpdb->insert_id;
+        if($result){
+            wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
+        }else{
+            wp_send_json_error(array('info'=>'提交失败'));
+        }
 
     }
 
