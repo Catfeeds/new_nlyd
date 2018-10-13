@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
-                                    <input class="nl-input" value='' readonly  id="birthdaySelect" placeholder="选择生日">
+                                    <input class="nl-input" name="birthday" value='' readonly  id="birthdaySelect" placeholder="选择生日">
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
@@ -290,12 +290,14 @@ jQuery(document).ready(function($) {
                 $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
+                    $('#birthdaySelect').val('');
                     $('#age').css('display','block')
-                    $('#birthdaySelect').val();
+
                 }else{
                     $('#birth').css('display','block');
+                    $('#meta_val[real_age]').val('');
                     $('#age').css('display','none');
-                    $('#meta_val[real_age]').val();
+
                 }
             }
         });
@@ -369,7 +371,7 @@ jQuery(document).ready(function($) {
             var form = layui.form
             form.render();
             // 自定义验证规则
-            form.verify($.validationLayui.allRules);
+            // form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
@@ -386,7 +388,9 @@ jQuery(document).ready(function($) {
                 fd.append('user_address[city]',data.field['user_address[city]']);
                 fd.append('user_address[province]',data.field['user_address[province]']);
                 fd.append('type',$('.sbu_type').val());
-
+                fd.append('nationality',data.field['nationality']);
+                fd.append('nationality_pic',data.field['nationality_pic']);
+                fd.append('birthday',data.field['birthday']);
                 if(match_id!=null){
                     fd.append('match_id',match_id);
                 }else{
