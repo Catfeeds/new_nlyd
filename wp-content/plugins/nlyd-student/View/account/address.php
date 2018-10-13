@@ -17,7 +17,7 @@
           ?>
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">收货地址管理</h1>
+        <h1 class="mui-title">收件地址管理</h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -47,13 +47,13 @@
                         </div>
                     </div>
                     <?php  } }else{ ?>
-                        <p class="no-info">您未设置收货地址</p>
+                        <p class="no-info">您未设置收件地址</p>
                     <?php } ?>
                 <?php
                 $add_url = home_url('/account/addAddress');
                 if(isset($_GET['match_id'])) $add_url .= '/match_id/'.$_GET['match_id'];
                 ?>
-                <a class="a-btn" href="<?=$add_url;?>">新增收货地址</a>
+                <a class="a-btn" href="<?=$add_url;?>">新增收件地址</a>
             </div>
         </div>
     </div>
