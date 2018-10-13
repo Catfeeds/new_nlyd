@@ -3343,6 +3343,69 @@ class Student_Ajax
 
         wp_send_json_success(['info' => $data, 'my_team' => $my_team]);
     }
+
+
+    /**
+     * 训练答案提交
+     */
+    public function trains_submit(){
+
+        if(empty($_POST['genre_id']) || empty($_POST['project_type'])) wp_send_json_error(array('info'=>'参数错误'));
+        global $wpdb,$current_user;
+
+        ini_set('post_max_size','20M');
+
+        switch ($_POST['project_type']){
+            case 'szzb':
+            case 'pkjl':
+
+                $len = count($_POST['train_questions']);
+                //print_r($questions_answer);
+                $error_len = count(array_diff_assoc($_POST['train_questions'],$_POST['my_score']));
+
+                $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+                $my_score = ($len-$error_len)*$score;
+
+                if ($error_len == 0){
+                    $my_score += $_POST['surplus_time'] * 1;
+                }
+
+                break;
+            case 'kysm':
+                break;
+            case 'wzsd':
+                break;
+            case 'pkjl':
+                break;
+            case 'zxss':
+                break;
+            case 'nxss':
+                break;
+            default:
+                break;
+        }
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'genre_id'=>$_POST['genre_id'],
+            'project_type'=>$_POST['project_type'],
+            'train_questions'=>json_encode($_POST['train_questions']),
+            'train_answer'=>json_encode($_POST['train_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
+            'surplus_time'=>$_POST['surplus_time'],
+            'my_score'=>$my_score,
+            'created_time'=>get_time('mysql'),
+        );
+
+        $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
+        $id = $wpdb->insert_id;
+        if($result){
+            wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
+        }else{
+            wp_send_json_error(array('info'=>'提交失败'));
+        }
+
+    }
+
 }
 
 new Student_Ajax();

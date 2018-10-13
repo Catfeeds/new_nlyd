@@ -1294,6 +1294,7 @@ class Match_student {
      * 字段 ID 姓名 奖项及金额 奖金总额 税后发放额 收款二维码 身份证号 电话号码 所属战队 发放状态
      */
     public function match_bonus(){
+        echo __('我是谁', 'nlyd-match');
         $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
         $type = isset($_GET['type']) ? trim($_GET['type']) : '';
         $param = isset($_GET['param']) ? trim($_GET['param']) : '';

@@ -108,11 +108,16 @@ class Student_Trains extends Student_Home
         if(empty($_GET['type'])) $this->get_404('参数错误');
 
         $view = student_view_path.CONTROLLER.'/answer.php';
-        load_view_template($view,array('list'=>$list));
+        load_view_template($view);
 
     }
 
+    /**
+     * 训练答题记录
+     */
+    public function logs(){
 
+    }
 
     /**
      * 默认公用js/css引入
@@ -170,7 +175,7 @@ class Student_Trains extends Student_Home
         }
 
         //比赛记忆后答题页面
-        if(ACTION == 'answerMatch'){
+        if(ACTION == 'answer'){
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($_GET['type']=='wzsd'){//文章速读
