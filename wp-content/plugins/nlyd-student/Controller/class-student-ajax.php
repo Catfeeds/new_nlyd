@@ -1347,6 +1347,10 @@ class Student_Ajax
                 $orders[$k]['real_age'] = '--';
                 $orders[$k]['nickname'] = $user['nickname'][0];
             }
+            $orders[$k]['created_time'] = str2arr($v['created_time'],' ')[0];
+            $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
+            $orders[$k]['nationality'] = student_css_url.'image/flags/'.$user_nationality_pic.'.png';
+
         }
 
         //print_r($orders);

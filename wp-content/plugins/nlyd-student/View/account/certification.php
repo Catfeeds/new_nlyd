@@ -21,7 +21,7 @@
                                     <div class="form-input-label">国籍</div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="选择国籍">
                                     <input type="hidden" name="nationality_pic" value='<?=$user_info['user_nationality_pic']?>'  id="src">
-                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'/image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
+                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
                                     
                                 </div>
                                 <div class="form-input-row">
