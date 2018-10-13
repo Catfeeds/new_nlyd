@@ -144,6 +144,12 @@ a.c_black3:hover{
 .bold{
     font-weight: bold;
 }
+.ti_28{
+    text-indent: 0.28rem;
+}
+.ti_24{
+    text-indent: 0.24rem;
+}
 /* 背景 */
 .bg_blue{
     background: #2484FE;

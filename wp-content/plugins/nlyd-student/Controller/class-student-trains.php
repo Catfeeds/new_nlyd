@@ -27,60 +27,83 @@ class Student_Trains extends Student_Home
 
 
     /**
-     * 体系标准
+     * 首页
      */
-    public function index(){    
+    public function index(){
+
+        //获取所有比赛类型
+        $args = array(
+            'post_type' => array('genre'),
+            'post_status' => array('publish'),
+            'order' => 'DESC',
+            'orderby' => 'ID',
+        );
+        $the_query = new WP_Query( $args );
+
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,array('list'=>$the_query->posts));
     }
-        /**
-     * 体系标准
-     */
-     public function system(){
-        $view = student_view_path.CONTROLLER.'/system.php';
-        load_view_template($view);
 
-    }
-    /**
-     * 课程体系
-     */
-     public function systemCourse(){
-        $view = student_view_path.CONTROLLER.'/system-course.php';
-        load_view_template($view);
+    public function lists(){
+        if(empty($_GET['id'])) $this->get_404('参数错误');
 
-    }
-    /**
-     * 师资体系
-     */
-     public function systemTeacher(){
-        $view = student_view_path.CONTROLLER.'/system-teacher.php';
-        load_view_template($view);
+        $args = array(
+            'post_type' => array('match-category'),
+            'post_status' => array('publish'),
+            'post_parent'=>$_GET['id'],
+            'order' => 'DESC',
+            'orderby' => 'ID',
+        );
+        $the_query = new WP_Query( $args );
+        $ids = arr2str(array_column((array)$the_query->posts,'ID'));
+        //print_r($ids);
+        global $wpdb;
+        $sql = "SELECT ID,post_title FROM {$wpdb->prefix}posts WHERE post_parent in($ids)";
+        $rows = $wpdb->get_results($sql);
+        if(!empty($rows)){
+            $list = $rows;
+        }else{
+            $list = $the_query->posts;
+        }
 
-    }
-    /**
-     * 赛事体系
-     */
-     public function systemMatch(){
-        $view = student_view_path.CONTROLLER.'/system-match.php';
-        load_view_template($view);
-
-    }
-    /**
-     * 测评体系
-     */
-     public function systemTest(){
-        $view = student_view_path.CONTROLLER.'/system-test.php';
-        load_view_template($view);
-
+        $view = student_view_path.CONTROLLER.'/lists.php';
+        load_view_template($view,array('list'=>$list));
     }
 
     /**
-     * 合作联系
+     * 答题页面
      */
-    public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
+    public function answer(){
+
+
+        $view = student_view_path.CONTROLLER.'/answer.php';
+        //load_view_template($view,array('list'=>$list));
+
+    }
+
+
+   /**
+     * 脑力世界杯专项训练列表
+     */
+     public function nlsjbList(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-list.php';
         load_view_template($view);
     }
+       /**
+     * 脑力世界杯专项训练准备页
+     */
+     public function nlsjbReady(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-ready.php';
+        load_view_template($view);
+    }
+       /**
+     * 脑力世界杯专项训练自定义设置页
+     */
+     public function nlsjbSetting(){
+        $view = student_view_path.CONTROLLER.'/nlsjb-setting.php';
+        load_view_template($view);
+     }
+
 
     /**
      * 默认公用js/css引入
