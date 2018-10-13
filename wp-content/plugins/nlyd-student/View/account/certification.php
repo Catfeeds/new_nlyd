@@ -47,9 +47,6 @@
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label">生 日</div>
                                     <input class="nl-input" value='' readonly  id="birthdaySelect" placeholder="选择生日">
-                                    <input  type="hidden" id="year" name="user_birthday[year]" value=""/>
-                                    <input  type="hidden" id="month" name="user_birthday[month]" value="">
-                                    <input  type="hidden" id="day" name="user_birthday[day]" value=""/>
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
                                     <div class="form-input-label">年 龄</div>
@@ -252,9 +249,6 @@ jQuery(document).ready(function($) {
             },
             callback:function(indexArr, data){
                 var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value'];
-                $('#year').val(data[0]['value'])
-                $('#month').val(data[1]['value'])
-                $('#day').val(data[2]['value'])
                 $('#birthdaySelect').val(text);
             }
         });
@@ -262,9 +256,11 @@ jQuery(document).ready(function($) {
         if($('#trigger4').val()=="中华人民共和国"){
             $('#birth').css('display','none')
             $('#age').css('display','block')
+            $('#birthdaySelect').val();
         }else{
-            $('#birth').css('display','block')
-            $('#age').css('display','none')
+            $('#birth').css('display','block');
+            $('#age').css('display','none');
+            $('#meta_val[real_age]').val();
         }
         // 模拟手机下拉列表，选择国籍
         var contrySelectData=$.validationLayui.contry;
@@ -290,14 +286,16 @@ jQuery(document).ready(function($) {
             callback:function(indexArr, data){
                 // console.log(data)
                 $('#trigger4').val(data[0]['value'])
-                $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 $('#src').val(data[0]['src'])
+                $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
                     $('#age').css('display','block')
+                    $('#birthdaySelect').val();
                 }else{
-                    $('#birth').css('display','block')
-                    $('#age').css('display','none')
+                    $('#birth').css('display','block');
+                    $('#age').css('display','none');
+                    $('#meta_val[real_age]').val();
                 }
             }
         });
@@ -371,7 +369,7 @@ jQuery(document).ready(function($) {
             var form = layui.form
             form.render();
             // 自定义验证规则
-            //form.verify($.validationLayui.allRules);
+            form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
