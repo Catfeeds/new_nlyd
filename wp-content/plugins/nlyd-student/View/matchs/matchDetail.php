@@ -93,6 +93,7 @@
                                                     <td><div class="table_content">性 别</div></td>
                                                     <td><div class="table_content">年龄</div></td>
                                                     <td><div class="table_content">报名日期</div></td>
+                                                    <td><div class="table_content">国籍</div></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="flow-table">
@@ -203,8 +204,9 @@ jQuery(function($) {
                                             +'</td>'
                                             +'<td><div class="table_content">'+v.nickname+'</div></td>'
                                             +'<td><div class="table_content">'+v.user_gender+'</div></td>'
-                                            +'<td><div class="table_content">'+v.real_age+'岁</div></td>'
-                                            +'<td><div class="table_content">'+v.created_time+'报名</div></td>'
+                                            +'<td><div class="table_content">'+v.real_age+'</div></td>'
+                                            +'<td><div class="table_content">'+v.created_time+'</div></td>'
+                                            +'<td><div class="table_content"><img src="'+v.nationality+'"/></div></td>'
                                         +'</tr>'
                                 lis.push(dom) 
                             })
