@@ -52,7 +52,7 @@ jQuery(function($) {
     // nanduMax=4,//替换项的上线
     nanduLen=6,//每nanduLen题nandu++
     // stop=false,//停止计时
-    answerHide=$.Request('flash_time'),//正确答案消失的时间为0.8秒
+    answerHide=$.Request('flash_time')/1000,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
