@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$project_title?></h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
                         <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -66,30 +66,17 @@
 <script>
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
-    var even_add_time = parseInt($('#even_add_time').val()); //连加
-    var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
-    var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
+    var even_add_time = 180; //连加
+    var add_and_subtract_time = 180; //加减
+    var wax_and_wane_time = 180; //乘除
     var level={number:2,symbol:1},//题目难度
-    n_type=<?=$child_type > 0 ? $child_type : 0?>,
+    n_type=0,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
-    var matchSession=$.GetSession('match','true');
-    var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-        isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-        level=matchSession['level'];
-        n_type=matchSession['n_type'];
-        nextBtn_click=matchSession['nextBtn_click'];
-    }
     if(n_type==0){
         type="连加运算" 
         even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
@@ -101,9 +88,9 @@ jQuery(function($) {
         wax_and_wane_time=<?=$count_down?>
     }
     $('#type').text(type)
-    if(!isMatching){
-        inItFastCalculation(level,type);
-    }
+
+    inItFastCalculation(level,type);
+    
     nextQuestion()
     count_down()  
 
@@ -351,16 +338,6 @@ jQuery(function($) {
             row=CX(levels);
         }
         ajaxData.push(row)
-        var sessionData={
-            ajaxData:ajaxData,
-            match_id:$.Request('match_id'),
-            project_id:$.Request('project_id'),
-            match_more:$.Request('match_more'),
-            level:level,
-            n_type:n_type,
-            nextBtn_click:nextBtn_click
-        }
-        $.SetSession('match',sessionData)
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
@@ -480,7 +457,7 @@ jQuery(function($) {
         }
         
     });
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
                 'display':'block',
@@ -489,26 +466,14 @@ jQuery(function($) {
             })
             isSubmit=true;
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                project_type:'zxss',
                 my_answer:ajaxData,
-                match_action:'subjectFastCalculation',
                 surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-            }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
             }
             $.ajax({
                     data:data,success:function(res,ajaxStatu,xhr){
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -540,7 +505,7 @@ jQuery(function($) {
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('比赛结束');
         setTimeout(function() {
-            submit(0,3)
+            submit(0)
         }, 1000);
     }
 
@@ -558,7 +523,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });  
@@ -590,7 +555,7 @@ layui.use('layer', function(){
                         thisAjaxRow['isRight']=false;
                     }
                     layer.closeAll();
-                    submit(time,1);
+                    submit(time);
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中

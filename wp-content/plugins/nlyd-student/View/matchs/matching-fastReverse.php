@@ -46,7 +46,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <!-- <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a> -->
+                            <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
@@ -90,16 +90,16 @@ jQuery(function($) {
             var number=randSZ();
             select.push(number)
         }
-        if(valid(select)=="本题无解"){
-            initQuestion()
-        }else{
+        // if(valid(select)=="本题无解"){
+        //     initQuestion()
+        // }else{
             var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
             ajaxData.push(thisRow)
             if(!$.Request('test')){
                 var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
                 $.SetSession('match',sessionData)
             }
-        }
+        // }
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
@@ -209,13 +209,13 @@ $('.number').each(function(){
                 })
                 var number=_this.text();
                 var text=$('.answer').text()
-                // if(text=="本题无解"){
-                //     text=''
-                // }
-                // if(number=="本题无解"){
-                //     $('.answer').text(number)
-                //     $('.number').removeClass('disabled')
-                // }else{
+                if(text=="本题无解"){
+                    text=''
+                }
+                if(number=="本题无解"){
+                    $('.answer').text(number)
+                    $('.number').removeClass('disabled')
+                }else{
                     var len=text.length;
                     var x=text.charAt(len-1,1);
                     if(!isNaN(parseInt(number))){//数字，前一位必须是符号
@@ -309,6 +309,7 @@ $('.number').each(function(){
                             }
                         }
                     }
+                }
             }
         }
     });
@@ -336,7 +337,7 @@ new AlloyFinger($('#del')[0], {
             var len=text.length;
             var news='';
             if(len>0){
-                // if(text!="本题无解"){
+                if(text!="本题无解"){
                     var end=text.substr(text.length-1,1);
                     var end_1=text.substr(text.length-2,1)
                     if(!isNaN(parseInt(end))){//删除的是数字
@@ -357,8 +358,10 @@ new AlloyFinger($('#del')[0], {
                     }else{
                         news=text.substring(0,len-1);
                     }
-                // }
-                $('.answer').text(news)
+                    $('.answer').text(news)
+                }else{
+                    $('.answer').text('')
+                }
             }
         }
     });
@@ -370,7 +373,6 @@ new AlloyFinger($('#next')[0], {
         var _this=$('#next');
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
-            var text=$('.answer').text()
             var flag=false;
             var text=$('.answer').text()
             ajaxData[ajaxData.length-1].yours=text;
@@ -383,16 +385,16 @@ new AlloyFinger($('#next')[0], {
                 }
             })
             if(text.length!=0){
-                // if($('.answer').text()=='本题无解'){
-                //     text='unsolvable';
-                //      if(ajaxData[ajaxData.length-1].rights=="本题无解"){
-                //         $('.answer').addClass('right-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']=true;
-                //      }else{
-                //         $('.answer').addClass('error-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']=false;
-                //      }
-                // }else{
+                if($('.answer').text()=='本题无解'){
+                     text='unsolvable';
+                     if(ajaxData[ajaxData.length-1].rights=="本题无解"){
+                        $('.answer').addClass('right-fast')
+                        ajaxData[ajaxData.length-1]['isRight']=true;
+                     }else{
+                        $('.answer').addClass('error-fast')
+                        ajaxData[ajaxData.length-1]['isRight']=false;
+                     }
+                }else{
                     if(flag){
                         _this.removeClass('disabled')
                         return false;
@@ -406,7 +408,7 @@ new AlloyFinger($('#next')[0], {
                             ajaxData[ajaxData.length-1]['isRight']=false;
                         }
                     }
-                // }
+                }
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()

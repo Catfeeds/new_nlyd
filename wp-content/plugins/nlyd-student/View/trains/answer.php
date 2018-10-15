@@ -12,7 +12,10 @@ switch ($_GET['type']){
         $title = '文章速读';
         include_once 'matching-reading.php';
         break;
-
+    case 'kysm';
+        $title = '快眼扫描';
+        include_once 'matching-fastScan.php';
+        break;
     default:
 
         break;

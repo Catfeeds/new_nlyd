@@ -115,6 +115,13 @@ switch ($type){
     </div>
 </div>
 <div class="a-btn two get_footer">
-    <a class="a-two left c_white" href="<?=$recur_url?>">再来一局</a>
+    <a class="a-two left c_white" id="again" href="<?=$recur_url?>">再来一局</a>
     <a class="a-two right c_white" href="<?=$revert_url?>">返回列表</a>
 </div>  
+<script>
+jQuery(function($) {
+    $('#again').click(function(){
+        $.DelCookie('train_match','1')
+    })
+})
+</script>

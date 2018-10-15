@@ -210,7 +210,7 @@
     .userCenter-row{
         display: block;
         height: 55px;
-        overflow: hidden;
+        overflow-x: scroll;
         font-size: 0.14rem;
         line-height: 55px;
         margin-top: 10px;

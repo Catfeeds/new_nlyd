@@ -336,6 +336,7 @@ class Student_Ajax
                 $update_arr['questions_answer'] = json_encode($questions_answer);
 
                 break;
+                break;
             case 'subjectfastScan':    //快眼扫描
             case 'subjectFastCalculation':    //正向速算
             case 'subjectFastReverse': //逆向速算
@@ -3380,10 +3381,11 @@ class Student_Ajax
                 if(!empty($data_arr)){
                     $match_questions = array_column($data_arr,'question');
                     $questions_answer = array_column($data_arr,'rights');
-                    $my_answer = array_column($data_arr,'yours');
+                    $_POST['my_answer'] = array_column($data_arr,'yours');
                 }
-                if($_POST['match_action'] == 'subjectFastReverse'){
+                if($_POST['project_type'] == 'nxss'){
                     $isRight = array_column($data_arr,'isRight');
+
                     $success_len = 0;
                     if(!empty($isRight)){
                         $count_value = array_count_values($isRight);
@@ -3398,14 +3400,19 @@ class Student_Ajax
                 }else{
 
                     $len = count($match_questions);
-                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
                     $my_score = ($len-$error_len)*10;
                 }
+
+
+                $_POST['train_questions'] = $match_questions;
+                $_POST['train_answer'] = $questions_answer;
+
                 break;
             case 'wzsd':
                 if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
-                var_dump($_POST);die;
-                $questions_answer = json_decode($row['questions_answer'],true);
+                //print_r($_POST);die;
+                $questions_answer = $_POST['train_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
 
@@ -3417,29 +3424,13 @@ class Student_Ajax
                         }
                     }
 
-                    if(isset($my_answer[$k])){
-                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    if(isset($_POST['my_answer'][$k])){
+                        if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
                     }
                 }
                 $my_score = $success_len * 23;
                 if ($success_len == $len){
                     $my_score += $_POST['surplus_time'] * 1;
-                }
-                $redis = new Redis();
-                $redis->connect('127.0.0.1',6379,1);
-                $redis->auth('leo626');
-
-                if(!empty($redis->get('wzsd_question'.$current_user->ID))){
-                    $result = json_decode($redis->get('wzsd_question'.$current_user->ID),true);
-                    $post_id = $result->ID;
-                    $redis->del('wzsd_question'.$current_user->ID);
-                }else{
-
-                    $result = json_decode($row['questions_answer'],true);
-                    $key = array_keys($result);
-                    $sql = "select post_parent from {$wpdb->prefix}posts where ID = {$key[0]}";
-                    $post_id = $wpdb->get_var($sql);
-
                 }
                 break;
             default:
@@ -3457,7 +3448,7 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
-        //var_dump($insert);die;
+        //print_r($insert);die;
         $sql = "select id from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} order by created_time asc ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = count($rows);
@@ -3472,7 +3463,14 @@ class Student_Ajax
         }
         if($result){
             if($_POST['project_type'] == 'wzsd'){
-
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID}";
+                    $wpdb->query($sql2);
+                }else{
+                    $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id']));
+                }
             }
             wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'])));
         }else{

@@ -37,6 +37,7 @@ new AlloyFinger($('#complete')[0], {//阅读完成
     tap:function(){
         var sessionData={//存储session
             genre_id:$.Request('genre_id'),
+            post_id:$.Request('post_id'),
             type:'wzsd',
             count_down:$('.count_down').attr('data-seconds'),
             questions_answer:<?=json_encode($questions_answer)?>,

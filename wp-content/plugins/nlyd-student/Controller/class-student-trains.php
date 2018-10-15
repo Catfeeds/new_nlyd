@@ -139,8 +139,10 @@ class Student_Trains extends Student_Home
                 $post_str = $wpdb->get_var($sql1);
                 if(!empty($post_str)){
                     $post_arr = str2arr($post_str,',');
+                    //print_r($posts_arr);
 
                     $result = array_diff($posts_arr,$post_arr);
+                    //print_r($result);
 
                 }else{
                     $result = $posts_arr;
@@ -219,7 +221,7 @@ class Student_Trains extends Student_Home
      */
     public function answer(){
         global $wpdb;
-
+        //var_dump(json_decode(stripslashes($_COOKIE['questions_answer']),true));
 
         switch ($_GET['type']){
             case 'wzsd':
@@ -228,29 +230,38 @@ class Student_Trains extends Student_Home
                     $this->get_404('参数错误');
                     return;
                 }
-                //获取比赛题目
-                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                if(!empty($_COOKIE['train_match'])){
+
+                    $match_array = json_decode(stripslashes($_COOKIE['train_match']),true);
+                    $questions_answer = $match_array['questions_answer'];
+                    $match_questions = $match_array['match_questions'];
+                    //print_r($match_array);
+                }else{
+
+                    //获取比赛题目
+                    $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
                         from {$wpdb->prefix}posts a 
                         left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
                         where a.post_parent = {$_GET['post_id']} order by b.id asc
                         ";
 
-                $rows = $wpdb->get_results($sql1,ARRAY_A);
-                $questions_answer = array();
-                $match_questions = array();
-                if(!empty($rows)){
-                    $answer_total = 1;  //默认答案个数
-                    foreach ($rows as $k => $val){
-                        //$val['problem_answer'] = 1;
-                        $key = &$val['ID'];
-                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
-                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
-                        //if($val['problem_answer'] == 1) $answer_total += 1;
+                    $rows = $wpdb->get_results($sql1,ARRAY_A);
+                    $questions_answer = array();
+                    $match_questions = array();
+                    if(!empty($rows)){
+                        $answer_total = 1;  //默认答案个数
+                        foreach ($rows as $k => $val){
+                            //$val['problem_answer'] = 1;
+                            $key = &$val['ID'];
+                            $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                            $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                            //if($val['problem_answer'] == 1) $answer_total += 1;
+                        }
+                        $match_questions = array_unique(array_column($rows,'post_title','ID'));
                     }
-                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
-                /*$data['questions_answer'] = $questions_answer;
-                $data['match_questions'] = $match_questions;*/
+                $data['questions_answer'] = $questions_answer;
+                $data['match_questions'] = $match_questions;
                 //print_r($questions_answer);
                 //print_r($match_questions);
                 break;
@@ -337,8 +348,8 @@ class Student_Trains extends Student_Home
         elseif ($row['project_type'] == 'nxss'){
 
             $answer = $questions_answer;
+
             $answer_array = $answer['result'];
-            $questions_answer = $answer['examples'];
             //print_r($answer_array);
             //print_r($questions_answer);die;
 
@@ -361,9 +372,14 @@ class Student_Trains extends Student_Home
 
             if(!empty($questions_answer)){
                 $len = count($questions_answer);
-                $error_arr = array_diff_assoc($questions_answer,$my_answer);
-                $error_len = count($error_arr);
-                $success_len = $len - $error_len;
+                if(!empty($my_answer)){
+
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                    $error_len = count($error_arr);
+                    $success_len = $len - $error_len;
+                }else{
+                    $success_len = 0;
+                }
             }else{
                 $my_answer = array();
                 $error_arr = array();
@@ -467,11 +483,6 @@ class Student_Trains extends Student_Home
 
             }
 
-            if($_GET['type']=='kysm'){//快眼扫描比赛页
-                wp_register_style( 'my-student-fastScan', student_css_url.'matching-fastScan.css',array('my-student') );
-                wp_enqueue_style( 'my-student-fastScan' );
-
-            }
 
             if($_GET['type']=='szzb'){//进入数字争霸准备页面
                 wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
@@ -502,6 +513,12 @@ class Student_Trains extends Student_Home
 
                 wp_register_style( 'my-student-pokerRelay', student_css_url.'matching-pokerRelay.css',array('my-student') );
                 wp_enqueue_style( 'my-student-pokerRelay' );
+            }
+            if($_GET['type']=='kysm'){//快眼扫描比赛页
+
+                wp_register_style( 'my-student-fastScan', student_css_url.'matching-fastScan.css',array('my-student') );
+                wp_enqueue_style( 'my-student-fastScan' );
+
             }
         }
 
