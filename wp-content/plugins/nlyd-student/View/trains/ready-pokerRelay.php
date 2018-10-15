@@ -141,7 +141,7 @@ jQuery(function($) {
         var item=v.split('-')
         data_match.push(item)
     })
-
+    
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     function submit(time){//提交答案
         $('#load').css({
