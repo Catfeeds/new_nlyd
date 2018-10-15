@@ -6,16 +6,16 @@
             <h1 class="mui-title"><?=$match_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <div class="fastScan-item answer">开始答题</div>
+                <div class="fastScan-item answer"><?=__('开始答题', 'nlyd-student')?></div>
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
+                        <span class="c_black match_info_font"><?=$project_title?><?=__('第', 'nlyd-student')?><?=$match_more_cn?><?=__('轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"></span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
                     <div class="matching-fastScan">
                         <div class="item-wrapper">
@@ -72,7 +72,7 @@ jQuery(function($) {
             var hour = Math.floor((_count_time / 3600) % 24);
             var minute = Math.floor((_count_time / 60) % 60);
             var second = Math.floor(_count_time % 60);
-            day=day>0?day+'天':'';
+            day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
             hour= hour<10?"0"+hour:hour;//计算小时
             minute= minute<10?"0"+minute:minute;//计算分钟
             second= second<10?"0"+second:second;//计算秒
@@ -267,7 +267,7 @@ jQuery(function($) {
             }
             $.SetSession('match',sessionData)
         }else{
-            $.alerts('错误'+flaseMax+'题')
+            $.alerts('<?=__('错误', 'nlyd-student')?>'+flaseMax+'<?=__('题', 'nlyd-student')?>')
             submit($('.count_down').attr('data-seconds'),2)
         }
     }
@@ -422,11 +422,11 @@ $('#selectWrapper .fastScan-item').each(function(){
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
+        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         if(typeof(timer)!="undefined"){
             clearTimeout(timer);
         }
@@ -444,9 +444,9 @@ $('#selectWrapper .fastScan-item').each(function(){
          $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             if(typeof(timer)!="undefined"){
                 clearTimeout(timer);
@@ -465,11 +465,11 @@ layui.use('layer', function(){
         layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '提示' //不显示标题栏
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: [ '按错了','提交',]
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: [ '<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>',]
                 ,success: function(layero, index){
                     // stop=true;
                 },

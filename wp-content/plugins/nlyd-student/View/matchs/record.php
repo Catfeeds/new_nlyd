@@ -18,23 +18,23 @@
 
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">成绩</h1>
+            <h1 class="mui-title"><?=__('成绩', 'nlyd-student')?></h1>
         </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                    
                     <div class="match-title c_black"><?=$match_title?>
                         <?php if($pay_status == 2):?>
-                        <a class="share" id="shareBtn">分享战绩</a>
+                        <a class="share" id="shareBtn"><?=__('分享战绩', 'nlyd-student')?></a>
                         <?php endif;?>
                     </div>
                    
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
-                        <li class="layui-this" data-id="1">单项排名</li>
-                        <li data-id="2">分类排名</li>
-                        <li data-id="3">总排名</li>
-                        <div class="nl-transform">单项排名</div>
+                        <li class="layui-this" data-id="1"><?=__('单项排名', 'nlyd-student')?></li>
+                        <li data-id="2"><?=__('分类排名', 'nlyd-student')?></li>
+                        <li data-id="3"><?=__('总排名', 'nlyd-student')?></li>
+                        <div class="nl-transform"><?=__('单项排名', 'nlyd-student')?></div>
                     </ul>
                     <?php endif;?>
                     <div class="layui-tab-content" style="padding: 0;">
@@ -57,12 +57,12 @@
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head'>
-                                            <td>名次</td>
-                                            <td>学员姓名</td>
-                                            <td><span>ID</span></td>
-                                            <td>城市</td>
-                                            <td><span>项目总分</span></td>
-                                            <td>组别</td>
+                                            <td><?=__('名次', 'nlyd-student')?></td>
+                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><span><?=__('ID', 'nlyd-student')?></span></td>
+                                            <td><?=__('城市', 'nlyd-student')?></td>
+                                            <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
+                                            <td><?=__('组别', 'nlyd-student')?></td>
                                         </tr>
                                         <tr class="nl-me"  id="rank_1">
                                         
@@ -73,7 +73,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="a-btn get_footer">查看本项目比赛详情</a>
+                            <a class="a-btn get_footer"><?=__('查看本项目比赛详情', 'nlyd-student')?></a>
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">
@@ -90,16 +90,16 @@
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head'>
-                                            <td>名次</td>
-                                            <td>学员姓名</td>
-                                            <td><span>ID</span></td>
-                                            <td>城市</td>
-                                            <td><span>项目总分</span></td>
+                                            <td><?=__('名次', 'nlyd-student')?></td>
+                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><span><?=__('ID', 'nlyd-student')?></span></td>
+                                            <td><?=__('城市', 'nlyd-student')?></td>
+                                            <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
                                             <td class="select-td">
                                                 <div class="td-type">
-                                                    <div class="show-type" id="show-type" data-group=""><span id="show_text">全部</span><i class="iconfont">&#xe644;</i></div>
+                                                    <div class="show-type" id="show-type" data-group=""><span id="show_text"><?=__('全部', 'nlyd-student')?></span><i class="iconfont">&#xe644;</i></div>
                                                     <ul class="ul-select" >
-                                                        <li class="show-type" data-group="">全部</li>
+                                                        <li class="show-type" data-group=""><?=__('全部', 'nlyd-student')?></li>
                                                         <?php
                                                             $group = get_age_group();
                                                             foreach ($group as $k =>$y){
@@ -124,22 +124,22 @@
                         <div class="layui-tab-item">
                             <div class="btn-wrapper one_3">
                                 <div class="btn-wrap">
-                                    <div class="classify-btn classify-active" data-post-id="0">个人排名</div>
+                                    <div class="classify-btn classify-active" data-post-id="0"><?=__('个人排名', 'nlyd-student')?></div>
                                 </div>
                                 <div class="btn-wrap">
-                                    <div class="classify-btn" data-post-id="1">战队排名</div>
+                                    <div class="classify-btn" data-post-id="1"><?=__('战队排名', 'nlyd-student')?></div>
                                 </div>
                             </div>
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
                                     <thead>
                                         <tr class='table-head' id="one_3_head">
-                                            <td>名次</td>
-                                            <td>学员姓名</td>
-                                            <td><span>ID</span></td>
-                                            <td>城市</td>
-                                            <td><span>项目总分</span></td>
-                                            <td>组别</td>
+                                            <td><?=__('名次', 'nlyd-student')?></td>
+                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><span><?=__('ID', 'nlyd-student')?></span></td>
+                                            <td><?=__('城市', 'nlyd-student')?></td>
+                                            <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
+                                            <td><?=__('组别', 'nlyd-student')?></td>
                                         </tr>
                                         <tr class="nl-me" id="rank_3">
 
@@ -167,7 +167,7 @@
                 <div class="shareTop wechatFriend">
                     <!-- <i class="iconfont">&#xe695;</i> -->
                 </div>
-                <div class="shareBottom">微信好友</div>
+                <div class="shareBottom"><?=__('微信好友', 'nlyd-student')?></div>
             </div>
         </div>
         <div class="shareItem flex1">
@@ -175,7 +175,7 @@
                 <div class="shareTop wechatTimeline">
                     <!-- <i class="iconfont">&#xe639;</i> -->
                 </div>
-                <div class="shareBottom">朋友圈</div>
+                <div class="shareBottom"><?=__('朋友圈', 'nlyd-student')?></div>
             </div>
         </div>
         <div class="shareItem flex1">
@@ -253,17 +253,17 @@ jQuery(function($) {
                         }
                         if(arg['data_id']==3){//总排名
                             if(arg['team']){//战队
-                                var html_='<td>名次</td>'
-                                +'<td>战队名称</td>'
-                                +'<td><span>ID</span></td>'
-                                +'<td><span>总成绩</span></td>'
+                                var html_='<td><?=__('名次', 'nlyd-student')?></td>'
+                                +'<td><?=__('战队名称', 'nlyd-student')?></td>'
+                                +'<td><span><?=__('ID', 'nlyd-student')?></span></td>'
+                                +'<td><span><?=__('总成绩', 'nlyd-student')?></span></td>'
                             }else{//个人
-                                var html_='<td>名次</td>'
-                                +'<td>学员姓名</td>'
-                                +'<td><span>ID</span></td>'
-                                +'<td>城市</td>'
-                                +'<td><span>项目总分</span></td>'
-                                +'<td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>'
+                                var html_='<td><?=__('名次', 'nlyd-student')?></td>'
+                                +'<td><?=__('学员姓名', 'nlyd-student')?></td>'
+                                +'<td><span><?=__('ID', 'nlyd-student')?></span></td>'
+                                +'<td><?=__('城市', 'nlyd-student')?></td>'
+                                +'<td><span><?=__('项目总分', 'nlyd-student')?></span></td>'
+                                +'<td><?=__('组&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></td>'
                             }
                             $('#one_3_head').html(html_)
                         }
@@ -382,7 +382,7 @@ jQuery(function($) {
                                 }
                             },
                             error:function(){
-                                $.alerts('网络质量差,请重试')
+                                $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                                 next(lis.join(''),true)
                             }
                         }) 

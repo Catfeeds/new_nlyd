@@ -59,7 +59,7 @@ function the_table_install () {
           `train_questions` longtext COMMENT '训练题目',
           `train_answer` longtext COMMENT '标准答案',
           `my_answer` longtext COMMENT '我的答案',
-          `surplus_time` tinyint(8) DEFAULT NULL COMMENT '剩余时间',
+          `surplus_time` int(8) DEFAULT NULL COMMENT '剩余时间',
           `my_score` int(10) DEFAULT NULL COMMENT '成绩',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)

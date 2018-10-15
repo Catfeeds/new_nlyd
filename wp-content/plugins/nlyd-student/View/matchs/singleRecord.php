@@ -12,11 +12,11 @@
         <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">单项成绩排名</h1>
+        <h1 class="mui-title"><?=__('单项成绩排名', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin width-margin-pc">
-                    <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn">分享战绩</div></div>
+                    <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn"><?=__('分享战绩', 'nlyd-student')?></div></div>
                     <div class="single-match-title">
                         <div class="single-match-name"><?=$project_title?></div>
                         <?php if($match_more > 0):?>
@@ -29,12 +29,12 @@
                             <table class="nl-table">
                                 <thead>
                                     <tr class='table-head'>
-                                        <td>名次</td>
-                                        <td>学员姓名</td>
-                                        <td><span>ID</span></td>
-                                        <td>城市</td>
-                                        <td><span>项目总分</span></td>
-                                        <td>组&nbsp;&nbsp;&nbsp;&nbsp;别</td>
+                                        <td><?=__('名次', 'nlyd-student')?></td>
+                                        <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                        <td><span><?=__('ID', 'nlyd-student')?></span></td>
+                                        <td><?=__('城市', 'nlyd-student')?></td>
+                                        <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
+                                        <td><?=__('组&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></td>
                                     </tr>  
                                     <tr class="nl-me" id="danxiang_me">
                             
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <?php if($my_log): ?>
-                    <a class="a-btn get_footer"  data-href="<?=$answer_url?>">查看本轮我的答题记录</a>
+                    <a class="a-btn get_footer"  data-href="<?=$answer_url?>"><?=__('查看本轮我的答题记录', 'nlyd-student')?></a>
                     <?php endif;?>
                 </div>
             </div>
@@ -63,13 +63,13 @@
         <div class="shareItem flex1">
             <div class="shareContent shareLeft" data-id="wechatFriend">
                 <div class="shareTop wechatFriend"></div>
-                <div class="shareBottom">微信好友</div>
+                <div class="shareBottom"><?=__('微信好友', 'nlyd-student')?></div>
             </div>
         </div>
         <div class="shareItem flex1">
             <div class="shareContent shareMid" data-id="wechatTimeline">
                 <div class="shareTop wechatTimeline"></div>
-                <div class="shareBottom">朋友圈</div>
+                <div class="shareBottom"><?=__('朋友圈', 'nlyd-student')?></div>
             </div>
         </div>
         <div class="shareItem flex1">
@@ -163,7 +163,7 @@ layui.use(['element','flow'], function(){
                         }
                     },
                     error:function(){
-                        $.alerts('网络质量差,请重试')
+                        $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
                 }) 

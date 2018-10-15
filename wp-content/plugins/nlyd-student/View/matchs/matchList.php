@@ -12,10 +12,10 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1">报名中</li>
-                            <li data-id="2">比赛中</li>
-                            <li data-id="3">往期比赛</li>
-                            <div class="nl-transform" data-y="-5">近期比赛</div>
+                            <li class="layui-this" data-id="1"><?=__('报名中', 'nlyd-student')?></li>
+                            <li data-id="2"><?=__('比赛中', 'nlyd-student')?></li>
+                            <li data-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
+                            <div class="nl-transform" data-y="-5"><?=__('近期比赛', 'nlyd-student')?></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 报名中 -->
@@ -26,7 +26,7 @@
                             </div>
                             <!-- 比赛中 -->
                             <div class="layui-tab-item">
-                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;最新比赛倒计时
+                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新比赛倒计时', 'nlyd-student')?>
                                     <span class="getTime" id="getTimes">00:00:00</span>        
                                 </div>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
@@ -58,7 +58,7 @@
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
-                        <p class="no-info-text">无比赛信息</p>
+                        <p class="no-info-text"><?=__('无比赛信息', 'nlyd-student')?></p>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@ jQuery(function($) {
                                     var end_time = new Date(domTime).getTime();//月份是实际月份-1
                                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                     var sys_second = (end_time-serverTimes)/1000;
-                                    var sys_second_text=sys_second>0 ? '' :  "报名结束";
+                                    var sys_second_text=sys_second>0 ? '' :  "<?=__('报名结束', 'nlyd-student')?>";
                                     if(v.user_id!=null){//我报名参加的赛事
                                         isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                     }
@@ -147,7 +147,7 @@ jQuery(function($) {
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
-                                                    +'<div class="nl-match-label">报名截止：</div>'
+                                                    +'<div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>：</div>'
                                                     +'<div class="nl-match-info">'
                                                         +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
                                                         +sys_second_text+'</span>'
@@ -155,7 +155,7 @@ jQuery(function($) {
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
-                                                    +'<button type="button" href="'+v.right_url+'">查看战绩</button>'
+                                                    +'<button type="button" href="'+v.right_url+'"><?=__('查看战绩', 'nlyd-student')?></button>'
                                                 +'</div>';   
                                     }else{
                                         if(v.right_url.length>0){
@@ -164,13 +164,13 @@ jQuery(function($) {
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button flex1 last-btn">'
-                                                            +'<button type="button" class="bg_gradient_grey">已报名参赛</button>'
+                                                            +'<button type="button" class="bg_gradient_grey"><?=__('已报名参赛', 'nlyd-student')?></button>'
                                                         +'</div>'
                                                 
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
-                                                    +'<div class="nl-match-label">报名截止：</div>'
+                                                    +'<div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>：</div>'
                                                     +'<div class="nl-match-info">'
                                                         +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
                                                         +sys_second_text+'</span>'
@@ -190,36 +190,36 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">开赛日期：</div>'
+                                                            +'<div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.match_start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">比赛地点：</div>'
+                                                            +'<div class="nl-match-label"><?=__('比赛地点', 'nlyd-student')?>：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.match_address+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">报名费用：</div>'
+                                                            +'<div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">¥'+v.match_cost+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label">已报选手：</div>'
+                                                            +'<div class="nl-match-label"><?=__('已报选手', 'nlyd-student')?>：</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'人</span>'
-                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>'
+                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
                                                     +'<div class="nl-match-footer flex-h">'
                                                         +'<div class="nl-match-button flex1">'
-                                                            +'<button type="button" class="'+onBtn+'" href="'+v.left_url+'">查看详情</button>'
+                                                            +'<button type="button" class="'+onBtn+'" href="'+v.left_url+'"><?=__('查看详情', 'nlyd-student')?></button>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'
@@ -238,14 +238,14 @@ jQuery(function($) {
                             }
                         
                             $('.getTimes'+id).countdown(function(S, d){//倒计
-                                    var D=d.day>0 ? d.day+'天' : '';
+                                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
                                     var h=d.hour<10 ? '0'+d.hour : d.hour;
                                     var m=d.minute<10 ? '0'+d.minute : d.minute;
                                     var s=d.second<10 ? '0'+d.second : d.second;
                                     var time=D+h+':'+m+':'+s;
                                     $(this).text(time);
                                 if(S==0){
-                                    $(this).text("报名结束");   
+                                    $(this).text("<?=__('报名结束', 'nlyd-student')?>");
                                     setTimeout(function() {
                                         window.location.reload()  
                                     }, 1000);
@@ -253,7 +253,7 @@ jQuery(function($) {
                             });
                         },
                         error:function(){
-                            $.alerts('网络质量差,请重试')
+                            $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                             next(lis.join(''),true)
                         }
                     })       

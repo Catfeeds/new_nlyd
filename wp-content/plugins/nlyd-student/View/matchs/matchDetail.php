@@ -11,7 +11,7 @@
             <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">比赛详情</h1>
+            <h1 class="mui-title"><?=__('比赛详情', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc content-border">
@@ -28,29 +28,29 @@
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">开赛日期：</div>
+                                        <div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black">
                                             <?=$match['match_start_time']?>
                                             <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">结束时间：</div>
+                                        <div class="nl-match-label"><?=__('结束时间', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black">
                                             <?=$match['match_end_time']?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">开赛地点：</div>
+                                        <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black"><?=$match['match_address']?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">报名费用：</div>
+                                        <div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label">报名截止：</div>
-                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?'已截止':'';?></div>
+                                        <div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
                                         
                                     </div>
                                 </div>
@@ -59,8 +59,8 @@
                             <!-- 比赛项目 -->
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> ">比赛项目</span>
-                                    <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">参赛须知</a>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> "><?=__('比赛项目', 'nlyd-student')?></span>
+                                    <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
@@ -68,7 +68,7 @@
                                         <div class="nl-match-label"><?=$val['parent_title']?>：</div>
                                             <div class="nl-match-info">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue">比赛规则</a>&nbsp;&nbsp;
+                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -79,20 +79,20 @@
                             
                             <li class="nl-match">
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?>">报名列表</span>
-                                    <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?=$total?>位选手已报名</span>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?>"><?=__('报名列表', 'nlyd-student')?></span>
+                                    <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?=$total?><?=__('位选手已报名', 'nlyd-student')?></span>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
                                         <table class="nl-table">
                                             <thead>
                                                 <tr>
-                                                    <td><div class="table_content">头像</div></td>
-                                                    <td><div class="table_content">学员姓名 </div></td>
-                                                    <td><div class="table_content">性 别</div></td>
-                                                    <td><div class="table_content">年龄</div></td>
-                                                    <td><div class="table_content">报名日期</div></td>
-                                                    <td><div class="table_content">国籍</div></td>
+                                                    <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?> </div></td>
+                                                    <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('年龄', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('报名日期', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('国籍', 'nlyd-student')?></div></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="flow-table">
@@ -104,23 +104,23 @@
                             </li>
                         </ul>
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
-                        <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>">报名参赛</a>
+                        <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"><?=__('报名参赛', 'nlyd-student')?></a>
                         <?php endif; ?>
                         <?php if( ($match['is_me'] == 'y' && $match['match_status'] == 2) && ($match['match_status'] == -3 || $match['match_status'] == 2)){?>
                             <div class="a-btn two get_footer">
                                 <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><?=__('查看战绩', 'nlyd-student')?></a>
                                 <?php endif;?>
                                 <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
+                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><?=__('进入比赛', 'nlyd-student')?></a>
                                 <?php endif;?>
                             </div>              
                         <?php }else { ?>
                             <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                <a class="a-btn get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>">查看战绩</a>
+                                <a class="a-btn get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><?=__('查看战绩', 'nlyd-student')?></a>
                             <?php endif;?>
                             <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>">进入比赛</a>
+                                <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><?=__('进入比赛', 'nlyd-student')?></a>
                             <?php endif;?>
                        <?php }?>
                         
@@ -145,7 +145,7 @@ jQuery(function($) {
         window.location.href='<?=$match['match_url']?>'
     }
     $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
@@ -183,7 +183,7 @@ jQuery(function($) {
                         var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                         var sys_second = (parseInt(end_time)-parseInt(serverTimes))/1000;
                         $('#time_count').attr('data-seconds',sys_second).countdown(function(S, d){//倒计时
-                            var D=d.day>0 ? d.day+'天' : '';
+                            var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
                             var h=d.hour<10 ? '0'+d.hour : d.hour;
                             var m=d.minute<10 ? '0'+d.minute : d.minute;
                             var s=d.second<10 ? '0'+d.second : d.second;
@@ -219,7 +219,7 @@ jQuery(function($) {
                         }
                     },
                     error:function(){
-                        $.alerts('网络质量差,请重试')
+                        $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
                 })       
