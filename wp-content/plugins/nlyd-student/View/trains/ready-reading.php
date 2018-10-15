@@ -38,7 +38,9 @@ new AlloyFinger($('#complete')[0], {//阅读完成
         var sessionData={//存储session
             genre_id:$.Request('genre_id'),
             type:'wzsd',
-            count_down:$('.count_down').attr('data-seconds')
+            count_down:$('.count_down').attr('data-seconds'),
+            questions_answer:<?=json_encode($questions_answer)?>,
+            match_questions:<?=json_encode($match_questions)?>,
         }
         $.SetCookie('train_match',sessionData,0)
     }

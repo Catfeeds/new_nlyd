@@ -72,6 +72,7 @@ jQuery(function($) {
     var questions_answer=[];
     var leavePage= $.GetCookie('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
+        console.log(leavePage)
         $('.count_down').attr('data-seconds',leavePage['count_down'])
     }else{//未获取到比赛题目
         $.alerts('未检测到题目信息')
