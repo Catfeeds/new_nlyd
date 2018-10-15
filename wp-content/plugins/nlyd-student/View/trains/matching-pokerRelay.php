@@ -130,6 +130,7 @@ jQuery(function($) {
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){
+                    $.DelCookie('train_match','1')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

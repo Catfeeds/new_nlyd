@@ -119,10 +119,10 @@ jQuery(function($) {
             // }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){ 
+                    $.DelCookie('train_match','1')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
-                            $.DelCookie('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{
@@ -131,7 +131,6 @@ jQuery(function($) {
                             'opacity': '0',
                             'visibility': 'hidden',
                         })
-                        $.DelCookie('train_match','1')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
