@@ -39,7 +39,7 @@
                             <!-- 更换手机号 -->
                             <input type="hidden" name="save_type" value="mobile">
                             <input type="hidden" name="step" value="one">
-                            <p class="c_blue" style="margin-bottom:0"><?=printf(__('更换后可使用新手机号登陆，当前手机号%s', 'nlyd-student'), $user_info['user_mobile'])?></p>
+                            <p class="c_blue" style="margin-bottom:0"><?php printf(__('更换后可使用新手机号登陆，当前手机号%s', 'nlyd-student'), $user_info['user_mobile'])?></p>
                             <div class="form-input-row">
                                 <div class="form-input-label"><?=__('手机号码', 'nlyd-student')?></div>
                                 <div class="nl-input"><?=$user_info['contact']?></div>

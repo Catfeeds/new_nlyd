@@ -110,7 +110,7 @@
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
                                 <div class="coachDetail-metal"><?=__('学 员', 'nlyd-student')?></div>
-                                <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=printf(__('%1$s名学员【%2$s位主训】', 'nlyd-student'), $content['student_count'],$content['major_count'])?></span></div>
+                                <div class="coachDetail-top">&nbsp;<span class="c_blue"><?php printf(__('%1$s名学员【%2$s位主训】', 'nlyd-student'), $content['student_count'],$content['major_count'])?></span></div>
                                 <p>*<?=__('M、R、A分别代表记忆、速读、心算', 'nlyd-student')?></p>
                                 <div class="nl-table-wapper">
                                     <table class="nl-table">
