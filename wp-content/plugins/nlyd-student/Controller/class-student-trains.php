@@ -481,11 +481,6 @@ class Student_Trains extends Student_Home
 
             }
 
-            if($_GET['type']=='kysm'){//快眼扫描比赛页
-                wp_register_style( 'my-student-fastScan', student_css_url.'matching-fastScan.css',array('my-student') );
-                wp_enqueue_style( 'my-student-fastScan' );
-
-            }
 
             if($_GET['type']=='szzb'){//进入数字争霸准备页面
                 wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
@@ -516,6 +511,12 @@ class Student_Trains extends Student_Home
 
                 wp_register_style( 'my-student-pokerRelay', student_css_url.'matching-pokerRelay.css',array('my-student') );
                 wp_enqueue_style( 'my-student-pokerRelay' );
+            }
+            if($_GET['type']=='kysm'){//快眼扫描比赛页
+
+                wp_register_style( 'my-student-fastScan', student_css_url.'matching-fastScan.css',array('my-student') );
+                wp_enqueue_style( 'my-student-fastScan' );
+
             }
         }
 
