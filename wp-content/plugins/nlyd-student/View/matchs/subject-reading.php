@@ -1,6 +1,6 @@
 
 <div class="answer-zoo">
-    <div class="answerBtn">答案对比</div>
+    <div class="answerBtn"><?=__('答案对比', 'nlyd-student')?></div>
         <?php if(!empty($match_questions)):?>
         <div class="reading-answer">
             <?php
@@ -32,8 +32,8 @@
             ?>
             <div class="one-ques">
                 <p class="question"><?=$num?>、<?=$val?></p>
-                <p class="yours">你的答案：<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : '未作答';?></span></p>
-                <p class="rights">正确答案：<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
+                <p class="yours"><?=__('你的答案', 'nlyd-student')?>：<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : __('未作答', 'nlyd-student');?></span></p>
+                <p class="rights"><?=__('正确答案', 'nlyd-student')?>：<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
             </div>
             <?php } ?>
         <?php endif;?>

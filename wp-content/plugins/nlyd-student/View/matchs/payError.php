@@ -11,10 +11,10 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">国际脑力运动</h1>
+            <h1 class="mui-title"><?=__('国际脑力运动', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
-                <p class="ta_c c_black" style="margin-top:100px">订单信息缺失</p>
+                <p class="ta_c c_black" style="margin-top:100px"><?=__('订单信息缺失', 'nlyd-student')?></p>
             </div>
         </div>           
     </div>
