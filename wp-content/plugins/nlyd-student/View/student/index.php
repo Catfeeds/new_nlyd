@@ -123,7 +123,7 @@ get_header(); ?>
                                 </div>
                                 <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
                                     <p class="text_1 c_black"><?=__('课程名称', 'nlyd-student')?></p>
-                                    <p class="fs_12 c_orange"><?=__('抢占名额中(2/18)', 'nlyd-student')?></p>
+                                    <p class="fs_12 c_orange"><?=__('抢占名额中', 'nlyd-student')?>(2/18)</p>
                                     <div class="fs_12 c_black6 text_2 nl-ad-detail"><?=__('这里是课程介绍摘要，截取课程简要介绍，不超过30个字符', 'nlyd-student')?></div>
                                 </div>
                             </div>

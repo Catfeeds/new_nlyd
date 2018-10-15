@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('所在地', 'nlyd-student')?></div>
-                            <input readonly id="areaSelect" type="text" placeholder="所在地" class="nl-input" lay-verify="required" value="<?=$row['province'].$row['city'].$row['area']?>" >
+                            <input readonly id="areaSelect" type="text" placeholder="<?=__('所在地', 'nlyd-student')?>" class="nl-input" lay-verify="required" value="<?=$row['province'].$row['city'].$row['area']?>" >
                             <input name='province' type="hidden" value="<?=$row['province']?>">
                             <input name='city' type="hidden" value="<?=$row['city']?>">
                             <input name='area' type="hidden" value="<?=$row['area']?>">

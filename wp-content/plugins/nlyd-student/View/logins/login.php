@@ -15,14 +15,14 @@
             <ul style="margin-left: 0;margin-bottom:15px!imporatant;" class="layui-tab-title">
                 <li class="layui-this">
                     <div class="login_icon iconLock lock_blue display-hide"></div>
-                    <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                    <div class="login_icon iconPhone phone_blue"></div>&nbsp;&nbsp;<span class="formName"><?=__('手机快速登陆', 'nlyd-student')?></span>
                 </li>
                 <li>
-                    <div class="login_icon icon-zhuce user_blue"></div>&nbsp;&nbsp;<span >注册</span>
+                    <div class="login_icon icon-zhuce user_blue"></div>&nbsp;&nbsp;<span ><?=__('注册', 'nlyd-student')?></span>
                 </li>
                 <div class="nl-transform">
                     <div class="login_icon iconLock user_white display-hide"></div>
-                    <div class="login_icon iconPhone phone_white"></div>&nbsp;&nbsp;<span class="formName">手机快速登陆</span>
+                    <div class="login_icon iconPhone phone_white"></div>&nbsp;&nbsp;<span class="formName"><?=__('手机快速登陆', 'nlyd-student')?></span>
                 </div>
             </ul>
             <div class="layui-tab-content">
@@ -36,21 +36,21 @@
                                     <input type="hidden" name="action" value="student_login">
                                     <input type="hidden" name="login_type" value="mobile">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce');?>">
-                                    <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="手机号" class="layui-input ">
+                                    <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="<?=__('手机号', 'nlyd-student')?>" class="layui-input ">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
-                                    <input type="tel" name="password" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19">获取验证码</a>
+                                    <input type="tel" name="password" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19"><?=__('获取验证码', 'nlyd-student')?></a>
                                 </div>
                             </div>
                             <p class="no-margin">
-                                <a  data-show="a3" class="login-by-code c_blue display-block login-by">使用帐号密码登录</a>
+                                <a  data-show="a3" class="login-by-code c_blue display-block login-by"><?=__('使用帐号密码登录', 'nlyd-student')?></a>
                             </p>
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
-                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit="">登 陆</a>
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="loginFormFastBtn" lay-filter="loginFormFastBtn" lay-submit=""><?=__('登 陆', 'nlyd-student')?></a>
                                 </div>
                             </div>
                         </form>
@@ -63,21 +63,21 @@
                                     <input type="hidden" name="action" value="student_login">
                                     <input type="hidden" name="login_type" value="pass">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce')?>">
-                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
+                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="<?=__('手机号/邮箱', 'nlyd-student')?>" class="layui-input ">
                                 </div>
                             </div>
                             <div class="layui-form-item" >
                                 <div class="layui-input-inline">
-                                    <input type="password" name="password" lay-verify="required" placeholder="输入密码" autocomplete="off" class="layui-input ">
+                                    <input type="password" name="password" lay-verify="required" placeholder="<?=__('输入密码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
                                 </div>
                             </div>
                             <p class="no-margin">
-                                <a data-show="a1"  class="login-by-psw  c_blue login-by">使用手机验证码快速登录</a>
-                                <a data-show="a2"  class="login-by-reset c_blue login-by pull-right">忘记密码</a>
+                                <a data-show="a1"  class="login-by-psw  c_blue login-by"><?=__('使用手机验证码快速登录', 'nlyd-student')?></a>
+                                <a data-show="a2"  class="login-by-reset c_blue login-by pull-right"><?=__('忘记密码', 'nlyd-student')?></a>
                             </p>
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
-                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="c" lay-filter="loginFormPswBtn" lay-submit="">登 陆</a>
+                                    <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="c" lay-filter="loginFormPswBtn" lay-submit=""><?=__('登 陆', 'nlyd-student')?></a>
                                 </div>
                             </div>
                         </form>
@@ -89,31 +89,31 @@
                                 <div class="layui-input-inline">
                                     <input type="hidden" name="action" value="student_reset">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_reset_code_nonce');?>">
-                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
+                                    <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="<?=__('手机号/邮箱', 'nlyd-student')?>" class="layui-input ">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
-                                    <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" >获取验证码</a>
+                                    <input type="tel" name="verify_code" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" ><?=__('获取验证码', 'nlyd-student')?></a>
                                 </div>
                             </div>
                             <div class="layui-form-item" >
                                 <div class="layui-input-inline">
-                                    <input type="password" name="password" lay-verify="password" placeholder="输入新密码" autocomplete="off" class="layui-input ">
+                                    <input type="password" name="password" lay-verify="password" placeholder="<?=__('输入新密码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
                                 </div>
                             </div>
                             <div class="layui-form-item" >
                                 <div class="layui-input-inline">
-                                    <input type="password" name="confirm_password" lay-verify="required" placeholder="输入新密码" autocomplete="off" class="layui-input ">
+                                    <input type="password" name="confirm_password" lay-verify="required" placeholder="<?=__('输入新密码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
                                 </div>
                             </div>
                             <p class="no-margin">
-                                <a data-show="a1"  class="login-by-psw  c_blue login-by">返回登陆</a>
+                                <a data-show="a1"  class="login-by-psw  c_blue login-by"><?=__('返回登陆', 'nlyd-student')?></a>
                             </p>
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
-                                    <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit="">确认重置</button>
+                                    <button type="button" class="layui-btn submitBtn  bg_gradient_blue" id="loginFormForgetBtn" lay-filter="loginFormForgetBtn" lay-submit=""><?=__('确认重置', 'nlyd-student')?></button>
                                 </div>
                             </div>
                         </form>
@@ -127,40 +127,40 @@
                             <div class="layui-input-inline">
                                 <input type="hidden" name="action" value="student_register">
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_register_code_nonce');?>">
-                                <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="手机号/邮箱" class="layui-input ">
+                                <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="<?=__('手机号/邮箱', 'nlyd-student')?>" class="layui-input ">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="tel" name="verify_code" lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input ">
-                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17">获取验证码</a>
+                                <input type="tel" name="verify_code" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17"><?=__('获取验证码', 'nlyd-student')?></a>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <input type="password" name="password" lay-verify="password" placeholder="设置密码,6位以上含字母及数字" autocomplete="off" class="layui-input ">
+                                <input type="password" name="password" lay-verify="password" placeholder="<?=__('设置密码,6位以上含字母及数字', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
                                             
                         <p class="no-margin">
-                            <a data-show="a1"  class="login-fast c_blue login-by">使用手机验证码快速登录</a>
+                            <a data-show="a1"  class="login-fast c_blue login-by"><?=__('使用手机验证码快速登录', 'nlyd-student')?></a>
                         </p>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
-                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit="">注 册</a>
+                                <a class="layui-btn submitBtn  bg_gradient_blue fs_16" type="button" id="registerBtn" lay-filter="registerBtn" lay-submit=""><?=__('注 册', 'nlyd-student')?></a>
                             </div>
                         </div>
                     </form>
                 </div> 
             </div> 
-            <div class="nl-agreement">登录或注册即同意<a class="c_blue pointer">【脑力中国用户协议】</a></div>
+            <div class="nl-agreement"><?=__('登录或注册即同意', 'nlyd-student')?><a class="c_blue pointer"><?=__('【脑力中国用户协议】', 'nlyd-student')?></a></div>
             <ul style="margin-left: 0"  class="login-type flex-h">
                 <?php if($default_wechat_login): ?>
                 <li class="login-type-wrapper flex1">
                     <div class="login-type-logo">
                         <i class="iconfont">&#xe695;</i>
                     </div>
-                    <div class="login-type-name">微信登录</div>
+                    <div class="login-type-name"><?=__('微信登录', 'nlyd-student')?></div>
                 </li>
                 <?php endif;?>
                 <?php if($default_qq_login): ?>
@@ -168,7 +168,7 @@
                     <div class="login-type-logo">
                         <i class="iconfont">&#xe603;</i>
                     </div>
-                    <div class="login-type-name">QQ登录</div>
+                    <div class="login-type-name"><?=__('QQ登录', 'nlyd-student')?></div>
                 </li>
                 <?php endif;?>
             </ul>

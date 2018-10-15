@@ -325,7 +325,8 @@ jQuery(function($) {
                                 window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
                             }
                         }else{
-                            if(res.data.info=="请先实名认证"){
+                            // if(res.data.info=="请先实名认证"){
+                            if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                                 setTimeout(function(){
                                     window.location.href=window.home_url+'/account/certification/match_id/'+$.Request('match_id');
                                 }, 1000);

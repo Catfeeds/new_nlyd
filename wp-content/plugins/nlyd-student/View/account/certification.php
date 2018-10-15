@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><?=__('所在城市', 'nlyd-student')?></div>
-                                    <input readonly id="areaSelect" type="text" placeholder="所在城市" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
+                                    <input readonly id="areaSelect" type="text" placeholder="<?=__('所在城市', 'nlyd-student')?>" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
                                     <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
@@ -138,7 +138,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect1 = new MobileSelect({
             trigger: '#trigger1',
-            title: '证件类型',
+            title: '<?=__('证件类型', 'nlyd-student')?>',
             wheels: [
                 {data: certificationSelectData}
             ],
@@ -200,7 +200,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect3 = new MobileSelect({
             trigger: '#areaSelect',
-            title: '地址',
+            title: '<?=__('地址', 'nlyd-student')?>',
             wheels: [
                 {data: $.validationLayui.allArea.area},
             ],
@@ -238,7 +238,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect5 = new MobileSelect({
             trigger: '#birthdaySelect',
-            title: '生日',
+            title: '<?=__('生日', 'nlyd-student')?>',
             wheels: [
                 {data:  $.validationLayui.dates},
             ],
@@ -274,7 +274,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect4 = new MobileSelect({
             trigger: '#trigger4',
-            title: '国籍',
+            title: '<?=__('国籍', 'nlyd-student')?>',
             wheels: [
                 {data: contrySelectData}
             ],

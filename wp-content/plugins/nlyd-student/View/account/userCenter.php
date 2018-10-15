@@ -218,7 +218,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
       layer.open({
         type: 1
         ,maxWidth:300
-        ,title: '您当前有一个未结束的比赛' //不显示标题栏
+        ,title: '<?=__('您当前有一个未结束的比赛', 'nlyd-student')?>' //不显示标题栏
         ,skin:'nl-box-skin'
         ,id: 'certification' //防止重复弹出
         ,content: '<div class="box-conent-wrapper"><?=__('是否继续进入比赛？', 'nlyd-student')?></div>'
