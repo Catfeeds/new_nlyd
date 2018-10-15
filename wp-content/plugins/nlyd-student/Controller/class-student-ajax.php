@@ -513,7 +513,7 @@ class Student_Ajax
         }
 
         if(empty(get_user_meta($current_user->ID,'user_real_name'))){
-            wp_send_json_error(array('info'=>'请先实名认证'));
+            wp_send_json_error(array('info'=>__('请先实名认证', 'nlyd-student')));
         }
 
         //if(count($_POST['project_id']) != count($_POST['major_coach'])) wp_send_json_error(array('info'=>'主训教练未设置齐全'));
