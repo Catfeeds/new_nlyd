@@ -108,11 +108,10 @@ jQuery(function($) {
         var data={
             action:'trains_submit',
             genre_id:$.Request('genre_id'),
+            post_id:$.Request('post_id'),
             project_type:'wzsd',
-            train_questions:$.Request('post_id'),
-            train_answer:$.Request('post_id'),
-            questions_answer:questions_answer,
-            match_questions:match_questions,
+            train_questions:match_questions,
+            train_answer:questions_answer,
             my_answer:my_answer,
             surplus_time:time,
         }

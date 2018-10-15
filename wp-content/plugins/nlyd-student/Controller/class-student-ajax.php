@@ -3403,9 +3403,9 @@ class Student_Ajax
                 }
                 break;
             case 'wzsd':
-                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
-                var_dump($_POST);die;
-                $questions_answer = json_decode($row['questions_answer'],true);
+                //if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
+                //print_r($_POST);die;
+                $questions_answer = $_POST['train_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
 
@@ -3417,29 +3417,13 @@ class Student_Ajax
                         }
                     }
 
-                    if(isset($my_answer[$k])){
-                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    if(isset($_POST['my_answer'][$k])){
+                        if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
                     }
                 }
                 $my_score = $success_len * 23;
                 if ($success_len == $len){
                     $my_score += $_POST['surplus_time'] * 1;
-                }
-                $redis = new Redis();
-                $redis->connect('127.0.0.1',6379,1);
-                $redis->auth('leo626');
-
-                if(!empty($redis->get('wzsd_question'.$current_user->ID))){
-                    $result = json_decode($redis->get('wzsd_question'.$current_user->ID),true);
-                    $post_id = $result->ID;
-                    $redis->del('wzsd_question'.$current_user->ID);
-                }else{
-
-                    $result = json_decode($row['questions_answer'],true);
-                    $key = array_keys($result);
-                    $sql = "select post_parent from {$wpdb->prefix}posts where ID = {$key[0]}";
-                    $post_id = $wpdb->get_var($sql);
-
                 }
                 break;
             default:
@@ -3457,7 +3441,7 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
-        //var_dump($insert);die;
+        //print_r($insert);die;
         $sql = "select id from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} order by created_time asc ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = count($rows);
