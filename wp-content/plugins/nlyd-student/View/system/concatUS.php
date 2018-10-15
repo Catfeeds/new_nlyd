@@ -7,7 +7,7 @@
                     <a class="mui-pull-left nl-goback">
                         <i class="iconfont">&#xe610;</i>
                     </a>
-                    <h1 class="mui-title">合作联系</h1>
+                    <h1 class="mui-title"><?=__('合作联系', 'nlyd-student')?></h1>
                 </header>
             <div class="layui-row nl-border nl-content  layui-bg-white">
                 <div id="baiduMap"></div> 
@@ -15,29 +15,29 @@
                     <div class="concat-wrap">
                         <div class="concat-row blue-b">
                             <p class="concat-info">
-                                <span>秘书处电话：</span>
+                                <span><?=__('秘书处电话', 'nlyd-student')?>：</span>
                                 <span>028-69956166</span>
                             </p>
                             <p class="concat-info">
-                                <span>商务部电话：</span>
+                                <span><?=__('商务部电话', 'nlyd-student')?>：</span>
                                 <span>028-66286610</span>
                             </p>
                             <p class="concat-info">
-                                <span>赛事部电话：</span>
+                                <span><?=__('赛事部电话', 'nlyd-student')?>：</span>
                                 <span>028-66795112</span>
                             </p>
                         </div>
                         <div class="concat-row orange-b">
                             <p class="concat-info">
-                                <span>邮箱地址：</span>
+                                <span><?=__('邮箱地址', 'nlyd-student')?>：</span>
                                 <span>gjnlyd @163.com</span>
                             </p>
                             <p class="concat-info">
-                                <span>通讯地址：</span>
-                                <span>成都市新希望路7号丰徳万瑞中心A 座25楼</span>
+                                <span><?=__('通讯地址', 'nlyd-student')?>：</span>
+                                <span><?=__('成都市新希望路7号丰徳万瑞中心A 座25楼', 'nlyd-student')?></span>
                             </p>
                             <p class="concat-info">
-                                <span>官网地址：</span>
+                                <span><?=__('官网地址', 'nlyd-student')?>：</span>
                                 <span>www.gjnlyd.com</span>
                             </p>
                         </div>
@@ -47,10 +47,10 @@
                             </div>
                             <div class="img-detail">
                                 <p class="concat-info">
-                                    <span>官方微信号</span>
+                                    <span><?=__('官方微信号', 'nlyd-student')?></span>
                                 </p>
                                 <p class="concat-info">
-                                    <span>国际脑力运动(gjnlyd)</span>
+                                    <span><?=__('国际脑力运动(gjnlyd)', 'nlyd-student')?></span>
                                 </p>
                             </div>
                         </div>
@@ -119,9 +119,9 @@ jQuery(function($) {
         var opts = {    
             width : 0,     // 信息窗口宽度    
             height: 0,     // 信息窗口高度    
-            title : "丰德万瑞中心"  // 信息窗口标题   
+            title : "<?=__('丰德万瑞中心', 'nlyd-student')?>"  // 信息窗口标题
         }    
-        var infoWindow = new BMap.InfoWindow("成都市新希望路7号丰徳万瑞中心A 座25楼", opts);  // 创建信息窗口对象    
+        var infoWindow = new BMap.InfoWindow("<?=__('成都市新希望路7号丰徳万瑞中心A 座25楼', 'nlyd-student')?>", opts);  // 创建信息窗口对象
         map.openInfoWindow(infoWindow, map.getCenter());      // 打开信息窗口
         marker.addEventListener("click", function(){    
             map.zoomTo(map.getZoom() + 1);   

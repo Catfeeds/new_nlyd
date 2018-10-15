@@ -25,42 +25,42 @@
                         <div class="teamDetail-infoRow">
                             <span class="nl-team-name"><?=$team['post_title']?></span>
                             <?php if($team['status'] == 2){?>
-                            <a class="nl-team-btn" id="team-leave" data-id="<?=$team['ID']?>">退出战队</a>
+                            <a class="nl-team-btn" id="team-leave" data-id="<?=$team['ID']?>"><?=__('退出战队', 'nlyd-student')?></a>
                             <?php }elseif($team['status'] == 1){?>
-                                <span class="nl-team-step">战队申请审核中</span>
+                                <span class="nl-team-step"><?=__('战队申请审核中', 'nlyd-student')?></span>
                             <?php }elseif ($team['status'] == -1){?>
-                                <span class="nl-team-step">离队申请审核中</span>
+                                <span class="nl-team-step"><?=__('离队申请审核中', 'nlyd-student')?></span>
                             <?php } ?>
                             <!-- <span class="nl-team-step">战队申请审核中</span> -->
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span>战队负责人：</span>
+                            <span><?=__('战队负责人', 'nlyd-student')?>：</span>
                             <span><?=$team['team_director']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span>战队口号：</span>
+                            <span><?=__('战队口号', 'nlyd-student')?>：</span>
                             <span><?=$team['team_slogan']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span>战队成员：</span>
+                            <span><?=__('战队成员', 'nlyd-student')?>：</span>
                             <span><?=$team['team_total']?>人</span>
                         </div>
                     </div>
                 </div>
                 <?php if(!empty($team['post_content'])):?>
                 <div class="teamDetail-row width-padding-pc have-metal layui-row layui-bg-white">
-                    <div class="teamDetail-metal">简 介</div>
+                    <div class="teamDetail-metal"><?=__('简 介', 'nlyd-student')?></div>
                     <div class="width-padding team-info-detail"><?=$team['post_content']?></div>
                 </div>
                 <?php endif;?>
                 <div class="teamDetail-row layui-row layui-bg-white">
                     <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
                         <ul style="margin-left: 0" class="layui-tab-title">
-                            <li class="layui-this">普通队员</li>
-                            <li>认证教练</li>
-                            <div class="nl-transform">普通队员</div>
+                            <li class="layui-this"><?=__('普通队员', 'nlyd-student')?></li>
+                            <li><?=__('认证教练', 'nlyd-student')?></li>
+                            <div class="nl-transform"><?=__('普通队员', 'nlyd-student')?></div>
                         </ul>
-                        <div class="teamDetail-top">*M、R、A分别代表记忆、速读、心算</div>
+                        <div class="teamDetail-top">*<?=__('M、R、A分别代表记忆、速读、心算', 'nlyd-student')?></div>
                         <div class="layui-tab-content" style="padding: 0;">
                             <!-- 普通队员 -->
                             <div class="layui-tab-item layui-show" id="student">
@@ -68,13 +68,13 @@
                                     <table class="nl-table">
                                         <thead>
                                             <tr>
-                                                <td>头像</td>
-                                                <td>学员姓名</td>
-                                                <td>学员ID</td>
-                                                <td>M级别</td>
-                                                <td>R级别</td>
-                                                <td>A级别</td>
-                                                <td>脑力健将级别</td>
+                                                <td><?=__('头像', 'nlyd-student')?></td>
+                                                <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                                <td><?=__('学员ID', 'nlyd-student')?></td>
+                                                <td><?=__('M级别', 'nlyd-student')?></td>
+                                                <td><?=__('R级别', 'nlyd-student')?></td>
+                                                <td><?=__('A级别', 'nlyd-student')?></td>
+                                                <td><?=__('脑力健将级别', 'nlyd-student')?></td>
                                             </tr>
                                         </thead>
                                         <tbody  id="flow-table">
@@ -88,13 +88,13 @@
                                     <table class="nl-table">
                                         <thead>
                                             <tr>
-                                                <td>头像</td>
-                                                <td>学员姓名</td>
-                                                <td>学员ID</td>
-                                                <td>M级别</td>
-                                                <td>R级别</td>
-                                                <td>A级别</td>
-                                                <td>脑力健将级别</td>
+                                                <td><?=__('头像', 'nlyd-student')?></td>
+                                                <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                                <td><?=__('学员ID', 'nlyd-student')?></td>
+                                                <td><?=__('M级别', 'nlyd-student')?></td>
+                                                <td><?=__('R级别', 'nlyd-student')?></td>
+                                                <td><?=__('A级别', 'nlyd-student')?></td>
+                                                <td><?=__('脑力健将级别', 'nlyd-student')?></td>
                                             </tr>
                                         </thead>
                                         <tbody  id="flow-table1">
@@ -108,7 +108,7 @@
                 </div>
 
                 <?php if(!in_array($team['status'],array(-1,1,2))): ?>
-                <a class="a-btn" id="team-join" data-id="<?=$team['ID']?>">加入战队</a>
+                <a class="a-btn" id="team-join" data-id="<?=$team['ID']?>"><?=__('加入战队', 'nlyd-student')?></a>
                 <?php endif;?>
             </div>
         </div>
@@ -175,7 +175,7 @@ layui.use(['element','layer','flow'], function(){
                         }
                     },
                     error:function(){
-                        $.alerts('网络质量差,请重试')
+                        $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
                 })         
@@ -225,7 +225,7 @@ layui.use(['element','layer','flow'], function(){
                         }
                     },
                     error:function(){
-                        $.alerts('网络质量差,请重试')
+                        $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
                 })         
@@ -236,11 +236,11 @@ layui.use(['element','layer','flow'], function(){
             layer.open({
             type: 1
             ,maxWidth:300
-            ,title: '提示' //不显示标题栏
+            ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'team-join1' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认加入<?=$team['post_title']?>？</div>'
-            ,btn: ['再想想', '确认', ]
+            ,content: '<div class="box-conent-wrapper"><?=printf(__('是否确认加入%s', 'nlyd-student'), $team['post_title'])?>？</div>'
+            ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
             ,success: function(layero, index){
                 
             }
@@ -261,7 +261,7 @@ layui.use(['element','layer','flow'], function(){
                         $.alerts(res.data.info)
                         if(res.success){
                             _this.css('display','none');
-                            $('.nl-team-name').after('<span class="nl-team-step">入队申请审核中</span>')
+                            $('.nl-team-name').after('<span class="nl-team-step"><?=__('入队申请审核中', 'nlyd-student')?></span>')
                         }
                     }
                 })
@@ -279,11 +279,11 @@ layui.use(['element','layer','flow'], function(){
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '提示' //不显示标题栏
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'team-leave1' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否确认退出<?=$team['post_title']?>？</div>'
-                ,btn: ['再想想', '确认', ]
+                ,content: '<div class="box-conent-wrapper"><?=printf(__('是否确认退出%s', 'nlyd-student'),$team['post_title'])?>？</div>'
+                ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
                 ,success: function(layero, index){
                     
                 }
@@ -303,7 +303,7 @@ layui.use(['element','layer','flow'], function(){
                         data:data,success:function(res,ajaxStatu,xhr){ 
                             $.alerts(res.data.info)
                             if(res.success){
-                                _this.after('<span class="nl-team-step">离队申请审核中</span>').css('display','none');
+                                _this.after('<span class="nl-team-step"><?=__('离队申请审核中', 'nlyd-student')?></span>').css('display','none');
                             }
                         }
                     })

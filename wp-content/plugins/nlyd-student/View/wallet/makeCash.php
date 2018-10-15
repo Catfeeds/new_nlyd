@@ -12,7 +12,7 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">提现</h1>
+            <h1 class="mui-title"><?=__('提现', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form" lay-filter='addAdress'>

@@ -6,7 +6,7 @@
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">体系标准</h1>
+                <h1 class="mui-title"><?=__('体系标准', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <ul style="margin:0">
@@ -17,7 +17,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>IISC 课程体系</p>
+                                        <p>IISC <?=__('课程体系', 'nlyd-student')?></p>
                                         <p>IISC TRAIN</p> 
                                     </div>
                                 </div>
@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>IISC 师资体系</p>
+                                        <p>IISC <?=__('师资体系', 'nlyd-student')?></p>
                                         <p>IISC RESOURCES</p> 
                                     </div>
                                 </div>
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>IISC 赛事体系</p>
+                                        <p>IISC <?=__('赛事体系', 'nlyd-student')?></p>
                                         <p>IISC TRAIN</p> 
                                     </div>
                                 </div>
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="center-detail">
                                     <div class="system-font">
-                                        <p>IISC 测评体系</p>
+                                        <p>IISC <?=__('测评体系', 'nlyd-student')?></p>
                                         <p>IISC GRADING</p> 
                                     </div>
                                 </div>

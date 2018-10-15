@@ -10,7 +10,7 @@
         <a class="mui-pull-left nl-goback">
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">余额收支记录</h1>
+        <h1 class="mui-title"><?=__('余额收支记录', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                     <form class="nl-page-form">

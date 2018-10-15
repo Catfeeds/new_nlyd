@@ -19,7 +19,7 @@
                 <i class="iconfont">&#xe610;</i>
             </a>
             <h1 class="mui-title">
-            战队列表
+            <?=__('战队列表', 'nlyd-student')?>
             </h1>
         </header>
             <div class="layui-row nl-border nl-content">
@@ -39,11 +39,11 @@
                         <div class="swiper-pagination"></div>
                     </div>
                     <div class="width-margin width-margin-pc layui-row">
-                        <p class="team-tips">*每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入</p>
+                        <p class="team-tips">*<?=__('每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入', 'nlyd-student')?></p>
                         <div class="search-zoo" style="margin-bottom:10px">
                             <i class="iconfont search-Icon">&#xe63b;</i>
-                            <div class="search-btn bg_gradient_blue"><span>搜 索</span></div>
-                            <input type="text" class="serach-Input nl-foucs" placeholder="搜索战队">
+                            <div class="search-btn bg_gradient_blue"><span><?=__('搜 索', 'nlyd-student')?></span></div>
+                            <input type="text" class="serach-Input nl-foucs" placeholder="<?=__('搜索战队', 'nlyd-student')?>">
                         </div>
                     </div>
                     <div class="width-margin width-margin-pc layui-row flow-default" id="team-flow">
@@ -54,7 +54,7 @@
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noTeam1094@2x.png'?>">
                         </div>
-                        <p class="no-info-text">暂无任何战队相关</p>
+                        <p class="no-info-text"><?=__('暂无任何战队相关', 'nlyd-student')?></p>
                     </div>
                 <?php } ?>
             </div>
@@ -118,7 +118,7 @@ layui.use(['layer','flow'], function(){
                                                         +'<i class="iconfont">&#xe62f;</i>'
                                                     +'</div>' 
                                             wait='<div class="team-detail-row waitting">'
-                                                        +'<span class="team-info">退队申请审核中</span>'
+                                                        +'<span class="team-info"><?=__('退队申请审核中', 'nlyd-student')?></span>'
                                                     +'</div>'
                                         }else if(parseInt(value.status)==2){//我的战队
                                             statue='<div class="team-join myTeam" data-id="'+value.ID+'">'
@@ -129,7 +129,7 @@ layui.use(['layer','flow'], function(){
                                                         +'<i class="iconfont">&#xe62f;</i>'
                                                     +'</div>'  
                                             wait='<div class="team-detail-row waitting">'
-                                                    +'<span class="team-info">入队申请审核中</span>'
+                                                    +'<span class="team-info"><?=__('入队申请审核中', 'nlyd-student')?></span>'
                                                 +'</div>'
                                         }
                                         
@@ -140,16 +140,16 @@ layui.use(['layer','flow'], function(){
                                                         +'<span class="fs_16 c_blue">'+value.post_title+'</span>'
                                                     +'</div>'
                                                     +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label">战队负责人：</span>'
+                                                        +'<span class="team-info-label"><?=__('战队负责人', 'nlyd-student')?>：</span>'
                                                         +'<span class="team-info">'+value.team_director+'</span>'
                                                     +'</div>'
                                                     +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label">战队口号：</span>'
+                                                        +'<span class="team-info-label"><?=__('战队口号', 'nlyd-student')?>：</span>'
                                                         +'<span class="team-info">'+value.team_slogan+'</span>'
                                                     +'</div>'
                                                     +'<div class="team-detail-row">'
-                                                        +'<span class="team-info-label">战队成员：</span>'
-                                                        +'<span class="team-info">'+value.team_total+'人</span>'
+                                                        +'<span class="team-info-label"><?=__('战队成员', 'nlyd-student')?>：</span>'
+                                                        +'<span class="team-info">'+value.team_total+'<?=__('人', 'nlyd-student')?></span>'
                                                     +'</div>'+wait
                                                 +'</div>'
                                             +'</a>'   
@@ -166,7 +166,7 @@ layui.use(['layer','flow'], function(){
                             }
                         },
                         error:function(){
-                            $.alerts('网络质量差,请重试')
+                            $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                             next(lis.join(''),true)
                         }
                     })         
@@ -209,8 +209,8 @@ if($('.search-btn').length>0){
             ,title: '提示' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否确认加入'+_this.attr('data-name')+'？</div>'
-            ,btn: ['再想想', '确认', ]
+            ,content: '<div class="box-conent-wrapper"><?=__('是否确认加入', 'nlyd-student')?>'+_this.attr('data-name')+'？</div>'
+            ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
             ,success: function(layero, index){
                 
             }
@@ -231,7 +231,7 @@ if($('.search-btn').length>0){
                         $.alerts(res.data.info)
                         if(res.success){
                         wait='<div class="team-detail-row waitting">'
-                                +'<span class="team-info">入队申请审核中</span>'
+                                +'<span class="team-info"><?=__('入队申请审核中', 'nlyd-student')?></span>'
                             +'</div>'
                         _this.removeClass('canJoin').addClass('waitting').html('<i class="iconfont">&#xe62f;</i>');
                         _this.parents('.team-row').find('.team-detail').append(wait)
