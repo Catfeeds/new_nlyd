@@ -99,30 +99,19 @@ jQuery(function($) {
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
     $.getJSON(file_path,function(JsonData){
-        // var matchSession=$.GetSession('ready_shuzi','true');
-        // if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-        //     questions_answer=matchSession['questions_answer']
-        // }else{
-            var questions_answers=JsonData;
-            var pos = Math.round(Math.random() * (questions_answers.length - 1));
-            var xx=questions_answers[pos]
-            questions_answer=xx.sort(function() {
-                return .5 - Math.random();
-            });
-            // var sessionData={
-            //     match_id:$.Request('match_id'),
-            //     project_id:$.Request('project_id'),
-            //     match_more:$.Request('match_more'),
-            //     questions_answer:questions_answer
-            // }
-            // $.SetSession('ready_shuzi',sessionData)
-        // }
+
+        var questions_answers=JsonData;
+        var pos = Math.round(Math.random() * (questions_answers.length - 1));
+        var xx=questions_answers[pos]
+        questions_answer=xx.sort(function() {
+            return .5 - Math.random();
+        });
+        
         $.each(questions_answer,function(i,v){
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
     })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
 new AlloyFinger($('#complete')[0], {
     tap:function(){
         var _this=$(this);
@@ -175,18 +164,10 @@ new AlloyFinger($('#complete')[0], {
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
 
-        // var leavePage= $.GetSession('leavePage','1');
-        //     if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-        //         if(leavePage.Time){
-        //             data['leave_page_time']=leavePage.Time;
-        //         }
-        //     }
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
                 if(res.success){
-                    //return false;
                     if(res.data.url){
                         setTimeout(function(){
                             window.location.href=res.data.url
@@ -210,12 +191,6 @@ new AlloyFinger($('#complete')[0], {
             }
         })
     } 
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0,3)
-    //     }, 1000);
-    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -234,7 +209,6 @@ new AlloyFinger($('#complete')[0], {
             }, 1000);
         }
     });
-    // mTouch('body').on('tap','.matching-btn',function(e){
     $('.matching-btn').each(function(){
         var _this=$(this);
         new AlloyFinger(_this[0], {

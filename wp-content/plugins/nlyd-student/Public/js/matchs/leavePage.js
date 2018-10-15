@@ -34,7 +34,7 @@
                         jQuery.alerts('第'+leveTimes+'次离开考试页面,到达1次自动提交答题')
                     }
                     if(leveTimes>=1){
-                        jQuery.alerts('第'+leveTimes+'次离开考试页面,自动提交本轮答题')
+                        jQuery.alerts(_leavePage.submit)
                         setTimeout(function() {
                             submit();
                         }, 3000);
