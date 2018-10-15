@@ -173,8 +173,6 @@ class Student_Trains extends Student_Home
                     }
                     $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
-                $data['questions_answer'] = $questions_answer;
-                $data['match_questions'] = $match_questions;
 
                 $count_down = 900;
                 break;
@@ -205,7 +203,11 @@ class Student_Trains extends Student_Home
             'count_down'=>$count_down,
             'url'=>home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type']),
         );
-        if(!empty($post_id)) $data['url'] .= '/post_id/'.$post_id;
+        if(!empty($post_id)){
+            $data['url'] .= '/post_id/'.$post_id;
+            $data['questions_answer'] = $questions_answer;
+            $data['match_questions'] = $match_questions;
+        }
 
         $view = student_view_path.CONTROLLER.'/initial.php';
         load_view_template($view,$data);
