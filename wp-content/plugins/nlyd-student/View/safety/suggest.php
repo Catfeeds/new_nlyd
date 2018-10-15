@@ -11,7 +11,7 @@
             <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">意见反馈</h1>
+            <h1 class="mui-title"><?=__('意见反馈', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
@@ -19,17 +19,17 @@
                         <div class="form-inputs">
                             <div class="layui-bg-white suggest-row">
                                 <div class="">
-                                    <input type="text" id="contact" name="contact" value="" placeholder="您的联系方式" lay-verify="phoneOrEmail"  class="suggest-input nl-foucs">
+                                    <input type="text" id="contact" name="contact" value="" placeholder="<?=__('您的联系方式', 'nlyd-student')?>" lay-verify="phoneOrEmail"  class="suggest-input nl-foucs">
                                 </div>    
                             </div>
                             <div class="layui-bg-white suggest-row">
                                 <div class="">
-                                    <textarea type="tel" id="contents" name="content" value="" placeholder="您对我们的平台有什么建议或反馈？请告诉我们" lay-verify="required"  class="suggest-textarea nl-foucs"  style="resize:none"></textarea>
+                                    <textarea type="tel" id="contents" name="content" value="" placeholder="<?=__('您对我们的平台有什么建议或反馈？请告诉我们', 'nlyd-student')?>" lay-verify="required"  class="suggest-textarea nl-foucs"  style="resize:none"></textarea>
                                 </div>    
                             </div>
 
                             <div class="layui-bg-white suggest-row img-zoos">
-                                <p class="tps">上传照片(最多四张)</p>
+                                <p class="tps"><?=__('上传照片(最多四张)', 'nlyd-student')?></p>
                                 <div class="post-img" id="add-img">
                                     <div class="add-zoo">
                                         <div class="transverse"></div>
@@ -39,7 +39,7 @@
                             </div>
                             <input type="hidden" name="_wpnonce" id="inputSuggest" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
                             <input style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/>
-                            <a class="a-btn" lay-filter="suggestionBtn" lay-submit="">提交意见反馈</a>
+                            <a class="a-btn" lay-filter="suggestionBtn" lay-submit=""><?=__('提交意见反馈', 'nlyd-student')?></a>
                         </div>   
                     </form>
                 </div>

@@ -46,13 +46,13 @@ p.tips{
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">定时器</h1>
+            <h1 class="mui-title"><?=__('定时器', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
 
                  <div class="count-wrapper">
                     <p class="tips fs_16">
-                        自定义定时器默认页面(无实际意义页面)
+                        <?=__('自定义定时器默认页面(无实际意义页面)', 'nlyd-student')?>
                         <?=get_time('mysql');?>
                     </p>
                 </div>
@@ -67,7 +67,7 @@ jQuery(function($) {
             window.location.reload();
         }
         $('.count_down').countdown(function(S, d){//倒计时
-            var D=d.day>0 ? d.day+'天' : '';
+            var D=d.day>0 ? d.day+' <?=__('天', 'nlyd-student')?>' : '';
             var h=d.hour<10 ? '0'+d.hour : d.hour;
             var m=d.minute<10 ? '0'+d.minute : d.minute;
             var s=d.second<10 ? '0'+d.second : d.second;

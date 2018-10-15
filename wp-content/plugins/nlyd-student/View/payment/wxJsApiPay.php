@@ -12,13 +12,13 @@
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">国际脑力运动</h1>
+                <h1 class="mui-title"><?=__('国际脑力运动', 'nlyd-student')?></h1>
             </header>
             <?php if($param['status'] == false){ ?>
                 <div class="layui-row nl-border nl-content layui-bg-white">
                     <p class="ta_c c_black" style="margin-top:100px"><?=$param['data']?></p>
                     <?php if($match_id > 0){ ?>
-                        <a class="a-btn" style="position: relative;top: 20px" href="<?=home_url('matchs/confirm/match_id/'.$match_id)?>">返回重新支付</a>
+                        <a class="a-btn" style="position: relative;top: 20px" href="<?=home_url('matchs/confirm/match_id/'.$match_id)?>"><?=__('返回重新支付', 'nlyd-student')?></a>
                     <?php } ?>
                 </div>
             <?php } ?>

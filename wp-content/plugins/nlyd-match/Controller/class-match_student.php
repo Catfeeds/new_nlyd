@@ -71,7 +71,7 @@ class Match_student {
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-报名选手</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-学员列表</h1>
 
             <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
@@ -133,6 +133,7 @@ class Match_student {
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="card" class="manage-column column-card">证件号码</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                         <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
                         <th scope="col" id="age_group" class="manage-column column-age_group">年龄组别</th>
@@ -150,7 +151,6 @@ class Match_student {
 
                     <?php foreach ($rows as $row){
                         $usermeta = get_user_meta($row['ID'], '', true);
-//                            var_dump($usermeta);
                         ?>
                         <tr id="user-<?=$row['ID']?>">
                             <th scope="row" class="check-column">
@@ -170,6 +170,7 @@ class Match_student {
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
 
                             <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
+                            <td class="name column-card" data-colname="证件号码"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span><span class="screen-reader-text">未知</span>&ensp;(<?=unserialize($usermeta['user_real_name'][0])['real_type']?>)</td>
 
                             <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
                             <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
@@ -198,6 +199,7 @@ class Match_student {
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
+                        <th scope="col" class="manage-column column-card">证件号码</th>
                         <th scope="col" class="manage-column column-sex">性别</th>
                         <th scope="col" class="manage-column column-birthday">年龄</th>
                         <th scope="col" class="manage-column column-age_group">年龄组别</th>

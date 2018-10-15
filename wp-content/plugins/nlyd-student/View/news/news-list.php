@@ -6,7 +6,7 @@
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">行业新闻</h1>
+                <h1 class="mui-title"><?=__('行业新闻', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc news-wrapper layui-row flow-default">
