@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
                 </div>
-                <div class="a-btn" id="complete">记忆完成</div>
+                <a class="a-btn"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
             </div>
         </div>           
     </div>
@@ -127,40 +127,6 @@ jQuery(function($) {
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
-                match_action:'pokerRelay',
-                match_questions:questions_answer,
-                type:'pkjl'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
-        }
-    }
-})
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',

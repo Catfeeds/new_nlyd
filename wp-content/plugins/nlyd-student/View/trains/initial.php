@@ -9,7 +9,19 @@ switch ($_GET['type']){
         include_once 'ready-pokerRelay.php';
         break;
     case 'wzsd';
-        $title = '扑克接力';
+        $title = '文章速读';
+        include_once 'ready-reading.php';
+        break;
+    case 'kysm';
+        $title = '快眼扫描';
+        include_once 'ready-reading.php';
+        break;
+    case 'zxss';
+        $title = '正向速算';
+        include_once 'ready-reading.php';
+        break;
+    case 'nxss';
+        $title = '逆向速算';
         include_once 'ready-reading.php';
         break;
 
