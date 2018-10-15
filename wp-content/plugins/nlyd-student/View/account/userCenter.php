@@ -14,8 +14,8 @@
         <img id="image" src="">
     </div>
     <div class="nl-cropper-footer">
-        <button type="button" class="pull-left" id='crop-cancel'>取消</button>
-        <button type="button" class="pull-right" id="crop">确认</button>
+        <button type="button" class="pull-left" id='crop-cancel'><?=__('取消', 'nlyd-student')?></button>
+        <button type="button" class="pull-right" id="crop"><?=__('确认', 'nlyd-student')?></button>
     </div>
 
 </div>
@@ -25,7 +25,7 @@
             <div class="userCenter-info layui-row">
                 <?php if(is_user_logged_in()): ?>
                 <!-- 消息 -->
-                <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;消息<?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
+                <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <!-- <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a> -->
                 <?php endif;?>
@@ -39,7 +39,7 @@
                     <!-- 用户名称 -->
                     <div class="userCenter-name layui-row">
                         <?php if(!is_user_logged_in()){ ?>
-                        <a class="userCenter-names c_black" href="<?=home_url('/logins')?>">未登录</a>
+                        <a class="userCenter-names c_black" href="<?=home_url('/logins')?>"><?=__('未登录', 'nlyd-student')?></a>
                         <?php }else{ ?>
                         <div class="userCenter-names login"><?=$user_info['nickname']?></div>
                         <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12  layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
@@ -57,7 +57,7 @@
                                 <?php endif;?>
                             </a>
                         <?php }else{ ?>
-                            <a class="userCenter-item c_blue" href="<?=home_url('teams')?>">加入战队</a>
+                            <a class="userCenter-item c_blue" href="<?=home_url('teams')?>"><?=__('加入战队', 'nlyd-student')?></a>
                         <?php }; ?>
                     </div>
                     <?php endif;?>
@@ -69,16 +69,16 @@
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <span class="fs_14 c_black">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
-                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span>级<?=$my_skill['mental_type']?> |
+                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?><?=$my_skill['mental_type']?> |
                         <?php endif;?>
-                        记忆<span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span>级 |
-                        速读<span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span>级 |
-                        心算<span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span>级
+                        <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
+                        <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
+                        <?=__('心算', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span><?=__('级', 'nlyd-student')?>
                     </span>
                 </div>
                 <?php }else{ ?>
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
-                    <a class="c_black6" href="<?=home_url('/logins')?>">登录后可查看认证脑力等级</a>
+                    <a class="c_black6" href="<?=home_url('/logins')?>"><?=__('登录后可查看认证脑力等级', 'nlyd-student')?></a>
                 </div>
                 <?php } ?>
                 <!-- 我的钱包 -->
@@ -93,77 +93,77 @@
                             </div>
                             
                         </div>
-                        <div class="userCenter-detail-foot">我的比赛</div>
+                        <div class="userCenter-detail-foot"><?=__('我的比赛', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a"  href="<?=home_url('/account/matchList');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的训练</div>
+                        <div class="userCenter-detail-foot"><?=__('我的训练', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a"  href="<?=home_url('/account/course');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的课程</div>
+                        <div class="userCenter-detail-foot"><?=__('我的课程', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8" href="<?=home_url('/teams/myCoach');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-coach">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的教练</div>
+                        <div class="userCenter-detail-foot"><?=__('我的教练', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的订单</div>
+                        <div class="userCenter-detail-foot"><?=__('我的订单', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的考级</div>
+                        <div class="userCenter-detail-foot"><?=__('我的考级', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a" >
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的推广</div>
+                        <div class="userCenter-detail-foot"><?=__('我的推广', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">安全中心</div>
+                        <div class="userCenter-detail-foot"><?=__('安全中心', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">其他设置</div>
+                        <div class="userCenter-detail-foot"><?=__('其他设置', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8 disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">我的钱包</div>
+                        <div class="userCenter-detail-foot"><?=__('我的钱包', 'nlyd-student')?></div>
                     </a>
                     <a class="c_black8"  href="<?=home_url('account/info');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper edit-info">
                             </div>
                         </div>
-                        <div class="userCenter-detail-foot">基本信息</div>
+                        <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                 </div>
             </div>
@@ -176,7 +176,7 @@
             <a class="mui-pull-left nl-goback">
             <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">个人中心</h1>
+            <h1 class="mui-title"><?=__('个人中心', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
 
@@ -194,8 +194,8 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             ,title: '提示' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper">是否立即进行实名认证？</div>'
-            ,btn: ['稍后认证', '立即认证', ]
+            ,content: '<div class="box-conent-wrapper"><?=__('是否立即进行实名认证？', 'nlyd-student')?></div>'
+            ,btn: ['<?=__('稍后认证', 'nlyd-student')?>', '<?=__('立即认证', 'nlyd-student')?>', ]
             ,success: function(layero, index){
                 
             }
@@ -221,8 +221,8 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
         ,title: '您当前有一个未结束的比赛' //不显示标题栏
         ,skin:'nl-box-skin'
         ,id: 'certification' //防止重复弹出
-        ,content: '<div class="box-conent-wrapper">是否继续进入比赛？</div>'
-        ,btn: ['不进入', '进入', ]
+        ,content: '<div class="box-conent-wrapper"><?=__('是否继续进入比赛？', 'nlyd-student')?></div>'
+        ,btn: ['<?=__('不进入', 'nlyd-student')?>', '<?=__('进入', 'nlyd-student')?>', ]
         ,success: function(layero, index){
             
         }

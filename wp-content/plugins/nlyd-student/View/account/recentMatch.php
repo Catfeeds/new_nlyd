@@ -13,7 +13,7 @@
                 <a class="mui-pull-left nl-goback static" onclick="window.location.href = '<?=home_url('account')?>' ">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">我的比赛</h1>
+                <h1 class="mui-title"><?=__('我的比赛', 'nlyd-student')?></h1>
             </header>
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
@@ -33,15 +33,15 @@
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">我的比赛</h1>
+                <h1 class="mui-title"><?=__('我的比赛', 'nlyd-student')?></h1>
             </header>    
                 <div class="layui-row nl-border nl-content">
                     <div class="no-info-page">
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
-                        <p class="no-info-text">您暂未参加任何比赛</p>
-                        <a class="a-btn" href="<?=home_url('/matchs');?>">看看最近比赛</a>
+                        <p class="no-info-text"><?=__('您暂未参加任何比赛', 'nlyd-student')?></p>
+                        <a class="a-btn" href="<?=home_url('/matchs');?>"><?=__('看看最近比赛', 'nlyd-student')?></a>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Application Student 项目学生端\n"
-"POT-Creation-Date: 2018-10-13 17:55+0800\n"
-"PO-Revision-Date: 2018-10-13 18:06+0800\n"
+"POT-Creation-Date: 2018-10-15 09:27+0800\n"
+"PO-Revision-Date: 2018-10-15 09:27+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -53,32 +53,62 @@ msgstr ""
 msgid "参赛须知"
 msgstr ""
 
-#: Controller/class-student-account.php:288
-msgid "是否确认设为默认地址"
+#: Controller/class-student-account.php:277
+msgid "人"
 msgstr ""
 
-#: Controller/class-student-account.php:289
-msgid "设为默认"
+#: Controller/class-student-account.php:278
+msgid "天"
 msgstr ""
 
 #: Controller/class-student-account.php:290
-msgid "默认地址"
+msgid "是否确认设为默认地址"
 msgstr ""
 
 #: Controller/class-student-account.php:291
-msgid "提示"
+msgid "设为默认"
 msgstr ""
 
 #: Controller/class-student-account.php:292
-msgid "再想想"
+msgid "默认地址"
 msgstr ""
 
 #: Controller/class-student-account.php:293
-msgid "确认"
+msgid "提示"
 msgstr ""
 
 #: Controller/class-student-account.php:294
+msgid "再想想"
+msgstr ""
+
+#: Controller/class-student-account.php:295
+msgid "确认"
+msgstr ""
+
+#: Controller/class-student-account.php:296
 msgid "是否确认删除地址"
+msgstr ""
+
+#: Controller/class-student-logins.php:74
+#: Controller/class-student-logins.php:85
+msgid "获取验证码"
+msgstr ""
+
+#: Controller/class-student-logins.php:75
+#: Controller/class-student-logins.php:86
+msgid "重新发送"
+msgstr ""
+
+#: Controller/class-student-logins.php:76
+msgid "手机快速登录"
+msgstr ""
+
+#: Controller/class-student-logins.php:77
+msgid "重置密码"
+msgstr ""
+
+#: Controller/class-student-logins.php:78
+msgid "我同意以上协议"
 msgstr ""
 
 #: nlyd-student.php:224

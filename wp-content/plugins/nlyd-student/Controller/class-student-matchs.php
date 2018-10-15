@@ -2020,6 +2020,9 @@ class Student_Matchs extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-leavePage' );
+        wp_localize_script('student-leavePage','_leavePage',[
+            'submit'=>__('离开考试页面,自动提交本轮答题','nlyd-student'),
+        ]);
         if(ACTION=='info'){//比赛详情页
             wp_register_style( 'my-student-matchDetail', student_css_url.'matchDetail.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchDetail' );
