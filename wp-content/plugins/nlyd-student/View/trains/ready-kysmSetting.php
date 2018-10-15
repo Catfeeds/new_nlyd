@@ -7,7 +7,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
 
-                闪现时间<input type="text" id="flash" name="flash_time" value="5" />秒
+                闪现时间<input type="text" id="flash" name="flash_time" value="800" />毫秒
 
                 <div class="a-btn" id="complete" href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">开始训练</div>
             </div>

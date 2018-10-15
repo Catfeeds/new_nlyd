@@ -336,6 +336,7 @@ class Student_Ajax
                 $update_arr['questions_answer'] = json_encode($questions_answer);
 
                 break;
+                break;
             case 'subjectfastScan':    //快眼扫描
             case 'subjectFastCalculation':    //正向速算
             case 'subjectFastReverse': //逆向速算
@@ -3380,9 +3381,9 @@ class Student_Ajax
                 if(!empty($data_arr)){
                     $match_questions = array_column($data_arr,'question');
                     $questions_answer = array_column($data_arr,'rights');
-                    $my_answer = array_column($data_arr,'yours');
+                    $_POST['my_answer'] = array_column($data_arr,'yours');
                 }
-                if($_POST['match_action'] == 'subjectFastReverse'){
+                if($_POST['type'] == 'nxss'){
                     $isRight = array_column($data_arr,'isRight');
                     $success_len = 0;
                     if(!empty($isRight)){
@@ -3401,6 +3402,10 @@ class Student_Ajax
                     $error_len = count(array_diff_assoc($questions_answer,$my_answer));
                     $my_score = ($len-$error_len)*10;
                 }
+
+                $_POST['train_questions'] = $match_questions;
+                $_POST['train_answer'] = $questions_answer;
+
                 break;
             case 'wzsd':
                 //if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
