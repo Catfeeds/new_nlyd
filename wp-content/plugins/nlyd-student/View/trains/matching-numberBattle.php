@@ -72,9 +72,10 @@ jQuery(function($) {
     var questions_answer=[];
     var leavePage= $.GetCookie('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
-        questions_answer=leavePage['train_questions']
+        questions_answer=leavePage['train_questions'];
+        $('.count_down').attr('data-seconds',leavePage['count_down'])
         $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number"></div>';
+            var dom=i==0 ? '<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
             $('.matching-number-zoo').append(dom)
         })
     }else{//未获取到比赛题目
@@ -127,7 +128,7 @@ jQuery(function($) {
             // }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
-                    // $.DelSession('leavePage')
+                    $.DelCookie('train_match','1')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

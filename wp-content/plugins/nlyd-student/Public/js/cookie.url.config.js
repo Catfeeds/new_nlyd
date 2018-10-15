@@ -137,10 +137,11 @@ Alert.prototype={
 				days=30
 				}
 			var result=data;
+			
 			result=typeof(result)=='object' ? JSON.stringify(result) : result;
 			result=escape(result)
 			exp.setTime(exp.getTime()+days*60*1000);
-			document.cookie=name+"="+result+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
+			document.cookie=name+"="+result+";expires="+exp.toGMTString()+";path=/"
 		},
 		/*获取cookie*/
 		GetCookie: function(name,type){
@@ -156,12 +157,23 @@ Alert.prototype={
 			}
 				
 		},
-		DelCookie: function(name){
+		DelCookie: function(name,type){
 			var exp=new Date();
 			exp.setTime(exp.getTime()-1);
-			var cval=getCookie(name);
+
+			var arr,
+				cval,
+				reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+			if(arr=document.cookie.match(reg)){
+				cval=arr[2];
+				cval=unescape(cval)
+				cval=type ? JSON.parse(cval) : cval;
+			}else{
+				cval=null
+			}
+			// var cval=type ? GetCookie(name,type) : GetCookie(name);
 			if(cval!=null)
-				document.cookie=name+"="+cval+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
+				document.cookie=name+"="+cval+";expires="+exp.toGMTString()+";path=/"
 		},
 		SetSession:function(name,data){
 			var result=data;

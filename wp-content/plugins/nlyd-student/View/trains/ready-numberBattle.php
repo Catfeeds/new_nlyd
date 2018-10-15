@@ -38,7 +38,6 @@
 </div>
 <script>
 jQuery(function($) { 
-    // $.DelCookie('train_match')
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
 
@@ -53,12 +52,13 @@ jQuery(function($) {
             questions_answer=xx.sort(function() {
                 return .5 - Math.random();
             });
-            var sessionData={//存储session
-                train_questions:questions_answer,
-                genre_id:$.Request('genre_id'),
-                type:'szzb',
-            }
-            $.SetCookie('train_match',sessionData)
+            // var sessionData={//存储session
+            //     train_questions:questions_answer,
+            //     genre_id:$.Request('genre_id'),
+            //     type:'szzb',
+            //     count_down:$('.count_down').attr('data-seconds')
+            // }
+            // $.SetCookie('train_match',sessionData)
         }
 
         $.each(questions_answer,function(i,v){
@@ -66,17 +66,17 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     })
-// new AlloyFinger($('#complete')[0], {//记忆完成
-//     tap:function(){
-//         var _this=$(this);
-//         var sessionData={
-//             train_questions:questions_answer,
-//             genre_id:$.Request('genre_id'),
-//             type:'szzb',
-//         }
-//         $.SetCookie('train_match',sessionData)
-//     }
-// })
+new AlloyFinger($('#complete')[0], {//记忆完成
+    tap:function(){
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'szzb',
+            count_down:$('.count_down').attr('data-seconds')
+        }
+        $.SetCookie('train_match',sessionData,0)
+    }
+})
     function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
@@ -98,7 +98,7 @@ jQuery(function($) {
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                $.DelCookie('train_match')
+                $.DelCookie('train_match','1')
                 if(res.success){
                     if(res.data.url){
                         setTimeout(function(){
