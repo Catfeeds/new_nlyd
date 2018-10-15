@@ -454,11 +454,15 @@ class Student_Matchs extends Student_Home
             $this->get_404('参数错误');
             return;
         }
-        $row = get_post($_GET['project_id']);
-
+//        $row = get_post($_GET['project_id']);
+        $project_alias = get_post_meta($_GET['project_id'],'project_alias', true);
         $data = array(
-            'post_content'=>$row->post_content,
+//            'post_content'=>$row->post_content,
+            'project_alias'=>$project_alias,
         );
+
+
+
         $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view,$data);
     }

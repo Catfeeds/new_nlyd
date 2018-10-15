@@ -9,18 +9,18 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font"> 第<span id="total">0</span>题</span>
+                        <span class="c_black match_info_font"><?=$project_title?><?=__('第', 'nlyd-student')?><?=$match_more_cn?><?=__('轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"> <?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
                     <p class="count_p fs_14">
-                        <span class="c_black">请用完给出的4个数字，并利用运算符号使运算结果等于24！</span>
+                        <span class="c_black"><?=__('请用完给出的4个数字，并利用运算符号使运算结果等于24！', 'nlyd-student')?></span>
                         <br>
-                        <span>*若您跳过此题不作答，则扣掉2秒时间</span>
+                        <span>*<?=__('若您跳过此题不作答，则扣掉2秒时间', 'nlyd-student')?></span>
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
@@ -45,9 +45,9 @@
                             <div class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key c_white fs_16" id="del">删除</div>
+                            <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
                             <!-- <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a> -->
-                            <div class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
+                            <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
                 </div> 
@@ -165,7 +165,7 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
      function count_down(){
@@ -176,7 +176,7 @@ jQuery(function($) {
                 var hour = Math.floor((sys_second / 3600) % 24);
                 var minute = Math.floor((sys_second / 60) % 60);
                 var second = Math.floor(sys_second % 60);
-                day=day>0?day+'天':'';
+                day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
                 hour= hour<10?"0"+hour:hour;//计算小时
                 minute= minute<10?"0"+minute:minute;//计算分钟
                 second= second<10?"0"+second:second;//计算秒
@@ -441,7 +441,7 @@ new AlloyFinger($('#next')[0], {
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
                         _this.removeClass('disabled')
-                        $.alerts('网络超时')
+                        $.alerts('<?=__('网络超时', 'nlyd-student')?>')
                         initQuestion()
                         nextQuestion()
                     }
@@ -462,7 +462,7 @@ new AlloyFinger($('#next')[0], {
                     ,title: '提示' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                    ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
                     ,btn: ['按错了','提交',  ]
                     ,success: function(layero, index){
                     }

@@ -11,44 +11,44 @@
                         <?php if($current_project['time_type'] != 'end'):?>
                         <div class="match_tips">
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue">即将进行：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?>第<?=$next_more_num?>轮
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?><?=__('第', 'nlyd-student')?><?=$next_more_num?><?=__('轮', 'nlyd-student')?>
                             </p>
                         </div>
                         <?php endif;?>
                         <?php if($answer_status == 1): ?>
                         <p class="fs_12 ta_c bottom_tips c_black">
-                            您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛
+                            <?=__('您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛', 'nlyd-student')?>
                         </p>
                         <?php endif;?>
                         <?php if((empty($answer_status) || $answer_status == -1) && empty($current_project['match_type'])): ?>
                         <?php
                             if(isset($current_project['time_type']) && $current_project['time_type'] == 'end' && empty($next_project)){
-                                $text = '本轮结束后查看答题详情';
+                                $text = __('本轮结束后查看答题详情', 'nlyd-student');
                             }else{
-                                $text = '下一轮开赛';
+                                $text = __('下一轮开赛', 'nlyd-student');
                             }
                         ?>
                         <p class="fs_12 ta_c bottom_tips c_black">
-                            <?=$current_project['project_title']?>第<?=$current_project['match_more']?>轮已开赛，禁止进入比赛，您可等待<?=$text?>
+                            <?=$current_project['project_title']?><?=__('第', 'nlyd-student')?><?=$current_project['match_more']?><?=__('轮已开赛，禁止进入比赛，您可等待', 'nlyd-student')?><?=$text?>
                         </p>
                         <?php endif;?>
                         <?php if($count_down > 0 ){ ?>
                             <div class="wait">
                                 <div class="inner">
-                                    <p>倒计时</p>
-                                    <p class="count_down" data-seconds="<?=$count_down?>">初始中...</p>
+                                    <p><?=__('倒计时', 'nlyd-student')?></p>
+                                    <p class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</p>
                                 </div>
                             </div>
                         <?php }
                         if($buffer_time){
                         ?>
                             <a class="a-btn back" href="<?=$buffer_url?>">
-                                进入比赛
+                                <?=__('进入比赛', 'nlyd-student')?>
                             </a>
                         <?php }?>
                         <div class="match_tips">
-                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> 比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。</p>
-                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> 比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。</p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。', 'nlyd-student')?></p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。', 'nlyd-student')?></p>
                         </div>
                     </div>
                 <?php //}else{ ?>
@@ -99,7 +99,7 @@
             window.location.href="<?=$match_url?>"
         }
         $('.count_down').countdown(function(S, d){//倒计时
-            var D=d.day>0 ? d.day+'天' : '';
+            var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
             var h=d.hour<10 ? '0'+d.hour : d.hour;
             var m=d.minute<10 ? '0'+d.minute : d.minute;
             var s=d.second<10 ? '0'+d.second : d.second;

@@ -10,8 +10,8 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_black match_info_font"><?=$project_title?><?=__('第', 'nlyd-student')?><?=$match_more_cn?><?=__('轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn" id="complete">阅读完成</div>
+                <div class="a-btn" id="complete"><?=__('阅读完成', 'nlyd-student')?></div>
             </div>
         </div>
     </div>
@@ -124,7 +124,7 @@ new AlloyFinger($('#complete')[0], {
         })
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
+        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
             submit(0,3)
         }, 1000);
@@ -138,9 +138,9 @@ new AlloyFinger($('#complete')[0], {
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
                 submit(0,3)
