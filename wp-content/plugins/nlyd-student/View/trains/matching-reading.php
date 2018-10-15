@@ -70,10 +70,12 @@ jQuery(function($) {
 
     })
     var questions_answer=[];
+    var match_questions=[];
     var leavePage= $.GetCookie('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
-        console.log(leavePage)
         $('.count_down').attr('data-seconds',leavePage['count_down'])
+        questions_answer=leavePage['questions_answer']
+        match_questions=leavePage['match_questions']
     }else{//未获取到比赛题目
         $.alerts('未检测到题目信息')
     }
@@ -109,6 +111,8 @@ jQuery(function($) {
             project_type:'wzsd',
             train_questions:$.Request('post_id'),
             train_answer:$.Request('post_id'),
+            questions_answer:questions_answer,
+            match_questions:match_questions,
             my_answer:my_answer,
             surplus_time:time,
         }
