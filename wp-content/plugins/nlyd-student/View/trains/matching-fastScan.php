@@ -56,9 +56,9 @@ jQuery(function($) {
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
-    _count_time=<?=$child_count_down?>+1,//初始答题时间,会变化
+    _count_time=6,//初始答题时间,会变化
     fetchPage_time=0;
-    getAjaxTime=<?=$child_count_down?>+1;//程序获取时间
+    getAjaxTime=6;//程序获取时间
     showTime=function(){ 
         fetchPage_time=getAjaxTime
         // if(!stop){
