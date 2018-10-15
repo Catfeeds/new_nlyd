@@ -3420,12 +3420,12 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
-
+        //var_dump($insert);die;
         $sql = "select id from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} order by created_time asc ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = count($rows);
 
-        if($total > 100){
+        if($total > 99){
             $result = $wpdb->update($wpdb->prefix.'user_train_logs',$insert,array('id'=>$rows[0]['id']));
             $id = $rows[0]['id'];
         }else{
@@ -3437,7 +3437,7 @@ class Student_Ajax
             if($_POST['project_type'] == 'wzsd'){
 
             }
-            wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
+            wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'])));
         }else{
             wp_send_json_error(array('info'=>'提交失败'));
         }
