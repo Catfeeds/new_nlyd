@@ -39,7 +39,7 @@
                             <!-- 更换手机号 -->
                             <input type="hidden" name="save_type" value="mobile">
                             <input type="hidden" name="step" value="one">
-                            <p class="c_blue" style="margin-bottom:0"><?=__('更换后可使用新手机号登陆，当前手机号13982242710', 'nlyd-student')?></p>
+                            <p class="c_blue" style="margin-bottom:0"><?=printf(__('更换后可使用新手机号登陆，当前手机号%s', 'nlyd-student'), $user_info['user_mobile'])?></p>
                             <div class="form-input-row">
                                 <div class="form-input-label"><?=__('手机号码', 'nlyd-student')?></div>
                                 <div class="nl-input"><?=$user_info['contact']?></div>
@@ -72,7 +72,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><?=__('邮箱地址', 'nlyd-student')?></div>
                                 <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="<?=__('邮箱地址', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="email">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16">发送验证码</a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><?=__('发送验证码', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><?=__('验证码', 'nlyd-student')?></div>

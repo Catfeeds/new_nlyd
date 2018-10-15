@@ -60,7 +60,7 @@
                 </div> 
 
                 <div class="layui-tab-item">
-                    <p class="ta_c">请使用已有账号密码登录</p>
+                    <p class="ta_c"><?=__('请使用已有账号密码登录', 'nlyd-student')?></p>
                     <form class="layui-form" action="" id='loginPwdForm' lay-filter='loginPwdForm'>
                         <!-- 使用密码登录 -->
                         <div class="layui-form-item">

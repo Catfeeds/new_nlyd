@@ -19,19 +19,19 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('开户姓名', 'nlyd-student')?></div>
-                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户姓名">
+                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="<?=__('开户姓名', 'nlyd-student')?>">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('开户行', 'nlyd-student')?></div>
-                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户行">
+                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="<?=__('开户行', 'nlyd-student')?>">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('开户账号', 'nlyd-student')?></div>
-                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户账号">
+                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="<?=__('开户账号', 'nlyd-student')?>">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('银行预留手机号', 'nlyd-student')?></div>
-                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="预留手机号">
+                            <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="<?=__('预留手机号', 'nlyd-student')?>">
                         </div>
                     </div>
                     <a class="a-btn" lay-filter="addAccount" lay-submit=""><?=__('保存', 'nlyd-student')?></a>

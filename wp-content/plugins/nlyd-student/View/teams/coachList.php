@@ -163,7 +163,7 @@ layui.use(['element','flow','layer','form'], function(){
                     var content=""
                     if(hasMajor){
                         content='<div class="box-conent-wrapper"><?=__('是否确认向', 'nlyd-student')?>“'+coach_name+'”<?=__('发送教练申请', 'nlyd-student')?>？</div>'
-                                +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> 同时设为'+type+'主训教练</div>'
+                                +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> <?=__('同时设为', 'nlyd-student')?>'+type+'<?=__('主训教练', 'nlyd-student')?></div>'
                     }else{
                         content='<div class="box-conent-wrapper"><?=__('是否确认向', 'nlyd-student')?>“'+coach_name+'”<?=__('发送教练申请', 'nlyd-student')?>？</div>'
                     }
@@ -292,11 +292,11 @@ layui.use(['element','flow','layer','form'], function(){
                                     layer.open({
                                         type: 1
                                         ,maxWidth:300
-                                        ,title: '更换主训教练' //不显示标题栏
+                                        ,title: '<?=__('更换主训教练', 'nlyd-student')?>' //不显示标题栏
                                         ,skin:'nl-box-skin'
                                         ,id: 'certification' //防止重复弹出
                                         ,content: '<div class="box-conent-wrapper"><?=__('你已设置', 'nlyd-student')?>“'+type+'”<?=__('主训教练是否确认更换', 'nlyd-student')?>？</div>'
-                                        ,btn: ['再想想', '确认', ]
+                                        ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
                                         ,cancel:function(){
                                             _this.removeClass('opacity')
                                         }
@@ -328,7 +328,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                                     var this_coach_name=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachName')
                                                                     var this_coach_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-coachId')
                                                                     var this_category_id=__this.parents('.coach-row').find('.left_c .ta_l').attr('data-categoryId')
-                                                                    var coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_blue" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'">设为主训教练</button></div>';
+                                                                    var coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn text_1  bg_gradient_orange setCoach c_blue" data-coachName="'+this_coach_name+'" data-coachId="'+this_coach_id+'" data-categoryId="'+this_category_id+'"><?=__('设为主训教练', 'nlyd-student')?></button></div>';
                                                                     __this.removeClass('c_orange').addClass('c_blue')
                                                                     __this.children('.nl-badge').removeClass('bg_gradient_orange').addClass('bg_gradient_blue')
                                                                     __this.parents('.coach-row').find('.left_c .ta_l').text('<?=__('解除教学关系', 'nlyd-student')?>').removeClass('clearMain').addClass('clearCoach')
@@ -557,7 +557,7 @@ layui.use(['element','flow','layer','form'], function(){
                                         post_title=value.post_title
                                         if(v.apply_status==1){//1，申请中
                                             if(value.category_id==category_id){//当前类目教练
-                                                post_title='<span style="color:#FF2300">审核中···</span>'
+                                                post_title='<span style="color:#FF2300"><?=__('审核中', 'nlyd-student')?>···</span>'
                                             }   
                                         }
                                         var categoryBtnDom='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 '+is_current+'">'+metal+' '+post_title+'</div>'
