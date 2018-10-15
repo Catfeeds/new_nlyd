@@ -105,8 +105,10 @@ class Student_Trains extends Student_Home
      */
     public function initial(){
 
+
         if(empty($_GET['type'])) $this->get_404('参数错误');
-        global $wpdb;
+        global $wpdb,$current_user;
+        $post_id = '';
         switch ($_GET['type']){
             case 'wzsd':
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
@@ -117,28 +119,57 @@ class Student_Trains extends Student_Home
                 if(empty($rows)) $this->get_404('测试题库暂无文章,请联系管理员添加');
 
                 $posts_arr = array_column($rows,'object_id');
-                print_r($posts_arr);
+                //print_r($posts_arr);
+
+                //获取已训练文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+                if(!empty($post_str)){
+                    $post_arr = str2arr($post_str,',');
+
+                    $result = array_diff($posts_arr,$post_arr);
+
+                }else{
+                    $result = $posts_arr;
+                }
+                $post_id = end($result);
 
                 //获取题目
-                $posts = get_posts(array(
-                        'numberposts' => 1, //输出的文章数量
-                        'post_type' => 'question',  //自定义文章类型名称
-                        'orderby'=>'rand', //post_date rand
-                        'tax_query'=>array(
-                            array(
-                                'taxonomy'=>'question_genre', //自定义分类法名称
-                                'field'  =>  'slug',
-                                'terms'=>'test-question' //id为64的分类。也可是多个分类array(12,64)
-                            )
-                        ),
-                    )
-                );
-
+                $content = get_post($post_id );
+                //print_r($content);
+                $count_down = 900;
+                break;
+            case 'szzb':
+                $count_down = 1200;
+                var_dump($_COOKIE['train_match']);
+                break;
+            case 'kysm':
+                $count_down = 600;
+                break;
+            case 'pkjl':
+                $count_down = 900;
+                break;
+            case 'zxss':
+                $count_down = 540;
+                break;
+            case 'nxss':
+                $count_down = 600;
+                break;
+            default:
+                $this->get_404('没有该比赛项目');
                 break;
         }
 
+        $data = array(
+            'content'=>$content,
+            'count_down'=>$count_down,
+            'url'=>home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type']),
+        );
+        if(!empty($post_id)) $data['url'] .= '/post_id/'.$post_id;
+
         $view = student_view_path.CONTROLLER.'/initial.php';
-        load_view_template($view);
+        load_view_template($view,$data);
 
     }
 
@@ -146,7 +177,36 @@ class Student_Trains extends Student_Home
      * 答题页面
      */
     public function answer(){
+        global $wpdb;
+        switch ($_GET['type']){
+            case 'wzsd':
+                if(empty($_GET['post_id'])) $this->get_404('参数错误');
+                //获取比赛题目
+                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
 
+                $rows = $wpdb->get_results($sql1,ARRAY_A);
+                $questions_answer = array();
+                $match_questions = array();
+                if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
+                    foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
+                        $key = &$val['ID'];
+                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
+                    }
+                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
+                }
+                //print_r($questions_answer);
+                //print_r($match_questions);
+                break;
+        }
+        //var_dump($_COOKIE);
         $view = student_view_path.CONTROLLER.'/answer.php';
         load_view_template($view);
     }

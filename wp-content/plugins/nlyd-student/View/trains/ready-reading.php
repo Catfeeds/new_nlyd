@@ -4,13 +4,13 @@
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black match_info_font">第一轮</span>
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -20,11 +20,11 @@
                     <div class="matching-reading">
                         <div class="Glass"></div>
                         <div class="article-title fs_16 c_black"><?=$questions->post_title?></div>
-                        <?=$questions->post_content?>
+                        <?=$content->post_content?>
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <a class="a-btn"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">阅读完成</a>
+                <a class="a-btn"  href="<?=$url?>">阅读完成</a>
             </div>
         </div>
     </div>
