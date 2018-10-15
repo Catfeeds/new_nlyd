@@ -249,8 +249,8 @@ class Student_Trains extends Student_Home
                     }
                     $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
-                $data['questions_answer'] = $questions_answer;
-                $data['match_questions'] = $match_questions;
+                /*$data['questions_answer'] = $questions_answer;
+                $data['match_questions'] = $match_questions;*/
                 //print_r($questions_answer);
                 //print_r($match_questions);
                 break;
