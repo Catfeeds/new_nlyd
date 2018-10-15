@@ -139,8 +139,10 @@ class Student_Trains extends Student_Home
                 $post_str = $wpdb->get_var($sql1);
                 if(!empty($post_str)){
                     $post_arr = str2arr($post_str,',');
+                    //print_r($posts_arr);
 
                     $result = array_diff($posts_arr,$post_arr);
+                    //print_r($result);
 
                 }else{
                     $result = $posts_arr;
@@ -348,7 +350,6 @@ class Student_Trains extends Student_Home
             $answer = $questions_answer;
 
             $answer_array = $answer['result'];
-            $questions_answer = $answer['examples'];
             //print_r($answer_array);
             //print_r($questions_answer);die;
 
