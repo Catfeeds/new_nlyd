@@ -109,9 +109,9 @@ switch ($type){
                             break;
                     }
                     ?>
+                    <a href="<?=$recur_url?>">再来一局</a>
+                    <a href="<?=$revert_url?>">返回列表</a>
                 </div>
-                <a href="<?=$recur_url?>">再来一局</a>
-                <a href="<?=$revert_url?>">返回列表</a>
             </div>
         </div>
     </div>
