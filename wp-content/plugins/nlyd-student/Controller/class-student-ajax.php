@@ -3376,6 +3376,7 @@ class Student_Ajax
             case 'zxss':
             case 'nxss':
 
+
                 $data_arr = $_POST['my_answer'];
 
                 if(!empty($data_arr)){
@@ -3399,7 +3400,7 @@ class Student_Ajax
                 }else{
 
                     $len = count($match_questions);
-                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
                     $my_score = ($len-$error_len)*10;
                 }
 

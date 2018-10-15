@@ -346,6 +346,7 @@ class Student_Trains extends Student_Home
         elseif ($row['project_type'] == 'nxss'){
 
             $answer = $questions_answer;
+
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
             //print_r($answer_array);
