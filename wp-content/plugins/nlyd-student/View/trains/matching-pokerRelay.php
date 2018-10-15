@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><?=$title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
+                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -36,7 +36,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                        <div class="choose-color <?= $k==$list_keys[0] ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                        <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
                         <?php } ?>
                     </div>
 
@@ -44,7 +44,7 @@
                         <div class="choose-zoo">
                             <div class="choose-window">
                                 <?php foreach ($list as $k => $v){ ?>
-                                <div class="choose-wrapper <?= $k==$list_keys[0]?'active':''?> <?=$k?>">
+                                <div class="choose-wrapper <?= $k=='spade'?'active':''?> <?=$k?>">
                                     <?php foreach ($v['content'] as $val){ ?>
                                     <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
                                         <div class="small poker-detail poker-top">

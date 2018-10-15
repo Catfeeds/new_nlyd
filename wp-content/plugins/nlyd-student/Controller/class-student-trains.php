@@ -192,6 +192,7 @@ class Student_Trains extends Student_Home
     public function answer(){
         global $wpdb;
 
+
         switch ($_GET['type']){
             case 'wzsd':
                 if(empty($_GET['post_id'])){
@@ -223,10 +224,41 @@ class Student_Trains extends Student_Home
                 //print_r($questions_answer);
                 //print_r($match_questions);
                 break;
+            case 'pkjl':
+                $kinds=array(
+                    "spade"=>array(
+                        'content'=>[],
+                        'color'=>636,
+                    ),
+                    "heart"=>array(
+                        'content'=>[],
+                        'color'=>638,
+                    ),
+                    "club"=>array(
+                        'content'=>[],
+                        'color'=>635,
+                    ),
+                    "diamond"=>array(
+                        'content'=>[],
+                        'color'=>634,
+                    ),
+                );
+                //kind数组盛放的是花型
+                $nums=array("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" );//52张牌对应的数字
+
+                foreach ($kinds as $k => $val){
+                    foreach ($nums as $v){
+                        $kinds[$k]['content'][] = $v;
+                    }
+                }
+                break;
+            default:
+                break;
         }
+        $data['list'] = $kinds;
         //var_dump($_COOKIE);
         $view = student_view_path.CONTROLLER.'/answer.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     /**
@@ -437,6 +469,7 @@ class Student_Trains extends Student_Home
             }
 
             if($_GET['type']=='pkjl'){//扑克接力
+
                 wp_register_style( 'my-student-pokerRelay', student_css_url.'matching-pokerRelay.css',array('my-student') );
                 wp_enqueue_style( 'my-student-pokerRelay' );
             }
