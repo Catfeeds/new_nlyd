@@ -397,6 +397,7 @@ new AlloyFinger($('#next')[0], {
                 }, 300);
             }
         }
+        console.log(ajaxData)
     }
 });
     layui.use('layer', function(){
