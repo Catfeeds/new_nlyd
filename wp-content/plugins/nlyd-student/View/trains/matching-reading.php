@@ -23,7 +23,6 @@
                             if(!empty($match_questions)){
                                 foreach ($match_questions as $k => $val ){
 
-                                    //var_dump($questions_answer[$k]['problem_answer']);
                                     $arr = array_count_values($questions_answer[$k]['problem_answer']);
                                     $checkbox = $arr[1] > 1 ? true : false;
                             ?>
@@ -36,10 +35,8 @@
 
                                  <div class="reading-select">
                                     <?php if($checkbox){ ?>
-                                    <!-- 多选 -->
                                     <input type="checkbox" name='<?=$y?>' class="select_answer" data-name="<?=$y?>" lay-skin="primary">
                                     <?php }else{ ?>
-                                    <!-- 单选 -->
                                     <input type="radio" name="<?=$key?>" class="select_answer" data-name="<?=$y?>" value="<?=$v;?>">
                                     <?php }?>
                                     <span><?=get_select($y)?>、<?=$v;?></span>
@@ -66,19 +63,35 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    layui.use(['form'], function(){
-
-    })
     var questions_answer=[];
-    var match_questions=[];
-    var leavePage= $.GetCookie('train_match','1');
-    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
-        $('.count_down').attr('data-seconds',leavePage['count_down'])
-        questions_answer=leavePage['questions_answer']
-        match_questions=leavePage['match_questions']
-    }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
-    }
+        var match_questions=[];
+        var checkIndex=['A','B','C','D','E','F','G']
+        var leavePage= $.GetCookie('train_match','1');
+        if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
+            $('.count_down').attr('data-seconds',leavePage['count_down'])
+            questions_answer=leavePage['questions_answer']
+            match_questions=leavePage['match_questions']
+            // var z=0
+            // $.each(questions_answer,function(i,v){
+            //     z++
+            //     var select=''
+            //     $.each(v.problem_select,function(index,value){
+            //         select+='<div class="reading-select"><input type="radio" name="'+i+'" class="select_answer" data-name="'+value+'" value="'+value+'"><span>'+checkIndex[index]+'、'+value+'</span></div>'
+            //     })
+                
+            //     var index0=z==1 ? 'active' : '';
+            //     var matching_reading='<div class="matching-reading '+index0+'" data-index="'+z+'" data-id="'+i+'">'
+            //         +'<p class="c_black">'+z+'、'+match_questions[i]+'</p>'
+            //         +select
+            //     +'</div>'
+            //     $('.reading-question').append(matching_reading)
+            // })
+        }else{//未获取到比赛题目
+            $.alerts('未检测到题目信息')
+        }
+    layui.use(['form'], function(){
+        var form = layui.form
+    })
     function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
@@ -272,6 +285,7 @@ jQuery(function($) {
         tap:function(){
             var right=$('.a-two.right');
             var len=$('.matching-reading').length-1;
+            
             if(!right.hasClass('disabled')){
                 if(n<len){
                     n++
