@@ -11,47 +11,47 @@
             <a class="mui-pull-left nl-goback static" onclick='window.location.href = "<?=home_url('account')?>"'>
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">安全设置</h1>
+            <h1 class="mui-title"><?=__('安全设置', 'nlyd-student')?></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
                     <div class="nl-page-form width-margin-pc ">
                         <div class="form-inputs">
                             <div class="form-input-row">
-                                <div class="form-input-label">登陆密码</div>
+                                <div class="form-input-label"><?=__('登陆密码', 'nlyd-student')?></div>
                                 <div class="nl-input">**********</div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/pass')?>">修改</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/pass')?>"><?=__('修改', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label">绑定手机</div>
+                                <div class="form-input-label"><?=__('绑定手机', 'nlyd-student')?></div>
                                 <?php if(!empty($user_info['user_mobile'])){?>
                                 <div class="nl-input"><?=hideStar($user_info['user_mobile'])?></div>
-                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>">修改</a>
+                                <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php }else{ ?>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>">去设置</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><?=__('去设置', 'nlyd-student')?></a>
                                 <?php } ?>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label">绑定邮箱</div>
+                                <div class="form-input-label"><?=__('绑定邮箱', 'nlyd-student')?></div>
                                 <?php if(!empty($user_info['user_email'])){?>
                                     <div class="nl-input"><?=hideStar($user_info['user_email'])?></div>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>">修改</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php }else{ ?>
-                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>">去设置</a>
+                                    <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><?=__('去设置', 'nlyd-student')?></a>
                                 <?php } ?>
                             </div>
                             <?php if(!empty($user_info['weChat_openid'])){ ?>
                             <div class="form-input-row">
-                                <div class="form-input-label">绑定微信</div>
+                                <div class="form-input-label"><?=__('绑定微信', 'nlyd-student')?></div>
                                 <div class="nl-input">*******</div>
-                                <span class="form-input-right c_blue clear" data-type="weChat">解绑</span>
+                                <span class="form-input-right c_blue clear" data-type="weChat"><?=__('解绑', 'nlyd-student')?></span>
                             </div>
                             <?php } ?>
                             <?php if(!empty($user_info['qq_union_id'])){ ?>
                             <div class="form-input-row">
-                                <div class="form-input-label">绑定QQ</div>
+                                <div class="form-input-label"><?=__('绑定QQ', 'nlyd-student')?></div>
                                 <div class="nl-input">*******</div>
-                                <span class="form-input-right c_blue clear" data-type="qq">解绑</span>
+                                <span class="form-input-right c_blue clear" data-type="qq"><?=__('解绑', 'nlyd-student')?></span>
                             </div>
                             <?php } ?>
                         </div>

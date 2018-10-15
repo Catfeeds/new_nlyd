@@ -11,7 +11,7 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">消息详情</h1>
+            <h1 class="mui-title"> <?=__('消息详情', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="message-row">

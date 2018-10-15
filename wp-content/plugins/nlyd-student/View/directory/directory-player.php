@@ -15,7 +15,7 @@
                 <div class="item-wrapper">
                     <div class="center-detail">
                         <div class="system-font">
-                            <p>脑力健将名录</p>
+                            <p><?=__('脑力健将名录', 'nlyd-student')?></p>
                             <p>BRAIN POWER</p> 
                         </div>
                     </div>
@@ -27,14 +27,14 @@
                         <table class="nl-table" >
                             <thead>
                                 <tr>
-                                    <td><div class="table_content">头像</div></td>
-                                    <td><div class="table_content">学员姓名</div></td>
-                                    <td><div class="table_content">ID</div></td>
-                                    <td><div class="table_content">性 别</div></td>
-                                    <td><div class="table_content">类&nbsp;&nbsp;&nbsp;&nbsp;别</div></td>
-                                    <td><div class="table_content">级 别</div></td>
-                                    <td><div class="table_content">主训教练 </div></td>
-                                    <td><div class="table_content">国 籍</div></td>
+                                    <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('ID', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('类&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('级 别', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"> <?=__('主训教练', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('国 籍', 'nlyd-student')?></div></td>
                                 </tr>
                             </thead>
                             <tbody id="flow-table">

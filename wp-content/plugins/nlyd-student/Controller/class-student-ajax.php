@@ -3372,14 +3372,38 @@ class Student_Ajax
 
                 break;
             case 'kysm':
+            case 'zxss':
+            case 'nxss':
+
+                $data_arr = $_POST['my_answer'];
+
+                if(!empty($data_arr)){
+                    $match_questions = array_column($data_arr,'question');
+                    $questions_answer = array_column($data_arr,'rights');
+                    $my_answer = array_column($data_arr,'yours');
+                }
+                if($_POST['match_action'] == 'subjectFastReverse'){
+                    $isRight = array_column($data_arr,'isRight');
+                    $success_len = 0;
+                    if(!empty($isRight)){
+                        $count_value = array_count_values($isRight);
+                        $success_len += $count_value['true'];
+                    }
+                    $answer['examples'] = $questions_answer;
+                    $answer['result'] = $isRight;
+                    $questions_answer = $answer;
+
+                    $my_score = $success_len * 10;
+
+                }else{
+
+                    $len = count($match_questions);
+                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $my_score = ($len-$error_len)*10;
+                }
                 break;
             case 'wzsd':
-                break;
-            case 'pkjl':
-                break;
-            case 'zxss':
-                break;
-            case 'nxss':
+
                 break;
             default:
                 break;
@@ -3399,6 +3423,9 @@ class Student_Ajax
         $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
         $id = $wpdb->insert_id;
         if($result){
+            if($_POST['project_type'] == 'wasd'){
+
+            }
             wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
         }else{
             wp_send_json_error(array('info'=>'提交失败'));

@@ -47,9 +47,76 @@
         </div>           
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputComplete" value="<?=wp_create_nonce('student_memory_complete_code_nonce');?>">
-<input type="hidden" name="match_more" id="inputMatchMore" value="<?=isset($_GET['match_more']) ? $_GET['match_more'] : 1;?>"/>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
+
+<div class="layui-fluid noCopy">
+    <div class="layui-row">
+        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+            <header class="mui-bar mui-bar-nav">
+                <h1 class="mui-title"><?=$match_title?></h1>
+            </header>
+            <div class="layui-row nl-border nl-content">
+                <div class="remember width-margin width-margin-pc">
+                    <div class="matching-row">
+                        <span class="c_black match_info_font"><?=$project_title?>第一轮</span>
+                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_blue ml_10 match_info_font">
+                            <i class="iconfont">&#xe685;</i>
+                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                        </span>
+                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                    </div>
+                    <div class="matching-row">
+                        <div class="matching-row-label">辅助操作</div>
+                        <div class="matching-row-list">
+                            <div class="matching-btn" id="prev">前移1位</div>
+                            <div class="matching-btn" id="next">后移1位</div>
+                            <div class="matching-btn" id="del">删 除</div>
+                        </div>
+                    </div>
+                    <div class="matching-number-zoo">
+                        <div class="porker-zoo">
+                            <div class="poker-window">
+                                <div class="poker-wrapper">
+                                    <!-- 扑克区域 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="porker-color">
+                        <?php foreach ($list as $k => $v){ ?>
+                            <div class="choose-color <?= $k==$list_keys[0] ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                        <?php } ?>
+                    </div>
+
+                    <div class="porker-choose-zoo">
+                        <div class="choose-zoo">
+                            <div class="choose-window">
+                                <?php foreach ($list as $k => $v){ ?>
+                                    <div class="choose-wrapper <?= $k==$list_keys[0]?'active':''?> <?=$k?>">
+                                        <?php foreach ($v['content'] as $val){ ?>
+                                            <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
+                                                <div class="small poker-detail poker-top">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                                <div class="small poker-detail poker-bottom">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 jQuery(function($) { 
     leaveMatchPage(function(){//窗口失焦提交

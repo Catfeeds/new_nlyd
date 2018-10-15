@@ -15,7 +15,7 @@
                 <div class="item-wrapper">
                     <div class="center-detail">
                         <div class="system-font">
-                            <p>脑力战队名录</p>
+                            <p><?=__('脑力战队名录', 'nlyd-student')?></p>
                             <p>BRAIN TEAM</p> 
                         </div>
                     </div>
@@ -27,10 +27,10 @@
                         <table class="nl-table">
                             <thead>
                                 <tr>
-                                    <td>战队名称</td>
-                                    <td>战队负责人</td>
-                                    <td>战队口号</td>
-                                    <td>战队成员</td>
+                                    <td><?=__('战队名称', 'nlyd-student')?></td>
+                                    <td><?=__('战队负责人', 'nlyd-student')?></td>
+                                    <td><?=__('战队口号', 'nlyd-student')?></td>
+                                    <td><?=__('战队成员', 'nlyd-student')?></td>
                                 </tr>
                             </thead>
                             <tbody id="flow-table">

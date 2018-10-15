@@ -18,7 +18,7 @@
 
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">报名信息确认</h1>
+        <h1 class="mui-title"><?=__('报名信息确认', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <form id="pay-form" class="layui-form width-margin width-margin-pc" action="" >
@@ -30,20 +30,20 @@
                             </div>
                             <div class="nl-match-body ">
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label">开赛日期：</div>
+                                    <div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>：</div>
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$match['match_start_time']?></span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label">开赛地点：</div>
+                                    <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>：</div>
                                     <!-- <span >开赛地点：</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$match['match_address']?></span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label">报名费用：</div>
+                                    <div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>：</div>
                                     <!-- <span >报名费用：</span> -->
                                     <div class="nl-match-info">
                                         <input class="c_black" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
@@ -55,7 +55,7 @@
                         <?php if(!empty($match_project)): ?>
                         <li class="nl-match">
                             <div class="nl-match-header ">
-                                <span class="fs_16 c_blue">参赛项目</span>
+                                <span class="fs_16 c_blue"><?=__('参赛项目', 'nlyd-student')?></span>
                             </div>
                             <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
@@ -74,12 +74,12 @@
                                             ?>
                                             &nbsp;&nbsp;&nbsp;
                                         </span>
-                                        <span class="nl-see-link">主训教练：</span>
+                                        <span class="nl-see-link"><?=__('主训教练', 'nlyd-student')?>：</span>
                                         <?php if(isset($val['major_coach']) && isset($val['coach_id'])){ ?>
                                         <input type="hidden" name="major_coach[]" value="<?=$val['coach_id']?>"/>
                                         <?=$val['major_coach']?>
                                         <?php }else{ ?>
-                                            <a href="<?=home_url('/teams/myCoach/match_id/'.$_GET['match_id']).'/category_id/'.$k;?>" class="nl-see-link">去设置</a>
+                                            <a href="<?=home_url('/teams/myCoach/match_id/'.$_GET['match_id']).'/category_id/'.$k;?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
                                         <?php } ?>
                                         </div>
                                 </div>
@@ -90,23 +90,23 @@
                         <!-- 选手信息 -->
                         <li class="nl-match">
                             <div class="nl-match-header ">
-                                <span class="fs_16 c_blue">选手信息</span>
+                                <span class="fs_16 c_blue"><?=__('选手信息', 'nlyd-student')?></span>
                             </div>
                             <div class="nl-match-body ">
                                 <div class="nl-match-detail rz">
-                                    <div class="nl-match-label">选手姓名：</div>
+                                    <div class="nl-match-label"><?=__('选手姓名', 'nlyd-student')?>：</div>
                                     <!-- <span >选手姓名：</span> -->
                                     <div class="nl-match-info">
                                         <?php if(!empty($player['real_name'])){?>
                                         <span class="c_black"><?=$player['real_name']?></span>
                                         <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
                                         <?php }else{?>
-                                            <a href="<?=home_url('account/certification/match_id/'.$_GET['match_id'])?>" class="nl-see-link">实名认证</a>
+                                            <a href="<?=home_url('account/certification/match_id/'.$_GET['match_id'])?>" class="nl-see-link"><?=__('实名认证', 'nlyd-student')?></a>
                                         <?php }?>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label">所属战队：</div>
+                                    <div class="nl-match-label"><?=__('所属战队', 'nlyd-student')?>：</div>
                                     <!-- <span >所属战队：</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black">
@@ -117,13 +117,13 @@
                                                 $url = home_url('teams/index');
                                                 if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                                             ?>
-                                                <a href="<?=$url?>" class="nl-see-link">加入战队</a>
+                                                <a href="<?=$url?>" class="nl-see-link"><?=__('加入战队', 'nlyd-student')?></a>
                                             <?php }?>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label">选手ID：</div>
+                                    <div class="nl-match-label"><?=__('选手ID', 'nlyd-student')?>：</div>
                                     <!-- <span >选手ID：</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$player['user_ID']?></span>
@@ -172,11 +172,11 @@
                     <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
 
                         <?php if($orderStatus['status'] == 1){ ?>
-                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</a>
+                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit=""><?=__('去支付', 'nlyd-student')?></a>
                         <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <a class="a-btn">已报名 </a>
+                            <a class="a-btn"><?=__('已报名', 'nlyd-student')?> </a>
                         <?php }elseif($orderStatus['status'] == 0){ ?>
-                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit="">去支付</a>
+                            <a class="a-btn" id="goPay" lay-filter="pay-formbtn" lay-submit=""><?=__('去支付', 'nlyd-student')?></a>
                         <?php } ?>
 
 
@@ -189,10 +189,10 @@
 <div class="selectBottom">
     <div class="grayLayer cancel"></div>
     <div class="selectBox">
-        <div class="selectOption pay" id="weiChat"><i class="iconfont">&#xe63e;</i>微信</div>
-        <div class="selectOption pay" id="zfb"><i class="iconfont">&#xe611;</i>支付宝</div>
-        <div class="selectOption pay" id="visa"><i class="iconfont">&#xe615;</i>银联支付</div>
-        <div class="selectOption cancel">取消</div>
+        <div class="selectOption pay" id="weiChat"><i class="iconfont">&#xe63e;</i><?=__('微信', 'nlyd-student')?></div>
+        <div class="selectOption pay" id="zfb"><i class="iconfont">&#xe611;</i><?=__('支付宝', 'nlyd-student')?></div>
+        <div class="selectOption pay" id="visa"><i class="iconfont">&#xe615;</i><?=__('银联支付', 'nlyd-student')?></div>
+        <div class="selectOption cancel"><?=__('取消', 'nlyd-student')?></div>
     </div>
 </div>
 <input type="hidden" name="_wpnonce" id="inputPay" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
@@ -255,18 +255,18 @@ jQuery(function($) {
                             var total=<?=$match['match_cost']?>;
                             if(total>0){
                                 // $('.selectBottom').addClass('selectBottom-show')
-                                var content='<div class="box-conent-wrapper">本次共需支付￥'+total+'</div>'
-                                            +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;微信</div>'
-                                            +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;支付宝</div>'
+                                var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
+                                            +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14"><div id="weiChat" class="layui-unselect layui-form-checkbox layui-form-checked" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('微信', 'nlyd-student')?></div>'
+                                            +'<div style="text-align:left;margin:auto;width:100px;margin-top:10px" class="fs_14"><div id="zfb" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('支付宝', 'nlyd-student')?></div>'
                                             //    +'<div style="text-align:left;margin:auto;width:100px;" class="fs_14 c_orange"><div id="visa" class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div>&nbsp;&nbsp;&nbsp;&nbsp;银联支付</div>'
                                 layer.open({
                                     type: 1
                                     ,maxWidth:300
-                                    ,title: '选择支付方式' //不显示标题栏
+                                    ,title: '<?=__('选择支付方式', 'nlyd-student')?>' //不显示标题栏
                                     ,skin:'nl-box-skin'
                                     ,id: 'certification' //防止重复弹出
                                     ,content:content
-                                    ,btn: ['取消支付', '确认支付', ]
+                                    ,btn: ['<?=__('取消支付', 'nlyd-student')?>', '<?=__('确认支付', 'nlyd-student')?>' ]
                                     ,cancel:function(){
 
                                     }

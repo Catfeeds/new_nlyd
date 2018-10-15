@@ -15,7 +15,7 @@
                 <div class="item-wrapper">
                     <div class="center-detail">
                         <div class="system-font">
-                            <p>速读水平认证名录</p>
+                            <p><?=__('速读水平认证名录', 'nlyd-student')?></p>
                             <p>SPEED READING</p> 
                         </div>
                     </div>
@@ -27,12 +27,12 @@
                         <table class="nl-table">
                             <thead>
                                 <tr>
-                                    <td>头像</td>
-                                    <td>学员姓名</td>
-                                    <td>ID</td>
-                                    <td>性别</td>
-                                    <td>速读级别</td>
-                                    <td>主训教练</td>
+                                    <td><?=__('头像', 'nlyd-student')?></td>
+                                    <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                    <td><?=__('ID', 'nlyd-student')?></td>
+                                    <td><?=__('性别', 'nlyd-student')?></td>
+                                    <td><?=__('速读级别', 'nlyd-student')?></td>
+                                    <td><?=__('主训教练', 'nlyd-student')?></td>
                                 </tr>
                             </thead>
                             <tbody id="flow-table">

@@ -17,7 +17,7 @@
           ?>
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">收件地址管理</h1>
+        <h1 class="mui-title"><?=__('收件地址管理', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -42,18 +42,18 @@
                             if(isset($_GET['match_id'])) $save_url .= '/match_id/'.$_GET['match_id'];
                         ?>
                         <div  class="address-right">
-                            <a class="address-btn bg_gradient_blue c_white" href="<?=$save_url;?>">修改</a>
-                            <div class="address-btn del bg_gradient_grey c_white" data-id="<?=$val['id']?>">删除</div>
+                            <a class="address-btn bg_gradient_blue c_white" href="<?=$save_url;?>"><?=__('修改', 'nlyd-student')?></a>
+                            <div class="address-btn del bg_gradient_grey c_white" data-id="<?=$val['id']?>"><?=__('删除', 'nlyd-student')?></div>
                         </div>
                     </div>
                     <?php  } }else{ ?>
-                        <p class="no-info">您未设置收件地址</p>
+                        <p class="no-info"><?=__('您未设置收件地址', 'nlyd-student')?></p>
                     <?php } ?>
                 <?php
                 $add_url = home_url('/account/addAddress');
                 if(isset($_GET['match_id'])) $add_url .= '/match_id/'.$_GET['match_id'];
                 ?>
-                <a class="a-btn" href="<?=$add_url;?>">新增收件地址</a>
+                <a class="a-btn" href="<?=$add_url;?>"><?=__('新增收件地址', 'nlyd-student')?></a>
             </div>
         </div>
     </div>

@@ -12,34 +12,34 @@
                     <a class="mui-pull-left nl-goback static" href="<?=home_url('account/')?>">
                         <i class="iconfont">&#xe610;</i>
                     </a>
-                    <h1 class="mui-title">个人资料</h1>
+                    <h1 class="mui-title"><?=__('个人资料', 'nlyd-student')?></h1>
                 </header>
             </div> 
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form width-margin-pc have-bottom" lay-filter='nicenameForm'>   
                 
-                    <div class="nl-form-tips width-padding width-padding-pc">为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误</div>
+                    <div class="nl-form-tips width-padding width-padding-pc"><?=__('为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误', 'nlyd-student')?></div>
                     <div class="form-inputs">
                         <div class="form-input-row no_edit">
-                            <div class="form-input-label">用户账号</div>
+                            <div class="form-input-label"><?=__('用户账号', 'nlyd-student')?></div>
                             <div class="nl-input"><?=$user_info['contact']?></div>
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label">账户昵称</div>
-                            <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="账户昵称" class="nl-input nl-foucs" lay-verify="required">
+                            <div class="form-input-label"><?=__('账户昵称', 'nlyd-student')?></div>
+                            <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="<?=__('账户昵称', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             <input  type="hidden" name="action" value="student_saveInfo"/>
                             <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                             <input  type="hidden" name="meta_key" value="user_nicename"/>
-                            <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit="">更新</div>
+                            <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit=""><?=__('更新', 'nlyd-student')?></div>
                         </div>
                         <a class="form-input-row" href="<?=home_url('account/certification');?>" >
-                            <div class="form-input-label">实名认证</div>
-                            <span class="form-input-right c_blue">修改实名认证</span>
+                            <div class="form-input-label"><?=__('实名认证', 'nlyd-student')?></div>
+                            <span class="form-input-right c_blue"><?=__('修改实名认证', 'nlyd-student')?></span>
                             <div class="nl-input"><?=$user_info['real_ID']?></div>
                         </a>
                         <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
-                            <div class="form-input-label">收件地址</div>
-                            <span class="form-input-right c_blue">修改收件地址</span>
+                            <div class="form-input-label"><?=__('收件地址', 'nlyd-student')?></div>
+                            <span class="form-input-right c_blue"><?=__('修改收件地址', 'nlyd-student')?></span>
                             <div  class="nl-input">  
                                 <?php if($user_address){ ?>
                                     <p class="accept-address">
@@ -47,7 +47,7 @@
                                         <br><?=$user_address['address']?>
                                     </p>
                                 <?php }else{ ?>
-                                    暂无地址
+                                    <?=__('暂无地址', 'nlyd-student')?>
                                 <?php }?>
                                     
                             </div>
