@@ -38,12 +38,12 @@
 </div>
 <script>
 jQuery(function($) { 
-    // $.DelSession('train_match')
+    // $.DelCookie('train_match')
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
 
     $.getJSON(file_path,function(JsonData){
-        var leavePage= $.GetSession('train_match','1');
+        var leavePage= $.GetCookie('train_match','1');
         if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
             questions_answer=leavePage['train_questions']
         }else{
@@ -58,7 +58,7 @@ jQuery(function($) {
                 genre_id:$.Request('genre_id'),
                 type:'szzb',
             }
-            $.SetSession('train_match',sessionData)
+            $.SetCookie('train_match',sessionData)
         }
 
         $.each(questions_answer,function(i,v){
@@ -74,7 +74,7 @@ jQuery(function($) {
 //             genre_id:$.Request('genre_id'),
 //             type:'szzb',
 //         }
-//         $.SetSession('train_match',sessionData)
+//         $.SetCookie('train_match',sessionData)
 //     }
 // })
     function submit(time){//提交答案
@@ -98,7 +98,7 @@ jQuery(function($) {
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('train_match')
+                $.DelCookie('train_match')
                 if(res.success){
                     if(res.data.url){
                         setTimeout(function(){

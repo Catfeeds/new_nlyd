@@ -131,20 +131,26 @@ Alert.prototype={
 			alerts.alertInfo()
 		},
 		/*设置cookie*/
-		SetCookie: function (name,value,days) {
+		SetCookie: function (name,data,days) {
 			var exp=new Date();
 			if(!days){
 				days=30
 				}
+			var result=data;
+			result=typeof(result)=='object' ? JSON.stringify(result) : result;
+			result=escape(result)
 			exp.setTime(exp.getTime()+days*60*1000);
-			document.cookie=name+"="+escape(value)+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
+			document.cookie=name+"="+result+";expires="+exp.toGMTString()+";path="+window.location.pathname+""
 		},
 		/*获取cookie*/
-		GetCookie: function(name){
+		GetCookie: function(name,type){
 			var arr,
 				reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
 			if(arr=document.cookie.match(reg)){
-				return unescape(arr[2]);
+				var result=arr[2];
+				result=unescape(result)
+				result=type ? JSON.parse(result) : result;
+				return result;
 			}else{
 				return null
 			}
@@ -171,7 +177,6 @@ Alert.prototype={
 			}else{
 				result=null
 			}
-
 			return result
 		},
 		DelSession:function(name){
