@@ -106,6 +106,36 @@ class Student_Trains extends Student_Home
     public function initial(){
 
         if(empty($_GET['type'])) $this->get_404('参数错误');
+        global $wpdb;
+        switch ($_GET['type']){
+            case 'wzsd':
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        where a.slug = 'test-question' ";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                if(empty($rows)) $this->get_404('测试题库暂无文章,请联系管理员添加');
+
+                $posts_arr = array_column($rows,'object_id');
+                print_r($posts_arr);
+
+                //获取题目
+                $posts = get_posts(array(
+                        'numberposts' => 1, //输出的文章数量
+                        'post_type' => 'question',  //自定义文章类型名称
+                        'orderby'=>'rand', //post_date rand
+                        'tax_query'=>array(
+                            array(
+                                'taxonomy'=>'question_genre', //自定义分类法名称
+                                'field'  =>  'slug',
+                                'terms'=>'test-question' //id为64的分类。也可是多个分类array(12,64)
+                            )
+                        ),
+                    )
+                );
+
+                break;
+        }
 
         $view = student_view_path.CONTROLLER.'/initial.php';
         load_view_template($view);
