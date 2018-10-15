@@ -59,15 +59,26 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
+    // leaveMatchPage(function(){//窗口失焦提交
+    //     var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+    //     submit(time,4);
+    // })
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     setTimeout(function() {
+    //         submit(0,3)
+    //     }, 1000);
+    // }
+    var questions_answer=[];
+    var leavePage= $.GetCookie('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
+        questions_answer=leavePage['train_questions']
+        $.each(questions_answer,function(i,v){
+            var dom='<div class="matching-number"></div>';
+            $('.matching-number-zoo').append(dom)
+        })
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
@@ -101,25 +112,22 @@ jQuery(function($) {
                 my_answer.push(answer)
             })
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=$_GET['match_more']?>,
-                my_answer:my_answer,
-                match_action:'subjectNumberBattle',
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                project_type:'szzb',
+                train_questions:questions_answer,
+                train_answer:my_answer,
                 surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+            // var leavePage= $.GetSession('leavePage','1');
+            // if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            //     if(leavePage.Time){
+            //         data['leave_page_time']=leavePage.Time;
+            //     }
+            // }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('leavePage')
+                    // $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
