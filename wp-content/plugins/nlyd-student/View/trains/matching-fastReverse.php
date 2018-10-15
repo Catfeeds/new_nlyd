@@ -105,7 +105,7 @@ jQuery(function($) {
             var data={
                 action:'trains_submit',
                 genre_id:$.Request('genre_id'),
-                project_type:'kysm',
+                project_type:'nxss',
                 my_answer:ajaxData,
                 surplus_time:time,
             }
