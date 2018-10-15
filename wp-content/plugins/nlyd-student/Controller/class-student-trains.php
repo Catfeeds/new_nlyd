@@ -370,9 +370,14 @@ class Student_Trains extends Student_Home
 
             if(!empty($questions_answer)){
                 $len = count($questions_answer);
-                $error_arr = array_diff_assoc($questions_answer,$my_answer);
-                $error_len = count($error_arr);
-                $success_len = $len - $error_len;
+                if(!empty($my_answer)){
+
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                    $error_len = count($error_arr);
+                    $success_len = $len - $error_len;
+                }else{
+                    $success_len = 0;
+                }
             }else{
                 $my_answer = array();
                 $error_arr = array();
