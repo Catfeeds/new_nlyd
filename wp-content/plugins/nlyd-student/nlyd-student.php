@@ -290,7 +290,7 @@ if(!class_exists('StudentController')){
                     }
                     if(!isWeiXin()){
                         if(!isSafari()){
-                            alert('请使用微信或Safari浏览器打开')
+                            alert('<?=__('请使用微信或Safari浏览器打开', 'nlyd-student')?>')
                             window.history.back(-1);
                         }
                     }
@@ -312,7 +312,7 @@ if(!class_exists('StudentController')){
                     }
                     if(!isWeiXin()){
                         if(!window.chrome){
-                            alert('请使用微信或谷歌浏览器打开')
+                            alert('<?=__('请使用微信或谷歌浏览器打开', 'nlyd-student')?>')
                             window.location.href="https://a.app.qq.com/o/simple.jsp?pkgname=com.android.chrome";
                         }
                     }
@@ -344,7 +344,7 @@ if(!class_exists('StudentController')){
                     if($session_id != session_id()){?>
                         <script>
                             jQuery(function($)  {
-                                $.alerts('账号异地登录,即将退出<br/>请及时修改密码');
+                                $.alerts('<?=__('账号异地登录,即将退出', 'nlyd-student')?><br/><?=__('请及时修改密码', 'nlyd-student')?>');
                                 $.ajax({
                                     type: "POST",
                                     url: window.admin_ajax,

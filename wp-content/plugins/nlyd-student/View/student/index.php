@@ -36,18 +36,18 @@ get_header(); ?>
             <header class="mui-bar mui-bar-nav layui-bg-white">
                 <div class="search-zoo">
                     <i class="iconfont search-Icon">&#xe63b;</i>
-                    <input type="text" class="serach-Input nl-foucs" placeholder="搜索名录/课程/教练等">
+                    <input type="text" class="serach-Input nl-foucs" placeholder="<?=__('搜索名录/课程/教练等', 'nlyd-student')?>">
                 </div>
             </header>
             <div class="layui-row nl-border nl-content  layui-bg-white">
                 <!-- 头部导航 -->
                 <div class="layui-row width-padding">
                     <div class="top-nav">
-                        <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url('/student/index');?>">首 页</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('directory');?>">名 录</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a">课 程</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>">商 城</a></div>
-                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a">公 益</a></div>
+                        <div class="top-nav-btn active"><a class="fs_16 c_blue" href="<?=home_url('/student/index');?>"><?=__('首 页', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6"  href="<?=home_url('directory');?>"><?=__('名 录', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('课 程', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a" href="<?=home_url('shops');?>"><?=__('商 城', 'nlyd-student')?></a></div>
+                        <div class="top-nav-btn"><a class="fs_16 c_black6 disabled_a"><?=__('公 益', 'nlyd-student')?></a></div>
                     </div>
                 </div>
                 <!-- 轮播 -->
@@ -84,7 +84,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/for-us-big.png'?>">
                                 </div>
-                                <div class="entrance-name c_black6">关于我们</div>
+                                <div class="entrance-name c_black6"><?=__('关于我们', 'nlyd-student')?></div>
                             </a>
                         </div>
                         <div class="entrance-wrap flex1">
@@ -92,7 +92,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/sys-big.png'?>">
                                 </div>
-                                <div class="entrance-name c_black6">体系标准</div>
+                                <div class="entrance-name c_black6"><?=__('体系标准', 'nlyd-student')?></div>
                             </a>
                         </div>
                         <div class="entrance-wrap flex1">
@@ -100,7 +100,7 @@ get_header(); ?>
                                 <div class="img-btn img-box">
                                     <img src="<?=student_css_url.'image/homePage/concat-big.png'?>">
                                 </div>
-                                <div class="entrance-name c_black6">合作联系</div>
+                                <div class="entrance-name c_black6"><?=__('合作联系', 'nlyd-student')?></div>
                             </a>
                         </div>
                     </div>
@@ -113,8 +113,8 @@ get_header(); ?>
                     <!-- 课程 资讯 -->
                     <div class="layui-row">
                         <div class="head-info layui-row width-padding">
-                            <span class="pull-left  c_blue fs_14">推荐课程</span>
-                            <span class="pull-right fs_14">推荐课程 <i class="iconfont">&#xe640;</i></span>
+                            <span class="pull-left  c_blue fs_14"><?=__('推荐课程', 'nlyd-student')?></span>
+                            <span class="pull-right fs_14"><?=__('推荐课程', 'nlyd-student')?> <i class="iconfont">&#xe640;</i></span>
                         </div>
                         <div class="nl-ad-row layui-bg-white  width-padding">
                             <div class="layui-row foot-info">
@@ -122,9 +122,9 @@ get_header(); ?>
                                     <img src="<?=student_css_url.'image/homePage/course1.png'?>">
                                 </div>
                                 <div class="layui-col-lg7 layui-col-md7 layui-col-sm7 layui-col-xs7">
-                                    <p class="text_1 c_black">课程名称</p>
-                                    <p class="fs_12 c_orange">抢占名额中(2/18)</p>
-                                    <div class="fs_12 c_black6 text_2 nl-ad-detail">这里是课程介绍摘要，截取课程简要介绍，不超过30个字符</div>
+                                    <p class="text_1 c_black"><?=__('课程名称', 'nlyd-student')?></p>
+                                    <p class="fs_12 c_orange"><?=__('抢占名额中(2/18)', 'nlyd-student')?></p>
+                                    <div class="fs_12 c_black6 text_2 nl-ad-detail"><?=__('这里是课程介绍摘要，截取课程简要介绍，不超过30个字符', 'nlyd-student')?></div>
                                 </div>
                             </div>
                         </div>

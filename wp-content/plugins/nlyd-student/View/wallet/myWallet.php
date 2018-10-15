@@ -19,7 +19,7 @@
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">我的钱包</h1>
+            <h1 class="mui-title"><?=__('我的钱包', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin">

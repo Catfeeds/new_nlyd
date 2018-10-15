@@ -135,12 +135,14 @@ Alert.prototype={
 			var exp=new Date();
 			if(!days){
 				days=30
-				}
+			}
+
 			var result=data;
 			
 			result=typeof(result)=='object' ? JSON.stringify(result) : result;
-			// result=escape(result)
-			//console.log(result);
+			//result=escape(result)
+			/*console.log(result);
+			return false;*/
 			exp.setTime(exp.getTime()+days*60*1000);
 			document.cookie=name+"="+result+";expires="+exp.toGMTString()+";path=/"
 		},
@@ -150,7 +152,7 @@ Alert.prototype={
 				reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
 			if(arr=document.cookie.match(reg)){
 				var result=arr[2];
-				// result=unescape(result)
+				//result=unescape(result)
 				result=type ? JSON.parse(result) : result;
 				return result;
 			}else{

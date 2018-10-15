@@ -16,16 +16,16 @@
                         <div class="item-wrapper">
                             <div class="center-detail">
                                 <div class="system-font">
-                                    <p>国际脑力运动师资体系</p>
+                                    <p><?=__('国际脑力运动师资体系', 'nlyd-student')?></p>
                                     <p>IISC RESOURCES</p> 
                                 </div>
                             </div>
                         </div>  
                         <ul class="layui-tab-title width-left  width-left-pc">
-                            <li class="layui-this">认证教练</li>
-                            <li>基地教练</li>
-                            <li>认证记忆导师</li>
-                            <div class="nl-transform">认证教练</div>
+                            <li class="layui-this"><?=__('认证教练', 'nlyd-student')?></li>
+                            <li><?=__('基地教练', 'nlyd-student')?></li>
+                            <li><?=__('认证记忆导师', 'nlyd-student')?></li>
+                            <div class="nl-transform"><?=__('认证教练', 'nlyd-student')?></div>
                         </ul>
                     </header>
                     <div class="layui-tab-content width-margin width-margin-pc">
@@ -43,10 +43,10 @@
                                                 <span class="coach-info light-c">ID 10000009</span>
                                             </div>
                                             <div class="coach-detail-row">
-                                                <span class="coach-info">国际脑力运动委员会（IISC）</span>
+                                                <span class="coach-info"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC）</span>
                                             </div>
                                             <div class="coach-detail-row">
-                                                <span class="coach-info">高级教练</span>
+                                                <span class="coach-info"><?=__('高级教练', 'nlyd-student')?></span>
                                             </div>
                                             <div class="right-icon">
                                                 <i class="iconfont">&#xe640;</i>

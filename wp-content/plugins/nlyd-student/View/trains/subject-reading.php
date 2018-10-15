@@ -13,7 +13,7 @@
                     $my_select = arr2str($my_answer[$k]);
                     foreach ($my_answer[$k] as $v){
                         $my_answer_select = $questions_answer[$k]['problem_select'][$v];
-                        $answer_my[] = $v >= 0 && is_numeric($v) ? get_select($v).'.'.$my_answer_select : '--';
+                        $answer_my[] = $v >= 0 && is_numeric($v) ? get_select($v).'.'.$my_answer_select : '未作答';
                     }
                 }
 
@@ -21,7 +21,7 @@
                     $questions_select = arr2str($questions_answer[$k]['problem_answer']);
                     foreach ($questions_answer[$k]['problem_answer'] as $x){
                         $questions_answer_select = $questions_answer[$k]['problem_select'][$x];
-                        $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select : '--';
+                        $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select : '未作答';
                     }
                 }
                 /*global $current_user;

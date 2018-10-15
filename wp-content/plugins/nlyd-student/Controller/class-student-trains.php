@@ -219,7 +219,7 @@ class Student_Trains extends Student_Home
      */
     public function answer(){
         global $wpdb;
-
+        //var_dump(json_decode(stripslashes($_COOKIE['questions_answer']),true));
 
         switch ($_GET['type']){
             case 'wzsd':
@@ -228,26 +228,35 @@ class Student_Trains extends Student_Home
                     $this->get_404('参数错误');
                     return;
                 }
-                //获取比赛题目
-                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                if(!empty($_COOKIE['train_match'])){
+
+                    $match_array = json_decode(stripslashes($_COOKIE['train_match']),true);
+                    $questions_answer = $match_array['questions_answer'];
+                    $match_questions = $match_array['match_questions'];
+                    //print_r($match_array);
+                }else{
+
+                    //获取比赛题目
+                    $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
                         from {$wpdb->prefix}posts a 
                         left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
                         where a.post_parent = {$_GET['post_id']} order by b.id asc
                         ";
 
-                $rows = $wpdb->get_results($sql1,ARRAY_A);
-                $questions_answer = array();
-                $match_questions = array();
-                if(!empty($rows)){
-                    $answer_total = 1;  //默认答案个数
-                    foreach ($rows as $k => $val){
-                        //$val['problem_answer'] = 1;
-                        $key = &$val['ID'];
-                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
-                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
-                        //if($val['problem_answer'] == 1) $answer_total += 1;
+                    $rows = $wpdb->get_results($sql1,ARRAY_A);
+                    $questions_answer = array();
+                    $match_questions = array();
+                    if(!empty($rows)){
+                        $answer_total = 1;  //默认答案个数
+                        foreach ($rows as $k => $val){
+                            //$val['problem_answer'] = 1;
+                            $key = &$val['ID'];
+                            $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                            $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                            //if($val['problem_answer'] == 1) $answer_total += 1;
+                        }
+                        $match_questions = array_unique(array_column($rows,'post_title','ID'));
                     }
-                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
                 $data['questions_answer'] = $questions_answer;
                 $data['match_questions'] = $match_questions;
