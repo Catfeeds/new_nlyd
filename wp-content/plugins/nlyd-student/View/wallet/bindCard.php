@@ -12,29 +12,29 @@
         <a class="mui-pull-left nl-goback">
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">收款账户管理</h1>
+        <h1 class="mui-title"><?=__('收款账户管理', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <form class="nl-page-form layui-form" lay-filter='addAdress'>
                     <div class="form-inputs">
                         <div class="form-input-row">
-                            <div class="form-input-label">开户姓名</div>
+                            <div class="form-input-label"><?=__('开户姓名', 'nlyd-student')?></div>
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户姓名">
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label">开户行</div>
+                            <div class="form-input-label"><?=__('开户行', 'nlyd-student')?></div>
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户行">
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label">开户账号</div>
+                            <div class="form-input-label"><?=__('开户账号', 'nlyd-student')?></div>
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="开户账号">
                         </div>
                         <div class="form-input-row">
-                            <div class="form-input-label">银行预留手机号</div>
+                            <div class="form-input-label"><?=__('银行预留手机号', 'nlyd-student')?></div>
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="预留手机号">
                         </div>
                     </div>
-                    <a class="a-btn" lay-filter="addAccount" lay-submit="">保存</a>
+                    <a class="a-btn" lay-filter="addAccount" lay-submit=""><?=__('保存', 'nlyd-student')?></a>
                 </form>
             </div>
         </div>           

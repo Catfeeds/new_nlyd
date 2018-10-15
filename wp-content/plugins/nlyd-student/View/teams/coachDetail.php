@@ -11,7 +11,7 @@
         <a class="mui-pull-left nl-goback">
         <i class="iconfont">&#xe610;</i>
         </a>
-        <h1 class="mui-title">教练详情</h1>
+        <h1 class="mui-title"><?=__('教练详情', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin-pc layui-row">
@@ -27,11 +27,11 @@
                                         <?php if(!empty($user_infos['user_gender'])):?>
                                         <span> <?=$user_infos['user_gender']?> </span>
                                         <?php endif;?>
-                                        <span>ID <?=$user_infos['user_ID']?></span>
-                                        <a class="c_blue fs_12 pointer" id="see">&nbsp;&nbsp;查看教练证书</a>
+                                        <span><?=__('ID', 'nlyd-student')?> <?=$user_infos['user_ID']?></span>
+                                        <a class="c_blue fs_12 pointer" id="see">&nbsp;&nbsp;<?=__('查看教练证书', 'nlyd-student')?></a>
                                     </div>
                                     <div class="coachDetail-infoRow">
-                                        <span>国际脑力运动委员会（IISC） <?=$user_infos['user_coach_level']?></span>
+                                        <span><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） <?=$user_infos['user_coach_level']?></span>
                                     </div>
                                     <?php if(!empty($skill)):?>
                                     <div class="coachDetail-infoRow coach-detail-footer flex-h">
@@ -39,7 +39,7 @@
                                             <?php if($v['is_current'] === false){?>
                                                 <div class="coach-type flex1 text_1 is_current"><?=$v['post_title']?></div>
                                             <?php }elseif($v['is_current'] === true && $v['is_apply'] == true && $v['is_my_coach'] === false){ ?>
-                                                <div class="coach-type flex1 text_1 is_current c_blue" style="color:#FF2300;">审核中...</div>
+                                                <div class="coach-type flex1 text_1 is_current c_blue" style="color:#FF2300;"><?=__('审核中', 'nlyd-student')?>...</div>
                                             <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === true){?>
                                                 <div class="coach-type flex1 text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
                                             <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === false){?>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
-                                <div class="coachDetail-metal">简 介</div>
+                                <div class="coachDetail-metal"><?=__('简 介', 'nlyd-student')?></div>
                                 <p>国际一级脑力健将（记忆类）</p>
                                 <p>成都电视台《超越梦想·脑力世界杯》栏目选手导师 </p>
                                 <p>2017脑力世界杯全球总决赛记忆类总亚军 </p>
@@ -109,20 +109,20 @@
                     <div class="layui-col-lg6 layui-col-md12 layui-col-sm12 layui-col-xs12">
                         <div class="coachDetail-row have-metal width-padding width-margin-pc">
                             <div class="width-padding-pc">
-                                <div class="coachDetail-metal">学 员</div>
-                                <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=$content['student_count']?>名学员【<?=$content['major_count']?>位主训】</span></div>
-                                <p>*M、R、A分别代表记忆、速读、心算</p>
+                                <div class="coachDetail-metal"><?=__('学 员', 'nlyd-student')?></div>
+                                <div class="coachDetail-top">&nbsp;<span class="c_blue"><?=printf(__('%1$s名学员【%2$s位主训】', 'nlyd-student'), $content['student_count'],$content['major_count'])?></span></div>
+                                <p>*<?=__('M、R、A分别代表记忆、速读、心算', 'nlyd-student')?></p>
                                 <div class="nl-table-wapper">
                                     <table class="nl-table">
                                         <thead>
                                             <tr>
-                                                <td>头像</td>
-                                                <td>学员姓名</td>
-                                                <td>学员ID</td>
-                                                <td>M级别</td>
-                                                <td>R级别</td>
-                                                <td>A级别</td>
-                                                <td>脑力健将级别</td>
+                                                <td><?=__('头像', 'nlyd-student')?></td>
+                                                <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                                <td><?=__('学员ID', 'nlyd-student')?></td>
+                                                <td><?=__('M级别', 'nlyd-student')?></td>
+                                                <td><?=__('R级别', 'nlyd-student')?></td>
+                                                <td><?=__('A级别', 'nlyd-student')?></td>
+                                                <td><?=__('脑力健将级别', 'nlyd-student')?></td>
                                             </tr>
                                         </thead>
                                         <tbody id="flow-table">
@@ -159,7 +159,7 @@ jQuery(function($) {
         })  
         $('#see').click(function(){
             var json={
-                "title": "教练证书", //相册标题
+                "title": "<?=__('教练证书', 'nlyd-student')?>", //相册标题
                 "id": "coach_see", //相册id
                 "start": 0, //初始显示的图片序号，默认0
                 "data": [   //相册包含的图片，数组格式
@@ -172,7 +172,7 @@ jQuery(function($) {
                 ]
             }
             if(json['data'].length==0){
-                $.alerts('当前教练未上传证书')
+                $.alerts('<?=__('当前教练未上传证书', 'nlyd-student')?>')
             }else{
                 layer.photos({//图片预览
                     photos: json,
@@ -229,11 +229,11 @@ jQuery(function($) {
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '提示' //不显示标题栏
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否请TA当教练？</div>'
-                ,btn: ['再想想', '确认', ]
+                ,content: '<div class="box-conent-wrapper"><?=__('是否请TA当教练', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
                 ,success: function(layero, index){
                     
                 }
@@ -242,7 +242,7 @@ jQuery(function($) {
                 }
                 ,btn2: function(index, layero){
                     //按钮【按钮二】的回调
-                    $.alerts('确认')
+                    $.alerts('<?=__('确认', 'nlyd-student')?>')
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中
