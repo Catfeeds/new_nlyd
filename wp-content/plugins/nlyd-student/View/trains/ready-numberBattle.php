@@ -13,7 +13,7 @@
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="1200">00:00:00</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
                     <div class="matching-row">

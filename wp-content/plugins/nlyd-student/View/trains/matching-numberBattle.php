@@ -7,7 +7,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black match_info_font">第一轮</span>
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -117,7 +117,8 @@ jQuery(function($) {
                 genre_id:$.Request('genre_id'),
                 project_type:'szzb',
                 train_questions:questions_answer,
-                train_answer:my_answer,
+                train_answer:questions_answer,
+                my_answer:my_answer,
                 surplus_time:time,
             }
             // var leavePage= $.GetSession('leavePage','1');
@@ -156,6 +157,7 @@ jQuery(function($) {
         }else{
             $.alerts('正在提交答案')
         }
+        return false;
     }
     $('.matching-number').each(function(){//填充区域
         var _this=$(this);
