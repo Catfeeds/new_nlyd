@@ -3376,7 +3376,6 @@ class Student_Ajax
             case 'zxss':
             case 'nxss':
 
-
                 $data_arr = $_POST['my_answer'];
 
                 if(!empty($data_arr)){
@@ -3449,7 +3448,7 @@ class Student_Ajax
             'my_score'=>$my_score,
             'created_time'=>get_time('mysql'),
         );
-        //print_r($_POST);die;
+        //print_r($insert);die;
         $sql = "select id from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} order by created_time asc ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = count($rows);
