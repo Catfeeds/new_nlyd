@@ -42,13 +42,13 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
                 </div>
-                <div class="a-btn" id="complete">记忆完成</div>
+                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
             </div>
         </div>           
     </div>
 </div>
 
-<div class="layui-fluid noCopy">
+<!-- <div class="layui-fluid noCopy">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
@@ -77,7 +77,6 @@
                         <div class="porker-zoo">
                             <div class="poker-window">
                                 <div class="poker-wrapper">
-                                    <!-- 扑克区域 -->
                                 </div>
                             </div>
                         </div>
@@ -115,53 +114,36 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
 jQuery(function($) { 
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
     var data_match=[];
     var questions_answer=[]
-    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
-                match_action:'pokerRelay',
-                match_questions:questions_answer,
-                type:'pkjl'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
+    var leavePage= $.GetCookie('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
+        questions_answer=leavePage['train_questions']
+    }else{
+        var arrColor=['heart','club','diamond','spade']
+        var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+        $.each(arrColor,function(i,v){
+            $.each(arrNum,function(index,val){
+                var item=v+'-'+val;
+                questions_answer.push(item)
             })
-        }
+        })
+        questions_answer.sort(function() {
+            return .5 - Math.random();
+        });
+        $.DelCookie('train_match')
     }
-})
-    function submit(time,submit_type){//提交答案
+    $.each(questions_answer,function(i,v){
+        var item=v.split('-')
+        data_match.push(item)
+    })
+
+    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
+    function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
                 'opacity': '1',
@@ -169,31 +151,21 @@ new AlloyFinger($('#complete')[0], {
             })
         var my_answer=[];
         var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1 ?>,
+            action:'trains_submit',
+            genre_id:$.Request('genre_id'),
+            project_type:'pkjl',
+            train_questions:questions_answer,
+            train_answer:questions_answer,
             my_answer:my_answer,
-            match_action:'subjectPokerRelay',
             surplus_time:time,
-            match_questions:questions_answer,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-        var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
-                        $.DelSession('ready_poker')
                     }   
                 }else{
                     $('#load').css({
@@ -213,12 +185,23 @@ new AlloyFinger($('#complete')[0], {
             }
         })
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
+new AlloyFinger($('#complete')[0], {//记忆完成
+    tap:function(){
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'pkjl',
+            count_down:$('.count_down').attr('data-seconds')
+        }
+        $.SetCookie('train_match',sessionData,0)
     }
+})
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     setTimeout(function() {
+    //         submit(0)
+    //     }, 1000);
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -233,7 +216,7 @@ new AlloyFinger($('#complete')[0], {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });
@@ -294,36 +277,19 @@ new AlloyFinger($('#complete')[0], {
 
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
-        $.getJSON(file_path,function(JsonData){
-
-            var matchSession=$.GetSession('ready_poker','true');
-            if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-                data_match=matchSession['data_match'];
-                questions_answer=matchSession['questions_answer']
-            }else{
-                var _answers=JsonData;
-                var pos = Math.round(Math.random() * (_answers.length - 1));
-                
-                var xx=_answers[pos]
-                questions_answer=xx.sort(function() {
-                    return .5 - Math.random();
-                });
-                $.each(questions_answer,function(i,v){
-                    var item=v.split('-')
-                    data_match.push(item)
-                })
-                var sessionData={
-                    data_match:data_match,
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    questions_answer:questions_answer
-                }
-                $.SetSession('ready_poker',sessionData)
-            }
-
+        // $.getJSON(file_path,function(JsonData){
+            // var leavePage= $.GetCookie('train_match','1');
+            // if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
+            //     questions_answer=leavePage['train_questions']
+            // }else{
+            //     $.DelCookie('train_match')
+            // }
+            // $.each(questions_answer,function(i,v){
+            //     var item=v.split('-')
+            //     data_match.push(item)
+            // })
             var data=pagation(data_match,nowPage,onePageItems)
-       
+    
         
             $('.poker-wrapper').empty()
             if(data.left){
@@ -363,8 +329,10 @@ new AlloyFinger($('#complete')[0], {
                         +'</div>'
                 $('.poker-wrapper').append(dom)
             })
+            
             initWidth()
-        })
+            
+        // })
     }
     initPagation()
     // mTouch('body').on('tap','.matching-btn',function(e){

@@ -7,7 +7,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
+                        <span class="c_black match_info_font">第一轮</span>
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -59,15 +59,17 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
+    var questions_answer=[];
+    var leavePage= $.GetCookie('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
+        questions_answer=leavePage['train_questions'];
+        $('.count_down').attr('data-seconds',leavePage['count_down'])
+        $.each(questions_answer,function(i,v){
+            var dom=i==0 ? '<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
+            $('.matching-number-zoo').append(dom)
+        })
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
@@ -101,28 +103,26 @@ jQuery(function($) {
                 my_answer.push(answer)
             })
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=$_GET['match_more']?>,
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                project_type:'szzb',
+                train_questions:questions_answer,
+                train_answer:questions_answer,
                 my_answer:my_answer,
-                match_action:'subjectNumberBattle',
                 surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+            // var leavePage= $.GetSession('leavePage','1');
+            // if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            //     if(leavePage.Time){
+            //         data['leave_page_time']=leavePage.Time;
+            //     }
+            // }
             $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('leavePage')
+                data:data,success:function(res,ajaxStatu,xhr){ 
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
+                            $.DelCookie('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{
@@ -131,6 +131,7 @@ jQuery(function($) {
                             'opacity': '0',
                             'visibility': 'hidden',
                         })
+                        $.DelCookie('train_match','1')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
@@ -147,6 +148,7 @@ jQuery(function($) {
         }else{
             $.alerts('正在提交答案')
         }
+        return false;
     }
     $('.matching-number').each(function(){//填充区域
         var _this=$(this);

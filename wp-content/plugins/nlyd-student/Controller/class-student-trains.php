@@ -9,8 +9,8 @@
  */
 class Student_Trains extends Student_Home
 {
-    private $action;
-    public $ajaxControll;
+
+
     public function __construct($action)
     {
 
@@ -46,7 +46,10 @@ class Student_Trains extends Student_Home
 
     public function lists(){
 
-        if(empty($_GET['id'])) $this->get_404('参数错误');
+        if(empty($_GET['id'])){
+            $this->get_404('参数错误');
+            return;
+        }
 
         //获取当前
         $row = get_post($_GET['id']);
@@ -88,7 +91,10 @@ class Student_Trains extends Student_Home
      * 专项训练准备页
      */
     public function ready(){
-        if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])) $this->get_404('参数错误');
+        if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])){
+            $this->get_404('参数错误');
+            return;
+        }
 
         $genre = get_post($_GET['genre_id']);
 
@@ -105,10 +111,78 @@ class Student_Trains extends Student_Home
      */
     public function initial(){
 
-        if(empty($_GET['type'])) $this->get_404('参数错误');
+
+        if(empty($_GET['type'])){
+            $this->get_404('参数错误');
+            return;
+        }
+        global $wpdb,$current_user;
+        $post_id = '';
+        switch ($_GET['type']){
+            case 'wzsd':
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        where a.slug = 'test-question' ";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                if(empty($rows)){
+                    $this->get_404('测试题库暂无文章,请联系管理员添加');
+                    return;
+                }
+
+                $posts_arr = array_column($rows,'object_id');
+                //print_r($posts_arr);
+
+                //获取已训练文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+                if(!empty($post_str)){
+                    $post_arr = str2arr($post_str,',');
+
+                    $result = array_diff($posts_arr,$post_arr);
+
+                }else{
+                    $result = $posts_arr;
+                }
+                $post_id = end($result);
+
+                //获取题目
+                $content = get_post($post_id );
+                //print_r($content);
+                $count_down = 900;
+                break;
+            case 'szzb':
+
+                $count_down = 1200;
+                break;
+            case 'kysm':
+                $count_down = 600;
+                break;
+            case 'pkjl':
+                $count_down = 900;
+                break;
+            case 'zxss':
+                $count_down = 540;
+                break;
+            case 'nxss':
+                $count_down = 600;
+                break;
+            default:
+                $this->get_404('没有该比赛项目');
+                return;
+                break;
+        }
+
+        $data = array(
+            'content'=>$content,
+            'count_down'=>$count_down,
+            'url'=>home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type']),
+        );
+        if(!empty($post_id)) $data['url'] .= '/post_id/'.$post_id;
 
         $view = student_view_path.CONTROLLER.'/initial.php';
-        load_view_template($view);
+        load_view_template($view,$data);
 
     }
 
@@ -116,7 +190,41 @@ class Student_Trains extends Student_Home
      * 答题页面
      */
     public function answer(){
+        global $wpdb;
 
+        switch ($_GET['type']){
+            case 'wzsd':
+                if(empty($_GET['post_id'])){
+
+                    $this->get_404('参数错误');
+                    return;
+                }
+                //获取比赛题目
+                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
+
+                $rows = $wpdb->get_results($sql1,ARRAY_A);
+                $questions_answer = array();
+                $match_questions = array();
+                if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
+                    foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
+                        $key = &$val['ID'];
+                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
+                    }
+                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
+                }
+                //print_r($questions_answer);
+                //print_r($match_questions);
+                break;
+        }
+        //var_dump($_COOKIE);
         $view = student_view_path.CONTROLLER.'/answer.php';
         load_view_template($view);
     }
@@ -126,6 +234,137 @@ class Student_Trains extends Student_Home
      */
     public function logs(){
 
+        global $wpdb,$current_user;
+        $sql = "select * from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} and id = {$_GET['id']}";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        if(empty($_GET['id']) || empty($row)){
+            $this->get_404('参数错误');
+            return;
+        }
+
+        $match_questions = !empty($row['train_questions']) ? json_decode($row['train_questions'],true) : array();
+        $questions_answer = !empty($row['train_answer']) ? json_decode($row['train_answer'],true) : array();
+        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+        if(in_array($row['project_type'],array('wzsd'))){
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
+
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
+                    }
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+            }
+
+        }
+        elseif ($row['project_type'] == 'nxss'){
+
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            //print_r($answer_array);
+            //print_r($questions_answer);die;
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
+
+            /*if(!empty($match_questions)){
+                $twentyfour = new TwentyFour();
+                foreach ($match_questions as $val){
+                    $results = $twentyfour->calculate($val);
+                    //print_r($results);
+                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
+                }
+                $questions_answer = $arr;
+            }*/
+        }
+        else{
+
+            if(!empty($questions_answer)){
+                $len = count($questions_answer);
+                $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                $error_len = count($error_arr);
+                $success_len = $len - $error_len;
+            }else{
+                $my_answer = array();
+                $error_arr = array();
+                $success_len = 0;
+                $len = 0;
+            }
+        }
+        $this->project_type = $row['project_type'];
+
+        $data = array(
+            'type'=>$row['project_type'],
+            'str_len'=>$len,
+            'success_length'=>$success_len,
+            'use_time'=>$this->get_count_down($row['project_type'])-$row['surplus_time'],
+            'surplus_time'=>$row['surplus_time'],
+            'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
+            'match_questions'=>$match_questions,
+            'questions_answer'=>$questions_answer,
+            'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
+            'my_score'=>$row['my_score'],
+            'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'recur_url'=>home_url('/trains/initial/genre_id/'.$row['genre_id'].'/type/'.$row['project_type']), //再来一局
+            'revert_url'=>home_url('trains'),//返回项目列表,
+        );
+
+
+        $view = student_view_path.CONTROLLER.'/answer-log.php';
+        load_view_template($view,$data);
+    }
+
+    /**
+     * @param $type 训练项目
+     * @return int|void 倒计时
+     */
+    public function get_count_down($type){
+
+        switch ($type){
+            case 'wzsd':
+                $count_down = 900;
+                break;
+            case 'szzb':
+
+                $count_down = 1200;
+                break;
+            case 'kysm':
+                $count_down = 600;
+                break;
+            case 'pkjl':
+                $count_down = 900;
+                break;
+            case 'zxss':
+                $count_down = 540;
+                break;
+            case 'nxss':
+                $count_down = 600;
+                break;
+            default:
+                $this->get_404('没有该比赛项目');
+                return;
+                break;
+        }
+        return $count_down;
     }
 
     /**
@@ -184,7 +423,7 @@ class Student_Trains extends Student_Home
         }
 
         //比赛记忆后答题页面
-        if(ACTION == 'answerMatch'){
+        if(ACTION == 'answer'){
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($_GET['type']=='wzsd'){//文章速读
@@ -204,7 +443,7 @@ class Student_Trains extends Student_Home
         }
 
         //答案记录页面
-        if(in_array(ACTION,array('answerLog','checkAnswerLog'))){
+        if(ACTION=='logs'){
             if($_GET['type']=='nxss'){//逆向速算成绩页
                 wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
                 wp_enqueue_style( 'my-student-subject' );
@@ -227,6 +466,7 @@ class Student_Trains extends Student_Home
             }
 
             if($_GET['type']=='szzb'){//数字争霸本轮答题记录
+
                 wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
                 wp_enqueue_style( 'my-student-subject' );
             }

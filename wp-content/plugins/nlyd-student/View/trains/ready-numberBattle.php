@@ -13,7 +13,7 @@
                         <span class="c_blue ml_10 match_info_font">第1/1题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="1200">00:00:00</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
                     <div class="matching-row">
@@ -36,125 +36,54 @@
         </div>
     </div>
 </div>
-<div class="layui-fluid noCopy">
-    <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
-            <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><?=$match_title?></h1>
-            </header>
-            <div class="layui-row nl-border nl-content">
-                <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
-                        </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
-                    </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label">辅助操作</div>
-                        <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev">前插一位</div>
-                            <div class="matching-btn c_white" id="next">后插一位</div>
-                        </div>
-                    </div>
-                    <div class="matching-number-zoo">
-                        <?php for($i=0;$i<$str_length;++$i){ ?>
-                            <div class="matching-number <?=$i==0?'active':'';?>"></div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="matching-keyboard">
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="1">1</div>
-                            <div class="matching-key fs_18 c_white number" date-number="2">2</div>
-                            <div class="matching-key fs_18 c_white number" date-number="3">3</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="4">4</div>
-                            <div class="matching-key fs_18 c_white number" date-number="5">5</div>
-                            <div class="matching-key fs_18 c_white number" date-number="6">6</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="7">7</div>
-                            <div class="matching-key fs_18 c_white number" date-number="8">8</div>
-                            <div class="matching-key fs_18 c_white number" date-number="9">9</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_16 c_white" id="del">删除</div>
-                            <div class="matching-key fs_18 c_white number" date-number="0">0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 jQuery(function($) { 
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
-    $.getJSON(file_path,function(JsonData){
-        // var matchSession=$.GetSession('ready_shuzi','true');
-        // if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-        //     questions_answer=matchSession['questions_answer']
-        // }else{
-            var questions_answers=JsonData;
-            var pos = Math.round(Math.random() * (questions_answers.length - 1));
-            var xx=questions_answers[pos]
-            questions_answer=xx.sort(function() {
-                return .5 - Math.random();
-            });
-            // var sessionData={
-            //     match_id:$.Request('match_id'),
-            //     project_id:$.Request('project_id'),
-            //     match_more:$.Request('match_more'),
-            //     questions_answer:questions_answer
+
+    // $.getJSON(file_path,function(JsonData){
+        var leavePage= $.GetCookie('train_match','1');
+        if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
+            questions_answer=leavePage['train_questions']
+        }else{
+            var questions_answers=[];
+            // var questions_answers=JsonData;
+            // var pos = Math.round(Math.random() * (questions_answers.length - 1));
+            // var xx=questions_answers[pos]
+            // questions_answer=xx.sort(function() {
+            //     return .5 - Math.random();
+            // });
+            for(var i=0;i<100;i++){
+                var num=Math.floor(Math.random()*10);//生成0-9的随机数
+                questions_answer.push(num)
+            }
+            $.DelCookie('train_match')
+            // var sessionData={//存储session
+            //     train_questions:questions_answer,
+            //     genre_id:$.Request('genre_id'),
+            //     type:'szzb',
+            //     count_down:$('.count_down').attr('data-seconds')
             // }
-            // $.SetSession('ready_shuzi',sessionData)
-        // }
+            // $.SetCookie('train_match',sessionData)
+        }
+
         $.each(questions_answer,function(i,v){
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
-    })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
+    // })
+new AlloyFinger($('#complete')[0], {//记忆完成
     tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                match_action:'numberBattle',
-                match_questions:questions_answer,
-                type:'szzb'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){  
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url;
-                            // $.DelSession('ready_shuzi')
-                        }   
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                    
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'szzb',
+            count_down:$('.count_down').attr('data-seconds')
         }
+        $.SetCookie('train_match',sessionData,0)
     }
 })
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
                 'opacity': '1',
@@ -166,27 +95,19 @@ new AlloyFinger($('#complete')[0], {
         })
         var data={
             action:'trains_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_more:$('#inputMatchMore').val(),
+            genre_id:$.Request('genre_id'),
+            project_type:'szzb',
+            train_questions:questions_answer,
+            train_answer:questions_answer,
             my_answer:my_answer,
             surplus_time:time,
-            match_questions:questions_answer,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-
-        // var leavePage= $.GetSession('leavePage','1');
-        //     if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-        //         if(leavePage.Time){
-        //             data['leave_page_time']=leavePage.Time;
-        //         }
-        //     }
         $.ajax({
             data:data,
-            success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
+            success:function(res,ajaxStatu,xhr){
                 if(res.success){
-                    //return false;
                     if(res.data.url){
+                        $.DelCookie('train_match','1')
                         setTimeout(function(){
                             window.location.href=res.data.url
                         },300)
@@ -209,12 +130,6 @@ new AlloyFinger($('#complete')[0], {
             }
         })
     } 
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0,3)
-    //     }, 1000);
-    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -229,11 +144,10 @@ new AlloyFinger($('#complete')[0], {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });
-    // mTouch('body').on('tap','.matching-btn',function(e){
     $('.matching-btn').each(function(){
         var _this=$(this);
         new AlloyFinger(_this[0], {
