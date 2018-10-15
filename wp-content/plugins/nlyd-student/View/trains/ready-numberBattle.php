@@ -92,15 +92,16 @@ new AlloyFinger($('#complete')[0], {//记忆完成
             genre_id:$.Request('genre_id'),
             project_type:'szzb',
             train_questions:questions_answer,
-            train_answer:my_answer,
+            train_answer:questions_answer,
+            my_answer:my_answer,
             surplus_time:time,
         }
         $.ajax({
             data:data,
-            success:function(res,ajaxStatu,xhr){  
-                $.DelCookie('train_match','1')
+            success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     if(res.data.url){
+                        $.DelCookie('train_match','1')
                         setTimeout(function(){
                             window.location.href=res.data.url
                         },300)

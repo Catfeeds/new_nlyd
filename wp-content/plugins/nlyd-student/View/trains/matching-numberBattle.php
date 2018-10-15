@@ -59,16 +59,6 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-    //     submit(time,4);
-    // })
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0,3)
-    //     }, 1000);
-    // }
     var questions_answer=[];
     var leavePage= $.GetCookie('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
@@ -127,11 +117,11 @@ jQuery(function($) {
             //     }
             // }
             $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){  
-                    $.DelCookie('train_match','1')
+                data:data,success:function(res,ajaxStatu,xhr){ 
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
+                            $.DelCookie('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{

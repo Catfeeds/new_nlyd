@@ -42,13 +42,13 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
                 </div>
-                <a class="a-btn"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
+                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
             </div>
         </div>           
     </div>
 </div>
 
-<div class="layui-fluid noCopy">
+<!-- <div class="layui-fluid noCopy">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
@@ -77,7 +77,6 @@
                         <div class="porker-zoo">
                             <div class="poker-window">
                                 <div class="poker-wrapper">
-                                    <!-- 扑克区域 -->
                                 </div>
                             </div>
                         </div>
@@ -115,19 +114,14 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
 jQuery(function($) { 
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
     var data_match=[];
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
                 'opacity': '1',
@@ -135,31 +129,21 @@ jQuery(function($) {
             })
         var my_answer=[];
         var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1 ?>,
+            action:'trains_submit',
+            genre_id:$.Request('genre_id'),
+            project_type:'pkjl',
+            train_questions:questions_answer,
+            train_answer:questions_answer,
             my_answer:my_answer,
-            match_action:'subjectPokerRelay',
             surplus_time:time,
-            match_questions:questions_answer,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-        var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
-                        $.DelSession('ready_poker')
                     }   
                 }else{
                     $('#load').css({
@@ -179,12 +163,12 @@ jQuery(function($) {
             }
         })
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
-    }
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     setTimeout(function() {
+    //         submit(0)
+    //     }, 1000);
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -199,7 +183,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });
@@ -262,32 +246,18 @@ jQuery(function($) {
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
         $.getJSON(file_path,function(JsonData){
 
-            var matchSession=$.GetSession('ready_poker','true');
-            if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-                data_match=matchSession['data_match'];
-                questions_answer=matchSession['questions_answer']
-            }else{
-                var _answers=JsonData;
-                var pos = Math.round(Math.random() * (_answers.length - 1));
-                
-                var xx=_answers[pos]
-                questions_answer=xx.sort(function() {
-                    return .5 - Math.random();
-                });
-                $.each(questions_answer,function(i,v){
-                    var item=v.split('-')
-                    data_match.push(item)
-                })
-                var sessionData={
-                    data_match:data_match,
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
-                    questions_answer:questions_answer
-                }
-                $.SetSession('ready_poker',sessionData)
-            }
 
+            var _answers=JsonData;
+            var pos = Math.round(Math.random() * (_answers.length - 1));
+            
+            var xx=_answers[pos]
+            questions_answer=xx.sort(function() {
+                return .5 - Math.random();
+            });
+            $.each(questions_answer,function(i,v){
+                var item=v.split('-')
+                data_match.push(item)
+            })
             var data=pagation(data_match,nowPage,onePageItems)
        
         
