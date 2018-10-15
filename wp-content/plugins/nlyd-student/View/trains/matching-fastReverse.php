@@ -9,18 +9,18 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font"> 第<span id="total">0</span>题</span>
+                        <span class="c_black match_info_font"><?=$project_title?><?=__('第', 'nlyd-student')?><?=$match_more_cn?><?=__('轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"> <?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
                     <p class="count_p fs_14">
-                        <span class="c_black">请用完给出的4个数字，并利用运算符号使运算结果等于24！</span>
+                        <span class="c_black"><?=__('请用完给出的4个数字，并利用运算符号使运算结果等于24！', 'nlyd-student')?></span>
                         <br>
-                        <span>*若您跳过此题不作答，则扣掉2秒时间</span>
+                        <span>*<?=__('若您跳过此题不作答，则扣掉2秒时间', 'nlyd-student')?></span>
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
@@ -45,9 +45,9 @@
                             <div class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key c_white fs_16" id="del">删除</div>
-                            <!-- <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a> -->
-                            <div class="bg_orange matching-key c_white fs_16" id="next">下一题</div>
+                            <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
+                            <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a>
+                            <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
                 </div> 
@@ -59,22 +59,9 @@
 <script>
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        // console.log(data);
-        submit(time,4);
-    })
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
-    var matchSession=$.GetSession('match','true');
-    var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-        isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-    }
-    if(!isMatching){
-        initQuestion();//初始化数据
-    }
+    initQuestion();//初始化数据
     nextQuestion();//初始化dom
     count_down();//倒计时
     function randSZ() {//生成随即数字
@@ -90,16 +77,12 @@ jQuery(function($) {
             var number=randSZ();
             select.push(number)
         }
-        if(valid(select)=="本题无解"){
-            initQuestion()
-        }else{
+        // if(valid(select)=="本题无解"){
+        //     initQuestion()
+        // }else{
             var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
             ajaxData.push(thisRow)
-            if(!$.Request('test')){
-                var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
-                $.SetSession('match',sessionData)
-            }
-        }
+        // }
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
@@ -111,7 +94,7 @@ jQuery(function($) {
         }).removeClass('disabled')
         $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
     }
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
                 'display':'block',
@@ -120,26 +103,14 @@ jQuery(function($) {
             })
             isSubmit=true;
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                project_type:'kysm',
                 my_answer:ajaxData,
-                match_action:'subjectFastReverse',
                 surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-            }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){    
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -165,7 +136,7 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
      function count_down(){
@@ -176,7 +147,7 @@ jQuery(function($) {
                 var hour = Math.floor((sys_second / 3600) % 24);
                 var minute = Math.floor((sys_second / 60) % 60);
                 var second = Math.floor(sys_second % 60);
-                day=day>0?day+'天':'';
+                day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
                 hour= hour<10?"0"+hour:hour;//计算小时
                 minute= minute<10?"0"+minute:minute;//计算分钟
                 second= second<10?"0"+second:second;//计算秒
@@ -188,7 +159,7 @@ jQuery(function($) {
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
                 var text=$('.answer').text()
                 thisAjaxRow.yours=text;
-                submit(0,3)
+                submit(0)
             }
 
         }, 1000);
@@ -209,13 +180,13 @@ $('.number').each(function(){
                 })
                 var number=_this.text();
                 var text=$('.answer').text()
-                // if(text=="本题无解"){
-                //     text=''
-                // }
-                // if(number=="本题无解"){
-                //     $('.answer').text(number)
-                //     $('.number').removeClass('disabled')
-                // }else{
+                if(text=="本题无解"){
+                    text=''
+                }
+                if(number=="本题无解"){
+                    $('.answer').text(number)
+                    $('.number').removeClass('disabled')
+                }else{
                     var len=text.length;
                     var x=text.charAt(len-1,1);
                     if(!isNaN(parseInt(number))){//数字，前一位必须是符号
@@ -309,6 +280,7 @@ $('.number').each(function(){
                             }
                         }
                     }
+                }
             }
         }
     });
@@ -336,7 +308,7 @@ new AlloyFinger($('#del')[0], {
             var len=text.length;
             var news='';
             if(len>0){
-                // if(text!="本题无解"){
+                if(text!="本题无解"){
                     var end=text.substr(text.length-1,1);
                     var end_1=text.substr(text.length-2,1)
                     if(!isNaN(parseInt(end))){//删除的是数字
@@ -357,8 +329,10 @@ new AlloyFinger($('#del')[0], {
                     }else{
                         news=text.substring(0,len-1);
                     }
-                // }
-                $('.answer').text(news)
+                    $('.answer').text(news)
+                }else{
+                    $('.answer').text('')
+                }
             }
         }
     });
@@ -366,11 +340,9 @@ new AlloyFinger($('#del')[0], {
     // mTouch('body').on('tap','#next',function(e){
 new AlloyFinger($('#next')[0], {
     tap:function(e){
-        // $.DelSession('leavePage')
         var _this=$('#next');
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
-            var text=$('.answer').text()
             var flag=false;
             var text=$('.answer').text()
             ajaxData[ajaxData.length-1].yours=text;
@@ -383,16 +355,16 @@ new AlloyFinger($('#next')[0], {
                 }
             })
             if(text.length!=0){
-                // if($('.answer').text()=='本题无解'){
-                //     text='unsolvable';
-                //      if(ajaxData[ajaxData.length-1].rights=="本题无解"){
-                //         $('.answer').addClass('right-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']=true;
-                //      }else{
-                //         $('.answer').addClass('error-fast')
-                //         ajaxData[ajaxData.length-1]['isRight']=false;
-                //      }
-                // }else{
+                if($('.answer').text()=='本题无解'){
+                    text='unsolvable';
+                     if(ajaxData[ajaxData.length-1].rights=="本题无解"){
+                        $('.answer').addClass('right-fast')
+                        ajaxData[ajaxData.length-1]['isRight']=true;
+                     }else{
+                        $('.answer').addClass('error-fast')
+                        ajaxData[ajaxData.length-1]['isRight']=false;
+                     }
+                }else{
                     if(flag){
                         _this.removeClass('disabled')
                         return false;
@@ -406,7 +378,7 @@ new AlloyFinger($('#next')[0], {
                             ajaxData[ajaxData.length-1]['isRight']=false;
                         }
                     }
-                // }
+                }
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
@@ -417,36 +389,12 @@ new AlloyFinger($('#next')[0], {
                 $('.answer').addClass('error-fast')
                 ajaxData[ajaxData.length-1]['isRight']=false;
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var data={
-                    action:'get_24_result',
-                    numbers:thisAjaxRow.question,
-                    my_answer:'',
-                    new_date:new Date().getTime(),
-                    match_more:$.Request('match_more') ? $.Request('match_more') : 1,
-                    project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
-                }
-                $.ajax({
-                    url: window.admin_ajax,
-                    data: data,
-                    success: function(res, textStatus, jqXHR){
-                        if(text.length==0){//重新计算时间
-                            var newTime=res.data.info;
-                            sys_second=newTime
-                        }
-                        setTimeout(function() {
-                            initQuestion()
-                            nextQuestion()
-                            _this.removeClass('disabled')
-                        }, 300);
-                    },
-                    error:function (XMLHttpRequest, textStatus, errorThrown) {
-                        _this.removeClass('disabled')
-                        $.alerts('网络超时')
-                        initQuestion()
-                        nextQuestion()
-                    }
-
-                });
+                sys_second-=1
+                setTimeout(function() {
+                    initQuestion()
+                    nextQuestion()
+                    _this.removeClass('disabled')
+                }, 300);
             }
         }
     }
@@ -462,7 +410,7 @@ new AlloyFinger($('#next')[0], {
                     ,title: '提示' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                    ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
                     ,btn: ['按错了','提交',  ]
                     ,success: function(layero, index){
                     }
@@ -474,7 +422,7 @@ new AlloyFinger($('#next')[0], {
                         var thisAjaxRow=ajaxData[ajaxData.length-1]
                         var text=$('.answer').text()
                         thisAjaxRow.yours=text;
-                        submit(time,1);  
+                        submit(time);  
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中

@@ -354,7 +354,9 @@ $('#selectWrapper .fastScan-item').each(function(){
                 my_answer:ajaxData,
                 surplus_time:time,
             }
-
+            if(typeof(timer)!="undefined"){
+                clearTimeout(timer);
+            }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     if(res.success){
@@ -408,9 +410,9 @@ $('#selectWrapper .fastScan-item').each(function(){
             }else{
                 $.alerts('比赛结束')
             }
-            if(typeof(timer)!="undefined"){
-                clearTimeout(timer);
-            }
+            // if(typeof(timer)!="undefined"){
+            //     clearTimeout(timer);
+            // }
             
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
             setTimeout(function() {
