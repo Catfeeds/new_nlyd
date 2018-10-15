@@ -43,10 +43,6 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
@@ -56,7 +52,7 @@ jQuery(function($) {
     // nanduMax=4,//替换项的上线
     nanduLen=6,//每nanduLen题nandu++
     // stop=false,//停止计时
-    answerHide=0.8,//正确答案消失的时间为0.8秒
+    answerHide=$.Request('flash_time'),//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
@@ -95,11 +91,6 @@ jQuery(function($) {
                 
             }else{
                 if(flaseQuestion<flaseMax){
-                    var matchSessions=$.GetSession('match','true');
-                    if(matchSessions && matchSessions['match_id']===$.Request('match_id') && matchSessions['project_id']===$.Request('project_id') && matchSessions['match_more']===$.Request('match_more')){
-                        matchSessions['fetchPage_time']=_count_time;//记录_count_time
-                        $.SetSession('match',matchSessions);
-                    }
                     if(_count_time+1==getAjaxTime){
                         timer=setTimeout("showTime()",1000+answerHide*1000);
                     }else{
@@ -111,17 +102,7 @@ jQuery(function($) {
             
 
     }  
-
-    var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-        isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-        flaseQuestion=matchSession['flaseQuestion'];
-        nandu=matchSession['nandu'];
-        itemLen=matchSession['itemLen'];
-        fetchPage_time=matchSession['fetchPage_time']?matchSession['fetchPage_time']:0;
-    }
     if(!isMatching){
         // $('.matching-fastScan').css('paddingTop','40%');
         $('body').one('click','.answer',function(){
@@ -256,16 +237,6 @@ jQuery(function($) {
             select.splice(arr[randIndex], 0,right); //随机插入
             var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
-            var sessionData={
-                ajaxData:ajaxData,
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
-                nandu:nandu,
-                flaseQuestion:flaseQuestion,
-                itemLen:itemLen,
-            }
-            $.SetSession('match',sessionData)
         }else{
             $.alerts('错误'+flaseMax+'题')
             submit($('.count_down').attr('data-seconds'),2)
@@ -368,7 +339,7 @@ $('#selectWrapper .fastScan-item').each(function(){
         }
     })
 })
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
                 'display':'block',
@@ -377,26 +348,15 @@ $('#selectWrapper .fastScan-item').each(function(){
             })
             isSubmit=true;
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1?>,
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                project_type:'kysm',
                 my_answer:ajaxData,
-                match_action:'subjectfastScan',
                 surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -425,16 +385,16 @@ $('#selectWrapper .fastScan-item').each(function(){
             $.alerts('正在提交答案')
         }
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        if(typeof(timer)!="undefined"){
-            clearTimeout(timer);
-        }
-        $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-        setTimeout(function(){
-            submit(0,3)
-        }, 1000);
-    }
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     if(typeof(timer)!="undefined"){
+    //         clearTimeout(timer);
+    //     }
+    //     $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
+    //     setTimeout(function(){
+    //         submit(0)
+    //     }, 1000);
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day<10 ? '0'+d.day : d.day;
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -454,7 +414,7 @@ $('#selectWrapper .fastScan-item').each(function(){
             
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });
@@ -484,7 +444,7 @@ layui.use('layer', function(){
                 ,btn2: function(index, layero){
                     layer.closeAll();
                     var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                    submit(time,1);
+                    submit(time);
                     // stop=false;
                 }
                 ,closeBtn:2
