@@ -130,6 +130,7 @@ jQuery(function($) {
                             'opacity': '0',
                             'visibility': 'hidden',
                         })
+                        $.DelCookie('train_match','1')
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }

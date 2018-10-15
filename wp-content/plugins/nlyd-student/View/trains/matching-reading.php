@@ -66,14 +66,10 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
     layui.use(['form'], function(){
 
     })
-    function submit(time,submit_type){//提交答案
+    function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
                 'display':'block',
@@ -99,27 +95,18 @@ jQuery(function($) {
                 }
             })
             
-            var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1?>,
-                my_answer:my_answer,
-                match_action:'subjectReading',
-                surplus_time:time,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-            }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+        var data={
+            action:'trains_submit',
+            genre_id:$.Request('genre_id'),
+            project_type:'wzsd',
+            train_questions:$.Request('post_id'),
+            train_answer:$.Request('post_id'),
+            my_answer:my_answer,
+            surplus_time:time,
+        }
             $.ajax({
                 data:data,
                 success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -148,12 +135,12 @@ jQuery(function($) {
             $.alerts('正在提交答案')
         }
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
-        setTimeout(function() {
-            submit(0,3)
-        }, 1000);
-    }
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('比赛结束');
+    //     setTimeout(function() {
+    //         submit(0)
+    //     }, 1000);
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -168,7 +155,7 @@ jQuery(function($) {
                 $.alerts('比赛结束')
             }
             setTimeout(function() {
-                submit(0,3)
+                submit(0)
             }, 1000);
         }
     });
@@ -197,7 +184,7 @@ jQuery(function($) {
                 ,btn2: function(index, layero){
                     //按钮【按钮二】的回调
                     layer.closeAll();
-                    submit(time,1)
+                    submit(time)
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中
