@@ -67,14 +67,14 @@
                 <?php if(is_user_logged_in()){ ?>
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
-                    <span class="fs_14 c_black">
+                    <p class="fs_14 c_black">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
-                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?><?=$my_skill['mental_type']?> |
+                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?> <?=$my_skill['mental_type']?> |
                         <?php endif;?>
                         <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('心算', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['compute'])?0:$my_skill['compute']?></span><?=__('级', 'nlyd-student')?>
-                    </span>
+                    </p>
                 </div>
                 <?php }else{ ?>
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">

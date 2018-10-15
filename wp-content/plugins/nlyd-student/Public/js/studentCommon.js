@@ -53,12 +53,12 @@ jQuery(document).ready(function($) {
         var isAndroid = u.indexOf('Android') > -1; //android终端或者uc浏览器  
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端  
          if(navigator.userAgent.indexOf('UCBrowser') > -1) { 
-            if(isAndroid){//
-                // alert('isAndroid UC')
-            }
-            if(isiOS){
-                // alert('isiOS UC')
-            }
+            // if(isAndroid){//
+            //     // alert('isAndroid UC')
+            // }
+            // if(isiOS){
+            //     // alert('isiOS UC')
+            // }
          }else{
             if(isAndroid){
                 if(!mqqbrowser() && !isQQInstalled() && !isChrome()){//非QQ浏览器，QQ内置浏览器
@@ -70,9 +70,9 @@ jQuery(document).ready(function($) {
                 }
                 
             }
-            if(isiOS){
-                // alert('isiOS')
-            }
+            // if(isiOS){
+            //     // alert('isiOS')
+            // }
          }
          
     }
