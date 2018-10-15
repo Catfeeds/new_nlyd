@@ -36,63 +36,6 @@
         </div>
     </div>
 </div>
-<div class="layui-fluid noCopy">
-    <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
-            <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><?=$match_title?></h1>
-            </header>
-            <div class="layui-row nl-border nl-content">
-                <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?>第<?=$match_more_cn?>轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
-                        </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
-                    </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label">辅助操作</div>
-                        <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev">前插一位</div>
-                            <div class="matching-btn c_white" id="next">后插一位</div>
-                        </div>
-                    </div>
-                    <div class="matching-number-zoo">
-                        <?php for($i=0;$i<$str_length;++$i){ ?>
-                            <div class="matching-number <?=$i==0?'active':'';?>"></div>
-                        <?php } ?>
-                    </div>
-
-                    <div class="matching-keyboard">
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="1">1</div>
-                            <div class="matching-key fs_18 c_white number" date-number="2">2</div>
-                            <div class="matching-key fs_18 c_white number" date-number="3">3</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="4">4</div>
-                            <div class="matching-key fs_18 c_white number" date-number="5">5</div>
-                            <div class="matching-key fs_18 c_white number" date-number="6">6</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="7">7</div>
-                            <div class="matching-key fs_18 c_white number" date-number="8">8</div>
-                            <div class="matching-key fs_18 c_white number" date-number="9">9</div>
-                        </div>
-                        <div class="matching-keyboard-row">
-                            <div class="matching-key fs_16 c_white" id="del">删除</div>
-                            <div class="matching-key fs_18 c_white number" date-number="0">0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 jQuery(function($) { 
     var questions_answer=[]
@@ -122,38 +65,6 @@ jQuery(function($) {
         })
     })
     // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                match_action:'numberBattle',
-                match_questions:questions_answer,
-                type:'szzb'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){  
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url;
-                            // $.DelSession('ready_shuzi')
-                        }   
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                    
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
-        }
-    }
-})
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',

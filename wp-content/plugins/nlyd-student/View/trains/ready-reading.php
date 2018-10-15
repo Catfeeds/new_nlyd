@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn" id="complete">阅读完成</div>
+                <a class="a-btn"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">阅读完成</a>
             </div>
         </div>
     </div>
