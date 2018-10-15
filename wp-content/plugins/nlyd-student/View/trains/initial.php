@@ -18,11 +18,11 @@ switch ($_GET['type']){
         break;
     case 'zxss';
         $title = '正向速算';
-        include_once 'ready-reading.php';
+        include_once 'matching-fastCalculation.php';
         break;
     case 'nxss';
         $title = '逆向速算';
-        include_once 'ready-reading.php';
+        include_once 'matching-fastReverse.php';
         break;
 
     default:
