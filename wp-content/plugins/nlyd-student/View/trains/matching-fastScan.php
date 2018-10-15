@@ -13,7 +13,7 @@
                         <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>"></span>
+                            <span class="count_down" data-seconds="600"></span>
                         </span>
                         <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
                     </div>
