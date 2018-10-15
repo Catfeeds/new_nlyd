@@ -14,7 +14,7 @@ switch ($_GET['type']){
         break;
     case 'kysm';
         $title = '快眼扫描';
-        include_once 'ready-reading.php';
+        include_once 'ready-kysmSetting.php';
         break;
     case 'zxss';
         $title = '正向速算';
