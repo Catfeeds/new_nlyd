@@ -11,32 +11,32 @@
             <a class="mui-pull-left nl-goback static" onclick='window.location.href = "<?=home_url('account')?>"'>
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">设置</h1>
+            <h1 class="mui-title"><?=__('设置', 'nlyd-student')?></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
                     <div class="nl-page-form width-margin-pc ">
                         <div class="form-inputs">
                             <a class="form-input-row a" href="<?=home_url('/safety/userAgreement');?>">
-                                <div class="form-input-label">用户协议</div>
+                                <div class="form-input-label"><?=__('用户协议', 'nlyd-student')?></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <a class="form-input-row a" href="<?=home_url('/safety/privacyAgreement');?>">
-                                <div class="form-input-label">隐私协议</div>
+                                <div class="form-input-label"><?=__('隐私协议', 'nlyd-student')?></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <a class="form-input-row a" href="<?=home_url('/safety/suggest');?>">
-                                <div class="form-input-label">意见反馈</div>
+                                <div class="form-input-label"><?=__('意见反馈', 'nlyd-student')?></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <div class="form-input-row">
-                                <div class="form-input-label">版本号</div>
+                                <div class="form-input-label"><?=__('版本号', 'nlyd-student')?></div>
                                 <span class="form-input-right">V<?=leo_student_version?></span>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label">清除缓存</div>
+                                <div class="form-input-label"><?=__('清除缓存', 'nlyd-student')?></div>
                             </div>
-                            <a class="a-btn" id="loginOut">退出登录</a>  
+                            <a class="a-btn" id="loginOut"><?=__('退出登录', 'nlyd-student')?></a>
                         </div>
                     </div>
                 </div>

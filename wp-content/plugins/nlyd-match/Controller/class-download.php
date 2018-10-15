@@ -245,6 +245,7 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(25);
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title);
 
@@ -259,9 +260,10 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
 
 
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:K1');
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', 'ID');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
@@ -273,6 +275,7 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '手机');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '邮箱');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '报名时间');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '证件号码');
         foreach ($rows as $k => $row){
             $usermeta = get_user_meta($row['ID'], '', true);
             $age = unserialize($usermeta['user_real_name'][0])['real_age'];
@@ -287,6 +290,7 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$row['telephone']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_email']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');

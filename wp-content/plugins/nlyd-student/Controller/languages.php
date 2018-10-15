@@ -11,3 +11,6 @@ __('快眼扫描', 'nlyd-student');
 __('文章速读', 'nlyd-student');
 __('正向速算', 'nlyd-student');
 __('逆向速算', 'nlyd-student');
+__('记忆类脑力健将', 'nlyd-student');
+__('心算类脑力健将', 'nlyd-student');
+__('速读类脑力健将', 'nlyd-student');

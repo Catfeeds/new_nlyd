@@ -6,30 +6,30 @@
                 <a class="mui-pull-left nl-goback">
                     <i class="iconfont">&#xe610;</i>
                 </a>
-                <h1 class="mui-title">新闻详情</h1>
+                <h1 class="mui-title"><?=__('新闻详情', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc news-wrapper layui-row">
                     <div class="news-title lauyi-row">
                         <div class="layui-row">
                             <?php if($next->ID){ ?>
-                                <a class="news-prev" href="<?=home_url('student/account/news/?action=newsDetail&id='.$next->ID)?>">上一篇</a>
+                                <a class="news-prev" href="<?=home_url('student/account/news/?action=newsDetail&id='.$next->ID)?>"><?=__('上一篇', 'nlyd-student')?></a>
                             <?php }else{ ?>
-                                <a class="news-prev" href="javascript:;">无上篇</a>
+                                <a class="news-prev" href="javascript:;"><?=__('无上篇', 'nlyd-student')?></a>
                             <?php }?>
                             <p class="news-name"><?=$row->post_title?></p>
                             <?php if($prev->ID){ ?>
-                                <a class="news-next" href="<?=home_url('student/account/news/?action=newsDetail&id='.$prev->ID)?>">下一篇</a>
+                                <a class="news-next" href="<?=home_url('student/account/news/?action=newsDetail&id='.$prev->ID)?>"><?=__('下一篇', 'nlyd-student')?></a>
                             <?php }else{ ?>
-                                <a class="news-next" href="javascript:;">无下篇</a>
+                                <a class="news-next" href="javascript:;"><?=__('无下篇', 'nlyd-student')?></a>
                             <?php }?>
                         </div>
                         <div class="layui-row">
                             <div class="pull-left news-info">
-                                <span class="news-build">发布日期：<?=explode(' ',$row->post_date)[0]?></span>
-                                <span class="news-scan">浏览数量：<?=$readNum?></span>
+                                <span class="news-build"><?=__('发布日期', 'nlyd-student')?>：<?=explode(' ',$row->post_date)[0]?></span>
+                                <span class="news-scan"><?=__('浏览数量', 'nlyd-student')?>：<?=$readNum?></span>
                             </div>
-                            <div class="pull-right news-share">分享</div>
+                            <div class="pull-right news-share"><?=__('分享', 'nlyd-student')?></div>
                         </div>
                     </div>
 

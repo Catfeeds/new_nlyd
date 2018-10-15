@@ -41,7 +41,7 @@ p.tips{
             <a class="mui-pull-left nl-goback">
                 <i class="iconfont">&#xe610;</i>
             </a>
-            <h1 class="mui-title">国际脑力运动</h1>
+            <h1 class="mui-title"><?=__('国际脑力运动', 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
 
@@ -49,14 +49,14 @@ p.tips{
                     <p class="tips fs_16">
                         <?=$data['message']?>
                         <?php if(!empty($start_count_down)):?>
-                        <span class="count_down" data-seconds="<?=$start_count_down?>">初始中...</span>
+                        <span class="count_down" data-seconds="<?=$start_count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                         <?php endif;?>
                     </p>
                     <?php if(!empty($data['match_url'])):?>
-                    <a class="a-btn" style="position: relative;bottom: 0;" href="<?=$data['match_url']?>">返回比赛详情</a>
+                    <a class="a-btn" style="position: relative;bottom: 0;" href="<?=$data['match_url']?>"><?=__('返回比赛详情', 'nlyd-student')?></a>
                     <?php endif;?>
                     <?php if(!empty($data['waiting_url'])):?>
-                    <a class="a-btn back" href="<?=$data['waiting_url']?>">返回比赛等待</a>
+                    <a class="a-btn back" href="<?=$data['waiting_url']?>"><?=__('返回比赛等待', 'nlyd-student')?></a>
                     <?php endif;?>
                 </div>
             </div>
@@ -70,7 +70,7 @@ jQuery(function($) {
             window.location.reload();
         }
         $('.count_down').countdown(function(S, d){//倒计时
-            var D=d.day>0 ? d.day+'天' : '';
+            var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
             var h=d.hour<10 ? '0'+d.hour : d.hour;
             var m=d.minute<10 ? '0'+d.minute : d.minute;
             var s=d.second<10 ? '0'+d.second : d.second;

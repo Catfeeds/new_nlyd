@@ -15,8 +15,8 @@
 <block name="body">
    <div class="paycont">
     <input type="hidden" id="serialnumber" value="{:$serialnumber}" />
-    <p class="text_center boa_p1">请点击屏幕左上角[ ⋮ ]</p>
-    <p class="text_center boa_p4">请用android浏览器打开</p>
+    <p class="text_center boa_p1"><?=__('请点击屏幕左上角', 'nlyd-student')?>[ ⋮ ]</p>
+    <p class="text_center boa_p4"><?=__('请用android浏览器打开', 'nlyd-student')?></p>
     <p><img class="boa_img boa_img_android" src="__IMG__/phoneSkip/android_open_01.png" alt=""/></p>
     <p><img class="boa_img boa_bottom_img" src="__IMG__/phoneSkip/phone_bottom.png" alt=""/></p>
 </div>
@@ -45,7 +45,7 @@
                         }
                     },
                     error:function(xhr,type,errorThrown){
-                        mui.alert('网络连接失败，请稍后重试');
+                        mui.alert('<?=__('网络连接失败，请稍后重试', 'nlyd-student')?>');
                     }
                 });
             };
