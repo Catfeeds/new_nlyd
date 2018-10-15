@@ -108,7 +108,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = ($page = intval($_POST['page'])) < 1 ? 1 : $page;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1) * $pageSize;
 
         if($_POST['type'] == 'project'){
@@ -596,7 +596,7 @@ class Student_Ajax
         $coach_id = $_POST['coach_id'];
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.apply_status,
@@ -740,7 +740,7 @@ class Student_Ajax
         $team_id = $_POST['team_id'];
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
         $sql = "select SQL_CALC_FOUND_ROWS a.user_id,a.user_type,
@@ -802,7 +802,7 @@ class Student_Ajax
         $map[] = " a.post_type = 'team' ";
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $where = join(' and ',$map);
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.user_id,b.status,
@@ -1010,7 +1010,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         if(isset($_POST['category_id'])) $category_id = $_POST['category_id'];
         $wap = array();
@@ -1318,7 +1318,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
         $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
@@ -1367,7 +1367,7 @@ class Student_Ajax
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
         $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
@@ -1479,7 +1479,7 @@ class Student_Ajax
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
         $where = join(' and ',$map);
@@ -2356,7 +2356,7 @@ class Student_Ajax
             global $wpdb,$current_user;
             if(!$current_user->ID) wp_send_json_error(array('info' => '您还没有登录'));
             $page = ($page = intval($_POST['page'])) < 1 ? 1 : $page;
-            $pageSize = 10;
+            $pageSize = 50;
             $start = ($page-1) * $pageSize;
             $sql = 'SELECT SQL_CALC_FOUND_ROWS id,`type`,title,read_status,title,content,message_time from '
                 .$wpdb->prefix.'messages WHERE '
@@ -2428,7 +2428,7 @@ class Student_Ajax
                 wp_send_json_error(array('info' => '参数错误'));
         }
         $page < 1 && $page = 1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT 
         id,
@@ -2670,7 +2670,7 @@ class Student_Ajax
         global $wpdb;
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         $page < 1 && $page = 1;
-        $pageSize = 10;
+        $pageSize = 50;
         $which_cat = get_category_by_slug('news');
         $recentPosts = new WP_Query();
         $cat_query = $recentPosts->query('showposts='.$pageSize.'&cat='.$which_cat->cat_ID.'&paged='.$page);
@@ -2696,7 +2696,7 @@ class Student_Ajax
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         //搜索商品
         $searchWhere = isset($_POST['search_str']) ? 'AND goods_title LIKE "%'.trim($_POST['search_str']).'%"' : '';
-        $pageSize = 20;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT 
         id,goods_title,goods_intro,images,brain,stock,sales,price 
@@ -3084,7 +3084,7 @@ class Student_Ajax
         $type = intval($_POST['type']);
         if($type < 1)  wp_send_json_error(array('info'=>'参数错误'));
         $page < 1 && $page = 1;
-        $pageSize = 20;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         global $wpdb;
 //        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,d.certificate,
@@ -3144,7 +3144,7 @@ class Student_Ajax
         $map[] = " a.post_title LIKE '%$search%' ";
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $where = join(' and ',$map);
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,b.user_id,b.status,
@@ -3199,7 +3199,7 @@ class Student_Ajax
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
         if($page < 1) $page = 1;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $page = 1;
         //战队排名
