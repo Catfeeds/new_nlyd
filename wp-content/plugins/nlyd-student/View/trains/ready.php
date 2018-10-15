@@ -290,5 +290,13 @@ Team score:
             </pre>
         </div>
     </div>
-    <a class="a-btn" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">训 练</a>
+    <a class="a-btn" id="go" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">训 练</a>
 </div>
+
+<script>
+jQuery(function($) { 
+    $('#go').click(function(){
+        $.DelCookie('train_match','1')
+    })
+})
+</script>

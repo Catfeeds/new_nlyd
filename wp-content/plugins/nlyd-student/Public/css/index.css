@@ -164,6 +164,24 @@ a.a-btn:hover{
     background: linear-gradient(90deg,#919191,#b8bcbe);
     border: none;
 }
+.a-two{
+    width: -webkit-calc(50% - 2px);
+    width: calc(50% - 2px);
+    background: rgba(67, 148, 249, 1);
+    border:1px solid rgba(67, 148, 249, 1);
+    float: left;
+}
+.a-two.left{
+    border-radius: 125px 0 0  125px;
+    border-right:1px solid #fff;
+}
+.a-two.right{
+    border-left:1px solid #fff;
+    border-radius:  0 125px 125px 0;
+}
+.a-btn.two{
+    background: transparent;
+}
 /* 上滑bottom下拉 */
 .selectBottom{
     position: relative;
