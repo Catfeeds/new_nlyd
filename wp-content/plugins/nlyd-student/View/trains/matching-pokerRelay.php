@@ -78,6 +78,15 @@ jQuery(function($) {
     //         submit(0,3)
     //     }, 1000);
     // }
+    var questions_answer=[];
+    var leavePage= $.GetCookie('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){//记忆成功
+        questions_answer=leavePage['train_questions'];
+        console.log(leavePage)
+        $('.count_down').attr('data-seconds',leavePage['count_down'])
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
+    }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'天' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
