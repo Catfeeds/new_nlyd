@@ -41,17 +41,23 @@ jQuery(function($) {
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
 
-    $.getJSON(file_path,function(JsonData){
+    // $.getJSON(file_path,function(JsonData){
         var leavePage= $.GetCookie('train_match','1');
         if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
             questions_answer=leavePage['train_questions']
         }else{
-            var questions_answers=JsonData;
-            var pos = Math.round(Math.random() * (questions_answers.length - 1));
-            var xx=questions_answers[pos]
-            questions_answer=xx.sort(function() {
-                return .5 - Math.random();
-            });
+            var questions_answers=[];
+            // var questions_answers=JsonData;
+            // var pos = Math.round(Math.random() * (questions_answers.length - 1));
+            // var xx=questions_answers[pos]
+            // questions_answer=xx.sort(function() {
+            //     return .5 - Math.random();
+            // });
+            for(var i=0;i<100;i++){
+                var num=Math.floor(Math.random()*10);//生成0-9的随机数
+                questions_answer.push(num)
+            }
+            $.DelCookie('train_match')
             // var sessionData={//存储session
             //     train_questions:questions_answer,
             //     genre_id:$.Request('genre_id'),
@@ -65,7 +71,7 @@ jQuery(function($) {
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
-    })
+    // })
 new AlloyFinger($('#complete')[0], {//记忆完成
     tap:function(){
         var sessionData={//存储session
