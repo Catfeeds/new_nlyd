@@ -49,7 +49,7 @@ switch ($type){
                 <?php } ?>
                 <h1 class="mui-title"><?=$title?><?=__('答题记录', 'nlyd-student')?></h1>
             </header>
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content" style="padding-bottom:80px;">
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title flex-h">
@@ -108,11 +108,13 @@ switch ($type){
                             require_once student_view_path.'public/my-404.php';
                             break;
                     }
-                    ?>
-                </div>
-                <a href="<?=$recur_url?>">再来一局</a>
-                <a href="<?=$revert_url?>">返回列表</a>
+                    ?> 
+                </div>        
             </div>
         </div>
     </div>
 </div>
+<div class="a-btn two get_footer">
+    <a class="a-two left c_white" href="<?=$recur_url?>">再来一局</a>
+    <a class="a-two right c_white" href="<?=$revert_url?>">返回列表</a>
+</div>  
