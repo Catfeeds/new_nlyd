@@ -141,8 +141,8 @@ class Student_Trains extends Student_Home
                 $count_down = 900;
                 break;
             case 'szzb':
+
                 $count_down = 1200;
-                var_dump($_COOKIE['train_match']);
                 break;
             case 'kysm':
                 $count_down = 600;
@@ -178,6 +178,7 @@ class Student_Trains extends Student_Home
      */
     public function answer(){
         global $wpdb;
+
         switch ($_GET['type']){
             case 'wzsd':
                 if(empty($_GET['post_id'])) $this->get_404('参数错误');

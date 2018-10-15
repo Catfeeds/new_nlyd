@@ -248,7 +248,7 @@ function chinanum($num){
 
 
 /**
- * 生成对应长度的比赛题
+ * 生成对应长度的数字争霸题
  * @param $length
  * @return array
  */

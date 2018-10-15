@@ -3360,8 +3360,8 @@ class Student_Ajax
             case 'pkjl':
 
                 $len = count($_POST['train_questions']);
-                //print_r($questions_answer);
-                $error_len = count(array_diff_assoc($_POST['train_questions'],$_POST['my_score']));
+
+                $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
 
                 $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
                 $my_score = ($len-$error_len)*$score;
@@ -3408,6 +3408,7 @@ class Student_Ajax
             default:
                 break;
         }
+
         $insert = array(
             'user_id'=>$current_user->ID,
             'genre_id'=>$_POST['genre_id'],
@@ -3420,10 +3421,20 @@ class Student_Ajax
             'created_time'=>get_time('mysql'),
         );
 
-        $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
-        $id = $wpdb->insert_id;
+        $sql = "select id from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} order by created_time asc ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $total = count($rows);
+
+        if($total > 100){
+            $result = $wpdb->update($wpdb->prefix.'user_train_logs',$insert,array('id'=>$rows[0]['id']));
+            $id = $rows[0]['id'];
+        }else{
+
+            $result = $wpdb->insert($wpdb->prefix.'user_train_logs',$insert);
+            $id = $wpdb->insert_id;
+        }
         if($result){
-            if($_POST['project_type'] == 'wasd'){
+            if($_POST['project_type'] == 'wzsd'){
 
             }
             wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id)));
