@@ -494,7 +494,7 @@
                                 case 'szzb':
                                     ?>
                                     <p class="rule-item">1、<span class="nl-dark-blue"><?=__('数字争霸', 'nlyd-student')?></span><?=__('即在比赛时系统给出100位随即数字，选手记忆后按正确的顺序复位数字。', 'nlyd-student')?></p>
-                                    <p class="rule-item">2、<?=__('正确复位1位数字', 'nlyd-student')?><span class="nl-dark-blue">+12<?=__('分', 'nlyd-student')?></span>，<?=__('若选手所复位数字全部正确，剩余1秒多', 'nlyd-student')?><span class="nl-dark-blue">+1分</span>，<?=__('若复位数字有错误，则时间分不计入成绩。', 'nlyd-student')?></p>
+                                    <p class="rule-item">2、<?=__('正确复位1位数字', 'nlyd-student')?><span class="nl-dark-blue">+12<?=__('分', 'nlyd-student')?></span>，<?=__('若选手所复位数字全部正确，剩余1秒多', 'nlyd-student')?><span class="nl-dark-blue">+1<?=__('分', 'nlyd-student')?></span>，<?=__('若复位数字有错误，则时间分不计入成绩。', 'nlyd-student')?></p>
                                     <?php
                                     break;
                                 case 'nxss':
@@ -511,7 +511,7 @@
                                     break;
                                 case 'zxss':
                                     ?>
-                                    <p class="rule-item">1、<span class="nl-dark-blue"><?=__('正向速算', 'nlyd-student')?></span><?=__('即在比赛时选手依次进行“连加运算” “加减混合运算” “乘除运算”三类题型的比赛,每类题型3分钟,答对一题', 'nlyd-student')?><span class="nl-dark-blue">+10分</span>，<?=__('每道题选手给出确认答案后选择下一题，即刻显示答案是否正确。', 'nlyd-student')?></p>
+                                    <p class="rule-item">1、<span class="nl-dark-blue"><?=__('正向速算', 'nlyd-student')?></span><?=__('即在比赛时选手依次进行“连加运算” “加减混合运算” “乘除运算”三类题型的比赛,每类题型3分钟,答对一题', 'nlyd-student')?><span class="nl-dark-blue">+10<?=__('分', 'nlyd-student')?></span>，<?=__('每道题选手给出确认答案后选择下一题，即刻显示答案是否正确。', 'nlyd-student')?></p>
                                     <p class="rule-item">2、<?=__('答题数量多且正确数多，则分数越高，未给出答题直接下一题，视为未作答，本项目', 'nlyd-student')?><span class="nl-dark-blue"><?=__('无时间分', 'nlyd-student')?></span>。</p>
                                     <?php
                                     break;

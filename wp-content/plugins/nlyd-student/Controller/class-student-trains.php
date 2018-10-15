@@ -139,8 +139,10 @@ class Student_Trains extends Student_Home
                 $post_str = $wpdb->get_var($sql1);
                 if(!empty($post_str)){
                     $post_arr = str2arr($post_str,',');
+                    //print_r($posts_arr);
 
                     $result = array_diff($posts_arr,$post_arr);
+                    //print_r($result);
 
                 }else{
                     $result = $posts_arr;
@@ -346,8 +348,8 @@ class Student_Trains extends Student_Home
         elseif ($row['project_type'] == 'nxss'){
 
             $answer = $questions_answer;
+
             $answer_array = $answer['result'];
-            $questions_answer = $answer['examples'];
             //print_r($answer_array);
             //print_r($questions_answer);die;
 
@@ -406,6 +408,33 @@ class Student_Trains extends Student_Home
 
 
         $view = student_view_path.CONTROLLER.'/answer-log.php';
+        load_view_template($view,$data);
+    }
+
+
+    /**
+     * 训练历史记录
+     */
+    public function history(){
+
+        global $wpdb,$current_user;
+        $sql = "select id,my_score,created_time,project_type,
+                case project_type
+                when 'szzb' then '数字争霸' 
+                when 'kysm' then '快眼扫描' 
+                when 'pkjl' then '扑克接力' 
+                when 'wzsd' then '文章速读' 
+                when 'zxss' then '正向速算' 
+                when 'nxss' then '逆向速算' 
+                else '--'
+                end project_type_cn
+                from {$wpdb->prefix}user_train_logs 
+                where user_id = {$current_user->ID} and  project_type != ''
+                order by created_time desc ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $data['list'] = $rows;
+
+        $view = student_view_path.CONTROLLER.'/history.php';
         load_view_template($view,$data);
     }
 

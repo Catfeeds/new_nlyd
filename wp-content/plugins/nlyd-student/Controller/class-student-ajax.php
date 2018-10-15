@@ -3383,8 +3383,9 @@ class Student_Ajax
                     $questions_answer = array_column($data_arr,'rights');
                     $_POST['my_answer'] = array_column($data_arr,'yours');
                 }
-                if($_POST['type'] == 'nxss'){
+                if($_POST['project_type'] == 'nxss'){
                     $isRight = array_column($data_arr,'isRight');
+
                     $success_len = 0;
                     if(!empty($isRight)){
                         $count_value = array_count_values($isRight);
@@ -3399,16 +3400,17 @@ class Student_Ajax
                 }else{
 
                     $len = count($match_questions);
-                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
                     $my_score = ($len-$error_len)*10;
                 }
+
 
                 $_POST['train_questions'] = $match_questions;
                 $_POST['train_answer'] = $questions_answer;
 
                 break;
             case 'wzsd':
-                //if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
+                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
                 //print_r($_POST);die;
                 $questions_answer = $_POST['train_answer'];
                 $len = count($questions_answer);
@@ -3461,7 +3463,14 @@ class Student_Ajax
         }
         if($result){
             if($_POST['project_type'] == 'wzsd'){
-
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID}";
+                    $wpdb->query($sql2);
+                }else{
+                    $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id']));
+                }
             }
             wp_send_json_success(array('info'=>'提交成功','url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'])));
         }else{

@@ -70,6 +70,9 @@ if(!class_exists('StudentController')){
 
             //引入ajax操作文件
             include_once(leo_student_path.'Controller/class-student-ajax.php');
+
+            //引入conf下functions
+            include_once(leo_student_path.'conf/functions.php');
         }
 
 
