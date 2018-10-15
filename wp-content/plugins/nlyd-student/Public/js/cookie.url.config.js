@@ -140,6 +140,7 @@ Alert.prototype={
 			
 			result=typeof(result)=='object' ? JSON.stringify(result) : result;
 			result=escape(result)
+			//console.log(result);
 			exp.setTime(exp.getTime()+days*60*1000);
 			document.cookie=name+"="+result+";expires="+exp.toGMTString()+";path=/"
 		},
