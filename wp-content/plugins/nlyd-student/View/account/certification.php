@@ -114,9 +114,9 @@ jQuery(document).ready(function($) {
                 }
             });
         })
-        $('.certificationFormBtn').click(function(){
-            $('#certificationFormBtn').click()
-        })
+        // $('.certificationFormBtn').click(function(){
+        //     $('#certificationFormBtn').click()
+        // })
         //模拟手机下拉列表，选择证件类型
         var certificationSelectData= [
             {key:'sf',value:'<?=__('身份证', 'nlyd-student')?>'},
@@ -254,14 +254,14 @@ jQuery(document).ready(function($) {
 
         if($('#trigger4').val()=="中华人民共和国"){
             $('#birth').css('display','none')
-                $('#age').css('display','block')
-                $('input[name="birthday"]').val('');
-            }else{
-                $('#birth').css('display','block');
-                $('input[name="meta_val[real_age]"').val('');
-                $('#age').css('display','none');
-            }
-        // 模拟手机下拉列表，选择国籍
+            $('#age').css('display','block')
+            $("#birth input").val('');
+        }else{
+            $('#birth').css('display','block');
+            $("#age input").val('');
+            $('#age').css('display','none');
+        }
+        //模拟手机下拉列表，选择国籍
         var contrySelectData=$.validationLayui.contry;
         var posiotioncontry=[0];//初始化位置，高亮展示
         if($('#trigger4').val().length>0 && $('#trigger4').val()){
@@ -399,6 +399,7 @@ jQuery(document).ready(function($) {
                 $('.post-img.no-dash input').each(function () {
                     fd.append('user_ID_Card[]',$(this).val());
                 })
+                $.alerts(fd)
                 $.ajax({
                     data: fd,
                     contentType : false,
@@ -406,9 +407,14 @@ jQuery(document).ready(function($) {
                     cache : false,
                     success: function(res, textStatus, jqXHR){
                         if(res.success){
-                            $.alerts(res.data.info)
+                            if(res.data.info){
+                                $.alerts(res.data.info)
+                            }
                             if(res.data.url){
-                                window.location.href=res.data.url
+                                setTimeout(function() {
+                                    window.location.href=res.data.url
+                                }, 300);
+                                
                             }
                             return false;
                            

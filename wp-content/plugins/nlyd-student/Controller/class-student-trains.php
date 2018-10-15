@@ -411,6 +411,33 @@ class Student_Trains extends Student_Home
         load_view_template($view,$data);
     }
 
+
+    /**
+     * 训练历史记录
+     */
+    public function history(){
+
+        global $wpdb,$current_user;
+        $sql = "select id,my_score,created_time,project_type,
+                case project_type
+                when 'szzb' then '数字争霸' 
+                when 'kysm' then '快眼扫描' 
+                when 'pkjl' then '扑克接力' 
+                when 'wzsd' then '文章速读' 
+                when 'zxss' then '正向速算' 
+                when 'nxss' then '逆向速算' 
+                else '--'
+                end project_type_cn
+                from {$wpdb->prefix}user_train_logs 
+                where user_id = {$current_user->ID} and  project_type != ''
+                order by created_time desc ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        $data['list'] = $rows;
+
+        $view = student_view_path.CONTROLLER.'/history.php';
+        load_view_template($view,$data);
+    }
+
     /**
      * @param $type 训练项目
      * @return int|void 倒计时
