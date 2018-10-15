@@ -143,37 +143,7 @@ if(!function_exists('get_time')){
     }
 }
 
-/**
- * 年齡組別
- */
-function get_age_group(){
-    return array('1'=>"儿童组",'2'=>"少年组",'3'=>"成年组",'4'=>"老年组");
-}
 
-/**
- * @param $age 年龄
- * 根据年龄获取组别名称
- */
-if(!function_exists('getAgeGroupNameByAge')) {
-    function getAgeGroupNameByAge($age)
-    {
-        switch ($age) {
-            case $age > 59:
-                $group = '老年组';
-                break;
-            case $age > 17:
-                $group = '成年组';
-                break;
-            case $age > 12:
-                $group = '少年组';
-                break;
-            default:
-                $group = '儿童组';
-                break;
-        }
-        return $group;
-    }
-}
 
 /*
  * 文章速读选项
