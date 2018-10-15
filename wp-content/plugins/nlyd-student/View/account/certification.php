@@ -255,10 +255,8 @@ jQuery(document).ready(function($) {
         if($('#trigger4').val()=="中华人民共和国"){
             $('#birth').css('display','none')
             $('#age').css('display','block')
-            $("#birth input").val('');
         }else{
             $('#birth').css('display','block');
-            $("#age input").val('');
             $('#age').css('display','none');
         }
         //模拟手机下拉列表，选择国籍
