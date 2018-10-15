@@ -3403,7 +3403,44 @@ class Student_Ajax
                 }
                 break;
             case 'wzsd':
+                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>'参数错误'));
+                var_dump($_POST);die;
+                $questions_answer = json_decode($row['questions_answer'],true);
+                $len = count($questions_answer);
+                $success_len = 0;
 
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                        }
+                    }
+
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+                $my_score = $success_len * 23;
+                if ($success_len == $len){
+                    $my_score += $_POST['surplus_time'] * 1;
+                }
+                $redis = new Redis();
+                $redis->connect('127.0.0.1',6379,1);
+                $redis->auth('leo626');
+
+                if(!empty($redis->get('wzsd_question'.$current_user->ID))){
+                    $result = json_decode($redis->get('wzsd_question'.$current_user->ID),true);
+                    $post_id = $result->ID;
+                    $redis->del('wzsd_question'.$current_user->ID);
+                }else{
+
+                    $result = json_decode($row['questions_answer'],true);
+                    $key = array_keys($result);
+                    $sql = "select post_parent from {$wpdb->prefix}posts where ID = {$key[0]}";
+                    $post_id = $wpdb->get_var($sql);
+
+                }
                 break;
             default:
                 break;

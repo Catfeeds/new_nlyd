@@ -145,11 +145,35 @@ class Student_Trains extends Student_Home
                 }else{
                     $result = $posts_arr;
                 }
-                $post_id = end($result);
+                //print_r($result);
+                $post_id = $result[array_rand($result)];
 
-                //获取题目
+                //获取文章
                 $content = get_post($post_id );
                 //print_r($content);
+
+                //获取比赛题目
+                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$post_id} order by b.id asc
+                        ";
+
+                $rows = $wpdb->get_results($sql1,ARRAY_A);
+                $questions_answer = array();
+                $match_questions = array();
+                if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
+                    foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
+                        $key = &$val['ID'];
+                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
+                    }
+                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
+                }
+
                 $count_down = 900;
                 break;
             case 'szzb':
@@ -179,7 +203,11 @@ class Student_Trains extends Student_Home
             'count_down'=>$count_down,
             'url'=>home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type']),
         );
-        if(!empty($post_id)) $data['url'] .= '/post_id/'.$post_id;
+        if(!empty($post_id)){
+            $data['url'] .= '/post_id/'.$post_id;
+            $data['questions_answer'] = $questions_answer;
+            $data['match_questions'] = $match_questions;
+        }
 
         $view = student_view_path.CONTROLLER.'/initial.php';
         load_view_template($view,$data);
@@ -191,6 +219,7 @@ class Student_Trains extends Student_Home
      */
     public function answer(){
         global $wpdb;
+
 
         switch ($_GET['type']){
             case 'wzsd':
@@ -220,13 +249,46 @@ class Student_Trains extends Student_Home
                     }
                     $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
+                $data['questions_answer'] = $questions_answer;
+                $data['match_questions'] = $match_questions;
                 //print_r($questions_answer);
                 //print_r($match_questions);
                 break;
+            case 'pkjl':
+                $kinds=array(
+                    "spade"=>array(
+                        'content'=>[],
+                        'color'=>636,
+                    ),
+                    "heart"=>array(
+                        'content'=>[],
+                        'color'=>638,
+                    ),
+                    "club"=>array(
+                        'content'=>[],
+                        'color'=>635,
+                    ),
+                    "diamond"=>array(
+                        'content'=>[],
+                        'color'=>634,
+                    ),
+                );
+                //kind数组盛放的是花型
+                $nums=array("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" );//52张牌对应的数字
+
+                foreach ($kinds as $k => $val){
+                    foreach ($nums as $v){
+                        $kinds[$k]['content'][] = $v;
+                    }
+                }
+                break;
+            default:
+                break;
         }
+        $data['list'] = $kinds;
         //var_dump($_COOKIE);
         $view = student_view_path.CONTROLLER.'/answer.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     /**
@@ -437,6 +499,7 @@ class Student_Trains extends Student_Home
             }
 
             if($_GET['type']=='pkjl'){//扑克接力
+
                 wp_register_style( 'my-student-pokerRelay', student_css_url.'matching-pokerRelay.css',array('my-student') );
                 wp_enqueue_style( 'my-student-pokerRelay' );
             }

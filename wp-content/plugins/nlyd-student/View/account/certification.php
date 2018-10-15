@@ -20,8 +20,8 @@
                                 <div class="form-input-row">
                                     <div class="form-input-label"><?=__('国 籍', 'nlyd-student')?></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
-                                    <input type="hidden" name="nationality_pic" value='<?=$user_info['user_nationality_pic']?>'  id="src">
-                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
+                                    <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
+                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
                                     
                                 </div>
                                 <div class="form-input-row">

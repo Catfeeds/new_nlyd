@@ -3,13 +3,13 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><?=$match_title?></h1>
+                <h1 class="mui-title"><?=$title?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="c_black match_info_font"><?=$project_title?><span class="blue-font">第<?=$match_more_cn?>轮</span></span>
+                            <span class="c_black match_info_font"><?=$title?><span class="blue-font">第一轮</span></span>
                             <span class="c_blue ml_10 match_info_font">第<span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?>题</span>
                             <span class="c_blue ml_10 match_info_font">
                                 <i class="iconfont">&#xe685;</i>
@@ -69,6 +69,14 @@ jQuery(function($) {
     layui.use(['form'], function(){
 
     })
+    var questions_answer=[];
+    var leavePage= $.GetCookie('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
+        console.log(leavePage)
+        $('.count_down').attr('data-seconds',leavePage['count_down'])
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
+    }
     function submit(time){//提交答案
         if(!isSubmit){
             $('#load').css({
