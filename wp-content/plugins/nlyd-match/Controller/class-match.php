@@ -121,10 +121,16 @@ class Match
 
     }
 
+    /**
+     * 轮数设置
+     */
+
     public function match_more_list(){
         global $wpdb;
         //获取轮数列表
-        $sql = "select *,
+        $sql = "select id,more,
+                DATE_FORMAT(start_time,'%Y-%m-%d %H:%i') start_time,
+                DATE_FORMAT(end_time,'%Y-%m-%d %H:%i') end_time,
                 case status
                 when 1 then '未开始'
                 when 2 then '进行中'
@@ -133,7 +139,7 @@ class Match
                 from {$wpdb->prefix}match_project_more 
                 where match_id = {$_GET['post_id']} and project_id = {$_GET['project_id']} order by more asc";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        print_r($rows);
+        //print_r($sql);
         include_once match_view_path.'match_more_list.php';
 
     }

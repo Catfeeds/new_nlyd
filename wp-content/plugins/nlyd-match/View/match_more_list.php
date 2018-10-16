@@ -12,7 +12,6 @@
                 <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                 <select name="action" id="bulk-action-selector-top">
                     <option value="">批量操作</option>
-                    <option value="-1">一键清除</option>
                     <option value="-2">一键删除</option>
                 </select>
                 <input type="submit" id="doaction" class="button action  all-btn" value="应用">
@@ -27,6 +26,7 @@
                     <th scope="col" id="title" class="manage-column column-name">轮数</th>
                     <th scope="col" id="name" class="manage-column column-name">开始时间</th>
                     <th scope="col" id="status" class="manage-column column-status status">结束时间</th>
+                    <th scope="col" id="status" class="manage-column column-status status">时长</th>
                     <th scope="col" id="mobile" class="manage-column column-mobile">比赛状态</th>
                     <th scope="col" id="age" class="manage-column column-age">操作</th>
                 </tr>
@@ -41,9 +41,11 @@
                         <td class="column-title">第<?=$v['more']?>轮</td>
                         <td class="column-title"><?=$v['start_time']?></td>
                         <td class="column-title"><?=$v['end_time']?></td>
+                        <td class="column-title"><?=(strtotime($v['end_time'])-strtotime($v['start_time']))/60?></td>
                         <td class="column-title"><?=$v['status_cn']?></td>
                         <td class="column-title">
-                            编辑/删除
+                            <span class="update_more" data-id="<?=$v['id']?>">编辑</span>/
+                            <span class="remove_more" data-id="<?=$v['id']?>">删除</span>
                         </td>
                     </tr>
                     <?php }?>
@@ -62,6 +64,7 @@
                     <th scope="col" id="name" class="manage-column column-name">轮数</th>
                     <th scope="col" id="name" class="manage-column column-name">开始时间</th>
                     <th scope="col" id="status" class="manage-column column-status status">结束时间</th>
+                    <th scope="col" id="status" class="manage-column column-status status">时长</th>
                     <th scope="col" id="mobile" class="manage-column column-mobile">比赛状态</th>
                     <th scope="col" id="age" class="manage-column column-age">操作</th>
 
@@ -75,7 +78,6 @@
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="">批量操作</option>
-                        <option value="-1">一键清除</option>
                         <option value="-2">一键删除</option>
                     </select>
                     <input type="submit" id="doaction2" class="button action all-btn" value="应用">
@@ -91,7 +93,7 @@
         <input type="hidden" name="action" value="match_more_add"/>
         <input type="hidden" name="post_id" value="<?=$_GET['post_id']?>"/>
         <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
-        <input type="hidden" name="more_id" value=""/>
+        <input id="match_more_id" type="hidden" name="more_id" value=""/>
         <div>
             <label>开始时间</label>
             <input type="text" value="" name="start_time"/>
@@ -103,10 +105,6 @@
         <div>
             <label>比赛时长</label>
             <input type="text" value="" name="use_time"/>分钟
-        </div>
-        <div>
-            <label>休息时间</label>
-            <input type="text" value="" name="rest_time"/>分钟
         </div>
         <div>
             <label>比赛状态</label>
@@ -128,6 +126,13 @@
             jQuery('.add_more_form').show();
         });
 
+        jQuery('.update_more').live('click',function(event){
+            jQuery('.add_more_form').show();
+            jQuery('#match_more_id').val(jQuery(this).attr('data-id'))
+        });
+
+
+        //新增/编辑
         jQuery('.add_more_submit').live('click',function(event){
             var query = jQuery('.add_more_form').serialize();
             $.post(ajaxurl,query,function (data) {
@@ -135,5 +140,15 @@
             },'json')
             return false;
         });
+
+        //删除
+        jQuery('.remove_more').live('click',function(event){
+            var id = jQuery(this).attr('data-id');
+            $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {
+                alert(data.data);
+            },'json')
+            return false;
+        });
+
     });
 </script>

@@ -43,7 +43,7 @@ function the_table_install () {
               `more` tinyint(5) DEFAULT NULL COMMENT '轮数',
               `start_time` datetime DEFAULT NULL COMMENT '开始时间',
               `end_time` datetime DEFAULT NULL COMMENT '结束时间',
-              `use_time` smallint(10) DEFAULT NULL COMMENT '比赛时间',
+              `use_time` smallint(10) DEFAULT NULL COMMENT '比赛时长',
               `status` tinyint(1) DEFAULT NULL COMMENT '状态 已结束-1 未开始1 进行中2',
               `created_id` int(20) DEFAULT NULL COMMENT '创建人id',
               `revise_id` int(20) DEFAULT NULL COMMENT '修改人id',

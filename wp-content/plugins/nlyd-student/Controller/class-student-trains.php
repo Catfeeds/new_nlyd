@@ -34,9 +34,9 @@ class Student_Trains extends Student_Home
         //获取所有比赛类型
         $args = array(
             'post_type' => array('genre'),
-            'post_status' => array('publish'),
-            'order' => 'DESC',
-            'orderby' => 'ID',
+            'post_status' => array('publish','draft'),
+            'order' => 'ASC',
+            'orderby' => 'menu_order',
         );
         $the_query = new WP_Query( $args );
 
