@@ -31,34 +31,19 @@
                         <div class="layui-row nl-border nl-content have-footer">
                             <div class="width-padding width-padding-pc">
                                 <?php foreach ($list as $v){ ?>
-                                    <a class="train_row c_black" href="<?=home_url('trains/lists/id/'.$v->ID)?>">
+                                    <a class="train_row <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?= $v->post_status == 'draft' ? '' : home_url('trains/lists/id/'.$v->ID)?>">
                                         <div class="train-img">
-                                            <img src="<?=student_css_url.'image/sjb.png'?>">
+                                            <?php
+                                                $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
+                                            ?>
+                                            <img src="<?=$thumbnail_image_url[0]?>">
                                         </div>
                                         <div class="train_name fs_16"><?=$v->post_title?></div>
+                                        <?php if($v->post_status == 'draft'):?>
+                                            <div class="train_tips">暂未开放</div>
+                                        <?php endif;?>
                                     </a>
                                 <?php }?>
-                                <a class="train_row disable" href="" onclick="return false;">
-                                    <div class="train-img">
-                                        <img src="<?=student_css_url.'image/sjb.png'?>">
-                                    </div>
-                                    <div class="train_name fs_16">自测考级专项训练</div>
-                                    <div class="train_tips">暂未开放</div>
-                                </a>
-                                <a class="train_row disable" href="" onclick="return false;">
-                                    <div class="train-img">
-                                        <img src="<?=student_css_url.'image/sjb.png'?>">
-                                    </div>
-                                    <div class="train_name fs_16">自测考级专项训练</div>
-                                    <div class="train_tips">暂未开放</div>
-                                </a>
-                                <a class="train_row disable" href="" onclick="return false;">
-                                    <div class="train-img">
-                                        <img src="<?=student_css_url.'image/sjb.png'?>">
-                                    </div>
-                                    <div class="train_name fs_16">自测考级专项训练</div>
-                                    <div class="train_tips">暂未开放</div>
-                                </a>
                             </div>
                         </div>
                     <?php }?>

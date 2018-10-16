@@ -1185,6 +1185,105 @@ class Match_Ajax
 
     }
 
+
+    /**
+     * 新增比赛项目轮数
+     */
+    public function match_more_add(){
+
+        if(empty($_POST['post_id']) || empty($_POST['project_id']) || empty($_POST['start_time'])){
+            wp_send_json_error('请确认必填项是否为空');
+        }
+
+        //计算结束时间
+        if(!empty($_POST['end_time'])){
+
+            $end_time = $_POST['end_time'];
+
+        }
+        elseif (!empty($_POST['use_time'])){
+            $use_time = $_POST['use_time'];
+            $end_time = date_i18n('Y-m-d H:i:s',strtotime($_POST['start_time']) + $_POST['use_time']*60);
+
+        }else{
+
+            //获取比赛时长
+            $match_project = get_option('match_project_use')['project_use'];
+            $alias = get_post_meta($_POST['project_id'],'project_alias')[0];
+            if($alias == 'zxss'){
+                $use_time = array_sum(array_values($match_project[$alias]));
+            }else{
+
+                $use_time = $match_project[$alias];
+            }
+            $end_time = date_i18n('Y-m-d H:i',strtotime($_POST['start_time']) + $use_time*60);
+        }
+
+        //查询当前该是第几轮
+        global $wpdb,$current_user ;
+        $sql = "select count(id) total from {$wpdb->prefix}match_project_more where match_id = {$_POST['post_id']} and project_id = {$_POST['project_id']} ";
+        $total = $wpdb->get_var($sql);
+        //var_dump($total);die;
+
+        $array = array(
+            'match_id'=>$_POST['post_id'],
+            'project_id'=>$_POST['project_id'],
+            'more'=>$total+1,
+            'start_time'=>$_POST['start_time'],
+            'end_time'=>$end_time,
+            'use_time'=>$use_time,
+            'status'=>empty($_POST['status']) ? 1 : $_POST['status'],
+            'created_id'=>$current_user->ID,
+            'created_time'=>get_time('mysql'),
+        );
+
+        if(!empty($_POST['more_id'])){  //修改
+
+            unset($array['more']);
+            unset($array['created_time']);
+            unset($array['created_time']);
+            $array['more'] = $total;
+            $array['revise_id'] = $current_user->ID;
+            $array['revise_time'] = get_time('mysql');
+
+            $result = $wpdb->update($wpdb->prefix.'match_project_more',$array,array('id'=>$_POST['more_id']));
+            $title = '编辑';
+        }
+        else{   //新增
+            $result = $wpdb->insert($wpdb->prefix.'match_project_more',$array);
+            $title = '新增';
+        }
+
+        if($result){
+            wp_send_json_success($title.'成功');
+        }else{
+            wp_send_json_error($title.'失败');
+        }
+        //var_dump($_POST);
+        die;
+    }
+
+    /**
+     * 删除
+     */
+    public function remove_match_more(){
+        if(empty($_POST['id'])) wp_send_json_error('请选择需要删除的数据');
+        if(is_array($_POST['id'])){
+            $id = arr2str($_POST['id']);
+        }else{
+            $id = $_POST['id'];
+        }
+        global $wpdb;
+        $sql = "DELETE FROM `{$wpdb->prefix}match_project_more` WHERE id in({$id}) ";
+        //print_r($sql);
+        $result = $wpdb->query($sql);
+        if($result){
+            wp_send_json_success('删除成功');
+        }else{
+            wp_send_json_error('删除失败');
+        }
+    }
+
 }
 
 new Match_Ajax();
