@@ -349,14 +349,16 @@ class Student_Trains extends Student_Home
 
             $answer = $questions_answer;
 
+            print_r($answer);
             $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
             //print_r($answer_array);
             //print_r($questions_answer);die;
 
             $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
-            $len = count($questions_answer);
+            $len = count($answer['result']);
 
             /*if(!empty($match_questions)){
                 $twentyfour = new TwentyFour();
