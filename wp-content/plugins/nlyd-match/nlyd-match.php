@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','2.0.9' );//样式版本
+            define( 'leo_match_version','2.0.9.3' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -678,7 +678,7 @@ if(!class_exists('MatchController')){
                     update_post_meta($post_ID,'default_match_switch','OFF');
                 }
 
-                if(isset($_POST['match']) && !empty($_POST['match'])){
+                /*if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];
                     //$match_meta['match_use_time'] = empty($match_meta['match_use_time']) ? 1 : $match_meta['match_use_time'];
@@ -740,8 +740,8 @@ if(!class_exists('MatchController')){
                         }
                         $match_end_time = date_i18n('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
                         //计算比赛状态
-                        /*var_dump($current_time);
-                        var_dump($match_meta['entry_end_time']);*/
+                        var_dump($current_time);
+                        var_dump($match_meta['entry_end_time']);
                         if($current_time > $match_end_time){
                             $status = -3;
                         }elseif ($match_meta['match_start_time'] < $current_time && $current_time < $match_end_time){
@@ -761,7 +761,7 @@ if(!class_exists('MatchController')){
                     $wpdb->delete($wpdb->prefix.'match_meta',array('match_id'=>$post_ID));
                     $a = $wpdb->insert($wpdb->prefix.'match_meta',$match_meta);
 
-                }
+                }*/
             }elseif ($post_data->post_type == 'team'){
                 if(isset($_POST['team']) && !empty($_POST['team'])){
 
@@ -894,6 +894,7 @@ if(!class_exists('MatchController')){
                             array($this->match,'project_review_meta_box'),
                             $this->post_type, 'normal'
                         );
+
 
                     }
 

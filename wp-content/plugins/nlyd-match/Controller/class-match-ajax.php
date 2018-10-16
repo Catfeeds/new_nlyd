@@ -1185,6 +1185,64 @@ class Match_Ajax
 
     }
 
+
+    /**
+     * 新增比赛项目轮数
+     */
+    public function match_more_add(){
+
+        if(empty($_POST['post_id']) || empty($_POST['project_id']) || empty($_POST['start_time'])){
+            wp_send_json_error('请确认必填项是否为空');
+        }
+
+        if(empty($_POST['end_time']) && empty($_POST['rest_time'])){
+            wp_send_json_error('结束时间/休息时间必填一项');
+        }
+
+        if(empty($_POST['end_time']) && !empty($_POST['rest_time'])){
+            $_POST['end_time'] = date_i18n('Y-m-d H:i:s',strtotime($_POST['start_time']) + $_POST['rest_time']*60);
+        }
+
+        //查询当前该是第几轮
+        global $wpdb,$current_user ;
+        $sql = "select count(id) total from {$wpdb->prefix}match_project_more where match_id = {$_POST['post_id']} and project_id = {$_POST['project_id']} ";
+        $total = $wpdb->get_var($sql);
+        //var_dump($total);die;
+        $array = array(
+            'match_id'=>$_POST['post_id'],
+            'project_id'=>$_POST['project_id'],
+            'more'=>$total+1,
+            'start_time'=>$_POST['start_time'],
+            'end_time'=>$_POST['end_time'],
+            'rest_time'=>$_POST['rest_time'],
+            'status'=>$_POST['status'],
+            'created_id'=>$current_user->ID,
+            'created_time'=>get_time('mysql'),
+        );
+        if(!empty($_POST['more_id'])){  //修改
+
+            unset($array['created_id']);
+            unset($array['created_time']);
+            $array['revise_id'] = $current_user->ID;
+            $array['revise_time'] = get_time('mysql');
+
+            $result = $wpdb->update($wpdb->prefix.'match_project_more',$array,array('id'=>$_POST['more_id']));
+            $title = '编辑';
+        }
+        else{   //新增
+            $result = $wpdb->insert($wpdb->prefix.'match_project_more',$array);
+            $title = '新增';
+        }
+
+        if($result){
+            wp_send_json_success($title.'成功');
+        }else{
+            wp_send_json_error($title.'失败');
+        }
+        //var_dump($_POST);
+        die;
+    }
+
 }
 
 new Match_Ajax();

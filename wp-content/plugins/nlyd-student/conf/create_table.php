@@ -32,6 +32,31 @@ function the_table_install () {
     }*/
 
 
+    $table_name = $wpdb->prefix . "match_project_more";  //用户文章速读使用记录  储存文章速读
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+              `match_id` int(20) NOT NULL COMMENT '比赛id',
+              `project_id` int(20) NOT NULL COMMENT '比赛项目id',
+              `more` tinyint(5) DEFAULT NULL COMMENT '轮数',
+              `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+              `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+              `use_time` smallint(10) DEFAULT NULL COMMENT '比赛时间',
+              `status` tinyint(1) DEFAULT NULL COMMENT '状态 已结束-1 未开始1 进行中2',
+              `created_id` int(20) DEFAULT NULL COMMENT '创建人id',
+              `revise_id` int(20) DEFAULT NULL COMMENT '修改人id',
+              `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+              `revise_time` datetime DEFAULT NULL COMMENT '编辑时间',
+              PRIMARY KEY (`id`,`match_id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+
     $table_name = $wpdb->prefix . "user_post_use";  //用户文章速读使用记录  储存文章速读
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在

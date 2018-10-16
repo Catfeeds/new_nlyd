@@ -33,6 +33,7 @@ if(!class_exists('myInterface')){
 
         public function add_submenu(){
 
+            add_submenu_page( 'edit.php?post_type=match', '时长配置', '时长配置', 'manage_options', 'match_default', array($this,'setting_match_default') );
             add_submenu_page( 'options-general.php', '接口设置', '接口设置', 'manage_options', 'interface', array($this,'my_submenu_page_display') );
             add_submenu_page( 'options-general.php', 'logo设置', 'logo设置', 'manage_options', 'logo', array($this,'my_submenu_page_logo') );
             add_submenu_page( 'options-general.php', 'banner设置', 'banner设置', 'manage_options', 'banner', array($this,'my_submenu_page_banner') );
@@ -40,6 +41,26 @@ if(!class_exists('myInterface')){
             add_submenu_page( 'options-general.php', '清除历史', '清除历史', 'administrator', 'clear_history', array($this,'my_clear_history') );
 
         }
+
+
+        /**
+         * 比赛时长默认配置
+         */
+        public function setting_match_default(){
+
+            $match_project = get_option('match_project_use')['project_use'];
+            //print_r($match_project);
+            $args = array(
+                'post_type' => array('project'),
+                'post_status' => array('publish'),
+                'order' => 'ASC',
+                'orderby' => 'menu_order',
+            );
+            $the_query = new WP_Query( $args );
+            $lists = $the_query->posts;
+            require_once( leo_user_interface_path . 'view/match_default.php' );
+        }
+
 
         /**
          * 清除历史
@@ -323,6 +344,6 @@ if(!class_exists('myInterface')){
 
 }
 define( 'leo_user_interface_path', plugin_dir_path( __FILE__ ) );
-define( 'leo_user_interface_version','2.0.9' );//样式版本
+define( 'leo_user_interface_version','2.0.9.3' );//样式版本
 
 new myInterface();

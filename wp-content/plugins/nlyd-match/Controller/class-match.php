@@ -102,7 +102,42 @@ class Match
             }
         }
 
+        add_action('admin_menu',array($this,'add_submenu'));
+
     }
+
+    public function add_submenu(){
+
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'match' ) ) {
+            global $wp_roles;
+
+            $role = 'match_more_list';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+
+        }
+
+        add_submenu_page( 'edit.php?post_type=match', '轮数设置', '轮数设置', 'match_more_list', 'match_more', array($this,'match_more_list'),45);
+
+    }
+
+    public function match_more_list(){
+        global $wpdb;
+        //获取轮数列表
+        $sql = "select *,
+                case status
+                when 1 then '未开始'
+                when 2 then '进行中'
+                else '已结束'
+                end status_cn
+                from {$wpdb->prefix}match_project_more 
+                where match_id = {$_GET['post_id']} and project_id = {$_GET['project_id']} order by more asc";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        print_r($rows);
+        include_once match_view_path.'match_more_list.php';
+
+    }
+
 
     /**
      * 比赛开关控制
@@ -587,10 +622,11 @@ class Match
     }
 
     /**
-     * 比赛项目设置box
-     */
-    public function project_review_meta_box()
+ * 比赛项目设置box
+ */
+    public function project_review_meta_box($posts)
     {
+
         //获取所有项目
         $args = array(
             'post_type' => array('project'),
@@ -610,36 +646,47 @@ class Match
             foreach ($match_project as $k => $v){
                 $v = (array)$v;
                 ?>
+                <!--<div class="layui-inline match_project">
+                    <div class="layui-input-inline title">
+                        <label class="layui-form-label">拖拽排序</label>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="checkbox" name="match[match_project][<?/*=$k*/?>][match_project_id]" value="<?/*=$v['ID']*/?>" <?/*=!empty($this->project[$v['ID']])?'checked':''; */?> lay-skin="primary" title="<?/*=$v['post_title']*/?>"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_use_time]" value="<?/*=!empty($v['project_use_time']) ? $v['project_use_time'] : '';*/?>" placeholder="比赛用时"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][match_more]" value="<?/*=!empty($v['match_more']) ? $v['match_more'] : '';*/?>" placeholder="比赛轮数"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input date-picker" readonly  type="text" name="match[match_project][<?/*=$k*/?>][project_start_time]" value="<?/*=!empty($v['project_start_time']) ? $v['project_start_time'] : '';*/?>" id="id<?/*=$k*/?>" placeholder="开始时间"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_washing_out]" value="<?/*=!empty($v['project_washing_out']) ? $v['project_washing_out'] : '';*/?>" placeholder="淘汰率或淘汰人数"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_time_interval]" value="<?/*=!empty($v['project_time_interval']) ? $v['project_time_interval'] : '';*/?>" placeholder="间隔时间"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][str_bit]" value="<?/*=!empty($v['str_bit']) ? $v['str_bit'] : '';*/?>" placeholder="初始位数"/>
+                    </div>
+                    <?php /*if(in_array($v['post_title'],array('正向速算','快眼扫描'))): */?>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][child_count_down]" value="<?/*=!empty($v['child_count_down']) ? $v['child_count_down'] : '';*/?>" placeholder="子项倒计时"/>
+                        </div>
+                    <?php /*endif;*/?>
+                </div>-->
                 <div class="layui-inline match_project">
                     <div class="layui-input-inline title">
                         <label class="layui-form-label">拖拽排序</label>
                     </div>
                     <div class="layui-input-inline">
                         <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v['ID']?>" <?=!empty($this->project[$v['ID']])?'checked':''; ?> lay-skin="primary" title="<?=$v['post_title']?>"/>
+                        <?php if(!empty($this->project[$v['ID']])): ?>
+                        <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$v['ID']);?>">新增轮数</a>
+                        <?php endif;?>
                     </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_use_time]" value="<?=!empty($v['project_use_time']) ? $v['project_use_time'] : '';?>" placeholder="比赛用时"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][match_more]" value="<?=!empty($v['match_more']) ? $v['match_more'] : '';?>" placeholder="比赛轮数"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input date-picker" readonly  type="text" name="match[match_project][<?=$k?>][project_start_time]" value="<?=!empty($v['project_start_time']) ? $v['project_start_time'] : '';?>" id="id<?=$k?>" placeholder="开始时间"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_washing_out]" value="<?=!empty($v['project_washing_out']) ? $v['project_washing_out'] : '';?>" placeholder="淘汰率或淘汰人数"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][project_time_interval]" value="<?=!empty($v['project_time_interval']) ? $v['project_time_interval'] : '';?>" placeholder="间隔时间"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][str_bit]" value="<?=!empty($v['str_bit']) ? $v['str_bit'] : '';?>" placeholder="初始位数"/>
-                    </div>
-                    <?php if(in_array($v['post_title'],array('正向速算','快眼扫描'))): ?>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?=$k?>][child_count_down]" value="<?=!empty($v['child_count_down']) ? $v['child_count_down'] : '';?>" placeholder="子项倒计时"/>
-                    </div>
-                    <?php endif;?>
                 </div>
             <?php }
         }else{ ?>
@@ -647,5 +694,6 @@ class Match
             <a href="post-new.php?post_type=project">去添加</a>
         <?php }
     }
+
 
 }
