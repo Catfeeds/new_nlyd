@@ -360,20 +360,28 @@ a.form-input-row:hover{
     color: rgba(38, 38, 38, 0.6);
 }
 .form-input-label{
+    display: table;
     float: left;
-    width: 60px;
+    width: 77px;
     height: 55px;
     line-height: 55px;
-    text-align: right;
-    overflow:hidden;
+    text-align: left;
+    /* overflow:hidden;
     text-overflow:ellipsis;
-    white-space:nowrap
+    white-space:nowrap */
 }
+.form-input-label div{
+    height: 55px;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
 .nl-page-form input.nl-input,
 .nl-page-form div.nl-input{
     float: left;
-    width: -webkit-calc(100% - 100px);
-    width: calc(100% - 100px);
+    width: -webkit-calc(100% - 153px);
+    width: calc(100% - 153px);
     height: 54px;
     line-height: 54px;
     border:none;
@@ -386,6 +394,12 @@ a.form-input-row:hover{
     color: #262626;
 }
 
+.nl-page-form div.nl-input div{
+    height: 55px;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
 .form-input-right{
     display: block;
     position: absolute;

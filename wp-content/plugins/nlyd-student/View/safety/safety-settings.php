@@ -22,15 +22,15 @@
                             <!-- 重置密码 -->
                             <input type="hidden" name="save_type" value="pass">
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('旧密码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('旧密码', 'nlyd-student')?></div></div>
                                 <input name='old_pass' value="" type="password" placeholder="<?=__('旧密码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('新密码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('新密码', 'nlyd-student')?></div></div>
                                 <input name='new_pass' value="" type="text" placeholder="<?=__('新密码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('再次输入', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('再次输入', 'nlyd-student')?></div></div>
                                 <input name='confirm_pass' value="" type="text" placeholder="<?=__('再次输入', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
@@ -41,13 +41,13 @@
                             <input type="hidden" name="step" value="one">
                             <p class="c_blue" style="margin-bottom:0"><?php printf(__('更换后可使用新手机号登陆，当前手机号%s', 'nlyd-student'), $user_info['user_mobile'])?></p>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('手机号码', 'nlyd-student')?></div>
-                                <div class="nl-input"><?=$user_info['contact']?></div>
+                                <div class="form-input-label"><div><?=__('手机号码', 'nlyd-student')?></div></div>
+                                <div class="nl-input"><div><?=$user_info['contact']?></div></div>
                                 <input type="hidden" lay-verify="phone" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="21"><?=__('发送验证码', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('验证码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
                                 <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
@@ -56,12 +56,12 @@
                             <input type="hidden" name="save_type" value="mobile">
                             <p class="c_blue" style="margin-bottom:0"><?=__('绑定后可使用手机号登陆', 'nlyd-student')?></p>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('手机号码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('手机号码', 'nlyd-student')?></div></div>
                                 <input name='user_mobile' value="" type="tel" placeholder="<?=__('手机号码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="phone">
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><?=__('发送验证码', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('验证码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
                                 <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php } ?>
@@ -70,12 +70,12 @@
                             <!-- 绑定更换邮箱 -->
                             <input type="hidden" name="save_type" value="email">
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('邮箱地址', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('邮箱地址', 'nlyd-student')?></div></div>
                                 <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="<?=__('邮箱地址', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="email">
                                 <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><?=__('发送验证码', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('验证码', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
                                 <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             </div>
                             <?php }?>
