@@ -18,14 +18,14 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom" lay-filter='certificationForm'>
                             <div class="form-inputs">
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('国 籍', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('国 籍', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
                                     <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
                                     
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('证件类型', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('证件类型', 'nlyd-student')?></div></div>
                                     <input value='<?= !empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type_c'] : '';?>' type="text" readonly id="trigger1" placeholder="<?=__('选择证件类型', 'nlyd-student')?>" class="nl-input" lay-verify="required">
                                     <input value='<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_type'] : '';?>'  type="hidden" name="meta_val[real_type]" id="trigger2">
                                     <input  type="hidden" name="action" value="student_saveInfo"/>
@@ -33,27 +33,27 @@
                                     <input  type="hidden" name="meta_key" value="user_real_name"/>
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('证件号码', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('证件号码', 'nlyd-student')?></div></div>
                                     <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('姓 名', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('姓 名', 'nlyd-student')?></div></div>
                                     <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('性 别', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
                                     <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
-                                    <div class="form-input-label"><?=__('生 日', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('生 日', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="birthday" value='<?=$user_info['user_birthday']?>' readonly  id="birthdaySelect" placeholder="<?=__('选择生日', 'nlyd-student')?>">
                                 </div>
                                 <div class="form-input-row" id="age" style="display:block">
-                                    <div class="form-input-label"><?=__('年 龄', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('年 龄', 'nlyd-student')?></div></div>
                                     <input type="text" name="meta_val[real_age]" readonly id="meta_val[real_age]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_age'] : '';?>" placeholder="<?=__('年龄', 'nlyd-student')?>"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><?=__('所在城市', 'nlyd-student')?></div>
+                                    <div class="form-input-label"><div><?=__('所在城市', 'nlyd-student')?></div></div>
                                     <input readonly id="areaSelect" type="text" placeholder="<?=__('所在城市', 'nlyd-student')?>" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'].$user_info['user_address']['city'].$user_info['user_address']['area'] : ''?>" class="nl-input" lay-verify="required">
                                     <input  type="hidden" id="province" name="user_address[province]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['province'] : ''?>"/>
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">

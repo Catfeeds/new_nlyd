@@ -42,9 +42,9 @@ width: 90%;
 .form-input-row.address-row{
     height: auto;
 }
-.nl-page-form .form-input-row.address-row div.nl-input{
+/* .nl-page-form .form-input-row.address-row div.nl-input{
     height: auto;
-}
+} */
 .form-input-row.upload_img{
     height: 200px;
     border-bottom: none;

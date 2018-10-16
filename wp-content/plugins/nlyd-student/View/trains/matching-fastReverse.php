@@ -80,6 +80,7 @@ jQuery(function($) {
         // if(valid(select)=="本题无解"){
         //     initQuestion()
         // }else{
+            console.log(valid(select))
             var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
             ajaxData.push(thisRow)
         // }

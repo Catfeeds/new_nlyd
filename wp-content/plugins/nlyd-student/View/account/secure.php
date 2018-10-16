@@ -18,23 +18,23 @@
                     <div class="nl-page-form width-margin-pc ">
                         <div class="form-inputs">
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('登陆密码', 'nlyd-student')?></div>
-                                <div class="nl-input">**********</div>
+                                <div class="form-input-label"><div><?=__('登陆密码', 'nlyd-student')?></div></div>
+                                <div class="nl-input"><div>**********</div></div>
                                 <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/pass')?>"><?=__('修改', 'nlyd-student')?></a>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('绑定手机', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('绑定手机', 'nlyd-student')?></div></div>
                                 <?php if(!empty($user_info['user_mobile'])){?>
-                                <div class="nl-input"><?=hideStar($user_info['user_mobile'])?></div>
+                                <div class="nl-input"><div><?=hideStar($user_info['user_mobile'])?></div></div>
                                 <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php }else{ ?>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><?=__('去设置', 'nlyd-student')?></a>
                                 <?php } ?>
                             </div>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('绑定邮箱', 'nlyd-student')?></div>
+                                <div class="form-input-label"><div><?=__('绑定邮箱', 'nlyd-student')?></div></div>
                                 <?php if(!empty($user_info['user_email'])){?>
-                                    <div class="nl-input"><?=hideStar($user_info['user_email'])?></div>
+                                    <div class="nl-input"><div><?=hideStar($user_info['user_email'])?></div></div>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php }else{ ?>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><?=__('去设置', 'nlyd-student')?></a>
@@ -42,15 +42,15 @@
                             </div>
                             <?php if(!empty($user_info['weChat_openid'])){ ?>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('绑定微信', 'nlyd-student')?></div>
-                                <div class="nl-input">*******</div>
+                                <div class="form-input-label"><div><?=__('绑定微信', 'nlyd-student')?></div></div>
+                                <div class="nl-input"><div>*******</div></div>
                                 <span class="form-input-right c_blue clear" data-type="weChat"><?=__('解绑', 'nlyd-student')?></span>
                             </div>
                             <?php } ?>
                             <?php if(!empty($user_info['qq_union_id'])){ ?>
                             <div class="form-input-row">
-                                <div class="form-input-label"><?=__('绑定QQ', 'nlyd-student')?></div>
-                                <div class="nl-input">*******</div>
+                                <div class="form-input-label"><div><?=__('绑定QQ', 'nlyd-student')?></div></div>
+                                <div class="nl-input"><div>*******</div></div>
                                 <span class="form-input-right c_blue clear" data-type="qq"><?=__('解绑', 'nlyd-student')?></span>
                             </div>
                             <?php } ?>

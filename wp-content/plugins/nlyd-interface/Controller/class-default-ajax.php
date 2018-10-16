@@ -33,6 +33,17 @@ class Default_Ajax
         update_option('default_setting',$_POST);
         wp_send_json_success('保存成功');
     }
+
+
+    /**
+     * 设置比赛项目默认时长
+     */
+    public function setting_project_use(){
+
+        unset($_POST['action']);
+        update_option('match_project_use',$_POST);
+        wp_send_json_success('保存成功');
+    }
 }
 
 new Default_Ajax();
