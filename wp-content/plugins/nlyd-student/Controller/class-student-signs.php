@@ -196,7 +196,7 @@ class Student_Signs
 			?>
 				<script type="text/javascript">
             	//$.alerts('即将跳转到实名认证页');
-                alert('<?=__('该用户未成功匹配参数资格\\n请确认该选手实名信息', 'nlyd-student')?>');
+                alert('<?=__("该用户未成功匹配参赛资格\\n请确认该选手实名信息", 'nlyd-student')?>');
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
