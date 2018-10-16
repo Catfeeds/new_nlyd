@@ -481,8 +481,14 @@ class Student_Trains extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-leavePage' );
-
-
+        if(ACTION == 'index'){
+            wp_register_style( 'my-trains-index', student_css_url.'trains/index.css',array('my-student') );
+            wp_enqueue_style( 'my-trains-index' );
+        }
+        if(ACTION == 'lists'){
+            wp_register_style( 'my-trains-lists', student_css_url.'trains/lists.css',array('my-student') );
+            wp_enqueue_style( 'my-trains-lists' );
+        }
         //比赛初始页面
         if(ACTION == 'initial'){
 
@@ -602,10 +608,6 @@ class Student_Trains extends Student_Home
             wp_enqueue_style( 'my-student-singleRecord' );
         }
 
-        if(ACTION=='index'){//比赛列表页
-            wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matchList' );
-        }
         if(ACTION=='matchRule'){//比赛规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );

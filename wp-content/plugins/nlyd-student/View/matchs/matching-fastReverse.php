@@ -46,7 +46,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <a class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</a>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</div>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
@@ -215,6 +215,14 @@ $('.number').each(function(){
                 if(number=="本题无解"){
                     $('.answer').text(number)
                     $('.number').removeClass('disabled')
+                    $('.answer').text(number) 
+                        _this.stop(true).animate({
+                            'opacity':'0.6',
+                            'filter': 'alpha(opacity=60)',
+                        },50).animate({
+                            'opacity':'1',
+                            'filter': 'alpha(opacity=100)',
+                        },50)
                 }else{
                     var len=text.length;
                     var x=text.charAt(len-1,1);
