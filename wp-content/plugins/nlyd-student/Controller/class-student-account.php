@@ -171,7 +171,7 @@ class Student_Account extends Student_Home
             $row = $this->ajaxControll->get_address(false);
 
             if(empty($row)){
-                $this->get_404('数据错误');
+                $this->get_404(__('数据错误', 'nlyd-student'));
                 return;
             }
         }

@@ -50,7 +50,7 @@ class Student_Logins
     }
     public function bindPhone(){
         if(empty($_GET['access']) || empty($_GET['oid'])){
-            echo '参数错误';
+            echo __('参数错误', 'nlyd-student');
             exit;
         }
         $data = [

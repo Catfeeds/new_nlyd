@@ -100,7 +100,7 @@ class Student_Weixin
         curl_close($ch);
         if (isset($data['errcode'])) {
             if(is_ajax()){
-                wp_send_json_error(['info' => '获取微用户授权失败.请退出后重试']);
+                wp_send_json_error(['info' => __('获取微用户授权失败.请退出后重试', 'nlyd-student')]);
             }else{
                 if($is_pay == true){
                     return false;
@@ -148,7 +148,7 @@ class Student_Weixin
         $res = json_decode($res,true);
         if (isset($res['errcode'])) {
             if(is_ajax()){
-                wp_send_json_error(['info' => '获取微用户信息失败,请退出后重试']);
+                wp_send_json_error(['info' => __('获取微用户信息失败,请退出后重试', 'nlyd-student')]);
             }else{
                 echo '<h1>错误：</h1>'.$res['errcode'];
                 echo '<br/><h2>错误信息：</h2>'.$res['errmsg'];
@@ -165,7 +165,7 @@ class Student_Weixin
      * 微信授权登录页,保存用户信息
      */
     public function save_user($res = [],$type='',$user_id=0,$emailOrMobile='',$bindType=''){
-        $me_name = $emailOrMobile == 'mobile' ? '手机' : '邮箱';
+        $me_name = $emailOrMobile == 'mobile' ? __('手机', 'nlyd-student') : __('邮箱', 'nlyd-student');
         global $wpdb;
         $userMetaType = false;
         if($bindType == 'username'){
@@ -186,7 +186,7 @@ class Student_Weixin
                     //TODO 判断当前手机是否已经绑定过微信
                     if($mobileUser->weChat_openid != false){
                         if(is_ajax()){
-                            wp_send_json_error(array('info'=>'当前'.$me_name.'已绑定其它微信'));
+                            wp_send_json_error(array('info'=>sprintf(__('当前%s已绑定其它微信', 'nlyd-student'), $me_name)));
                             exit;
                         }else{
                             return false;
