@@ -169,7 +169,39 @@
                     </a>
                 </div>
             </div>
-        
+
+            <?php
+
+            $languages = get_available_languages(PLUGINS_PATH . 'nlyd-student/languages');
+            foreach ($languages as &$language){
+                $language = str_replace('nlyd-student-', '', $language);
+            }
+            $user = get_user_by( 'id', 3) ;
+
+            if ( $user ) $user->filter = 'edit';
+            $profileuser = $user;
+
+            $user_locale = $profileuser->locale;
+
+            if ( 'en_US' === $user_locale ) {
+                $user_locale = '';
+            } elseif ( '' === $user_locale || ! in_array( $user_locale, $languages, true ) ) {
+                $user_locale = 'site-default';
+            }
+
+
+            $select = wp_dropdown_languages( array(
+                'name'                        => 'locale',
+                'id'                          => 'locale',
+                'echo'                          => 0,
+                'selected'                    => $user_locale,
+                'languages'                   => $languages,
+                'show_available_translations' => false,
+                'show_option_site_default'    => false,
+                'is_current_languages_list'   => true,//加的
+            ) );
+            ?>
+
             <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple />
             <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">        
         </div>
@@ -186,10 +218,12 @@
         </div>
     </div>
 </div>
+
 <script>
 jQuery(document).ready(function($) {
     // 模拟手机下拉列表，选择性别
-    var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
+    // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
+    var selectData= <?=json_encode($select)?>;
     var posiotion=[0];//初始化位置，高亮展示
     if($('#checked_lan').text().length>0 && $('#trigger3').text()){
         $.each(selectData,function(index,value){
@@ -210,11 +244,27 @@ jQuery(document).ready(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
+            var languageId = data[0]['id'];
             if(data[0]['value']=='English'){
                 $('#checked_lan').text('语言')
             }else if(data[0]['value']=='中文'){
                 $('#checked_lan').text('langulage')
             }
+            $.ajax({
+                url : window.admin_ajax,
+                data : {'lang' : languageId,'action' : 'userUpdateLanguage'},
+                dataType : 'json',
+                type : 'post',
+                success : function (response) {
+                    if(response['success']){
+                        window.location.reload();
+                    }else{
+                        // $.alerts(response.data.info)
+                    }
+                },error:function () {
+
+                }
+            });
         }
     });
 layui.use('layer', function(){ //独立版的layer无需执行这一句

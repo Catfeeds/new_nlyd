@@ -1142,6 +1142,7 @@ function wp_dropdown_languages( $args = array() ) {
 		'echo'         => 1,
 		'show_available_translations' => true,
 		'show_option_site_default'    => false,
+		'is_current_languages_list'   => false,//自定义
 	) );
 
 	// Bail if no ID or no name.
@@ -1189,6 +1190,8 @@ function wp_dropdown_languages( $args = array() ) {
 
 	// Holds the HTML markup.
 	$structure = array();
+	//自定义列表数组
+    $languagesList = [];
 
 	// List installed languages.
 	if ( $translations_available ) {
@@ -1209,8 +1212,13 @@ function wp_dropdown_languages( $args = array() ) {
 		'<option value="" lang="en" data-installed="1"%s>English (United States)</option>',
 		selected( '', $parsed_args['selected'], false )
 	);
-
-	// List installed languages. 
+	//默认中文 ====自定义
+    $languagesList[] = [
+        'id' => 'nlyd-student-zh_CN',
+        'value' => '中文'
+    ];
+    //====自定义
+	// List installed languages.
 	foreach ( $languages as $language ) {
 		$structure[] = sprintf(
 			'<option value="%s" lang="%s"%s data-installed="1">%s</option>',
@@ -1219,7 +1227,14 @@ function wp_dropdown_languages( $args = array() ) {
 			selected( $language['language'], $parsed_args['selected'], false ),
 			esc_html( $language['native_name'] )
 		);
-	}
+        //====自定义
+		if('en_US' == $language['language']) $language['native_name'] = 'English';
+        $languagesList[] = [
+            'id' => $language['language'],
+            'value' => $language['native_name']
+        ];
+        //====自定义
+    }
 	if ( $translations_available ) {
 		$structure[] = '</optgroup>';
 	}
@@ -1235,6 +1250,13 @@ function wp_dropdown_languages( $args = array() ) {
 				selected( $translation['language'], $parsed_args['selected'], false ),
 				esc_html( $translation['native_name'] )
 			);
+           //====自定义
+            if('en_US' == $translation['language']) $translation['native_name'] = 'English';
+            $languagesList[] = [
+                'id' => $translation['language'],
+                'value' => $translation['native_name']
+            ];
+           //====自定义
 		}
 		$structure[] = '</optgroup>';
 	}
@@ -1244,11 +1266,18 @@ function wp_dropdown_languages( $args = array() ) {
 	$output .= join( "\n", $structure );
 	$output .= '</select>';
 
-	if ( $parsed_args['echo'] ) {
-		echo $output;
-	}
+    if($parsed_args['is_current_languages_list']){//====自定义
+        return $languagesList;
+    }else{//====自定义
+        if ( $parsed_args['echo'] ) {
+            echo $output;
+        }
+    }
+//    if ( $parsed_args['echo'] ) {
+//        echo $output;
+//    }
+    return $output;
 
-	return $output;
 }
 
 /**

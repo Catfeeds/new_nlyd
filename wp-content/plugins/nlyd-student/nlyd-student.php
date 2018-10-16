@@ -9,7 +9,7 @@ Author URI: --
 Text Domain: nlyd-student
 */
 
-load_plugin_textdomain( 'nlyd-student', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
+//load_plugin_textdomain( 'nlyd-student', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 //判断插件是否启用
 if(!class_exists('StudentController')){
 
@@ -44,8 +44,29 @@ if(!class_exists('StudentController')){
             //配置自己的重写模版
             add_action('template_redirect', array($this,'custom_rewrite_template'));
 
+            //用户语言
+            add_filter( 'locale', array($this,'admin_in_english_locale') );
         }
 
+        public function admin_in_english_locale($locale){
+//                var_dump($_COOKIE['user_language']);
+//                die;
+                if ( !is_admin() ) {
+                    if($_COOKIE['user_language']){
+                        $cookie = $_COOKIE['user_language'];
+//                        setcookie('user_language', $cookie, time()+3600*24*30,'/');
+                        return $cookie;
+                    }
+//        var_dump(get_user_meta($current_user->ID,'locale'));
+//                    die;
+//                    if($current_user->ID > 0){
+//                        return get_user_meta($current_user->ID,'locale',true)[0];
+//                    }
+                }
+                return $locale;
+
+
+        }
 
 
         private function main(){

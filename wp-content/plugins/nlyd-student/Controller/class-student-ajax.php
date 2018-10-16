@@ -3479,6 +3479,25 @@ class Student_Ajax
 
     }
 
+    /**
+     * 用户修改语言
+     */
+    public function userUpdateLanguage(){
+        $lang = trim($_POST['lang']);
+        if(!$lang) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        global $current_user;
+
+        $cookieBool = setcookie('user_language', $lang, time()+3600*24*30*12,'/');
+        if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+//        print_r($_COOKIE);
+        $bool = update_user_meta($current_user->ID, 'locale', $lang);
+        if($bool){
+            wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
+        }else{
+            wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+        }
+    }
+
 }
 
 new Student_Ajax();
