@@ -28,7 +28,7 @@
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
 
-                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">中文</span></a>
+                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">langulage</span></a>
                 
                 <?php endif;?>
                 <div class="radius-zoo">
@@ -210,18 +210,11 @@ jQuery(document).ready(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
-            // $('#checked_lan').text(data[0])
-            var formData = new FormData();
-            formData.append('locale',data[0]['id']);
-            $.ajax({
-                    data: formData,
-                    contentType : false,
-                    processData : false,
-                    url:"http://127.0.0.1/nlyd/wp-admin/profile.php",
-                    success: function(data, textStatus, jqXHR){
-                     console.log(data)
-                    }
-                })
+            if(data[0]['value']=='English'){
+                $('#checked_lan').text('语言')
+            }else if(data[0]['value']=='中文'){
+                $('#checked_lan').text('langulage')
+            }
         }
     });
 layui.use('layer', function(){ //独立版的layer无需执行这一句

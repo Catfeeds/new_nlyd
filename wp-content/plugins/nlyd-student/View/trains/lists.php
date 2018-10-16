@@ -25,17 +25,15 @@
                     <div>   
                         <?php
                         if (empty($list)){ ?>
-                            <div>暂无专项训练</div>;
+                            <div class="ta_c">暂无专项训练</div>
                         <?php }else{ ?>
                             <?php foreach ($list as $v){ ?>
-                                <div>
-                                    <span class="bold c_black fs_16"><?=$v["title"]?></span>
-                                </div>
                                 <div class="lists_item_row">
+                                    <div class="bold c_black fs_16"><?=$v["title"]?></div>
                                     <?php foreach ($v["children"] as $val){ ?>
                                         <a class="item_row lists_row c_black6"  href="<?=home_url('trains/ready/type/'.$val->project_alias.'/genre_id/'.$genre_id.'/id/'.$val->ID)?>" >
                                             <div class="item_img"><img src="<?=student_css_url.'image/sjb.png'?>"></div>
-                                            <div class=""><?=$val->post_title?><span class="pull-right"><i class="iconfont">&#xe727;</i></span></div>
+                                            <div class=""><?=$val->post_title?><div class="pull-right arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div></div>
                                         </a>
                                     <?php }?>
                                 </div>
