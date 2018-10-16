@@ -239,7 +239,7 @@ layui.use(['element','layer','flow'], function(){
             ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'team-join1' //防止重复弹出
-            ,content: '<div class="box-conent-wrapper"><?=printf(__('是否确认加入%s', 'nlyd-student'), $team['post_title'])?>？</div>'
+            ,content: '<div class="box-conent-wrapper"><?php printf(__('是否确认加入%s', 'nlyd-student'), $team['post_title'])?>？</div>'
             ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
             ,success: function(layero, index){
                 
@@ -282,7 +282,7 @@ layui.use(['element','layer','flow'], function(){
                 ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'team-leave1' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper"><?=printf(__('是否确认退出%s', 'nlyd-student'),$team['post_title'])?>？</div>'
+                ,content: '<div class="box-conent-wrapper"><?php printf(__('是否确认退出%s', 'nlyd-student'),$team['post_title'])?>？</div>'
                 ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
                 ,success: function(layero, index){
                     

@@ -45,11 +45,11 @@ class Student_Home
             //print_r($user_info);
             $user_level = get_the_author_meta('user_level',$current_user->ID);
             if($user_level == 0){
-                $user_info['user_type'] = '学 员';
+                $user_info['user_type'] = __('学 员', 'nlyd-student');
             }elseif ($user_level == 10){
-                $user_info['user_type'] = '管理员';
+                $user_info['user_type'] = __('管理员', 'nlyd-student');
             }elseif ($user_level == 7){
-                $user_info['user_type'] = '教练';
+                $user_info['user_type'] = __('教练', 'nlyd-student');
             }
             $user_info['user_id'] = $current_user->ID;
             $user_info['user_head'] = isset($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
@@ -69,19 +69,19 @@ class Student_Home
             if(!empty($user_info['user_real_name']['real_type'])){
                 switch ($user_info['user_real_name']['real_type']){
                     case 'sf':
-                        $text = '身份证';
+                        $text = __('身份证', 'nlyd-student');
                         break;
                     case 'jg':
-                        $text = '军官证';
+                        $text = __('军官证', 'nlyd-student');
                         break;
                     case 'hz':
-                        $text = '护照';
+                        $text = __('护照', 'nlyd-student');
                         break;
                     case 'tb':
-                        $text = '台胞证';
+                        $text = __('台胞证', 'nlyd-student');
                         break;
                     case 'ga':
-                        $text = '港澳证';
+                        $text = __('港澳证', 'nlyd-student');
                         break;
                 }
                 $user_info['user_real_name']['real_type_c'] = $text;

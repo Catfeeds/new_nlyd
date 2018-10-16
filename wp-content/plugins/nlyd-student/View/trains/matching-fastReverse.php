@@ -185,16 +185,15 @@ $('.number').each(function(){
                 }
                 if(number=="本题无解"){
                     $('.answer').text(number)
-                    // $('.number').removeClass('disabled')
-                    $('.answer').text(text+number) 
-                    _this.stop(true).animate({
-                        'opacity':'0.6',
-                        'filter': 'alpha(opacity=60)',
-                    },50).animate({
-                        'opacity':'1',
-                        'filter': 'alpha(opacity=100)',
-                    },50)
-                            
+                    $('.number').removeClass('disabled')
+                    $('.answer').text(number) 
+                        _this.stop(true).animate({
+                            'opacity':'0.6',
+                            'filter': 'alpha(opacity=60)',
+                        },50).animate({
+                            'opacity':'1',
+                            'filter': 'alpha(opacity=100)',
+                        },50)
                 }else{
                     var len=text.length;
                     var x=text.charAt(len-1,1);
@@ -202,13 +201,12 @@ $('.number').each(function(){
                         if(len>0){
                             if(isNaN(parseInt(x)) && x!==')'){
                                 $('.answer').text(text+number)
-                                // _this.addClass('disabled')
+                                _this.addClass('disabled')
                                 dataIndex.push(_this.attr('data-index'))
                             }
                         }else{
-
                             $('.answer').text(text+number)
-                            // _this.addClass('disabled')
+                            _this.addClass('disabled')
                             dataIndex.push(_this.attr('data-index'))
                         }
                     }else{//符号

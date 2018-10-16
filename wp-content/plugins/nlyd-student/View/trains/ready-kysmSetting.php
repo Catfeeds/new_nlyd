@@ -6,8 +6,11 @@
             <h1 class="mui-title"><?=$title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
-
-                闪现时间<input type="text" id="flash" name="flash_time" value="800" />毫秒
+                <div class="bold c_blue fs_16 ta_c" style="margin-top:20px;margin-bottom:50px">快眼训练设置</div>
+                <div class="ta_c">
+                    闪现时间  <input style="border-radius:6px" type="tel" id="flash" name="flash_time" value="800" />  毫秒
+                </div>
+                
 
                 <div class="a-btn" id="complete" href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">开始训练</div>
             </div>

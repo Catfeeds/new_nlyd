@@ -171,7 +171,7 @@ class Student_Account extends Student_Home
             $row = $this->ajaxControll->get_address(false);
 
             if(empty($row)){
-                $this->get_404('数据错误');
+                $this->get_404(__('数据错误', 'nlyd-student'));
                 return;
             }
         }
@@ -239,6 +239,10 @@ class Student_Account extends Student_Home
             wp_enqueue_script( 'student-cropper' );
             wp_register_style( 'my-student-cropper', student_css_url.'cropper/cropper.css',array('my-student'));
             wp_enqueue_style( 'my-student-cropper' );
+            wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mobileSelect' );
+            wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
+            wp_enqueue_style( 'my-student-mobileSelect' );
         }
         if(ACTION == 'info' || ACTION == 'certification'){
             wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );

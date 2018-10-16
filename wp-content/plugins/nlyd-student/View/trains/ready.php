@@ -1,4 +1,11 @@
-
+<style>
+.ready_img{
+    position: relative;
+    width:30px;
+    display:inline-block;
+    top: 8px;
+}
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -19,11 +26,11 @@
             switch ($_GET['type']){
                 case 'szzb':
         ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　数字是世界公认最难记忆的信息，但运用记忆术可以轻松克服这一难题，同时对大脑的注意力、记忆力、创造力和敏锐度也是一个有效的训练。本赛事向广大群众提供公益性的记忆术培训，掌握技术方法之后利用本训练平台进行自我训练，记忆水平将大幅提高。
 　　Numbers are universally acknowledged to be the most difficult information to remember, but memory is an easy way to overcome this problem and an effective training for the brain's attention, memory, creativity and sharpness. This competition provides public welfare memory training to the masses. After mastering the techniques and methods, the training platform will be used for self-training, and the memory level will be greatly improved.
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -33,7 +40,7 @@
 　　4、待所有选手答题结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.数量分：正确记忆1个数字得12分；
@@ -61,11 +68,11 @@
                 <?php
                         break;
                 case 'pkjl': ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　扑克牌是训练多元素信息记忆能力的极佳工具，训练者要在尽量短的时间内记住一副牌的颜色、图案、字符、顺序等多项信息，各元素的搭配要准确无误，是训练注意力、视觉感知力、记忆力和创造力（想象力）的重要方式。
 　　Poker is an excellent tool for training multi-element information memory ability. Trainers should remember as soon as possible the color, pattern, character, sequence and other information of a deck of cards. The combination of various elements must be accurate. It is an important way to train attention, visual perception, memory and creativity (imagination).
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -75,7 +82,7 @@
 　　4、本项目比赛结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 　　
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.数量分：正确记忆1张牌得18分；
@@ -103,11 +110,11 @@
                 <?php
                     break;
                 case 'kysm': ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　快眼扫描是训练快速准确感知文字、符号、数字等信息的重要项目，感知信息量每两题递增一次，无限增多，能有效提高注意力和视觉感知力。本项目从一项特工瞬间观察力训练演化而来，对提高实际生活中瞬间准确感知大量信息的能力具有重要意义。
 　　Fast eye scan is an important item in training to quickly and accurately perceive text, symbols, numbers and other information. The amount of perceived information increases every two questions, infinitely, which can effectively improve attention and visual perception. This project evolved from a spy's instantaneous observation training, which is of great significance to improve the ability of instantaneous and accurate perception of large amounts of information in real life.
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -117,7 +124,7 @@
 　　4、待所有选手答题结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.在每题6个不同选项中只有1个正确答案，选对1题得10分。
@@ -141,11 +148,11 @@
                 <?php
                     break;
                 case 'wzsd': ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　阅读是获取知识的重要方式，文章速读是注意力、文字感知力、理解力、记忆力的重要训练项目，是提高获取知识速度和准确性、提高阅读效率的有效手段。
 　　Reading is an important way to acquire knowledge. Speed reading is an important training item for attention, text perception, comprehension and memory. It is an effective means to improve the speed and accuracy of knowledge acquisition and improve reading efficiency.
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -155,7 +162,7 @@
 　　4、待所有选手答题结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.数量分：选择正确1题得23分；
@@ -183,11 +190,11 @@
                 <?php
                     break;
                 case 'zxss': ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　计算是大脑数理逻辑推理能力的综合应用，是理解力水平最直观的体现。正向速算是综合训练大脑注意力、理解力和记忆力的重要项目。本项目不同于奥数、珠心算等技巧性比赛，侧重于面向普通人通过简单的加减乘除运算考查大脑计算的速度和准确性，重在脑力素质的训练。
 　　Computation is the comprehensive application of mathematical logic reasoning ability of the brain, and it is the most direct embodiment of comprehension level. Fast calculation is an important project to train brain's attention, comprehension and memory. This project is different from the Olympic mathematics competition, abacus arithmetic and other technical competitions, focusing on ordinary people through simple addition, subtraction, multiplication and division to check the speed and accuracy of brain computing, focusing on the training of mental quality.
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -197,7 +204,7 @@
 　　4、系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. The system automatically calculates and releases the result.
 
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.答对1题计10分。
@@ -221,11 +228,11 @@
                 <?php
                     break;
                 case 'nxss': ?>
-<div class="bold ta_c c_blue fs_16">项目意义</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> 项目意义</div>
 　　逆向速算来源于著名的“24点智力游戏”，通过把系统出示的0-13中的4个数据用加、减、乘、除和括号连接成算式，使其计算结果等于24，综合训练大脑的注意力、发散思维、逆向思维、想象力和记忆力。
 　　24-point originates from the famous "24-point game". By adding, subtracting, multiplying, dividing and bracketing four data from 0-13 produced by the system into an arithmetic formula, the result is equal to 24. It integrates training of the brain's attention, divergent thinking, reverse thinking, imagination and memory.
 
-<div class="bold ta_c c_blue fs_16">比赛规程</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/bsgc.png'?>"></div> 比赛规程</div>
 　　1、选手在“国际脑力运动”线上平台报名参加脑力世界杯并选中本项比赛。
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
@@ -235,7 +242,7 @@
 　　4、待所有选手答题结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 
-<div class="bold ta_c c_blue fs_16">评判标准</div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/ppbz.png'?>"></div> 评判标准</div>
 <span class="c_blue">获胜依据：</span>
 <span class="c_blue">Scoring rules:</span>
 　　1.答对1题得10分。

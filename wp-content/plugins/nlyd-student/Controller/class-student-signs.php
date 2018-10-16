@@ -63,7 +63,7 @@ class Student_Signs
 
     <script type="text/javascript">
         jQuery(function($){
-            $.alerts('请使用微信扫码进行签到');
+            $.alerts(__('请使用微信扫码进行签到', 'nlyd-student'));
         })
             //alert('请使用微信扫码进行签到');
     </script>
@@ -126,7 +126,7 @@ class Student_Signs
     public function getWebAccessToken()
     {   
         $code = $_GET['code'];
-        
+
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
         $url .= 'appid='.$this->appid;
         $url .= '&secret='.$this->appsecret;
@@ -154,7 +154,7 @@ class Student_Signs
             $url = home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/loginType/sign/id/'.$_GET['id']);
         ?>
             <script type="text/javascript">
-                alert("你是新用户或未进行手机绑定\n即将跳转到绑定页");
+                alert("<?=__('你是新用户或未进行手机绑定\\n即将跳转到绑定页', 'nlyd-student')?>");
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
@@ -177,7 +177,7 @@ class Student_Signs
         ?>
             <script type="text/javascript">
             	//$.alerts('即将跳转到实名认证页');
-                alert('你未进行实名认证\n即将跳转到实名认证页');
+                alert('<?=__('你未进行实名认证\\n即将跳转到实名认证页', 'nlyd-student')?>');
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
@@ -196,7 +196,7 @@ class Student_Signs
 			?>
 				<script type="text/javascript">
             	//$.alerts('即将跳转到实名认证页');
-                alert('该用户未成功匹配参数资格\n请确认该选手实名信息');
+                alert('<?=__('该用户未成功匹配参数资格\\n请确认该选手实名信息', 'nlyd-student')?>');
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
@@ -221,7 +221,7 @@ class Student_Signs
             		?>
 					<script type="text/javascript">
 		            	//$.alerts('即将跳转到实名认证页');
-		                alert('签到成功');
+		                alert('<?=__('签到成功', 'nlyd-student')?>');
 		                setTimeout(function(){
 		                    window.location.href='<?=home_url('signs/success/id/'.$_GET['id'])?>';
 		                    return false;
@@ -260,7 +260,7 @@ class Student_Signs
                     	?>
                     	<script type="text/javascript">
 			            	//$.alerts('即将跳转到实名认证页');
-			                alert('签到成功');
+			                alert('<?=__('签到成功', 'nlyd-student')?>');
 			                setTimeout(function(){
 			                    window.location.href='<?=home_url('signs/success/')?>';
 			                    return false;
@@ -274,7 +274,7 @@ class Student_Signs
                     	?>
                     	<script type="text/javascript">
 			            	//$.alerts('即将跳转到实名认证页');
-			                alert('签到失败,比赛订单创建失败\n请联系管理员');
+			                alert('<?=__('签到失败,比赛订单创建失败\\n请联系管理员', 'nlyd-student')?>');
 	            		</script>
                         <?php }
             	}

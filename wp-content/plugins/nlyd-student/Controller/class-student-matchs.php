@@ -171,7 +171,7 @@ class Student_Matchs extends Student_Home
         if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog','singleRecord')) ){
 
             if (empty($this->project_key_array[$_GET['project_id']])){
-                $this->get_404('比赛项目错误');
+                $this->get_404(__('比赛项目错误', 'nlyd-student'));
                 die;
             }
             $match_project = $this->project_key_array[$_GET['project_id']];
@@ -374,7 +374,7 @@ class Student_Matchs extends Student_Home
     public function info(){
 
         if(!isset($_GET['match_id'])) {
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         global $wpdb,$current_user;
@@ -382,7 +382,7 @@ class Student_Matchs extends Student_Home
         //获取比赛详情
         $match = $this->get_match_info($_GET['match_id']);
         if(empty($match)){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -390,7 +390,7 @@ class Student_Matchs extends Student_Home
             //修改比赛状态
             $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
             $match['match_status'] = -2;
-            $match['match_status_cn'] = '等待开赛';
+            $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
         }
 
 
@@ -451,7 +451,7 @@ class Student_Matchs extends Student_Home
     public function matchRule(){
 
         if(!isset($_GET['project_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 //        $row = get_post($_GET['project_id']);
@@ -484,7 +484,7 @@ class Student_Matchs extends Student_Home
             $row = $wpdb->get_row($sql,ARRAY_A);
             //var_dump($row);
             if(empty($row)){
-                $this->get_404('最近暂无比赛');
+                $this->get_404(__('最近暂无比赛', 'nlyd-student'));
                 return;
             }
             if(empty($this->project_order_array)){
@@ -567,7 +567,7 @@ class Student_Matchs extends Student_Home
     public function initialMatch(){
 
         if(empty($_GET['match_id']) || empty($_GET['project_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -577,11 +577,11 @@ class Student_Matchs extends Student_Home
         //print_r($row);
         if(empty($row)){
 
-            $this->get_404('你未报名');
+            $this->get_404(__('你未报名', 'nlyd-student'));
             return;
         }else{
             if(!in_array($row->pay_status,array(2,3,4))){
-                $this->get_404('订单未付款');
+                $this->get_404(__('订单未付款', 'nlyd-student'));
                 return;
             }
         }
@@ -594,14 +594,14 @@ class Student_Matchs extends Student_Home
 
                 if( get_time() > $this->current_project['project_end_time'] + 60  ){
 
-                    $this->get_404(array('message'=>'该轮比赛已结束','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                    $this->get_404(array('message'=>__('该轮比赛已结束', 'nlyd-student'),'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
                     return;
                 }
                 //print_r($this->current_project);//die;
                 if( get_time() < $this->current_project['project_start_time']){
 
                     $error_data = array(
-                        'message'=>'该轮比赛未开始',
+                        'message'=>__('该轮比赛未开始', 'nlyd-student'),
                         'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
                         'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
                         'start_count_down' => $this->project_start_time - get_time(),
@@ -681,7 +681,7 @@ class Student_Matchs extends Student_Home
                 if(empty($question)){
                     $error_data = array(
                         'status'=>-1,
-                        'message'=>'暂无比赛题目,联系管理员录题',
+                        'message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),
                         'match_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
                     );
                     $this->get_404($error_data);
@@ -780,7 +780,7 @@ class Student_Matchs extends Student_Home
             //判断状态
             if(!empty($row['answer_status'])){
                 if($row['answer_status'] == 1){
-                    $this->get_404(array('message'=>'答案已提交','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
+                    $this->get_404(array('message'=>__('答案已提交', 'nlyd-student'),'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
                     return;
                 }
             }
@@ -910,7 +910,7 @@ class Student_Matchs extends Student_Home
     public function answerMatch(){
 
         if(empty($_GET['match_id']) || empty($_GET['project_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -920,11 +920,11 @@ class Student_Matchs extends Student_Home
         //print_r($row);
         if(empty($row)){
 
-            $this->get_404('你未报名');
+            $this->get_404(__('你未报名', 'nlyd-student'));
             return;
         }else{
             if(!in_array($row->pay_status,array(2,3,4))){
-                $this->get_404('订单未付款');
+                $this->get_404(__('订单未付款', 'nlyd-student'));
                 return;
             }
         }
@@ -942,14 +942,14 @@ class Student_Matchs extends Student_Home
 
         if(empty($row)){
 
-            $this->get_404('数据错误');
+            $this->get_404(__('数据错误', 'nlyd-student'));
             return;
         }else{
 
             //判断状态
             if(!empty($row['answer_status'])){
                 if($row['answer_status'] == 1){
-                    $messahe = '答案已提交';
+                    $messahe = __('答案已提交', 'nlyd-student');
                     $this->get_404($messahe);
                     return;
                 }
@@ -1027,7 +1027,7 @@ class Student_Matchs extends Student_Home
 
 
         if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         global $wpdb,$current_user;
@@ -1044,12 +1044,12 @@ class Student_Matchs extends Student_Home
 
         $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
         if(empty($order)){
-            $this->get_404('你未报名');
+            $this->get_404(__('你未报名', 'nlyd-student'));
             return;
         }else{
 
             if(!in_array($order->pay_status,array(2,3,4))){
-                $this->get_404('订单未付款');
+                $this->get_404(__('订单未付款', 'nlyd-student'));
                 return;
             }
         }
@@ -1057,11 +1057,11 @@ class Student_Matchs extends Student_Home
         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
 
         if(empty($row)){
-            $this->get_404('数据为空,请确认是否参加本轮答题');
+            $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
             return;
         }else{
             if($row['answer_status'] != 1){
-                $this->get_404('操作错误,你未进行答题');
+                $this->get_404(__('操作错误,你未进行答题', 'nlyd-student'));
                 return;
             }
         }
@@ -1266,7 +1266,7 @@ class Student_Matchs extends Student_Home
     public function checkAnswerLog(){
 
         if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         global $wpdb,$current_user;
@@ -1274,11 +1274,11 @@ class Student_Matchs extends Student_Home
         $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
         //print_r($row);
         if(empty($row)){
-            $this->get_404('数据为空,请确认是否参加本轮答题');
+            $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
             return;
         }else{
             if($row['answer_status'] != 1){
-                $this->get_404('操作错误,你未进行答题');
+                $this->get_404(__('操作错误,你未进行答题', 'nlyd-student'));
                 return;
             }
         }
@@ -1403,7 +1403,7 @@ class Student_Matchs extends Student_Home
     public function confirm(){
 
         if(!isset($_GET['match_id'])) {
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         //获取比赛详情
@@ -1469,7 +1469,7 @@ class Student_Matchs extends Student_Home
     public function record(){
 
         if(empty($_GET['match_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -1484,7 +1484,7 @@ class Student_Matchs extends Student_Home
 
             if(empty($_GET['project_id']) || empty($_GET['match_more'])){
 
-                $this->get_404('参数错误');
+                $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
             }
             $sql = "select user_id,my_score from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} order by my_score desc,surplus_time desc limit {$start},{$pageSize} ";
@@ -1578,7 +1578,7 @@ class Student_Matchs extends Student_Home
      */
     public function singleRecord (){
         if(empty($_GET['match_id']) || empty($_GET['project_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         //print_r($this->match_alias);
@@ -1614,7 +1614,7 @@ class Student_Matchs extends Student_Home
         //获取比赛信息
         $match = $this->get_match_info($_GET['match_id']);
         if(empty($match)){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         if(!empty($match['match_category_order'])) $match['match_category_order'] = unserialize($match['match_category_order']);
@@ -1721,7 +1721,7 @@ class Student_Matchs extends Student_Home
 
         $this->match = $this->get_match_info($match_id);
         if(empty($this->match)){
-            $this->get_404(array('message'=>'比賽信息错误','match_url'=>home_url('/matchs/')));
+            $this->get_404(array('message'=>__('比賽信息错误', 'nlyd-student'),'match_url'=>home_url('/matchs/')));
             die;
         }
         //print_r($this->match);die;
@@ -1745,7 +1745,7 @@ class Student_Matchs extends Student_Home
         $rows = $wpdb->get_results($sql1,ARRAY_A);
 
         if(empty($rows)){
-            $this->get_404(array('message'=>'该比赛未绑定比赛项','match_url'=>home_url('/matchs/info/match_id/'.$match_id)));
+            $this->get_404(array('message'=>__('该比赛未绑定比赛项', 'nlyd-student'),'match_url'=>home_url('/matchs/info/match_id/'.$match_id)));
             die;
         }
         //print_r($this->match_start_time);
@@ -1851,7 +1851,7 @@ class Student_Matchs extends Student_Home
 
                     $error_data = array(
                         'status'=>-1,
-                        'message'=>'比赛结束',
+                        'message'=>__('比赛结束', 'nlyd-student'),
                         'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
                     );
                     $this->get_404($error_data);

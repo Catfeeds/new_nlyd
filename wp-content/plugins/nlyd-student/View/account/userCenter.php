@@ -27,7 +27,9 @@
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
-                <!-- <a href="<?=home_url('account/info')?>" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;编辑资料</a> -->
+
+                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">中文</span></a>
+                
                 <?php endif;?>
                 <div class="radius-zoo">
                     <!-- 头像 -->
@@ -186,6 +188,42 @@
 </div>
 <script>
 jQuery(document).ready(function($) {
+    // 模拟手机下拉列表，选择性别
+    var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
+    var posiotion=[0];//初始化位置，高亮展示
+    if($('#checked_lan').text().length>0 && $('#trigger3').text()){
+        $.each(selectData,function(index,value){
+            if(value==$('#checked_lan').text()){
+                posiotion=[index]
+                return false;
+            }
+        })
+    }
+    var mobileSelect2 = new MobileSelect({
+        trigger: '#checked_lan',
+        title: '语言 langulage',
+        wheels: [
+            {data: selectData}
+        ],
+        position:posiotion, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            // $('#checked_lan').text(data[0])
+            var formData = new FormData();
+            formData.append('locale',data[0]['id']);
+            $.ajax({
+                    data: formData,
+                    contentType : false,
+                    processData : false,
+                    url:"http://127.0.0.1/nlyd/wp-admin/profile.php",
+                    success: function(data, textStatus, jqXHR){
+                     console.log(data)
+                    }
+                })
+        }
+    });
 layui.use('layer', function(){ //独立版的layer无需执行这一句
     <?php if(empty($user_info['user_real_name']) && get_time() < $_SESSION['login_time']){ ?>
     layer.open({

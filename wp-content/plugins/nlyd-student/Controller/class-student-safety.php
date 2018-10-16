@@ -71,22 +71,22 @@ class Student_Safety extends Student_Home
         //重置密码/更换手机号/绑定手机号/绑定邮箱
          switch ($_GET['type']){
              case 'pass':
-                $title = '密码重置';
+                $title = __('密码重置', 'nlyd-student');
                 break;
              case 'mobile':
-                 $title = '手机绑定';
+                 $title = __('手机绑定', 'nlyd-student');
                  break;
              case 'email':
-                 $title = '邮箱绑定';
+                 $title = __('邮箱绑定', 'nlyd-student');
                  break;
              case 'weChat':
-                 $title = '微信绑定';
+                 $title = __('微信绑定', 'nlyd-student');
                  break;
              case 'qq':
-                 $title = 'QQ绑定';
+                 $title = __('QQ绑定', 'nlyd-student');
                  break;
              default:
-                 $title='安全中心';
+                 $title=__('安全中心', 'nlyd-student');
                  break;
          }
 

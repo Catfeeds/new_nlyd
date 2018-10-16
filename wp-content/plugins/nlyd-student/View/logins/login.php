@@ -153,7 +153,7 @@
                     </form>
                 </div> 
             </div> 
-            <div class="nl-agreement"><?=__('登录或注册即同意', 'nlyd-student')?><a class="c_blue pointer"><?=__('【脑力中国用户协议】', 'nlyd-student')?></a></div>
+            <div class="nl-agreement"><?=__('登录或注册即同意', 'nlyd-student')?><br /><a class="c_blue pointer"><?=__('【脑力中国用户协议】', 'nlyd-student')?></a></div>
             <ul style="margin-left: 0"  class="login-type flex-h">
                 <?php if($default_wechat_login): ?>
                 <li class="login-type-wrapper flex1">
