@@ -10,6 +10,7 @@
 }
 .lists_item_row{
     overflow: hidden;
+    width: 100%;
 }
 .item_row{
     display: block;
@@ -19,8 +20,11 @@
     width: -webkit-calc(50% - 40px);
     width: calc(50% - 40px);
 }
-.lists_item_row .item_row:last-child{
+.lists_item_row .item_row{
     margin-left: 24px;
+}
+.lists_item_row .item_row:nth-child(even){
+    margin-left: 0;
 }
 .item_img{
     float: left;
