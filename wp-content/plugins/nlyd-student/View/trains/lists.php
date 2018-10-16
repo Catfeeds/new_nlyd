@@ -28,10 +28,8 @@
                             <div class="ta_c">暂无专项训练</div>
                         <?php }else{ ?>
                             <?php foreach ($list as $v){ ?>
-                                <div>
-                                    <span class="bold c_black fs_16"><?=$v["title"]?></span>
-                                </div>
                                 <div class="lists_item_row">
+                                    <div class="bold c_black fs_16"><?=$v["title"]?></div>
                                     <?php foreach ($v["children"] as $val){ ?>
                                         <a class="item_row lists_row c_black6"  href="<?=home_url('trains/ready/type/'.$val->project_alias.'/genre_id/'.$genre_id.'/id/'.$val->ID)?>" >
                                             <?php
