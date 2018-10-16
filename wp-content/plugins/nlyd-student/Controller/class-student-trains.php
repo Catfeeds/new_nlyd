@@ -489,6 +489,10 @@ class Student_Trains extends Student_Home
             wp_register_style( 'my-trains-lists', student_css_url.'trains/lists.css',array('my-student') );
             wp_enqueue_style( 'my-trains-lists' );
         }
+        if(ACTION == 'history'){
+            wp_register_style( 'my-trains-history', student_css_url.'trains/history.css',array('my-student') );
+            wp_enqueue_style( 'my-trains-history' );
+        }
         //比赛初始页面
         if(ACTION == 'initial'){
 

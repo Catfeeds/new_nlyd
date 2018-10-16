@@ -36,6 +36,17 @@
     width: 100%;
     height: 100%;
 }
+.arrow_box{
+    display: table;
+    width: 9px;
+    margin-top: 9px;
+}
+.arrow_box img{
+    display: table-cell;
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
 @media screen and (max-width: 1199px){
     #content{
         background:#f6f6f6;
