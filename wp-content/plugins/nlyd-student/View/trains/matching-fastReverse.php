@@ -80,9 +80,32 @@ jQuery(function($) {
         // if(valid(select)=="本题无解"){
         //     initQuestion()
         // }else{
-            console.log(valid(select))
-            var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
-            ajaxData.push(thisRow)
+            // console.log(valid(select))
+            var _flag=false;//重复题目是true
+            var _flag1=false;//前面的4题连续无解是true
+            $.each(ajaxData,function(index,value){
+                var _select=value.question;
+                if(_select[0]==select[0] && _select[1]==select[1] && _select[2]==select[2] && _select[3]==select[3]){//重复题目
+                    _flag=true;
+                    return false;
+                }
+            })
+            var _len=ajaxData.length;
+            var _rights=valid(select);
+            
+            if(_len>=4){//前面的4题连续无解
+                if(_rights=='本题无解'){//本题也无解
+                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
+                        _flag1=true;
+                    }
+                }
+            }
+            if(_flag || _flag1){//重复题目，连续无解
+                initQuestion()
+            }else{
+                var thisRow={question:select,yours:'',isRight:false,rights:_rights}
+                ajaxData.push(thisRow) 
+            }
         // }
     }
     function nextQuestion() {
@@ -405,7 +428,6 @@ new AlloyFinger($('#next')[0], {
                 }, 300);
             }
         }
-        console.log(ajaxData)
     }
 });
     layui.use('layer', function(){

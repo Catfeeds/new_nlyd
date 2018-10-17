@@ -44,7 +44,7 @@ switch ($type){
         ?>
         <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <?php if(isset($_GET['type'])){ ?>
+                <?php if(isset($_GET['back'])){ ?>
                     <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
                 <?php } ?>
                 <h1 class="mui-title"><?=$title?><?=__('答题记录', 'nlyd-student')?></h1>
@@ -120,10 +120,12 @@ switch ($type){
 </div>  
 <script>
 jQuery(function($) {
+    <?php if(isset($_GET['back'])){ ?>
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
+    <?php } ?>
     $('#again').click(function(){
         $.DelCookie('train_match','1')
     })

@@ -22,7 +22,7 @@
                                 <div class="bold c_black fs_16 pull-left his_first"> <?=$v['project_type_cn']?></div>
                                 <div class="c_orange pull-left his_second"><?=$v['my_score']?>分</div>
                                 <div class="pull-left his_third"><?=$v['created_time']?></div>
-                                <a class="pull-right c_blue" href="<?=home_url('trains/logs/id/'.$v['id'].'/type/'.$v['project_type'])?>">详情</a>
+                                <a class="pull-right c_blue" href="<?=home_url('trains/logs/back/1/id/'.$v['id'].'/type/'.$v['project_type'])?>">详情</a>
                             </div>
                             <?php } ?>
                             <a class="a-btn" href="<?=home_url('trains')?>">马上去训练</a>
