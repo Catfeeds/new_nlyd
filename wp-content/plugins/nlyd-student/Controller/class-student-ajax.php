@@ -1406,6 +1406,7 @@ class Student_Ajax
                 //前端需要的数组
                 $rows[$k]['match_start_time_arr'] = str2arr(time_format(strtotime($val['match_start_time']),'Y-m-d-H-i-s'),'-');
                 $rows[$k]['entry_end_time_arr'] = str2arr(time_format(strtotime($val['entry_end_time']),'Y-m-d-H-i-s'),'-');
+                $rows[$k]['match_status_cn'] = __($rows[$k]['match_status_cn'], 'nlyd-student');//翻译
                 //两个链接
                 if($val['match_status'] == 2){
                     //比赛中
