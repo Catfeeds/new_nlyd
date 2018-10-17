@@ -139,16 +139,6 @@ jQuery(function($) {
             }
         }
         rand(new_poker)
-        // var newArr=[]
-        // function build() {
-        //     var poker=rand(questions_answer)
-        //     console.log(poker) 
-        // }
-        // build()
-        // console.log(questions_answer)
-        // questions_answer.sort(function() {
-        //     return .5 - Math.random();
-        // });
         $.DelCookie('train_match')
     }
     $.each(questions_answer,function(i,v){
