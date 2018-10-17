@@ -16,10 +16,10 @@
                   <?php if(!empty($list)){ ?>
                     <div class="layui-row nl-border nl-content have-bottom">
                         <div class="width-padding width-padding-pc">
-                            <div class="ta_c c_yellow fs_12 his_tips">温馨提示：训练最多保存100条</div>
+                            <div class="ta_c c_yellow fs_12 his_tips">温馨提示：训练记录最多保存100条</div>
                             <?php foreach ($list as $v){ ?>
                             <div class="his_row">
-                                <div class="bold c_black fs_16 pull-left his_first"> <?=$v['project_type_cn']?></div>
+                                <div class="bold c_black pull-left his_first"> <?=$v['project_type_cn']?></div>
                                 <div class="c_orange pull-left his_second"><?=$v['my_score']?>分</div>
                                 <div class="pull-left his_third"><?=$v['created_time']?></div>
                                 <a class="pull-right c_blue" href="<?=home_url('trains/logs/back/1/id/'.$v['id'].'/type/'.$v['project_type'])?>">详情</a>

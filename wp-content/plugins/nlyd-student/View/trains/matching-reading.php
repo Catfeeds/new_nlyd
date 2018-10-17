@@ -63,7 +63,7 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var questions_answer=[];
+    /*var questions_answer=[];
         var match_questions=[];
         var checkIndex=['A','B','C','D','E','F','G']
         var leavePage= $.GetCookie('train_match','1');
@@ -88,7 +88,7 @@ jQuery(function($) {
             // })
         }else{//未获取到比赛题目
             $.alerts('未检测到题目信息')
-        }
+        }*/
     layui.use(['form'], function(){
         var form = layui.form
     })

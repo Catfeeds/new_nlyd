@@ -92,8 +92,8 @@ jQuery(function($) {
         function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
-                // ,isAuto: false
-                // ,isLazyimg: true
+                ,isAuto: false
+                ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_match_list',
@@ -213,7 +213,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>：</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+v.entry_total+'人</div>'
-                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                                                +'<a class="c_orange" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
@@ -227,7 +227,7 @@ jQuery(function($) {
                                             +'</li>'
                                     lis.push(dom) 
                                 })
-                                if (res.data.info.length<10) {
+                                if (res.data.info.length<50) {
                                     next(lis.join(''),false) 
                                 }else{
                                     next(lis.join(''),true) 

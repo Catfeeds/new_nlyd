@@ -522,7 +522,7 @@ class Student_Ajax
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
 
-        $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
+        $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta where match_id = {$_POST['match_id']} ";
         $match_meta = $wpdb->get_row($sql,ARRAY_A);
         if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
         if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
@@ -1485,14 +1485,11 @@ class Student_Ajax
 
         $where = join(' and ',$map);
 
-
-        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
-                a.post_content,
-                DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
+        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
                 b.match_cost,b.entry_end_time,b.match_status ,c.user_id
                 from {$wpdb->prefix}posts a
-                left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id
+                left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
@@ -1509,6 +1506,27 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
         foreach ($rows as $k => $val){
+
+            /*//修改比赛状态
+            $match = get_match_end_time($val['ID']);
+            $end_time = end($match)['project_end_time'];
+            /*if($current_user->ID == 66){
+                print_r($val);
+                var_dump($end_time);
+                echo "<hr/>";
+            }
+            if(strtotime($val['entry_end_time']) < get_time() && get_time() < strtotime($val['match_start_time'])){
+                $val['match_status'] = $match_status = -2;  //等待开赛
+            }elseif (get_time() < strtotime($val['entry_end_time'])){
+                $val['match_status'] = $match_status = 1;      //报名中
+            }elseif (get_time() > strtotime($end_time)){
+                $val['match_status'] = $match_status = -3;  //已结束
+            }else{
+                $val['match_status'] = $match_status = 2;   //比赛中
+            }
+
+            
+            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>$match_status),array('match_id'=>$val['ID']));*/
 
             //获取报名人数
             $sql_ = "select count(a.id) total 

@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!-- 比赛详情 -->
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
@@ -96,7 +99,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="flow-table">
-
+                                            <?php
+                                                if($match['match_status'] != 1):
+                                                    foreach ($orders as $v){
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <div class="player-img"><img src="http://127.0.0.1/nlyd/wp-content/uploads/user/3/20180816073854_3590.jpg"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content">易水寒</div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content">男</div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content">26</div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content">20181017</div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content">
+                                                        <img src="http://127.0.0.1/nlyd/wp-content/plugins/nlyd-student/Public/css/image/flags/cn.png">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <?php } ?>
+                                            <?php endif;?>
                                             </tbody>    
                                         </table>
                                     </div>
@@ -131,7 +161,7 @@
                     </div>
                 </div>
             </div>
-        </div>           
+        </div>
     </div>
 </div>
 <!-- 比赛详情报名选手列表获取 -->
@@ -159,6 +189,7 @@ jQuery(function($) {
     });
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        <?php if($match['match_status'] == 1){ ?>
         var flow = layui.flow;//流加载
         var match_page=1;
         flow.load({
@@ -225,6 +256,14 @@ jQuery(function($) {
                 })       
             }
         });
+        <?php } ?>
     });
 })
 </script>
+<?php
+    $path = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
+    $info=ob_get_contents(); //得到缓冲区的内容并且赋值给$info
+    $file=fopen($path,'w'); //打开文件info.txt
+    fwrite($file,$info); //写入信息到info.txt
+    fclose($file); //关闭文件info.txt
+?>
