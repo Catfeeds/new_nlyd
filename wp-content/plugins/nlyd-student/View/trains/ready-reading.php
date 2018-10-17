@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$content->ID?>">
-                <a class="a-btn" id="complete"  href="<?=$url?>">阅读完成</a>
+                <div class="a-btn" id="complete"  data-href="<?=$url?>">阅读完成</div>
             </div>
         </div>
     </div>
@@ -35,15 +35,20 @@
 jQuery(function($) {
 new AlloyFinger($('#complete')[0], {//阅读完成
     tap:function(){
-        var sessionData={//存储session
-            genre_id:$.Request('genre_id'),
-            post_id:$.Request('post_id'),
-            type:'wzsd',
-            count_down:$('.count_down').attr('data-seconds'),
-            questions_answer:<?=json_encode($questions_answer)?>,
-            match_questions:<?=json_encode($match_questions)?>,
-        }
-        $.SetCookie('train_match',sessionData,0)
+        // var sessionData={//存储session
+        //     genre_id:$.Request('genre_id'),
+        //     post_id:$.Request('post_id'),
+        //     type:'wzsd',
+        //     count_down:$('.count_down').attr('data-seconds'),
+        //     questions_answer:<?=json_encode($questions_answer)?>,
+        //     match_questions:<?=json_encode($match_questions)?>,
+        // }
+        // $.SetCookie('train_match',sessionData,0)
+        var time=$('.count_down').attr('data-seconds');
+        var href=$(this).attr('data-href')
+        var new_href=href+'/surplus_time/'+time;
+        window.location.href=new_href
+        
     }
 })
     function submit(time){//提交答案

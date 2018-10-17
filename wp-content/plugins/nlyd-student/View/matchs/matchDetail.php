@@ -68,7 +68,7 @@
                                         <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>：</div>
                                             <div class="nl-match-info1">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
+                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('规则', 'nlyd-student')?></a>&nbsp;&nbsp;
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -163,8 +163,8 @@ jQuery(function($) {
         var match_page=1;
         flow.load({
             elem: '#flow-table' //流加载容器
-            // ,isAuto: false
-            // ,isLazyimg: true
+            ,isAuto: false
+            ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'get_entry_list',
@@ -209,7 +209,7 @@ jQuery(function($) {
                                         +'</tr>'
                                 lis.push(dom) 
                             })
-                            if (res.data.info.length<10) {
+                            if (res.data.info.length<50) {
                                 next(lis.join(''),false) 
                             }else{
                                 next(lis.join(''),true) 

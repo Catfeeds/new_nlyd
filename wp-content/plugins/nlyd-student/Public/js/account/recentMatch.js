@@ -106,7 +106,7 @@ jQuery(function($) {
                                             +'</li>'
                                     lis.push(dom) 
                                 })
-                                if (res.data.info.length<10) {
+                                if (res.data.info.length<50) {
                                     next(lis.join(''),false) 
                                 }else{
                                     next(lis.join(''),true) 

@@ -102,7 +102,7 @@
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
-                                <div class="layui-bg-white img-zoos">
+                                <div class="layui-bg-white img-zoos img-zoos0">
                                     <p class="tps"><?=__('上传身份证', 'nlyd-student')?></p>
                                         <?php if(!empty($user_info['user_ID_Card'])){ ?>
                                         <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
@@ -117,8 +117,9 @@
                                         </div>
                                         <?php } ?>
                                         <?php } ?>
-                                    <div class="post-img" id="add-img">
-                                        <div class="add-zoo">
+                                    <div class="post-img dash" id="add-img">
+                                        <div class="add-zoo" data-file="img-zoos0">
+                                            <!-- <input class="img_" style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/> -->
                                             <div class="transverse"></div>
                                             <div class="vertical"></div>
                                         </div>
@@ -133,7 +134,8 @@
         </div>           
     </div>
 </div>
-<input style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/>
+<input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*" multiple/>
+<input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*" multiple/>
 <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple/>
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 <script>
@@ -376,19 +378,24 @@ jQuery(document).ready(function($) {
             });
         }
         $('.img-zoos').on('click','.add-zoo',function(){//上传图片
-            $('#img').click()
+            var id=$(this).attr('data-file')
+            $('#'+id).click()
         })
         var imgs=[]
-        // $('.img-zoos').each(function(){
-        //     var _this=$(this);
-        // })
+        var imgs1=[]
+        $('.img-zoos').each(function(){
+            var _this=$(this);
+            if(_this.find('.post-img.no-dash').length>=3){
+                _this.find('.post-img.dash').css('display','none')
+            }
+        })
 
-        if($('.post-img.no-dash').length>=3){
-            $('#add-img').css('display','none')
-        }
-        $("#img").change(function(e) {
+        // if($('.post-img.no-dash').length>=3){
+        //     $('#add-img').css('display','none')
+        // }
+        function changes(e,_this,array) {
             var file=e.target.files[0];
-            imgs.unshift(file)
+            array.unshift(file)
             var reader = new FileReader();
             var src='';
             //读取File对象的数据
@@ -402,19 +409,28 @@ jQuery(document).ready(function($) {
                             +'<i class="iconfont">&#xe633;</i>'
                         +'</div>'
                     +'</div>'
-                $('.tps').after(dom)
+                var className=_this.attr('data-this')
+                $('.'+className+' p').after(dom)
                 layer.photos({//图片预览
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                 })
-                if($('.post-img.no-dash').length>=3){
-                    $('#add-img').css('display','none')
+                if($('.'+className+' .post-img.no-dash').length>=3){
+                    $('.'+className+' .post-img.dash').css('display','none')
                 }
+                // if($('.post-img.no-dash').length>=3){
+                //     $('#add-img').css('display','none')
+                // }
             }
             reader.readAsDataURL(file);
             $(e.target).val('')
+        }
 
-    
+        $("#img-zoos0").change(function(e) {
+            changes(e,$("#img-zoos0"),imgs)
+        });
+        $("#img-zoos1").change(function(e) {
+            changes(e,$("#img-zoos1"),imgs1)
         });
         $('.img-zoos').on('click','.del',function(){//删除图片
             var _this=$(this);
