@@ -114,13 +114,15 @@ switch ($type){
         </div>
     </div>
 </div>
+<?php if(!isset($_GET['back'])){ ?>
 <div class="a-btn two get_footer">
     <a class="a-two left c_white" id="again" href="<?=$recur_url?>">再来一局</a>
     <a class="a-two right c_white" href="<?=$revert_url?>">返回列表</a>
-</div>  
+</div>
+<?php } ?>
 <script>
 jQuery(function($) {
-    <?php if(isset($_GET['back'])){ ?>
+    <?php if(!isset($_GET['back'])){ ?>
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);

@@ -51,7 +51,7 @@
                     <?php }?>
                 <?php }else{ ?>
                     <tr>
-                        <td colspan="6" style="text-align: center">暂无列表</td>
+                        <td colspan="7" style="text-align: center">暂无列表</td>
                     </tr>
                 <?php } ?>
                 </tbody>

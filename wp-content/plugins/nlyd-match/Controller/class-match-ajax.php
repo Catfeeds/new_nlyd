@@ -1237,6 +1237,8 @@ class Match_Ajax
             'created_time'=>get_time('mysql'),
         );
 
+        $wpdb->startTrans();
+
         if(!empty($_POST['more_id'])){  //修改
 
             unset($array['more']);
@@ -1254,9 +1256,13 @@ class Match_Ajax
             $title = '新增';
         }
 
-        if($result){
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
+
+        if($result && $a){
+            $wpdb->commit();
             wp_send_json_success($title.'成功');
         }else{
+            $wpdb->rollback();
             wp_send_json_error($title.'失败');
         }
         //var_dump($_POST);
