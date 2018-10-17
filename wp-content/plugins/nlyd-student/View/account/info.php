@@ -102,6 +102,29 @@
                                     <input  type="hidden" id="city" name="user_address[city]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['city'] : ''?>">
                                     <input  type="hidden" id="area" name="user_address[area]" value="<?=!empty($user_info['user_address']) ? $user_info['user_address']['area'] : ''?>"/>
                                 </div>
+                                <div class="layui-bg-white img-zoos img-zoos1">
+                                    <p class="tps"><?=__('上传收款账户（不设金额的个人收款微信二维码）', 'nlyd-student')?></p>
+                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
+                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                        <div class="post-img no-dash">
+                                            <div class="img-zoo img-box">
+                                                <img src="<?=$val?>"/>
+                                            </div>
+                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                            <div class="del">
+                                                <i class="iconfont">&#xe633;</i>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
+                                        <?php } ?>
+                                    <div class="post-img dash">
+                                        <div class="add-zoo" data-file="img-zoos1">
+                                            <div class="transverse"></div>
+                                            <div class="vertical"></div>
+                                        </div>
+                                    </div>
+                                </div>        
+
                                 <div class="layui-bg-white img-zoos img-zoos0">
                                     <p class="tps"><?=__('上传身份证', 'nlyd-student')?></p>
                                         <?php if(!empty($user_info['user_ID_Card'])){ ?>
@@ -117,9 +140,8 @@
                                         </div>
                                         <?php } ?>
                                         <?php } ?>
-                                    <div class="post-img dash" id="add-img">
+                                    <div class="post-img dash">
                                         <div class="add-zoo" data-file="img-zoos0">
-                                            <!-- <input class="img_" style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/> -->
                                             <div class="transverse"></div>
                                             <div class="vertical"></div>
                                         </div>
@@ -390,9 +412,6 @@ jQuery(document).ready(function($) {
             }
         })
 
-        // if($('.post-img.no-dash').length>=3){
-        //     $('#add-img').css('display','none')
-        // }
         function changes(e,_this,array) {
             var file=e.target.files[0];
             array.unshift(file)
@@ -418,9 +437,6 @@ jQuery(document).ready(function($) {
                 if($('.'+className+' .post-img.no-dash').length>=3){
                     $('.'+className+' .post-img.dash').css('display','none')
                 }
-                // if($('.post-img.no-dash').length>=3){
-                //     $('#add-img').css('display','none')
-                // }
             }
             reader.readAsDataURL(file);
             $(e.target).val('')
@@ -435,13 +451,17 @@ jQuery(document).ready(function($) {
         $('.img-zoos').on('click','.del',function(){//删除图片
             var _this=$(this);
             var index =_this.parents('.post-img').index();
-            imgs.splice(index, 1);
+            _this.parents('.img-zoos').find('.post-img.dash').css('display','block');
             _this.parents('.post-img').remove()
-            $('#add-img').css('display','block');
+            if(_this.parents('.img-zoos').hasClass('img-zoos0')){
+                imgs.splice(index, 1);
+            }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
+                imgs1.splice(index, 1);
+            }
             layer.photos({//图片预览
-                photos: '.img-zoos',
-                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-            }) 
+                    photos: '.img-zoos',
+                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                }) 
         })
         layui.use(['form'], function(){
             var form = layui.form
@@ -513,7 +533,6 @@ jQuery(document).ready(function($) {
                 photos: '.img-zoos',
                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
             }) 
-  
         });
 })
 
