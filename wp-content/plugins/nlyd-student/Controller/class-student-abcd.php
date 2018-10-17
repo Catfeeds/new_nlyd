@@ -315,30 +315,13 @@ class Student_Abcd extends Student_Home
             $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
         }
 
-        //如果报名截止 缓存当前页面
-        /*if(strtotime($match['entry_end_time']) <= get_time()){
-
-
-
-
-            $language = get_user_meta($current_user->ID,'locale')[0];
-
-            $view = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
-            load_view_template($view);
-
-        }else{
-
-
-
-
-        }*/
-
-
         //获取比赛项目
         $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
         //print_r($project);
 
         //获取报名选手列表
+
+
         $sql2 = "select count (a.id) total
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
@@ -360,7 +343,48 @@ class Student_Abcd extends Student_Home
             //var_dump($data['match_url']);
         }
 
-        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total);
+        //如果报名截止 缓存当前页面
+        //if(strtotime($match['entry_end_time']) <= get_time()){
+
+            //获取报名选手列表
+            $sql2 = "select a.id,a.user_id,a.created_time
+                      from {$wpdb->prefix}order a
+                      right join {$wpdb->prefix}users b on a.user_id = b.ID
+                      where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
+                      order by a.id desc ";
+            $orders = $wpdb->get_results($sql2,ARRAY_A);
+
+            if(!empty($orders)){
+
+                foreach ($orders as $k => $v){
+                    $user = get_user_meta($v['user_id']);
+                    $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
+                    $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
+                    if(!empty($user['user_real_name'])){
+                        $user_real = unserialize($user['user_real_name'][0]);
+                        $orders[$k]['real_age'] = $user_real['real_age'];
+                        $orders[$k]['nickname'] = $user_real['real_name'];
+                    }else{
+                        $orders[$k]['real_age'] = '--';
+                        $orders[$k]['nickname'] = $user['nickname'][0];
+                    }
+                    $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
+                    $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
+                    $orders[$k]['nationality'] = student_css_url.'image/flags/'.$user_nationality_pic.'.png';
+
+                }
+            }
+
+
+            $language = get_user_meta($current_user->ID,'locale')[0];
+
+
+            /*$view = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
+            load_view_template($view);*/
+
+        //}
+
+        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'orders'=>$orders,'language'=>empty($language) ? 'zh_CN' : $language);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
