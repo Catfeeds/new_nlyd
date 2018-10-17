@@ -27,10 +27,8 @@
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
-
-                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">langulage</span></a>
-                
                 <?php endif;?>
+                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">language</span></a>
                 <div class="radius-zoo">
                     <!-- 头像 -->
                     <div class="userCenter-main layui-row">
@@ -71,7 +69,7 @@
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <p class="fs_14 c_black">
                         <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
-                            <?=$my_skill['nationality']?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?> <?=$my_skill['mental_type']?> |
+                            <?=__($my_skill['nationality'], 'nlyd-student')?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?> <?=__($my_skill['mental_type'], 'nlyd-student')?> |
                         <?php endif;?>
                         <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
@@ -169,7 +167,39 @@
                     </a>
                 </div>
             </div>
-        
+
+            <?php
+
+            $languages = get_available_languages(PLUGINS_PATH . 'nlyd-student/languages');
+            foreach ($languages as &$language){
+                $language = str_replace('nlyd-student-', '', $language);
+            }
+            $user = get_user_by( 'id', 3) ;
+
+            if ( $user ) $user->filter = 'edit';
+            $profileuser = $user;
+
+            $user_locale = $profileuser->locale;
+
+            if ( 'en_US' === $user_locale ) {
+                $user_locale = '';
+            } elseif ( '' === $user_locale || ! in_array( $user_locale, $languages, true ) ) {
+                $user_locale = 'site-default';
+            }
+
+
+            $select = wp_dropdown_languages( array(
+                'name'                        => 'locale',
+                'id'                          => 'locale',
+                'echo'                          => 0,
+                'selected'                    => $user_locale,
+                'languages'                   => $languages,
+                'show_available_translations' => false,
+                'show_option_site_default'    => false,
+                'is_current_languages_list'   => true,//加的
+            ) );
+            ?>
+
             <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple />
             <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">        
         </div>
@@ -186,10 +216,12 @@
         </div>
     </div>
 </div>
+
 <script>
 jQuery(document).ready(function($) {
     // 模拟手机下拉列表，选择性别
-    var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
+    // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
+    var selectData= <?=json_encode($select)?>;
     var posiotion=[0];//初始化位置，高亮展示
     if($('#checked_lan').text().length>0 && $('#trigger3').text()){
         $.each(selectData,function(index,value){
@@ -210,11 +242,27 @@ jQuery(document).ready(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
+            var languageId = data[0]['id'];
             if(data[0]['value']=='English'){
                 $('#checked_lan').text('语言')
             }else if(data[0]['value']=='中文'){
                 $('#checked_lan').text('langulage')
             }
+            $.ajax({
+                url : window.admin_ajax,
+                data : {'lang' : languageId,'action' : 'userUpdateLanguage'},
+                dataType : 'json',
+                type : 'post',
+                success : function (response) {
+                    if(response['success']){
+                        window.location.reload();
+                    }else{
+                        // $.alerts(response.data.info)
+                    }
+                },error:function () {
+
+                }
+            });
         }
     });
 layui.use('layer', function(){ //独立版的layer无需执行这一句
@@ -222,7 +270,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
     layer.open({
             type: 1
             ,maxWidth:300
-            ,title: '提示' //不显示标题栏
+            ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
             ,content: '<div class="box-conent-wrapper"><?=__('是否立即进行实名认证？', 'nlyd-student')?></div>'

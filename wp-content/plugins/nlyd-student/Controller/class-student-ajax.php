@@ -1406,6 +1406,7 @@ class Student_Ajax
                 //前端需要的数组
                 $rows[$k]['match_start_time_arr'] = str2arr(time_format(strtotime($val['match_start_time']),'Y-m-d-H-i-s'),'-');
                 $rows[$k]['entry_end_time_arr'] = str2arr(time_format(strtotime($val['entry_end_time']),'Y-m-d-H-i-s'),'-');
+                $rows[$k]['match_status_cn'] = __($rows[$k]['match_status_cn'], 'nlyd-student');//翻译
                 //两个链接
                 if($val['match_status'] == 2){
                     //比赛中
@@ -3477,6 +3478,26 @@ class Student_Ajax
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
 
+    }
+
+    /**
+     * 用户修改语言
+     */
+    public function userUpdateLanguage(){
+        $lang = trim($_POST['lang']);
+        if(!$lang) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        global $current_user;
+
+        $cookieBool = setcookie('user_language', $lang, time()+3600*24*30*12,'/');
+        if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+//        print_r($_COOKIE);
+        update_user_meta($current_user->ID, 'locale', $lang);
+        wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
+//        if($bool){
+//            wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
+//        }else{
+//            wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
+//        }
     }
 
 }

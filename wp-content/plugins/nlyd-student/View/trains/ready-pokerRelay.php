@@ -51,21 +51,100 @@
 jQuery(function($) { 
     var data_match=[];
     var questions_answer=[]
+    var new_poker=[]
+    var arrColor=['heart','club','diamond','spade']
+    var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+    var arrZM=['A','J','Q','K'];
     var leavePage= $.GetCookie('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
         questions_answer=leavePage['train_questions']
     }else{
-        var arrColor=['heart','club','diamond','spade']
-        var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
         $.each(arrColor,function(i,v){
             $.each(arrNum,function(index,val){
                 var item=v+'-'+val;
-                questions_answer.push(item)
+                new_poker.push(item)
             })
         })
-        questions_answer.sort(function() {
-            return .5 - Math.random();
-        });
+        function splits(str) {
+            return str.split('-');
+        }
+        function isNumber(str) {//非数字扑克转成number
+            var newStr=parseInt(str);
+            var result=newStr;
+            if(isNaN(newStr)){//'A','J','Q','K'
+                if(str=='A'){
+                    result=1
+                }else if(str=='J'){
+                    result=11
+                }else if(str=='Q'){
+                    result=12
+                }else if(str=='K'){
+                    result=13
+                }
+            }
+            return result;
+        }
+        function rand(data) {//生成随即字符
+            var pokers=data;
+            var length=pokers.length;
+            if(length>0){
+                var pos1 = Math.round(Math.random() * (length - 1));
+                var _poker=pokers[pos1]    
+                var question_len=questions_answer.length;//生成题目的长度
+                if(question_len>2){//取两个以上的扑克new_poker
+                    var _poker0=_poker;//当前扑克
+                    var _poker1=questions_answer[question_len-1];//前1张扑克
+                    var _poker2=questions_answer[question_len-2];//前2张扑克
+                    var _pokerArray0=splits(_poker0);//拆分
+                    var _pokerArray1=splits(_poker1);//拆分
+                    var _pokerArray2=splits(_poker2);//拆分
+                    var color0=_pokerArray0[0];//花色
+                    var color1=_pokerArray1[0];//花色
+                    var color2=_pokerArray2[0];//花色
+                    var number0=isNumber(_pokerArray0[1]);//number
+                    var number1=isNumber(_pokerArray1[1]);//number
+                    var number2=isNumber(_pokerArray2[1]);//number
+                    var numbers=_pokerArray0[1]+_pokerArray1[1]+_pokerArray2[1]
+                    if(color0==color1 && color0==color2){//同花色
+                        var _flag=false;
+                        if(numbers=="QKA" || numbers=="AKQ"){//QKA,AKQ单独判断
+                            _flag=true;
+                        }else{
+                            if((number2-number1==1 && number1-number0==1) || (number2-number1==-1 && number1-number0==-1)){//num是顺子
+                                _flag=true;
+                            }   
+                        }
+                        console.log(color0,numbers)
+                        if(!_flag){//非顺子
+                            questions_answer.push(_poker)
+                            pokers.splice(pos1, 1);
+                        }else{
+                            console.log(numbers)
+                        }
+
+                    }else{
+                        questions_answer.push(_poker)
+                        pokers.splice(pos1, 1);
+                    }
+                }else{
+                    questions_answer.push(_poker)
+                    pokers.splice(pos1, 1);
+                }
+                rand(pokers)
+            }else{//跳出递归
+            }
+        }
+        rand(new_poker)
+        // var newArr=[]
+        // function build() {
+        //     var poker=rand(questions_answer)
+        //     console.log(poker) 
+        // }
+        // build()
+        // console.log(questions_answer)
+        // questions_answer.sort(function() {
+        //     return .5 - Math.random();
+        // });
         $.DelCookie('train_match')
     }
     $.each(questions_answer,function(i,v){
