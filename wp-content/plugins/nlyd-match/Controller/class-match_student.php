@@ -1053,7 +1053,7 @@ class Match_student {
     /**
      * 排名分类和单项数据
      */
-    public function getCategoryRankingData($match,$projectIdStr,$ageType){
+    public function getCategoryRankingData($match,$projectIdStr,$ageType,$limitStr=''){
         global $wpdb;
         //获取每个用户的每个分类的分数和排名
         switch ($ageType){
@@ -1072,6 +1072,10 @@ class Match_student {
             default://全部
                 $ageWhere = ' 1=1';
         }
+        $limit = '';
+        if($limitStr != ''){
+            $limit = ' LIMIT '.$limitStr;
+        }
 
         $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id,x.created_microtime  
                     FROM(
@@ -1085,7 +1089,7 @@ class Match_student {
                     left join `{$wpdb->users}` u on u.ID=y.user_id 
                     WHERE {$ageWhere}
                     GROUP BY user_id
-                    ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC ", ARRAY_A);
+                    ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC {$limit}", ARRAY_A);
 
         $list = array();
         $ranking = 1;
@@ -1142,9 +1146,97 @@ class Match_student {
     /**
      * 排名总数据
      */
-    public function getAllRankingData($match,$projectArr,$op5){
+    public function getAllRankingData($match,$projectArr,$op5,$is_bonus=false,$limitStr='',$ageType=0){
         global $wpdb;
+        if($is_bonus){
+            global $wpdb;
+            //获取每个用户的每个分类的分数和排名
+            switch ($ageType){
+                case 4://儿童组
+                    $ageWhere = ' y.meta_value<13';
+                    break;
+                case 3://少年组
+                    $ageWhere = ' y.meta_value>12 AND y.meta_value<18';
+                    break;
+                case 2://成年组
+                    $ageWhere = ' y.meta_value>17 AND y.meta_value<60';
+                    break;
+                case 1://老年组
+                    $ageWhere = ' y.meta_value>59';
+                    break;
+                default://全部
+                    $ageWhere = ' 1=1';
+            }
+            $limit = '';
+            if($limitStr != ''){
+                $limit = ' LIMIT '.$limitStr;
+            }
 
+            $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id,x.created_microtime  
+                    FROM(
+                        SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
+                        FROM `{$wpdb->prefix}order` a 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']})                 
+                        WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
+                        GROUP BY user_id,project_id
+                    ) x
+                    left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 
+                    left join `{$wpdb->users}` u on u.ID=y.user_id 
+                    WHERE {$ageWhere}
+                    GROUP BY user_id
+                    ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC {$limit}", ARRAY_A);
+
+            $list = array();
+            $ranking = 1;
+            foreach ($result as $k => $val){
+//            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
+                $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
+                $info = $wpdb->get_results($sql1,ARRAY_A);
+
+                if(!empty($info)){
+                    $user_info = array_column($info,'meta_value','meta_key');
+                    $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
+
+                    $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+                    if(!empty($user_info['user_age'])){
+                        $age = $user_info['user_age'];
+                        $group = getAgeGroupNameByAge($age);
+
+                    }else{
+                        $group = '-';
+                    }
+                    if(!empty($user_info['user_address'])){
+                        $user_address = unserialize($user_info['user_address']);
+//                    $city = $user_address['city'] == '市辖区' ? $user_address['city'] : $user_address['province'];
+                        $city = $user_address['province'].$user_address['city'];
+                    }else{
+                        $city = '-';
+                    }
+
+                    $result[$k]['userID'] = $user_info['user_ID'];
+                    $result[$k]['address'] = $city;
+                    //$list[$k]['score'] = $val['my_score'];
+                    $result[$k]['ageGroup'] = $group;
+                    $result[$k]['age'] = $age;
+                    $result[$k]['sex'] = $user_info['user_gender'] ? $user_info['user_gender'] : '-';
+                    $result[$k]['birthday'] = isset($user_info['user_birthday']) ? $user_info['user_birthday'] : '-';
+                    $result[$k]['score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                    $result[$k]['my_score'] = $val['my_score'] > 0 ? $val['my_score'] : 0;
+                    $result[$k]['ranking'] = $ranking;
+                    if($val['my_score'] > 0) ++$ranking;
+
+//                if($k != 0){
+//                    if(($val['my_score'] == $result[$k-1]['my_score'] && $val['surplus_time'] == $result[$k-1]['surplus_time']) || ($val['my_score']== 0 && $result[$k-1]['my_score']==0)){
+//                        $result[$k]['ranking'] = $result[$k-1]['ranking'];
+//                    }
+//                }
+//                if($val['user_id'] == $current_user->ID){
+//                    $my_ranking = $list[$k];
+//                }
+                }
+            }
+            return $result;
+        }
         if($op5 == 1){
             //个人排名
             //先查询所有成员
@@ -1296,30 +1388,191 @@ class Match_student {
      * 字段 ID 姓名 奖项及金额 奖金总额 税后发放额 收款二维码 身份证号 电话号码 所属战队 发放状态
      */
     public function match_bonus(){
-        echo __('我是谁', 'nlyd-match');
         $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
-        $type = isset($_GET['type']) ? trim($_GET['type']) : '';
-        $param = isset($_GET['param']) ? trim($_GET['param']) : '';
         $match_id < 1 && exit('match_id参数错误');
-        $projectArr = get_match_end_time($match_id);
-        $category = 'sdl';
-        $project_id = $projectArr[0]['match_project_id'];
-        $ageOption = 0;
-        switch ($type){
-            case 'all':
+        global $wpdb;
+        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
 
-                break;
-            case 'category':
-                $category = $param;
-                break;
-            case 'project':
-                $project_id = $param;
-                break;
-            default:
-                exit('类型参数错误');
+        //TODO 判断比赛是否结束
+        if(!$match || $match['match_status'] != -3){
+            exit(__('当前比赛未结束', 'nlyd-match'));
         }
 
-        //查询比赛小项目
+        if(is_post()){
+            //是否允许前端用户查看
+            $is_user_view = isset($_POST['is_user_view']) ? $_POST['is_user_view'] : false;
+
+            //单项是否开启
+            $project_able = isset($_POST['project_able']) ? $_POST['project_able'] : false;
+
+            //单项冠亚季军选项
+            $project_option_check = isset($_POST['project_option_check']) ? $_POST['project_option_check'] : false;
+
+            //单项优秀选手荣誉名称
+            $project_honor_name = isset($_POST['project_honor_name']) ? $_POST['project_honor_name'] : '';
+
+            //单项优秀选手数量
+            $project_honor_num = isset($_POST['project_honor_num']) ? intval($_POST['project_honor_num']) : 0;
+
+            //是否开启单项年龄组
+            $project_age_able = isset($_POST['project_age_able']) ? $_POST['project_age_able'] : false;
+
+            //大类是否开启
+            $category_able = isset($_POST['category_able']) ? $_POST['category_able'] : false;
+
+            //大类冠亚季军选项
+            $category_option_check = isset($_POST['category_option_check']) ? $_POST['category_option_check'] : false;
+
+            //大类优秀选手荣誉名称
+            $category_honor_name = isset($_POST['category_honor_name']) ? $_POST['category_honor_name'] : '';
+
+            //大类优秀选手数量
+            $category_honor_num = isset($_POST['category_honor_num']) ? intval($_POST['category_honor_num']) : 0;
+
+            //是否开启大类年龄组
+            $category_age_able = isset($_POST['category_age_able']) ? $_POST['category_age_able'] : false;
+
+            //是否开启总排名
+            $all_able = isset($_POST['all_able']) ? $_POST['all_able'] : false;
+
+            //总排名冠亚季军选项
+            $all_option_check = isset($_POST['all_option_check']) ? $_POST['all_option_check'] : false;
+
+            //总排名优秀选手荣誉名称
+            $all_honor_name = isset($_POST['all_honor_name']) ? $_POST['all_honor_name'] : '';
+
+            //总排名优秀选手数量
+            $all_honor_num = isset($_POST['all_honor_num']) ? intval($_POST['all_honor_num']) : 0;
+
+            //是否开启总排名年龄组
+            $all_age_able = isset($_POST['all_age_able']) ? $_POST['all_age_able'] : false;
+        }
+
+        $projectArr = get_match_end_time($match_id);
+        $ageArr = [
+            1 => '老年组',
+            2 => '成年组',
+            3 => '少年组',
+            4 => '儿童组'
+        ];
+//        leo_dump($projectArr);
+        //查询数据
+        $projectDataArr = [];
+        $categoryDataArr = [];
+        $allDataArr = [];
+        if($project_able != false){
+            //单项数据
+            foreach ($projectArr as $proProv){
+
+                //单项冠亚季
+                if($project_option_check != false){
+                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+                    $projectDataArr[$proProv['match_project_id']]['project_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],0,'0,3');
+                }
+
+                //单项年龄组冠亚季
+                if($project_age_able != false){
+                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+                    $projectDataArr[$proProv['match_project_id']]['project_age'] = [];
+                    foreach ($ageArr as $ageNumK => $ageNum){
+                        //每个年龄组
+                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['name'] = $ageNum;
+                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],$ageNumK,'0,3');
+                    }
+                }
+
+                //单项优秀选手
+                if($project_honor_num > 0){
+                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+                    $projectDataArr[$proProv['match_project_id']]['project_honor']['name'] = $project_honor_name;
+                    $projectDataArr[$proProv['match_project_id']]['project_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],0,'3,'.$project_honor_num);
+                }
+            }
+
+        }
+        if($category_able){
+            //大类数据
+            $cateArr = [];
+            //大类数组
+            foreach ($projectArr as $catePro){
+                if(in_array($catePro['project_alias'],['zxss','nxss'] )){
+                    if(!isset($cateArr[0])) $cateArr[0] = [];
+                    if(!isset($cateArr[0]['id'])) $cateArr[0]['id'] = [];
+                    $cateArr[0]['id'][] = $catePro['match_project_id'];
+                    $cateArr[0]['name'] = '心算类';
+                };
+                if(in_array($catePro['project_alias'],['wzsd','kysm'] )){
+                    if(!isset($cateArr[1])) $cateArr[1] = [];
+                    if(!isset($cateArr[1]['id'])) $cateArr[1]['id'] = [];
+                    $cateArr[1]['id'][] = $catePro['match_project_id'];
+                    $cateArr[1]['name'] = '速读类';
+                };
+                if(in_array($catePro['project_alias'],['szzb','pkjl'] )){
+                    if(!isset($cateArr[2])) $cateArr[2] = [];
+                    if(!isset($cateArr[2]['id'])) $cateArr[2]['id'] = [];
+                    $cateArr[2]['id'][] = $catePro['match_project_id'];
+                    $cateArr[2]['name'] = '记忆类';
+                };
+            }
+
+            foreach ($cateArr as $cateCatK => $cateCateV){
+                //大类冠亚季
+                if($category_option_check != false){
+                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                    $categoryDataArr[$cateCatK]['cate_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),0,'0,3');
+                }
+
+                //大类年龄组冠亚季
+                if($category_age_able != false){
+                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                    $categoryDataArr[$cateCatK]['project_age'] = [];
+                    foreach ($ageArr as $cateAgeNumK => $cateAgeNum){
+                        //每个年龄组
+                        $categoryDataArr[$cateCatK]['project_age'][$cateAgeNumK]['name'] = $cateAgeNum;
+                        $categoryDataArr[$cateCatK]['project_age'][$cateAgeNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),$cateAgeNumK,'0,3');
+                    }
+                }
+
+                //大类优秀选手
+                if($category_honor_num > 0){
+                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                    $categoryDataArr[$cateCatK]['project_honor']['name'] = $category_honor_name;
+                    $categoryDataArr[$cateCatK]['project_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),0,'3,'.$category_honor_num);
+                }
+            }
+
+
+        }
+        if($all_able){
+//            //总排名数据
+//            foreach ($projectArr as $proProv){
+//                //总排名亚季
+//                if($project_option_check != false){
+//                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+//                    $projectDataArr[$proProv['match_project_id']]['project_option_check'] = $this->getAllRankingData(['match_id' => $match_id],$projectArr,$proProv['match_project_id'],0,'0,3');
+//                }
+//
+//                //总排名年龄组冠亚季
+//                if($project_age_able != false){
+//                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+//                    $projectDataArr[$proProv['match_project_id']]['project_age'] = [];
+//                    foreach ($ageArr as $ageNumK => $ageNum){
+//                        //每个年龄组
+//                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['name'] = $ageNum;
+//                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],$ageNumK,'0,3');
+//                    }
+//                }
+//
+//                //总排名优秀选手
+//                if($project_honor_num > 0){
+//                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+//                    $projectDataArr[$proProv['match_project_id']]['project_honor']['name'] = $project_honor_name;
+//                    $projectDataArr[$proProv['match_project_id']]['project_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],0,'3,'.$project_honor_num);
+//                }
+//            }
+        }
+        leo_dump($categoryDataArr);
+
 
 
         ?>
@@ -1332,72 +1585,138 @@ class Match_student {
             <hr class="wp-header-end">
 
             <style type="text/css">
-                #oprion-box a{
-                    color: #282828;
-                    text-decoration: none;
+                #project_option,
+                 #category_option,
+                 #all_option,
+                #view_option
+                 {
+                     padding-top: 1em;
+                 }
+                #project_option div,
+                #category_option div,
+                #all_option div
+                {
+                    padding-bottom: 0.5em;
                 }
-                #oprion-box > div{
-                    padding-top: 0.5em;
-                }
-                #oprion-box > div > span{
-                    display: inline-block;
-                    width: 5em;
-                    height: 1.5em;
-                    border-radius: 0.2em;
-                    text-align: center;
-                    line-height: 1.5em;
-                    cursor: pointer;
-                }
-                #option1 > span{
-                    background-color: rgba(151, 151, 151, 0.48);
+                #option-form  .title
+                {
                     font-weight: bold;
                 }
-                #oprion-box .active{
-                    background-color: #45B29D;
+                #option-form  .la
+                {
+                    width: 4.5em;
+                    display: inline-block;
+                    text-align: right;
                 }
-                #oprion-box .active a{
-
-                    color: #ffffff;
+                #option-form input[type="checkbox"]{
+                    width: 1em;
+                    height: 1em;
+                }
+                #option-form input[type="checkbox"]:before{
+                    font-style: normal;
+                    font-variant-ligatures: normal;
+                    font-variant-caps: normal;
+                    font-variant-numeric: normal;
+                    font-variant-east-asian: normal;
+                    font-weight: 400;
+                    font-stretch: normal;
+                    font-size: 20px;
+                    line-height: 1;
+                    font-family: dashicons;
+                }
+                #option-form input[type="text"]{
+                    width: 10em;
+                    height: 1.3em;
                 }
             </style>
-            <div id="oprion-box">
-                    <div id="option2">
+            <form action="" method="post" id="option-form">
+                <div id="view_option">
+                    <label for="is_user_view" class="title">允许选手查看:</label>
+                    <input type="checkbox" id="is_user_view" <?=isset($is_user_view) ? ($is_user_view!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="is_user_view" value="1">
+                </div>
+                <div id="project_option">
+                    <div class="title"><label for="project_able">单项设置:</label> <input type="checkbox" id="project_able" class="able_option" <?=isset($project_able) ? ($project_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_able" value="1"></div>
+                   <div style="display: <?=isset($project_able) ? ($project_able!=false ? 'block':'none') : 'block'?>">
+                       <div>
+                           <label for="project_champion" class="la">冠亚季军:</label>
+                           <input type="checkbox" id="project_champion" <?=isset($project_option_check) ? ($project_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_option_check" value="1">
+                      </div>
+                       <div>
+                           <span class="la">优秀选手:</span>
+                           <?=is_mobile()?'<br >':''?>
+                           <label for="project_honor_name" class="la">荣誉名称:</label>
+                           <input type="text" id="project_honor_name" name="project_honor_name" value="<?=isset($project_honor_name) ? $project_honor_name : ''?>">
+                           <?=is_mobile()?'<br >':''?>
+                           <label for="project_honor_num" class="la">人数:</label>
+                           <input type="text" id="project_honor_num" name="project_honor_num" value="<?=isset($project_honor_num) ? $project_honor_num : 0?>">
+                       </div>
+                       <div>
+                           <label class="la" for="project_age_able">年龄组:</label>
+                           <input type="checkbox" <?=isset($project_age_able) && $project_age_able!=false ? 'checked="checked"':''?> id="project_age_able" name="project_age_able" value="1">
+                       </div>
+                   </div>
 
-                            <span class="<?php if($category == 'sdl'){ ?>active<?php } ?>">
-                                <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=sdl&age=0')?>">速读类</a>
-                            </span>
-                        <span class="<?php if($category == 'sjl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=sjl&age=0')?>">记忆类</a>
-                                </span>
-                        <span class="<?php if($category == 'ssl'){ ?>active<?php } ?>">
-                                    <a href="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param=ssl&age=0')?>">心算类</a>
-                                </span>
-                        <select name="" id="option4" onchange="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&type=category&param='.$category.'&age=')?>'+this.value">
-                            <option <?php if($ageOption == '0'){ ?>selected="selected"<?php } ?> value="0">全部</option>
-                            <option <?php if($ageOption == '4'){ ?>selected="selected"<?php } ?> value="4">儿童组</option>
-                            <option <?php if($ageOption == '3'){ ?>selected="selected"<?php } ?> value="3">少年组</option>
-                            <option <?php if($ageOption == '2'){ ?>selected="selected"<?php } ?> value="2">成年组</option>
-                            <option <?php if($ageOption == '1'){ ?>selected="selected"<?php } ?> value="1">老年组</option>
-                        </select>
-
+                </div>
+                <div id="category_option">
+                    <div class="title"><label for="category_able">大类设置:</label> <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
+                    <div style="display: <?=isset($category_able) ? ($category_able!=false ? 'block':'none') : 'block'?>">
+                        <div>
+                            <label class="la" for="category_champion">冠亚季军:</label>
+                            <input type="checkbox" id="category_champion" name="category_option_check" <?=isset($category_option_check) ? ($category_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1">
+                       </div>
+                        <div>
+                            <span class="la">优秀选手:</span>
+                            <?=is_mobile()?'<br >':''?>
+                            <label for="category_honor_name" class="la">荣誉名称:</label>
+                            <input type="text" id="category_honor_name" name="category_honor_name" value="<?=isset($category_honor_name) ? $category_honor_name : '优秀选手'?>">
+                            <?=is_mobile()?'<br >':''?>
+                            <label for="category_honor_num" class="la">人数:</label>
+                            <input type="text" id="category_honor_num" name="category_honor_num" value="<?=isset($category_honor_num) ? $category_honor_num : 7?>">
+                        </div>
+                        <div>
+                            <label class="la" for="category_age_able">年龄组:</label>
+                            <input type="checkbox" <?=isset($category_age_able) ? ($category_age_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> id="category_age_able" name="category_age_able" value="1">
+                        </div>
                     </div>
-
-
-
-                    <div id="option3">
-
-                        <?php foreach ($projectArr as $pav2) { ?>
-                            <span class="<?php if($project_id == $pav2['match_project_id']){ ?>active<?php } ?>">
-                                        <a href="<?= admin_url('admin.php?page=match_student-bonus&match_id=' . $match_id . '&type=project&param=' . $pav2['match_project_id']) ?>"><?= $pav2['post_title'] ?></a>
-                                    </span>
-                        <?php } ?>
-
+                </div>
+                <div id="all_option">
+                    <div class="title"><label for="all_able">总排名设置:</label> <input type="checkbox" id="all_able" <?=isset($all_able) && $all_able!=false ? 'checked="checked"':''?> class="able_option" name="all_able" value="1"></div>
+                    <div style="display: <?=isset($all_able) && $all_able!=false ? 'block':'none'?>">
+                        <div>
+                            <label class="la" for="all_champion">冠亚季军:</label>
+                            <input type="checkbox" id="all_champion" name="all_option_check" <?=isset($all_option_check) && $all_option_check!=false ? 'checked="checked"':''?> value="1">
+                          </div>
+                        <div>
+                            <span class="la">优秀选手:</span>
+                            <?=is_mobile()?'<br >':''?>
+                            <label for="all_honor_name" class="la">荣誉名称:</label>
+                            <input type="text" id="all_honor_name" name="all_honor_name" value="<?=isset($all_honor_name) ? $all_honor_name : ''?>">
+                            <?=is_mobile()?'<br >':''?>
+                            <label for="all_honor_num" class="la">人数:</label>
+                            <input type="text" id="all_honor_num" name="all_honor_num" value="<?=isset($all_honor_num) ? $all_honor_num : 0?>">
+                        </div>
+                        <div>
+                            <label class="la" for="all_age_able">年龄组:</label>
+                            <input type="checkbox" <?=isset($all_age_able) && $all_age_able!=false ? 'checked="checked"':''?> id="all_age_able" name="all_age_able" value="1">
+                        </div>
                     </div>
+                </div>
+                <div>
+                    <input type="submit" class="button" value="更改">
+                </div>
+            </form>
 
-            </div>
-
-
-
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('.able_option').on('change', function () {
+                        if($(this).prop('checked') == true){
+                            $(this).closest('.title').next().css('display', 'block');
+                        }else{
+                            $(this).closest('.title').next().css('display', 'none');
+                        }
+                    })
+                })
+            </script>
 
             <div class="tablenav top">
 
