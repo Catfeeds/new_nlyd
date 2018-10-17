@@ -245,8 +245,8 @@ jQuery(function($) {
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
                     // ,scrollElem:'#flow_'+arg['data_id']
-                    // ,isAuto: false
-                    // ,isLazyimg: true
+                    ,isAuto: false
+                    ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
                         if(arg['myPage']==1){
                             $('#rank_'+arg['data_id']).empty()
