@@ -32,25 +32,34 @@ class Match
                 }
             }
 
-            if(in_array($post_type,array('match','genre','project','match-category'))){
+            if($post_type == 'match'){
+                //获取比赛meta
+                $sql = "select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['post']}";
+                $post_meta = $wpdb->get_row($sql,ARRAY_A);
+                $this->meta = $post_meta;
+            }elseif ($post_type == 'team'){
+                //获取战队基本资料
+                $sql = " select * from {$wpdb->prefix}team_meta where team_id = {$_GET['post']} ";
+                $this->team_meta = $wpdb->get_row($sql,ARRAY_A);
+                //print_r($this->team_meta);
+            }elseif ($post_type == 'problem'){
+                //获取题目选项以及答案
+                $sql = " select * from {$wpdb->prefix}problem_meta where problem_id = {$_GET['post']} order by id asc ";
+                $this->problem = $wpdb->get_results($sql,ARRAY_A);
+            }
+
+
+
+
+
+            /*if(in_array($post_type,array('match','genre','project','match-category'))){
 
                 //获取比赛meta
-                $sql = "select 
-                          id,match_id,match_genre,match_genre,match_status,match_category_order,match_slogan,match_address,match_max_number,
-                          if(unix_timestamp(match_start_time) > 1,match_start_time,'') match_start_time, 
-                          if(unix_timestamp(entry_start_time) > 1,entry_start_time,'') entry_start_time, 
-                          if(unix_timestamp(entry_end_time) > 1,entry_end_time,'') entry_end_time, 
-                          if(match_cost < 0,'',match_cost) match_cost, 
-                          if(match_more < 1,'',match_more) match_more,
-                          if(match_use_time < 1,'',match_use_time) match_use_time, 
-                          if(match_project_interval < 1,'',match_project_interval) match_project_interval, 
-                          if(match_subject_interval < 1,'',match_subject_interval) match_subject_interval,
-                          if(str_bit < 1,'',str_bit) str_bit,
-                          if(child_count_down < 1,'',child_count_down) child_count_down
-                from {$wpdb->prefix}match_meta where match_id = {$_GET['post']} ";
+                $sql = "select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['post']}";
                 $post_meta = $wpdb->get_row($sql,ARRAY_A);
-                //var_dump($sql);
                 $this->meta = $post_meta;
+
+
                 switch ($post_type){
                     case 'match':
                         //获取比赛选项
@@ -90,7 +99,8 @@ class Match
                     default:
                         break;
                 }
-            }elseif ($post_type == 'team'){
+            }
+            elseif ($post_type == 'team'){
                 //获取战队基本资料
                 $sql = " select * from {$wpdb->prefix}team_meta where team_id = {$_GET['post']} ";
                 $this->team_meta = $wpdb->get_row($sql,ARRAY_A);
@@ -99,7 +109,7 @@ class Match
                 //获取题目选项以及答案
                 $sql = " select * from {$wpdb->prefix}problem_meta where problem_id = {$_GET['post']} order by id asc ";
                 $this->problem = $wpdb->get_results($sql,ARRAY_A);
-            }
+            }*/
         }
 
         add_action('admin_menu',array($this,'add_submenu'));
@@ -552,6 +562,7 @@ class Match
                 ?>
                <!-- <span class="layui-input <?/*=$className*/?>"><?/*=$text*/?></span>-->
                 <input title="已结束" type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >
+                <input title="报名中" type="radio" name="match[match_status]" value="1" <?=$this->meta['match_status'] == 1?'checked':'';?> >
                 <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >
                 <input title="进行中" type="radio" name="match[match_status]" value="2" <?=$this->meta['match_status'] == 2?'checked':'';?> >
             </div>
@@ -635,59 +646,42 @@ class Match
         $args = array(
             'post_type' => array('project'),
             'post_status' => array('publish'),
-            'order' => 'DESC',
+            'order' => 'asc',
+            'orderby' => 'menu_order',
         );
         $the_query = new WP_Query($args);
-        $this->post_array = array_combine(array_column($the_query->posts,'ID'),$the_query->posts);
         $match_project = $the_query->posts;
-        if(!empty($this->temp_key)){
-            $default_array = array_unique(array_merge($this->temp_key,array_column($the_query->posts,'ID')));
-            $match_project = array_map(array($this,'mop_function'),$default_array);
-        }
-        //var_dump($match_project);
 
-        if (!empty($match_project)) {
-            foreach ($match_project as $k => $v){
-                $v = (array)$v;
-                ?>
-                <!--<div class="layui-inline match_project">
+        if(!empty($match_project)){
+            $default_project = array_column($match_project,'post_title','ID');
+        }
+
+
+        //获取已经保存的比赛项目
+        $match_project_id = $this->meta['match_project_id'];
+        if(!empty($match_project_id)){
+            $match_project_id = str2arr($match_project_id);
+            //print_r($match_project_id);
+
+            $project_array = array_diff(array_column($match_project,'ID'),$match_project_id);
+            $project_array = array_merge($match_project_id,$project_array);
+            foreach ($project_array as $v){
+                $default_array[$v] = $default_project[$v];
+            }
+            $default_project = $default_array;
+        }
+        //print_r($default_project);
+
+        if (!empty($default_project)) {
+            foreach ($default_project as $k => $val){
+        ?>
+                <div class="layui-block match_project">
                     <div class="layui-input-inline title">
                         <label class="layui-form-label">拖拽排序</label>
                     </div>
                     <div class="layui-input-inline">
-                        <input type="checkbox" name="match[match_project][<?/*=$k*/?>][match_project_id]" value="<?/*=$v['ID']*/?>" <?/*=!empty($this->project[$v['ID']])?'checked':''; */?> lay-skin="primary" title="<?/*=$v['post_title']*/?>"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_use_time]" value="<?/*=!empty($v['project_use_time']) ? $v['project_use_time'] : '';*/?>" placeholder="比赛用时"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][match_more]" value="<?/*=!empty($v['match_more']) ? $v['match_more'] : '';*/?>" placeholder="比赛轮数"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input date-picker" readonly  type="text" name="match[match_project][<?/*=$k*/?>][project_start_time]" value="<?/*=!empty($v['project_start_time']) ? $v['project_start_time'] : '';*/?>" id="id<?/*=$k*/?>" placeholder="开始时间"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_washing_out]" value="<?/*=!empty($v['project_washing_out']) ? $v['project_washing_out'] : '';*/?>" placeholder="淘汰率或淘汰人数"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][project_time_interval]" value="<?/*=!empty($v['project_time_interval']) ? $v['project_time_interval'] : '';*/?>" placeholder="间隔时间"/>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][str_bit]" value="<?/*=!empty($v['str_bit']) ? $v['str_bit'] : '';*/?>" placeholder="初始位数"/>
-                    </div>
-                    <?php /*if(in_array($v['post_title'],array('正向速算','快眼扫描'))): */?>
-                        <div class="layui-input-inline">
-                            <input class="layui-input" type="text" name="match[match_project][<?/*=$k*/?>][child_count_down]" value="<?/*=!empty($v['child_count_down']) ? $v['child_count_down'] : '';*/?>" placeholder="子项倒计时"/>
-                        </div>
-                    <?php /*endif;*/?>
-                </div>-->
-                <div class="layui-inline match_project">
-                    <div class="layui-input-inline title">
-                        <label class="layui-form-label">拖拽排序</label>
-                    </div>
-                    <div class="layui-input-inline">
-                        <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$v['ID']?>" <?=!empty($this->project[$v['ID']])?'checked':''; ?> lay-skin="primary" title="<?=$v['post_title']?>"/>
-                        <?php if(!empty($this->project[$v['ID']])): ?>
+                        <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$k?>"  <?= in_array($k,$match_project_id) ? 'checked':''; ?> lay-skin="primary" title="<?=$val?>"/>
+                        <?php if(in_array($k,$match_project_id)): ?>
                         <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$v['ID']);?>">新增轮数</a>
                         <?php endif;?>
                     </div>
