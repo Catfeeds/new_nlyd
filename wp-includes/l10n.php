@@ -1214,7 +1214,7 @@ function wp_dropdown_languages( $args = array() ) {
 	);
 	//默认中文 ====自定义
     $languagesList[] = [
-        'id' => 'nlyd-student-zh_CN',
+        'id' => 'zh_CN',
         'value' => '中文'
     ];
     //====自定义
