@@ -511,21 +511,21 @@ class Match
      */
     public function time_review_meta_box($post){?>
         <div class="layui-form-item">
+            <label class="layui-form-label">报名结束时间</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
             <div class="layui-input-block">
                 <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
-        <!--<div class="layui-form-item">
-            <label class="layui-form-label">报名开始时间</label>
-            <div class="layui-input-block">
-                <input type="text" value="<?/*=$this->meta['entry_start_time']*/?>" name="match[entry_start_time]" class="layui-input date-picker" readonly  id="entry_start_time" placeholder="报名开始时间">
-            </div>
-        </div>-->
         <div class="layui-form-item">
-            <label class="layui-form-label">报名结束时间</label>
+            <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
+                <input type="text" value="<?=$this->meta['match_end_time']?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="比赛结束时间">
             </div>
         </div>
         <div class="layui-form-item">
@@ -669,6 +669,8 @@ class Match
                 $default_array[$v] = $default_project[$v];
             }
             $default_project = $default_array;
+        }else{
+            $match_project_id = array();
         }
         //print_r($default_project);
 
@@ -682,7 +684,7 @@ class Match
                     <div class="layui-input-inline">
                         <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$k?>"  <?= in_array($k,$match_project_id) ? 'checked':''; ?> lay-skin="primary" title="<?=$val?>"/>
                         <?php if(in_array($k,$match_project_id)): ?>
-                        <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$v['ID']);?>">新增轮数</a>
+                        <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
                         <?php endif;?>
                     </div>
                 </div>

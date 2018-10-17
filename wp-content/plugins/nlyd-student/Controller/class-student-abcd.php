@@ -207,53 +207,36 @@ class Student_Abcd extends Student_Home
      */
     public function index(){
 
-        /*$a = new TwentyFour();
-       var_dump($a->calculate(array(5,5,5,9)));*/
+        global $wpdb;
 
-        global $wpdb,$current_user;
-
-        //if($current_user->ID == 66){}
-
-        $map = array();
-        $map[] = ' a.post_type = "match" ';
-        $map[] = ' a.post_status = "publish" ';
-        $map[] = ' c.meta_value="ON" ';
-        $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time,c.meta_value as match_switch';
-        $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
-                LEFT JOIN {$wpdb->prefix}match_meta b ON a.ID = b.match_id
-                LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
-                WHERE {$where}
-                ORDER BY b.match_start_time DESC
+        $sql = "select a.id,a.match_id,a.match_start_time,a.match_end_time,a.entry_end_time,c.meta_value
+                from {$wpdb->prefix}match_meta_new a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_id = c.post_id and meta_key = 'default_match_switch'
                 ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        //var_dump($rows);
+
         if(!empty($rows)){
-            //var_dump($rows);
             $new_time = get_time('mysql');
             foreach ($rows as $v){
+                if($v['match_switch'] == 'ON') {
 
-                if($v['match_switch'] == 'ON'){
-
-                    $rows = get_match_end_time($v['match_id']);
-                    $start_time = reset($rows)['project_start_time'];
-                    $end_time = end($rows)['project_end_time'];
-
-
-                    if($new_time < $v['entry_end_time']){     //报名中
-                        $save = array('match_status'=>1);
-                    }else if($v['entry_end_time'] < $new_time && $new_time < $start_time){       //等待开赛
-                        $save = array('match_status'=>-2);
-                    }else if($start_time < $new_time && $new_time < $end_time){       //比赛中
-                        $save = array('match_status'=>2);
-                    }else if($end_time < $new_time){
-                        $save = array('match_status'=>-3);
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['match_status'] = 1;
                     }
-                    //var_dump($v['match_id']);
-                    //var_dump($save);
-                    $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
-                    //var_dump($a);
+                    elseif ($v['entry_end_time'] < $new_time && $new_time < $v['match_start_time']){
+                        //等待开赛
+                        $save['match_status'] = -2;
+                    }
+                    elseif ($v['match_start_time'] < $new_time && $new_time < $v['match_end_time']){
+                        //进行中
+                        $save['match_status'] = 2;
+                    }else{
+                        //已结束
+                        $save['match_status'] = -3;
+                    }
                 }
+                $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
             }
         }
 
@@ -304,69 +287,6 @@ class Student_Abcd extends Student_Home
         return $match;
     }
 
-    /**
-     * 获取比赛项目
-     * @param $match_id 比赛id
-     * @param $default 是否调取默认项目
-     */
-    public function get_match_project($match_id,$default=false){
-        global $wpdb,$current_user;
-        if(!$default){
-            $sql1 = "select a.id,a.post_id,a.match_project_id,b.post_title,b.post_content,b.post_parent,c.post_title parent_title
-                     from {$wpdb->prefix}match_project a 
-                     left join {$wpdb->prefix}posts b on a.match_project_id = b.ID
-                     left join {$wpdb->prefix}posts c on b.post_parent = c.ID
-                     where a.post_id = {$match_id}   
-                    ";
-        }else{
-            $sql1 = "select b.ID,b.post_title,b.post_parent,c.post_title parent_title
-                     from {$wpdb->prefix}posts b
-                     left join {$wpdb->prefix}posts c on b.post_parent = c.ID
-                     where b.post_type = 'project' and b.post_status = 'publish' ";
-        }
-        //print_r($sql1);
-        $projects = $wpdb->get_results($sql1,ARRAY_A);
-        //print_r($projects);
-        $project = array();
-        if(!empty($projects)){
-            foreach ($projects as $val){
-                $k = &$val['post_parent'];
-                $project[$k]['parent_title'] = $val['parent_title'];
-                //获取主训教练
-
-                if(empty($project[$k]['major_coach']) && empty($project[$k]['coach_id'])){
-
-                    $sql = "select a.coach_id,b.display_name 
-                            from {$wpdb->prefix}my_coach a 
-                            left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                            where user_id = {$current_user->ID} and category_id = $k and major = 1
-                            ";
-                    $row = $wpdb->get_row($sql);
-                    //print_r($row);
-                    if(!empty($row)){
-                        /*$user_meta = get_user_meta($row->coach_id);
-                        if(!empty($user_meta['user_real_name'])){
-                            $user_real_name = unserialize($user_meta['user_real_name'][0]);
-                            $coach = $user_real_name['real_name'];
-                        }elseif (!empty($user_meta['last_name']) || !empty($user_meta['first_name'])){
-                            $coach = $user_meta['last_name'][0].$user_meta['first_name'][0];
-                        }else{
-                            $coach = $user_meta['nickname'][0];
-                        }
-                        $project[$k]['major_coach'] = $coach;*/
-                        $project[$k]['major_coach'] = preg_replace('/, /','',$row->display_name);
-                        $project[$k]['coach_id'] = $row->coach_id;
-                    }
-                }
-                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
-                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
-                $project[$k]['project'][] = $val;
-
-            }
-        }
-        //print_r($project);
-        return $project;
-    }
 
     /**
      * 比赛详情页
@@ -380,51 +300,56 @@ class Student_Abcd extends Student_Home
         global $wpdb,$current_user;
 
         //获取比赛详情
-        $match = $this->get_match_info($_GET['match_id']);
+        $match = $this->get_match_meta($_GET['match_id']);
         if(empty($match)){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
+        //print_r($match);
+
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
             //修改比赛状态
-            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_status'=>-2),array('match_id'=>$this->match_id));
             $match['match_status'] = -2;
             $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
         }
 
+        //如果报名截止 缓存当前页面
+        /*if(strtotime($match['entry_end_time']) <= get_time()){
 
+
+
+
+            $language = get_user_meta($current_user->ID,'locale')[0];
+
+            $view = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
+            load_view_template($view);
+
+        }else{
+
+
+
+
+        }*/
 
         //print_r($match);
         //获取比赛项目
-        $project = $this->get_match_project($_GET['match_id']);
+        $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
         //print_r($project);
 
         //获取报名选手列表
-        $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
+        $sql2 = "select count (a.id) total
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
                   where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
-                  order by a.id desc limit 0,10";
-        $orders = $wpdb->get_results($sql2,ARRAY_A);
-        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
-        $order_total = $total['total'] > 0 ? $total['total'] : 0;
-        if (!empty($orders)){
-            //print_r($orders);
-            foreach ($orders as $k => $v){
-                $user = get_user_meta($v['user_id']);
-                $orders[$k]['nickname'] = $user['nickname'][0];
-                $orders[$k]['user_gender'] = !empty($user['user_gender'][0]) ? $user['user_gender'][0] : '--' ;
-                $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
-                if(!empty($user['user_real_name'])){
-                    $user_real = unserialize($user['user_real_name'][0]);
-                    $orders[$k]['real_age'] = $user_real['real_age'];
+                  order by a.id desc ";
+        $order_total = $wpdb->get_var($sql2,ARRAY_A);
 
-                }else{
-                    $orders[$k]['real_age'] = '--';
-                }
-            }
-        }
+        //判断选手是否报名
+        $sql3 = "select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} ";
+        $order_id = $wpdb->get_var($sql3);
+        if(!empty($order_id)) $match['is_me'] == 'y';
 
         if($match['is_me'] == 'y' && $match['match_status'] == -2){
             $start = reset($this->project_order_array);
@@ -433,14 +358,7 @@ class Student_Abcd extends Student_Home
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
         }
-        $end = end($this->project_order_array);
-        $match['match_end_time'] = $end['project_end_time'];
-        if(strtotime($end['project_end_time']) <= get_time()){
-            //修改比赛状态
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
-        }
-
-        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
+        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
@@ -1407,12 +1325,24 @@ class Student_Abcd extends Student_Home
             return;
         }
         //获取比赛详情
-        $match = $this->get_match_info($_GET['match_id']);
+        $match = $this->get_match_meta($_GET['match_id']);
+
+        if(empty($match)) {
+            $this->get_404(__('比赛信息错误', 'nlyd-student'));
+            return;
+        }
 
         //获取比赛项目
+        $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
+
+        //print_r($match);
+
+
+
+
+
         //update_option('match_project_default',true);
-        $match_project_default = get_option('match_project_default');
-        $project = $this->get_match_project($_GET['match_id'],$match_project_default);
+        //$project = $this->get_match_project($_GET['match_id'],$match_project_default);
         //print_r($project);
         //获取选手信息
         global $current_user,$user_info,$wpdb;
@@ -2018,6 +1948,73 @@ class Student_Abcd extends Student_Home
         return $action;
     }
 
+
+    /**
+     * 获取比赛meta信息
+     * @param $match_id 比赛id
+     * @param $find 需要获取的字段
+     */
+    public function get_match_meta($match_id,$find='a.*,b.post_title'){
+
+        global $wpdb;
+        $sql = " select {$find},
+                   DATE_FORMAT(a.match_start_time,'%Y-%m-%d %H:%i') match_start_time, 
+                   DATE_FORMAT(a.match_end_time,'%Y-%m-%d %H:%i') match_end_time, 
+                   DATE_FORMAT(a.entry_end_time,'%Y-%m-%d %H:%i') entry_end_time
+                  from {$wpdb->prefix}match_meta_new a 
+                  left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                  where match_id = {$match_id} ";
+        $match = $wpdb->get_row($sql,ARRAY_A);
+        return $match;
+
+    }
+
+    /**
+     *  获取比赛项目
+     * @param $match_id 比赛id
+     * @param $match_project_id 比赛项目id集合
+     * @return array
+     */
+    public function get_match_project($match_id,$match_project_id){
+        global $wpdb,$current_user;
+        $sql = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}posts c on a.post_parent = c.ID
+                where a.ID in($match_project_id)";
+        $projects = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($projects);
+
+
+        $project = array();
+        if(!empty($projects)){
+            foreach ($projects as $val){
+                $k = &$val['post_parent'];
+                $project[$k]['parent_title'] = $val['parent_title'];
+                //获取主训教练
+
+                if(empty($project[$k]['major_coach']) && empty($project[$k]['coach_id'])){
+
+                    $sql = "select a.coach_id,b.display_name 
+                            from {$wpdb->prefix}my_coach a 
+                            left join {$wpdb->prefix}users b on a.coach_id = b.ID
+                            where user_id = {$current_user->ID} and category_id = $k and major = 1
+                            ";
+                    $row = $wpdb->get_row($sql);
+                    //print_r($row);
+                    if(!empty($row)){
+                        $project[$k]['major_coach'] = preg_replace('/, /','',$row->display_name);
+                        $project[$k]['coach_id'] = $row->coach_id;
+                    }
+                }
+                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
+                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
+                $project[$k]['project'][] = $val;
+
+            }
+        }
+        //print_r($project);
+        return $project;
+    }
 
 
     /**

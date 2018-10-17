@@ -31,8 +31,33 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "match_meta_new";  //比赛meta
 
-    $table_name = $wpdb->prefix . "match_project_more";  //用户文章速读使用记录  储存文章速读
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+            `match_id` int(20) NOT NULL COMMENT '比赛id(posts主键ID)',
+            `match_slogan` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛口号',
+            `match_genre` int(20) DEFAULT NULL COMMENT '比赛类型',
+            `match_start_time` datetime DEFAULT NULL COMMENT '比赛时间',
+            `match_end_time` datetime DEFAULT NULL COMMENT '比赛结束时间',
+            `entry_end_time` datetime DEFAULT NULL COMMENT '报名结束时间',
+            `match_status` tinyint(2) DEFAULT '1' COMMENT '比赛状态 -3:已结束 -2等待开赛 1:报名中 2:进行中',
+            `match_address` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛地点',
+            `match_cost` decimal(10,2) DEFAULT NULL COMMENT '比赛费用',
+            `match_max_number` smallint(10) DEFAULT NULL COMMENT '最大参与人数 值大于0才有限制',
+            `match_project_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛项目id合集',
+            `created_id` int(20) DEFAULT NULL COMMENT '发布人',
+            `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+              PRIMARY KEY (`id`,`match_id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+    $table_name = $wpdb->prefix . "match_project_more";  //比赛项目轮数记录表
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
 
