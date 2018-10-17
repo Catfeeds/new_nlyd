@@ -3491,7 +3491,7 @@ class Student_Ajax
         $cookieBool = setcookie('user_language', $lang, time()+3600*24*30*12,'/');
         if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
 //        print_r($_COOKIE);
-        if($current_user->ID) update_user_meta($current_user->ID, 'locale', $lang);
+        update_user_meta($current_user->ID, 'locale', $lang);
         wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
 //        if($bool){
 //            wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
