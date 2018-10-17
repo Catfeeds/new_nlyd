@@ -31,7 +31,7 @@
                                         <div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>：</div></div>
                                         <div class="nl-match-info c_black">
                                             <div><?=$match['match_start_time']?></div>
-                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
+                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=__($match['match_status_cn'], 'nlyd-student')?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">

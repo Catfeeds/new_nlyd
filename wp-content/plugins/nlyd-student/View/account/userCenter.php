@@ -28,7 +28,16 @@
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <?php endif;?>
-                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">language</span></a>
+                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">
+
+                        <?php
+                            if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
+                                echo 'language';
+                            }else{
+                                echo '语言';
+                            }
+                        ?>
+                    </span></a>
                 <div class="radius-zoo">
                     <!-- 头像 -->
                     <div class="userCenter-main layui-row">
