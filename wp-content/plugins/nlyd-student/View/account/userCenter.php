@@ -27,10 +27,8 @@
                 <!-- 消息 -->
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
-
-                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">langulage</span></a>
-                
                 <?php endif;?>
+                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">language</span></a>
                 <div class="radius-zoo">
                     <!-- 头像 -->
                     <div class="userCenter-main layui-row">
@@ -272,7 +270,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
     layer.open({
             type: 1
             ,maxWidth:300
-            ,title: '提示' //不显示标题栏
+            ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
             ,skin:'nl-box-skin'
             ,id: 'certification' //防止重复弹出
             ,content: '<div class="box-conent-wrapper"><?=__('是否立即进行实名认证？', 'nlyd-student')?></div>'
