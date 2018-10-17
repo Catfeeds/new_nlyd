@@ -657,7 +657,7 @@ if(!class_exists('MatchController')){
         public function add_movie_review_fields( $post_ID, $post_data ) {
 
             // Check post type for movie reviews
-            global $wpdb;
+            global $wpdb,$current_user;
             if(in_array($post_data->post_type,array('match','genre','project','match-category'))){
 
                 if(!empty($_POST['project_alias'])){
@@ -678,90 +678,42 @@ if(!class_exists('MatchController')){
                     update_post_meta($post_ID,'default_match_switch','OFF');
                 }
 
-                /*if(isset($_POST['match']) && !empty($_POST['match'])){
+                if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];
-                    //$match_meta['match_use_time'] = empty($match_meta['match_use_time']) ? 1 : $match_meta['match_use_time'];
+
+                    if(empty($match_meta['match_project'])){
+                        //获取所有比赛项目
+                        $args = array(
+                            'post_type' => array('project'),
+                            'post_status' => array('publish'),
+                            'orderby' => 'menu_order',
+                            'order' => 'asc',
+                        );
+                        $the_query = new WP_Query($args);
+                        $project_array = array_column($the_query->posts,'ID');
+
+                    }else{
+                        $project_array = array_column($match_meta['match_project'],'match_project_id');
+                    }
+
+                    $project_id = arr2str($project_array);
+
+
                     $match_meta['match_id'] = $post_ID;
-                    //var_dump($match_meta);die;
-                    if(!empty($match_meta['match_category_order'])) $match_meta['match_category_order'] = serialize($match_meta['match_category_order']);
-                    if(isset($match_meta['match_project'])){
-
-                        $match_project = $match_meta['match_project'];
-                        $this->save_match_project($post_ID,$match_project);
-                    }
-                    $match_meta['entry_start_time'] = $current_time = current_time('mysql'); //当前时间 == 发布时间 == 开始报名时间
-                    //var_dump($post_data);die;
-                    if($post_data->post_type == 'match'){
-
-                        //根据时间计算状态
-                        if(!empty($match_meta['match_project'])){
-                            $match_use_time = 0;
-                            foreach ($match_meta['match_project'] as $v){
-                                $project_alias = get_post_meta($v['match_project_id'],'project_alias')[0];
-                                //print_r($project_alias);
-                                if($project_alias == 'zxss'){
-
-                                    $child_count_down = get_post_meta($project_alias,'child_count_down')[0];
-                                    //var_dump(111);die;
-                                    if($v['child_count_down'] > 0){
-                                        $child_count_down['even_add'] = $v['child_count_down'];
-                                        $child_count_down['add_and_subtract'] = $v['child_count_down'];
-                                        $child_count_down['wax_and_wane'] = $v['child_count_down'];
-                                    }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
-
-                                        $child_count_down['even_add'] *= 1;
-                                        $child_count_down['add_and_subtract'] *= 1;
-                                        $child_count_down['wax_and_wane'] *= 1;
-                                    }else{
-
-                                        $child_count_down['even_add'] = 3;
-                                        $child_count_down['add_and_subtract'] = 3;
-                                        $child_count_down['wax_and_wane'] = 3;
-                                    }
-                                    $project_use_time = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-                                    //print_r($project_use_time);
-                                }else{
-                                    $project_use_time = $v['project_use_time'] > 0 ? $v['project_use_time'] : $match_meta['match_use_time'];
-
-                                }
-
-                                $match_more = $v['match_more'] > 0 ? $v['match_more'] : $match_meta['match_more'];
-                                $project_time_interval = $v['project_time_interval'] > 0 ? $v['project_time_interval'] : $match_meta['match_subject_interval'];
-
-                                $match_use_time += $project_use_time*$match_more + ($match_more-1)*$project_time_interval + $match_meta['match_project_interval'];
-                            }
-
-                            //var_dump(date('Y-m-d H:i:s',$match_end_time));die;
-                           // die;
-                        }else{
-                            //var_dump($match_meta);die;
-                            $match_use_time = (($match_meta['match_use_time'] * $match_meta['match_more'] + $match_meta['match_subject_interval'] + $match_meta['match_project_interval'])*6 - $match_meta['match_project_interval'])*60;
-                        }
-                        $match_end_time = date_i18n('Y-m-d H:i:s',strtotime($match_meta['match_start_time']) + ($match_use_time-$match_meta['match_project_interval'])*60);
-                        //计算比赛状态
-                        var_dump($current_time);
-                        var_dump($match_meta['entry_end_time']);
-                        if($current_time > $match_end_time){
-                            $status = -3;
-                        }elseif ($match_meta['match_start_time'] < $current_time && $current_time < $match_end_time){
-                            $status = 2;
-                        }elseif ($match_meta['entry_end_time'] < $current_time && $current_time < $match_meta['match_start_time']){
-                            $status = -2;
-                        }elseif ($current_time < $match_meta['entry_end_time']){
-                            $status = 1;
-                        }
-                        $match_meta['match_status'] = $status;
-                    }
+                    $match_meta['match_project_id'] = $project_id;
+                    $match_meta['created_id'] = $current_user->ID;
+                    $match_meta['created_time'] = get_time('mysql');
 
                     unset($match_meta['match_project']);
 
                     //查询是否发布了比赛信息
                     //var_dump($match_meta);die;
-                    $wpdb->delete($wpdb->prefix.'match_meta',array('match_id'=>$post_ID));
-                    $a = $wpdb->insert($wpdb->prefix.'match_meta',$match_meta);
+                    $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$post_ID));
+                    $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
 
-                }*/
+                    //var_dump($a);die;
+                }
             }elseif ($post_data->post_type == 'team'){
                 if(isset($_POST['team']) && !empty($_POST['team'])){
 
@@ -898,11 +850,11 @@ if(!class_exists('MatchController')){
 
                     }
 
-                    add_meta_box( 'interval_meta_box',
+                    /*add_meta_box( 'interval_meta_box',
                         '比赛间隔设置',
                         array($this->match,'interval_review_meta_box'),
                         $this->post_type, 'normal','high'
-                    );
+                    );*/
 
                     if( in_array($this->post_type,array('project')) ){
 
