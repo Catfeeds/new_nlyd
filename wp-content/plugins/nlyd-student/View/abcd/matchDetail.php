@@ -28,29 +28,29 @@
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>：</div></div>
+                                        <div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black">
-                                            <div><?=$match['match_start_time']?></div>
+                                            <?=$match['match_start_time']?>
                                             <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><div><?=__('结束时间', 'nlyd-student')?>：</div></div>
+                                        <div class="nl-match-label"><?=__('结束时间', 'nlyd-student')?>：</div>
                                         <div class="nl-match-info c_black">
-                                            <div><?=$match['match_end_time']?></div>
+                                            <?=$match['match_end_time']?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><div><?=__('开赛地点', 'nlyd-student')?>：</div></div>
-                                        <div class="nl-match-info c_black"><div><?=$match['match_address']?></div></div>
+                                        <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-info c_black"><?=$match['match_address']?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><div><?=__('报名费用', 'nlyd-student')?>：</div></div>
-                                        <div class="nl-match-info c_black"><div>¥<?=$match['match_cost']?></div></div>
+                                        <div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>：</div></div>
-                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><div><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div></div>
+                                        <div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
                                         
                                     </div>
                                 </div>
@@ -64,11 +64,11 @@
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
-                                    <div class="nl-match-detail1 layui-row">
-                                        <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>：</div>
-                                            <div class="nl-match-info1">
+                                    <div class="nl-match-detail layui-row">
+                                        <div class="nl-match-label"><?=$val['parent_title']?>：</div>
+                                            <div class="nl-match-info">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
+                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
                                             <?php } ?>
                                         </div>
                                     </div>

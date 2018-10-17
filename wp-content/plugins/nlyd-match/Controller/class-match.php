@@ -523,7 +523,7 @@ class Match
 
             <div class="layui-input-block">
                 <?php
-                switch ($this->meta['match_status']) {
+                /*switch ($this->meta['match_status']) {
                     case -3:
                         $text = '已结束';
                         $className = '';
@@ -548,14 +548,12 @@ class Match
                         $text = '未开始';
                         $className = '';
                         break;
-                }
+                }*/
                 ?>
-                <span class="layui-input <?=$className?>"><?=$text?></span>
-                <!--<input title="已结束" type="radio" name="match[match_status]" value="-3" <?/*=$this->meta['match_status'] == -3?'checked':'';*/?> >
-                <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?/*=$this->meta['match_status'] == -2?'checked':'';*/?> >
-                <input title="未开始" type="radio" name="match[match_status]" value="-1" <?/*=$this->meta['match_status'] == -1 || empty($this->meta['match_status'])?'checked':'';*/?> >
-                <input title="报名中" type="radio" name="match[match_status]" value="1" <?/*=$this->meta['match_status'] == 1?'checked':'';*/?> >
-                <input title="进行中" type="radio" name="match[match_status]" value="2" <?/*=$this->meta['match_status'] == 2?'checked':'';*/?> >-->
+               <!-- <span class="layui-input <?/*=$className*/?>"><?/*=$text*/?></span>-->
+                <input title="已结束" type="radio" name="match[match_status]" value="-3" <?=$this->meta['match_status'] == -3?'checked':'';?> >
+                <input title="等待开赛" type="radio" name="match[match_status]" value="-2" <?=$this->meta['match_status'] == -2?'checked':'';?> >
+                <input title="进行中" type="radio" name="match[match_status]" value="2" <?=$this->meta['match_status'] == 2?'checked':'';?> >
             </div>
         </div>
     <?php }

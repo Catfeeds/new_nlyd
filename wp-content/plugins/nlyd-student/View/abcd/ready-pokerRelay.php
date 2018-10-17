@@ -3,22 +3,22 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$title?></h1>
+            <h1 class="mui-title"><?=$match_title?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label">显示张数</div>
+                        <div class="matching-row-label"><?=__('显示张数', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn active">全部</div>
+                            <div class="matching-btn active"><?=__('全部', 'nlyd-student')?></div>
                             <div class="matching-btn">1</div>
                             <div class="matching-btn">2</div>
                             <div class="matching-btn">3</div>
@@ -40,120 +40,61 @@
                             </div>
                         </div>
                     </div>
-                    <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
+                    <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
+                <div class="a-btn" id="complete"><?=__('记忆完成', 'nlyd-student')?></div>
             </div>
         </div>           
     </div>
 </div>
+<input type="hidden" name="_wpnonce" id="inputComplete" value="<?=wp_create_nonce('student_memory_complete_code_nonce');?>">
+<input type="hidden" name="match_more" id="inputMatchMore" value="<?=isset($_GET['match_more']) ? $_GET['match_more'] : 1;?>"/>
+<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
+    leaveMatchPage(function(){//窗口失焦提交
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        submit(time,4);
+    })
     var data_match=[];
     var questions_answer=[]
-    var new_poker=[]
-    var arrColor=['heart','club','diamond','spade']
-    var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
-    var arrZM=['A','J','Q','K'];
-    var leavePage= $.GetCookie('train_match','1');
-    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
-        questions_answer=leavePage['train_questions']
-    }else{
-        $.each(arrColor,function(i,v){
-            $.each(arrNum,function(index,val){
-                var item=v+'-'+val;
-                new_poker.push(item)
-            })
-        })
-        function splits(str) {
-            return str.split('-');
-        }
-        function isNumber(str) {//非数字扑克转成number
-            var newStr=parseInt(str);
-            var result=newStr;
-            if(isNaN(newStr)){//'A','J','Q','K'
-                if(str=='A'){
-                    result=1
-                }else if(str=='J'){
-                    result=11
-                }else if(str=='Q'){
-                    result=12
-                }else if(str=='K'){
-                    result=13
-                }
-            }
-            return result;
-        }
-        function rand(data) {//生成随即字符
-            var pokers=data;
-            var length=pokers.length;
-            if(length>0){
-                var pos1 = Math.round(Math.random() * (length - 1));
-                var _poker=pokers[pos1]    
-                var question_len=questions_answer.length;//生成题目的长度
-                if(question_len>2){//取两个以上的扑克new_poker
-                    var _poker0=_poker;//当前扑克
-                    var _poker1=questions_answer[question_len-1];//前1张扑克
-                    var _poker2=questions_answer[question_len-2];//前2张扑克
-                    var _pokerArray0=splits(_poker0);//拆分
-                    var _pokerArray1=splits(_poker1);//拆分
-                    var _pokerArray2=splits(_poker2);//拆分
-                    var color0=_pokerArray0[0];//花色
-                    var color1=_pokerArray1[0];//花色
-                    var color2=_pokerArray2[0];//花色
-                    var number0=isNumber(_pokerArray0[1]);//number
-                    var number1=isNumber(_pokerArray1[1]);//number
-                    var number2=isNumber(_pokerArray2[1]);//number
-                    var numbers=_pokerArray0[1]+_pokerArray1[1]+_pokerArray2[1]
-                    if(color0==color1 && color0==color2){//同花色
-                        var _flag=false;
-                        if(numbers=="QKA" || numbers=="AKQ"){//QKA,AKQ单独判断
-                            _flag=true;
-                        }else{
-                            if((number2-number1==1 && number1-number0==1) || (number2-number1==-1 && number1-number0==-1)){//num是顺子
-                                _flag=true;
-                            }   
-                        }
-                        console.log(color0,numbers)
-                        if(!_flag){//非顺子
-                            questions_answer.push(_poker)
-                            pokers.splice(pos1, 1);
-                        }else{
-                            console.log(numbers)
-                        }
-
-                    }else{
-                        questions_answer.push(_poker)
-                        pokers.splice(pos1, 1);
-                    }
-                }else{
-                    questions_answer.push(_poker)
-                    pokers.splice(pos1, 1);
-                }
-                rand(pokers)
-            }else{//跳出递归
-            }
-        }
-        rand(new_poker)
-        // var newArr=[]
-        // function build() {
-        //     var poker=rand(questions_answer)
-        //     console.log(poker) 
-        // }
-        // build()
-        // console.log(questions_answer)
-        // questions_answer.sort(function() {
-        //     return .5 - Math.random();
-        // });
-        $.DelCookie('train_match')
-    }
-    $.each(questions_answer,function(i,v){
-        var item=v.split('-')
-        data_match.push(item)
-    })
-
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
-    function submit(time){//提交答案
+    // mTouch('body').on('tap','#complete',function(){//记忆完成
+new AlloyFinger($('#complete')[0], {
+    tap:function(){
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            _this.addClass('disabled')
+            var data={
+                action:'memory_complete',
+                _wpnonce:$('#inputComplete').val(),
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:$('#inputMatchMore').val(),
+                match_action:'pokerRelay',
+                match_questions:questions_answer,
+                type:'pkjl'
+            }
+            $.ajax({
+                data:data,
+                success:function(res,ajaxStatu,xhr){
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.href=res.data.url
+                        }
+                    }else{
+                        $.alerts(res.data.info)
+                        _this.removeClass('disabled')
+                    }
+                },
+                error: function(jqXHR, textStatus, errorMsg){
+                    _this.removeClass('disabled')
+                }
+            })
+        }
+    }
+})
+    function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',
                 'opacity': '1',
@@ -161,21 +102,31 @@ jQuery(function($) {
             })
         var my_answer=[];
         var data={
-            action:'trains_submit',
-            genre_id:$.Request('genre_id'),
-            project_type:'pkjl',
-            train_questions:questions_answer,
-            train_answer:questions_answer,
+            action:'answer_submit',
+            _wpnonce:$('#inputSubmit').val(),
+            match_id:<?=$_GET['match_id']?>,
+            project_id:<?=$_GET['project_id']?>,
+            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1 ?>,
             my_answer:my_answer,
+            match_action:'subjectPokerRelay',
             surplus_time:time,
+            match_questions:questions_answer,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
-
+        var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+                if(leavePage.Time){
+                    data['leave_page_time']=leavePage.Time;
+                }
+            }
         $.ajax({
             data:data,
             success:function(res,ajaxStatu,xhr){  
+                $.DelSession('leavePage')
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
+                        $.DelSession('ready_poker')
                     }   
                 }else{
                     $('#load').css({
@@ -195,23 +146,12 @@ jQuery(function($) {
             }
         })
     }
-new AlloyFinger($('#complete')[0], {//记忆完成
-    tap:function(){
-        var sessionData={//存储session
-            train_questions:questions_answer,
-            genre_id:$.Request('genre_id'),
-            type:'pkjl',
-            count_down:$('.count_down').attr('data-seconds')
-        }
-        $.SetCookie('train_match',sessionData,0)
+    if(<?=$count_down?><=0){//进入页面判断时间是否结束
+        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+        setTimeout(function() {
+            submit(0,3)
+        }, 1000);
     }
-})
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0)
-    //     }, 1000);
-    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -221,12 +161,12 @@ new AlloyFinger($('#complete')[0], {//记忆完成
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
-                submit(0)
+                submit(0,3)
             }, 1000);
         }
     });
@@ -287,19 +227,36 @@ new AlloyFinger($('#complete')[0], {//记忆完成
 
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
-        // $.getJSON(file_path,function(JsonData){
-            // var leavePage= $.GetCookie('train_match','1');
-            // if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
-            //     questions_answer=leavePage['train_questions']
-            // }else{
-            //     $.DelCookie('train_match')
-            // }
-            // $.each(questions_answer,function(i,v){
-            //     var item=v.split('-')
-            //     data_match.push(item)
-            // })
+        $.getJSON(file_path,function(JsonData){
+
+            var matchSession=$.GetSession('ready_poker','true');
+            if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+                data_match=matchSession['data_match'];
+                questions_answer=matchSession['questions_answer']
+            }else{
+                var _answers=JsonData;
+                var pos = Math.round(Math.random() * (_answers.length - 1));
+                
+                var xx=_answers[pos]
+                questions_answer=xx.sort(function() {
+                    return .5 - Math.random();
+                });
+                $.each(questions_answer,function(i,v){
+                    var item=v.split('-')
+                    data_match.push(item)
+                })
+                var sessionData={
+                    data_match:data_match,
+                    match_id:$.Request('match_id'),
+                    project_id:$.Request('project_id'),
+                    match_more:$.Request('match_more'),
+                    questions_answer:questions_answer
+                }
+                $.SetSession('ready_poker',sessionData)
+            }
+
             var data=pagation(data_match,nowPage,onePageItems)
-    
+       
         
             $('.poker-wrapper').empty()
             if(data.left){
@@ -339,10 +296,8 @@ new AlloyFinger($('#complete')[0], {//记忆完成
                         +'</div>'
                 $('.poker-wrapper').append(dom)
             })
-            
             initWidth()
-            
-        // })
+        })
     }
     initPagation()
     // mTouch('body').on('tap','.matching-btn',function(e){
