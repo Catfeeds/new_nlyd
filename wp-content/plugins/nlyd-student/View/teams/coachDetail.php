@@ -213,7 +213,7 @@ jQuery(function($) {
                                         +'</tr>'
                                 lis.push(dom)                           
                             })  
-                            if (res.data.list.length<10) {
+                            if (res.data.list.length<50) {
                                 next(lis.join(''),false)
                             }else{
                                 next(lis.join(''),true)

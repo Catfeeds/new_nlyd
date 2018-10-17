@@ -24,7 +24,7 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><?=__('姓名', 'nlyd-student')?></div>
-                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="<?=__('请填写联系人姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="chineseName">
+                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="<?=__('请填写联系人姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
                             <input name='action' value='save_address' type="hidden">
                             <input type="hidden" name="_wpnonce"  value="<?=wp_create_nonce('student_save_address_code_nonce');?>">
                             <input type="hidden" name="id"  value="<?php echo isset($row['id']) ? $row['id'] : 0; ?>">

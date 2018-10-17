@@ -31,7 +31,7 @@
                                         <div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>：</div></div>
                                         <div class="nl-match-info c_black">
                                             <div><?=$match['match_start_time']?></div>
-                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
+                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=__($match['match_status_cn'], 'nlyd-student')?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
@@ -60,7 +60,7 @@
                             <li class="nl-match">
                                 <div class="nl-match-header noMargin">
                                     <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> "><?=__('比赛项目', 'nlyd-student')?></span>
-                                    <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>
+                                    <a class="c_orange" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
@@ -68,7 +68,7 @@
                                         <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>：</div>
                                             <div class="nl-match-info1">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
+                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('规则', 'nlyd-student')?></a>&nbsp;&nbsp;
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -163,8 +163,8 @@ jQuery(function($) {
         var match_page=1;
         flow.load({
             elem: '#flow-table' //流加载容器
-            // ,isAuto: false
-            // ,isLazyimg: true
+            ,isAuto: false
+            ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'get_entry_list',
@@ -209,7 +209,7 @@ jQuery(function($) {
                                         +'</tr>'
                                 lis.push(dom) 
                             })
-                            if (res.data.info.length<10) {
+                            if (res.data.info.length<50) {
                                 next(lis.join(''),false) 
                             }else{
                                 next(lis.join(''),true) 
