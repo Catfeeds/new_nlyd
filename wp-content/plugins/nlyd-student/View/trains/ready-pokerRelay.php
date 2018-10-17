@@ -68,7 +68,7 @@ jQuery(function($) {
         function splits(str) {
             return str.split('-');
         }
-        function isNumber(str) {
+        function isNumber(str) {//非数字扑克转成number
             var newStr=parseInt(str);
             var result=newStr;
             if(isNaN(newStr)){//'A','J','Q','K'

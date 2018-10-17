@@ -120,8 +120,29 @@ switch ($type){
 </div>  
 <script>
 jQuery(function($) {
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     $('#again').click(function(){
         $.DelCookie('train_match','1')
     })
+    <?php if($type == 'pkjl'): ?>
+            initWidth=function() {
+                var len=$('.first_wap.poker-wrapper .poker').length;
+                var width=$('.first_wap.poker-wrapper .poker').width()+2;
+                var marginRight=parseInt($('.first_wap.poker-wrapper .poker').css('marginRight'))
+                var W=width*len+marginRight*(len-1)+'px';
+                $('.first_wap.poker-wrapper').css('width',W);
+
+                var len1=$('.second_wap.poker-wrapper .poker').length;
+                var width1=$('.second_wap.poker-wrapper .poker').width()+2;
+                var marginRight1=parseInt($('.second_wap.poker-wrapper .poker').css('marginRight'))
+                var W1=width1*len1+marginRight1*(len1-1)+'px';
+                $('.second_wap.poker-wrapper').css('width',W1);
+            }
+            initWidth();
+            
+        <?php endif;?>
 })
 </script>
