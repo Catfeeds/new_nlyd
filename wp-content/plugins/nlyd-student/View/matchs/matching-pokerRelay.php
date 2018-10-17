@@ -269,52 +269,56 @@ $('.choose-poker').each(function(e){
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-           var text=_this.attr('data-text');
-           var color=_this.attr('data-color');
-           _this.addClass('active');
-           var i='';
-           if(color=='club'){
-                i='<i class="iconfont">&#xe635;</i>'
-            }else if(color=='heart'){
-                i='<i class="iconfont">&#xe638;</i>'
-            }else if(color=='spade'){
-                i='<i class="iconfont">&#xe636;</i>'
-            }else if(color=='diamond'){
-                i='<i class="iconfont">&#xe634;</i>'
-            }
-            var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
-                        +'<div class="poker-detail poker-top">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                        +'<div class="poker-logo">'
-                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
-                        +'</div>'
-                        +'<div class="poker-detail poker-bottom">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                    +'</div>'
-            
-            if($('.poker-wrapper .poker.active').length>0){//绑定事件
-                var active=$('.poker-wrapper .poker.active')
-                active.after(poker);
-                active.removeClass('active')
-            }else{
-                $('.poker-wrapper .poker.active').removeClass('active')
-                $('.poker-wrapper').append(poker)
-            }
-
-            var newDom=$('.poker.active')
-            new AlloyFinger(newDom[0], {
-                tap:function(){
-                    var active=$('.poker-wrapper .poker.active')
-                    active.removeClass('active');
-                    newDom.addClass('active');
+            if(!_this.hasClass('disabled')){
+                $('.choose-poker').addClass('disabled')
+                var text=_this.attr('data-text');
+                var color=_this.attr('data-color');
+                _this.addClass('active');
+                var i='';
+                if(color=='club'){
+                    i='<i class="iconfont">&#xe635;</i>'
+                }else if(color=='heart'){
+                    i='<i class="iconfont">&#xe638;</i>'
+                }else if(color=='spade'){
+                    i='<i class="iconfont">&#xe636;</i>'
+                }else if(color=='diamond'){
+                    i='<i class="iconfont">&#xe634;</i>'
                 }
-            })
-            initWidth();
-            initScroll()
+                var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
+                            +'<div class="poker-detail poker-top">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                            +'<div class="poker-logo">'
+                                +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                            +'</div>'
+                            +'<div class="poker-detail poker-bottom">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                        +'</div>'
+                
+                if($('.poker-wrapper .poker.active').length>0){//绑定事件
+                    var active=$('.poker-wrapper .poker.active')
+                    active.after(poker);
+                    active.removeClass('active')
+                }else{
+                    $('.poker-wrapper .poker.active').removeClass('active')
+                    $('.poker-wrapper').append(poker)
+                }
+
+                var newDom=$('.poker.active')
+                new AlloyFinger(newDom[0], {
+                    tap:function(){
+                        var active=$('.poker-wrapper .poker.active')
+                        active.removeClass('active');
+                        newDom.addClass('active');
+                    }
+                })
+                initWidth();
+                initScroll()
+                $('.choose-poker').removeClass('disabled')
+            }
         }
     });
 });
