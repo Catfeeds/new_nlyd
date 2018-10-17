@@ -65,10 +65,10 @@
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
                                     <div class="nl-match-detail1 layui-row">
-                                        <div class="nl-match-label1"><?=$val['parent_title']?>：</div>
+                                        <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>：</div>
                                             <div class="nl-match-info1">
                                             <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
+                                                <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
                                             <?php } ?>
                                         </div>
                                     </div>
