@@ -137,11 +137,16 @@ class Student_Trains extends Student_Home
                 $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
+
                 if(!empty($post_str)){
                     $post_arr = str2arr($post_str,',');
                     //print_r($posts_arr);
 
                     $result = array_diff($posts_arr,$post_arr);
+                    if(empty($result)){
+                        $this->get_404(array('message'=>'恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！','return_url'=>home_url('trains')));
+                        return;
+                    }
                     //print_r($result);
 
                 }else{
@@ -349,7 +354,7 @@ class Student_Trains extends Student_Home
 
             $answer = $questions_answer;
 
-            print_r($answer);
+            //print_r($answer);
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
             //print_r($answer_array);
