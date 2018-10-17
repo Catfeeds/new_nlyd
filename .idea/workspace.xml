@@ -6,540 +6,8 @@
       <change afterPath="$PROJECT_DIR$/wp-content/languages/plugins/nlyd-student-en_US.po" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/wp-content/languages/plugins/nlyd-student-es_VE.mo" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/wp-content/languages/plugins/nlyd-student-es_VE.po" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/opHighlightMode/Border_Around.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/opHighlightMode/Left_Border.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/opLSBStyle/Simple_Buttons.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/opLSBStyle/Simple_Tabs.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/opLSBStyle/Tabs_in_Block.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/css/qtranslate_configuration.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/i18n-interface-admin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/common.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/common.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/edit-tag-exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/edit-tag-exec.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/edit-tags-exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/edit-tags-exec.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/nav-menus-exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/nav-menus-exec.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/options.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/options.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/post-exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/post-exec.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/widgets-exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/js/widgets-exec.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_activation_hook.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_admin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_admin_class_translator.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_admin_options.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_admin_options_update.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_admin_utils.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_configuration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_import_export.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_languages.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_update_gettext_db.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/admin/qtx_user_options.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/aa.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ad.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ad.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ae.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/af.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ag.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ai.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ai.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/al.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/am.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/an.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ao.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/aq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ar.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ar.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/arle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/as.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/at.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/at.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/au.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/aw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ax.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/az.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ba.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bd.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/be.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bi.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bj.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/br.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/by.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/bz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ca.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ca.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/catala.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cc.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cd.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ch.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ci.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ck.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/co.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cr.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cx.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cy_GB.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/cz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/de.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/dj.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/dk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/dm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/do.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/dz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ec.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ec.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ee.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eh.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/er.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/es.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/es.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/et.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/et.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/eu_ES.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fj.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/fr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ga.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/galego.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gd.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ge.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gp.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gt.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/gy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/hk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/hm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/hn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/hr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ht.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ht.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/hu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/id.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ie.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/il.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/im.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/in.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/io.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/iq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ir.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/is.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/it.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/je.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/jm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/jo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/jp.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ke.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ki.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/km.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kp.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ky.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/kz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/la.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/li.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ls.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/lv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ly.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ma.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/md.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/me.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ml.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mp.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mq.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ms.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mx.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/my.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/mz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/na.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ne.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ng.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ni.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ni.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/no.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/np.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/nz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/om.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pa.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pe.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pf.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ph.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ps.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/pw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/py.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/qa.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/re.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ro.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/rs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ru.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/rw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sa.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sd.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/se.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/si.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sj.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/so.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ss.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/st.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sv.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sx.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/sz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/td.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/th.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tj.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/to.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tr.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tv.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/tz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ua.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ug.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/uk.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/um.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/us.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/uy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/uz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/va.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/vc.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ve.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/vg.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/vi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/vn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/vu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/wf.alt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/wf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ws.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/ye.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/yt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/yu.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/za.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/zm.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/zw.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/flags/zz.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/plugins/bbpress/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/plugins/events-made-easy/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/plugins/types/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/plugins/watupro/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/themes/eventor/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/themes/magnium/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/i18n-config/themes/ta-pluton/i18n-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/img/arrowdown.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/img/arrowup.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/inc/i18n-interface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/inc/qtx_class_translator.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/inc/qtx_dbg.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-af.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ak.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-am.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ar.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-arq.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ary.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-as.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-az.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-az_TR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-azb.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ba.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bal.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bcc.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bel.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bg_BG.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bn_BD.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bre.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-bs_BA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ca.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ckb.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-co.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-cs_CZ.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-cy.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-da_DK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-de_CH.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-de_DE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-dv.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-dzo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-el.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_AU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_CA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_GB.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_NZ.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_US.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-en_ZA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-eo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_AR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_CL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_CO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_ES.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_MX.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_PE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_PR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-es_VE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-et.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-eu.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fa_AF.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fa_IR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fi.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fr_BE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fr_CA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fr_FR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-frp.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fuc.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fur.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-fy.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ga.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-gd.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-gl_ES.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-gn.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-gsw.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-gu.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-haw_US.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-haz.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-he_IL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-hi_IN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-hr.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-hu_HU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-hy.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-id_ID.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ido.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-is_IS.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-it_IT.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ja.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-jv_ID.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ka_GE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-kab.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-kin.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-kk.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-km.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-kn.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ko_KR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ky_KY.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-lb_LU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-li.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-lin.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-lo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-lt_LT.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-lv.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-me_ME.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-mg_MG.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-mk_MK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ml_IN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-mn.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-mr.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-mri.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ms_MY.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-my_MM.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-nb_NO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ne_NP.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-nl_BE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-nl_NL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-nn_NO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-oci.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ory.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-os.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-pa_IN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-pl_PL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ps.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-pt_BR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-pt_PT.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-rhg.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ro_RO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-roh.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ru_RU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ru_UA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-rue.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-rup_MK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sa_IN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sah.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sd_PK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-si_LK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sk_SK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sl_SI.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-so_SO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sq.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sr_RS.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-srd.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-su_ID.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sv_SE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-sw.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-szl.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ta_IN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ta_LK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-te.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tg.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-th.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tir.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tl.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tr_TR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tt_RU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tuk.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-tzm.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ug_CN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-uk.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-ur.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-uz_UZ.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-vi.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-wa.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-xmf.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-yor.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-zh_CN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-zh_HK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/language-names/language-zh_TW.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ar.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-az_AZ.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-bg_BG.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ca.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-cs_CZ.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-da_DK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-de_DE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-el.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-el_GR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-eo.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-es_CA.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-es_ES.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-fr_FR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-hr.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-hr_HR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-hu_HU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-id_ID.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-it_IT.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ja.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-mk_MK.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ms_MY.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-nl_NL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-pl_PL.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-pt_BR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-pt_PT.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ro_RO.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-ru_RU.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-sr_RS.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-sv_SE.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-tr_TR.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/qtranslate-zh_CN.mo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/lang/translators-notes.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/license.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_compatibility.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_core.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_frontend.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_hooks.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_options.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_utils.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/qtranslate_widget.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/readme.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/wp-content/plugins/qtranslate-x/screenshot-7.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php" beforeDir="false" afterPath="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php" afterDir="false" />
     </list>
     <ignored path="wp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -559,11 +27,61 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="nlyd-student.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php">
+      <file leaf-file-name="functions.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="11" column="94" selection-start-line="11" selection-start-column="47" selection-end-line="11" selection-end-column="94" />
+            <state relative-caret-position="972">
+              <caret line="937" column="139" selection-start-line="937" selection-start-column="139" selection-end-line="937" selection-end-column="139" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-brainpower.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="673">
+              <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-match_student.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-732">
+              <caret line="1055" column="66" lean-forward="true" selection-start-line="1055" selection-start-column="66" selection-end-line="1055" selection-end-column="66" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-student-matchs.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="807">
+              <caret line="442" column="59" lean-forward="true" selection-start-line="442" selection-start-column="59" selection-end-line="442" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="matchDetail.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2592" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nlyd-match-zh_CN.po" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/languages/nlyd-match-zh_CN.po">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="393">
+              <caret line="38" column="10" selection-start-line="38" selection-start-column="7" selection-end-line="38" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -573,81 +91,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="513">
               <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-match_student.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1053">
-              <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="userCenter.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-student-ajax.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="656">
-              <caret line="3488" lean-forward="true" selection-start-line="3488" selection-end-line="3488" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="l10n.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-includes/l10n.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="621">
-              <caret line="1022" column="52" lean-forward="true" selection-start-line="1022" selection-start-column="52" selection-end-line="1022" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="l10n.php" pinned="false" current-in-tab="false">
-        <entry file="file://F:/备份/code/betazg/l10n.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27027">
-              <caret line="1007" selection-start-line="1007" selection-end-line="1007" />
               <folding>
-                <element signature="n#wp_dropdown_languages#0;n#!!top" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="functions.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-includes/functions.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94041">
-              <caret line="3487" column="26" selection-start-line="3487" selection-start-column="26" selection-end-line="3487" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Core.php" pinned="false" current-in-tab="false">
-        <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/Core/Core.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15282">
-              <caret line="566" column="24" selection-start-line="566" selection-start-column="9" selection-end-line="566" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-student-signs.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-signs.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5184">
-              <caret line="198" column="43" lean-forward="true" selection-start-line="198" selection-start-column="43" selection-end-line="198" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -663,13 +111,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get_score_ranking</find>
-      <find>准备页面</find>
-      <find>initialMatch()</find>
-      <find>if (!wp_verify_nonce($_POST['_wpnonce']</find>
-      <find>排名</find>
-      <find>matchWaitting(</find>
-      <find>答案</find>
       <find>answerLog</find>
       <find>json_encode</find>
       <find>系统</find>
@@ -693,6 +134,13 @@
       <find>用户未成功</find>
       <find>用户未</find>
       <find>wp_dropdown_languages</find>
+      <find>zh</find>
+      <find>报名中</find>
+      <find>脑力健将</find>
+      <find>match_bonus</find>
+      <find>aaaaaaaaaaaa</find>
+      <find>排名</find>
+      <find>info</find>
     </findStrings>
     <replaceStrings>
       <replace>$title</replace>
@@ -713,6 +161,8 @@
       <dir>D:\application\wamp\www\nlyd\wp-content\plugins\nlyd-student\Public\js</dir>
       <dir>D:\application\wamp\www\nlyd\wp-content\plugins\nlyd-student\View</dir>
       <dir>D:\application\wamp\www\nlyd\wp-content\plugins\nlyd-student\Controller</dir>
+      <dir>D:\application\wamp\www\nlyd\wp-content\plugins\nlyd-match\Controller</dir>
+      <dir>D:\application\wamp\www\nlyd\wp-content\plugins\nlyd-match</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -721,7 +171,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/wp-includes/library/TwentyFour.class.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Public/js/matchs/leavePage.js" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/secure.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-interface/nlyd-interface.php" />
@@ -734,9 +183,7 @@
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match-ajax.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-answer-log.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/public/my-404.php" />
-        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/conf/create_table.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/languages.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-waitting.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-Rule.php" />
@@ -767,11 +214,14 @@
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-safety.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/nlyd-student.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-signs.php" />
-        <option value="$PROJECT_DIR$/wp-includes/l10n.php" />
-        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" />
         <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/languages.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php" />
+        <option value="$PROJECT_DIR$/wp-includes/l10n.php" />
+        <option value="$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php" />
+        <option value="$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php" />
       </list>
     </option>
   </component>
@@ -864,7 +314,20 @@
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="nlyd-student" type="462c0819:PsiDirectoryNode" />
               <item name="View" type="462c0819:PsiDirectoryNode" />
-              <item name="account" type="462c0819:PsiDirectoryNode" />
+              <item name="matchs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
+              <item name="nlyd" type="462c0819:PsiDirectoryNode" />
+              <item name="wp-content" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="dt-armada-child" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="nlyd" type="b2602c69:ProjectViewProjectNode" />
@@ -1016,35 +479,7 @@
       <workItem from="1539427417873" duration="170000" />
       <workItem from="1539564823400" duration="15096000" />
       <workItem from="1539651203953" duration="17931000" />
-      <workItem from="1539739601995" duration="295000" />
-    </task>
-    <task id="LOCAL-00170" summary="比赛列表增加字段">
-      <created>1535110012624</created>
-      <option name="number" value="00170" />
-      <option name="presentableId" value="LOCAL-00170" />
-      <option name="project" value="LOCAL" />
-      <updated>1535110012624</updated>
-    </task>
-    <task id="LOCAL-00171" summary="减少教练列表和详情查询类别查询语句">
-      <created>1535159916645</created>
-      <option name="number" value="00171" />
-      <option name="presentableId" value="LOCAL-00171" />
-      <option name="project" value="LOCAL" />
-      <updated>1535159916645</updated>
-    </task>
-    <task id="LOCAL-00172" summary="1">
-      <created>1535166402778</created>
-      <option name="number" value="00172" />
-      <option name="presentableId" value="LOCAL-00172" />
-      <option name="project" value="LOCAL" />
-      <updated>1535166402778</updated>
-    </task>
-    <task id="LOCAL-00173" summary="1">
-      <created>1535331574543</created>
-      <option name="number" value="00173" />
-      <option name="presentableId" value="LOCAL-00173" />
-      <option name="project" value="LOCAL" />
-      <updated>1535331574543</updated>
+      <workItem from="1539739601995" duration="5148000" />
     </task>
     <task id="LOCAL-00174" summary="1">
       <created>1535332711419</created>
@@ -1361,11 +796,39 @@
       <option name="project" value="LOCAL" />
       <updated>1539668566292</updated>
     </task>
-    <option name="localTasksCounter" value="219" />
+    <task id="LOCAL-00219" summary="10-17 1">
+      <created>1539739929756</created>
+      <option name="number" value="00219" />
+      <option name="presentableId" value="LOCAL-00219" />
+      <option name="project" value="LOCAL" />
+      <updated>1539739929756</updated>
+    </task>
+    <task id="LOCAL-00220" summary="10-17 2">
+      <created>1539741549798</created>
+      <option name="number" value="00220" />
+      <option name="presentableId" value="LOCAL-00220" />
+      <option name="project" value="LOCAL" />
+      <updated>1539741549798</updated>
+    </task>
+    <task id="LOCAL-00221" summary="10-17 3">
+      <created>1539742134109</created>
+      <option name="number" value="00221" />
+      <option name="presentableId" value="LOCAL-00221" />
+      <option name="project" value="LOCAL" />
+      <updated>1539742134109</updated>
+    </task>
+    <task id="LOCAL-00222" summary="10-17 3 用户列表修复">
+      <created>1539742388435</created>
+      <option name="number" value="00222" />
+      <option name="presentableId" value="LOCAL-00222" />
+      <option name="project" value="LOCAL" />
+      <updated>1539742388435</updated>
+    </task>
+    <option name="localTasksCounter" value="223" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1402260000" />
+    <option name="totallyTimeSpent" value="1407113000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1380,17 +843,17 @@
     <frame x="-8" y="-8" width="2576" height="1426" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.9709924" visible="true" weight="0.26947537" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.26412213" />
       <window_info anchor="bottom" id="调试" order="7" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32900763" />
-      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info id="Structure" order="1" sideWeight="0.029007634" side_tool="true" weight="0.15117188" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="运行" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.9709924" visible="true" weight="0.26947537" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info id="Structure" order="1" sideWeight="0.029007634" side_tool="true" weight="0.15117188" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="找到" order="8" weight="0.32977098" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1443,10 +906,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="排名组别" />
-    <MESSAGE value="导出排名文件样式" />
-    <MESSAGE value="日常" />
-    <MESSAGE value="import" />
     <MESSAGE value="返回支付地址时判断登录" />
     <MESSAGE value="报名支付请登录" />
     <MESSAGE value="支付状态" />
@@ -1468,7 +927,11 @@
     <MESSAGE value="v2.0.8.3" />
     <MESSAGE value="10-16 1 student-ajax 语言包" />
     <MESSAGE value="10-16 3 student控制器除训练语言包" />
-    <option name="LAST_COMMIT_MESSAGE" value="10-16 3 student控制器除训练语言包" />
+    <MESSAGE value="10-17 1" />
+    <MESSAGE value="10-17 2" />
+    <MESSAGE value="10-17 3" />
+    <MESSAGE value="10-17 3 用户列表修复" />
+    <option name="LAST_COMMIT_MESSAGE" value="10-17 3 用户列表修复" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1483,41 +946,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchList.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4058">
-          <caret line="255" column="37" selection-start-line="255" selection-start-column="37" selection-end-line="255" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/payError.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="16" column="65" lean-forward="true" selection-start-line="16" selection-start-column="65" selection-end-line="16" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-numberBattle.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="191" column="25" lean-forward="true" selection-start-line="191" selection-start-column="25" selection-end-line="191" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-pokerRelay.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3934">
-          <caret line="165" column="25" lean-forward="true" selection-start-line="165" selection-start-column="25" selection-end-line="165" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/ready-reading.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="845">
-          <caret line="142" column="25" selection-start-line="142" selection-start-column="25" selection-end-line="142" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/match-answer.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -1655,13 +1083,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7606">
-          <caret line="1853" column="61" lean-forward="true" selection-start-line="1853" selection-start-column="35" selection-end-line="1853" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-news.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1571" />
@@ -1734,20 +1155,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1053">
-          <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-signs.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5184">
@@ -1786,25 +1193,91 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wp-includes/l10n.php">
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/languages.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="621">
-          <caret line="1022" column="52" lean-forward="true" selection-start-line="1022" selection-start-column="52" selection-end-line="1022" selection-end-column="52" />
+        <state relative-caret-position="567">
+          <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-ajax.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="656">
-          <caret line="3488" lean-forward="true" selection-start-line="3488" selection-end-line="3488" />
+        <state relative-caret-position="749">
+          <caret line="3493" column="8" selection-start-line="3493" selection-start-column="8" selection-end-line="3493" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/account/userCenter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="-2538">
+          <caret line="71" column="73" selection-start-line="71" selection-start-column="73" selection-end-line="71" selection-end-column="73" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-includes/l10n.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="1216" column="17" selection-start-line="1216" selection-start-column="17" selection-end-line="1216" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/nlyd-match.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/themes/dt-armada-child/functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="937" column="139" selection-start-line="937" selection-start-column="139" selection-end-line="937" selection-end-column="139" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-brainpower.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="673">
+          <caret line="88" column="9" lean-forward="true" selection-start-line="88" selection-start-column="9" selection-end-line="88" selection-end-column="9" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/languages/nlyd-match-zh_CN.po">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="38" column="10" selection-start-line="38" selection-start-column="7" selection-end-line="38" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-match/Controller/class-match_student.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-732">
+          <caret line="1055" column="66" lean-forward="true" selection-start-line="1055" selection-start-column="66" selection-end-line="1055" selection-end-column="66" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/Controller/class-student-matchs.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="807">
+          <caret line="442" column="59" lean-forward="true" selection-start-line="442" selection-start-column="59" selection-end-line="442" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wp-content/plugins/nlyd-student/View/matchs/matchDetail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2592" />
       </provider>
     </entry>
   </component>
