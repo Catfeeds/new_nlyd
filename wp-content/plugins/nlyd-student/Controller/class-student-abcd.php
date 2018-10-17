@@ -333,7 +333,7 @@ class Student_Abcd extends Student_Home
 
         }*/
 
-        //print_r($match);
+
         //获取比赛项目
         $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
         //print_r($project);
@@ -349,7 +349,8 @@ class Student_Abcd extends Student_Home
         //判断选手是否报名
         $sql3 = "select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} ";
         $order_id = $wpdb->get_var($sql3);
-        if(!empty($order_id)) $match['is_me'] == 'y';
+
+        if(!empty($order_id)) $match['is_me'] = 'y';
 
         if($match['is_me'] == 'y' && $match['match_status'] == -2){
             $start = reset($this->project_order_array);
@@ -358,6 +359,7 @@ class Student_Abcd extends Student_Home
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
         }
+
         $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
@@ -1965,6 +1967,7 @@ class Student_Abcd extends Student_Home
                   left join {$wpdb->prefix}posts b on a.match_id = b.ID
                   where match_id = {$match_id} ";
         $match = $wpdb->get_row($sql,ARRAY_A);
+
         return $match;
 
     }

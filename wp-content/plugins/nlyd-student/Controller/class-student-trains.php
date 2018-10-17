@@ -235,13 +235,13 @@ class Student_Trains extends Student_Home
                     $this->get_404('参数错误');
                     return;
                 }
-                if(!empty($_COOKIE['train_match'])){
+                /*if(!empty($_COOKIE['train_match'])){
 
                     $match_array = json_decode(stripslashes($_COOKIE['train_match']),true);
                     $questions_answer = $match_array['questions_answer'];
                     $match_questions = $match_array['match_questions'];
                     //print_r($match_array);
-                }else{
+                }else{*/
 
                     //获取比赛题目
                     $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -264,9 +264,10 @@ class Student_Trains extends Student_Home
                         }
                         $match_questions = array_unique(array_column($rows,'post_title','ID'));
                     }
-                }
+                //}
                 $data['questions_answer'] = $questions_answer;
                 $data['match_questions'] = $match_questions;
+                $data['count_down'] = $_GET['surplus_time']-1;
                 //print_r($questions_answer);
                 //print_r($match_questions);
                 break;

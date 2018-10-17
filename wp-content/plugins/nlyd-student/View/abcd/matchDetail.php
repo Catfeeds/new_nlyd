@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!-- 比赛详情 -->
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
@@ -131,7 +134,7 @@
                     </div>
                 </div>
             </div>
-        </div>           
+        </div>
     </div>
 </div>
 <!-- 比赛详情报名选手列表获取 -->
@@ -228,3 +231,9 @@ jQuery(function($) {
     });
 })
 </script>
+<?php
+    $info=ob_get_contents(); //得到缓冲区的内容并且赋值给$info
+    $file=fopen('E:\php\tool\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\public\cache\test.php','w'); //打开文件info.txt
+    fwrite($file,$info); //写入信息到info.txt
+    fclose($file); //关闭文件info.txt
+?>
