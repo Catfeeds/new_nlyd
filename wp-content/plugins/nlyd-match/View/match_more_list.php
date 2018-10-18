@@ -44,8 +44,8 @@
                         <td class="column-title"><?=(strtotime($v['end_time'])-strtotime($v['start_time']))/60?></td>
                         <td class="column-title"><?=$v['status_cn']?></td>
                         <td class="column-title">
-                            <span class="update_more" data-id="<?=$v['id']?>">编辑</span>/
-                            <span class="remove_more" data-id="<?=$v['id']?>">删除</span>
+                            <button type="button" class="update_more" data-id="<?=$v['id']?>">编辑</button>/
+                            <button type="button" class="remove_more" data-id="<?=$v['id']?>">删除</button>
                         </td>
                     </tr>
                     <?php }?>
@@ -149,6 +149,32 @@
             },'json')
             return false;
         });
+        layui.use('layer', function(){ //独立版的layer无需执行这一句
+            
+            // layer.open({
+            //     type: 1
+            //     ,maxWidth:300
+            //     ,title: '提示' //不显示标题栏
+            //     ,skin:'nl-box-skin'
+            //     ,id: 'certification' //防止重复弹出
+            //     ,content: '<div class="box-conent-wrapper">111</div>'
+            //     ,btn: ['按错了','提交',  ]
+            //     ,success: function(layero, index){
+            //     }
+            //     ,yes: function(index, layero){
+            //         layer.closeAll();
+            //     }
+            //     ,btn2: function(index, layero){
+            //         //按钮【按钮二】的回调
+            //         layer.closeAll();
+            //         submit(time,1)
+            //     }
+            //     ,closeBtn:2
+            //     ,btnAagn: 'c' //按钮居中
+            //     ,shade: 0.3 //遮罩
+            //     ,isOutAnim:true//关闭动画
+            // });
 
+        });
     });
 </script>

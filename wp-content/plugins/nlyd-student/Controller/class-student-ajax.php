@@ -268,27 +268,11 @@ class Student_Ajax
      */
     public function answer_submit(){
 
-        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_answer_submit_code_nonce') ) {
-            wp_send_json_error(array('info'=>'非法操作'));
-        }*/
 
-        ini_set('post_max_size','10M');
+        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        global $wpdb,$current_user;
 
-        if(empty($_POST['match_more'])) $_POST['match_more'] = 1;
-
-        // var_dump($_POST['match_id']);
-        // var_dump($_POST['project_id']);
-        // var_dump($_POST['match_more']);
-        // var_dump($_POST['match_action']);
-        // var_dump($_POST['surplus_time']);
-        // print_r($_POST);
-        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) || empty($_POST['match_action']) || !isset($_POST['surplus_time'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
-        if(!empty($_POST['my_answer'])){
-            if(!is_array($_POST['my_answer'])) wp_send_json_error(array('info'=>__('答案请以数组格式提交', 'nlyd-student')));
-            $my_answer = $_POST['my_answer'];
-        }else{
-            $my_answer = array();
-        }
+        ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
         $sql = "select answer_status,questions_answer
@@ -299,57 +283,45 @@ class Student_Ajax
         //print_r($sql);
         if(empty($row)) wp_send_json_error(array('info'=> __('数据错误', 'nlyd-student')));
         if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
+
         //计算成绩
-        //print_r($_POST['match_action']);die;
-        //var_dump($_POST);die;
-        $update_arr = array();
-        switch ($_POST['match_action']){
-            case 'subjectNumberBattle':    //数字争霸
-                $questions_answer = !empty($_POST['match_questions']) ? $_POST['match_questions'] : json_decode($row['questions_answer'],true);
-                $len = count($questions_answer);
-                //print_r($questions_answer);
 
-                $error_len = count(array_diff_assoc($questions_answer,$my_answer));
-                $my_score = ($len-$error_len)*12;
+        switch ($_POST['project_type']){
+            case 'szzb':
+            case 'pkjl':
 
-                if ($error_len == 0){
-                    $my_score += $_POST['surplus_time'] * 1;
+                if(!empty($_POST['my_answer'])){
+
+                    $len = count($_POST['train_questions']);
+
+                    $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
+
+                    $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+
+                    $my_score = ($len-$error_len)*$score;
+
+                    if ($error_len == 0 && !empty($_POST['my_answer'])){
+                        $my_score += $_POST['surplus_time'] * 1;
+                    }
+                }else{
+                    $my_score = 0;
                 }
 
-                $update_arr['match_questions'] = json_encode($questions_answer);
-                $update_arr['questions_answer'] = json_encode($questions_answer);
-
                 break;
-            case 'subjectPokerRelay':    //扑克接力
-                $questions_answer = !empty($_POST['match_questions']) ? $_POST['match_questions'] : json_decode($row['questions_answer'],true);
-                $len = count($questions_answer);
-                //print_r($questions_answer);
-
-                $error_len = count(array_diff_assoc($questions_answer,$my_answer));
-                $my_score = ($len-$error_len)*18;
-
-                if ($error_len == 0){
-                    $my_score += $_POST['surplus_time'] * 1;
-                }
-
-                $update_arr['match_questions'] = json_encode($questions_answer);
-                $update_arr['questions_answer'] = json_encode($questions_answer);
-
-                break;
-                break;
-            case 'subjectfastScan':    //快眼扫描
-            case 'subjectFastCalculation':    //正向速算
-            case 'subjectFastReverse': //逆向速算
+            case 'kysm':
+            case 'zxss':
+            case 'nxss':
 
                 $data_arr = $_POST['my_answer'];
 
                 if(!empty($data_arr)){
                     $match_questions = array_column($data_arr,'question');
                     $questions_answer = array_column($data_arr,'rights');
-                    $my_answer = array_column($data_arr,'yours');
+                    $_POST['my_answer'] = array_column($data_arr,'yours');
                 }
-                if($_POST['match_action'] == 'subjectFastReverse'){
+                if($_POST['project_type'] == 'nxss'){
                     $isRight = array_column($data_arr,'isRight');
+
                     $success_len = 0;
                     if(!empty($isRight)){
                         $count_value = array_count_values($isRight);
@@ -364,17 +336,20 @@ class Student_Ajax
                 }else{
 
                     $len = count($match_questions);
-                    $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
                     $my_score = ($len-$error_len)*10;
                 }
 
-                //print_r($questions_answer);die;
-                $update_arr['match_questions'] = json_encode($match_questions);
-                $update_arr['questions_answer'] = json_encode($questions_answer);
+
+                $_POST['train_questions'] = $match_questions;
+                $_POST['train_answer'] = $questions_answer;
+
                 break;
-            case 'subjectReading': //文章速读
-                //var_dump($_POST);die;
-                $questions_answer = json_decode($row['questions_answer'],true);
+            case 'wzsd':
+                //print_r($_POST);die;
+                if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                //print_r($_POST);die;
+                $questions_answer = $_POST['train_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
 
@@ -386,52 +361,44 @@ class Student_Ajax
                         }
                     }
 
-                    if(isset($my_answer[$k])){
-                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    if(isset($_POST['my_answer'][$k])){
+                        if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
                     }
                 }
                 $my_score = $success_len * 23;
                 if ($success_len == $len){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
-                $redis = new Redis();
-                $redis->connect('127.0.0.1',6379,1);
-                $redis->auth('leo626');
-
-                if(!empty($redis->get('wzsd_question'.$current_user->ID))){
-                    $result = json_decode($redis->get('wzsd_question'.$current_user->ID),true);
-                    $post_id = $result->ID;
-                    $redis->del('wzsd_question'.$current_user->ID);
-                }else{
-
-                    $result = json_decode($row['questions_answer'],true);
-                    $key = array_keys($result);
-                    $sql = "select post_parent from {$wpdb->prefix}posts where ID = {$key[0]}";
-                    $post_id = $wpdb->get_var($sql);
-
-                }
-
-                //修改其分类
-                $a = wp_set_object_terms( $post_id, array('test-question') ,'question_genre');
-                //var_dump($a);die;
                 break;
             default:
-                wp_send_json_error(array('info'=>__('未知错误', 'nlyd-student')));
                 break;
         }
-        $update_arr['answer_status'] = 1;
-        $update_arr['my_answer'] = json_encode($my_answer);
-        $update_arr['surplus_time'] = $_POST['surplus_time'];
-        $update_arr['my_score'] = $my_score;
-        $update_arr['submit_type'] = isset($_POST['submit_type']) ? $_POST['submit_type'] : 1;
-        $update_arr['leave_page_time'] = isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '';
-        $update_arr['created_microtime'] = str2arr(microtime(),' ')[0];
-        /*print_r($update_arr);
-        die;*/
-        $result = $wpdb->update($wpdb->prefix.'match_questions',$update_arr,array('user_id'=>$current_user->ID,'match_id'=>$_POST['match_id'],'project_id'=>$_POST['project_id'],'match_more'=>$_POST['match_more']));
+
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'match_id'=>$_POST['match_id'],
+            'project_id'=>$_POST['project_id'],
+            'match_more'=>$_POST['match_more'],
+            'match_questions'=>json_encode($_POST['train_questions']),
+            'questions_answer'=>json_encode($_POST['train_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
+            'surplus_time'=>$_POST['surplus_time'],
+            'my_score'=>$my_score,
+            'answer_status'=>1,
+            'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
+            'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
+            'created_time'=>get_time('mysql'),
+            'created_microtime'=>str2arr(microtime(),' ')[0],
+        );
+
+
+        // print_r($insert);
+        // die;
+        $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
+
         if($result){
-            //wp_send_json_success(array('info'=>'提交完成','url'=>home_url('matchs/'.$_POST['match_action'].'/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
+            $log_id = $wpdb->insert_id;
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id)));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
         }
@@ -1351,7 +1318,7 @@ class Student_Ajax
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
             $orders[$k]['nationality'] = $user_nationality_pic;
-            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : 'CHN' ;
+            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
             $orders[$k]['nationality_short'] = $nationality_short;
 
         }
@@ -1504,7 +1471,24 @@ class Student_Ajax
         }*/
         
         $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(empty($rows)){
+            $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
+                a.post_content,
+                DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
+                if(b.match_address = '','--',b.match_address) match_address,
+                b.match_cost,b.entry_end_time,b.match_status ,c.user_id
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
+                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
+                where {$where} order by {$order} limit $start,$pageSize;
+                ";
+            //print_r($sql);
+            /*if($current_user->ID == 66){
+                    print_r($sql);
+            }*/
 
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+        }
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));

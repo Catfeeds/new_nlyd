@@ -79,10 +79,10 @@ jQuery(function($) {
     //     }, 1000);
     // }
     var questions_answer=[];
-    var leavePage= $.GetCookie('train_match','1');
-    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){//记忆成功
-        questions_answer=leavePage['train_questions'];
-        $('.count_down').attr('data-seconds',leavePage['count_down'])
+    var ready_poker= $.GetCookie('train_match','1');
+    if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){//记忆成功
+        questions_answer=ready_poker['train_questions'];
+        $('.count_down').attr('data-seconds',ready_poker['count_down'])
     }else{//未获取到比赛题目
         $.alerts('未检测到题目信息')
     }

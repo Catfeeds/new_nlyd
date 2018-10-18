@@ -1313,7 +1313,7 @@ if(!class_exists('MatchController')){
          * 默认公用js/css引入
          */
         public function scripts_default(){
-            //var_dump($this->post_type);
+            // var_dump($this->post_type);
             wp_register_style( 'admin_index_css',match_css_url.'index.css','', leo_match_version  );
             wp_enqueue_style( 'admin_index_css' );
             //in_array($this->post_type,array('team','match','genre'));

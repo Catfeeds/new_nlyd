@@ -1,28 +1,9 @@
-
-<div class="layui-fluid noCopy">
-    <div class="layui-row">
-        <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
-        <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
-        </header>
-            <div class="layui-row nl-border nl-content">
-                <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
-                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
-                        </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
-                    </div>
-                    
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                        <div class="matching-row-label">辅助操作</div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev"><?=__('前移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="next"><?=__('后移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="del"><?=__('删 除', 'nlyd-student')?></div>
+                            <div class="matching-btn" id="prev">前移1位</div>
+                            <div class="matching-btn" id="next">后移1位</div>
+                            <div class="matching-btn" id="del">删 除</div>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -36,30 +17,53 @@
                     </div>
 
                     <div class="porker-color">
-                        <?php foreach ($list as $k => $v){ ?>
-                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                        <?php } ?>
+                        <br />
+<font size='1'><table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: Invalid argument supplied for foreach() in D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\matching-pokerRelay.php on line <i>47</i></th></tr>
+<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0000</td><td bgcolor='#eeeeec' align='right'>407800</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='D:\wamp64\www\nlyd\index.php' bgcolor='#eeeeec'>...\index.php<b>:</b>0</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.0000</td><td bgcolor='#eeeeec' align='right'>408088</td><td bgcolor='#eeeeec'>require( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-blog-header.php'</font> )</td><td title='D:\wamp64\www\nlyd\index.php' bgcolor='#eeeeec'>...\index.php<b>:</b>18</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>3</td><td bgcolor='#eeeeec' align='center'>0.1362</td><td bgcolor='#eeeeec' align='right'>7031592</td><td bgcolor='#eeeeec'>require_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-includes\template-loader.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-blog-header.php' bgcolor='#eeeeec'>...\wp-blog-header.php<b>:</b>19</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>4</td><td bgcolor='#eeeeec' align='center'>0.1496</td><td bgcolor='#eeeeec' align='right'>7012904</td><td bgcolor='#eeeeec'>include( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\themes\dt-armada\page.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-includes\template-loader.php' bgcolor='#eeeeec'>...\template-loader.php<b>:</b>74</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>5</td><td bgcolor='#eeeeec' align='center'>0.1736</td><td bgcolor='#eeeeec' align='right'>7302168</td><td bgcolor='#eeeeec'>the_content(  )</td><td title='D:\wamp64\www\nlyd\wp-content\themes\dt-armada\page.php' bgcolor='#eeeeec'>...\page.php<b>:</b>31</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>6</td><td bgcolor='#eeeeec' align='center'>0.1738</td><td bgcolor='#eeeeec' align='right'>7302136</td><td bgcolor='#eeeeec'>apply_filters(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\post-template.php' bgcolor='#eeeeec'>...\post-template.php<b>:</b>240</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>7</td><td bgcolor='#eeeeec' align='center'>0.1738</td><td bgcolor='#eeeeec' align='right'>7302536</td><td bgcolor='#eeeeec'>WP_Hook->apply_filters(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\plugin.php' bgcolor='#eeeeec'>...\plugin.php<b>:</b>203</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>8</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7303336</td><td bgcolor='#eeeeec'>do_shortcode(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\class-wp-hook.php' bgcolor='#eeeeec'>...\class-wp-hook.php<b>:</b>286</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>9</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7307504</td><td bgcolor='#eeeeec'><a href='http://www.php.net/function.preg-replace-callback' target='_new'>preg_replace_callback</a>
+(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>197</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>10</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7308216</td><td bgcolor='#eeeeec'>do_shortcode_tag(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>197</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>11</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7308216</td><td bgcolor='#eeeeec'>Student_Abcd->answerMatch(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>319</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>12</td><td bgcolor='#eeeeec' align='center'>0.1751</td><td bgcolor='#eeeeec' align='right'>7298480</td><td bgcolor='#eeeeec'>load_view_template(  )</td><td title='D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\Controller\class-student-abcd.php' bgcolor='#eeeeec'>...\class-student-abcd.php<b>:</b>676</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>13</td><td bgcolor='#eeeeec' align='center'>0.1753</td><td bgcolor='#eeeeec' align='right'>7299352</td><td bgcolor='#eeeeec'>include_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\match-answer.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-includes\functions.php' bgcolor='#eeeeec'>...\functions.php<b>:</b>6294</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>14</td><td bgcolor='#eeeeec' align='center'>0.1757</td><td bgcolor='#eeeeec' align='right'>7300296</td><td bgcolor='#eeeeec'>require_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\matching-pokerRelay.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\match-answer.php' bgcolor='#eeeeec'>...\match-answer.php<b>:</b>16</td></tr>
+</table></font>
                     </div>
 
                     <div class="porker-choose-zoo">
                         <div class="choose-zoo">
                             <div class="choose-window">
-                                <?php foreach ($list as $k => $v){ ?>
-                                    <div class="choose-wrapper <?= $k=='spade'?'active':''?> <?=$k?>">
-                                        <?php foreach ($v['content'] as $val){ ?>
-                                            <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
-                                                <div class="small poker-detail poker-top">
-                                                    <div class="poker-name"><?=$val?></div>
-                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                                </div>
-                                                <div class="small poker-detail poker-bottom">
-                                                    <div class="poker-name"><?=$val?></div>
-                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
-                                <?php } ?>
+                                <br />
+<font size='1'><table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: Invalid argument supplied for foreach() in D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\matching-pokerRelay.php on line <i>55</i></th></tr>
+<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0000</td><td bgcolor='#eeeeec' align='right'>407800</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='D:\wamp64\www\nlyd\index.php' bgcolor='#eeeeec'>...\index.php<b>:</b>0</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.0000</td><td bgcolor='#eeeeec' align='right'>408088</td><td bgcolor='#eeeeec'>require( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-blog-header.php'</font> )</td><td title='D:\wamp64\www\nlyd\index.php' bgcolor='#eeeeec'>...\index.php<b>:</b>18</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>3</td><td bgcolor='#eeeeec' align='center'>0.1362</td><td bgcolor='#eeeeec' align='right'>7031592</td><td bgcolor='#eeeeec'>require_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-includes\template-loader.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-blog-header.php' bgcolor='#eeeeec'>...\wp-blog-header.php<b>:</b>19</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>4</td><td bgcolor='#eeeeec' align='center'>0.1496</td><td bgcolor='#eeeeec' align='right'>7012904</td><td bgcolor='#eeeeec'>include( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\themes\dt-armada\page.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-includes\template-loader.php' bgcolor='#eeeeec'>...\template-loader.php<b>:</b>74</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>5</td><td bgcolor='#eeeeec' align='center'>0.1736</td><td bgcolor='#eeeeec' align='right'>7302168</td><td bgcolor='#eeeeec'>the_content(  )</td><td title='D:\wamp64\www\nlyd\wp-content\themes\dt-armada\page.php' bgcolor='#eeeeec'>...\page.php<b>:</b>31</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>6</td><td bgcolor='#eeeeec' align='center'>0.1738</td><td bgcolor='#eeeeec' align='right'>7302136</td><td bgcolor='#eeeeec'>apply_filters(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\post-template.php' bgcolor='#eeeeec'>...\post-template.php<b>:</b>240</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>7</td><td bgcolor='#eeeeec' align='center'>0.1738</td><td bgcolor='#eeeeec' align='right'>7302536</td><td bgcolor='#eeeeec'>WP_Hook->apply_filters(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\plugin.php' bgcolor='#eeeeec'>...\plugin.php<b>:</b>203</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>8</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7303336</td><td bgcolor='#eeeeec'>do_shortcode(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\class-wp-hook.php' bgcolor='#eeeeec'>...\class-wp-hook.php<b>:</b>286</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>9</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7307504</td><td bgcolor='#eeeeec'><a href='http://www.php.net/function.preg-replace-callback' target='_new'>preg_replace_callback</a>
+(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>197</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>10</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7308216</td><td bgcolor='#eeeeec'>do_shortcode_tag(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>197</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>11</td><td bgcolor='#eeeeec' align='center'>0.1740</td><td bgcolor='#eeeeec' align='right'>7308216</td><td bgcolor='#eeeeec'>Student_Abcd->answerMatch(  )</td><td title='D:\wamp64\www\nlyd\wp-includes\shortcodes.php' bgcolor='#eeeeec'>...\shortcodes.php<b>:</b>319</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>12</td><td bgcolor='#eeeeec' align='center'>0.1751</td><td bgcolor='#eeeeec' align='right'>7298480</td><td bgcolor='#eeeeec'>load_view_template(  )</td><td title='D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\Controller\class-student-abcd.php' bgcolor='#eeeeec'>...\class-student-abcd.php<b>:</b>676</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>13</td><td bgcolor='#eeeeec' align='center'>0.1753</td><td bgcolor='#eeeeec' align='right'>7299352</td><td bgcolor='#eeeeec'>include_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\match-answer.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-includes\functions.php' bgcolor='#eeeeec'>...\functions.php<b>:</b>6294</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>14</td><td bgcolor='#eeeeec' align='center'>0.1757</td><td bgcolor='#eeeeec' align='right'>7300296</td><td bgcolor='#eeeeec'>require_once( <font color='#00bb00'>'D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\matching-pokerRelay.php'</font> )</td><td title='D:\wamp64\www\nlyd\wp-content\plugins\nlyd-student\View\abcd\match-answer.php' bgcolor='#eeeeec'>...\match-answer.php<b>:</b>16</td></tr>
+</table></font>
                             </div>
                         </div>
                     </div>
@@ -68,34 +72,23 @@
         </div>           
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
+<input type="hidden" name="_wpnonce" id="inputSubmit" value="7bfcc3a473">
 
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var questions_answer=[];
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var matching_question= $.GetSession('matching_question','1');
-    console.log(matching_question)
-    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-        questions_answer=matching_question['questions_answer'];
-    }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
-    }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+    if(-222<=0){//进入页面判断时间是否结束
+        $.alerts('比赛结束');
         setTimeout(function() {
             submit(0,3)
         }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+        var D=d.day>0 ? d.day+'天' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
@@ -103,9 +96,9 @@ jQuery(function($) {
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
+                $.alerts('倒计时结束，即将提交答案')
             }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
+                $.alerts('比赛结束')
             }
             setTimeout(function() {
                 submit(0,3)
@@ -130,26 +123,20 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-
-                match_questions:questions_answer,
-                questions_answer:questions_answer,
-
+                match_id:765,
+                project_id:202,
+                match_more:1,
                 my_answer:my_answer,
                 match_action:'subjectPokerRelay',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
-            // console.log(data)
-            // return false;
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
@@ -178,7 +165,7 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
+            $.alerts('正在提交答案')
         }
     }
 layui.use(['layer'], function(){
@@ -192,11 +179,11 @@ layui.use(['layer'], function(){
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
+                ,title: '提示' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                ,btn: [ '<?=__('按错了', 'nlyd-student')?>', '<?=__('提交', 'nlyd-student')?>',]
+                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
+                ,btn: [ '按错了', '提交',]
                 ,success: function(layero, index){
                 }
                 ,yes: function(index, layero){
@@ -306,7 +293,7 @@ $('.choose-poker').each(function(e){
                             +'<div class="poker-type">'+i+'</div>'
                         +'</div>'
                         +'<div class="poker-logo">'
-                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                            +'<img src="http://127.0.0.1/nlyd/wp-content/plugins/nlyd-student/Public/css/image/nlyd-big.png">'
                         +'</div>'
                         +'<div class="poker-detail poker-bottom">'
                             +'<div class="poker-name">'+text+'</div>'

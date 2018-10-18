@@ -491,8 +491,8 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
+                match_id:$.Request('match_id'),
+                project_id:$.Request('project_id'),
                 match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
                 my_answer:ajaxData,
                 match_action:'subjectFastCalculation',

@@ -34,6 +34,11 @@ class Student_Abcd extends Student_Home
     public $end_project = '';
 
     /**
+     * @var 第一轮
+     */
+    public $start_project = '';
+
+    /**
      * @var 比赛别名
      */
     public $project_alias = '';
@@ -333,6 +338,7 @@ class Student_Abcd extends Student_Home
         $data['next_more_num'] = $project_more['more'];
         $data['current_project'] = $this->current_project;
         $data['end_project'] = $this->end_project;
+        $data['start_project'] = $this->start_project;
         $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
 
         $buffer_time = get_time()-strtotime($project_more['start_time']);
@@ -443,7 +449,7 @@ class Student_Abcd extends Student_Home
         }
 
 
-
+        //unset($_SESSION['count_down']);
 
         if(empty($_SESSION['count_down'])){
             $_SESSION['count_down'] = array(
@@ -452,6 +458,8 @@ class Student_Abcd extends Student_Home
                 'count_down_time'=>get_time()+ $project_more['use_time']*60,
             );
         }else{
+
+            //var_dump($_SESSION['count_down']);
 
             if($_SESSION['count_down']['match_title'] != $project_more['match_title'] || $_SESSION['count_down']['project_title'] != $project_more['project_title'] || get_time() > $_SESSION['count_down']['count_down_time']){
                 $_SESSION['count_down'] = array(
@@ -666,6 +674,7 @@ class Student_Abcd extends Student_Home
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
         $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
 
@@ -1784,6 +1793,9 @@ class Student_Abcd extends Student_Home
                 }
 
                 if($new_time <= $v['start_time'] ){
+                    if($new_time < $rows[0]['start_time']){
+                        $this->start_project = 'y';
+                    }
                     //print_r($v);
                     //$this->next_project = $rows[$k-1];
                     return $v;
