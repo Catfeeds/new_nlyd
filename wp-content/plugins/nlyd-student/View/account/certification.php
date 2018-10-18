@@ -21,6 +21,7 @@
                                     <div class="form-input-label"><div><?=__('国 籍', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
+                                    <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
                                     <!-- <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span> -->
                                     <span class="form-input-right" id="nationality_pic"><span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
                                 </div>
@@ -285,6 +286,7 @@ jQuery(document).ready(function($) {
                 var dom='<span class="fastbannerform__span f32 NOFLAG '+data[0]['src']+'"></span>'
                 $('#trigger4').val(data[0]['value'])
                 $('#src').val(data[0]['src'])
+                $('#short').val(data[0]['short'])
                 $('#nationality_pic').empty().html(dom)
                 // $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
@@ -388,6 +390,7 @@ jQuery(document).ready(function($) {
                 fd.append('nationality',data.field['nationality']);
                 fd.append('nationality_pic',data.field['nationality_pic']);
                 fd.append('birthday',data.field['birthday']);
+                fd.append('nationality_short',data.field['nationality_short']);
                 if(match_id!=null){
                     fd.append('match_id',match_id);
                 }else{

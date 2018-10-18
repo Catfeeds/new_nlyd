@@ -79,7 +79,7 @@
     color: #FFFFFF;
     cursor: pointer;
     position: absolute;
-    font-size: 0.14rem;
+    font-size: 0.12rem;
     text-align: center;
     font-weight: 500;
     text-transform: uppercase;
@@ -188,13 +188,20 @@ line-height:45px;
 }
 .getCodeBtn{
     position: absolute;
+    display: table;
+    width: 50px;
     top: 0;
     right: 20px;
     background: transparent;
     height: 45px;
-    line-height: 45px;
+    /* line-height: 45px; */
     padding: 0;
     border: none;
+}
+.getCodeBtn div{
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
 }
 .login-type{
     width: 100%;

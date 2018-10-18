@@ -42,7 +42,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
                                     <input type="tel" name="password" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
-                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19"><?=__('获取验证码', 'nlyd-student')?></a>
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="19"><div><?=__('获取验证码', 'nlyd-student')?></div></a>
                                 </div>
                             </div>
                             <p class="no-margin">
@@ -95,7 +95,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-input-inline">
                                     <input type="tel" name="verify_code" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
-                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" ><?=__('获取验证码', 'nlyd-student')?></a>
+                                    <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="16" ><div><?=__('获取验证码', 'nlyd-student')?></div></a>
                                 </div>
                             </div>
                             <div class="layui-form-item" >
@@ -133,7 +133,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="tel" name="verify_code" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input ">
-                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17"><?=__('获取验证码', 'nlyd-student')?></a>
+                                <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17"><div><?=__('获取验证码', 'nlyd-student')?></div></a>
                             </div>
                         </div>
                         <div class="layui-form-item">

@@ -371,6 +371,7 @@ a.form-input-row:hover{
     white-space:nowrap */
 }
 .form-input-label div{
+    font-size: 0.12rem;
     height: 55px;
     display: table-cell;
     vertical-align: middle;
@@ -379,9 +380,10 @@ a.form-input-row:hover{
 
 .nl-page-form input.nl-input,
 .nl-page-form div.nl-input{
+    font-size: 0.12rem!important;
     float: left;
-    width: -webkit-calc(100% - 153px);
-    width: calc(100% - 153px);
+    width: -webkit-calc(100% - 145px);
+    width: calc(100% - 145px);
     height: 54px;
     line-height: 54px;
     border:none;
@@ -401,13 +403,23 @@ a.form-input-row:hover{
     line-height: 20px;
 }
 .form-input-right{
-    display: block;
+    font-size: 0.12rem;
+    display: table;
     position: absolute;
     height: 55px;
+    width: 55px;
     text-align: center;
-    line-height: 55px;
+    /* line-height: 55px; */
     right: 0;
     top: 0;
+}
+.form-input-right div{
+    font-size: 0.12rem;
+    text-align: left;
+    height: 55px;
+    line-height: 20px;
+    display: table-cell;
+    vertical-align: middle;
 }
 .imgBox{
     display: flex;
@@ -783,7 +795,7 @@ p.share-font{
 }
 @media screen and (max-width: 1199px){
     .have-footer{
-        margin-bottom: 50px;
+        margin-bottom: 60px;
     }
     .have-bottom{
         padding-bottom: 80px;
@@ -943,7 +955,7 @@ p.share-font{
 .f32.bz { background-position: 0 -288px; }
 .f32.ca, .f32.CAD, .f32.CAN { background-position: 0 -320px; }
 .f32.cc { background-position: 0 -352px; }
-.f32.dd, .f32.COD { background-position: 0 -384px; }
+.f32.cd, .f32.COD { background-position: 0 -384px; }
 .f32.cf { background-position: 0 -416px; }
 .f32.cg { background-position: 0 -448px; }
 .f32.ch, .f32.CHF, .f32.CHE { background-position: 0 -480px; }
@@ -1001,7 +1013,7 @@ p.share-font{
 .f32.gy { background-position: 0 -2144px; }
 .f32.hk, .f32.HKD { background-position: 0 -2176px; }
 .f32.hn { background-position: 0 -2208px; }
-.f32.HR { background-position: 0 -2240px; }
+.f32.hr { background-position: 0 -2240px; }
 .f32.ht { background-position: 0 -2272px; }
 .f32.hu, .f32.HUF, .f32.HUN { background-position: 0 -2304px; }
 .f32.ic { background-position: 0 -2336px; }

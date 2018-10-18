@@ -30,23 +30,23 @@
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="1">1</div>
-                            <div class="matching-key fs_18 c_white number" date-number="2">2</div>
-                            <div class="matching-key fs_18 c_white number" date-number="3">3</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1">1</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="2">2</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="3">3</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="4">4</div>
-                            <div class="matching-key fs_18 c_white number" date-number="5">5</div>
-                            <div class="matching-key fs_18 c_white number" date-number="6">6</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="4">4</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="5">5</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="6">6</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key fs_18 c_white number" date-number="7">7</div>
-                            <div class="matching-key fs_18 c_white number" date-number="8">8</div>
-                            <div class="matching-key fs_18 c_white number" date-number="9">9</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="7">7</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="8">8</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key fs_16 c_white" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <div class="matching-key fs_18 c_white number" date-number="0">0</div>
+                            <div class="bg_orange matching-key fs_16 c_white" id="del"><?=__('删除', 'nlyd-student')?></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0">0</div>
                         </div>
                     </div>
                 </div> 

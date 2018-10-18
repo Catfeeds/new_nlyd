@@ -44,7 +44,7 @@
                                 <div class="form-input-label"><div><?=__('手机号码', 'nlyd-student')?></div></div>
                                 <div class="nl-input"><div><?=$user_info['contact']?></div></div>
                                 <input type="hidden" lay-verify="phone" name="user_mobile" value="<?=$user_info['user_mobile']?>" />
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="21"><?=__('发送验证码', 'nlyd-student')?></a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="21"><div><?=__('发送验证码', 'nlyd-student')?></div></a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
@@ -58,7 +58,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('手机号码', 'nlyd-student')?></div></div>
                                 <input name='user_mobile' value="" type="tel" placeholder="<?=__('手机号码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="phone">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><?=__('发送验证码', 'nlyd-student')?></a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><div><?=__('发送验证码', 'nlyd-student')?></div></a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
@@ -72,7 +72,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('邮箱地址', 'nlyd-student')?></div></div>
                                 <input name='user_email' value="<?=$user_info['user_email']?>" type="text" placeholder="<?=__('邮箱地址', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="email">
-                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><?=__('发送验证码', 'nlyd-student')?></a>
+                                <a class="form-input-right getCode c_blue" data-sendCodeCase="16"><div><?=__('发送验证码', 'nlyd-student')?></div></a>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
@@ -169,7 +169,7 @@
                     }
                     sendloginAjax(data)
                     var wait=60;  
-                    time(wait,$(this))
+                    time(wait,$(this).children('div'))
                 }else{
                     // $(this).parents('form').find("input[name='user_login']").focus()
                     $.alerts(message)
@@ -189,7 +189,7 @@
                     }
                     sendloginAjax(data)
                     var wait=60;  
-                    time(wait,$(this))
+                    time(wait,$(this).children('div'))
                     return false
                 }else{
                     $.alerts(message)
