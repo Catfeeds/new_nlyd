@@ -1,21 +1,28 @@
 <?php
-ob_start();
+$path = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
+if(file_exists($path) && $match['match_status'] != 1){
+    include_once $path;
+}else{
+
+if ($match['match_status'] != 1):
+    ob_start();
+endif;
 ?>
 <!-- 比赛详情 -->
-<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
+<?php require_once PLUGINS_PATH . 'nlyd-student/View/public/student-footer-menu.php'; ?>
 
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-            require_once leo_student_public_view.'leftMenu.php';
+        require_once leo_student_public_view . 'leftMenu.php';
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
-        <header class="mui-bar mui-bar-nav">
-            <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
-                <i class="iconfont">&#xe610;</i>
-            </a>
-            <h1 class="mui-title"><?=__('比赛详情', 'nlyd-student')?></h1>
-        </header>
+            <header class="mui-bar mui-bar-nav">
+                <a class="mui-pull-left nl-goback static" href="<?= home_url('matchs') ?>">
+                    <i class="iconfont">&#xe610;</i>
+                </a>
+                <h1 class="mui-title"><?= __('比赛详情', 'nlyd-student') ?></h1>
+            </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc content-border">
                     <div class="width-padding-pc">
@@ -23,116 +30,145 @@ ob_start();
                             <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':' ';?>"><?=$match['post_title']?></span>
-                                    <?php if($match['is_me'] == 'y'): ?>
+                                    <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ' '; ?>"><?= $match['post_title'] ?></span>
+                                    <?php if ($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name fs_12 c_black3"><?=$match['post_content']?></p>
+                                    <p class="long-name fs_12 c_black3"><?= $match['post_content'] ?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-label"><?= __('开赛日期', 'nlyd-student') ?>：</div>
                                         <div class="nl-match-info c_black">
-                                            <?=$match['match_start_time']?>
-                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=$match['match_status_cn']?></span>
+                                            <?= $match['match_start_time'] ?>
+                                            <span class="nl-match-type fs_12 <?= $match['match_status'] == 2 ? 'c_orange' : 'c_blue'; ?> "><?= $match['match_status_cn'] ?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?=__('结束时间', 'nlyd-student')?>：</div>
+                                        <div class="nl-match-label"><?= __('结束时间', 'nlyd-student') ?>：</div>
                                         <div class="nl-match-info c_black">
-                                            <?=$match['match_end_time']?>
+                                            <?= $match['match_end_time'] ?>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>：</div>
-                                        <div class="nl-match-info c_black"><?=$match['match_address']?></div>
+                                        <div class="nl-match-label"><?= __('开赛地点', 'nlyd-student') ?>：</div>
+                                        <div class="nl-match-info c_black"><?= $match['match_address'] ?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>：</div>
-                                        <div class="nl-match-info c_black">¥<?=$match['match_cost']?></div>
+                                        <div class="nl-match-label"><?= __('报名费用', 'nlyd-student') ?>：</div>
+                                        <div class="nl-match-info c_black">¥<?= $match['match_cost'] ?></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>：</div>
-                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
-                                        
+                                        <div class="nl-match-label"><?= __('报名截止', 'nlyd-student') ?>：</div>
+                                        <div class="nl-match-info c_black" id="time_count"
+                                             data-end="<?= $match['entry_end_time'] ?>"><?= $match['entry_end_time'] < get_time('mysql') ? __('已截止', 'nlyd-student') : ''; ?></div>
+
                                     </div>
                                 </div>
                             </li>
-                            <?php if(!empty($match_project)): ?>
-                            <!-- 比赛项目 -->
-                            <li class="nl-match">
-                                <div class="nl-match-header noMargin">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?> "><?=__('比赛项目', 'nlyd-student')?></span>
-                                    <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>
-                                </div>
-                                <div class="nl-match-body">
-                                    <?php foreach ($match_project as $val){ ?>
-                                    <div class="nl-match-detail layui-row">
-                                        <div class="nl-match-label"><?=$val['parent_title']?>：</div>
-                                            <div class="nl-match-info">
-                                            <?php foreach ($val['project'] as $v ){ ?>
-                                                <?=$v['post_title']?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('比赛规则', 'nlyd-student')?></a>&nbsp;&nbsp;
-                                            <?php } ?>
-                                        </div>
+                            <?php if (!empty($match_project)): ?>
+                                <!-- 比赛项目 -->
+                                <li class="nl-match">
+                                    <div class="nl-match-header noMargin">
+                                        <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?> "><?= __('比赛项目', 'nlyd-student') ?></span>
+                                        <a class="c_blue" style="float:right"
+                                           href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?= __('参赛须知', 'nlyd-student') ?></a>
                                     </div>
-                                    <?php } ?>
-                                </div>
-                            </li>
-                            <?php endif;?>
-                            
+                                    <div class="nl-match-body">
+                                        <?php foreach ($match_project as $val) { ?>
+                                            <div class="nl-match-detail layui-row">
+                                                <div class="nl-match-label"><?= $val['parent_title'] ?>：</div>
+                                                <div class="nl-match-info">
+                                                    <?php foreach ($val['project'] as $v) { ?>
+                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a
+                                                                href="<?= $v['rule_url'] ?>"
+                                                                class="c_blue"><?= __('比赛规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </li>
+                            <?php endif; ?>
+
                             <li class="nl-match">
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?>"><?=__('报名列表', 'nlyd-student')?></span>
-                                    <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?php printf(__('%s位选手已报名', 'nlyd-student'),$total)?></span>
-      </div>
+                                    <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?>"><?= __('报名列表', 'nlyd-student') ?></span>
+                                    <span class="nl-match-people <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?>"><?php printf(__('%s位选手已报名', 'nlyd-student'), $total) ?></span>
+                                </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
                                         <table class="nl-table">
                                             <thead>
-                                                <tr>
-                                                    <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?> </div></td>
-                                                    <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('年龄', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('报名日期', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('国籍', 'nlyd-student')?></div></td>
-                                                </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="table_content"><?= __('头像', 'nlyd-student') ?></div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content"><?= __('学员姓名', 'nlyd-student') ?> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content"><?= __('性 别', 'nlyd-student') ?></div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content"><?= __('年龄', 'nlyd-student') ?></div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content"><?= __('报名日期', 'nlyd-student') ?></div>
+                                                </td>
+                                                <td>
+                                                    <div class="table_content"><?= __('国籍', 'nlyd-student') ?></div>
+                                                </td>
+                                            </tr>
                                             </thead>
                                             <tbody id="flow-table">
                                             <?php
-                                                if($match['match_status'] != 1):
-                                                    foreach ($orders as $v){
-                                            ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="player-img"><img src="http://127.0.0.1/nlyd/wp-content/uploads/user/3/20180816073854_3590.jpg"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content">易水寒</div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content">男</div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content">26</div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content">20181017</div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content">
-                                                        <img src="http://127.0.0.1/nlyd/wp-content/plugins/nlyd-student/Public/css/image/flags/cn.png">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                            <?php endif;?>
-                                            </tbody>    
+                                            if ($match['match_status'] != 1):
+                                                foreach ($orders as $v) {
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="player-img">
+                                                                <img src="<?=$v['user_head']?>">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table_content"><?=$v['nickname']?></div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table_content"><?=$v['user_gender']?></div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table_content"><?=$v['real_age']?></div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table_content"><?=$v['created_time']?></div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="table_content">
+                                                                <img src="<?=$v['nationality']?>">
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php endif; ?>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </li>
                         </ul>
+                        <?php
+                        if ($match['match_status'] != 1):
+                            $path = leo_student_public_view . 'cache/match_info/' . $_GET['match_id'] . '_' . $language . '.php';
+                            $info = ob_get_contents(); //得到缓冲区的内容并且赋值给$info
+                            $file = fopen($path, 'w'); //打开文件info.txt
+                            fwrite($file, $info); //写入信息到info.txt
+                            fclose($file); //关闭文件info.txt
+                        endif;
+                        }
+                        ?>
+
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
                         <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"><?=__('报名参赛', 'nlyd-student')?></a>
                         <?php endif; ?>
@@ -154,7 +190,7 @@ ob_start();
                             <?php endif;?>
                        <?php }?>
                         
-                        <?php if($match['is_me'] == 'y' && $match['match_status'] == -2):?>
+                        <?php if($match['is_me'] == 'y' && $match['match_status'] == -2 && $match['down_time'] > 0):?>
                         <!--倒计时-->
                             <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match['match_url']?>"></div>
                         <?php endif;?>
@@ -260,10 +296,3 @@ jQuery(function($) {
     });
 })
 </script>
-<?php
-    $path = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
-    $info=ob_get_contents(); //得到缓冲区的内容并且赋值给$info
-    $file=fopen($path,'w'); //打开文件info.txt
-    fwrite($file,$info); //写入信息到info.txt
-    fclose($file); //关闭文件info.txt
-?>

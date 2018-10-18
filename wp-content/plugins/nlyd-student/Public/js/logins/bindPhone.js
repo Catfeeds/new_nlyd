@@ -125,7 +125,7 @@ jQuery(function($) {
                     }
                     sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
                     var wait=60;  
-                    time(wait,$(this))
+                    time(wait,$(this).children('div'))
                 }else{
                     // $(this).parents('form').find("input[name='user_login']").focus()
                     $.alerts(message)
@@ -155,7 +155,7 @@ jQuery(function($) {
                     }
                     sendloginAjax(window.admin_ajax+"?date="+new Date().getTime(),data)
                     var wait=60;  
-                    time(wait,$(this))
+                    time(wait,$(this).children('div'))
                     return false
                 }else{
                     $.alerts(message)
