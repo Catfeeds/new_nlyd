@@ -3420,6 +3420,7 @@ class Student_Ajax
 
                 break;
             case 'wzsd':
+                //print_r($_POST);die;
                 if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
                 //print_r($_POST);die;
                 $questions_answer = $_POST['train_answer'];
