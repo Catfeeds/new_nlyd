@@ -34,16 +34,16 @@
                             <input  type="hidden" name="action" value="student_saveInfo"/>
                             <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                             <input  type="hidden" name="meta_key" value="user_nicename"/>
-                            <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit=""><?=__('更新', 'nlyd-student')?></div>
+                            <div class="form-input-right c_blue" id="nicenameFormBtn" lay-filter="nicenameFormBtn" lay-submit=""><div><?=__('更新', 'nlyd-student')?></div></div>
                         </div>
                         <a class="form-input-row" href="<?=home_url('account/certification');?>" >
                             <div class="form-input-label"><div><?=__('实名认证', 'nlyd-student')?></div></div>
-                            <span class="form-input-right c_blue"><?=__('修改实名认证', 'nlyd-student')?></span>
+                            <div class="form-input-right c_blue"><div><?=__('修改实名认证', 'nlyd-student')?></div></div>
                             <div class="nl-input"><div><?=$user_info['real_ID']?></div></div>
                         </a> -->
                         <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                             <div class="form-input-label"><div><?=__('收件地址', 'nlyd-student')?></div></div>
-                            <span class="form-input-right c_blue"><?=__('修改收件地址', 'nlyd-student')?></span>
+                            <div class="form-input-right c_blue"><div><?=__('修改收件地址', 'nlyd-student')?></div></div>
                             <div  class="nl-input">  
                                 <div>
                                 <?php if($user_address){ ?>
@@ -64,7 +64,9 @@
                                     <div class="form-input-label"><div><?=__('国 籍', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
-                                    <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span>
+                                    <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
+                                    <span class="form-input-right" id="nationality_pic"><span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
+                                    <!-- <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span> -->
                                     
                                 </div>
                                 <div class="form-input-row">
@@ -104,13 +106,13 @@
                                 </div>
                                 <div class="layui-bg-white img-zoos img-zoos1">
                                     <p class="tps"><?=__('上传收款账户（不设金额的个人收款微信二维码）', 'nlyd-student')?></p>
-                                        <?php if(!empty($user_info['user_ID_Card'])){ ?>
-                                        <?php foreach ($user_info['user_ID_Card'] as $val){ ?>
+                                        <?php if(!empty($user_info['user_wechat'])){ ?>
+                                        <?php foreach ($user_info['user_wechat'] as $val){ ?>
                                         <div class="post-img no-dash">
                                             <div class="img-zoo img-box">
                                                 <img src="<?=$val?>"/>
                                             </div>
-                                            <input type="hidden" name="user_ID_Card[]" value="<?=$val?>" />
+                                            <input type="hidden" name="user_wechat[]" value="<?=$val?>" />
                                             <div class="del">
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>
@@ -367,9 +369,12 @@ jQuery(document).ready(function($) {
             },
             callback:function(indexArr, data){
                 // console.log(data)
+                var dom='<span class="fastbannerform__span f32 NOFLAG '+data[0]['src']+'"></span>'
                 $('#trigger4').val(data[0]['value'])
                 $('#src').val(data[0]['src'])
-                $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
+                $('#short').val(data[0]['short'])
+                $('#nationality_pic').empty().html(dom)
+                // $('#flags').attr('src',window.home_url+"/wp-content/plugins/nlyd-student/Public/css/image/flags/"+data[0]['src']+".png")
                 if(data[0]['value']=="中华人民共和国"){
                     $('#birth').css('display','none')
                     $('#age').css('display','block')
@@ -407,8 +412,14 @@ jQuery(document).ready(function($) {
         var imgs1=[]
         $('.img-zoos').each(function(){
             var _this=$(this);
-            if(_this.find('.post-img.no-dash').length>=3){
-                _this.find('.post-img.dash').css('display','none')
+            if(_this.hasClass('img-zoos1')){//微信
+                if(_this.find('.post-img.no-dash').length>=1){
+                    _this.find('.post-img.dash').css('display','none')
+                }
+            }else if(_this.hasClass('img-zoos0')){//身份证
+                if(_this.find('.post-img.no-dash').length>=3){
+                    _this.find('.post-img.dash').css('display','none')
+                }
             }
         })
 
@@ -434,8 +445,14 @@ jQuery(document).ready(function($) {
                     photos: '.img-zoos',
                     anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                 })
-                if($('.'+className+' .post-img.no-dash').length>=3){
-                    $('.'+className+' .post-img.dash').css('display','none')
+                if(className=="img-zoos0"){
+                    if($('.'+className+' .post-img.no-dash').length>=3){
+                        $('.'+className+' .post-img.dash').css('display','none')
+                    }
+                }else if(className=="img-zoos1"){
+                    if($('.'+className+' .post-img.no-dash').length>=1){
+                        $('.'+className+' .post-img.dash').css('display','none')
+                    }
                 }
             }
             reader.readAsDataURL(file);
@@ -491,6 +508,7 @@ jQuery(document).ready(function($) {
                 fd.append('nationality',data.field['nationality']);
                 fd.append('nationality_pic',data.field['nationality_pic']);
                 fd.append('birthday',data.field['birthday']);
+                fd.append('nationality_short',data.field['nationality_short']);
                 if(match_id!=null){
                     fd.append('match_id',match_id);
                 }else{
@@ -499,8 +517,12 @@ jQuery(document).ready(function($) {
                 $.each(imgs, function (i, v) {
                     fd.append('images[]',v);
                 })
+                $.each(imgs1, function (i, v) {
+                    fd.append('images_wechat[]',v);
+                })
                 $('.post-img.no-dash input').each(function () {
-                    fd.append('user_ID_Card[]',$(this).val());
+                    var name=$(this).attr('name')
+                    fd.append(name,$(this).val());
                 })
                 $.alerts(fd)
                 $.ajax({

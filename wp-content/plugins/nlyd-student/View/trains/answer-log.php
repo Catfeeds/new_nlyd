@@ -49,7 +49,7 @@ switch ($type){
                 <?php } ?>
                 <h1 class="mui-title"><?=$title?><?=__('答题记录', 'nlyd-student')?></h1>
             </header>
-            <div class="layui-row nl-border nl-content" style="padding-bottom:80px;">
+            <div class="layui-row nl-border nl-content">
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title flex-h">

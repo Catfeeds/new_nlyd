@@ -1,16 +1,26 @@
 
+.lists_lists{
+    margin-top: 10px;
+}
 .lists_row{
     overflow: hidden;
     border-radius: 6px;
     background-color: #fff;
     box-shadow: 0 1px 2px rgba(139, 139, 139, 0.16);
-    margin-top: 15px;
-    margin-bottom: 20px;
-    padding: 15px 11px; 
+    /* margin-bottom: 70px; */
+    margin-top: 10px;
+    padding-top: 15px; 
 }
 .lists_item_row{
     overflow: hidden;
     width: 100%;
+}
+.lists_item_row>div:first-child{
+    margin-bottom: 5px;
+}
+.lists_item_row .lists_row{
+    margin-bottom: 5px;
+    margin-top: 0;
 }
 .item_row{
     display: block;
@@ -29,16 +39,14 @@
 .item_img{
     float: left;
     display: table;
-    width: 22px;
-    height: 22px;
+    width: 13px;
     margin-right: 10px;
-    margin-top: 2px;
+    margin-top: 7px;
 }
 .item_img img{
     display: table-cell;
     vertical-align: middle;
     width: 100%;
-    height: 100%;
 }
 .arrow_box{
     display: table;

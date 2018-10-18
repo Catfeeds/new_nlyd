@@ -1350,7 +1350,7 @@ class Student_Ajax
             }
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
-            $orders[$k]['nationality'] = student_css_url.'image/flags/'.$user_nationality_pic.'.png';
+            $orders[$k]['nationality'] = $user_nationality_pic;
 
         }
 
