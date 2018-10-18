@@ -58,7 +58,7 @@
 				
 				//防止表单元素失效
 				var tagName = e.target.tagName.toLowerCase();
-				if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' || tagName == 'i'){
+				if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' || tagName == 'i' || tagName == 'a'){
 					return;
 				}
 				
