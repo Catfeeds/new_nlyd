@@ -275,18 +275,17 @@ class Student_Ajax
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
-        $sql = "select answer_status,questions_answer
+        $sql = "select id,answer_status,questions_answer
                 from {$wpdb->prefix}match_questions
                 where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']}
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        if(empty($row)) wp_send_json_error(array('info'=> __('数据错误', 'nlyd-student')));
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_id/'.$_POST['project_id'].'/match_more/'.$_POST['match_more'])));
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_type'])));
 
         //计算成绩
 
-        switch ($_POST['project_type']){
+        switch ($_POST['project_alias']){
             case 'szzb':
             case 'pkjl':
 
@@ -379,8 +378,8 @@ class Student_Ajax
             'match_id'=>$_POST['match_id'],
             'project_id'=>$_POST['project_id'],
             'match_more'=>$_POST['match_more'],
-            'match_questions'=>json_encode($_POST['train_questions']),
-            'questions_answer'=>json_encode($_POST['train_answer']),
+            'match_questions'=>json_encode($_POST['match_questions']),
+            'questions_answer'=>json_encode($_POST['questions_answer']),
             'my_answer'=>json_encode($_POST['my_answer']),
             'surplus_time'=>$_POST['surplus_time'],
             'my_score'=>$my_score,
@@ -392,13 +391,13 @@ class Student_Ajax
         );
 
 
-        // print_r($insert);
-        // die;
+         /*print_r($insert);
+         die;*/
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
             $log_id = $wpdb->insert_id;
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id)));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'])));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
         }

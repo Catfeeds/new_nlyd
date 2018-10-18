@@ -252,7 +252,6 @@ class Student_Abcd extends Student_Home
         if(!empty($order_id)) $match['is_me'] = 'y';
 
         if($match['is_me'] == 'y' && $match['match_status'] == -2){
-            $start = reset($this->project_order_array);
             //print_r($this->project_order_array);
             $match['down_time'] = strtotime($match['match_start_time'])-get_time();
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
@@ -691,20 +690,16 @@ class Student_Abcd extends Student_Home
     public function answerLog(){
 
 
-        if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
+        if(empty($_GET['match_id']) || empty($_GET['log_id']) ){
+
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
+
         global $wpdb,$current_user;
 
         //清空倒计时
-        if(!empty($this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more))){
-            $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
-        }
-        //清空题目
-        if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
-        }
+        unset($_SESSION['count_down']);
 
 
         $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
@@ -718,23 +713,19 @@ class Student_Abcd extends Student_Home
                 return;
             }
         }
-
-        $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
+        //获取答题记录
+        $row = $this->get_match_questions($_GET['match_id'],$_GET['log_id']);
 
         if(empty($row)){
             $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
             return;
-        }else{
-            if($row['answer_status'] != 1){
-                $this->get_404(__('操作错误,你未进行答题', 'nlyd-student'));
-                return;
-            }
         }
+
         $match_questions = json_decode($row['match_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
-        if(in_array($this->project_alias,array('wzsd'))){
+        if($row['project_alias'] == 'wzsd'){
             if(empty($questions_answer)){
                 $len = 0;
             }else{
@@ -760,7 +751,7 @@ class Student_Abcd extends Student_Home
             }
 
         }
-        elseif ($this->project_alias == 'nxss'){
+        elseif ($row['project_alias'] == 'nxss'){
 
             $answer = $questions_answer;
             $answer_array = $answer['result'];
@@ -804,61 +795,7 @@ class Student_Abcd extends Student_Home
         }
 
 
-        //判断是否有新的比赛轮次或者新的项目
-        /*print_r($this->current_project);
-        print_r($this->next_project);
-        print_r($this->project_end_time);*/
-
-        if(empty($this->next_project)){
-
-            if(!empty($this->current_project) && $this->current_project['match_more'] < $this->default_match_more){
-
-                $match_more = $this->current_project['match_more']+1;
-                $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
-                $next_type = 1;
-                //$next_count_down = $this->current_project['project_end_time']-get_time();
-                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
-
-            }else{
-                $next_project_url = home_url('/matchs/record/match_id/'.$this->match_id);
-                $next_type = 4;
-                $wait_url = '';
-            }
-        }else{
-
-            if($this->next_project['project_start_time'] < get_time()){
-                $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
-                $next_type = 4;
-                $wait_url = '';
-            }else{
-                $match_more = 1;
-                $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['project_id'].'/match_more/'.$match_more);
-                $next_type = 2;
-                //$next_count_down = $this->next_project['project_start_time']-get_time();
-                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
-            }
-        }
-        //print_r($this->next_project);
-        if($this->project_alias == 'zxss'){
-
-            if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
-                $child_count_down['even_add'] = $this->project_count_down * 60;
-                $child_count_down['add_and_subtract'] = $this->project_count_down * 60;
-                $child_count_down['wax_and_wane'] = $this->project_count_down * 60;
-            }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
-
-                $child_count_down['even_add'] *= 60;
-                $child_count_down['add_and_subtract'] *= 60;
-                $child_count_down['wax_and_wane'] *= 60;
-            }else{
-
-                $child_count_down['even_add'] = 180;
-                $child_count_down['add_and_subtract'] = 180;
-                $child_count_down['wax_and_wane'] = 180;
-            }
-
-            $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-        }
+        //获取当前轮项目
 
         $ranking = '';
         if(($this->project_start_time + $this->default_count_down) <= get_time()){
@@ -888,7 +825,7 @@ class Student_Abcd extends Student_Home
         }
         //print_r($row);
         $data = array(
-            'project_alias'=>$this->project_alias,
+            'project_alias'=>$row['project_alias'],
             'next_type'=>$next_type,
             'str_len'=>$len,
             'match_more_cn'=>chinanum($_GET['match_more']),
@@ -914,11 +851,6 @@ class Student_Abcd extends Student_Home
             'match_row'=>$row
         ,
         );
-        //var_dump($data['end_time_count_down']);
-        /********测试使用*********/
-        if($_GET['test'] == 1){
-            $data['next_count_down'] = 50;
-        }
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
@@ -1302,15 +1234,19 @@ class Student_Abcd extends Student_Home
     }
 
     /**
-     * 获取用户当前比赛信息
+     * 获取答题记录
+     * @param $match_id 比赛id
+     * @param $log_id   答题记录
+     * @return array|null|object|void
      */
-    public function get_match_questions($match_id,$project_id,$match_more){
+    public function get_match_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title
+        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title,c.meta_value project_alias
                     from {$wpdb->prefix}match_questions a 
                     left join {$wpdb->prefix}posts b on a.project_id = b.ID
-                    where a.user_id = {$current_user->ID} and a.match_id = {$match_id} and a.project_id = {$project_id} and a.match_more = {$match_more}
+                    LEFT JOIN {$wpdb->prefix}postmeta c ON a.project_id = c.post_id AND meta_key = 'project_alias'
+                    where a.user_id = {$current_user->ID} and a.match_id = {$match_id} and a.id = {$log_id} 
                     ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
