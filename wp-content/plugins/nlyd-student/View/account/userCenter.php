@@ -28,7 +28,7 @@
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <?php endif;?>
-                <a id="langulage" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">
+                <a id="language" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">
 
                         <?php
                             if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
@@ -242,7 +242,7 @@ jQuery(document).ready(function($) {
     }
     var mobileSelect2 = new MobileSelect({
         trigger: '#checked_lan',
-        title: '语言 langulage',
+        title: '语言 language',
         wheels: [
             {data: selectData}
         ],
@@ -255,7 +255,7 @@ jQuery(document).ready(function($) {
             if(data[0]['value']=='English'){
                 $('#checked_lan').text('语言')
             }else if(data[0]['value']=='中文'){
-                $('#checked_lan').text('langulage')
+                $('#checked_lan').text('language')
             }
             $.ajax({
                 url : window.admin_ajax,
