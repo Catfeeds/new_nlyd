@@ -62,7 +62,10 @@ jQuery(function($) {
     var arrColor=['heart','club','diamond','spade']
     var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
     var arrZM=['A','J','Q','K'];
-    function splits(str) {
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
+        function splits(str) {
             return str.split('-');
         }
         function isNumber(str) {//非数字扑克转成number
@@ -135,10 +138,12 @@ jQuery(function($) {
                 
             }
         }
-        var matchSession=$.GetCookie('ready_poker','true');
-            if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-                questions_answer=matchSession['questions_answer']
+        var matching_question=$.GetSession('matching_question','true');
+        console.log(matching_question)
+            if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
+                questions_answer=matching_question['questions_answer']
             }else{
+                console.log(1)
                 $.each(arrColor,function(i,v){
                     $.each(arrNum,function(index,val){
                         var item=v+'-'+val;
@@ -147,12 +152,12 @@ jQuery(function($) {
                 })
                 rand(new_poker);//生成题目
                 var sessionData={
-                    match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
+                    match_id:_match_id,
+                    project_id:_project_id,
+                    match_more:_match_more,
                     questions_answer:questions_answer
                 }
-                $.SetCookie('ready_poker',sessionData)
+                $.SetSession('matching_question',sessionData)
             }
             $.each(questions_answer,function(i,v){
                 var item=v.split('-')
@@ -168,17 +173,20 @@ jQuery(function($) {
         var data={
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$project_id?>,
-            match_more:<?=$match_more ?>,
+            match_id:_match_id,
+            project_id:_project_id,
+            match_more:_match_more,
+
+            match_questions:questions_answer,
+            questions_answer:questions_answer,
+
             my_answer:my_answer,
             match_action:'subjectPokerRelay',
             surplus_time:time,
-            match_questions:questions_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -190,7 +198,7 @@ jQuery(function($) {
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
-                        $.DelCookie('ready_poker')
+                        $.DelSession('matching_question')
                     }   
                 }else{
                     $('#load').css({
