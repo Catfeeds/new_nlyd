@@ -228,6 +228,7 @@
 
 <script>
 jQuery(document).ready(function($) {
+
     // 模拟手机下拉列表，选择性别
     // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
     var selectData= <?=json_encode($select)?>;
