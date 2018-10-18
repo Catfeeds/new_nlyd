@@ -449,7 +449,7 @@ class Student_Abcd extends Student_Home
         }
 
 
-
+        //unset($_SESSION['count_down']);
 
         if(empty($_SESSION['count_down'])){
             $_SESSION['count_down'] = array(
@@ -458,6 +458,8 @@ class Student_Abcd extends Student_Home
                 'count_down_time'=>get_time()+ $project_more['use_time']*60,
             );
         }else{
+
+            //var_dump($_SESSION['count_down']);
 
             if($_SESSION['count_down']['match_title'] != $project_more['match_title'] || $_SESSION['count_down']['project_title'] != $project_more['project_title'] || get_time() > $_SESSION['count_down']['count_down_time']){
                 $_SESSION['count_down'] = array(

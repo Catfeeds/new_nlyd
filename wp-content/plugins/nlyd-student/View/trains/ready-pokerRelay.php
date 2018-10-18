@@ -55,9 +55,9 @@ jQuery(function($) {
     var arrColor=['heart','club','diamond','spade']
     var arrNum=['A','2','3','4','5','6','7','8','9','10','J','Q','K']
     var arrZM=['A','J','Q','K'];
-    var leavePage= $.GetCookie('train_match','1');
-    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
-        questions_answer=leavePage['train_questions']
+    var ready_poker= $.GetCookie('train_match','1');
+    if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
+        questions_answer=ready_poker['train_questions']
     }else{
         $.each(arrColor,function(i,v){
             $.each(arrNum,function(index,val){
@@ -146,7 +146,7 @@ jQuery(function($) {
         data_match.push(item)
     })
 
-    var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
+    // var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
@@ -282,9 +282,9 @@ new AlloyFinger($('#complete')[0], {//记忆完成
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
         // $.getJSON(file_path,function(JsonData){
-            // var leavePage= $.GetCookie('train_match','1');
-            // if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){
-            //     questions_answer=leavePage['train_questions']
+            // var ready_poker= $.GetCookie('train_match','1');
+            // if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
+            //     questions_answer=ready_poker['train_questions']
             // }else{
             //     $.DelCookie('train_match')
             // }
