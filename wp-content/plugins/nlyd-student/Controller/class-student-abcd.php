@@ -34,6 +34,11 @@ class Student_Abcd extends Student_Home
     public $end_project = '';
 
     /**
+     * @var 第一轮
+     */
+    public $start_project = '';
+
+    /**
      * @var 比赛别名
      */
     public $project_alias = '';
@@ -333,6 +338,7 @@ class Student_Abcd extends Student_Home
         $data['next_more_num'] = $project_more['more'];
         $data['current_project'] = $this->current_project;
         $data['end_project'] = $this->end_project;
+        $data['start_project'] = $this->start_project;
         $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
 
         $buffer_time = get_time()-strtotime($project_more['start_time']);
@@ -1784,6 +1790,9 @@ class Student_Abcd extends Student_Home
                 }
 
                 if($new_time <= $v['start_time'] ){
+                    if($new_time < $rows[0]['start_time']){
+                        $this->start_project = 'y';
+                    }
                     //print_r($v);
                     //$this->next_project = $rows[$k-1];
                     return $v;
