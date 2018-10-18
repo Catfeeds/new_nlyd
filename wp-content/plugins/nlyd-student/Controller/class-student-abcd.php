@@ -672,6 +672,7 @@ class Student_Abcd extends Student_Home
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
         $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
 
