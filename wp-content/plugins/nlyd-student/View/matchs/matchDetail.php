@@ -205,7 +205,7 @@ jQuery(function($) {
                                             +'<td><div class="table_content">'+v.user_gender+'</div></td>'
                                             +'<td><div class="table_content">'+v.real_age+'</div></td>'
                                             +'<td><div class="table_content">'+v.created_time+'</div></td>'
-                                            +'<td><div class="table_content"><img src="'+v.nationality+'"/></div></td>'
+                                            +'<td><div class="table_content"><span class="fastbannerform__span f32 NOFLAG '+v.nationality+'"></span></div></td>'
                                         +'</tr>'
                                 lis.push(dom) 
                             })

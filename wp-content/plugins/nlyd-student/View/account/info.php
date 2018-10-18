@@ -65,7 +65,7 @@
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
                                     
-                                    <span class="form-input-right" id="nationality_pic"><span style="margin-top: 10px;" class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
+                                    <span class="form-input-right" id="nationality_pic"><span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn': $user_info['user_nationality_pic']?>"></span></span>
                                     <!-- <span class="form-input-right"><img id="flags" style="width:16px;height:11px;" src="<?=empty($user_info['user_nationality_pic']) ? student_css_url.'image/flags/cn.png': student_css_url.'image/flags/'.$user_info['user_nationality_pic'].'.png'?>"></span> -->
                                     
                                 </div>
@@ -347,7 +347,7 @@ jQuery(document).ready(function($) {
             $('#age').css('display','none');
         }
         //模拟手机下拉列表，选择国籍
-        var contrySelectData=$.validationLayui.contry1;
+        var contrySelectData=$.validationLayui.contry;
         var posiotioncontry=[0];//初始化位置，高亮展示
         if($('#trigger4').val().length>0 && $('#trigger4').val()){
             $.each(contrySelectData,function(index,value){
@@ -369,7 +369,7 @@ jQuery(document).ready(function($) {
             },
             callback:function(indexArr, data){
                 // console.log(data)
-                var dom='<span style="margin-top: 10px;" class="fastbannerform__span f32 NOFLAG '+data[0]['src']+'"></span>'
+                var dom='<span class="fastbannerform__span f32 NOFLAG '+data[0]['src']+'"></span>'
                 $('#trigger4').val(data[0]['value'])
                 $('#src').val(data[0]['src'])
                 $('#nationality_pic').empty().html(dom)
