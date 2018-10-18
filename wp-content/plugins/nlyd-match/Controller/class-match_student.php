@@ -1755,7 +1755,7 @@ class Match_student {
         }
         $match = get_post($match_id);
 
-        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
+        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}", ARRAY_A);
         if(!$orderAllData){
             $allDatas = $this->getBonusData($match_id);
             $countData = $allDatas['countData'];
