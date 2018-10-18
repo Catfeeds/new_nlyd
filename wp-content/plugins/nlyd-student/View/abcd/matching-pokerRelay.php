@@ -16,15 +16,7 @@
                         </span>
                         <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
-                    <?php
-                        $path = leo_student_public_view.'cache/match_info/pkjl.php';
-                        if(file_exists($path)){
-                            include_once $path;
-                        }else{
-
-                            ob_start();
-
-                    ?>
+                    
                     <div class="matching-row">
                         <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
                         <div class="matching-row-list">
@@ -81,10 +73,18 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
+    var questions_answer=[];
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var ready_poker= $.GetCookie('ready_poker','1');
+    if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){//记忆成功
+        questions_answer=ready_poker['train_questions'];
+        console.log(questions_answer)
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
+    }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
@@ -129,7 +129,9 @@ jQuery(function($) {
                 _wpnonce:$('#inputSubmit').val(),
                 match_id:<?=$_GET['match_id']?>,
                 project_id:<?=$project_id?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
+                match_more:<?=$match_more;?>,
+                train_questions:questions_answer,
+                train_answer:questions_answer,
                 my_answer:my_answer,
                 match_action:'subjectPokerRelay',
                 surplus_time:time,
@@ -400,10 +402,3 @@ new AlloyFinger($('#next')[0], {
     
 })
 </script>
-<?php
-    $info = ob_get_contents(); //得到缓冲区的内容并且赋值给$info
-    $file = fopen($path, 'w'); //打开文件info.txt
-    fwrite($file, $info); //写入信息到info.txt
-    fclose($file); //关闭文件info.txt
-}
-?>
