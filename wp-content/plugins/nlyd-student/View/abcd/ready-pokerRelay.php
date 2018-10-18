@@ -180,7 +180,7 @@ jQuery(function($) {
             match_id:_match_id,
             project_id:_project_id,
             match_more:_match_more,
-            project_type:'pkjl',
+            project_alias:'pkjl',
             match_questions:questions_answer,
             questions_answer:questions_answer,
 
