@@ -19,7 +19,7 @@
                             <?=__('您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛', 'nlyd-student')?>
                         </p>
                         <?php endif;?>
-                        <?php if(empty($current_project)){ ?>
+                        <?php if(empty($current_project) && empty($start_project) && empty($end_project) ){ ?>
                         <p class="fs_12 ta_c bottom_tips c_black">
                             <?=__('中场休息', 'nlyd-student')?>
                         </p>
