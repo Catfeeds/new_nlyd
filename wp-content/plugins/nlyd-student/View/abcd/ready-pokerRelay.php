@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <div class="a-btn" id="complete"><?=__('记忆完成', 'nlyd-student')?></div>
+                <a class="a-btn" href="<?=$redirect_url?>"><?=__('记忆完成', 'nlyd-student')?></a>
             </div>
         </div>           
     </div>
@@ -60,40 +60,6 @@ jQuery(function($) {
     var questions_answer=[]
     var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
-                match_action:'pokerRelay',
-                match_questions:questions_answer,
-                type:'pkjl'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
-        }
-    }
-})
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',
@@ -105,8 +71,8 @@ new AlloyFinger($('#complete')[0], {
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
             match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1 ?>,
+            project_id:<?=$project_id?>,
+            match_more:<?=$match_more ?>,
             my_answer:my_answer,
             match_action:'subjectPokerRelay',
             surplus_time:time,
@@ -248,8 +214,8 @@ new AlloyFinger($('#complete')[0], {
                 var sessionData={
                     data_match:data_match,
                     match_id:$.Request('match_id'),
-                    project_id:$.Request('project_id'),
-                    match_more:$.Request('match_more'),
+                    project_id:<?=$project_id?>,
+                    match_more:<?=$match_more?>,
                     questions_answer:questions_answer
                 }
                 $.SetSession('ready_poker',sessionData)
