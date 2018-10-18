@@ -1625,7 +1625,7 @@ class Match_student {
         $allData = [];
         foreach ($projectDataArr as $pdaK => $pdaV){
             foreach ($pdaV['project_option_check'] as $project_option){
-                $ranking_name = $pdaV['name'].'/';
+                $ranking_name = $pdaV['name'];
                 $ranking_bonus = 0;
                 switch ($project_option['ranking']){
                     case 1:
@@ -1649,7 +1649,7 @@ class Match_student {
             if(isset($cdaV['cate_option_check'])){
                 foreach ($cdaV['cate_option_check'] as $cate_option){
                     if(!isset($allData[$cate_option['user_id']])) $allData[$cate_option['user_id']] = [];
-                    $ranking_name = $cdaV['name'].'/';
+                    $ranking_name = $cdaV['name'];
                     $ranking_bonus = 0;
                     switch ($cate_option['ranking']){
                         case 1:
@@ -1674,7 +1674,7 @@ class Match_student {
                     if($cate_age['data'] != []){
                         foreach ($cate_age['data'] as $cateAK => $cateAV){
                             if(!isset($allData[$cateAV['user_id']])) $allData[$cateAV['user_id']] = [];
-                            $ranking_name = $cdaV['name'].'类/'.$cate_age['name'];
+                            $ranking_name = $cdaV['name'].'类'.$cate_age['name'];
                             $ranking_bonus = 0;
                             switch ($cateAV['ranking']){
                                 case 1:
@@ -1699,7 +1699,7 @@ class Match_student {
             if(isset($cdaV['category_honor'])){
                 foreach ($cdaV['category_honor']['data'] as $cate_honor){
                     if(!isset($allData[$cate_honor['user_id']])) $allData[$cate_honor['user_id']] = [];
-                    $ranking_name = $cdaV['name'].'类/'.$cdaV['category_honor']['name'];
+                    $ranking_name = $cdaV['name'].'类'.$cdaV['category_honor']['name'];
                     $ranking_bonus = $bonus_set['lei_you'];
                     $allData = $this->bonus_all_data($allData, $cate_honor, $ranking_name, $ranking_bonus);
                 }
