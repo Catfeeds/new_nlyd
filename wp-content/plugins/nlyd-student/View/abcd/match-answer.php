@@ -10,13 +10,13 @@
 <?php
 switch ($project_alias){
     case 'szzb':    //数字争霸
-        require_once student_view_path.'matchs/matching-numberBattle.php';
+        require_once student_view_path.CONTROLLER.'/matching-numberBattle.php';
         break;
     case 'pkjl':    //扑克接力
-        require_once student_view_path.'matchs/matching-pokerRelay.php';
+        require_once student_view_path.CONTROLLER.'/matching-pokerRelay.php';
         break;
     case 'wzsd':     //文章速读
-        require_once student_view_path.'matchs/matching-reading.php';
+        require_once student_view_path.CONTROLLER.'/matching-reading.php';
         break;
     default:
         require_once student_view_path.'public/my-404.php';

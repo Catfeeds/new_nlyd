@@ -468,7 +468,7 @@ class Student_Abcd extends Student_Home
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
         $data['match_more'] = $project_more['more'];
-        $data['redirect_url'] = home_url(CONTROLLER.'/answerMatch/match_id/'.$project_more['match_id'].'/project_id/'.$project_more['project_id'].'/match_more/'.$project_more['more'].'/project_alias/'.$project_more['project_alias']);
+        $data['redirect_url'] = home_url(CONTROLLER.'/answerMatch/match_id/'.$project_more['match_id'].'/project_more_id/'.$project_more['id'].'/project_alias/'.$project_more['project_alias']);
 
         if(!empty($post_id)){
             $data['redirect_url'] .= '/post_id/'.$post_id;
@@ -554,7 +554,7 @@ class Student_Abcd extends Student_Home
      */
     public function answerMatch(){
 
-        if(empty($_GET['match_id']) || empty($_GET['project_id'])){
+        if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
@@ -574,92 +574,103 @@ class Student_Abcd extends Student_Home
             }
         }
 
+        //获取比赛项数据
+        $project_more = $this->get_match_more($_GET['match_id'],$_GET['project_more_id']);
+        if(empty($project_more)){
 
-        $match_more = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
-
-        if($match_more > $this->default_match_more) $match_more = $this->default_match_more;
-
-        //获取比赛考题
-        $sql = "select id,user_id,match_id,project_id,match_questions,questions_answer,answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$match_more}";
-        //print_r($sql);
-        $row = $wpdb->get_row($sql ,ARRAY_A);
-        //print_r($row);
-
-        if(empty($row)){
-
-            $this->get_404(__('数据错误', 'nlyd-student'));
+            $this->get_404(__('数据信息错误', 'nlyd-student'));
             return;
-        }else{
+        }
 
-            //判断状态
-            if(!empty($row['answer_status'])){
-                if($row['answer_status'] == 1){
-                    $messahe = __('答案已提交', 'nlyd-student');
-                    $this->get_404($messahe);
+        switch ($_GET['project_alias']){
+            case 'wzsd':
+                if(empty($_GET['post_id'])){
+
+                    $this->get_404('参数错误');
                     return;
                 }
-            }
+                /*if(!empty($_COOKIE['train_match'])){
 
-        }
+                    $match_array = json_decode(stripslashes($_COOKIE['train_match']),true);
+                    $questions_answer = $match_array['questions_answer'];
+                    $match_questions = $match_array['match_questions'];
+                    //print_r($match_array);
+                }else{*/
 
-        $count_down = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+                //获取比赛题目
+                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
 
-        $data = array(
-            'match_title'=>$this->match_title,
-            'project_alias'=>$this->project_alias,
-            'match_more_cn'=>chinanum($match_more),
-            'count_down'=>$count_down-get_time(),
-            'project_title'=>$this->project_title,
-            'match_questions'=>empty($row['match_questions']) ? '' : json_decode($row['match_questions'],true),
-            'questions_answer' =>empty($row['questions_answer']) ? '' : json_decode($row['questions_answer'],true),
-        );
-
-
-        if ($this->project_alias == 'pkjl'){
-            $poker = poker_create(false);
-
-            if(!empty($poker)){
-                $list = array(
-                    'spade'=>array(),
-                    'heart'=>array(),
-                    'club'=>array(),
-                    'diamond'=>array(),
-                );
-                foreach ($poker as $v){
-                    $val = str2arr($v,'-');
-                    //'heart','club','diamond','spade'
-                    if($val[0] == 'heart'){
-
-                        $list['heart']['content'][] = $val[1];
-                        $list['heart']['color'] = '638;';
-
-                    }elseif ($val[0] == 'club'){
-
-                        $list['club']['content'][] = $val[1];
-                        $list['club']['color'] = '635';
-
-                    }elseif ($val[0] == 'spade'){
-
-                        $list['spade']['content'][] = $val[1];
-                        $list['spade']['color'] = '636';
-
+                $rows = $wpdb->get_results($sql1,ARRAY_A);
+                $questions_answer = array();
+                $match_questions = array();
+                if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
+                    foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
+                        $key = &$val['ID'];
+                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
                     }
-                    elseif ($val[0] == 'diamond'){
-
-                        $list['diamond']['content'][] = $val[1];
-                        $list['diamond']['color'] = '634';
-
-                    }
+                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
+                //}
+                $data['questions_answer'] = $questions_answer;
+                $data['match_questions'] = $match_questions;
+                $data['count_down'] = $_GET['surplus_time']-1;
+                //print_r($questions_answer);
+                //print_r($match_questions);
+                break;
+            case 'pkjl':
+                $path = leo_student_public_view.'cache/match_info/pkjl.php';
+                if(file_exists($path)){
+                    $kinds=array(
+                        "spade"=>array(
+                            'content'=>[],
+                            'color'=>636,
+                        ),
+                        "heart"=>array(
+                            'content'=>[],
+                            'color'=>638,
+                        ),
+                        "club"=>array(
+                            'content'=>[],
+                            'color'=>635,
+                        ),
+                        "diamond"=>array(
+                            'content'=>[],
+                            'color'=>634,
+                        ),
+                    );
+                    //kind数组盛放的是花型
+                    $nums=array("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" );//52张牌对应的数字
 
-            }
-            $data['list'] = $list;
-            $data['list_keys'] = array_keys($list);
-            //var_dump($list);
+                    foreach ($kinds as $k => $val){
+                        foreach ($nums as $v){
+                            $kinds[$k]['content'][] = $v;
+                        }
+                    }
+                    $data['list'] = $kinds;
+                }
+                break;
+            default:
+                break;
+
         }
-        if($this->project_alias == 'szzb'){
-            $data['str_length'] = $this->project_str_len;
-        }
+
+        $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
+        $data['match_title'] = $project_more['match_title'];
+        $data['project_title'] = $project_more['project_title'];
+        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
+        $data['project_id'] = $project_more['project_id'];
+
+
+        $data['project_alias'] = $this->project_alias;
         //print_r($data);die;
         $view = student_view_path.CONTROLLER.'/match-answer.php';
         load_view_template($view,$data);

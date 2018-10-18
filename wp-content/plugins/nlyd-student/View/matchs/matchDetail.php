@@ -91,7 +91,6 @@
                                                     <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?> </div></td>
                                                     <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
                                                     <td><div class="table_content"><?=__('年龄', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('报名日期', 'nlyd-student')?></div></td>
                                                     <td><div class="table_content"><?=__('国籍', 'nlyd-student')?></div></td>
                                                 </tr>
                                             </thead>
@@ -204,8 +203,7 @@ jQuery(function($) {
                                             +'<td><div class="table_content">'+v.nickname+'</div></td>'
                                             +'<td><div class="table_content">'+v.user_gender+'</div></td>'
                                             +'<td><div class="table_content">'+v.real_age+'</div></td>'
-                                            +'<td><div class="table_content">'+v.created_time+'</div></td>'
-                                            +'<td><div class="table_content"><span class="fastbannerform__span f32 NOFLAG '+v.nationality+'"></span></div></td>'
+                                            +'<td><div class="table_content"><span class="fastbannerform__span f32 NOFLAG '+v.nationality+'"></span>'+v.nationality_short+'</div></td>'
                                         +'</tr>'
                                 lis.push(dom) 
                             })

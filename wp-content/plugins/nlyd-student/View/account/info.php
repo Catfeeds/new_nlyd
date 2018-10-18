@@ -106,13 +106,13 @@
                                 </div>
                                 <div class="layui-bg-white img-zoos img-zoos1">
                                     <p class="tps"><?=__('上传收款账户（不设金额的个人收款微信二维码）', 'nlyd-student')?></p>
-                                        <?php if(!empty($user_info['user_wechat'])){ ?>
-                                        <?php foreach ($user_info['user_wechat'] as $val){ ?>
+                                        <?php if(!empty($user_info['user_coin_code'])){ ?>
+                                        <?php foreach ($user_info['user_coin_code'] as $v){ ?>
                                         <div class="post-img no-dash">
                                             <div class="img-zoo img-box">
-                                                <img src="<?=$val?>"/>
+                                                <img src="<?=$v?>"/>
                                             </div>
-                                            <input type="hidden" name="user_wechat[]" value="<?=$val?>" />
+                                            <input type="hidden" name="user_coin_code[]" value="<?=$v?>" />
                                             <div class="del">
                                                 <i class="iconfont">&#xe633;</i>
                                             </div>

@@ -1351,6 +1351,8 @@ class Student_Ajax
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
             $orders[$k]['nationality'] = $user_nationality_pic;
+            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : 'CHN' ;
+            $orders[$k]['nationality_short'] = $nationality_short;
 
         }
 
@@ -1666,6 +1668,7 @@ class Student_Ajax
 
                     update_user_meta($current_user->ID,'user_nationality',$_POST['nationality']);
                     update_user_meta($current_user->ID,'user_nationality_pic',$_POST['nationality_pic']);
+                    update_user_meta($current_user->ID,'nationality_short',$_POST['nationality_short']);
 
                     if($_POST['nationality'] != '中华人民共和国'){
                         if(empty($_POST['birthday']))wp_send_json_error(array('info'=>__('生日必选', 'nlyd-student')));
@@ -1685,7 +1688,7 @@ class Student_Ajax
                     //if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
 
                     //判断是否报名
-                    if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+                    /*if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
                         $sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$_POST['meta_val']['real_name']}' ";
 
@@ -1722,7 +1725,7 @@ class Student_Ajax
                                 //wp_send_json_error(array('info'=>$orders_id.'====='.$a.'----'.$b.'==='.$c));
                                 
                                 //var_dump($a.'----'.$b);die;
-                                /*if($a && $b){
+                                if($a && $b){
 
                                     $wpdb->commit();
                                     wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
@@ -1730,12 +1733,12 @@ class Student_Ajax
 
                                     $wpdb->rollback();
                                     wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败<br/>请联系管理员'));
-                                }*/
+                                }
                             }else{
                                 wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/')));
                             }
                         }
-                    }
+                    }*/
 
                     if(!empty($_POST['user_gender'])){
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
@@ -1745,7 +1748,7 @@ class Student_Ajax
                         update_user_meta($current_user->ID,'user_age',$_POST['meta_val']['real_age']) && $user_age_update = true;
                     }
                     //var_dump($_POST['meta_val']);die;
-//                    $_POST['user_address'] = array(
+//                    $_POST['user_address'] = array(nationality
 //                        'province'=>'四川省',
 //                        'city'=>'成都市',
 //                        'area'=>'高新区',
@@ -1754,6 +1757,24 @@ class Student_Ajax
                         update_user_meta($current_user->ID,'user_address',$_POST['user_address']) && $user_address_update = true;
                         unset($_POST['user_address']);
                     }
+
+                    //收钱码
+                    if(!empty($_FILES['images_wechat'])){
+
+                        $upload_dir = wp_upload_dir();
+                        $dir = '/QRcode/'.$current_user->ID.'/';
+                        $imagePathArr = [];
+                        $num = 0;
+                        foreach ($_FILES['images_wechat']['tmp_name'] as $va){
+                            $file = $this->saveIosFile($va,$upload_dir['basedir'].$dir);
+
+                            if($file){
+                                $_POST['user_coin_code'][] = $upload_dir['baseurl'].$dir.$file;
+                                ++$num;
+                            }
+                        }
+                    }
+                    update_user_meta($current_user->ID,'user_coin_code',$_POST['user_coin_code']);
 
 
                     if(!empty($_FILES['images'])){
@@ -1791,7 +1812,7 @@ class Student_Ajax
 
             if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
-                if($a && $b && $c){
+                /*if($a && $b && $c){
 
                     $wpdb->commit();
                     wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/')));
@@ -1799,7 +1820,7 @@ class Student_Ajax
 
                     $wpdb->rollback();
                     wp_send_json_error(array('info'=>__('签到失败,比赛订单创建失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
-                }
+                }*/
             }
 
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
@@ -3343,18 +3364,24 @@ class Student_Ajax
             case 'szzb':
             case 'pkjl':
 
-                $len = count($_POST['train_questions']);
+                if(!empty($_POST['my_answer'])){
 
-                $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
+                    $len = count($_POST['train_questions']);
 
-                $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
-                $my_score = ($len-$error_len)*$score;
+                    $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
 
-                if ($error_len == 0){
-                    $my_score += $_POST['surplus_time'] * 1;
+                    $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+
+                    $my_score = ($len-$error_len)*$score;
+
+                    if ($error_len == 0 && !empty($_POST['my_answer'])){
+                        $my_score += $_POST['surplus_time'] * 1;
+                    }
+                }else{
+                    $my_score = 0;
                 }
 
-                break;
+            break;
             case 'kysm':
             case 'zxss':
             case 'nxss':

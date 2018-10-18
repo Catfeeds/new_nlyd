@@ -16,6 +16,15 @@
                         </span>
                         <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
+                    <?php
+                        $path = leo_student_public_view.'cache/match_info/pkjl.php';
+                        if(file_exists($path)){
+                            include_once $path;
+                        }else{
+
+                            ob_start();
+
+                    ?>
                     <div class="matching-row">
                         <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
                         <div class="matching-row-list">
@@ -36,7 +45,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                        <div class="choose-color <?= $k==$list_keys[0] ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
                         <?php } ?>
                     </div>
 
@@ -44,23 +53,23 @@
                         <div class="choose-zoo">
                             <div class="choose-window">
                                 <?php foreach ($list as $k => $v){ ?>
-                                <div class="choose-wrapper <?= $k==$list_keys[0]?'active':''?> <?=$k?>">
-                                    <?php foreach ($v['content'] as $val){ ?>
-                                    <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
-                                        <div class="small poker-detail poker-top">
-                                            <div class="poker-name"><?=$val?></div>
-                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                        </div>
-                                        <div class="small poker-detail poker-bottom">
-                                            <div class="poker-name"><?=$val?></div>
-                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                        </div>
+                                    <div class="choose-wrapper <?= $k=='spade'?'active':''?> <?=$k?>">
+                                        <?php foreach ($v['content'] as $val){ ?>
+                                            <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
+                                                <div class="small poker-detail poker-top">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                                <div class="small poker-detail poker-bottom">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
                                     </div>
-                                    <?php } ?>
-                                </div>
                                 <?php } ?>
                             </div>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,7 +128,9 @@ jQuery(function($) {
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
                 match_id:<?=$_GET['match_id']?>,
-                my_answer:my_answer,project_id
+                project_id:<?=$project_id?>,
+                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
+                my_answer:my_answer,
                 match_action:'subjectPokerRelay',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
@@ -389,3 +400,10 @@ new AlloyFinger($('#next')[0], {
     
 })
 </script>
+<?php
+    $info = ob_get_contents(); //得到缓冲区的内容并且赋值给$info
+    $file = fopen($path, 'w'); //打开文件info.txt
+    fwrite($file, $info); //写入信息到info.txt
+    fclose($file); //关闭文件info.txt
+}
+?>
