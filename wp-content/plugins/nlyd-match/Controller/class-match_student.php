@@ -1754,262 +1754,287 @@ class Match_student {
             exit(__('当前比赛未结束', 'nlyd-match'));
         }
         $match = get_post($match_id);
-
+        $reload = isset($_GET['reload_data']) && $_GET['reload_data'] == 'y' ? true : false;
+        if(is_post()){
+            $delBool = $wpdb->delete($wpdb->prefix.'match_bonus', ['match_id' => $match_id]);
+            if(!$delBool){
+                $old_data = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
+                if($old_data) exit('删除原数据失败');
+            }
+        }
         $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}", ARRAY_A);
-        if(!$orderAllData){
-            $allDatas = $this->getBonusData($match_id);
-            $countData = $allDatas['countData'];
-            $orderAllData = $allDatas['orderAllData'];
-        }else{
-            //汇总
-            $countData = [
-                'bonus_all' => 0,
-                'tax_all' => 0,
-                'tax_send_all' => 0,
-            ];
-            foreach ($orderAllData as &$v) {
-                $countData['bonus_all'] += $v['all_bonus'];
-                $countData['tax_all'] += $v['tax_all'];
-                $countData['tax_send_all'] += $v['tax_send_bonus'];
-                $v['bonus_list'] = unserialize($v['bonus_list']);
+        if($reload == false){
+            if(!$orderAllData){
+                $allDatas = $this->getBonusData($match_id);
+                $countData = $allDatas['countData'];
+                $orderAllData = $allDatas['orderAllData'];
+            }else{
+                //汇总
+                $countData = [
+                    'bonus_all' => 0,
+                    'tax_all' => 0,
+                    'tax_send_all' => 0,
+                ];
+                foreach ($orderAllData as &$v) {
+                    $countData['bonus_all'] += $v['all_bonus'];
+                    $countData['tax_all'] += $v['tax_all'];
+                    $countData['tax_send_all'] += $v['tax_send_bonus'];
+                    $v['bonus_list'] = unserialize($v['bonus_list']);
+                }
             }
         }
 
-//        leo_dump($orderAllData);
         ?>
-        <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title.'-'?>奖金明细</h1>
 
-            <a href="javascript:;" class="page-title-action">导出当前</a>
-            <a href="javascript:;" class="page-title-action">导出所有</a>
-
-            <hr class="wp-header-end">
-
-            <style type="text/css">
-                #project_option,
-                 #category_option,
-                 #bonus_all_box,
-                #view_option
-                 {
-                     padding-top: 1em;
-                 }
-                #project_option div,
-                #category_option div,
-                #all_option div
-                {
-                    padding-bottom: 0.5em;
-                }
-                #option-form  .title
-                {
-                    font-weight: bold;
-                }
-                #bonus_all_box >div{
-                    padding-top: 0.8em;
-                }
-                #bonus_all_box .bonus_all_title{
-                    display: inline-block;
-                    width: 6em;
-                    text-align: right;
-                    font-weight: bold;
-                    padding-right: 1em;
-                }
-                #bonus_all_box .bonus_all_value{
-                    font-weight: bold;
-                    padding-right: 0.2em;
-                    color: #0a8406;
-                }
-                #option-form  .la
-                {
-                    width: 4.5em;
-                    display: inline-block;
-                    text-align: right;
-                }
-                #option-form input[type="checkbox"]{
-                    width: 1em;
-                    height: 1em;
-                }
-                #option-form input[type="checkbox"]:before{
-                    font-style: normal;
-                    font-variant-ligatures: normal;
-                    font-variant-caps: normal;
-                    font-variant-numeric: normal;
-                    font-variant-east-asian: normal;
-                    font-weight: 400;
-                    font-stretch: normal;
-                    font-size: 20px;
-                    line-height: 1;
-                    font-family: dashicons;
-                }
-                #option-form input[type="text"]{
-                    width: 10em;
-                    height: 1.3em;
-                }
-            </style>
-            <form action="" method="post" id="option-form">
-                <div id="view_option">
-                    <label for="is_user_view" class="title">允许选手查看:</label>
-                    <input type="checkbox" id="is_user_view" <?=isset($is_user_view) ? ($is_user_view!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="is_user_view" value="1">
-                </div>
-                <div id="project_option">
-                    <div class="title"><label for="project_able">单项设置:</label> <input type="checkbox" id="project_able" class="able_option" <?=isset($project_able) ? ($project_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_able" value="1"></div>
-                   <div style="display: <?=isset($project_able) ? ($project_able!=false ? 'block':'none') : 'block'?>">
-                       <div>
-                           <label for="project_champion" class="la">冠亚季军:</label>
-                           <input type="checkbox" id="project_champion" <?=isset($project_option_check) ? ($project_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_option_check" value="1">
-                      </div>
-<!--                       <div>-->
-<!--                           <span class="la">优秀选手:</span>-->
-<!--                           <?//=is_mobile()?'<br >':''?>-->
-<!--                           <label for="project_honor_name" class="la">荣誉名称:</label>-->
-<!--                           <input type="text" id="project_honor_name" name="project_honor_name" value="--><?//=isset($project_honor_name) ? $project_honor_name : ''?><!--">-->
-<!--                           <?//=is_mobile()?'<br >':''?>-->
-<!--                           <label for="project_honor_num" class="la">人数:</label>-->
-<!--                           <input type="text" id="project_honor_num" name="project_honor_num" value="--><?//=isset($project_honor_num) ? $project_honor_num : 0?><!--">-->
-<!--                       </div>-->
-<!--                       <div>-->
-<!--                           <label class="la" for="project_age_able">年龄组:</label>-->
-<!--                           <input type="checkbox" --><?//=isset($project_age_able) && $project_age_able!=false ? 'checked="checked"':''?><!-- id="project_age_able" name="project_age_able" value="1">-->
-<!--                       </div>-->
-                   </div>
-
-                </div>
-                <div id="category_option">
-                    <div class="title"><label for="category_able">大类设置:</label> <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
-                    <div style="display: <?=isset($category_able) ? ($category_able!=false ? 'block':'none') : 'block'?>">
-                        <div>
-                            <label class="la" for="category_champion">冠亚季军:</label>
-                            <input type="checkbox" id="category_champion" name="category_option_check" <?=isset($category_option_check) ? ($category_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1">
-                       </div>
-                        <div>
-                            <span class="la">优秀选手:</span>
-                            <?=is_mobile()?'<br >':''?>
-                            <label for="category_honor_name" class="la">荣誉名称:</label>
-                            <input type="text" id="category_honor_name" name="category_honor_name" value="<?=isset($category_honor_name) ? $category_honor_name : '优秀选手'?>">
-                            <?=is_mobile()?'<br >':''?>
-                            <label for="category_honor_num" class="la">人数:</label>
-                            <input type="text" id="category_honor_num" name="category_honor_num" value="<?=isset($category_honor_num) ? $category_honor_num : 7?>">
-                        </div>
-                        <div>
-                            <label class="la" for="category_age_able">年龄组:</label>
-                            <input type="checkbox" <?=isset($category_age_able) ? ($category_age_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> id="category_age_able" name="category_age_able" value="1">
-                        </div>
-                    </div>
-                </div>
-<!--                <div id="all_option">-->
-<!--                    <div class="title"><label for="all_able">总排名设置:</label> <input type="checkbox" id="all_able" --><?//=isset($all_able) && $all_able!=false ? 'checked="checked"':''?><!-- class="able_option" name="all_able" value="1"></div>-->
-<!--                    <div style="display: --><?//=isset($all_able) && $all_able!=false ? 'block':'none'?><!--">-->
-<!--                        <div>-->
-<!--                            <label class="la" for="all_champion">冠亚季军:</label>-->
-<!--                            <input type="checkbox" id="all_champion" name="all_option_check" --><?//=isset($all_option_check) && $all_option_check!=false ? 'checked="checked"':''?><!-- value="1">-->
-<!--                          </div>-->
-<!--                        <div>-->
-<!--                            <span class="la">优秀选手:</span>-->
-<!--                            <?//=is_mobile()?'<br >':''?>-->
-<!--                            <label for="all_honor_name" class="la">荣誉名称:</label>-->
-<!--                            <input type="text" id="all_honor_name" name="all_honor_name" value="--><?//=isset($all_honor_name) ? $all_honor_name : ''?><!--">-->
-<!--                            <?//=is_mobile()?'<br >':''?>-->
-<!--                            <label for="all_honor_num" class="la">人数:</label>-->
-<!--                            <input type="text" id="all_honor_num" name="all_honor_num" value="--><?//=isset($all_honor_num) ? $all_honor_num : 0?><!--">-->
-<!--                        </div>-->
-<!--                        <div>-->
-<!--                            <label class="la" for="all_age_able">年龄组:</label>-->
-<!--                            <input type="checkbox" --><?//=isset($all_age_able) && $all_age_able!=false ? 'checked="checked"':''?><!-- id="all_age_able" name="all_age_able" value="1">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <div>
-                    <input type="submit" class="button" value="更改">
-                </div>
-            </form>
-
-
-                <div id="bonus_all_box">
-                <div><span class="bonus_all_title">奖金总额:</span><span class="bonus_all_value"><?=$countData['bonus_all']?></span>元</div>
-                <div><span class="bonus_all_title">税后发放额:</span><span class="bonus_all_value"><?=$countData['tax_send_all']?></span>元</div>
-                <div><span class="bonus_all_title">代扣税:</span><span class="bonus_all_value"><?=$countData['tax_all']?></span>元</div>
-
-            </div>
             <div class="tablenav top">
+                <div class="wrap">
+                    <h1 class="wp-heading-inline"><?=$match->post_title.'-'?>奖金明细</h1>
 
 
-                    <br class="clear">
-                </div>
-                <h2 class="screen-reader-text">奖金明细列表</h2><table class="wp-list-table widefat fixed striped users">
-                    <thead>
-                    <tr>
-                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
-                            <span>姓名</span><span class="sorting-indicator"></span>
-                        </th>
-                        <th scope="col" id="real_ID" class="manage-column column-real_ID">选手ID</th>
-                        <th scope="col" id="project_name" class="manage-column column-project_name">类别/项目</th>
-                        <th scope="col" id="bonus" class="manage-column column-bonus">奖金数额</th>
-                        <th scope="col" id="bonus_all" class="manage-column column-bonus_all">奖金总额</th>
-                        <th scope="col" id="tax_all" class="manage-column column-tax_all">扣税总额</th>
-                        <th scope="col" id="tax_send_bonus" class="manage-column column-tax_send_bonus">税后发放总额</th>
-                        <th scope="col" id="bonus_path" class="manage-column column-bonus_path">收款路径</th>
-                        <th scope="col" id="cards" class="manage-column column-cards">身份证号</th>
-                        <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
-                        <th scope="col" id="team" class="manage-column column-team">所属战队</th>
-                        <th scope="col" id="is_send" class="manage-column column-is_send">是否发放</th>
-                    </tr>
-                    </thead>
+                    <hr class="wp-header-end">
 
-                    <tbody id="the-list" data-wp-lists="list:user">
+                    <style type="text/css">
+                        #project_option,
+                        #category_option,
+                        #bonus_all_box,
+                        #view_option
+                        {
+                            padding-bottom: 1em;
+                        }
+                        #project_option div,
+                        #category_option div,
+                        #all_option div
+                        {
+                            padding-bottom: 0.5em;
+                        }
+                        #option-form  .title
+                        {
+                            font-weight: bold;
+                        }
+                        #bonus_all_box >div{
+                            padding-top: 0.8em;
+                        }
+                        #bonus_all_box .bonus_all_title{
+                            display: inline-block;
+                            width: 6em;
+                            text-align: right;
+                            font-weight: bold;
+                            padding-right: 1em;
+                        }
+                        #bonus_all_box .bonus_all_value{
+                            font-weight: bold;
+                            padding-right: 0.2em;
+                            color: #0a8406;
+                        }
+                        #option-form  .la
+                        {
+                            width: 4.5em;
+                            display: inline-block;
+                            text-align: right;
+                        }
+                        #option-form input[type="checkbox"],#is_user_view{
+                            width: 1em;
+                            height: 1em;
+                        }
+                        #option-form input[type="checkbox"]:before,#is_user_view:before{
+                            font-style: normal;
+                            font-variant-ligatures: normal;
+                            font-variant-caps: normal;
+                            font-variant-numeric: normal;
+                            font-variant-east-asian: normal;
+                            font-weight: 400;
+                            font-stretch: normal;
+                            font-size: 20px;
+                            line-height: 1;
+                            font-family: dashicons;
+                        }
+                        #option-form input[type="text"]{
+                            width: 10em;
+                            height: 1.3em;
+                        }
+                    </style>
 
-                    <?php foreach ($orderAllData as $data){ ?>
-                    <tr id="user-5" class="data-list">
-                        <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
-                            <strong><?=$data['real_name']?></strong>
-                            <br>
-                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
-                        </td>
-                        <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userId']?></td>
-                        <td class="project_name column-project_name" data-colname="类别/项目">
-                            <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
-                                <?=$bonus_name['bonus_name']?><br />
-                            <?php } ?>
-                        </td>
-                        <td class="bonus column-bonus" data-colname="奖金数额">
-                            <?php foreach ($data['bonus_list'] as $bonusV){ ?>
-                                <?=$bonusV['bonus']?><br />
-                            <?php } ?>
-                        </td>
+                    <?php if($reload == true){ ?>
+                        <form action="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id)?>" method="post" id="option-form">
 
-                        <td class="bonus_all column-bonus_all line-c" data-colname="奖金总额"><?=$data['all_bonus']?></td>
-                        <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
-                        <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
-                        <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="javascript:;" target="_blank">暂无</a></td>
-                        <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card']?></td>
-                        <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
-                        <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
-                        <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?></td>
+                            <div id="project_option">
+                                <div class="title"><label for="project_able">单项设置:</label> <input type="checkbox" id="project_able" class="able_option" <?=isset($project_able) ? ($project_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_able" value="1"></div>
+                                <div style="display: <?=isset($project_able) ? ($project_able!=false ? 'block':'none') : 'block'?>">
+                                    <div>
+                                        <label for="project_champion" class="la">冠亚季军:</label>
+                                        <input type="checkbox" id="project_champion" <?=isset($project_option_check) ? ($project_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_option_check" value="1">
+                                    </div>
+                                    <!--                       <div>-->
+                                    <!--                           <span class="la">优秀选手:</span>-->
+                                    <!--                           <?//=is_mobile()?'<br >':''?>-->
+                                    <!--                           <label for="project_honor_name" class="la">荣誉名称:</label>-->
+                                    <!--                           <input type="text" id="project_honor_name" name="project_honor_name" value="--><?//=isset($project_honor_name) ? $project_honor_name : ''?><!--">-->
+                                    <!--                           <?//=is_mobile()?'<br >':''?>-->
+                                    <!--                           <label for="project_honor_num" class="la">人数:</label>-->
+                                    <!--                           <input type="text" id="project_honor_num" name="project_honor_num" value="--><?//=isset($project_honor_num) ? $project_honor_num : 0?><!--">-->
+                                    <!--                       </div>-->
+                                    <!--                       <div>-->
+                                    <!--                           <label class="la" for="project_age_able">年龄组:</label>-->
+                                    <!--                           <input type="checkbox" --><?//=isset($project_age_able) && $project_age_able!=false ? 'checked="checked"':''?><!-- id="project_age_able" name="project_age_able" value="1">-->
+                                    <!--                       </div>-->
+                                </div>
 
-                    </tr>
+                            </div>
+                            <div id="category_option">
+                                <div class="title"><label for="category_able">大类设置:</label> <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
+                                <div style="display: <?=isset($category_able) ? ($category_able!=false ? 'block':'none') : 'block'?>">
+                                    <div>
+                                        <label class="la" for="category_champion">冠亚季军:</label>
+                                        <input type="checkbox" id="category_champion" name="category_option_check" <?=isset($category_option_check) ? ($category_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1">
+                                    </div>
+                                    <div>
+                                        <span class="la">优秀选手:</span>
+                                        <?=is_mobile()?'<br >':''?>
+                                        <label for="category_honor_name" class="la">荣誉名称:</label>
+                                        <input type="text" id="category_honor_name" name="category_honor_name" value="<?=isset($category_honor_name) ? $category_honor_name : '优秀选手'?>">
+                                        <?=is_mobile()?'<br >':''?>
+                                        <label for="category_honor_num" class="la">人数:</label>
+                                        <input type="text" id="category_honor_num" name="category_honor_num" value="<?=isset($category_honor_num) ? $category_honor_num : 7?>">
+                                    </div>
+                                    <div>
+                                        <label class="la" for="category_age_able">年龄组:</label>
+                                        <input type="checkbox" <?=isset($category_age_able) ? ($category_age_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> id="category_age_able" name="category_age_able" value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--                <div id="all_option">-->
+                            <!--                    <div class="title"><label for="all_able">总排名设置:</label> <input type="checkbox" id="all_able" --><?//=isset($all_able) && $all_able!=false ? 'checked="checked"':''?><!-- class="able_option" name="all_able" value="1"></div>-->
+                            <!--                    <div style="display: --><?//=isset($all_able) && $all_able!=false ? 'block':'none'?><!--">-->
+                            <!--                        <div>-->
+                            <!--                            <label class="la" for="all_champion">冠亚季军:</label>-->
+                            <!--                            <input type="checkbox" id="all_champion" name="all_option_check" --><?//=isset($all_option_check) && $all_option_check!=false ? 'checked="checked"':''?><!-- value="1">-->
+                            <!--                          </div>-->
+                            <!--                        <div>-->
+                            <!--                            <span class="la">优秀选手:</span>-->
+                            <!--                            <?//=is_mobile()?'<br >':''?>-->
+                            <!--                            <label for="all_honor_name" class="la">荣誉名称:</label>-->
+                            <!--                            <input type="text" id="all_honor_name" name="all_honor_name" value="--><?//=isset($all_honor_name) ? $all_honor_name : ''?><!--">-->
+                            <!--                            <?//=is_mobile()?'<br >':''?>-->
+                            <!--                            <label for="all_honor_num" class="la">人数:</label>-->
+                            <!--                            <input type="text" id="all_honor_num" name="all_honor_num" value="--><?//=isset($all_honor_num) ? $all_honor_num : 0?><!--">-->
+                            <!--                        </div>-->
+                            <!--                        <div>-->
+                            <!--                            <label class="la" for="all_age_able">年龄组:</label>-->
+                            <!--                            <input type="checkbox" --><?//=isset($all_age_able) && $all_age_able!=false ? 'checked="checked"':''?><!-- id="all_age_able" name="all_age_able" value="1">-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                            <!--                </div>-->
+                            <div>
+                                <input type="submit" class="button" value=确定>
+                                <button class="button" type="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id)?>'">返回</button>
+                            </div>
+                        </form>
+                    <?php }else{ ?>
+                        <div id="bonus_all_box">
+                            <div><span class="bonus_all_title">奖金总额:</span><span class="bonus_all_value"><?=$countData['bonus_all']?></span>元</div>
+                            <div><span class="bonus_all_title">税后发放额:</span><span class="bonus_all_value"><?=$countData['tax_send_all']?></span>元</div>
+                            <div><span class="bonus_all_title">代扣税:</span><span class="bonus_all_value"><?=$countData['tax_all']?></span>元</div>
+
+
+                        </div>
+                        <br class="clear">
+                        <div id="view_option">
+                            <label for="is_user_view" class="title" style="font-weight: bold">允许选手查看:</label>
+                            <input type="checkbox" id="is_user_view" <?=$orderAllData[0]['is_user_view'] == 1 ? 'checked="checked"' : ''?> name="is_user_view" value="1">
+                        </div>
                     <?php } ?>
 
-                    <tfoot>
-                    <tr>
-                    <tr>
-                        <th scope="col" class="manage-column column-real_name column-primary">
-                            <span>姓名</span><span class="sorting-indicator"></span>
-                        </th>
-                        <th scope="col" class="manage-column column-real_ID">选手ID</th>
-                        <th scope="col" class="manage-column column-project_name">类别/项目</th>
-                        <th scope="col" class="manage-column column-bonus">奖金数额</th>
-                        <th scope="col" class="manage-column column-bonus_all">奖金总额</th>
-                        <th scope="col" class="manage-column column-tax_all">扣税总额</th>
-                        <th scope="col" class="manage-column column-tax_send_bonus">税后发放总额</th>
-                        <th scope="col" class="manage-column column-bonus_path">收款路径</th>
-                        <th scope="col" class="manage-column column-cards">身份证号</th>
-                        <th scope="col" class="manage-column column-mobile">电话号码</th>
-                        <th scope="col" class="manage-column column-team">所属战队</th>
-                        <th scope="col" class="manage-column column-is_send">是否发放</th>
-                    </tr>
-                    </tr>
 
-                    </tfoot>
 
-                </table>
+                </div>
+
+
+                <?php if($reload == false){ ?>
+                    <div>
+                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">重新生成</button>
+                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">导出</button>
+                    </div>
+                <?php } ?>
+                <br class="clear">
+                <h2 class="screen-reader-text">奖金明细列表</h2>
+               <?php if($reload == false){ ?>
+                   <table class="wp-list-table widefat fixed striped users">
+                       <thead>
+                       <tr>
+                           <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
+                               <span>姓名</span><span class="sorting-indicator"></span>
+                           </th>
+                           <th scope="col" id="real_ID" class="manage-column column-real_ID">选手ID</th>
+                           <th scope="col" id="project_name" class="manage-column column-project_name">类别/项目</th>
+                           <th scope="col" id="bonus" class="manage-column column-bonus">奖金数额</th>
+                           <th scope="col" id="bonus_all" class="manage-column column-bonus_all">奖金总额</th>
+                           <th scope="col" id="tax_all" class="manage-column column-tax_all">扣税总额</th>
+                           <th scope="col" id="tax_send_bonus" class="manage-column column-tax_send_bonus">税后发放总额</th>
+                           <th scope="col" id="bonus_path" class="manage-column column-bonus_path">收款路径</th>
+                           <th scope="col" id="cards" class="manage-column column-cards">身份证号</th>
+                           <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
+                           <th scope="col" id="team" class="manage-column column-team">所属战队</th>
+                           <th scope="col" id="is_send" class="manage-column column-is_send">是否发放</th>
+                       </tr>
+                       </thead>
+
+                       <tbody id="the-list" data-wp-lists="list:user">
+
+                       <?php foreach ($orderAllData as $data){ ?>
+                           <tr id="user-5" class="data-list">
+                               <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
+                                   <strong><?=$data['real_name']?></strong>
+                                   <br>
+                                   <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                               </td>
+                               <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userId']?></td>
+                               <td class="project_name column-project_name" data-colname="类别/项目">
+                                   <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
+                                       <?=$bonus_name['bonus_name']?><br />
+                                   <?php } ?>
+                               </td>
+                               <td class="bonus column-bonus" data-colname="奖金数额">
+                                   <?php foreach ($data['bonus_list'] as $bonusV){ ?>
+                                       <?=$bonusV['bonus']?><br />
+                                   <?php } ?>
+                               </td>
+
+                               <td class="bonus_all column-bonus_all line-c" data-colname="奖金总额"><?=$data['all_bonus']?></td>
+                               <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
+                               <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
+                               <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="javascript:;" target="_blank">暂无</a></td>
+                               <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card']?></td>
+                               <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
+                               <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
+                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?></td>
+
+                           </tr>
+                       <?php } ?>
+
+                       <tfoot>
+                       <tr>
+                       <tr>
+                           <th scope="col" class="manage-column column-real_name column-primary">
+                               <span>姓名</span><span class="sorting-indicator"></span>
+                           </th>
+                           <th scope="col" class="manage-column column-real_ID">选手ID</th>
+                           <th scope="col" class="manage-column column-project_name">类别/项目</th>
+                           <th scope="col" class="manage-column column-bonus">奖金数额</th>
+                           <th scope="col" class="manage-column column-bonus_all">奖金总额</th>
+                           <th scope="col" class="manage-column column-tax_all">扣税总额</th>
+                           <th scope="col" class="manage-column column-tax_send_bonus">税后发放总额</th>
+                           <th scope="col" class="manage-column column-bonus_path">收款路径</th>
+                           <th scope="col" class="manage-column column-cards">身份证号</th>
+                           <th scope="col" class="manage-column column-mobile">电话号码</th>
+                           <th scope="col" class="manage-column column-team">所属战队</th>
+                           <th scope="col" class="manage-column column-is_send">是否发放</th>
+                       </tr>
+                       </tr>
+
+                       </tfoot>
+
+                   </table>
+                <?php } ?>
             <script type="text/javascript">
                 jQuery(document).ready(function($) {
                     $('.able_option').on('change', function () {
@@ -2024,7 +2049,25 @@ class Match_student {
                     //     height = $(v).height();
                     //     $(v).find('.line-c').css({'height':height,'line-height': height+'px'});
                     // })
-
+                    $('#is_user_view').on('change',function () {
+                        var is_view = $(this).prop('checked') == true ? 1 : 2;
+                        var status = is_view == 1 ? false : true;
+                        var _this = $(this);
+                        $.ajax({
+                           url : ajaxurl,
+                           data : {"is_view" : is_view, "match_id" : <?=$match_id?>, "action" : 'matchBonusUserView'},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                               if(response['success'] == false){
+                                   _this.prop('checked', status);
+                               }
+                                alert(response.data.info);
+                            },error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    });
 
                 })
             </script>

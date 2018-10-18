@@ -475,9 +475,10 @@ function the_table_install () {
               `cart_type` varchar(32) NOT NULL COMMENT '证件类型',
               `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
               `team` varchar(255) DEFAULT NULL COMMENT '战队名称',
+              `is_user_view` tinyint(1) unsigned DEFAULT '2' COMMENT '1允许前台显示,2禁止前台显示',
               PRIMARY KEY (`id`),
               KEY `index` (`match_id`,`user_id`) USING BTREE
-            ) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=1 CHARSET=utf8;";
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         dbDelta($sql);
     }
 }

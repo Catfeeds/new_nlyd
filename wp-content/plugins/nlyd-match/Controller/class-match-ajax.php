@@ -1290,6 +1290,23 @@ class Match_Ajax
         }
     }
 
+    /**
+     * 开启关闭比赛奖金明细前台显示
+     */
+    public function matchBonusUserView(){
+        $match_id = intval($_POST['match_id']);
+        if($match_id < 1) wp_send_json_error(['info' => '参数错误']);
+        $is_view = intval($_POST['is_view']);
+        if($is_view != 1 && $is_view != 2) wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $updateBool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_user_view' => $is_view], ['match_id' => $match_id]);
+        if(!$updateBool){
+            $id = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
+            if($id) wp_send_json_error(['info' => '修改失败']);
+        }
+        wp_send_json_success(['info' => '修改成功']);
+    }
+
 }
 
 new Match_Ajax();
