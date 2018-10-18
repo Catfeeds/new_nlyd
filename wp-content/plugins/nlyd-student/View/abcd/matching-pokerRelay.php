@@ -119,9 +119,7 @@ jQuery(function($) {
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
                 match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
-                my_answer:my_answer,
+                my_answer:my_answer,project_id
                 match_action:'subjectPokerRelay',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
