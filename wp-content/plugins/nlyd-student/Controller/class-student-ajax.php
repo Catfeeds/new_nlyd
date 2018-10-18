@@ -1318,7 +1318,7 @@ class Student_Ajax
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
             $orders[$k]['nationality'] = $user_nationality_pic;
-            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : 'CHN' ;
+            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
             $orders[$k]['nationality_short'] = $nationality_short;
 
         }
@@ -1471,7 +1471,24 @@ class Student_Ajax
         }*/
         
         $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(empty($rows)){
+            $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
+                a.post_content,
+                DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
+                if(b.match_address = '','--',b.match_address) match_address,
+                b.match_cost,b.entry_end_time,b.match_status ,c.user_id
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
+                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
+                where {$where} order by {$order} limit $start,$pageSize;
+                ";
+            //print_r($sql);
+            /*if($current_user->ID == 66){
+                    print_r($sql);
+            }*/
 
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+        }
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
