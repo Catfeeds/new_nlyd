@@ -84,7 +84,7 @@ jQuery(function($) {
     var matching_question= $.GetSession('matching_question','1');
     console.log(matching_question)
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-        questions_answer=matching_question['train_questions'];
+        questions_answer=matching_question['questions_answer'];
     }else{//未获取到比赛题目
         $.alerts('未检测到题目信息')
     }
@@ -148,6 +148,8 @@ jQuery(function($) {
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            // console.log(data)
+            // return false;
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')

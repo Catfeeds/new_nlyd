@@ -392,8 +392,8 @@ class Student_Ajax
         );
 
 
-        /*print_r($update_arr);
-        die;*/
+        // print_r($insert);
+        // die;
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
