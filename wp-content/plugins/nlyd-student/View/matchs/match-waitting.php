@@ -74,6 +74,25 @@
 </div>
 <script>
     jQuery(function($) {
+    //     new AlloyFinger($('body')[0], {//用户手势操作导致倒计时失效
+    //     touchStart: function () {
+    //         console.log(1)
+    //     },
+    //     touchMove: function () {
+    //         console.log(2)
+    //     },
+    //     touchEnd: function () {//比赛结束时间减去当前时间
+    //         //比赛结束时间减去当前时间,如果！=倒计时时间+-5s,重置或刷新
+    //         console.log(3)
+    //     },
+    //     touchCancel: function () {
+    //         console.log(4)
+    //     },
+    //     tap:function(){
+    //         console.log(5)
+    //     }
+      
+    // });
         <?php if($match_status == 2 || $count_down <= 120): ?>
 
          history.pushState(null, null, document.URL);

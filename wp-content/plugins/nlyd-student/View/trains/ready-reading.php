@@ -33,24 +33,18 @@
 
 <script>
 jQuery(function($) {
-new AlloyFinger($('#complete')[0], {//阅读完成
-    tap:function(){
-        // var sessionData={//存储session
-        //     genre_id:$.Request('genre_id'),
-        //     post_id:$.Request('post_id'),
-        //     type:'wzsd',
-        //     count_down:$('.count_down').attr('data-seconds'),
-        //     questions_answer:<?=json_encode($questions_answer)?>,
-        //     match_questions:<?=json_encode($match_questions)?>,
-        // }
-        // $.SetCookie('train_match',sessionData,0)
-        var time=$('.count_down').attr('data-seconds');
-        var href=$(this).attr('data-href')
-        var new_href=href+'/surplus_time/'+time;
-        window.location.href=new_href
-        
-    }
-})
+    new AlloyFinger($('#complete')[0], {//阅读完成
+        tap:function(){
+            if(!$('#complete').hasClass('disabled')){
+                var time=$('.count_down').attr('data-seconds');
+                var href=$(this).attr('data-href')
+                var new_href=href+'/surplus_time/'+time;
+                window.location.href=new_href
+                $('#complete').addClass('disabled')
+            }
+        }
+      
+    });
     function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
@@ -62,8 +56,8 @@ new AlloyFinger($('#complete')[0], {//阅读完成
             action:'trains_submit',
             genre_id:$.Request('genre_id'),
             project_type:'wzsd',
-            train_questions:<?=$content->ID?>,
-            train_answer:<?=$content->ID?>,
+            train_questions:<?=json_encode($match_questions)?>,
+            train_answer:<?=json_encode($match_questions)?>,
             my_answer:my_answer,
             surplus_time:time,
         }

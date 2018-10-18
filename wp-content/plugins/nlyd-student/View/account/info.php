@@ -184,22 +184,24 @@ jQuery(document).ready(function($) {
         //     });
         // });
         $("input[name='meta_val[real_ID]']").focusout(function(){//身份证号码输入框失焦事件
-            var value=$(this).val();
-            var datas={
-                real_ID:value,
-                action:'reckon_age',
-            }
-            $.ajax({
-                data: datas,
-                success: function(data, textStatus, jqXHR){
-                    if(data.success){
-                        $("input[name='meta_val[real_age]']").val(data.data.info);
-                    }else{
-                        $.alerts(data.data.info);
-                    }
-                    return false;
+            if($('#trigger4').val()=="中华人民共和国"){
+                var value=$(this).val();
+                var datas={
+                    real_ID:value,
+                    action:'reckon_age',
                 }
-            });
+                $.ajax({
+                    data: datas,
+                    success: function(data, textStatus, jqXHR){
+                        if(data.success){
+                            $("input[name='meta_val[real_age]']").val(data.data.info);
+                        }else{
+                            $.alerts(data.data.info);
+                        }
+                        return false;
+                    }
+                });
+            }
         })
         // $('.certificationFormBtn').click(function(){
         //     $('#certificationFormBtn').click()
@@ -524,7 +526,6 @@ jQuery(document).ready(function($) {
                     var name=$(this).attr('name')
                     fd.append(name,$(this).val());
                 })
-                $.alerts(fd)
                 $.ajax({
                     data: fd,
                     contentType : false,
