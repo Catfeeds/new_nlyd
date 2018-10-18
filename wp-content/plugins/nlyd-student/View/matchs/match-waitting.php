@@ -74,6 +74,11 @@
 </div>
 <script>
     jQuery(function($) {
+        new AlloyFinger($('body')[0], {//用户手势操作导致倒计时失效
+            touchCancel: function () {//比赛结束时间减去当前时间
+                //比赛结束时间减去当前时间,如果！=倒计时时间+-5s,重置或刷新
+            },
+        });
         <?php if($match_status == 2 || $count_down <= 120): ?>
 
          history.pushState(null, null, document.URL);

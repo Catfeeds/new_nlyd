@@ -525,7 +525,7 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['match_end_time']?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="比赛结束时间">
+                <input type="text" value="<?=$this->meta['match_end_time']?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
             </div>
         </div>
         <div class="layui-form-item">
