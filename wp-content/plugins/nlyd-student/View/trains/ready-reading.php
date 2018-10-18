@@ -57,7 +57,7 @@ jQuery(function($) {
             genre_id:$.Request('genre_id'),
             project_type:'wzsd',
             train_questions:<?=json_encode($match_questions)?>,
-            train_answer:<?=json_encode($match_questions)?>,
+            train_answer:<?=json_encode($questions_answer)?>,
             my_answer:my_answer,
             surplus_time:time,
         }

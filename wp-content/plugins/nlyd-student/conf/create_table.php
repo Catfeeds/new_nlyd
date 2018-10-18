@@ -456,7 +456,30 @@ function the_table_install () {
 
     }
 
+    $table_name = $wpdb->prefix . "match_bonus";  //奖金明细表
 
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+        $sql = "CREATE TABLE `{$table_name}` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `match_id` int(10) unsigned NOT NULL,
+              `user_id` int(10) unsigned NOT NULL,
+              `all_bonus` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '奖金总额',
+              `tax_send_bonus` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '税后发放额',
+              `tax_all` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '扣税总额',
+              `bonus_list` text NOT NULL COMMENT '奖项奖金列表',
+              `is_send` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1未发放,2=发放',
+              `real_name` varchar(64) NOT NULL,
+              `userID` varchar(32) NOT NULL,
+              `collect_path` varchar(255) DEFAULT NULL COMMENT '收款路径',
+              `card_num` varchar(255) NOT NULL COMMENT '证件号码',
+              `cart_type` varchar(32) NOT NULL COMMENT '证件类型',
+              `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
+              `team` varchar(255) DEFAULT NULL COMMENT '战队名称',
+              PRIMARY KEY (`id`),
+              KEY `index` (`match_id`,`user_id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=1 CHARSET=utf8;";
+        dbDelta($sql);
+    }
 }
 
 
