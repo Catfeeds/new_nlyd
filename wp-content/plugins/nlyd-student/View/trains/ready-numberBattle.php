@@ -92,6 +92,7 @@ new AlloyFinger($('#complete')[0], {//记忆完成
         $('.matching-number-zoo .matching-number').each(function(){
             my_answer.push('')
         })
+        var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
         var data={
             action:'trains_submit',
             genre_id:$.Request('genre_id'),
@@ -100,6 +101,7 @@ new AlloyFinger($('#complete')[0], {//记忆完成
             train_answer:questions_answer,
             my_answer:my_answer,
             surplus_time:time,
+            match_more:match_more,
         }
         $.ajax({
             data:data,

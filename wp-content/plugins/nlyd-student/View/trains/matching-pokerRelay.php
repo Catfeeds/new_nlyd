@@ -119,6 +119,7 @@ jQuery(function($) {
                 var answer=color+'-'+text;
                 my_answer.push(answer)
             })
+            var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
                 action:'trains_submit',
                 genre_id:$.Request('genre_id'),
@@ -127,6 +128,7 @@ jQuery(function($) {
                 train_answer:questions_answer,
                 my_answer:my_answer,
                 surplus_time:time,
+                match_more:match_more,
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){

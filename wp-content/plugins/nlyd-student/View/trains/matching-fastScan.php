@@ -347,12 +347,14 @@ $('#selectWrapper .fastScan-item').each(function(){
                 'visibility': 'visible',
             })
             isSubmit=true;
+            var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
                 action:'trains_submit',
                 genre_id:$.Request('genre_id'),
                 project_type:'kysm',
                 my_answer:ajaxData,
                 surplus_time:time,
+                match_more:match_more,
             }
             if(typeof(timer)!="undefined"){
                 clearTimeout(timer);

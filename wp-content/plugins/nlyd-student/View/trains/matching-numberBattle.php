@@ -102,6 +102,7 @@ jQuery(function($) {
                 var answer=$(this).text();
                 my_answer.push(answer)
             })
+            var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
                 action:'trains_submit',
                 genre_id:$.Request('genre_id'),
@@ -110,6 +111,7 @@ jQuery(function($) {
                 train_answer:questions_answer,
                 my_answer:my_answer,
                 surplus_time:time,
+                match_more:match_more,
             }
             // var leavePage= $.GetSession('leavePage','1');
             // if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
