@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
+            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=__('第'.$match_more.'轮', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn" id="complete"  href="<?=$url?>"><?=__('记忆完成', 'nlyd-student')?></a>
             </div>
         </div>           
     </div>
