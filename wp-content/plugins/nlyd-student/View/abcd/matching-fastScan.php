@@ -382,12 +382,13 @@ $('#selectWrapper .fastScan-item').each(function(){
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$project_id?>,
-                match_more:<?=$match_more?>,
-                my_answer:ajaxData,
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
                 project_alias:'kysm',
-                project_more_id:<?=$_GET['project_more_id']?>,
+                project_more_id:$.Request('project_more_id'),
+
+                my_answer:ajaxData,
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }

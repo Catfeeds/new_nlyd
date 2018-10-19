@@ -187,7 +187,6 @@ jQuery(function($) {
             project_more_id:$.Request('project_more_id'),
 
             my_answer:my_answer,
-            match_action:'subjectPokerRelay',
             surplus_time:time,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }

@@ -51,9 +51,9 @@ new AlloyFinger($('#complete')[0], {
             var data={
                 action:'memory_complete',
                 _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
                 match_action:'reading',
                 question_id:$('input[name="question_id"]').val()
             }
@@ -84,15 +84,17 @@ new AlloyFinger($('#complete')[0], {
             })
         var my_answer={};
         var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
-            my_answer:my_answer,
-            match_action:'subjectReading',
-            surplus_time:time,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'wzsd',
+                project_more_id:$.Request('project_more_id'),
+
+                my_answer:my_answer,
+                surplus_time:time,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         var leavePage= $.GetSession('leavePage','1');
         if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
