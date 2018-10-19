@@ -9,7 +9,7 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_black match_info_font"><?=__('第'.$match_more.'轮', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
@@ -31,7 +31,7 @@
                         <div class="Glass"></div>
                     </div>
                 </div>
-                <a class="a-btn" id="complete" href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn" id="complete" href="<?=$url?>"><?=__('记忆完成', 'nlyd-student')?></a>
             </div>
         </div>
     </div>

@@ -1,4 +1,10 @@
 <?php
+$match_more = isset($_GET['match_more']) ? chinanum($_GET['match_more']) :'一';
+$more = isset($_GET['match_more']) ? $_GET['match_more'] : 1 ;
+
+$url = home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type']).'/match_more/'.$more;
+
+
 switch ($_GET['type']){
     case 'szzb';
         $title = __('数字争霸', 'nlyd-student');
