@@ -3,13 +3,13 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
+            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="fastScan-item answer"><?=__('开始答题', 'nlyd-student')?></div>
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?> <?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?> <?=__('第'.$match_more.'轮', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>

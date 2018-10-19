@@ -216,6 +216,8 @@ class Student_Trains extends Student_Home
             $data['match_questions'] = $match_questions;
         }
 
+        $data['match_more'] = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
+        $data['url'] .= '/match_more/'.$data['match_more'];
         $view = student_view_path.CONTROLLER.'/initial.php';
         load_view_template($view,$data);
 
@@ -303,6 +305,7 @@ class Student_Trains extends Student_Home
                 break;
         }
         $data['list'] = $kinds;
+        $data['match_more'] = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
         //var_dump($_COOKIE);
         $view = student_view_path.CONTROLLER.'/answer.php';
         load_view_template($view,$data);
@@ -414,6 +417,7 @@ class Student_Trains extends Student_Home
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'recur_url'=>home_url('/trains/initial/genre_id/'.$row['genre_id'].'/type/'.$row['project_type'].'/match_more/'.$match_more), //再来一局
             'revert_url'=>home_url('trains'),//返回项目列表,
+            'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );
 
 

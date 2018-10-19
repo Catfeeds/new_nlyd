@@ -12,7 +12,7 @@
                 </div>
                 
 
-                <div class="a-btn" id="complete" href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><?=__('开始训练', 'nlyd-student')?></div>
+                <div class="a-btn" id="complete" href="<?=$url?>"><?=__('开始训练', 'nlyd-student')?></div>
             </div>
         </div>
     </div>
