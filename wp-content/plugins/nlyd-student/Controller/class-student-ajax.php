@@ -281,7 +281,7 @@ class Student_Ajax
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_type'])));
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
 
         //计算成绩
 
@@ -291,9 +291,9 @@ class Student_Ajax
 
                 if(!empty($_POST['my_answer'])){
 
-                    $len = count($_POST['train_questions']);
+                    $len = count($_POST['questions_answer']);
 
-                    $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
+                    $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
 
                     $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
 
@@ -390,14 +390,14 @@ class Student_Ajax
             'created_microtime'=>str2arr(microtime(),' ')[0],
         );
 
-
          /*print_r($insert);
          die;*/
+
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
             $log_id = $wpdb->insert_id;
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
         }

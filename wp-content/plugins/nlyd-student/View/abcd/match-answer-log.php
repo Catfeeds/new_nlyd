@@ -117,19 +117,16 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     }
                     ?>
                 </div>
-                <!-- <?php if(!empty($end_time_count_down)):?>
-                    <div class="a-btn" style="display: none"><span class="count_down next_more_down" data-seconds="<?=$end_time_count_down?>">00:00:00</span></div>
-                <?php endif;?> -->
-                <?php if($next_type == 1 && !isset($_GET['type'])): ?>
-                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一轮开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
+                <?php if($next_count_down > 0):
+                    if($next_project == 'y'){
+                        $title = '项';
+                    }elseif ($next_project == 'n'){
+                        $title = '轮';
+                    }
+                ?>
+                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一'.$title.'开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
                 <?php endif;?>
-                <?php if($next_type == 2 && !isset($_GET['type'])): ?>
-                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一项目开赛', 'nlyd-student')?> <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
-                <?php endif;?>
-                <?php if($next_type == 3):?>
-                    <a class="a-btn" href="<?=$next_project_url?>"><?=__('下一项已开赛,进入比赛', 'nlyd-student')?></a>
-                <?php endif;?>
-                <?php if($next_type == 4):?>
+                <?php if(empty($next_project)): ?>
                     <a class="a-btn" href="<?=$next_project_url?>"><?=__('所有答题结束,查看详情', 'nlyd-student')?></a>
                 <?php endif;?>
             </div>
@@ -138,10 +135,8 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 </div>
 <script>
     jQuery(function($) {
-        <?php if(!isset($_GET['type'])): ?>
+        <?php if(isset($_GET['project_more_id'])): ?>
           leavePageLoad('<?=$wait_url?>');
-        // var getTime=<?=$next_count_down?>;
-        // var now_Time=new Date().getTime()
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
