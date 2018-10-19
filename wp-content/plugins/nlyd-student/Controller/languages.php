@@ -15,6 +15,8 @@ __('记忆类脑力健将', 'nlyd-student');
 __('心算类脑力健将', 'nlyd-student');
 __('速读类脑力健将', 'nlyd-student');
 __('英国', 'nlyd-student');
+__('中国', 'nlyd-student');
+__('国际', 'nlyd-student');
 __('已结束', 'nlyd-student');
 __('等待开赛', 'nlyd-student');
 __('未开始', 'nlyd-student');

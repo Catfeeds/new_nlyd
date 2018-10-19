@@ -77,8 +77,8 @@
                 <!-- 级别 -->
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <p class="fs_14 c_black">
-                        <?php if(!empty($my_skill['nationality']) && !empty($my_skill['mental_lv']) && !empty($my_skill['mental_type'])):?>
-                            <?=__($my_skill['nationality'], 'nlyd-student')?><span class="c_orange"><?=$my_skill['mental_lv']?></span><?=__('级', 'nlyd-student')?> <?=__($my_skill['mental_type'], 'nlyd-student')?> |
+                        <?php if($brainpower):?>
+                            <?=$brainpower['range'] == 2 ? __('国际', 'nlyd-student') : __('中国', 'nlyd-student')?><span class="c_orange"><?=$brainpower['level']?></span><?=__($brainpower['type_name'], 'nlyd-student')?> |
                         <?php endif;?>
                         <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
