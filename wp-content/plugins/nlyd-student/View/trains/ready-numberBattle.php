@@ -46,7 +46,6 @@ jQuery(function($) {
         if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
             questions_answer=leavePage['train_questions']
         }else{
-            var questions_answers=[];
             // var questions_answers=JsonData;
             // var pos = Math.round(Math.random() * (questions_answers.length - 1));
             // var xx=questions_answers[pos]
