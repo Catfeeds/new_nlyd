@@ -50,8 +50,9 @@
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>:</div></div>
-                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><div><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div></div>
-                                        
+                                        <div class="nl-match-info c_black">
+                                            <div id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -87,11 +88,11 @@
                                         <table class="nl-table">
                                             <thead>
                                                 <tr>
-                                                    <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?> </div></td>
+                                                    <td><div class="table_content"><?=__('头 像', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('姓 名', 'nlyd-student')?> </div></td>
                                                     <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('年龄', 'nlyd-student')?></div></td>
-                                                    <td><div class="table_content"><?=__('国籍', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('年 龄', 'nlyd-student')?></div></td>
+                                                    <td><div class="table_content"><?=__('国 籍', 'nlyd-student')?></div></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="flow-table">

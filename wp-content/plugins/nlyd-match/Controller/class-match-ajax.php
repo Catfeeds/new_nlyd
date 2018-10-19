@@ -1240,11 +1240,11 @@ class Match_Ajax
         $wpdb->startTrans();
 
         if(!empty($_POST['more_id'])){  //修改
-
+            $match_more = $wpdb->get_var("select `more` from {$wpdb->prefix}match_project_more where id = {$_POST['more_id']} ");
             unset($array['more']);
             unset($array['created_time']);
             unset($array['created_time']);
-            $array['more'] = $total;
+            $array['more'] = $match_more;
             $array['revise_id'] = $current_user->ID;
             $array['revise_time'] = get_time('mysql');
 

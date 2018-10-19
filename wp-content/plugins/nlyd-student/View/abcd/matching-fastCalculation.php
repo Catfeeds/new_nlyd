@@ -70,6 +70,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     var even_add_time = parseInt($('#even_add_time').val()); //连加
     var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
     var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
@@ -83,7 +86,7 @@ jQuery(function($) {
 
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
         level=matchSession['level'];
@@ -353,9 +356,9 @@ jQuery(function($) {
         ajaxData.push(row)
         var sessionData={
             ajaxData:ajaxData,
-            match_id:$.Request('match_id'),
-            project_id:$.Request('project_id'),
-            match_more:$.Request('match_more'),
+            match_id:_match_id,
+            project_id:<?=$project_id?>,
+            match_more:<?=$match_more?>,
             level:level,
             n_type:n_type,
             nextBtn_click:nextBtn_click
@@ -491,16 +494,18 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
+                match_id:_match_id,
+                project_id:<?=$project_id?>,
+                match_more:<?=$match_more?>,
+                project_more_id:<?=$_GET['project_more_id']?>,
                 match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
                 my_answer:ajaxData,
-                match_action:'subjectFastCalculation',
+                project_alias:'zxss',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }

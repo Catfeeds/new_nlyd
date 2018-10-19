@@ -64,11 +64,14 @@ jQuery(function($) {
         // console.log(data);
         submit(time,4);
     })
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
     }
@@ -96,7 +99,7 @@ jQuery(function($) {
             var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
             ajaxData.push(thisRow)
             if(!$.Request('test')){
-                var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
+                var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
                 $.SetSession('match',sessionData)
             }
         // }
@@ -131,7 +134,7 @@ jQuery(function($) {
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -432,7 +435,7 @@ new AlloyFinger($('#next')[0], {
                     numbers:thisAjaxRow.question,
                     my_answer:'',
                     new_date:new Date().getTime(),
-                    match_more:$.Request('match_more') ? $.Request('match_more') : 1,
+                    match_more:_match_more ? _match_more : 1,
                     project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
                 }
                 $.ajax({

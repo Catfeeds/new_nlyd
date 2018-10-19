@@ -50,6 +50,10 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');
         </div>
         <?php } ?>
         <?php } ?>
+        <div>
+            <label>快眼闪烁时间</label>
+            <input type="text" name="project_default['kysm'][flicker]" value="<?=!empty($project_default['kysm']['flicker']) ? $project_default['kysm']['flicker'] : 5;?>"/>分钟
+        </div>
         <p><input type="submit" id="match_default_sub" class="button button-primary" value="提交"></p>
     </form>
 </div>

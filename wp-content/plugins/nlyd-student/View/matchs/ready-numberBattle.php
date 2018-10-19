@@ -19,12 +19,12 @@
                     <div class="matching-row">
                         <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn active"><?=__('不划', 'nlyd-student')?></div>
-                            <div class="matching-btn">2</div>
-                            <div class="matching-btn">3</div>
-                            <div class="matching-btn">4</div>
-                            <div class="matching-btn">5</div>
-                            <div class="matching-btn">8</div>
+                            <button class="matching-btn active"><?=__('不划', 'nlyd-student')?></button>
+                            <button class="matching-btn">2</button>
+                            <button class="matching-btn">3</button>
+                            <button class="matching-btn">4</button>
+                            <button class="matching-btn">5</button>
+                            <button class="matching-btn">8</button>
                         </div>
                     </div>
                     <div class="matching-number-zoo">

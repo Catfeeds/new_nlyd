@@ -233,12 +233,13 @@ class Student_Abcd extends Student_Home
                             $orders[$k]['real_age'] = '--';
                             $orders[$k]['nickname'] = $user['nickname'][0];
                         }
-                        $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
-                        $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
-                        $orders[$k]['nationality'] = student_css_url.'image/flags/'.$user_nationality_pic.'.png';
 
+                        $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
+                        $orders[$k]['nationality'] = $user_nationality_pic;
+                        $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
+                        $orders[$k]['nationality_short'] = $nationality_short;
                     }
-                    //print_r($orders);
+                    //print_r($orders);die;
                 }
             }
 
@@ -314,8 +315,8 @@ class Student_Abcd extends Student_Home
             $this->get_404(__('未设置比赛项的轮数', 'nlyd-student'));
             return;
         }
-        if($project_more['match_status'] == -3){
-            $this->get_404(__('比赛已结束', 'nlyd-student'));
+        if($project_more['match_status'] == -3 || $this->end_project == 'y'){
+            $this->get_404(array('message'=>__('比赛已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$project_more['match_id'])));
             return;
         }
 
@@ -450,6 +451,31 @@ class Student_Abcd extends Student_Home
                     //if($val['problem_answer'] == 1) $answer_total += 1;
                 }
                 $match_questions = array_unique(array_column($rows,'post_title','ID'));
+            }
+        }
+        elseif (in_array($this->project_alias,array('kysm','zxss'))){
+
+            $match_default = get_option('match_project_use');
+            if($this->project_alias == 'kysm'){
+
+                $data['child_count_down'] = !empty($match_default['project_default']['kysm']['flicker']) ? $match_default['project_default']['kysm']['flicker'] : 5;
+            }else {
+                $zxss_default = $match_default['project_use']['zxss'];
+
+                if(empty($zxss_default)){
+                    $zxss_default = array(
+                        'even_add'=>180,
+                        'add_and_subtract'=>180,
+                        'wax_and_wane'=>180,
+                    );
+                }else{
+                    $zxss_default['even_add'] *= 60;
+                    $zxss_default['add_and_subtract'] *= 60;
+                    $zxss_default['wax_and_wane'] *= 60;
+                }
+
+                $data['child_count_down'] = $zxss_default;
+
             }
         }
 
