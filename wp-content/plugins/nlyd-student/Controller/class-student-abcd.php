@@ -348,8 +348,8 @@ class Student_Abcd extends Student_Home
             $data['buffer_url'] = $data['match_url'];
         }
 
-        print_r($this->current_project);
-        print_r($project_more);
+        /*print_r($this->current_project);
+        print_r($project_more);*/
 
 
 

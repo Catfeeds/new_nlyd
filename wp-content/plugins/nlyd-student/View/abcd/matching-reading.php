@@ -111,11 +111,13 @@ jQuery(function($) {
                 project_alias:'wzsd',
                 project_more_id:$.Request('project_more_id'),
                 post_id:$.Request('post_id'),
-
+                match_questions:<?=json_encode($match_questions)?>,
+                questions_answer:<?=json_encode($questions_answer)?>,
                 my_answer:my_answer,
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
+            
             var leavePage= $.GetSession('leavePage','1');
             if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
