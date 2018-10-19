@@ -47,7 +47,7 @@ class Student_Trains extends Student_Home
     public function lists(){
 
         if(empty($_GET['id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -92,7 +92,7 @@ class Student_Trains extends Student_Home
      */
     public function ready(){
         if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -113,7 +113,7 @@ class Student_Trains extends Student_Home
 
 
         if(empty($_GET['type'])){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
         global $wpdb,$current_user;
@@ -126,7 +126,7 @@ class Student_Trains extends Student_Home
                 $rows = $wpdb->get_results($sql,ARRAY_A);
 
                 if(empty($rows)){
-                    $this->get_404('测试题库暂无文章,请联系管理员添加');
+                    $this->get_404(__('测试题库暂无文章,请联系管理员添加', 'nlyd-student'));
                     return;
                 }
 
@@ -144,7 +144,7 @@ class Student_Trains extends Student_Home
 
                     $result = array_diff($posts_arr,$post_arr);
                     if(empty($result)){
-                        $this->get_404(array('message'=>'恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！','return_url'=>home_url('trains')));
+                        $this->get_404(array('message'=>__('恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！', 'nlyd-student'),'return_url'=>home_url('trains')));
                         return;
                     }
                     //print_r($result);
@@ -200,7 +200,7 @@ class Student_Trains extends Student_Home
                 $count_down = 600;
                 break;
             default:
-                $this->get_404('没有该比赛项目');
+                $this->get_404(__('没有该比赛项目', 'nlyd-student'));
                 return;
                 break;
         }
@@ -232,7 +232,7 @@ class Student_Trains extends Student_Home
             case 'wzsd':
                 if(empty($_GET['post_id'])){
 
-                    $this->get_404('参数错误');
+                    $this->get_404(__('参数错误', 'nlyd-student'));
                     return;
                 }
                 /*if(!empty($_COOKIE['train_match'])){
@@ -317,7 +317,7 @@ class Student_Trains extends Student_Home
         $sql = "select * from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} and id = {$_GET['id']}";
         $row = $wpdb->get_row($sql,ARRAY_A);
         if(empty($_GET['id']) || empty($row)){
-            $this->get_404('参数错误');
+            $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
@@ -473,7 +473,7 @@ class Student_Trains extends Student_Home
                 $count_down = 600;
                 break;
             default:
-                $this->get_404('没有该比赛项目');
+                $this->get_404(__('没有该比赛项目', 'nlyd-student'));
                 return;
                 break;
         }

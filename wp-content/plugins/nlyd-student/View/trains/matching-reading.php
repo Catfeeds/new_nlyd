@@ -3,19 +3,19 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><?=$title?></h1>
+                <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="c_black match_info_font"><?=$title?><span class="blue-font">第一轮</span></span>
-                            <span class="c_blue ml_10 match_info_font">第<span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?>题</span>
+                            <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><span class="blue-font"><?=__('第一轮', 'nlyd-student')?></span></span>
+                            <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?><?=__('题', 'nlyd-student')?></span>
                             <span class="c_blue ml_10 match_info_font">
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </span>
-                            <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                            <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                         </div>
                         <div class="reading-question">
                             <?php
@@ -49,8 +49,8 @@
                         </div>
                         
                         <div class="a-btn two">
-                            <div class="a-two left disabled">上一题</div>
-                            <div class="a-two right">下一题</div>
+                            <div class="a-two left disabled"><?=__('上一题', 'nlyd-student')?></div>
+                            <div class="a-two right"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
                 </form>
@@ -156,7 +156,7 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
@@ -166,7 +166,7 @@ jQuery(function($) {
     //     }, 1000);
     // }
     $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
@@ -174,9 +174,9 @@ jQuery(function($) {
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
                 submit(0)
@@ -195,11 +195,11 @@ jQuery(function($) {
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '提示' //不显示标题栏
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: ['按错了','提交',  ]
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>',  ]
                 ,success: function(layero, index){
                 }
                 ,yes: function(index, layero){

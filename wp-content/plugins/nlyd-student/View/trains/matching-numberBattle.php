@@ -2,24 +2,24 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font">第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_black match_info_font"><?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label">辅助操作</div>
+                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev">前插一位</div>
-                            <div class="matching-btn c_white" id="next">后插一位</div>
+                            <div class="matching-btn c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></div>
+                            <div class="matching-btn c_white" id="next"><?=__('后插一位', 'nlyd-student')?></div>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -45,7 +45,7 @@
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key fs_16 c_white" id="del">删除</div>
+                            <div class="bg_orange matching-key fs_16 c_white" id="del"><?=__('删除', 'nlyd-student')?></div>
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0">0</div>
                         </div>
                     </div>
@@ -69,10 +69,10 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
+        $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
     }
     $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
@@ -80,9 +80,9 @@ jQuery(function($) {
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
                 submit(0,3)
@@ -145,7 +145,7 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
         return false;
     }
@@ -357,11 +357,11 @@ layui.use('layer', function(){
             layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '提示' //不显示标题栏
+                    ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                    ,btn: ['按错了','提交']
+                    ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                    ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>']
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){

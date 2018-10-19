@@ -3,22 +3,22 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$title?></h1>
+            <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第1/1题</span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label">显示张数</div>
+                        <div class="matching-row-label"><?=__('显示张数', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn active">全部</div>
+                            <div class="matching-btn active"><?=__('全部', 'nlyd-student')?></div>
                             <div class="matching-btn">1</div>
                             <div class="matching-btn">2</div>
                             <div class="matching-btn">3</div>
@@ -40,9 +40,9 @@
                             </div>
                         </div>
                     </div>
-                    <p class="ta_c" style="margin-top:20px">当前记忆 <span class="c_blue" id="number">0</span> 张</p>
+                    <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>">记忆完成</a>
+                <a class="a-btn" id="complete"  href="<?=home_url('trains/answer/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><?=__('记忆完成', 'nlyd-student')?></a>
             </div>
         </div>           
     </div>
@@ -215,9 +215,9 @@ new AlloyFinger($('#complete')[0], {//记忆完成
         $(this).attr('data-seconds',S).text(time)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
                 submit(0)
