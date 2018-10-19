@@ -38,7 +38,7 @@
                                             ?>
                                             <img src="<?=$thumbnail_image_url[0]?>">
                                         </div>
-                                        <div class="train_name fs_16"><?=$v->post_title?></div>
+                                        <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
                                         <?php if($v->post_status == 'draft'):?>
                                             <div class="train_tips"><?=__('暂未开放', 'nlyd-student')?></div>
                                         <?php endif;?>

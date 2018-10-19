@@ -69,118 +69,92 @@ class Brainpower
      * 加入名录
      */
     public function joinDirectory(){
-//        global $wpdb;
-//        $match_id = intval($_GET['match_id']);
-//        $project_id_arr = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id, ARRAY_A);
-//        for ($i = 2; $i < 15; ++$i){
-//            foreach ($project_id_arr as $v){
-//                unset($v['id']);
-//                $v['user_id'] = $i;
-//                $wpdb->insert($wpdb->prefix.'match_questions', $v);
-//            }
-//        }
         $is_view_btn = true;
         global $wpdb;
         $match_id = intval($_GET['match_id']);
+        if($match_id < 1) exit('参数错误');
+        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        //TODO 判断比赛是否结束
+
+        if(!$match || $match['match_status'] != -3){
+            exit('<h3>当前比赛未结束!</h3>');
+        }
         //查询是否有名录
         $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'directories WHERE `match` LIKE "%('.$match_id.')%"', ARRAY_A);
         if($res) {
             $is_view_btn = false;
         }
+        //查询比赛小项目
+        $projectArr = get_match_end_time($match_id);
 
-        //查询大类以及附属小类
-        $cateArr = $wpdb->get_results('SELECT p1.post_title AS parent_title,p1.ID AS parent_ID,GROUP_CONCAT(p2.ID) AS child_ID,GROUP_CONCAT(p2.post_title) AS child_title FROM '.$wpdb->posts.' AS p1 
-        LEFT JOIN '.$wpdb->posts.' AS p2 ON p2.post_parent=p1.ID AND p2.post_status="publish" AND p2.post_type="project" 
-        WHERE p1.post_status="publish" AND p1.post_type="match-category" GROUP BY parent_ID', ARRAY_A);
+        //获取比赛大类
+        $match_student = new Match_student();
+        $categoryArr = $match_student->getCategoryArr($projectArr);
 
-        //1.根据比赛id查询比赛每一项目得前十五名,当分数相同时重新排名,然后去除后5名
-        //1.1 查询比赛类别, 用于分组
-        foreach ($cateArr as $cak => $cav){
-            //每个大类的学员总分数
-            $res = $wpdb->get_results('SELECT u.ID AS user_ID,SUM(mq.my_score) AS my_score,u.user_login,u.display_name,u.user_mobile,SUM(mq.surplus_time) AS surplus_time,u.user_email FROM '.$wpdb->prefix.'match_questions AS mq 
-        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=mq.user_id 
-        WHERE mq.project_id IN('.$cav['child_ID'].') AND mq.match_id='.$match_id.' GROUP BY user_ID ORDER BY my_score DESC LIMIT 0,15', ARRAY_A);
-            //排序
-            for ($i = 0; $i < count($res)-1; ++$i){
-                for ($j = $i+1; $j < count($res); ++$j){
-                    if($res[$i]['my_score'] == $res[$j]['my_score']){
-                        //分数相同,算时间
-                        if($res[$i]['surplus_time'] < $res[$j]['surplus_time']){
-                            $a = $res[$i];
-                            $res[$i] = $res[$j];
-                            $res[$j] = $a;
-                        }elseif ($res[$i]['surplus_time'] == $res[$j]['surplus_time']){
-                            //时间相同,算正确率
-                            //查询答案
-                            $correct1 = $this->getCorrect($cav['child_ID'],$match_id,$res[$i]['user_ID'],$cav['child_title']);
-                            $correct2 = $this->getCorrect($cav['child_ID'],$match_id,$res[$j]['user_ID'],$cav['child_title']);
-
-                            $res[$i]['correct'] = $correct1;
-                            $res[$j]['correct'] = $correct2;
-//                            $res[$j]['answer'] = $answer2;
-                            if($correct2 > $correct1){
-                                $a = $res[$i];
-                                $res[$i] = $res[$j];
-                                $res[$j] = $a;
-                            }
-                            //正确率相同,看脸
-                        }
-                    }
-                }
-            }
-            $cateArr[$cak]['data'] = array_slice($res, 0, 10);//截取前十
+        //查询前十
+        foreach ($categoryArr as &$cate){
+            $cate['data'] = $match_student->getCategoryRankingData($match,join(',', $cate['id']),0,'0,10');
         }
 
-
-
-
-//
-//        echo '<pre />';
-//        print_r($cateArr);
-//        die;
-        //3.插入数据sql生成
-        if(is_post()){
-            $wpdb->startTrans();
-            $sql = 'INSERT INTO '.$wpdb->prefix.'directories (user_id,category_name,`level`,`match`,`range`,`type`) VALUES ';
-            $insertValue = '';
-            foreach ($cateArr as $pgv){
-//                $match = serialize(['1' => ['match_id' => $match_id, 'match_level' => 1]]);
-                $match = '('.$match_id.')';
-                foreach ($pgv['data'] as $sv){
-                    //2.查询这前十名是否已是当前类别当前赛事脑力健将, 如果是并且需要修改级别则修改级别
-                    $oldId = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'directories WHERE category_id='.$pgv['parent_ID'].' AND user_id='.$sv['user_ID'].' AND `type`=1');
-                    if($oldId){
-//                        $match = unserialize($oldId->match);
-                        if(!preg_match('/('.$match_id.')/', $oldId->match)) $match = $oldId->match.'('.$match_id.')';
-                        else $match = $oldId->match;
-//                        $match[$oldId->level+1] = ['match_id' => $match_id, 'match_level' => $oldId->level+1];
-                        $wpdb->update($wpdb->prefix.'directories', ['level' => $oldId->level+1, 'match' => $match], ['id' => $oldId->id]);
-                    }else{
-                        $insertValue .= "('{$sv['user_ID']}','{$pgv['parent_title']}','1','{$match}','1','1'),";
-                    }
-                }
-            }
-            if(!$insertValue == ''){
-                $sql .= $insertValue;
-                $sql = substr($sql,0,strlen($sql)-1);
-                //4.开始插入数据
-                $res = $wpdb->query($sql);
-            }
-            if($insertValue == '' || $res){
-                $wpdb->commit();
-                $msg = '<span style="color: #154D10;">操作成功!</span>';
-            }else{
-                $wpdb->rollback();
-                $msg = '<span style="color:#7F0000;">操作失败!</span>';
-            }
-        }
+//        leo_dump($categoryArr);
+        $msg = '';
 
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=get_post($match_id)->post_title?>-脑力健将名录</h1>
 
+            <form method="post" action="" onsubmit="" id="_F">
 
+                <p class="search-box">
+                    <!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
+                    <!--                    <input type="search" id="user-search-input" name="s" value="">-->
+                    <!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
+                </p>
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="437465374e"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="tablenav top">
+
+
+                    <!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
+                    <!--                            <option value="-1">批量操作</option>-->
+                    <!--                            <option value="delete">删除</option>-->
+                    <!--                        </select>-->
+                    <style>
+                        #dra_set_name,#dra_set_btn{
+                            padding-bottom: 0.5em;
+                        }
+                    </style>
+                    <div id="dra_set_name">
+                        <span style="font-weight: bold">名录类型:</span>
+                        <input type="radio" name="range" value="1">中国
+                        <input type="radio" name="range" value="2">国际
+
+                    </div>
+
+                    <div id="dra_set_btn">
+                        <?php if($is_view_btn){?>
+                            <input type="button" onclick="confirmSub();" class="button action" style="font-weight: bold" value="生成名录">
+                        <?php } ?>
+                    </div>
+                    <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
+                    <script type="text/javascript">
+                        function confirmSub() {
+                            if(confirm('是否确认生成名录?生成后无法重新生成')){
+                                document.getElementById('_F').submit();
+                            }
+                        }
+                    </script>
+
+
+                    <br class="clear">
+                </div>
+            </form>
             <hr class="wp-header-end">
+
+
+            <?php if(!is_mobile()){
+                echo '<br class="clear"> <br class="clear">';
+            } ?>
 <!---->
 <!--            <h2 class="screen-reader-text">过滤用户列表</h2>-->
 <!--            <ul class="subsubsub">-->
@@ -189,99 +163,39 @@ class Brainpower
 <!--                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（6）</span></a> |</li>-->
 <!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（3）</span></a></li>-->
 <!--            </ul>-->
-            <form method="post" action="" onsubmit="" id="_F">
 
-                <p class="search-box">
-<!--                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>-->
-<!--                    <input type="search" id="user-search-input" name="s" value="">-->
-<!--                    <input type="submit" id="search-submit" class="button" value="搜索用户">-->
-                </p>
-
-                <input type="hidden" id="_wpnonce" name="_wpnonce" value="437465374e"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
-                <div class="tablenav top">
-
-                    <div class="alignleft actions bulkactions">
-<!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-                        <?php if($is_view_btn){?>
-                            <input type="button" onclick="confirmSub();" class="button action" style="font-weight: bold" value="生成名录">
-                        <?php } ?>
-                        <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
-                        <script type="text/javascript">
-                            function confirmSub() {
-                                if(confirm('是否确认生成名录?')){
-                                    document.getElementById('_F').submit();
-                                }
-                            }
-                        </script>
-                    </div>
-                    <div class="alignleft actions">
-<!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
-<!--                        <select name="new_role" id="new_role">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
-                    </div>
-
-                    <br class="clear">
-                </div>
                 <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
-                        <td id="cb" class="manage-column column-cb check-column">
-                            <label class="screen-reader-text" for="cb-select-all-1">全选</label
-                            <input id="cb-select-all-1" type="checkbox">
-                        </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
-                            用户名
+                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
                         </th>
-                        <th scope="col" id="name" class="manage-column column-real_name">姓名</th>
-                        <th scope="col" id="role" class="manage-column column-score">分数</th>
-                        <th scope="col" id="role" class="manage-column column-mobile">手机</th>
-                        <th scope="col" id="email" class="manage-column column-email sortable desc">
-                            电子邮件
-                        </th>
-                        </th>
+                        <th scope="col" id="cates" class="manage-column column-cates">类别</th>
+                        <th scope="col" id="userID" class="manage-column column-userID">选手ID</th>
+                        <th scope="col" id="card_num" class="manage-column column-card_num">证件号码</th>
+                        <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
+                        <th scope="col" id="email" class="manage-column column-email">邮箱</th>
                     </tr>
+
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                    <?php foreach ($cateArr as $cav){ ?>
-                        <tr id="user-12">
-                            <th scope="row" class="check-column" style="text-align: left;font-weight: bold;font-size:18px;background-color: #C1BBB7;height: 2em" colspan="6">
-                                <?=$cav['parent_title']?>-前<?=count($cav['data'])?>名
-                            </th>
+                    <?php foreach ($categoryArr as $cav){ ?>
 
 
-                        </tr>
-
-                        <?php foreach ($cav['data'] as $cavD){
+                        <?php foreach ($cav['data'] as $data){
                             ?>
-
-                            <tr id="user-12">
-                                <th scope="row" class="check-column">
-                                    <label class="screen-reader-text" for=""></label>
-                                    <input type="checkbox" name="users[]" id="" class="editor" value="">
-                                </th>
-                                <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                                    <img alt="" src="http://2.gravatar.com/avatar/b697aceb6d93a06b47ed9eabdd504985?s=32&amp;d=mm&amp;r=g" srcset="<?=get_user_meta($cavD['user_ID'], 'user_head')[0]?>" class="avatar avatar-32 photo" height="32" width="32">
-                                    <strong>
-                                        <?=$cavD['user_login']?>
-                                    </strong>
+                            <tr class="data-list">
+                                <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
+                                    <strong><?=$data['real_name']?></strong>
+                                    <br>
+                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                 </td>
-                                <td class="role column-real_name" data-colname="姓名"><?=str_replace(', ','',$cavD['display_name'])?></td>
-                                <td class="role column-score" data-colname="分数"><?=$cavD['my_score']?></td>
-                                <td class="role column-mobile" data-colname="手机"><?=$cavD['user_mobile']?></td>
-                                <td class="email column-email" data-colname="电子邮件">
-                                    <?=$cavD['user_email']?>
-                                </td>
+                                <td class="cates column-cates line-c" data-colname="类别"><?=$cav['name']?>类</td>
+                                <td class="userID column-userID line-c" data-colname="选手ID"><?=$data['userID']?></td>
+                                <td class="card_num column-card_num line-c" data-colname="证件号码"><?=$data['card']?></td>
+                                <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
+                                <td class="email column-email line-c" data-colname="邮箱"><?=$data['user_email']?></td>
 
                             </tr>
                         <?php } ?>
@@ -292,19 +206,14 @@ class Brainpower
 
                     <tfoot>
                     <tr>
-                        <td class="manage-column column-cb check-column">
-                            <label class="screen-reader-text" for="cb-select-all-2">全选</label>
-                            <input id="cb-select-all-2" type="checkbox">
-                        </td>
-                        <th scope="col" class="manage-column column-username column-primary sortable desc">
-                            用户名
+                        <th scope="col" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
                         </th>
-                        <th scope="col" class="manage-column column-real_name">姓名</th>
-                        <th scope="col" class="manage-column column-score">分数</th>
-                        <th scope="col" class="manage-column column-mobile">手机</th>
-                        <th scope="col" class="manage-column column-email sortable desc">
-                            电子邮件
-                        </th>
+                        <th scope="col" class="manage-column column-cates">类别</th>
+                        <th scope="col" class="manage-column column-userID">选手ID</th>
+                        <th scope="col" class="manage-column column-card_num">证件号码</th>
+                        <th scope="col" class="manage-column column-mobile">电话号码</th>
+                        <th scope="col" class="manage-column column-email">邮箱</th>
                     </tr>
                     </tfoot>
 
@@ -314,7 +223,7 @@ class Brainpower
 
                     <br class="clear">
                 </div>
-            </form>
+
 
             <br class="clear">
         </div>

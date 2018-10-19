@@ -187,9 +187,10 @@ line-height:45px;
     margin-top: 10px;
 }
 .getCodeBtn{
+    text-align: right;
     position: absolute;
     display: table;
-    width: 50px;
+    width: 75px;
     top: 0;
     right: 20px;
     background: transparent;

@@ -481,6 +481,24 @@ function the_table_install () {
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         dbDelta($sql);
     }
+
+    $table_name = $wpdb->prefix . "directories";  //名录表
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+        $sql = "CREATE TABLE `{$table_name}` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(10) unsigned NOT NULL,
+          `category_name` varchar(66) DEFAULT NULL COMMENT '类别名称',
+          `level` varchar(33) NOT NULL COMMENT '等级',
+          `match` text COMMENT '比赛id记录(1)(2)(3)',
+          `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1显示,0显示',
+          `range` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1中国,2国际',
+          `type_name` varchar(255) NOT NULL COMMENT '名录类型名称',
+          `certificate` varchar(64) DEFAULT NULL COMMENT '证书编号',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;";
+        dbDelta($sql);
+    }
 }
 
 

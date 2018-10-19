@@ -46,7 +46,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="<?=__('本题无解', 'nlyd-student')?>"><?=__('本题无解', 'nlyd-student')?></div>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
@@ -94,8 +94,8 @@ jQuery(function($) {
             var _rights=valid(select);
             
             if(_len>=4){//前面的4题连续无解
-                if(_rights=='本题无解'){//本题也无解
-                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
+                if(_rights=='<?=__('本题无解', 'nlyd-student')?>'){//本题也无解
+                    if(ajaxData[_len-1]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-2]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-3]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-4]['rights']=='<?=__('本题无解', 'nlyd-student')?>'){
                         _flag1=true;
                     }
                 }
@@ -204,10 +204,10 @@ $('.number').each(function(){
                 })
                 var number=_this.text();
                 var text=$('.answer').text()
-                if(text=="本题无解"){
+                if(text=='<?=__('本题无解', 'nlyd-student')?>'){
                     text=''
                 }
-                if(number=="本题无解"){
+                if(number=='<?=__('本题无解', 'nlyd-student')?>'){
                     $('.answer').text(number)
                     $('.number').removeClass('disabled')
                     $('.answer').text(number) 
@@ -339,7 +339,7 @@ new AlloyFinger($('#del')[0], {
             var len=text.length;
             var news='';
             if(len>0){
-                if(text!="本题无解"){
+                if(text!='<?=__('本题无解', 'nlyd-student')?>'){
                     var end=text.substr(text.length-1,1);
                     var end_1=text.substr(text.length-2,1)
                     if(!isNaN(parseInt(end))){//删除的是数字
@@ -386,9 +386,9 @@ new AlloyFinger($('#next')[0], {
                 }
             })
             if(text.length!=0){
-                if($('.answer').text()=='本题无解'){
+                if($('.answer').text()=='<?=__('本题无解', 'nlyd-student')?>'){
                     text='unsolvable';
-                     if(ajaxData[ajaxData.length-1].rights=="本题无解"){
+                     if(ajaxData[ajaxData.length-1].rights=='<?=__('本题无解', 'nlyd-student')?>'){
                         $('.answer').addClass('right-fast')
                         ajaxData[ajaxData.length-1]['isRight']=true;
                      }else{
@@ -438,11 +438,11 @@ new AlloyFinger($('#next')[0], {
             layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '提示' //不显示标题栏
+                    ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['按错了','提交',  ]
+                    ,btn: ['<?=__('按错了', 'nlyhd-student')?>','<?=__('提交', 'nlyhd-student')?>',  ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){

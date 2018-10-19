@@ -78,13 +78,13 @@ jQuery(function($) {
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
     if(n_type==0){
-        type="连加运算" 
+        type="<?=__('连加运算', 'nlyd-student')?>"
         even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
     }else if(n_type==1){
-        type="加减运算" 
+        type="<?=__('加减运算', 'nlyd-student')?>"
         add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
     }else{
-        type='乘除运算'
+        type='<?=__('乘除运算', 'nlyd-student')?>'
         wax_and_wane_time=<?=$count_down?>
     }
     $('#type').text(type)
@@ -110,7 +110,7 @@ jQuery(function($) {
                 var hour = Math.floor((sys_second / 3600) % 24);
                 var minute = Math.floor((sys_second / 60) % 60);
                 var second = Math.floor(sys_second % 60);
-                day=day>0?day+'天':'';
+                day=day>0?day+'<?_('天', 'nlyd-student')?>':'';
                 hour= hour<10?"0"+hour:hour;//计算小时
                 minute= minute<10?"0"+minute:minute;//计算分钟
                 second= second<10?"0"+second:second;//计算秒
