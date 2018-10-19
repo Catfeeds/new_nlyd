@@ -1304,7 +1304,7 @@ class Student_Ajax
         if(empty($orders)) wp_send_json_error(array('info'=>__('暂无选手报名', 'nlyd-student')));
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
-            $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
+            $orders[$k]['user_gender'] = $user['user_gender'][0] ? __($user['user_gender'][0], 'nlyd-student') : '--' ;
             $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);

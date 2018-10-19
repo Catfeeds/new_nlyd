@@ -1429,7 +1429,34 @@ class Match_student {
         return $allData;
     }
 
-
+    /**
+     * 获取比赛大类
+     */
+    public function getCategoryArr($projectArr){
+        $cateArr = [];
+        //大类数组
+        foreach ($projectArr as $catePro){
+            if(in_array($catePro['project_alias'],['zxss','nxss'] )){
+                if(!isset($cateArr[0])) $cateArr[0] = [];
+                if(!isset($cateArr[0]['id'])) $cateArr[0]['id'] = [];
+                $cateArr[0]['id'][] = $catePro['match_project_id'];
+                $cateArr[0]['name'] = '心算';
+            };
+            if(in_array($catePro['project_alias'],['wzsd','kysm'] )){
+                if(!isset($cateArr[1])) $cateArr[1] = [];
+                if(!isset($cateArr[1]['id'])) $cateArr[1]['id'] = [];
+                $cateArr[1]['id'][] = $catePro['match_project_id'];
+                $cateArr[1]['name'] = '速读';
+            };
+            if(in_array($catePro['project_alias'],['szzb','pkjl'] )){
+                if(!isset($cateArr[2])) $cateArr[2] = [];
+                if(!isset($cateArr[2]['id'])) $cateArr[2]['id'] = [];
+                $cateArr[2]['id'][] = $catePro['match_project_id'];
+                $cateArr[2]['name'] = '记忆';
+            };
+        }
+        return $cateArr;
+    }
 
 /**
      * 比赛奖金明细
@@ -1528,29 +1555,8 @@ class Match_student {
         }
         if($category_able){
             //大类数据
-            $cateArr = [];
-            //大类数组
-            foreach ($projectArr as $catePro){
-                if(in_array($catePro['project_alias'],['zxss','nxss'] )){
-                    if(!isset($cateArr[0])) $cateArr[0] = [];
-                    if(!isset($cateArr[0]['id'])) $cateArr[0]['id'] = [];
-                    $cateArr[0]['id'][] = $catePro['match_project_id'];
-                    $cateArr[0]['name'] = '心算';
-                };
-                if(in_array($catePro['project_alias'],['wzsd','kysm'] )){
-                    if(!isset($cateArr[1])) $cateArr[1] = [];
-                    if(!isset($cateArr[1]['id'])) $cateArr[1]['id'] = [];
-                    $cateArr[1]['id'][] = $catePro['match_project_id'];
-                    $cateArr[1]['name'] = '速读';
-                };
-                if(in_array($catePro['project_alias'],['szzb','pkjl'] )){
-                    if(!isset($cateArr[2])) $cateArr[2] = [];
-                    if(!isset($cateArr[2]['id'])) $cateArr[2]['id'] = [];
-                    $cateArr[2]['id'][] = $catePro['match_project_id'];
-                    $cateArr[2]['name'] = '记忆';
-                };
-            }
 
+            $cateArr = $this->getCategoryArr($projectArr);
             foreach ($cateArr as $cateCatK => $cateCateV){
                 //大类冠亚季
                 if($category_option_check != false){

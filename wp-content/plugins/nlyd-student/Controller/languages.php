@@ -20,3 +20,5 @@ __('等待开赛', 'nlyd-student');
 __('未开始', 'nlyd-student');
 __('报名中', 'nlyd-student');
 __('比赛中', 'nlyd-student');
+__('男', 'nlyd-student');
+__('女', 'nlyd-student');
