@@ -85,7 +85,7 @@ jQuery(function($) {
     // var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
     // $.getJSON(file_path,function(JsonData){
     //     var matchSession=$.GetSession('ready_shuzi','true');
-    //     if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    //     if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
     //         questions_answer=matchSession['questions_answer']
     //     }else{
     //         var questions_answers=JsonData;
@@ -95,9 +95,9 @@ jQuery(function($) {
     //             return .5 - Math.random();
     //         });
     //         var sessionData={
-    //             match_id:$.Request('match_id'),
+    //             match_id:_match_id,
     //             project_id:<?=$project_id?>,
-    //             match_more:$.Request('match_more'),
+    //             match_more:_match_more,
     //             questions_answer:questions_answer
     //         }
     //         $.SetSession('ready_shuzi',sessionData)
@@ -183,7 +183,7 @@ jQuery(function($) {
         }
 
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
