@@ -217,6 +217,7 @@ class Student_Trains extends Student_Home
         }
 
         $data['match_more'] = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
+
         $data['url'] .= '/match_more/'.$data['match_more'];
         $view = student_view_path.CONTROLLER.'/initial.php';
         load_view_template($view,$data);
