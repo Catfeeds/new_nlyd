@@ -78,7 +78,21 @@
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <p class="fs_14 c_black">
                         <?php if($brainpower):?>
-                            <?=$brainpower['range'] == 2 ? __('国际', 'nlyd-student') : __('中国', 'nlyd-student')?><span class="c_orange"><?=$brainpower['level']?></span><?=__($brainpower['type_name'], 'nlyd-student')?> |
+                            <?php
+                                $brainpower_name = '';
+                                switch ($brainpower['category_name']){
+                                    case 'xsl':
+                                        $brainpower_name = 'MA';
+                                        break;
+                                    case 'sdl':
+                                        $brainpower_name = 'R';
+                                        break;
+                                    case 'jyl':
+                                        $brainpower_name = 'M';
+                                        break;
+                                }
+                            ?>
+                            <?=__('脑力健将', 'nlyd-student')?><span class="c_orange"> <?=$brainpower['range'] == 2 ? __('国际', 'nlyd-student') : __('中国', 'nlyd-student')?>-<?=$brainpower_name?><?=$brainpower['level']?></span> |
                         <?php endif;?>
                         <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
