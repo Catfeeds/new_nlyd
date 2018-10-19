@@ -61,6 +61,9 @@ class Student_Account extends Student_Home
             $my_skill = $wpdb->get_row($sql1,ARRAY_A);
             //print_r($sql1);
             //var_dump($my_skill);
+            //脑力健将
+            $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range` FROM {$wpdb->prefix}directories WHERE `range`=2 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
+            if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取当前是否有比赛
             $saql = "select a.match_id from {$wpdb->prefix}match_meta a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
@@ -71,6 +74,7 @@ class Student_Account extends Student_Home
                 'message_total'=>$message_total->total,
                 'my_team'=>$my_team,
                 'my_skill'=>$my_skill,
+                'brainpower'=>$brainpower,
                 'waitting_url'=>!empty($match_id) ? home_url('matchs/matchWaitting/match_id/'.$match_id) : '',
             );
             //print_r($data);

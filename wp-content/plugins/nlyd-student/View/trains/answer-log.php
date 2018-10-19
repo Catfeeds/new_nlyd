@@ -47,7 +47,7 @@ switch ($type){
                 <?php if(isset($_GET['back'])){ ?>
                     <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
                 <?php } ?>
-                <h1 class="mui-title"><?=$title?><?=__('答题记录', 'nlyd-student')?></h1>
+                <h1 class="mui-title"><?=$title?> <?=__('答题记录', 'nlyd-student')?></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin">

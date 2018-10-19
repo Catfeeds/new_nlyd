@@ -23,12 +23,167 @@ class Brainpower
 
         add_menu_page('脑力健将', '脑力健将', 'brainpower', 'brainpower',array($this,'index'),'dashicons-businessman',99);
         add_submenu_page('brainpower','加入名录','加入名录','brainpower_join_directory','brainpower-join_directory',array($this,'joinDirectory'));
-//        add_submenu_page('order','申请退款','申请退款','administrator','order-refund',array($this,'refund'));
 //        add_submenu_page('order','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
+
+    /**
+     * 所有脑力健将
+     */
     public function index(){
-        die;
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $types = isset($_GET['types']) ? intval($_GET['types']) : 0;
+        $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
+        $whereStr = '';
+        switch ($types){
+            case 1:
+                $whereStr .= ' AND d.`category_name`="xsl"';
+                break;
+            case 2:
+                $whereStr .= ' AND d.`category_name`="jyl"';
+                break;
+            case 3:
+                $whereStr .= ' AND d.`category_name`="sdl"';
+                break;
+        }
+        $searchJoinSql = '';
+        if($searchStr != ''){
+            $searchJoinSql = " LEFT JOIN {$wpdb->usermeta} as um1 ON um1.user_id=u.ID AND um1.meta_key='user_real_name' 
+                               LEFT JOIN {$wpdb->usermeta} as um2 ON um2.user_id=u.ID AND um2.meta_key='user_ID'";
+            $whereStr .= " AND (u.user_mobile LIKE '%{$searchStr}%' OR u.user_email LIKE '%{$searchStr}%' OR um1.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
+        }
+
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS d.user_id,d.category_name,d.level,d.is_show,d.range,d.type_name,u.user_mobile,u.user_email FROM {$wpdb->prefix}directories AS d 
+                LEFT JOIN {$wpdb->users} AS u ON u.ID=d.user_id{$searchJoinSql}
+                WHERE u.ID!=''{$whereStr} LIMIT {$start},{$pageSize}", ARRAY_A);
+
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+        ));
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">脑力健将</h1>
+
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤用户列表</h2><ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=0')?>" class="<?=($types === 0) ? 'current': ''?>">全部<span class="count"></span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=1')?>" class="<?=($types === 1) ? 'current': ''?>">心算类<span class="count"></span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=2')?>" class="<?=($types === 2) ? 'current': ''?>">记忆类<span class="count"></span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=3')?>" class="<?=($types === 3) ? 'current': ''?>">速读类<span class="count"></span></a> </li>
+            </ul>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/手机/证件号码/ID" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=brainpower&types='.$types.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
+            </p>
+            <form method="get">
+
+
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="5740170b35"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="tablenav top">
+
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <span class="pagination-links">
+                        <?=$pageHtml?>
+                    </span>
+                    </div>
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">用户列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" id="cates" class="manage-column column-cates">类别</th>
+                        <th scope="col" id="userID" class="manage-column column-userID">选手ID</th>
+                        <th scope="col" id="card_num" class="manage-column column-card_num">证件号码</th>
+                        <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
+                        <th scope="col" id="email" class="manage-column column-email">邮箱</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <?php foreach ($rows as $data){
+
+                        $rangName = '';
+                        switch ($data['range']){
+                            case '1':
+                                $rangName = '中国';
+                                break;
+                            case '2':
+                                $rangName = '国际';
+                                break;
+                        }
+                        $usermeta = get_user_meta($data['user_id']);
+
+                        if(isset($usermeta['user_real_name'])) $user_real_name = unserialize($usermeta['user_real_name'][0]);
+                        else $user_real_name = false;
+
+                        ?>
+                        <tr class="data-list">
+                            <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
+                                <strong><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></strong>
+                                <br>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+                            <td class="cates column-cates line-c" data-colname="类别"><?=$rangName?> <?=$data['level']?>级 <?=$data['type_name']?></td>
+                            <td class="userID column-userID line-c" data-colname="选手ID"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : '-'?></td>
+                            <td class="card_num column-card_num line-c" data-colname="证件号码"><?=$user_real_name ? $user_real_name['real_ID'] : ''?></td>
+                            <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
+                            <td class="email column-email line-c" data-colname="邮箱"><?=$data['user_email']?></td>
+
+                        </tr>
+                    <?php } ?>
+
+
+                    </tbody>
+
+
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-real_name column-primary">
+                            <span>姓名</span><span class="sorting-indicator"></span>
+                        </th>
+                        <th scope="col" class="manage-column column-cates">类别</th>
+                        <th scope="col" class="manage-column column-userID">选手ID</th>
+                        <th scope="col" class="manage-column column-card_num">证件号码</th>
+                        <th scope="col" class="manage-column column-mobile">电话号码</th>
+                        <th scope="col" class="manage-column column-email">邮箱</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <span class="pagination-links">
+                        <?=$pageHtml?>
+                    </span>
+                    </div>
+                </div>
+            </form>
+
+            <br class="clear">
+        </div>
+        <?php
     }
 
     /**
@@ -79,8 +234,6 @@ class Brainpower
             exit('<h3>当前比赛未结束!</h3>');
         }
 
-
-
         //查询比赛小项目
         $projectArr = get_match_end_time($match_id);
 
@@ -93,29 +246,29 @@ class Brainpower
             $cate['data'] = $match_student->getCategoryRankingData($match,join(',', $cate['id']),0,'0,10');
         }
 
-
+        $range = 0;
         $msg = '';
         if(is_post()){
             $range = isset($_POST['range']) ? intval($_POST['range']) : 0;
             if($range != 1 && $range !=2 ) exit('<h3>参数错误</h3>');
             //清除当前比赛已有脑力健将
-//            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}directories WHERE `match` LIKE '%({$match_id})%'", ARRAY_A);
-//            foreach ($rows as $row2){
-//                if($row2['level'] == false || $row2['level'] <= 1){
-//                    $wpdb->delete($wpdb->prefix.'directories', ['id' => $row2['id']]);
-//                }else{
-//                    $level = $row2['level']-1;
-//                    $matchArr = explode(',', $row2['match']);
-//                    foreach ($matchArr as $k => $v){
-//                        if($v == '('.$match_id.')'){
-//                            unset($matchArr[$k]);
-//                            break;
-//                        }
-//                    }
-//                    $matchStr = join(',', $matchArr);
-//                    $wpdb->update($wpdb->prefix.'directories', ['level' => $level]);
-//                }
-//            }
+            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}directories WHERE `match` LIKE '%({$match_id})%'", ARRAY_A);
+            foreach ($rows as $row2){
+                if($row2['level'] == false || $row2['level'] <= 1){
+                    $wpdb->delete($wpdb->prefix.'directories', ['id' => $row2['id']]);
+                }else{
+                    $level = $row2['level']-1;
+                    $matchArr = explode(',', $row2['match']);
+                    foreach ($matchArr as $k => $v){
+                        if($v == '('.$match_id.')'){
+                            unset($matchArr[$k]);
+                            break;
+                        }
+                    }
+                    $matchStr = join(',', $matchArr);
+                    $wpdb->update($wpdb->prefix.'directories', ['level' => $level,'match' => $matchStr], ['id' => $row2['id']]);
+                }
+            }
 
             foreach ($categoryArr as $cav1){
                 foreach ($cav1['data'] as $caDataV){
@@ -139,6 +292,13 @@ class Brainpower
                 }
             }
             if($msg == '') $msg = '生成失败';
+        }
+
+        //是否已有数据
+        $row3 = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}directories WHERE `match` LIKE '%({$match_id})%'", ARRAY_A);
+        if($row3){
+            $range = $row3['range'];
+
         }
 //        leo_dump($categoryArr);
 
@@ -173,14 +333,14 @@ class Brainpower
                     </style>
                     <div id="dra_set_name" class="">
                         <span style="font-weight: bold">名录类型:</span>
-                        <input type="radio" name="range" value="1">中国
-                        <input type="radio" name="range" value="2">国际
+                        <input type="radio" name="range" <?=intval($range) === 1 ? 'checked="checked"' : ''?> value="1">中国
+                        <input type="radio" name="range" <?=intval($range) === 2 ? 'checked="checked"' : ''?> value="2">国际
 
                     </div>
 
                     <div id="dra_set_btn">
 
-                            <input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="生成名录">
+                            <input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="<?=$row3 ? '重新生成' : '生成名录'?>">
 
                         <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
                     </div>
@@ -222,7 +382,8 @@ class Brainpower
 <!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（3）</span></a></li>-->
 <!--            </ul>-->
 
-                <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
+                <h2 class="screen-reader-text">用户列表</h2>
+                <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
                         <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
