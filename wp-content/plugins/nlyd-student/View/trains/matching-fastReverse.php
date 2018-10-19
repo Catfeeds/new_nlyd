@@ -438,11 +438,11 @@ new AlloyFinger($('#next')[0], {
             layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '提示' //不显示标题栏
+                    ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['按错了','提交',  ]
+                    ,btn: ['<?=__('按错了', 'nlyhd-student')?>','<?=__('提交', 'nlyhd-student')?>',  ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){

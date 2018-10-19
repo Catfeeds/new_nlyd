@@ -29,7 +29,7 @@
                                             $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($val->ID), 'thumbnail');
                                             ?>
                                             <div class="item_img"><img src="<?=$thumbnail_image_url[0]?>"></div>
-                                            <div class=""><?=$val->post_title?><div class="pull-right arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div></div>
+                                            <div class=""><?=__($val->post_title, 'nlyd-student')?><div class="pull-right arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div></div>
                                         </a>
                                     <?php }?>
                                 </div>

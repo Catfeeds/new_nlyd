@@ -78,13 +78,13 @@ jQuery(function($) {
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
     if(n_type==0){
-        type="连加运算" 
+        type="<?_('连加运算', 'nlyd-student')?>"
         even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
     }else if(n_type==1){
-        type="加减运算" 
+        type="<?_('加减运算', 'nlyd-student')?>"
         add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
     }else{
-        type='乘除运算'
+        type='<?_('乘除运算', 'nlyd-student')?>'
         wax_and_wane_time=<?=$count_down?>
     }
     $('#type').text(type)
