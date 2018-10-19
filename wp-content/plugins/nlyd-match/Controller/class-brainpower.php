@@ -97,7 +97,7 @@ class Brainpower
         }
 
 //        leo_dump($categoryArr);
-
+        $msg = '';
 
         ?>
         <div class="wrap">
@@ -142,16 +142,7 @@ class Brainpower
                         </script>
                     </div>
                     <div class="alignleft actions">
-<!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
-<!--                        <select name="new_role" id="new_role">-->
-<!--                            <option value="">将角色变更为…</option>-->
-<!---->
-<!--                            <option value="subscriber">学生</option>-->
-<!--                            <option value="contributor">投稿者</option>-->
-<!--                            <option value="author">作者</option>-->
-<!--                            <option value="editor">教练</option>-->
-<!--                            <option value="administrator">管理员</option>		</select>-->
-<!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
+
                     </div>
 
                     <br class="clear">
@@ -163,28 +154,21 @@ class Brainpower
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
-                            用户名
+                        <th scope="col" id="username" class="manage-column column-username column-primary">
+                            姓名
                         </th>
-                        <th scope="col" id="name" class="manage-column column-real_name">姓名</th>
-                        <th scope="col" id="role" class="manage-column column-score">分数</th>
+                        <th scope="col" id="cate" class="manage-column column-cate">类别</th>
+                        <th scope="col" id="name" class="manage-column column-real_name">选手ID</th>
+<!--                        <th scope="col" id="role" class="manage-column column-score">分数</th>-->
                         <th scope="col" id="role" class="manage-column column-mobile">手机</th>
-                        <th scope="col" id="email" class="manage-column column-email sortable desc">
-                            电子邮件
-                        </th>
+                        <th scope="col" id="email" class="manage-column column-email">邮箱</th>
                         </th>
                     </tr>
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
                     <?php foreach ($categoryArr as $cav){ ?>
-                        <tr id="user-12">
-                            <th scope="row" class="check-column" style="text-align: left;font-weight: bold;font-size:18px;background-color: #C1BBB7;height: 2em" colspan="6">
-                                <?=$cav['parent_title']?>-前<?=count($cav['data'])?>名
-                            </th>
 
-
-                        </tr>
 
                         <?php foreach ($cav['data'] as $cavD){
                             ?>
@@ -216,18 +200,18 @@ class Brainpower
 
                     <tfoot>
                     <tr>
-                        <td class="manage-column column-cb check-column">
-                            <label class="screen-reader-text" for="cb-select-all-2">全选</label>
-                            <input id="cb-select-all-2" type="checkbox">
+                        <td id="cb" class="manage-column column-cb check-column">
+                            <label class="screen-reader-text" for="cb-select-all-1">全选</label
+                            <input type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-username column-primary sortable desc">
-                            用户名
+                        <th scope="col"  class="manage-column column-username column-primary">
+                            姓名
                         </th>
-                        <th scope="col" class="manage-column column-real_name">姓名</th>
-                        <th scope="col" class="manage-column column-score">分数</th>
+                        <th scope="col" class="manage-column column-cate">类别</th>
+                        <th scope="col" class="manage-column column-real_name">选手ID</th>
+                        <!--                        <th scope="col" id="role" class="manage-column column-score">分数</th>-->
                         <th scope="col" class="manage-column column-mobile">手机</th>
-                        <th scope="col" class="manage-column column-email sortable desc">
-                            电子邮件
+                        <th scope="col" class="manage-column column-email">邮箱</th>
                         </th>
                     </tr>
                     </tfoot>

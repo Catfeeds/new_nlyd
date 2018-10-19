@@ -26,7 +26,7 @@
             switch ($_GET['type']){
                 case 'szzb':
         ?>
-<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> </div> <?=__('项目意义', 'nlyd-student')?></div>
+<div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> <?=__('项目意义', 'nlyd-student')?></div>
 　　数字是世界公认最难记忆的信息，但运用记忆术可以轻松克服这一难题，同时对大脑的注意力、记忆力、创造力和敏锐度也是一个有效的训练。本赛事向广大群众提供公益性的记忆术培训，掌握技术方法之后利用本训练平台进行自我训练，记忆水平将大幅提高。
 　　Numbers are universally acknowledged to be the most difficult information to remember, but memory is an easy way to overcome this problem and an effective training for the brain's attention, memory, creativity and sharpness. This competition provides public welfare memory training to the masses. After mastering the techniques and methods, the training platform will be used for self-training, and the memory level will be greatly improved.
 
