@@ -8,7 +8,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=__('第'.$match_more.'轮', 'nlyd-student')?></span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>

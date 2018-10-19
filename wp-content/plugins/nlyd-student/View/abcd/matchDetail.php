@@ -1,6 +1,6 @@
 <?php
 $path = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
-if(file_exists($path) && $match['match_status'] != 1){
+if( file_exists($path) && $match['match_status'] != 1){
     include_once $path;
 }else{
 
@@ -102,22 +102,19 @@ endif;
                                             <thead>
                                             <tr>
                                                 <td>
-                                                    <div class="table_content"><?= __('头像', 'nlyd-student') ?></div>
+                                                    <div class="table_content"><?= __('头 像', 'nlyd-student') ?></div>
                                                 </td>
                                                 <td>
-                                                    <div class="table_content"><?= __('学员姓名', 'nlyd-student') ?> </div>
+                                                    <div class="table_content"><?= __('姓 名', 'nlyd-student') ?> </div>
                                                 </td>
                                                 <td>
                                                     <div class="table_content"><?= __('性 别', 'nlyd-student') ?></div>
                                                 </td>
                                                 <td>
-                                                    <div class="table_content"><?= __('年龄', 'nlyd-student') ?></div>
+                                                    <div class="table_content"><?= __('年 龄', 'nlyd-student') ?></div>
                                                 </td>
                                                 <td>
-                                                    <div class="table_content"><?= __('报名日期', 'nlyd-student') ?></div>
-                                                </td>
-                                                <td>
-                                                    <div class="table_content"><?= __('国籍', 'nlyd-student') ?></div>
+                                                    <div class="table_content"><?= __('国 籍', 'nlyd-student') ?></div>
                                                 </td>
                                             </tr>
                                             </thead>
@@ -142,11 +139,8 @@ endif;
                                                             <div class="table_content"><?=$v['real_age']?></div>
                                                         </td>
                                                         <td>
-                                                            <div class="table_content"><?=$v['created_time']?></div>
-                                                        </td>
-                                                        <td>
                                                             <div class="table_content">
-                                                                <img src="<?=$v['nationality']?>">
+                                                                <span class="fastbannerform__span f32 NOFLAG <?=$v['nationality']?>"></span><?=$v['nationality_short']?>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -271,8 +265,7 @@ jQuery(function($) {
                                             +'<td><div class="table_content">'+v.nickname+'</div></td>'
                                             +'<td><div class="table_content">'+v.user_gender+'</div></td>'
                                             +'<td><div class="table_content">'+v.real_age+'</div></td>'
-                                            +'<td><div class="table_content">'+v.created_time+'</div></td>'
-                                            +'<td><div class="table_content"><img src="'+v.nationality+'"/></div></td>'
+                                            +'<td><div class="table_content"><span class="fastbannerform__span f32 NOFLAG '+v.nationality+'"></span>'+v.nationality_short+'</div></td>'
                                         +'</tr>'
                                 lis.push(dom) 
                             })
