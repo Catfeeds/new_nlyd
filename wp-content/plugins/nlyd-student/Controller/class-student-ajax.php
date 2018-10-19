@@ -281,7 +281,7 @@ class Student_Ajax
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_type'])));
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
 
         //计算成绩
 
@@ -291,9 +291,9 @@ class Student_Ajax
 
                 if(!empty($_POST['my_answer'])){
 
-                    $len = count($_POST['train_questions']);
+                    $len = count($_POST['questions_answer']);
 
-                    $error_len = count(array_diff_assoc($_POST['train_answer'],$_POST['my_answer']));
+                    $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
 
                     $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
 
@@ -390,14 +390,14 @@ class Student_Ajax
             'created_microtime'=>str2arr(microtime(),' ')[0],
         );
 
-
          /*print_r($insert);
          die;*/
+
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
             $log_id = $wpdb->insert_id;
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
         }
@@ -1304,7 +1304,7 @@ class Student_Ajax
         if(empty($orders)) wp_send_json_error(array('info'=>__('暂无选手报名', 'nlyd-student')));
         foreach ($orders as $k => $v){
             $user = get_user_meta($v['user_id']);
-            $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
+            $orders[$k]['user_gender'] = $user['user_gender'][0] ? __($user['user_gender'][0], 'nlyd-student') : '--' ;
             $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
             if(!empty($user['user_real_name'])){
                 $user_real = unserialize($user['user_real_name'][0]);

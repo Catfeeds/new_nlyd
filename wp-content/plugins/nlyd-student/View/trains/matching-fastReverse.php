@@ -4,13 +4,13 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$title?></h1>
+            <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font"> 第<span id="total">0</span>题</span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"> <?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
@@ -438,11 +438,11 @@ new AlloyFinger($('#next')[0], {
             layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '提示' //不显示标题栏
+                    ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['按错了','提交',  ]
+                    ,btn: ['<?=__('按错了', 'nlyhd-student')?>','<?=__('提交', 'nlyhd-student')?>',  ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){

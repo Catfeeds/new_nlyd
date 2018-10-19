@@ -8,22 +8,22 @@
  */
 switch ($type){
     case 'szzb';
-        $title = '数字争霸';
+        $title = __('数字争霸', 'nlyd-student');
         break;
     case 'pkjl';
-        $title = '扑克接力';
+        $title = __('扑克接力', 'nlyd-student');
         break;
     case 'wzsd';
-        $title = '文章速读';
+        $title = __('文章速读', 'nlyd-student');
         break;
     case 'kysm';
-        $title = '快眼扫描';
+        $title = __('快眼扫描', 'nlyd-student');
         break;
     case 'zxss';
-        $title = '正向速算';
+        $title = __('正向速算', 'nlyd-student');
         break;
     case 'nxss';
-        $title = '逆向速算';
+        $title = __('逆向速算', 'nlyd-student');
         break;
 
     default:
@@ -53,8 +53,8 @@ switch ($type){
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title flex-h">
-                            <div class="c_black flex1 match_info_font"><?=$title?>第一轮</div>
-                            <div class="c_blue flex1 ml_10 match_info_font"><?=__('您的得分', 'nlyd-student')?><?=$my_score?><?=__('分', 'nlyd-student')?></div>
+                            <div class="c_black flex1 match_info_font"><?=__($title,'nlyd-student')?> <?=__('第一轮', 'nlyd-student')?></div>
+                            <div class="c_blue flex1 ml_10 match_info_font"><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score)?></div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
@@ -116,8 +116,8 @@ switch ($type){
 </div>
 <?php if(!isset($_GET['back'])){ ?>
 <div class="a-btn two get_footer">
-    <a class="a-two left c_white" id="again" href="<?=$recur_url?>">再来一局</a>
-    <a class="a-two right c_white" href="<?=$revert_url?>">返回列表</a>
+    <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><?=__('再来一局', 'nlyd-student')?></a>
+    <a class="a-two right c_white" href="<?=$revert_url?>"><?=__('返回列表', 'nlyd-student')?></a>
 </div>
 <?php } ?>
 <script>

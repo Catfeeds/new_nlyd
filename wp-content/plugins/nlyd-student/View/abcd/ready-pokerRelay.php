@@ -183,6 +183,7 @@ jQuery(function($) {
             project_alias:'pkjl',
             match_questions:questions_answer,
             questions_answer:questions_answer,
+            project_more_id:$.Request('project_more_id'),
 
             my_answer:my_answer,
             match_action:'subjectPokerRelay',

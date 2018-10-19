@@ -12,7 +12,7 @@
                     <i class="iconfont">&#xe610;</i>
                 </a>
                 <h1 class="mui-title">
-                训练类型
+                <?=__('训练类型', 'nlyd-student')?>
                 </h1>
             </header>
 
@@ -23,7 +23,7 @@
                                     <div class="no-info-img">
                                         <img src="<?=student_css_url.'image/noInfo/noTrain1045@3x.png'?>">
                                     </div>
-                                    <p class="no-info-text">暂无专项比賽训练</p>
+                                    <p class="no-info-text"><?=__('暂无专项比賽训练', 'nlyd-student')?></p>
                                 </div>
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                                             ?>
                                             <img src="<?=$thumbnail_image_url[0]?>">
                                         </div>
-                                        <div class="train_name fs_16"><?=$v->post_title?></div>
+                                        <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
                                         <?php if($v->post_status == 'draft'):?>
-                                            <div class="train_tips">暂未开放</div>
+                                            <div class="train_tips"><?=__('暂未开放', 'nlyd-student')?></div>
                                         <?php endif;?>
                                     </a>
                                 <?php }?>
