@@ -110,6 +110,7 @@ jQuery(function($) {
                 match_more:_match_more,
                 project_alias:'wzsd',
                 project_more_id:$.Request('project_more_id'),
+                post_id:$.Request('post_id'),
 
                 my_answer:my_answer,
                 surplus_time:time,
