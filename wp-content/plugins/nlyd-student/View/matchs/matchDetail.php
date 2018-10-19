@@ -50,8 +50,9 @@
                                     </div>
                                     <div class="nl-match-detail">
                                         <div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>:</div></div>
-                                        <div class="nl-match-info c_black" id="time_count" data-end="<?=$match['entry_end_time']?>"><div><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div></div>
-                                        
+                                        <div class="nl-match-info c_black">
+                                            <div id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
+                                        </div>
                                     </div>
                                 </div>
                             </li>

@@ -959,10 +959,12 @@ p.share-font{
 .f32.cf { background-position: 0 -416px; }
 .f32.cg { background-position: 0 -448px; }
 .f32.ch, .f32.CHF, .f32.CHE { background-position: 0 -480px; }
+
 .f32.ci, .f32.CIV { background-position: 0 -512px; }
 .f32.ck { background-position: 0 -544px; }
 .f32.cl { background-position: 0 -576px; }
 .f32.cm, .f32.CMR { background-position: 0 -608px; }
+/* 中国 */
 .f32.cn, .f32.CNY, .f32.CHN { background-position: 0 -640px; }
 .f32.co, .f32.COL { background-position: 0 -672px; }
 .f32.cr, .f32.CRI { background-position: 0 -704px; }
@@ -977,11 +979,12 @@ p.share-font{
 .f32.dk, .f32.DKK, .f32.DNK { background-position: 0 -992px; }
 .f32.dm { background-position: 0 -1024px; }
 .f32.do { background-position: 0 -1056px; }
-.f32.DOLLAR { background-position: 0 -1088px; }
+.f32.dollar { background-position: 0 -1088px; }
 .f32.dz, .f32.DZA { background-position: 0 -1120px; }
 .f32.ec, .f32.ECU { background-position: 0 -1152px; }
 .f32.ee, .f32.EST { background-position: 0 -1184px; }
 .f32.eg, .f32.EGY { background-position: 0 -1216px; }
+
 .f32.eh { background-position: 0 -1248px; }
 .f32.er { background-position: 0 -1280px; }
 .f32.es, .f32.ESP, .f32.SP { background-position: 0 -1312px; }
@@ -993,6 +996,7 @@ p.share-font{
 .f32.fm { background-position: 0 -1504px; }
 .f32.fo { background-position: 0 -1536px; }
 .f32.fr, .f32.FRA { background-position: 0 -1568px; }
+
 .f32.ga { background-position: 0 -1600px; }
 .f32.gb, .f32.en, .f32.GBP, .f32.GBR { background-position: 0 -1632px; }
 .f32.gd { background-position: 0 -1664px; }
@@ -1011,11 +1015,13 @@ p.share-font{
 .f32.gu { background-position: 0 -2080px; }
 .f32.gw { background-position: 0 -2112px; }
 .f32.gy { background-position: 0 -2144px; }
+/* 香港 */
 .f32.hk, .f32.HKD { background-position: 0 -2176px; }
 .f32.hn { background-position: 0 -2208px; }
 .f32.hr { background-position: 0 -2240px; }
 .f32.ht { background-position: 0 -2272px; }
 .f32.hu, .f32.HUF, .f32.HUN { background-position: 0 -2304px; }
+
 .f32.ic { background-position: 0 -2336px; }
 .f32.id, .f32.IDR, .f32.IDN { background-position: 0 -2368px; }
 .f32.ie { background-position: 0 -2400px; }
@@ -1026,10 +1032,12 @@ p.share-font{
 .f32.ir, .f32.IRN { background-position: 0 -2560px; }
 .f32.is, .f32.ISL { background-position: 0 -2592px; }
 .f32.it, .f32.ITA { background-position: 0 -2624px; }
+
 .f32.je { background-position: 0 -2656px; }
 .f32.jm, .f32.JAM { background-position: 0 -2688px; }
 .f32.jo, .f32.JOR { background-position: 0 -2720px; }
 .f32.jp, .f32.JPY, .f32.JPN { background-position: 0 -2752px; }
+
 .f32.ke, .f32.KEN { background-position: 0 -2784px; }
 .f32.kg, .f32.KGZ { background-position: 0 -2816px; }
 .f32.kh, .f32.KHM { background-position: 0 -2848px; }
@@ -1041,6 +1049,7 @@ p.share-font{
 .f32.kw { background-position: 0 -3040px; }
 .f32.ky { background-position: 0 -3072px; }
 .f32.kk, .f32.kz, .f32.KZT, .f32.KAZ { background-position: 0 -3104px; }
+
 .f32.la, .f32.LAO { background-position: 0 -3136px; }
 .f32.lb { background-position: 0 -3168px; }
 .f32.lc { background-position: 0 -3200px; }
@@ -1052,6 +1061,7 @@ p.share-font{
 .f32.lu { background-position: 0 -3392px; }
 .f32.lv, .f32.LVL, .f32.LVA { background-position: 0 -3424px; }
 .f32.ly, .f32.LBY { background-position: 0 -3456px; }
+
 .f32.ma, .f32.MAR { background-position: 0 -3488px; }
 .f32.mc { background-position: 0 -3520px; }
 .f32.md, .f32.MDA { background-position: 0 -3552px; }
@@ -1063,11 +1073,12 @@ p.share-font{
 .f32.ml { background-position: 0 -3744px; }
 .f32.mm { background-position: 0 -3776px; }
 .f32.mn, .f32.MNG { background-position: 0 -3808px; }
+/* 澳门 */
 .f32.mo { background-position: 0 -3840px; }
 .f32.mp { background-position: 0 -3872px; }
 .f32.mq { background-position: 0 -3904px; }
 .f32.mr { background-position: 0 -3936px; }
-/*.f32.MS { background-position: 0 -3968px; }*/
+.f32.ms { background-position: 0 -3968px; }
 .f32.mt { background-position: 0 -4000px; }
 .f32.mu, .f32.MRI { background-position: 0 -4032px; }
 .f32.mv, .f32.MDV { background-position: 0 -4064px; }
@@ -1075,6 +1086,7 @@ p.share-font{
 .f32.mx, .f32.MXN, .f32.MEX { background-position: 0 -4128px; }
 .f32.my, .f32.MYR, .f32.MYS, .f32.MS { background-position: 0 -4160px; }
 .f32.mz { background-position: 0 -4192px; }
+
 .f32.na, .f32.NAM { background-position: 0 -4224px; }
 .f32.nc { background-position: 0 -4256px; }
 .f32.ne { background-position: 0 -4288px; }
@@ -1087,7 +1099,9 @@ p.share-font{
 .f32.nr { background-position: 0 -4512px; }
 .f32.nu { background-position: 0 -4544px; }
 .f32.nz, .f32.NZD, .f32.NZL { background-position: 0 -4576px; }
+
 .f32.om, .f32.OMR { background-position: 0 -4608px; }
+
 .f32.pa, .f32.PAN { background-position: 0 -4640px; }
 .f32.pe, .f32.PER { background-position: 0 -4672px; }
 .f32.pf { background-position: 0 -4704px; }
@@ -1101,11 +1115,14 @@ p.share-font{
 .f32.pt, .f32.PRT { background-position: 0 -4960px; }
 .f32.pw { background-position: 0 -4992px; }
 .f32.py, .f32.PRY { background-position: 0 -5024px; }
+
 .f32.qa, .f32.QAR { background-position: 0 -5056px; }
+
 .f32.ro, .f32.ROU { background-position: 0 -5088px; }
 .f32.rs, .f32.SRB { background-position: 0 -5120px; }
 .f32.ru, .f32.RUB, .f32.RUR, .f32.RUS { background-position: 0 -5152px; }
 .f32.rw { background-position: 0 -5184px; }
+
 .f32.sa, .f32.SAR, .f32.SAU { background-position: 0 -5216px; }
 .f32.sb { background-position: 0 -5248px; }
 .f32.sc { background-position: 0 -5280px; }
@@ -1126,6 +1143,7 @@ p.share-font{
 .f32.sv, .f32.SLV { background-position: 0 -5760px; }
 .f32.sy { background-position: 0 -5792px; }
 .f32.sz { background-position: 0 -5824px; }
+
 .f32.tc { background-position: 0 -5856px; }
 .f32.td { background-position: 0 -5888px; }
 .f32.tf { background-position: 0 -5920px; }
@@ -1140,46 +1158,55 @@ p.share-font{
 .f32.tr, .f32.TUR { background-position: 0 -6208px; }
 .f32.tt, .f32.TTO { background-position: 0 -6240px; }
 .f32.tv { background-position: 0 -6272px; }
+/* 台湾 */
 .f32.tw, .f32.TWD { background-position: 0 -6304px; }
 .f32.tz { background-position: 0 -6336px; }
+
 .f32.ua, .f32.UAH, .f32.UKR { background-position: 0 -6368px; }
 .f32.ug, .f32.UGA { background-position: 0 -6400px; }
 .f32.us, .f32.USD { background-position: 0 -6432px; }
 .f32.uy { background-position: 0 -6464px; }
 .f32.uz, .f32.oz, .f32.UZB { background-position: 0 -6496px; }
+
 .f32.va { background-position: 0 -6528px; }
 .f32.vc { background-position: 0 -6560px; }
 .f32.ve, .f32.VEN { background-position: 0 -6592px; }
 .f32.vg { background-position: 0 -6624px; }
-/*.f32.VI { background-position: 0 -6656px; }*/
+.f32.vi { background-position: 0 -6656px; }
 .f32.vn, .f32.VNM, .f32.VI { background-position: 0 -6688px; }
 .f32.vu { background-position: 0 -6720px; }
+
 .f32.wf { background-position: 0 -6752px; }
 .f32.ws { background-position: 0 -6784px; }
+
 .f32.ye, .f32.YEM { background-position: 0 -6816px; }
 .f32.yt { background-position: 0 -6848px; }
 .f32.za, .f32.ZAR, .f32.ZAF { background-position: 0 -6880px; }
 .f32.zm, .f32.ZMB { background-position: 0 -6912px; }
 .f32.zw, .f32.ZWE { background-position: 0 -6944px; }
-.f32._abkhazia { background-position: 0 -6976px; }
-.f32._basque-country { background-position: 0 -7008px; }
-.f32._british-antarctic-territory { background-position: 0 -7040px; }
-.f32._commonwealth { background-position: 0 -7072px; }
-.f32._england { background-position: 0 -7104px; }
-.f32._gosquared { background-position: 0 -7136px; }
-.f32._kosovo { background-position: 0 -7168px; }
-.f32._mars { background-position: 0 -7200px; }
-.f32._nagorno-karabakh { background-position: 0 -7232px; }
-.f32._nato { background-position: 0 -7264px; }
-.f32._northern-cyprus { background-position: 0 -7296px; }
+
+.f32.abkhazia { background-position: 0 -6976px; }
+.f32.bc { background-position: 0 -7008px; }
+.f32.bat { background-position: 0 -7040px; }
+.f32.commonwealth { background-position: 0 -7072px; }
+.f32.england { background-position: 0 -7104px; }
+.f32.gosquared { background-position: 0 -7136px; }
+.f32.kosovo { background-position: 0 -7168px; }
+.f32.mars { background-position: 0 -7200px; }
+.f32.nk { background-position: 0 -7232px; }
+.f32.nato { background-position: 0 -7264px; }
+.f32.noc { background-position: 0 -7296px; }
 .f32._olympics { background-position: 0 -7328px; }
 .f32._red-cross { background-position: 0 -7360px; }
-.f32._scotland { background-position: 0 -7392px; }
-.f32._somaliland { background-position: 0 -7424px; }
-.f32._south-ossetia { background-position: 0 -7456px; }
+.f32.scotland { background-position: 0 -7392px; }
+.f32.somaliland { background-position: 0 -7424px; }
+.f32.southossetia { background-position: 0 -7456px; }
 .f32._united-nations { background-position: 0 -7488px; }
 .f32._unknown { background-position: 0 -7520px; }
-.f32._wales { background-position: 0 -7552px; }
+.f32.wales { background-position: 0 -7552px; }
+
+
+
 .f32.ac{ background-position: 0 -3295px; }
 .f32.ad { background-position: 0 -7584px; }
 .f32.ae, .f32.AED, .f32.ARE, .f32.ar { background-position: 0 -7616px; }
@@ -1191,7 +1218,7 @@ p.share-font{
 .f32.an { background-position: 0 -7808px; }
 .f32.ao { background-position: 0 -7840px; }
 .f32.aq { background-position: 0 -7872px; }
-.f32.ARG { background-position: 0 -7904px; }
+.f32.arg { background-position: 0 -7904px; }
 .f32.as { background-position: 0 -7936px; }
 .f32.at, .f32.AUT { background-position: 0 -7968px; }
 .f32.au, .f32.AUD, .f32.AUS { background-position: 0 -8000px; }
@@ -1207,11 +1234,14 @@ p.share-font{
 .f32.bh, .f32.BHD, .f32.BRN { background-position: 0 -8320px; }
 .f32.bi { background-position: 0 -8352px; }
 .f32.bj { background-position: 0 -8384px; }
-.f32.CYP { background-position: 0 -864px; }
+
+.f32.empty { background-position: 0 -999999px; }
+
+
+/* .f32.CYP { background-position: 0 -864px; }
 .f32.KOS { background-position: 0 -7168px; }
 .f32.HND { background-position: 0 -2208px; }
 .f32.TZA { background-position: 0 -6336px; }
 .f32.MMR { background-position: 0 -3776px; }
 .f32.LSO { background-position: 0 -3328px; }
-.f32.LBN { background-position: 0 -3168px; }
-.f32.empty { background-position: 0 -999999px; }
+.f32.LBN { background-position: 0 -3168px; } */
