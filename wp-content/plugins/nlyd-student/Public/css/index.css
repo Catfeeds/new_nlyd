@@ -4,7 +4,15 @@
 .nl-dark-blue{
     color: #4394F9;
 }
-
+.dis_table{
+    display: table!important;
+}
+.dis_cell{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
 input::-webkit-input-placeholder {
     color:#b8bcbe;
     font-size:0.14rem;
