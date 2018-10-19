@@ -10,7 +10,7 @@
                     <i class="iconfont">&#xe610;</i>
                 </a>
                 <h1 class="mui-title">
-                <?=$post_title?>
+                <?=__($post_title, 'nlyd-student')?>
                 </h1>
             </header>
             <div class="layui-row nl-border nl-content have-footer">
@@ -22,7 +22,7 @@
                         <?php }else{ ?>
                             <?php foreach ($list as $v){ ?>
                                 <div class="lists_item_row">
-                                    <div class="bold c_black fs_16"><?=$v["title"]?></div>
+                                    <div class="bold c_black fs_16"><?=__($v["title"], 'nlyd-student')?></div>
                                     <?php foreach ($v["children"] as $val){ ?>
                                         <a class="item_row lists_row c_black6"  href="<?=home_url('trains/ready/type/'.$val->project_alias.'/genre_id/'.$genre_id.'/id/'.$val->ID)?>" >
                                             <?php
