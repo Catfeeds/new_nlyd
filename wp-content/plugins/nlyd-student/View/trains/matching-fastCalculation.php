@@ -3,25 +3,25 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$title?></h1>
+            <h1 class="mui-title"><?=__($title, 'nlyd-student')?></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=$title?>第一轮</span>
-                        <span class="c_blue ml_10 match_info_font">第<span id="total">0</span>题</span>
+                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?> <?=__('第一轮', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">初始中...</span>
+                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             <!-- <span><?=$count_down?></span> -->
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit">提交</div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
                     </div>
                    
                     <div class="matching-fast">
                         <p class="count_p c_black">
                             <span id="type"></span>
-                            <span class="count_downs" data-seconds="10">初始中...</span>
+                            <span class="count_downs" data-seconds="10"><?=__('初始中', 'nlyd-student')?>...</span>
                             <!-- <span><?=!empty($child_type_down) ? $child_type_down : ''?></span> -->
                             <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
                             <input type="hidden"id="add_and_subtract_time" value="<?=$child_count_down['add_and_subtract'] ?>">
@@ -50,10 +50,10 @@
                             <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9">9</div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key c_white fs_16 bg_orange" id="del">删除</div>
+                            <div class="matching-key c_white fs_16 bg_orange" id="del"><?=__('删除', 'nlyd-student')?></div>
                             <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</div>
                             <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</div>
-                            <div class="matching-key c_white fs_16 bg_orange" id="next">下一题</div>
+                            <div class="matching-key c_white fs_16 bg_orange" id="next"><?=__('下一题', 'nlyd-student')?></div>
                         </div>
                     </div>
                 </div> 
@@ -121,15 +121,15 @@ jQuery(function($) {
                 level={number:2,symbol:1};//初始化难度
                 n_type++
                 if(n_type==0){
-                    type="连加运算" 
+                    type="<?=__('连加运算', 'nlyd-student')?>"
                     sys_second=even_add_time;
                     nextBtn_click=0;
                 }else if(n_type==1){
-                    type="加减运算" 
+                    type="<?=__('加减运算', 'nlyd-student')?>"
                     sys_second=add_and_subtract_time -1 ;
                     nextBtn_click=0;
                 }else if(n_type==2){
-                    type="乘除运算" 
+                    type="<?=__('乘除运算', 'nlyd-student')?>"
                     sys_second=wax_and_wane_time -1 ;
                     nextBtn_click=0;
                 }else{
@@ -145,7 +145,7 @@ jQuery(function($) {
                     clearInterval(timer);
                 }
                 if(n_type<=2){
-                    $('.count_downs').text('初始中...').attr('data-seconds',sys_second)
+                    $('.count_downs').text('<?=__('初始中', 'nlyd-student')?>...').attr('data-seconds',sys_second)
                     $('#type').text(type)
                     $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
                     inItFastCalculation(level,type);  
@@ -222,9 +222,9 @@ jQuery(function($) {
         answer=parseInt(firstNumber);
         for (var index = 0; index < L; index++) {
             var symbol=''
-            if(type=='连加运算'){
+            if(type=='<?=__('连加运算', 'nlyd-student')?>'){
                 symbol='+';
-            }else if(type=='加减运算'){
+            }else if(type=='<?=__('加减运算', 'nlyd-student')?>'){
                 symbol=randJJ()
             }
             var number=''
@@ -330,11 +330,11 @@ jQuery(function($) {
     function inItFastCalculation(levels,type) {
         var text=''
         var row=''
-        if(type=='连加运算'){//连加运算
+        if(type=='<?=__('连加运算', 'nlyd-student')?>'){//连加运算
             row=add(levels,type);
-        }else if(type=='加减运算'){//加减运算
+        }else if(type=='<?=__('加减运算', 'nlyd-student')?>'){//加减运算
             row=add(levels,type);
-        }else if(type=='乘除运算'){//乘除运算
+        }else if(type=='<?=__('乘除运算', 'nlyd-student')?>'){//乘除运算
             row=CX(levels);
         }
         ajaxData.push(row)
@@ -399,7 +399,7 @@ jQuery(function($) {
             if(!_this.hasClass('disabled')){
                 _this.addClass('disabled')
                 nextBtn_click++
-                if (type=='乘除运算') {
+                if (type=='<?=__('乘除运算', 'nlyd-student')?>') {
                     if(nextBtn_click%cx_interval_times==0){//难度控制
                         level.symbol=1
                         level.number++
@@ -499,18 +499,18 @@ jQuery(function($) {
                 }
             })
         }else{
-            $.alerts('正在提交答案')
+            $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('比赛结束');
+        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
             submit(0)
         }, 1000);
     }
 
     $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'天' : '';
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
         var m=d.minute<10 ? '0'+d.minute : d.minute;
         var s=d.second<10 ? '0'+d.second : d.second;
@@ -518,9 +518,9 @@ jQuery(function($) {
         $(this).text(time).attr('data-seconds',S)
         if(S<=0){//本轮比赛结束
             if(S==0){
-                $.alerts('倒计时结束，即将提交答案')
+                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('比赛结束')
+                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
             setTimeout(function() {
                 submit(0)
@@ -535,11 +535,11 @@ layui.use('layer', function(){
             layer.open({
                 type: 1
                 ,maxWidth:300
-                ,title: '提示' //不显示标题栏
+                ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">是否立即提交？</div>'
-                ,btn: [ '按错了','提交', ]
+                ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
+                ,btn: [ '<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>', ]
                 ,success: function(layero, index){
                 }
                 ,yes: function(index, layero){

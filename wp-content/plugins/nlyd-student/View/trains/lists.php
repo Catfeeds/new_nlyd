@@ -18,7 +18,7 @@
                     <div class="lists_lists">   
                         <?php
                         if (empty($list)){ ?>
-                            <div class="ta_c">暂无专项训练</div>
+                            <div class="ta_c"><?=__('暂无专项训练', 'nlyd-student')?></div>
                         <?php }else{ ?>
                             <?php foreach ($list as $v){ ?>
                                 <div class="lists_item_row">

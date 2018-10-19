@@ -1952,7 +1952,7 @@ class Match_student {
                 <?php if($reload == false){ ?>
                     <div>
                         <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">重新生成</button>
-                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">导出</button>
+                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
                     </div>
                 <?php } ?>
                 <br class="clear">
