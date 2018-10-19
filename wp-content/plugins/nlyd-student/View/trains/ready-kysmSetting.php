@@ -8,7 +8,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="bold c_blue fs_16 ta_c" style="margin-top:20px;margin-bottom:50px">快眼训练设置</div>
                 <div class="ta_c">
-                    闪现时间  <input style="border-radius:6px" type="tel" id="flash" name="flash_time" value="800" />  毫秒
+                    闪现时间  <input class="nl-foucs" style="border-radius:6px" type="tel" id="flash" name="flash_time" value="800" />  毫秒
                 </div>
                 
 
@@ -19,10 +19,19 @@
 </div>
 <script>
     jQuery(function($) {
-        $('#complete').click(function () {
-            var url = $(this).attr('href')+'/flash_time/'+$('#flash').val();
-            //alert(url);
-            window.location.href = url;
+        new AlloyFinger($('#complete')[0], {
+            tap:function(){
+                var _this=$(this);
+                if(!_this.hasClass('disabled')){
+                    _this.addClass('disabled')
+                    var url = $(this).attr('href')+'/flash_time/'+$('#flash').val();
+                    //alert(url);
+                    setTimeout(function(){
+                        window.location.href = url;
+                        _this.removeClass('disabled')
+                    }, 800);
+                }
+            }
         })
     })
 </script>
