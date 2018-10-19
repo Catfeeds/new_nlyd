@@ -69,7 +69,6 @@ class Brainpower
      * 加入名录
      */
     public function joinDirectory(){
-        $is_view_btn = true;
         global $wpdb;
         $match_id = intval($_GET['match_id']);
         if($match_id < 1) exit('参数错误');
@@ -79,11 +78,9 @@ class Brainpower
         if(!$match || $match['match_status'] != -3){
             exit('<h3>当前比赛未结束!</h3>');
         }
-        //查询是否有名录
-        $res = $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'directories WHERE `match` LIKE "%('.$match_id.')%"', ARRAY_A);
-        if($res) {
-            $is_view_btn = false;
-        }
+
+
+
         //查询比赛小项目
         $projectArr = get_match_end_time($match_id);
 
@@ -96,8 +93,54 @@ class Brainpower
             $cate['data'] = $match_student->getCategoryRankingData($match,join(',', $cate['id']),0,'0,10');
         }
 
-//        leo_dump($categoryArr);
+
         $msg = '';
+        if(is_post()){
+            $range = isset($_POST['range']) ? intval($_POST['range']) : 0;
+            if($range != 1 && $range !=2 ) exit('<h3>参数错误</h3>');
+            //清除当前比赛已有脑力健将
+//            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}directories WHERE `match` LIKE '%({$match_id})%'", ARRAY_A);
+//            foreach ($rows as $row2){
+//                if($row2['level'] == false || $row2['level'] <= 1){
+//                    $wpdb->delete($wpdb->prefix.'directories', ['id' => $row2['id']]);
+//                }else{
+//                    $level = $row2['level']-1;
+//                    $matchArr = explode(',', $row2['match']);
+//                    foreach ($matchArr as $k => $v){
+//                        if($v == '('.$match_id.')'){
+//                            unset($matchArr[$k]);
+//                            break;
+//                        }
+//                    }
+//                    $matchStr = join(',', $matchArr);
+//                    $wpdb->update($wpdb->prefix.'directories', ['level' => $level]);
+//                }
+//            }
+
+            foreach ($categoryArr as $cav1){
+                foreach ($cav1['data'] as $caDataV){
+                    $row = $wpdb->get_row('SELECT id,`level`,`match` FROM '.$wpdb->prefix.'directories WHERE `category_name`="'.$cav1['alias'].'" AND `user_id`='.$caDataV['user_id'].' AND `range`='.$range, ARRAY_A);
+
+                    if($row){
+                        if(!in_array('('.$match_id.')', explode(',', $row['match']))){
+                            $level = $row['level']+1;
+                            $match = $row['match'].',('.$match_id.')';
+                            $sql = "UPDATE {$wpdb->prefix}directories SET `level`={$level},`match`='{$match}' WHERE id={$row['id']}";
+                            $bool = $wpdb->query($sql);
+                        }
+                    }else{
+                        $sql = "INSERT INTO {$wpdb->prefix}directories (`user_id`,`category_name`,`level`,`match`,`range`,`type_name`) 
+                                VALUES ('{$caDataV['user_id']}','{$cav1['alias']}',1,'({$match_id})',{$range},'{$cav1['name']}类脑力健将')";
+                        $bool = $wpdb->query($sql);
+                    }
+                    if($bool){
+                        $msg = '生成成功';
+                    }
+                }
+            }
+            if($msg == '') $msg = '生成失败';
+        }
+//        leo_dump($categoryArr);
 
         ?>
         <div class="wrap">
@@ -122,9 +165,13 @@ class Brainpower
                     <style>
                         #dra_set_name,#dra_set_btn{
                             padding-bottom: 0.5em;
+                            padding-top: 0.5em;
+                        }
+                        .red_border {
+                            border: 1px solid red;
                         }
                     </style>
-                    <div id="dra_set_name">
+                    <div id="dra_set_name" class="">
                         <span style="font-weight: bold">名录类型:</span>
                         <input type="radio" name="range" value="1">中国
                         <input type="radio" name="range" value="2">国际
@@ -132,17 +179,28 @@ class Brainpower
                     </div>
 
                     <div id="dra_set_btn">
-                        <?php if($is_view_btn){?>
-                            <input type="button" onclick="confirmSub();" class="button action" style="font-weight: bold" value="生成名录">
-                        <?php } ?>
+
+                            <input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="生成名录">
+
+                        <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
                     </div>
-                    <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
                     <script type="text/javascript">
-                        function confirmSub() {
-                            if(confirm('是否确认生成名录?生成后无法重新生成')){
-                                document.getElementById('_F').submit();
-                            }
-                        }
+
+                        jQuery(document).ready(function($) {
+                            $('#generate_btn').on('click', function () {
+                                var vals = $('input[name="range"]:checked').val();
+                                if(vals == undefined || vals == false){
+                                    $('#dra_set_name').addClass('red_border')
+                                    return false;
+                                }
+                                if(confirm('是否确认生成名录?生成后无法重新生成')){
+                                    $(this).off('click');
+                                    document.getElementById('_F').submit();
+                                }
+                            });
+
+                        })
+
                     </script>
 
 

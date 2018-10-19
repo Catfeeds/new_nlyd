@@ -1441,18 +1441,21 @@ class Match_student {
                 if(!isset($cateArr[0]['id'])) $cateArr[0]['id'] = [];
                 $cateArr[0]['id'][] = $catePro['match_project_id'];
                 $cateArr[0]['name'] = '心算';
+                $cateArr[0]['alias'] = 'xsl';
             };
             if(in_array($catePro['project_alias'],['wzsd','kysm'] )){
                 if(!isset($cateArr[1])) $cateArr[1] = [];
                 if(!isset($cateArr[1]['id'])) $cateArr[1]['id'] = [];
                 $cateArr[1]['id'][] = $catePro['match_project_id'];
                 $cateArr[1]['name'] = '速读';
+                $cateArr[1]['alias'] = 'sdl';
             };
             if(in_array($catePro['project_alias'],['szzb','pkjl'] )){
                 if(!isset($cateArr[2])) $cateArr[2] = [];
                 if(!isset($cateArr[2]['id'])) $cateArr[2]['id'] = [];
                 $cateArr[2]['id'][] = $catePro['match_project_id'];
                 $cateArr[2]['name'] = '记忆';
+                $cateArr[2]['alias'] = 'jyl';
             };
         }
         return $cateArr;
