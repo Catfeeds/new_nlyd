@@ -796,23 +796,14 @@ class Student_Abcd extends Student_Home
             $answer = $questions_answer;
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
-            //print_r($answer_array);
-            //print_r($questions_answer);die;
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
 
             $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
 
-            /*if(!empty($match_questions)){
-                $twentyfour = new TwentyFour();
-                foreach ($match_questions as $val){
-                    $results = $twentyfour->calculate($val);
-                    //print_r($results);
-                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
-                }
-                $questions_answer = $arr;
-            }*/
         }
         else{
 
