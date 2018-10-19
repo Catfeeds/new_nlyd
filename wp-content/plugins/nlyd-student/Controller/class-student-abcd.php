@@ -420,7 +420,7 @@ class Student_Abcd extends Student_Home
                 )
             );
             $question = $posts[0];
-
+            //print_r($question);die;
             if(empty($question)){
                 $error_data = array(
                     'status'=>-1,
@@ -488,7 +488,8 @@ class Student_Abcd extends Student_Home
                 'project_title'=>$project_more['project_title'],
                 'count_down_time'=>get_time()+ $project_more['use_time']*60,
             );
-        }else{
+        }
+        else{
 
             //var_dump($_SESSION['count_down']);
 
@@ -511,6 +512,8 @@ class Student_Abcd extends Student_Home
         $data['redirect_url'] = home_url(CONTROLLER.'/answerMatch/match_id/'.$project_more['match_id'].'/project_more_id/'.$project_more['id'].'/project_alias/'.$project_more['project_alias']);
 
         if(!empty($post_id)){
+            $data['questions'] = $question;
+            $data['post_id'] = $post_id;
             $data['redirect_url'] .= '/post_id/'.$post_id;
             $data['questions_answer'] = $questions_answer;
             $data['match_questions'] = $match_questions;
@@ -796,23 +799,14 @@ class Student_Abcd extends Student_Home
             $answer = $questions_answer;
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
-            //print_r($answer_array);
-            //print_r($questions_answer);die;
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
 
             $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
 
-            /*if(!empty($match_questions)){
-                $twentyfour = new TwentyFour();
-                foreach ($match_questions as $val){
-                    $results = $twentyfour->calculate($val);
-                    //print_r($results);
-                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
-                }
-                $questions_answer = $arr;
-            }*/
         }
         else{
 
@@ -1748,6 +1742,9 @@ class Student_Abcd extends Student_Home
 
                 if($v['start_time'] <= $new_time && $new_time <= $v['end_time']){
                     $this->current_project = $v;
+                    if($k == $num-1){
+                        return $v;
+                    }
                 }
 
                 if($new_time <= $v['start_time'] ){

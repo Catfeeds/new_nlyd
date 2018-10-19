@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn" id="complete"><?=__('阅读完成', 'nlyd-student')?></div>
+                <div class="a-btn" id="complete"  data-href="<?=$redirect_url?>"><?=__('阅读完成', 'nlyd-student')?></div>
             </div>
         </div>
     </div>
@@ -43,39 +43,18 @@ jQuery(function($) {
         submit(time,4);
     })
     // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
-                match_action:'reading',
-                question_id:$('input[name="question_id"]').val()
+    new AlloyFinger($('#complete')[0], {//阅读完成
+        tap:function(){
+            if(!$('#complete').hasClass('disabled')){
+                var time=$('.count_down').attr('data-seconds');
+                var href=$(this).attr('data-href')
+                var new_href=href+'/surplus_time/'+time;
+                window.location.href=new_href
+                $('#complete').addClass('disabled')
             }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){  
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url
-                        }
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
         }
-    }
-})
+
+    });
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',
@@ -84,15 +63,20 @@ new AlloyFinger($('#complete')[0], {
             })
         var my_answer={};
         var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
-            my_answer:my_answer,
-            match_action:'subjectReading',
-            surplus_time:time,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'wzsd',
+                post_id:<?=$post_id?>,
+                train_questions:<?=json_encode($match_questions)?>,
+                train_answer:<?=json_encode($questions_answer)?>,
+                project_more_id:$.Request('project_more_id'),
+
+                my_answer:my_answer,
+                surplus_time:time,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         var leavePage= $.GetSession('leavePage','1');
         if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){

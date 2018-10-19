@@ -34,15 +34,15 @@
                             <!-- <span class="nl-team-step">战队申请审核中</span> -->
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span><?=__('战队负责人', 'nlyd-student')?>：</span>
+                            <span><?=__('战队负责人', 'nlyd-student')?>:</span>
                             <span><?=$team['team_director']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span><?=__('战队口号', 'nlyd-student')?>：</span>
+                            <span><?=__('战队口号', 'nlyd-student')?>:</span>
                             <span><?=$team['team_slogan']?></span>
                         </div>
                         <div class="teamDetail-infoRow">
-                            <span><?=__('战队成员', 'nlyd-student')?>：</span>
+                            <span><?=__('战队成员', 'nlyd-student')?>:</span>
                             <span><?=$team['team_total']?>人</span>
                         </div>
                     </div>

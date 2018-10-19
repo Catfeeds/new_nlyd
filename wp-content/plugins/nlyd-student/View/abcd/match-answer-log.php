@@ -44,27 +44,27 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>：</div><span class="c_blue"><?=$str_len;?></span>
+                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$str_len;?></span>
                             </div>
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>：</div><span class="c_blue"><?=$success_length;?></span>
-                            </div>
-                        </div>
-                        <div class="subject-row flex-h">
-                            <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>：</div><span class="c_blue"><?=$use_time;?>s</span>
-                            </div>
-                            <div class="one-info flex1">
-                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>：</div><span class="c_blue"><?=$surplus_time;?>s</span>
+                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$success_length;?></span>
                             </div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>：</div><span class="c_blue"><?=$accuracy;?>%</span>
+                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>:</div><span class="c_blue"><?=$use_time;?>s</span>
+                            </div>
+                            <div class="one-info flex1">
+                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>:</div><span class="c_blue"><?=$surplus_time;?>s</span>
+                            </div>
+                        </div>
+                        <div class="subject-row flex-h">
+                            <div class="one-info flex1">
+                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
                             <?php if(!empty($ranking)):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('本轮排名', 'nlyd-student')?>：</div><span class="c_blue"><?=$ranking?></span>
+                                    <div class="left-label"><?=__('本轮排名', 'nlyd-student')?>:</div><span class="c_blue"><?=$ranking?></span>
                                 </div>
                             <?php endif;?>
                         </div>
@@ -87,29 +87,29 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     ?>
                     <div style="color:#CF1818;"><?=$error?></div>
                     <?php if(!empty($end_time)): ?>
-                        <div><?=__('切出页面时间', 'nlyd-student')?>：<span class="c_blue"><?=$end_time?></span></div>
+                        <div><?=__('切出页面时间', 'nlyd-student')?>:<span class="c_blue"><?=$end_time?></span></div>
                     <?php endif;?>
 
 
                     <?php
                     switch ($project_alias){
                         case 'szzb':    //数字争霸
-                            require_once student_view_path.'matchs/subject-numberBattle.php';
+                            require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
                             break;
                         case 'pkjl':    //扑克接力
-                            require_once student_view_path.'matchs/subject-pokerRelay.php';
+                            require_once student_view_path.CONTROLLER.'/subject-pokerRelay.php';
                             break;
                         case 'zxss':    //正向速算
-                            require_once student_view_path.'matchs/subject-fastCalculation.php';
+                            require_once student_view_path.CONTROLLER.'/subject-fastCalculation.php';
                             break;
                         case 'nxss':    //逆向速算
-                            require_once student_view_path.'matchs/subject-fastReverse.php';
+                            require_once student_view_path.CONTROLLER.'/subject-fastReverse.php';
                             break;
                         case 'wzsd':     //文章速读
-                            require_once student_view_path.'matchs/subject-reading.php';
+                            require_once student_view_path.CONTROLLER.'/subject-reading.php';
                             break;
                         case 'kysm':    //快眼扫描
-                            require_once student_view_path.'matchs/subject-fastScan.php';
+                            require_once student_view_path.CONTROLLER.'/subject-fastScan.php';
                             break;
                         default:
                             require_once student_view_path.'public/my-404.php';

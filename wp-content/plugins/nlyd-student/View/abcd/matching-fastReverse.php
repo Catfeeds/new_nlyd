@@ -96,12 +96,39 @@ jQuery(function($) {
         // if(valid(select)=="本题无解"){
         //     initQuestion()
         // }else{
-            var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
-            ajaxData.push(thisRow)
-            if(!$.Request('test')){
+            var _flag=false;//重复题目是true
+            var _flag1=false;//前面的4题连续无解是true
+            $.each(ajaxData,function(index,value){
+                var _select=value.question;
+                if(_select[0]==select[0] && _select[1]==select[1] && _select[2]==select[2] && _select[3]==select[3]){//重复题目
+                    _flag=true;
+                    return false;
+                }
+            })
+            var _len=ajaxData.length;
+            var _rights=valid(select);
+            
+            if(_len>=4){//前面的4题连续无解
+                if(_rights=='<?=__('本题无解', 'nlyd-student')?>'){//本题也无解
+                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
+                        _flag1=true;
+                    }
+                }
+            }
+            if(_flag || _flag1){//重复题目，连续无解
+                initQuestion()
+            }else{
+                var thisRow={question:select,yours:'',isRight:false,rights:_rights}
+                ajaxData.push(thisRow) 
                 var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
                 $.SetSession('match',sessionData)
             }
+            // var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
+            // ajaxData.push(thisRow)
+            // if(!$.Request('test')){
+            //     var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
+            //     $.SetSession('match',sessionData)
+            // }
         // }
     }
     function nextQuestion() {
@@ -125,11 +152,13 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'nxss',
+                project_more_id:$.Request('project_more_id'),
+
                 my_answer:ajaxData,
-                match_action:'subjectFastReverse',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
@@ -139,6 +168,7 @@ jQuery(function($) {
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            console.log(data)
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){    
                     $.DelSession('match')

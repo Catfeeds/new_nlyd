@@ -42,7 +42,7 @@ switch ($type){
             require_once leo_student_public_view.'leftMenu.php';
         }
         ?>
-        <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+        <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['back'])){ ?>
                     <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
@@ -58,27 +58,27 @@ switch ($type){
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>：</div><span class="c_blue"><?=$str_len;?></span>
+                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$str_len;?></span>
                             </div>
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>：</div><span class="c_blue"><?=$success_length;?></span>
-                            </div>
-                        </div>
-                        <div class="subject-row flex-h">
-                            <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>：</div><span class="c_blue"><?=$use_time;?>s</span>
-                            </div>
-                            <div class="one-info flex1">
-                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>：</div><span class="c_blue"><?=$surplus_time;?>s</span>
+                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$success_length;?></span>
                             </div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>：</div><span class="c_blue"><?=$accuracy;?>%</span>
+                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>:</div><span class="c_blue"><?=$use_time;?>s</span>
+                            </div>
+                            <div class="one-info flex1">
+                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>:</div><span class="c_blue"><?=$surplus_time;?>s</span>
+                            </div>
+                        </div>
+                        <div class="subject-row flex-h">
+                            <div class="one-info flex1">
+                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
                             <?php if(!empty($ranking)):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('本轮排名', 'nlyd-student')?>：</div><span class="c_blue"><?=$ranking?></span>
+                                    <div class="left-label"><?=__('本轮排名', 'nlyd-student')?>:</div><span class="c_blue"><?=$ranking?></span>
                                 </div>
                             <?php endif;?>
                         </div>

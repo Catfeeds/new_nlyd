@@ -155,16 +155,6 @@ jQuery(function($) {
             my_answer.push('')
         })
         var data={
-            // action:'answer_submit',
-            // _wpnonce:$('#inputSubmit').val(),
-            // match_id:<?=$_GET['match_id']?>,
-            // project_id:<?=$project_id?>,
-            // match_more:$('#inputMatchMore').val(),
-            // my_answer:my_answer,
-            // match_action:'subjectNumberBattle',
-            // surplus_time:time,
-            // match_questions:questions_answer,
-            // submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
                 match_id:_match_id,
@@ -176,7 +166,6 @@ jQuery(function($) {
                 project_more_id:$.Request('project_more_id'),
 
                 my_answer:my_answer,
-                match_action:'subjectNumberBattle',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 

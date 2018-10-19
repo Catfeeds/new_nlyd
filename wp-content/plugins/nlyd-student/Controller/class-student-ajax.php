@@ -36,14 +36,14 @@ class Student_Ajax
         if(empty($_POST['match_more']) || empty($_POST['project_alias'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
 
         if(empty($_POST['my_answer'])){
-            global $current_user;
-            $redis = new Redis();
-            $redis->connect('127.0.0.1',6379,1);
-            $redis->auth('leo626');
-            $new_time = get_time();
-            $default_count_down = $redis->get('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'])-1;
-            $redis->setex('count_down'.$current_user->ID.$_POST['project_alias'].$_POST['match_more'],$default_count_down-$new_time,$default_count_down);
-            wp_send_json_error(array('info'=>$default_count_down-$new_time));
+
+            if(isset($_SESSION['count_down']['count_down_time'])){
+                $default_count_down = $_SESSION['count_down']['count_down_time']-get_time() - 2;
+
+                $_SESSION['count_down']['count_down_time'] = get_time() + $default_count_down;
+            }
+
+            wp_send_json_error(array('info'=>$default_count_down));
 
         }else{
 
@@ -268,6 +268,7 @@ class Student_Ajax
      */
     public function answer_submit(){
 
+
         unset($_SESSION['count_down']);
 
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
@@ -314,13 +315,14 @@ class Student_Ajax
 
 
                 $data_arr = $_POST['my_answer'];
-
+                //print_r($data_arr);die;
                 if(!empty($data_arr)){
                     $match_questions = array_column($data_arr,'question');
                     $questions_answer = array_column($data_arr,'rights');
                     $_POST['my_answer'] = array_column($data_arr,'yours');
                 }
-                if($_POST['project_type'] == 'nxss'){
+
+                if($_POST['project_alias'] == 'nxss'){
                     $isRight = array_column($data_arr,'isRight');
 
                     $success_len = 0;
@@ -350,7 +352,7 @@ class Student_Ajax
                 //print_r($_POST);die;
                 if(empty($_POST['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
                 //print_r($_POST);die;
-                $questions_answer = $_POST['train_answer'];
+                $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
 
@@ -1319,7 +1321,7 @@ class Student_Ajax
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
             $orders[$k]['nationality'] = $user_nationality_pic;
-            $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
+            $nationality_short = $user['user_nationality_short'][0] ? $user['user_nationality_short'][0] : '' ;
             $orders[$k]['nationality_short'] = $nationality_short;
 
         }
@@ -1653,7 +1655,7 @@ class Student_Ajax
 
                     update_user_meta($current_user->ID,'user_nationality',$_POST['nationality']);
                     update_user_meta($current_user->ID,'user_nationality_pic',$_POST['nationality_pic']);
-                    update_user_meta($current_user->ID,'nationality_short',$_POST['nationality_short']);
+                    update_user_meta($current_user->ID,'user_nationality_short',$_POST['nationality_short']);
 
                     if($_POST['nationality'] != '中华人民共和国'){
                         if(empty($_POST['birthday']))wp_send_json_error(array('info'=>__('生日必选', 'nlyd-student')));

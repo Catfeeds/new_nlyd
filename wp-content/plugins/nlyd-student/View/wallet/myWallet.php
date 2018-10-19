@@ -24,9 +24,9 @@
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin">
                     <div class="wallet-title">
-                        <span class="wallet-flex">余额：<span class="bold">4200.00</span></span>
-                        <span class="wallet-flex">脑币：<span class="bold">0</span></span>
-                        <span class="wallet-flex">银行卡：<span class="bold">1</span></span>
+                        <span class="wallet-flex">余额:<span class="bold">4200.00</span></span>
+                        <span class="wallet-flex">脑币:<span class="bold">0</span></span>
+                        <span class="wallet-flex">银行卡:<span class="bold">1</span></span>
                     </div>
                     <div class="wallet-row">
                         <div class="wallet-row-title c_blue">

@@ -58,6 +58,8 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
+    
+    console.log(eval('8/(3-(8/3))'))
     var isSubmit=false;//是否正在提交
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
