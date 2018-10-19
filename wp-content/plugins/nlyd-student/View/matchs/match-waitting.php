@@ -11,7 +11,7 @@
                         <?php if($current_project['time_type'] != 'end'):?>
                         <div class="match_tips">
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>：</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>:</span><?=!empty($next_project['project_title']) ? $next_project['project_title'] : $current_project['project_title']?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
                             </p>
                         </div>
                         <?php endif;?>

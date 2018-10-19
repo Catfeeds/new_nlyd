@@ -125,8 +125,8 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
+                match_id:_match_id,
+                project_id:_project_id,
                 match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
                 my_answer:ajaxData,
                 match_action:'subjectFastReverse',

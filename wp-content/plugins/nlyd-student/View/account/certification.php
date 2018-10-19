@@ -302,7 +302,7 @@ jQuery(document).ready(function($) {
         });
 
         sendloginAjax=function(formData){
-            //type：确定回调函数
+            //type:确定回调函数
             //url:ajax地址
             //formData:ajax传递的参数
             $.ajax({

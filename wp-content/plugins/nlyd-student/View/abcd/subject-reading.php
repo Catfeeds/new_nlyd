@@ -32,8 +32,8 @@
             ?>
             <div class="one-ques">
                 <p class="question"><?=$num?>、<?=$val?></p>
-                <p class="yours"><?=__('你的答案', 'nlyd-student')?>：<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : __('未作答', 'nlyd-student');?></span></p>
-                <p class="rights"><?=__('正确答案', 'nlyd-student')?>：<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
+                <p class="yours"><?=__('你的答案', 'nlyd-student')?>:<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : __('未作答', 'nlyd-student');?></span></p>
+                <p class="rights"><?=__('正确答案', 'nlyd-student')?>:<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
             </div>
             <?php } ?>
         <?php endif;?>

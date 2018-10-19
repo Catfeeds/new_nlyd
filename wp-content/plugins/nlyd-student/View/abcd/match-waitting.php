@@ -10,7 +10,7 @@
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>：</span><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>:</span><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
                             </p>
                         </div>
 

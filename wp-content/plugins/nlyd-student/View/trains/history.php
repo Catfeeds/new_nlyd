@@ -16,7 +16,7 @@
                   <?php if(!empty($list)){ ?>
                     <div class="layui-row nl-border nl-content have-bottom">
                         <div class="width-padding width-padding-pc">
-                            <div class="ta_c c_yellow fs_12 his_tips"><?=__('温馨提示：训练记录最多保存100条', 'nlyd-student')?></div>
+                            <div class="ta_c c_yellow fs_12 his_tips"><?=__('温馨提示:训练记录最多保存100条', 'nlyd-student')?></div>
                             <?php foreach ($list as $v){ ?>
                             <div class="his_row">
                                 <div class="bold c_black pull-left his_first"> <?=__($v['project_type_cn'], 'nlyd-student')?></div>
