@@ -49,6 +49,7 @@ if(!class_exists('myInterface')){
         public function setting_match_default(){
 
             $match_project = get_option('match_project_use')['project_use'];
+            $project_default = get_option('match_project_use')['project_default'];
             //print_r($match_project);
             $args = array(
                 'post_type' => array('project'),

@@ -452,6 +452,31 @@ class Student_Abcd extends Student_Home
                 $match_questions = array_unique(array_column($rows,'post_title','ID'));
             }
         }
+        elseif (in_array($this->project_alias,array('kysm','zxss'))){
+
+            $match_default = get_option('match_project_use');
+            if($this->project_alias == 'kysm'){
+
+                $data['child_count_down'] = !empty($match_default['project_default']['kysm']['flicker']) ? $match_default['project_default']['kysm']['flicker'] : 5;
+            }else {
+                $zxss_default = $match_default['project_use']['zxss'];
+
+                if(empty($zxss_default)){
+                    $zxss_default = array(
+                        'even_add'=>180,
+                        'add_and_subtract'=>180,
+                        'wax_and_wane'=>180,
+                    );
+                }else{
+                    $zxss_default['even_add'] *= 60;
+                    $zxss_default['add_and_subtract'] *= 60;
+                    $zxss_default['wax_and_wane'] *= 60;
+                }
+
+                $data['child_count_down'] = $zxss_default;
+
+            }
+        }
 
 
         //unset($_SESSION['count_down']);

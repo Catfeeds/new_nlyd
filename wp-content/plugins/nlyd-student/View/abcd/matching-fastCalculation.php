@@ -354,8 +354,8 @@ jQuery(function($) {
         var sessionData={
             ajaxData:ajaxData,
             match_id:$.Request('match_id'),
-            project_id:$.Request('project_id'),
-            match_more:$.Request('match_more'),
+            project_id:<?=$project_id?>,
+            match_more:<?=$match_more?>,
             level:level,
             n_type:n_type,
             nextBtn_click:nextBtn_click
@@ -492,10 +492,12 @@ jQuery(function($) {
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
                 match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
+                project_id:<?=$project_id?>,
+                match_more:<?=$match_more?>,
+                project_more_id:<?=$_GET['project_more_id']?>,
                 match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
                 my_answer:ajaxData,
-                match_action:'subjectFastCalculation',
+                project_alias:'zxss',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }

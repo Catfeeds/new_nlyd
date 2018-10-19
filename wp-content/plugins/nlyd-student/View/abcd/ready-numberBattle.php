@@ -66,7 +66,7 @@ jQuery(function($) {
             });
             var sessionData={
                 match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
+                project_id:<?=$project_id?>,
                 match_more:$.Request('match_more'),
                 questions_answer:questions_answer
             }
@@ -87,7 +87,7 @@ new AlloyFinger($('#complete')[0], {
                 action:'memory_complete',
                 _wpnonce:$('#inputComplete').val(),
                 match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
+                project_id:<?=$project_id?>,
                 match_more:$('#inputMatchMore').val(),
                 match_action:'numberBattle',
                 match_questions:questions_answer,
@@ -128,7 +128,7 @@ new AlloyFinger($('#complete')[0], {
             action:'answer_submit',
             _wpnonce:$('#inputSubmit').val(),
             match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
+            project_id:<?=$project_id?>,
             match_more:$('#inputMatchMore').val(),
             my_answer:my_answer,
             match_action:'subjectNumberBattle',

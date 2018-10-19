@@ -268,6 +268,7 @@ class Student_Ajax
      */
     public function answer_submit(){
 
+        unset($_SESSION['count_down']);
 
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
@@ -311,6 +312,7 @@ class Student_Ajax
             case 'zxss':
             case 'nxss':
 
+
                 $data_arr = $_POST['my_answer'];
 
                 if(!empty($data_arr)){
@@ -340,8 +342,8 @@ class Student_Ajax
                 }
 
 
-                $_POST['train_questions'] = $match_questions;
-                $_POST['train_answer'] = $questions_answer;
+                $_POST['match_questions'] = $match_questions;
+                $_POST['questions_answer'] = $questions_answer;
 
                 break;
             case 'wzsd':

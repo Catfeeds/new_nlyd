@@ -383,7 +383,8 @@ $('#selectWrapper .fastScan-item').each(function(){
                 project_id:<?=$project_id?>,
                 match_more:<?=$match_more?>,
                 my_answer:ajaxData,
-                match_action:'subjectfastScan',
+                project_alias:'kysm',
+                project_more_id:<?=$_GET['project_more_id']?>,
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
@@ -393,6 +394,8 @@ $('#selectWrapper .fastScan-item').each(function(){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            /*console.log(data);
+            return false;*/
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('match')
