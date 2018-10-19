@@ -96,7 +96,7 @@ class Brainpower
             $cate['data'] = $match_student->getCategoryRankingData($match,join(',', $cate['id']),0,'0,10');
         }
 
-        leo_dump($categoryArr);
+//        leo_dump($categoryArr);
 
 
         ?>
@@ -177,7 +177,7 @@ class Brainpower
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
-                    <?php foreach ($cateArr as $cav){ ?>
+                    <?php foreach ($categoryArr as $cav){ ?>
                         <tr id="user-12">
                             <th scope="row" class="check-column" style="text-align: left;font-weight: bold;font-size:18px;background-color: #C1BBB7;height: 2em" colspan="6">
                                 <?=$cav['parent_title']?>-前<?=count($cav['data'])?>名

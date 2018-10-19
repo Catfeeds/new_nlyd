@@ -22,3 +22,4 @@ __('报名中', 'nlyd-student');
 __('比赛中', 'nlyd-student');
 __('男', 'nlyd-student');
 __('女', 'nlyd-student');
+__('脑力世界杯专项训练', 'nlyd-student');
