@@ -13,7 +13,7 @@
                     $my_select = arr2str($my_answer[$k]);
                     foreach ($my_answer[$k] as $v){
                         $my_answer_select = $questions_answer[$k]['problem_select'][$v];
-                        $answer_my[] = $v >= 0 && is_numeric($v) ? get_select($v).'.'.$my_answer_select : '--';
+                        $answer_my[] = $v >= 0 && is_numeric($v) ? get_select($v).'.'.$my_answer_select :  __('未作答', 'nlyd-student');
                     }
                 }
 
@@ -21,7 +21,7 @@
                     $questions_select = arr2str($questions_answer[$k]['problem_answer']);
                     foreach ($questions_answer[$k]['problem_answer'] as $x){
                         $questions_answer_select = $questions_answer[$k]['problem_select'][$x];
-                        $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select : '--';
+                        $answer_questions[] = $x >= 0 && is_numeric($x) ? get_select($x).'.'.$questions_answer_select :  __('未作答', 'nlyd-student');
                     }
                 }
                 /*global $current_user;
@@ -33,7 +33,7 @@
             <div class="one-ques">
                 <p class="question"><?=$num?>、<?=$val?></p>
                 <p class="yours"><?=__('你的答案', 'nlyd-student')?>:<span class="<?=$my_select == $questions_select ? 'yes' : 'error'; ?>"><?=!empty($answer_my) ? arr2str(' ',$answer_my) : __('未作答', 'nlyd-student');?></span></p>
-                <p class="rights"><?=__('正确答案', 'nlyd-student')?>:<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) : '--';?></p>
+                <p class="rights"><?=__('正确答案', 'nlyd-student')?>:<?=!empty($answer_questions) ? arr2str(' ',$answer_questions) :  __('未作答', 'nlyd-student');?></p>
             </div>
             <?php } ?>
         <?php endif;?>
