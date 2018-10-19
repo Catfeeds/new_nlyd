@@ -153,6 +153,7 @@ jQuery(function($) {
                 'visibility': 'visible',
             })
         var my_answer=[];
+        var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
         var data={
             action:'trains_submit',
             genre_id:$.Request('genre_id'),
@@ -161,6 +162,7 @@ jQuery(function($) {
             train_answer:questions_answer,
             my_answer:my_answer,
             surplus_time:time,
+            match_more:match_more,
         }
 
         $.ajax({

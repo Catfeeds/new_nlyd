@@ -117,17 +117,18 @@ jQuery(function($) {
                     my_answer[id]=['-1']
                 }
             })
-            
-        var data={
-            action:'trains_submit',
-            genre_id:$.Request('genre_id'),
-            post_id:$.Request('post_id'),
-            project_type:'wzsd',
-            train_questions:<?=json_encode($match_questions)?>,
-            train_answer:<?=json_encode($questions_answer)?>,
-            my_answer:my_answer,
-            surplus_time:time,
-        }
+            var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
+            var data={
+                action:'trains_submit',
+                genre_id:$.Request('genre_id'),
+                post_id:$.Request('post_id'),
+                project_type:'wzsd',
+                train_questions:<?=json_encode($match_questions)?>,
+                train_answer:<?=json_encode($questions_answer)?>,
+                my_answer:my_answer,
+                surplus_time:time,
+                match_more:match_more,
+            }
             $.ajax({
                 data:data,
                 success:function(res,ajaxStatu,xhr){  
