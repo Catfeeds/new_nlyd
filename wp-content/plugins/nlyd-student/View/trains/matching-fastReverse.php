@@ -46,7 +46,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="<?=__('本题无解', 'nlyd-student')?>"><div><?=__('本题无解', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解"><div><?=__('本题无解', 'nlyd-student')?></div></div>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
@@ -58,8 +58,8 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
-    
-    console.log(eval('8/(3-(8/3))'))
+
+    console.log(eval('8/(3-(8/3))'))    
     var isSubmit=false;//是否正在提交
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
@@ -93,11 +93,14 @@ jQuery(function($) {
                 }
             })
             var _len=ajaxData.length;
-            var _rights=valid(select);
-            
+            var examples=valid(select)
+            var _rights='本题无解'
+            if(examples.length>0){//有解
+                _rights=examples[0]
+            }
             if(_len>=4){//前面的4题连续无解
-                if(_rights=='<?=__('本题无解', 'nlyd-student')?>'){//本题也无解
-                    if(ajaxData[_len-1]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-2]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-3]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-4]['rights']=='<?=__('本题无解', 'nlyd-student')?>'){
+                if(_rights=='本题无解'){//本题也无解
+                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
                         _flag1=true;
                     }
                 }
@@ -105,7 +108,7 @@ jQuery(function($) {
             if(_flag || _flag1){//重复题目，连续无解
                 initQuestion()
             }else{
-                var thisRow={question:select,yours:'',isRight:false,rights:_rights}
+                var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
             }
         // }
@@ -208,10 +211,10 @@ $('.number').each(function(){
                 })
                 var number=_this.text();
                 var text=$('.answer div').text()
-                if(text=='<?=__('本题无解', 'nlyd-student')?>'){
+                if(text=='本题无解'){
                     text=''
                 }
-                if(number=='<?=__('本题无解', 'nlyd-student')?>'){
+                if(number=='本题无解'){
                     $('.answer div').text(number)
                     $('.number').removeClass('disabled')
                     $('.answer div').text(number) 
@@ -343,7 +346,7 @@ new AlloyFinger($('#del')[0], {
             var len=text.length;
             var news='';
             if(len>0){
-                if(text!='<?=__('本题无解', 'nlyd-student')?>'){
+                if(text!='本题无解'){
                     var end=text.substr(text.length-1,1);
                     var end_1=text.substr(text.length-2,1)
                     if(!isNaN(parseInt(end))){//删除的是数字
@@ -390,9 +393,9 @@ new AlloyFinger($('#next')[0], {
                 }
             })
             if(text.length!=0){
-                if($('.answer div').text()=='<?=__('本题无解', 'nlyd-student')?>'){
+                if($('.answer div').text()=='本题无解'){
                     text='unsolvable';
-                     if(ajaxData[ajaxData.length-1].rights=='<?=__('本题无解', 'nlyd-student')?>'){
+                     if(ajaxData[ajaxData.length-1].rights=='本题无解'){
                         $('.answer').addClass('right-fast')
                         ajaxData[ajaxData.length-1]['isRight']=true;
                      }else{
@@ -404,13 +407,43 @@ new AlloyFinger($('#next')[0], {
                         _this.removeClass('disabled')
                         return false;
                     }else{
-                        if(calculateResult(new_text)==24){
+                        var _result=calculateResult(new_text)
+                        if(_result==24){
                             $('.answer').addClass('right-fast')
                             ajaxData[ajaxData.length-1]['isRight']=true;
-                            
                         }else{
-                            $('.answer').addClass('error-fast')
-                            ajaxData[ajaxData.length-1]['isRight']=false;
+                            if(_result=='error'){//符号错误
+                                $('.answer').addClass('error-fast')
+                                ajaxData[ajaxData.length-1]['isRight']=false;
+                            }else{
+                                if(_result%1==0){//整数
+                                    $('.answer').addClass('error-fast')
+                                    ajaxData[ajaxData.length-1]['isRight']=false;
+                                }else{//浮点数
+                                    var __flag=false;
+                                    $.each(ajaxData[ajaxData.length-1]['examples'],function(i,v){
+                                        var _item=v;
+                                        var AA='';
+                                        try {
+                                            AA=eval(_item); // no exception occured
+                                        }
+                                        catch (e) {
+                                            AA='error'; 
+                                        }
+                                        if(AA==_result){//相同浮点数
+                                            __flag=true;
+                                            return false;
+                                        }
+                                    })
+                                    if(__flag){//相同浮点数
+                                        $('.answer').addClass('right-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=true;
+                                    }else{
+                                        $('.answer').addClass('error-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=false;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
