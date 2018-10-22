@@ -26,6 +26,7 @@
     display: block;
     overflow: hidden;
     float: left;
+    position: relative;
     padding: 15px 14px; 
     width: -webkit-calc(50% - 40px);
     width: calc(50% - 40px);
@@ -48,16 +49,21 @@
     vertical-align: middle;
     width: 100%;
 }
+.name_wrapper{
+    width: -webkit-calc(100% - 17px);
+    width: calc(100% - 17px);
+}
 .arrow_box{
-    display: table;
+    position: absolute;
+    top:50%;
+    right: 10px;
+    margin-top: 0; 
     width: 9px;
-    margin-top: 9px;
+    margin-top: -14px;
 }
 .arrow_box img{
-    display: table-cell;
     width: 100%;
     height: auto;
-    vertical-align: middle;
 }
 @media screen and (max-width: 1199px){
     #content{

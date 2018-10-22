@@ -262,13 +262,12 @@ layui.use(['layer'], function(){
             }
         })
     })
-    // mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {//扑克选择区tap事件
-$('.choose-poker').each(function(e){
+$('.choose-poker').each(function(e){//扑克选择区tap事件
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-            if(!_this.hasClass('disabled')){
-                $('.choose-poker').addClass('disabled')
+            if(!_this.hasClass('active')){
+                // $('.choose-poker').addClass('disabled')
                 _this.addClass('active');
                 var text=_this.attr('data-text');
                 var color=_this.attr('data-color');
@@ -315,7 +314,7 @@ $('.choose-poker').each(function(e){
                 })
                 initWidth();
                 initScroll()
-                $('.choose-poker').removeClass('disabled')
+                // $('.choose-poker').removeClass('disabled')
             }
         }
     });
