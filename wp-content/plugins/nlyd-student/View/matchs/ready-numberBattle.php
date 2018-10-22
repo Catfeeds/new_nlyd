@@ -37,7 +37,7 @@
                         <?php endif;?> -->
                     </div>
                 </div>
-                <div class="a-btn a-btn-table" id="complete"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
+                <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
             </div>
         </div>
     </div>

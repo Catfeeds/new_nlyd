@@ -12,7 +12,7 @@
                 </div>
                 
 
-                <div class="a-btn a-btn-table" id="complete" href="<?=$url?>"><div><?=__('开始训练', 'nlyd-student')?></div></div>
+                <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete" href="<?=$url?>"><div><?=__('开始训练', 'nlyd-student')?></div></div>
             </div>
         </div>
     </div>
