@@ -129,7 +129,7 @@ jQuery(function($) {
     });
     <?php } ?>
     $('#again').click(function(){
-        $.DelSession('train_match','1')
+        $.DelSession('train_match')
     })
     <?php if($type == 'pkjl'): ?>
             initWidth=function() {

@@ -61,6 +61,7 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');
+    console.log(leavePage)
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
         questions_answer=leavePage['train_questions'];
         $('.count_down').attr('data-seconds',leavePage['count_down'])
@@ -124,7 +125,6 @@ jQuery(function($) {
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
-                            $.DelSession('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{

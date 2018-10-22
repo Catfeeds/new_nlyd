@@ -58,13 +58,20 @@ jQuery(function($) {
     if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
         questions_answer=ready_poker['train_questions']
     }else{
-        // $.each(arrColor,function(i,v){
-        //     $.each(arrNum,function(index,val){
-        //         var item=v+'-'+val;
-        //         new_poker.push(item)
-        //     })
-        // })
-        function splits(str) {
+        rand(new_poker)
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'pkjl',
+            count_down:$('.count_down').attr('data-seconds')
+        }
+        $.SetSession('train_match',sessionData,0)
+    }
+    $.each(questions_answer,function(i,v){
+        var item=v.split('-')
+        data_match.push(item)
+    })
+    function splits(str) {
             return str.split('-');
         }
         function isNumber(str) {//非数字扑克转成number
@@ -137,14 +144,6 @@ jQuery(function($) {
                 
             }
         }
-        rand(new_poker)
-        $.DelSession('train_match')
-    }
-    $.each(questions_answer,function(i,v){
-        var item=v.split('-')
-        data_match.push(item)
-    })
-
     // var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     function submit(time){//提交答案
         $('#load').css({
@@ -190,17 +189,17 @@ jQuery(function($) {
             }
         })
     }
-new AlloyFinger($('#complete')[0], {//记忆完成
-    tap:function(){
-        var sessionData={//存储session
-            train_questions:questions_answer,
-            genre_id:$.Request('genre_id'),
-            type:'pkjl',
-            count_down:$('.count_down').attr('data-seconds')
-        }
-        $.SetSession('train_match',sessionData,0)
-    }
-})
+// new AlloyFinger($('#complete')[0], {//记忆完成
+//     tap:function(){
+//         var sessionData={//存储session
+//             train_questions:questions_answer,
+//             genre_id:$.Request('genre_id'),
+//             type:'pkjl',
+//             count_down:$('.count_down').attr('data-seconds')
+//         }
+//         $.SetSession('train_match',sessionData,0)
+//     }
+// })
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
     //     $.alerts('比赛结束');
     //     setTimeout(function() {
@@ -287,7 +286,6 @@ new AlloyFinger($('#complete')[0], {//记忆完成
             // if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
             //     questions_answer=ready_poker['train_questions']
             // }else{
-            //     $.DelSession('train_match')
             // }
             // $.each(questions_answer,function(i,v){
             //     var item=v.split('-')

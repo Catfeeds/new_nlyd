@@ -135,7 +135,6 @@ jQuery(function($) {
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
-                            $.DelSession('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{

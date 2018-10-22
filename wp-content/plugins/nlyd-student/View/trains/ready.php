@@ -282,7 +282,7 @@
 <script>
 jQuery(function($) { 
     $('#go').click(function(){
-        $.DelSession('train_match','1')
+        $.DelSession('train_match')
     })
 })
 </script>
