@@ -1,8 +1,8 @@
 <header class="mui-bar mui-bar-nav">
     <a class="mui-pull-left nl-goback">
-        <i class="iconfont">&#xe610;</i>
+        <div><i class="iconfont">&#xe610;</i></div>
     </a>
-    <h1 class="mui-title"><?=__('比赛规则', 'nlyd-student')?></h1>
+    <h1 class="mui-title"><div><?=__('比赛规则', 'nlyd-student')?></div></h1>
 </header>
 <div class="layui-fluid">
     <div class="layui-row">

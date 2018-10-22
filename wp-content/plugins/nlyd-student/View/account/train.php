@@ -10,9 +10,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('我的训练', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('我的训练', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="no-info-page">
@@ -20,7 +20,7 @@
                         <img src="<?=student_css_url.'image/noInfo/noTrain1045@2x.png'?>">
                     </div>
                     <p class="no-info-text"><?=__('您暂无训练记录', 'nlyd-student')?></p>
-                    <a class="a-btn"><?=__('现在去训练', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table"><div><?=__('现在去训练', 'nlyd-student')?></div></a>
                 </div>
             </div>
         </div>           

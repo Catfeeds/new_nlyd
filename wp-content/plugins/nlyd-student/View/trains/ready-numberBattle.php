@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
+            <h1 class="mui-title "><div class=""><?=__($match_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -16,10 +16,10 @@
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <button class="dis_table matching-btn active"><?=__('不划', 'nlyd-student')?></button>
+                            <button class="matching-btn active"><?=__('不划', 'nlyd-student')?></button>
                             <button class="matching-btn">2</button>
                             <button class="matching-btn">3</button>
                             <button class="matching-btn">4</button>
@@ -31,7 +31,7 @@
                         <div class="Glass"></div>
                     </div>
                 </div>
-                <a class="a-btn" id="complete" href="<?=$url?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete" href="<?=$url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@ jQuery(function($) {
         }
 
         $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number">'+v+'</div>';
+            var dom='<div class="matching-number"><div>'+v+'</div></div>';
             $('.matching-number-zoo').append(dom)
         })
     // })

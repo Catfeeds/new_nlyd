@@ -10,9 +10,9 @@
             <div class="main-header">
                 <header class="mui-bar mui-bar-nav main">
                     <a class="mui-pull-left nl-goback static" href="<?=home_url('account/')?>">
-                        <i class="iconfont">&#xe610;</i>
+                        <div><i class="iconfont">&#xe610;</i></div>
                     </a>
-                    <h1 class="mui-title"><?=__('个人资料', 'nlyd-student')?></h1>
+                    <h1 class="mui-title"><div><?=__('个人资料', 'nlyd-student')?></div></h1>
                 </header>
             </div> 
             <div class="layui-row nl-border nl-content">
@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
                                 
-                                <a class="a-btn" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><?=__('更新实名认证', 'nlyd-student')?></a>
+                                <a class="a-btn a-btn-table" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><div><?=__('更新实名认证', 'nlyd-student')?></div></a>
                                 <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
                             </div>
                         </form>

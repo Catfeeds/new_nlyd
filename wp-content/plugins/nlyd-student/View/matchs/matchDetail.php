@@ -9,9 +9,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs')?>">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('比赛详情', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('比赛详情', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin width-margin-pc content-border">
@@ -104,23 +104,23 @@
                             </li>
                         </ul>
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
-                        <a class="a-btn get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"><?=__('报名参赛', 'nlyd-student')?></a>
+                        <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"><div><?=__('报名参赛', 'nlyd-student')?></div></a>
                         <?php endif; ?>
                         <?php if( ($match['is_me'] == 'y' && $match['match_status'] == 2) && ($match['match_status'] == -3 || $match['match_status'] == 2)){?>
                             <div class="a-btn two get_footer">
                                 <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><?=__('查看战绩', 'nlyd-student')?></a>
+                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                                 <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><?=__('进入比赛', 'nlyd-student')?></a>
+                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入比赛', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                             </div>              
                         <?php }else { ?>
                             <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                <a class="a-btn get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><?=__('查看战绩', 'nlyd-student')?></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                             <?php endif;?>
                             <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                <a class="a-btn get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><?=__('进入比赛', 'nlyd-student')?></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入比赛', 'nlyd-student')?></div></a>
                             <?php endif;?>
                        <?php }?>
                         

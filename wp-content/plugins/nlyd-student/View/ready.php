@@ -14,15 +14,15 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
-                    <div><i class="iconfont">&#xe610;</i></div>
-                    
+                    <div>
+                    <i class="iconfont">&#xe610;</i>
+                    </div>
                 </a>
                 <h1 class="mui-title">
                     <div>
-                        <?=__($project_title, 'nlyd-student')?>
-                        <?=__($genre_title, 'nlyd-student')?>
+                    <?=__($project_title, 'nlyd-student')?>
+                    <?=__($genre_title, 'nlyd-student')?>
                     </div>
-
                 </h1>
             </header>
             <pre class="width-margin width-margin-pc c_black ff_cn">
@@ -276,7 +276,7 @@
             </pre>
         </div>
     </div>
-    <a class="a-btn a-btn-table" id="go" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
+    <a class="a-btn" id="go" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><?=__('开始训练', 'nlyd-student')?></a>
 </div>
 
 <script>

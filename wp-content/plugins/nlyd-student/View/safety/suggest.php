@@ -9,9 +9,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-            <i class="iconfont">&#xe610;</i>
+            <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('意见反馈', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('意见反馈', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
@@ -39,7 +39,7 @@
                             </div>
                             <input type="hidden" name="_wpnonce" id="inputSuggest" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
                             <input style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/>
-                            <a class="a-btn" lay-filter="suggestionBtn" lay-submit=""><?=__('提交意见反馈', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" lay-filter="suggestionBtn" lay-submit=""><div><?=__('提交意见反馈', 'nlyd-student')?></div></a>
                         </div>   
                     </form>
                 </div>

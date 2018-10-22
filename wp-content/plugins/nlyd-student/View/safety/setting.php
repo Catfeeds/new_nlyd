@@ -9,9 +9,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback static" onclick='window.location.href = "<?=home_url('account')?>"'>
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('设置', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('设置', 'nlyd-student')?></div></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
@@ -36,7 +36,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('清除缓存', 'nlyd-student')?></div></div>
                             </div>
-                            <a class="a-btn" id="loginOut"><?=__('退出登录', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
                         </div>
                     </div>
                 </div>

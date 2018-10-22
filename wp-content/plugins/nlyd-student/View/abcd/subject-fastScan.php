@@ -1,6 +1,6 @@
 
                     <div class="answer-zoo">
-                        <div class="answerBtn"><?=__('答案对比', 'nlyd-student')?></div>
+                        <button class="matching-btn active"><?=__('答案对比', 'nlyd-student')?></button>
                             <div class="reading-answer">
                                 <?php if(!empty($questions_answer)): ?>
                                 <?php foreach ($questions_answer as $k => $val){ ?>

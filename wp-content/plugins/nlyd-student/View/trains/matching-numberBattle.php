@@ -2,7 +2,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__($match_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
@@ -13,40 +13,40 @@
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></div>
-                            <div class="matching-btn c_white" id="next"><?=__('后插一位', 'nlyd-student')?></div>
+                            <button class="matching-btn active c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></button>
+                            <button class="matching-btn active c_white" id="next"><?=__('后插一位', 'nlyd-student')?></button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
-                        <?php for($i=0;$i<$str_length;++$i){ ?>
+                    <div class="matching-number-zoo layui-row">
+                        <!-- <?php for($i=0;$i<$str_length;++$i){ ?>
                         <div class="matching-number <?=$i==0?'active':'';?>"></div>
-                        <?php } ?>
+                        <?php } ?> -->
                     </div>
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1">1</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="2">2</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="3">3</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1"><div>1</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="2"><div>2</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="3"><div>3</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="4">4</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="5">5</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="6">6</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="4"><div>4</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="5"><div>5</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="6"><div>6</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="7">7</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="8">8</div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="9">9</div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="7"><div>7</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="8"><div>8</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="9"><div>9</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key fs_16 c_white" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0">0</div>
+                            <div class="bg_orange matching-key fs_16 c_white" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0"><div>0</div></div>
                         </div>
                     </div>
                 </div> 

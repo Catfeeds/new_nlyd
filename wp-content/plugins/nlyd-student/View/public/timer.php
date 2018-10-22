@@ -1,25 +1,4 @@
 <style>
-.a-btn.wait{
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-left: 0;
-    width: 100%;
-}
-.a-btn.back{
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-top: 15px;
-    margin-left: 0;
-    width: 100%;
-    border: 1px solid #2484FE;
-    color: #2484FE;
-    background: #fff;
-}
-.a-btn.back:hover{
-    color: #2484FE!important;
-}
 p.tips{
     margin-bottom: 20px;
     text-align: center;
@@ -44,9 +23,9 @@ p.tips{
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('定时器', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('定时器', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
 

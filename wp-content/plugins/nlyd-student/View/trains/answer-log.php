@@ -45,9 +45,9 @@ switch ($type){
         <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['back'])){ ?>
-                    <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
+                    <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
-                <h1 class="mui-title"><?=$title?> <?=__('答题记录', 'nlyd-student')?></h1>
+                <h1 class="mui-title"><div><?=$title?> <?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin">

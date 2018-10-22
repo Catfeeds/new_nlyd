@@ -1,6 +1,6 @@
 
                     <div class="answer-zoo">
-                        <div class="answerBtn"><?=__('你的答案', 'nlyd-student')?></div>
+                        <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
                         <div class="your-answer layui-row">
                             <?php if(!empty($my_answer)):?>
                             <?php foreach ($my_answer as $k => $v){ ?>
@@ -8,7 +8,7 @@
                             <?php } ?>
                             <?php endif;?>
                         </div>
-                        <div class="answerBtn"><?=__('正确答案', 'nlyd-student')?></div>
+                        <button class="matching-btn active"><?=__('正确答案', 'nlyd-student')?></button>
                         <div class="right-answer layui-row">
                             <?php if(!empty($questions_answer)):?>
                                 <?php foreach ($questions_answer as $key => $val){ ?>

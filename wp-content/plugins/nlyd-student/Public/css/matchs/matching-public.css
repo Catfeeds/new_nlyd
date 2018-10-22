@@ -1,15 +1,20 @@
 /* 比赛页面 */
 .matching-sumbit{
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 69px;
+    display: table;
+    float: right;
     height: 28px;
     border: 1px solid #2484FE;
     border-radius: 6px;
-    line-height: 28px;
+    line-height: 20px;
     text-align: center;
     color: #2484FE;
+    width: 55px;
+}
+.matching-sumbit div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
 }
 .matching-row-label,.matching-row-list{
     float: left;
@@ -18,19 +23,116 @@
     width: 74px;
     text-align: left;
     height: 28px;
-    line-height: 28px;
+    /* line-height: 28px; */
+    display: table;
+    line-height: 20px;
 }
-
+.matching-row-label div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
 .opacity{
     opacity:0.6;
     filter: alpha(opacity=60);
+}
+
+button.matching-btn {
+    float: left;
+    font: normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
+    color: rgba(116, 116, 116, 1);
+    border: 1px solid rgba(116, 116, 116, 1);
+    border-radius: 3px;
+    /* font-size: 12px; */
+    margin-right: 6px;
+    margin-bottom: 4px;
+    background: #fff;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+button.matching-btn.active {
+    background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
+    background: linear-gradient(90deg,#4394F9,#68AAFE);
+    border: 1px solid transparent;
+    color: #fff;
+}
+button.matching-btn:last-child{
+    margin-right: 0;
+}
+/* 键盘 */
+.matching-keyboard{
+    margin-top: 25px;
+}
+.matching-keyboard-row{
+    margin-bottom: 12px;
+    width: 100%;
+    height: 50px;
+}
+.matching-key{
+    display: table;
+    float: left;
+    width: calc(100% / 3 - 8px);
+    height: 50px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 6px;
+    margin-left: 12px;
+}
+.matching-key div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
+.matching-key.disabled{
+    background: -webkit-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: -o-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: -moz-linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+    background: linear-gradient(90deg,rgb(107, 116, 128),rgb(143, 147, 151));
+}
+.matching-keyboard-row .matching-key:first-child{
+    margin-left: 0;
+}
+/*  */
+.fast-item{
+    width: 100%;
+    display: table;
+    height: 40px;
+    border: 1px solid rgba(67, 148, 249, 1);
+    border-radius: 5px; 
+    font-size: 0.16rem;
+    color: rgba(67, 148, 249, 1); 
+    text-align: center;
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+.fast-item div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; 
+}
+.answer{
+    border: 1px solid #747474;
+    color: #747474;
+}
+.error-fast{
+    border: 1px solid #f9a9b8;
+    background: #f9a9b8;
+    color: #fa5f68;
+}
+.right-fast{
+    border: 1px solid #b7edd4;
+    background: #b7edd4;
+    color: #0a8406;
 }
 @media screen and (max-width: 374px){
     /* iphone6以下 */
     .match_info_font{
         font-size: 0.12rem;
-    }
-    .matching-sumbit{
-        width: 55px;
     }
 }

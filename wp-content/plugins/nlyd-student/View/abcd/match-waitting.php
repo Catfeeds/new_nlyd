@@ -49,8 +49,8 @@
                         <?php }
                         if($buffer_time){
                         ?>
-                            <a class="a-btn back" href="<?=$buffer_url?>">
-                                <?=__('进入比赛', 'nlyd-student')?>
+                            <a class="a-btn a-btn-table back" href="<?=$buffer_url?>">
+                                <div><?=__('进入比赛', 'nlyd-student')?></div>
                             </a>
                         <?php }?>
                         <div class="match_tips">

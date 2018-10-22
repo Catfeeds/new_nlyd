@@ -4,12 +4,12 @@
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><div><?=$match_title?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row  layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn" id="complete"  data-href="<?=$redirect_url?>"><?=__('阅读完成', 'nlyd-student')?></div>
+                <div class="a-btn a-btn-table focus_none" style="position: relative;top:0;margin-top:30px" id="complete"  data-href="<?=$redirect_url?>"><div><?=__('阅读完成', 'nlyd-student')?></div></div>
             </div>
         </div>
     </div>
