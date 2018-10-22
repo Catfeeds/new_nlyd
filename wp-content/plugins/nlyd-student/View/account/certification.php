@@ -82,11 +82,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a class="a-btn" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><?=__('更新实名认证', 'nlyd-student')?></a>
+                                <a class="a-btn a-btn-table" id="certificationFormBtn" lay-filter="certificationFormBtn" lay-submit=""><div><?=__('更新实名认证', 'nlyd-student')?></div></a>
                                 <input type="hidden" class="sbu_type" name="type" value="<?=$_GET['type']?>">
                             </div>
                         </form>
-                    <!-- <a class="a-btn certificationFormBtn">更新实名认证</a> -->
             </div>
         </div>           
     </div>

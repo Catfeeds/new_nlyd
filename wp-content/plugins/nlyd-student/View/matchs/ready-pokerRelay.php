@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <div class="a-btn" id="complete"><?=__('记忆完成', 'nlyd-student')?></div>
+                <div class="a-btn a-btn-table" id="complete"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
             </div>
         </div>           
     </div>

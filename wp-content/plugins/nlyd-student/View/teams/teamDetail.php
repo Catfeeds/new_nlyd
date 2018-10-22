@@ -108,7 +108,7 @@
                 </div>
 
                 <?php if(!in_array($team['status'],array(-1,1,2))): ?>
-                <a class="a-btn" id="team-join" data-id="<?=$team['ID']?>"><?=__('加入战队', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" id="team-join" data-id="<?=$team['ID']?>"><div><?=__('加入战队', 'nlyd-student')?></div></a>
                 <?php endif;?>
             </div>
         </div>

@@ -20,7 +20,7 @@
                         <img src="<?=student_css_url.'image/noInfo/noTrain1045@2x.png'?>">
                     </div>
                     <p class="no-info-text"><?=__('您暂无训练记录', 'nlyd-student')?></p>
-                    <a class="a-btn"><?=__('现在去训练', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table"><div><?=__('现在去训练', 'nlyd-student')?></div></a>
                 </div>
             </div>
         </div>           

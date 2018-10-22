@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <?php if($my_log): ?>
-                    <a class="a-btn get_footer"  data-href="<?=$answer_url?>"><?=__('查看本轮我的答题记录', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-tableget_footer"  data-href="<?=$answer_url?>"><div><?=__('查看本轮我的答题记录', 'nlyd-student')?></div></a>
                     <?php endif;?>
                 </div>
             </div>

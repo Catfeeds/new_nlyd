@@ -98,7 +98,7 @@
                                 $url = home_url('/teams/coachList');
                                 if(!empty($_GET['match_id']) ) $url .= '/match_id/'.$_GET['match_id'];
                             ?>
-                            <a class="a-btn" href="<?=$url;?>"><?=__('去设置我的教练', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" href="<?=$url;?>"><div><?=__('去设置我的教练', 'nlyd-student')?></div></a>
                         <?php }else{ ?>
                             <p class="no-info-text"><?=__('无教练信息', 'nlyd-student')?></p>
                         <?php } ?>
@@ -623,7 +623,7 @@ layui.use(['element','flow','layer','form'], function(){
                                     var flag='<?=$action ?>';
                                     if(flag.length>0){
                                         var text=$('.layui-this').text();
-                                        var dom='<a class="a-btn" href="<?=$next_url?>"><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></a>'
+                                        var dom='<a class="a-btn a-btn-table" href="<?=$next_url?>"><div><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></div></a>'
                                     }
                                     lis.push(dom) 
                                 }

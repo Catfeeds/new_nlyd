@@ -34,7 +34,7 @@
                             <input type="text" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="<?=__('预留手机号', 'nlyd-student')?>">
                         </div>
                     </div>
-                    <a class="a-btn" lay-filter="addAccount" lay-submit=""><?=__('保存', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table" lay-filter="addAccount" lay-submit=""><div><?=__('保存', 'nlyd-student')?></div></a>
                 </form>
             </div>
         </div>           

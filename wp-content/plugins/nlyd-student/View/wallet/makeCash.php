@@ -29,7 +29,7 @@
                             
                         </div>
                     </div>
-                    <a class="a-btn" lay-filter="makeCash" lay-submit=""><?=__('保存', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table" lay-filter="makeCash" lay-submit=""><div><?=__('保存', 'nlyd-student')?></div></a>
                 </form>
             </div>
         </div>           

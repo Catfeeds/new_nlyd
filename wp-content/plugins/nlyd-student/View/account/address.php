@@ -53,7 +53,7 @@
                 $add_url = home_url('/account/addAddress');
                 if(isset($_GET['match_id'])) $add_url .= '/match_id/'.$_GET['match_id'];
                 ?>
-                <a class="a-btn" href="<?=$add_url;?>"><?=__('新增收件地址', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" href="<?=$add_url;?>"><div><?=__('新增收件地址', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

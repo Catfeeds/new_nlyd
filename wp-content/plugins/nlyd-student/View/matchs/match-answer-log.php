@@ -121,16 +121,16 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     <div class="a-btn" style="display: none"><span class="count_down next_more_down" data-seconds="<?=$end_time_count_down?>">00:00:00</span></div>
                 <?php endif;?> -->
                 <?php if($next_type == 1 && !isset($_GET['type'])): ?>
-                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一轮开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
+                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一轮开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
                 <?php if($next_type == 2 && !isset($_GET['type'])): ?>
-                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一项目开赛', 'nlyd-student')?> <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
+                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一项目开赛', 'nlyd-student')?> <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
                 <?php if($next_type == 3):?>
-                    <a class="a-btn" href="<?=$next_project_url?>"><?=__('下一项已开赛,进入比赛', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('下一项已开赛,进入比赛', 'nlyd-student')?></div></a>
                 <?php endif;?>
                 <?php if($next_type == 4):?>
-                    <a class="a-btn" href="<?=$next_project_url?>"><?=__('所有答题结束,查看详情', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>
                 <?php endif;?>
             </div>
         </div>

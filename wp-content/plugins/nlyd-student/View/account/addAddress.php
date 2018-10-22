@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="a-btn" lay-filter="addAdressBtn" lay-submit=""><?=__('保存更改', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" lay-filter="addAdressBtn" lay-submit=""><div><?=__('保存更改', 'nlyd-student')?></div></a>
             </form>
         </div>           
     </div>

@@ -37,7 +37,7 @@
                         <?php endif;?> -->
                     </div>
                 </div>
-                <a class="a-btn" id="complete" href="<?=$redirect_url?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" id="complete" href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

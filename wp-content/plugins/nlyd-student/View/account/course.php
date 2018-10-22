@@ -27,7 +27,7 @@
                         <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
                     </div>
                     <p class="no-info-text"><?=__('您暂未报名任何课程', 'nlyd-student')?></p>
-                    <a class="a-btn"><?=__('浏览可报名课程', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table"><div><?=__('浏览可报名课程', 'nlyd-student')?></div></a>
                 </div>
             </div>
         </div>            

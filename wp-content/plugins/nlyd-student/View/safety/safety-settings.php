@@ -80,14 +80,13 @@
                             </div>
                             <?php }?>
                             <?php if($_GET['type']=='mobile' && !isset($_GET['confirm']) ){ ?>
-                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit=""><?=__('下一步', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="safetySetting" lay-filter="safetySetting" lay-submit=""><div><?=__('下一步', 'nlyd-student')?></div></a>
                             <?php }else{ ?>
-                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit=""><?=__('更 新', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="safetySetting" lay-filter="safetySetting" lay-submit=""><div><?=__('更 新', 'nlyd-student')?></div></a>
                             <?php } ?>
                         </div>
                     </form>
                 </div>
-                <!-- <a class="a-btn safetySetting">更 新</a> -->
             </div>
         </div>           
     </div>

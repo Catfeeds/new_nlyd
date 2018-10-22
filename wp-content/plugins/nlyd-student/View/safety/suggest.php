@@ -39,7 +39,7 @@
                             </div>
                             <input type="hidden" name="_wpnonce" id="inputSuggest" value="<?=wp_create_nonce('student_get_ranking_code_nonce');?>">
                             <input style="display:none;" type="file" name="meta_val" id="img" value="" accept="image/*" multiple/>
-                            <a class="a-btn" lay-filter="suggestionBtn" lay-submit=""><?=__('提交意见反馈', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" lay-filter="suggestionBtn" lay-submit=""><div><?=__('提交意见反馈', 'nlyd-student')?></div></a>
                         </div>   
                     </form>
                 </div>

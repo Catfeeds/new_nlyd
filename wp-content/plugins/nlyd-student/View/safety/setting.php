@@ -36,7 +36,7 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('清除缓存', 'nlyd-student')?></div></div>
                             </div>
-                            <a class="a-btn" id="loginOut"><?=__('退出登录', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
                         </div>
                     </div>
                 </div>

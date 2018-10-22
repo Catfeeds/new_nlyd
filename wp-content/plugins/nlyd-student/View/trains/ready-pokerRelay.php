@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <a class="a-btn" id="complete"  href="<?=$url?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" id="complete"  href="<?=$url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>           
     </div>

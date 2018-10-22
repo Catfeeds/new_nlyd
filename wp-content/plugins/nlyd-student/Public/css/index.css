@@ -162,6 +162,15 @@ font-size:0.14rem;
     bottom:30px;
     z-index: 900;
 }
+.a-btn.a-btn-table{
+    display: table;
+}
+.a-btn.a-btn-table div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
 a.a-btn:hover{
     color: #fff!important;
 }

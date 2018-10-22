@@ -173,11 +173,11 @@
                     <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
 
                         <?php if($orderStatus['status'] == 1){ ?>
-                            <a class="a-btn go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><?=__('去支付', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
                         <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <a class="a-btn go"><?=__('已报名', 'nlyd-student')?> </a>
+                            <a class="a-btn a-btn-table go"><div><?=__('已报名', 'nlyd-student')?></div></a>
                         <?php }elseif($orderStatus['status'] == 0){ ?>
-                            <a class="a-btn go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><?=__('去支付', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
                         <?php } ?>
 
 

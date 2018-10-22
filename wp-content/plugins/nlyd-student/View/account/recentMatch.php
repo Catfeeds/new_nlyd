@@ -41,7 +41,7 @@
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
                         <p class="no-info-text"><?=__('您暂未参加任何比赛', 'nlyd-student')?></p>
-                        <a class="a-btn" href="<?=home_url('/matchs');?>"><?=__('看看最近比赛', 'nlyd-student')?></a>
+                        <a class="a-btn a-btn-table" href="<?=home_url('/matchs');?>"><div><?=__('看看最近比赛', 'nlyd-student')?></div></a>
                     </div>
                 </div>
             </div>
