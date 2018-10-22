@@ -44,7 +44,7 @@ class Match_student {
         $searchWhere = '';
         $joinSql = '';
         if($searchStr != ''){
-            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%")';
+            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%" OR p.post_title LIKE "%'.$searchStr.'%")';
             $joinSql = ' LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID"';
         }
 
@@ -52,11 +52,12 @@ class Match_student {
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
+        LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id 
+        LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
         '.$joinSql.'
         WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
-
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -88,7 +89,7 @@ class Match_student {
 
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID" value="<?=$searchStr?>">
+                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID/战队" value="<?=$searchStr?>">
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 
@@ -141,7 +142,7 @@ class Match_student {
                         <th scope="col" id="mobile" class="manage-column column-mobile">电话</th>
                         <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
                         <th scope="col" id="entry_time" class="manage-column column-entry_time">报名时间</th>
-                        <th scope="col" id="score" class="manage-column column-score">个⼈⽐赛成绩</th>
+                        <th scope="col" id="team_name" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" id="record" class="manage-column column-record">答题记录</th>-->
 
                     </tr>
@@ -173,13 +174,13 @@ class Match_student {
                             <td class="name column-card" data-colname="证件号码"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span><span class="screen-reader-text">未知</span>&ensp;(<?=unserialize($usermeta['user_real_name'][0])['real_type']?>)</td>
 
                             <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
-                            <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
-                            <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
-                            <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
-                            <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
+                            <td class="birthday column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
+                            <td class="age_group column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
+                            <td class="address column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
+                            <td class="mobile column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
                             <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
-                            <td class="role column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
-                            <td class="role column-score" data-colname="个人比赛成绩"><a href="admin.php?page=match_student-score&match_id=<?=$_GET['match_id']?>&student_id=<?=$row['ID']?>">个人比赛成绩</a></td>
+                            <td class="entry_time column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
+                            <td class="team_name column-team_name" data-colname="战队名称"><?=$row['team_name']?></td>
                             <!--                                <td class="role column-record" data-colname="答题记录">答题记录</td>-->
                         </tr>
                     <?php } ?>
@@ -207,7 +208,7 @@ class Match_student {
                         <th scope="col" class="manage-column column-mobile">电话</th>
                         <th scope="col" class="manage-column column-email">电子邮件</th>
                         <th scope="col" class="manage-column column-entry_time">报名时间</th>
-                        <th scope="col" class="manage-column column-score">个人比赛成绩</th>
+                        <th scope="col" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" class="manage-column column-record">答题记录</th>-->
                     </tr>
                     </tfoot>

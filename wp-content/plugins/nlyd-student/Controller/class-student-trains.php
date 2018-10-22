@@ -120,11 +120,16 @@ class Student_Trains extends Student_Home
         $post_id = '';
         switch ($_GET['type']){
             case 'wzsd':
+
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
-                        where a.slug = 'test-question' ";
+                        where a.slug = '{$locale}-test-question' ";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
-
+                //print_r($sql);
                 if(empty($rows)){
                     $this->get_404(__('测试题库暂无文章,请联系管理员添加', 'nlyd-student'));
                     return;

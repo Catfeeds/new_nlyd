@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /**
  * 页面自定义box控制
@@ -665,6 +665,7 @@ class Match
 
             $project_array = array_diff(array_column($match_project,'ID'),$match_project_id);
             $project_array = array_merge($match_project_id,$project_array);
+
             foreach ($project_array as $v){
                 $default_array[$v] = $default_project[$v];
             }
@@ -675,7 +676,14 @@ class Match
         //print_r($default_project);
 
         if (!empty($default_project)) {
+            global $wpdb;
             foreach ($default_project as $k => $val){
+
+                //获取每个项目信息
+                $sql = "select *,date_format(start_time, '%Y-%m-%d %H:%i') start_time_format,date_format(end_time, '%Y-%m-%d %H:%i') end_time_format from {$wpdb->prefix}match_project_more where match_id = {$posts->ID} and project_id = {$k}";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                $total = count($rows);
+                //print_r($rows);
         ?>
                 <div class="layui-block match_project">
                     <div class="layui-input-inline title">
@@ -684,7 +692,21 @@ class Match
                     <div class="layui-input-inline">
                         <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$k?>"  <?= in_array($k,$match_project_id) ? 'checked':''; ?> lay-skin="primary" title="<?=$val?>"/>
                         <?php if(in_array($k,$match_project_id)): ?>
+                        <span>(<?=$total > 0 ? $total : 0;?>)</span>
                         <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
+                        <div>
+                            <?php if($total >0): ?>
+                                <ul>
+                                    <?php foreach ($rows as $k => $row){ ?>
+                                    <li>
+                                        第<?=$k+1?>轮
+                                        开始时间:<?=$row['start_time_format']?>
+                                        结束时间:<?=$row['end_time_format']?>
+                                    </li>
+                                    <?php } ?>
+                                </ul>
+                            <?php endif;?>
+                        </div>
                         <?php endif;?>
                     </div>
                 </div>

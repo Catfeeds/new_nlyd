@@ -137,6 +137,9 @@
             var query = jQuery('.add_more_form').serialize();
             $.post(ajaxurl,query,function (data) {
                 alert(data.data);
+                history.go(0);
+                /*setTimeout(function () {
+                },900)*/
             },'json')
             return false;
         });
@@ -146,6 +149,7 @@
             var id = jQuery(this).attr('data-id');
             $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {
                 alert(data.data);
+                history.go(0);
             },'json')
             return false;
         });

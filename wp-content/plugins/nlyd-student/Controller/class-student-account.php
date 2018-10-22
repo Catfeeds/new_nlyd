@@ -66,7 +66,7 @@ class Student_Account extends Student_Home
             if(!$brainpower) $brainpower = $wpdb->get_row("SELECT type_name,MAX(`level`) AS `level`,`range`,`category_name` FROM {$wpdb->prefix}directories WHERE `range`=1 AND user_id={$user_info['user_id']} GROUP BY user_id", ARRAY_A);
 
             //获取当前是否有比赛
-            $saql = "select a.match_id from {$wpdb->prefix}match_meta a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
+            $saql = "select a.match_id from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}order b on a.match_id = b.match_id where b.user_id = {$user_info['user_id']} and match_status = 2";
             $match_id = $wpdb->get_var($saql);
 
             $data = array(
