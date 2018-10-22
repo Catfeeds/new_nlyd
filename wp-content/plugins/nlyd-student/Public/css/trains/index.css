@@ -29,8 +29,8 @@
 }
 .train_name{
     float: left;
-    width: -webkit-calc(100% - 121px);
-    width: calc(100% - 121px);
+    width: -webkit-calc(100% - 122px);
+    width: calc(100% - 122px);
     text-align: left;
 }
 .train_row.disable{
