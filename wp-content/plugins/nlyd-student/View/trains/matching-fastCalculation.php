@@ -15,7 +15,7 @@
                             <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             <!-- <span><?=$count_down?></span> -->
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                    
                     <div class="matching-fast">
@@ -28,32 +28,32 @@
                             <input type="hidden"id="wax_and_wane_time" value="<?=$child_count_down['wax_and_wane'] ?>">
                         </p>
                         <div class="item-wrapper">
-                            <div class="fast-item" id="question"></div>
-                            <div class="fast-item answer" id="answer"></div>
+                            <div class="fast-item" id="question"><div></div></div>
+                            <div class="fast-item answer" id="answer"><div></div></div>
                         </div>
                     </div>
 
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="1">1</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="2">2</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="3">3</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="1"><div>1</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="2"><div>2</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="3"><div>3</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="4">4</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="5">5</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="6">6</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="4"><div>4</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="5"><div>5</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="6"><div>6</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="7">7</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="8">8</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9">9</div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="7"><div>7</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="8"><div>8</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="9"><div>9</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="matching-key c_white fs_16 bg_orange" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-">-</div>
-                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0">0</div>
-                            <div class="matching-key c_white fs_16 bg_orange" id="next"><?=__('下一题', 'nlyd-student')?></div>
+                            <div class="matching-key c_white fs_16 bg_orange" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="-"><div>-</div></div>
+                            <div class="bg_gradient_blue c_white fs_18 matching-key number" date-number="0"><div>0</div></div>
+                            <div class="matching-key c_white fs_16 bg_orange" id="next"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
                 </div> 
@@ -133,7 +133,7 @@ jQuery(function($) {
                     sys_second=wax_and_wane_time -1 ;
                     nextBtn_click=0;
                 }else{
-                    var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
+                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
                     ajaxData[ajaxData.length-1]['yours']=yours;
                     if(yours==ajaxData[ajaxData.length-1]['rights']){
                         ajaxData[ajaxData.length-1]['isRight']=true;
@@ -147,7 +147,8 @@ jQuery(function($) {
                 if(n_type<=2){
                     $('.count_downs').text('<?=__('初始中', 'nlyd-student')?>...').attr('data-seconds',sys_second)
                     $('#type').text(type)
-                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer')
+                    $('#answer div').text('') 
                     inItFastCalculation(level,type);  
                     nextQuestion()
                 }
@@ -341,7 +342,7 @@ jQuery(function($) {
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
-        $('#question').text(ajaxData[ajaxData.length-1]['question']+'=?')
+        $('#question div').text(ajaxData[ajaxData.length-1]['question']+'=?')
     }
     $('.number').each(function(e){//数字键盘
         var _this=$(this)
@@ -360,9 +361,9 @@ jQuery(function($) {
                 },
                 tap: function () {
                     var number=_this.attr('date-number');
-                    var text=$('.answer').text()
+                    var text=$('#answer div').text()
                     if(text.length<21){
-                        $('.answer').text(text+number)
+                        $('#answer div').text(text+number)
                     }
                 }
             })
@@ -383,11 +384,11 @@ jQuery(function($) {
         },
         tap: function () {
             var _this=$('#del');
-            var text=$('.answer').text()
+            var text=$('#answer div').text()
             var len=text.length;
             if(len>0){
                 var news=text.substring(0,len-1)
-                $('.answer').text(news)
+                $('#answer div').text(news)
             }
         }
     });
@@ -421,7 +422,7 @@ jQuery(function($) {
                     }
                 }
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var yours=$('#answer').text()
+                var yours=$('#answer div').text()
                 var flag=true;
                 if(yours.length>0){
                     for(var i=0;i< yours.length;i++){
@@ -448,7 +449,8 @@ jQuery(function($) {
                     $('#answer').removeClass('answer').addClass('error-fast')
                 }
                 setTimeout(function() {
-                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer').text('') 
+                    $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer')
+                    $('#answer div').text('') 
                     inItFastCalculation(level,type);
                     nextQuestion()
                     _this.removeClass('disabled')
@@ -549,7 +551,7 @@ layui.use('layer', function(){
                 }
                 ,btn2: function(index, layero){
                     var thisAjaxRow=ajaxData[ajaxData.length-1]
-                    var yours=$('#answer').text().length==0 ? '' : parseInt($('#answer').text());
+                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
                     thisAjaxRow['yours']=yours;
                     if(yours==thisAjaxRow['rights']){
                         thisAjaxRow['isRight']=true;

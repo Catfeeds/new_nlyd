@@ -15,7 +15,7 @@
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="600"></span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <div class="matching-fastScan">
                         <div class="item-wrapper">

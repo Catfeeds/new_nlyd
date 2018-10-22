@@ -15,7 +15,7 @@
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <p class="count_p fs_14">
                         <span class="c_black"><?=__('请用完给出的4个数字，并利用运算符号使运算结果等于24！', 'nlyd-student')?></span>
@@ -24,30 +24,30 @@
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
-                            <div class="fast-item answer"></div>
+                            <div class="fast-item answer"><div></div></div>
                             <!-- <div class="fast-item error-fast">4A@#$%</div>
                             <div class="fast-item right-fast">4A@#$%</div> -->
                         </div>
                     </div>
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
-                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='1'></div>
-                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='2'></div>
-                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='3'></div>
-                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='4'></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="(">(</div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='1'><div></div></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='2'><div></div></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='3'><div></div></div>
+                            <div class="bg_yellow matching-key c_white fs_18 number rand" date-number="" data-index='4'><div></div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number leftBrackets" date-number="("><div>(</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="+">+</div>
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator reduce" date-number="-">-</div>
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="*">×</div>
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="/">÷</div>
-                            <div class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")">)</div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="+"><div>+</div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator reduce" date-number="-"><div>-</div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="*"><div>×</div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number operator" date-number="/"><div>÷</div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_18 number rightBrackets" date-number=")"><div>)</div></div>
                         </div>
                         <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key c_white fs_16" id="del"><?=__('删除', 'nlyd-student')?></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解">本题无解</div>
-                            <div class="bg_orange matching-key c_white fs_16" id="next"><?=__('下一题', 'nlyd-student')?></div>
+                            <div class="bg_orange matching-key c_white fs_16" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="<?=__('本题无解', 'nlyd-student')?>"><div><?=__('本题无解', 'nlyd-student')?></div></div>
+                            <div class="bg_orange matching-key c_white fs_16" id="next"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
                 </div> 
@@ -133,13 +133,13 @@ jQuery(function($) {
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
-        var text=$('.answer').text();
+        var text=$('.answer div').text();
         $('.rand').each(function(i){
             var text= ajaxData[ajaxData.length-1]['question'][i]
-             $(this).text(text).attr('date-number',text)
-             $(this).next('input').val(text)
+            $(this).attr('date-number',text).children('div').text(text)
         }).removeClass('disabled')
-        $('.answer').text('').removeClass('error-fast').removeClass('right-fast');
+        $('.answer div').text('')
+        $('.answer').removeClass('error-fast').removeClass('right-fast');
     }
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
@@ -219,7 +219,7 @@ jQuery(function($) {
                 $('.count_down').text('00:00:00').attr('data-seconds',sys_second)
                 clearInterval(timer);
                 var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var text=$('.answer').text()
+                var text=$('.answer div').text()
                 thisAjaxRow.yours=text;
                 submit(0,3)
             }
@@ -241,14 +241,14 @@ $('.number').each(function(){
                     }
                 })
                 var number=_this.text();
-                var text=$('.answer').text()
+                var text=$('.answer div').text()
                 if(text=="本题无解"){
                     text=''
                 }
                 if(number=="本题无解"){
-                    $('.answer').text(number)
+                    $('.answer div').text(number)
                     $('.number').removeClass('disabled')
-                    $('.answer').text(number) 
+                    $('.answer div').text(number) 
                         _this.stop(true).animate({
                             'opacity':'0.6',
                             'filter': 'alpha(opacity=60)',
@@ -262,13 +262,13 @@ $('.number').each(function(){
                     if(!isNaN(parseInt(number))){//数字，前一位必须是符号
                         if(len>0){
                             if(isNaN(parseInt(x)) && x!==')'){
-                                $('.answer').text(text+number)
+                                $('.answer div').text(text+number)
                                 _this.addClass('disabled')
                                 dataIndex.push(_this.attr('data-index'))
                             }
                         }else{
 
-                            $('.answer').text(text+number)
+                            $('.answer div').text(text+number)
                             _this.addClass('disabled')
                             dataIndex.push(_this.attr('data-index'))
                         }
@@ -317,7 +317,7 @@ $('.number').each(function(){
                                 }
                             }
                             if(flag1){
-                                $('.answer').text(text+number) 
+                                $('.answer div').text(text+number) 
                                 _this.stop(true).animate({
                                     'opacity':'0.6',
                                     'filter': 'alpha(opacity=60)',
@@ -337,7 +337,7 @@ $('.number').each(function(){
                                     }
                                 }
                                 if(leftBracket>rightBracket){
-                                    $('.answer').text(text+number)  
+                                    $('.answer div').text(text+number)  
                                     _this.stop(true).animate({
                                         'opacity':'0.6',
                                         'filter': 'alpha(opacity=60)',
@@ -374,7 +374,7 @@ new AlloyFinger($('#del')[0], {
         var _this=$('#del');
         // if(!_this.hasClass('disabled')){
         //     _this.addClass('disabled')
-            var text=$('.answer').text()
+            var text=$('.answer div').text()
             var len=text.length;
             var news='';
             if(len>0){
@@ -399,9 +399,9 @@ new AlloyFinger($('#del')[0], {
                     }else{
                         news=text.substring(0,len-1);
                     }
-                    $('.answer').text(news)
+                    $('.answer div').text(news)
                 }else{
-                    $('.answer').text('')
+                    $('.answer div').text('')
                 }
             }
         }
@@ -415,7 +415,7 @@ new AlloyFinger($('#next')[0], {
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
             var flag=false;
-            var text=$('.answer').text()
+            var text=$('.answer div').text()
             ajaxData[ajaxData.length-1].yours=text;
             var new_text=text.replace(/×/g,'*');
             new_text=new_text.replace(/÷/g,'/');
@@ -426,7 +426,7 @@ new AlloyFinger($('#next')[0], {
                 }
             })
             if(text.length!=0){
-                if($('.answer').text()=='本题无解'){
+                if($('.answer div').text()=='本题无解'){
                      text='unsolvable';
                      if(ajaxData[ajaxData.length-1].rights=="本题无解"){
                         $('.answer').addClass('right-fast')
@@ -515,7 +515,7 @@ new AlloyFinger($('#next')[0], {
                     ,btn2: function(index, layero){
                         layer.closeAll();
                         var thisAjaxRow=ajaxData[ajaxData.length-1]
-                        var text=$('.answer').text()
+                        var text=$('.answer div').text()
                         thisAjaxRow.yours=text;
                         submit(time,1);  
                     }

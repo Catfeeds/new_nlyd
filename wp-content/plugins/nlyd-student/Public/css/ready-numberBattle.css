@@ -13,22 +13,15 @@
 .fs-16{
     font-size: 0.16rem;
 }
-.matching-number-zoo{
+/* .matching-number-zoo{
     width: 100%;
-    /* overflow: hidden; */
     overflow: visible;
-    /* min-height: 250px; */
     margin-top: 50px;
 }
 .matching-number{
-    /* font: normal normal normal 0.14rem / 0.28rem "PingFang SC"!important; */
     width: -webkit-calc(5% - 1px);
     width: calc(5% - 1px);
     float: left;
-    /* padding-left: 0;
-    padding-right: 0;
-    padding-top:1px;
-    padding-bottom:1px; */
     overflow: visible;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -37,13 +30,32 @@
     text-align: center;
     border-right:1px solid transparent;
     background: #fff;
+} */
+.matching-number{
+    width: -webkit-calc(5% - 1px);
+    width: calc(5% - 1px);
+    float: left;
+    overflow: visible;
+    height: 25px;
+    display: table;
+    font-size: 0.16rem;
+    color: #262626;
+    text-align: center;
+    line-height: 20px;
+    border-right:1px solid transparent;
+    background: #fff;
+}
+.matching-number div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; 
 }
 .border-right{
     border-right:1px solid #262626;
 }
 .matching-row{
     width: 100%;
-    height: 30px;
+    /* height: 30px; */
     margin-top: 20px;
     position: relative;
 }
@@ -51,37 +63,6 @@
 .matching-row-list{
     width: -webkit-calc(100% - 74px);
     width: calc(100% - 74px);
-}
-button.matching-btn{
-    float: left;
-    font: normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
-    /* width: 40px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #fff; */
-    color: rgba(116, 116, 116, 1);
-    border: 1px solid rgba(116, 116, 116, 1);
-    border-radius: 3px;
-    /* font-size: 12px; */
-    margin-right: 6px;
-    margin-bottom: 4px;
-    background:#fff;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top:0;
-    padding-bottom:0;
-}
-button.matching-btn:last-child{
-    margin-right: 0;
-}
-button.matching-btn.active{
-    background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: linear-gradient(90deg,#4394F9,#68AAFE);
-    border: 1px solid transparent;
-    color: #fff;
 }
 .remember .matching-number-zoo{
     position: relative;

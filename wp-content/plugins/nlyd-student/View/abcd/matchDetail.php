@@ -169,10 +169,10 @@ endif;
                         <?php if( ($match['is_me'] == 'y' && $match['match_status'] == 2) && ($match['match_status'] == -3 || $match['match_status'] == 2)){?>
                             <div class="a-btn two get_footer">
                                 <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><?=__('查看战绩', 'nlyd-student')?></a>
+                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                                 <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><?=__('进入比赛', 'nlyd-student')?></a>
+                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入比赛', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                             </div>              
                         <?php }else { ?>

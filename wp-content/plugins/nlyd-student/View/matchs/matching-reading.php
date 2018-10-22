@@ -15,7 +15,7 @@
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </span>
-                            <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                            <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                         </div>
                         <div class="reading-question">
                             <?php
@@ -52,8 +52,8 @@
                         </div>
                         
                         <div class="a-btn two">
-                            <div class="a-two left disabled"><?=__('上一题', 'nlyd-student')?></div>
-                            <div class="a-two right"><?=__('下一题', 'nlyd-student')?></div>
+                            <div class="a-two left disabled"><div><?=__('上一题', 'nlyd-student')?></div></div>
+                            <div class="a-two right"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
                 </form>

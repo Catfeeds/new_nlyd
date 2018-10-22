@@ -7,21 +7,21 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?>  <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                    <div class="matching-row layui-row">
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev"><?=__('前移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="next"><?=__('后移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="del"><?=__('删 除', 'nlyd-student')?></div>
+                            <button class="matching-btn active" id="prev"><?=__('前移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="next"><?=__('后移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="del"><?=__('删 除', 'nlyd-student')?></button>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -36,7 +36,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                        <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                        <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
                         <?php } ?>
                     </div>
 

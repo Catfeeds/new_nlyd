@@ -1,6 +1,6 @@
 
 <div class="answer-zoo">
-    <div class="answerBtn"><?=__('答案对比', 'nlyd-student')?></div>
+    <button class="matching-btn active"><?=__('答案对比', 'nlyd-student')?></button>
         <?php if(!empty($match_questions)):?>
         <div class="reading-answer">
             <?php

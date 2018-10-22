@@ -14,7 +14,7 @@
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <div class="matching-row">
                         <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>

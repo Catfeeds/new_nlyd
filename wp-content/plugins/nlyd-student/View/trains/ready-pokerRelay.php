@@ -7,7 +7,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -15,16 +15,16 @@
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <div class="matching-row-label"><?=__('显示张数', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn active"><?=__('全部', 'nlyd-student')?></div>
-                            <div class="matching-btn">1</div>
-                            <div class="matching-btn">2</div>
-                            <div class="matching-btn">3</div>
-                            <div class="matching-btn">4</div>
-                            <div class="matching-btn">5</div>
-                            <div class="matching-btn">6</div>
+                            <button class="matching-btn active"><?=__('全部', 'nlyd-student')?></button>
+                            <button class="matching-btn">1</button>
+                            <button class="matching-btn">2</button>
+                            <button class="matching-btn">3</button>
+                            <button class="matching-btn">4</button>
+                            <button class="matching-btn">5</button>
+                            <button class="matching-btn">6</button>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
