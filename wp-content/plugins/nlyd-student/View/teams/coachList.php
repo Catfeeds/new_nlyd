@@ -31,9 +31,9 @@
 
 
            ?>
-        <i class="iconfont">&#xe610;</i>
+        <div><i class="iconfont">&#xe610;</i></div>
         </a>
-        <h1 class="mui-title"><?=$action == 'myCoach' ? __('我的教练', 'nlyd-student') :__('教练列表', 'nlyd-student');?></h1>
+        <h1 class="mui-title"><div><?=$action == 'myCoach' ? __('我的教练', 'nlyd-student') :__('教练列表', 'nlyd-student');?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
@@ -66,7 +66,6 @@
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
                                 <li data-id="<?=$val['ID']?>" class="<?=$val['ID'] == $_GET['category_id'] || (!isset($_GET['category_id']) && $k==0) ? 'layui-this' : '';?>">
-                                    <!-- <a href="<?=$url.'/category_id/'.$val['ID']?>" ><?=$val['post_title']?></a> -->
                                     <?=$val['post_title']?>
                                 </li>
                                 <?php if($k==0){ ?>
@@ -98,7 +97,7 @@
                                 $url = home_url('/teams/coachList');
                                 if(!empty($_GET['match_id']) ) $url .= '/match_id/'.$_GET['match_id'];
                             ?>
-                            <a class="a-btn" href="<?=$url;?>"><?=__('去设置我的教练', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" href="<?=$url;?>"><div><?=__('去设置我的教练', 'nlyd-student')?></div></a>
                         <?php }else{ ?>
                             <p class="no-info-text"><?=__('无教练信息', 'nlyd-student')?></p>
                         <?php } ?>
@@ -623,7 +622,7 @@ layui.use(['element','flow','layer','form'], function(){
                                     var flag='<?=$action ?>';
                                     if(flag.length>0){
                                         var text=$('.layui-this').text();
-                                        var dom='<a class="a-btn" href="<?=$next_url?>"><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></a>'
+                                        var dom='<a class="a-btn a-btn-table" href="<?=$next_url?>"><div><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></div></a>'
                                     }
                                     lis.push(dom) 
                                 }

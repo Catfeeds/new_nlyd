@@ -16,9 +16,9 @@
                 <a class="mui-pull-left nl-goback">
                     <?php } ?>
 
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('成绩', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('成绩', 'nlyd-student')?></div></h1>
         </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="layui-tab layui-tab-brief width-margin width-margin-pc" lay-filter="tabs">
@@ -46,7 +46,7 @@
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
                                             <?php foreach ($default_category as $k =>$val){ ?>
-                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=$val['post_title']?></div>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=__($val['post_title'], 'nlyd-student')?></div>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="a-btn get_footer"><?=__('查看本项目比赛详情', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table get_footer"><div><?=__('查看本项目比赛详情', 'nlyd-student')?></div></a>
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">

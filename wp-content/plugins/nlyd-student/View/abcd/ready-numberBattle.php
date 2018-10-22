@@ -3,12 +3,12 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=$match_title?></h1>
+            <h1 class="mui-title"><div><?=$match_title?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -16,7 +16,7 @@
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
                     </div>
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>
                         <div class="matching-row-list">
                             <button class="matching-btn active"><?=__('不划', 'nlyd-student')?></button>
@@ -29,15 +29,9 @@
                     </div>
                     <div class="matching-number-zoo">
                         <div class="Glass"></div>
-                        <!-- <?php if(!empty($questions)):
-                            foreach ($questions as $v){
-                        ?>
-                        <div class="matching-number"><?=$v?></div>
-                            <?php } ?>
-                        <?php endif;?> -->
                     </div>
                 </div>
-                <a class="a-btn" id="complete" href="<?=$redirect_url?>"><?=__('记忆完成', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete" href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>
@@ -60,12 +54,6 @@ jQuery(function($) {
         questions_answer=matching_question['questions_answer']
     }else{
         $.DelSession('matching_question')
-        // $.each(arrColor,function(i,v){
-        //     $.each(arrNum,function(index,val){
-        //         var item=v+'-'+val;
-        //         new_poker.push(item)
-        //     })
-        // })
         for(var i=0;i<100;i++){
             var num=Math.floor(Math.random()*10);//生成0-9的随机数
             questions_answer.push(num)
@@ -82,68 +70,6 @@ jQuery(function($) {
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
-    // var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
-    // $.getJSON(file_path,function(JsonData){
-    //     var matchSession=$.GetSession('ready_shuzi','true');
-    //     if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
-    //         questions_answer=matchSession['questions_answer']
-    //     }else{
-    //         var questions_answers=JsonData;
-    //         var pos = Math.round(Math.random() * (questions_answers.length - 1));
-    //         var xx=questions_answers[pos]
-    //         questions_answer=xx.sort(function() {
-    //             return .5 - Math.random();
-    //         });
-    //         var sessionData={
-    //             match_id:_match_id,
-    //             project_id:<?=$project_id?>,
-    //             match_more:_match_more,
-    //             questions_answer:questions_answer
-    //         }
-    //         $.SetSession('ready_shuzi',sessionData)
-    //     }
-    //     $.each(questions_answer,function(i,v){
-    //         var dom='<div class="matching-number">'+v+'</div>';
-    //         $('.matching-number-zoo').append(dom)
-    //     })
-    // })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-// new AlloyFinger($('#complete')[0], {
-//     tap:function(){
-//         var _this=$(this);
-//         if(!_this.hasClass('disabled')){
-//             _this.addClass('disabled')
-//             var data={
-//                 action:'memory_complete',
-//                 _wpnonce:$('#inputComplete').val(),
-//                 match_id:<?=$_GET['match_id']?>,
-//                 project_id:<?=$project_id?>,
-//                 match_more:$('#inputMatchMore').val(),
-//                 match_action:'numberBattle',
-//                 match_questions:questions_answer,
-//                 type:'szzb'
-//             }
-//             $.ajax({
-//                 data:data,
-//                 success:function(res,ajaxStatu,xhr){  
-//                     if(res.success){
-//                         if(res.data.url){
-//                             window.location.href=res.data.url;
-//                             $.DelSession('ready_shuzi')
-//                         }   
-//                     }else{
-//                         $.alerts(res.data.info)
-//                         _this.removeClass('disabled')
-//                     }
-                    
-//                 },
-//                 error: function(jqXHR, textStatus, errorMsg){
-//                     _this.removeClass('disabled')
-//                 }
-//             })
-//         }
-//     }
-// })
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',

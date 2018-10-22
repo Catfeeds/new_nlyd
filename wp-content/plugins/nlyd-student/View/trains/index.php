@@ -9,10 +9,10 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
-                    <i class="iconfont">&#xe610;</i>
+                    <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title">
-                <?=__('训练类型', 'nlyd-student')?>
+                <div><?=__('训练类型', 'nlyd-student')?></div>
                 </h1>
             </header>
 
@@ -32,13 +32,11 @@
                             <div class="width-padding width-padding-pc">
                                 <?php foreach ($list as $v){ ?>
                                     <a class="train_row <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?= $v->post_status == 'draft' ? '' : home_url('trains/lists/id/'.$v->ID)?>">
-                                        <div class="train_img_wrapper">
-                                            <div class="train-img">
-                                                <?php
-                                                    $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
-                                                ?>
-                                                <img src="<?=$thumbnail_image_url[0]?>">
-                                            </div>
+                                        <div class="train-img">
+                                            <?php
+                                                $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
+                                            ?>
+                                            <img src="<?=$thumbnail_image_url[0]?>">
                                         </div>
                                         <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
                                         <?php if($v->post_status == 'draft'):?>

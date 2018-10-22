@@ -42,8 +42,8 @@
                         <?php }
                         if($buffer_time){
                         ?>
-                            <a class="a-btn back" href="<?=$buffer_url?>">
-                                <?=__('进入比赛', 'nlyd-student')?>
+                            <a class="a-btn a-btn-table back" href="<?=$buffer_url?>">
+                                <div><?=__('进入比赛', 'nlyd-student')?></div>
                             </a>
                         <?php }?>
                         <div class="match_tips">
@@ -57,14 +57,14 @@
                             <p class="tips fs_16">
                                 <span class="c_blue"><?/*=$current_project['project_title']*/?>第<?/*=$current_project['match_more']*/?>轮</span>已经开赛，您可等待本轮比赛完成后进入下一轮比赛
                             </p>
-                            <a href="<?/*=$wait_url*/?>" class="a-btn wait">进入下一轮等待页面</a>
+                            <a href="<?/*=$wait_url*/?>" class="a-btn a-btn-table wait">进入下一轮等待页面</a>
                         <?php /*}else{ */?>
                             <p class="tips fs_16">
                                 <span class="c_blue"><?/*=$current_project['project_title']*/?>第<?/*=$current_project['match_more']*/?>轮</span>已经开赛，您可等待本轮排名统计完成后进入下一项比赛
                             </p>
-                            <a href="<?/*=$wait_url*/?>" class="a-btn wait">进入下一项等待页面</a>
+                            <a href="<?/*=$wait_url*/?>" class="a-btn a-btn-table wait">进入下一项等待页面</a>
                         <?php /*} */?>
-                        <a class="a-btn back" href="<?/*=home_url('account/recentMatch');*/?>">返回我的比赛列表</a>
+                        <a class="a-btn a-btn-table back" href="<?/*=home_url('account/recentMatch');*/?>">返回我的比赛列表</a>
                     </div>-->
                 <?php //} ?>
             </div>

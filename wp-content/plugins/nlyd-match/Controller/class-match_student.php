@@ -44,7 +44,7 @@ class Match_student {
         $searchWhere = '';
         $joinSql = '';
         if($searchStr != ''){
-            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%")';
+            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%" OR p.post_title LIKE "%'.$searchStr.'%")';
             $joinSql = ' LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID"';
         }
 
@@ -52,11 +52,12 @@ class Match_student {
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
+        LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id 
+        LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
         '.$joinSql.'
         WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
-
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -88,7 +89,7 @@ class Match_student {
 
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID" value="<?=$searchStr?>">
+                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID/战队" value="<?=$searchStr?>">
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 
@@ -141,7 +142,7 @@ class Match_student {
                         <th scope="col" id="mobile" class="manage-column column-mobile">电话</th>
                         <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
                         <th scope="col" id="entry_time" class="manage-column column-entry_time">报名时间</th>
-                        <th scope="col" id="score" class="manage-column column-score">个⼈⽐赛成绩</th>
+                        <th scope="col" id="team_name" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" id="record" class="manage-column column-record">答题记录</th>-->
 
                     </tr>
@@ -173,13 +174,13 @@ class Match_student {
                             <td class="name column-card" data-colname="证件号码"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span><span class="screen-reader-text">未知</span>&ensp;(<?=unserialize($usermeta['user_real_name'][0])['real_type']?>)</td>
 
                             <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
-                            <td class="role column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
-                            <td class="role column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
-                            <td class="role column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
-                            <td class="email column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
+                            <td class="birthday column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
+                            <td class="age_group column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
+                            <td class="address column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
+                            <td class="mobile column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
                             <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
-                            <td class="role column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
-                            <td class="role column-score" data-colname="个人比赛成绩"><a href="admin.php?page=match_student-score&match_id=<?=$_GET['match_id']?>&student_id=<?=$row['ID']?>">个人比赛成绩</a></td>
+                            <td class="entry_time column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
+                            <td class="team_name column-team_name" data-colname="战队名称"><?=$row['team_name']?></td>
                             <!--                                <td class="role column-record" data-colname="答题记录">答题记录</td>-->
                         </tr>
                     <?php } ?>
@@ -207,7 +208,7 @@ class Match_student {
                         <th scope="col" class="manage-column column-mobile">电话</th>
                         <th scope="col" class="manage-column column-email">电子邮件</th>
                         <th scope="col" class="manage-column column-entry_time">报名时间</th>
-                        <th scope="col" class="manage-column column-score">个人比赛成绩</th>
+                        <th scope="col" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" class="manage-column column-record">答题记录</th>-->
                     </tr>
                     </tfoot>
@@ -1403,7 +1404,7 @@ class Match_student {
     public function bonus_all_data($allData , $project_option,$ranking_name='',$ranking_bonus=0){
         if(!isset($allData[$project_option['user_id']])) $allData[$project_option['user_id']] = [];
 
-        if(!isset($allData[$project_option['user_id']]['userId'])) $allData[$project_option['user_id']]['userId'] = $project_option['userID'];
+        if(!isset($allData[$project_option['user_id']]['userID'])) $allData[$project_option['user_id']]['userID'] = $project_option['userID'];
         if(!isset($allData[$project_option['user_id']]['real_name'])) $allData[$project_option['user_id']]['real_name'] = $project_option['real_name'];
         if(!isset($allData[$project_option['user_id']]['user_id'])) $allData[$project_option['user_id']]['user_id'] = $project_option['user_id'];
 
@@ -1417,9 +1418,9 @@ class Match_student {
 
         if(!isset($allData[$project_option['user_id']]['all_bonus'])) $allData[$project_option['user_id']]['all_bonus'] = 0;
         $allData[$project_option['user_id']]['all_bonus'] += $ranking_bonus;
-        if(!isset($allData[$project_option['user_id']]['card'])) $allData[$project_option['user_id']]['card'] = $project_option['card'];
+        if(!isset($allData[$project_option['user_id']]['card_num'])) $allData[$project_option['user_id']]['card_num'] = $project_option['card'];
         if(!isset($allData[$project_option['user_id']]['real_type'])) $allData[$project_option['user_id']]['real_type'] = $project_option['real_type'];
-        if(!isset($allData[$project_option['user_id']]['user_mobile'])) $allData[$project_option['user_id']]['user_mobile'] = $project_option['user_mobile'];
+        if(!isset($allData[$project_option['user_id']]['mobile'])) $allData[$project_option['user_id']]['mobile'] = $project_option['user_mobile'];
         if(!isset($allData[$project_option['user_id']]['is_send'])) $allData[$project_option['user_id']]['is_send'] = 1;
         if(!isset($allData[$project_option['user_id']]['team'])) {
             global $wpdb;
@@ -1743,11 +1744,13 @@ class Match_student {
         //插入数据
         global $wpdb;
         $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_path`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
+        $insertValueArr = [];
         foreach ($orderAllData as $odv){
             $bonus_list = serialize($odv['bonus_list']);
-            $sql .= "({$match_id},'{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userId']}','{$odv['collect_path']}','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
+            $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
+                    '{$odv['real_name']}','{$odv['userID']}','{$odv['collect_path']}','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
         }
+        $sql .= join(',', $insertValueArr);
         $wpdb->query($sql);
         return ['orderAllData' => $orderAllData,'countData' => $countData];
     }
@@ -1771,13 +1774,15 @@ class Match_student {
                 if($old_data) exit('删除原数据失败');
             }
         }
-        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}", ARRAY_A);
+        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id} ORDER BY bonus_all DESC", ARRAY_A);
         if($reload == false){
             if(!$orderAllData){
+                $reCreated = false;
                 $allDatas = $this->getBonusData($match_id);
                 $countData = $allDatas['countData'];
                 $orderAllData = $allDatas['orderAllData'];
             }else{
+                $reCreated = true;
                 //汇总
                 $countData = [
                     'bonus_all' => 0,
@@ -1790,6 +1795,7 @@ class Match_student {
                     $countData['tax_send_all'] += $v['tax_send_bonus'];
                     $v['bonus_list'] = unserialize($v['bonus_list']);
                 }
+
             }
         }
 
@@ -1960,8 +1966,16 @@ class Match_student {
 
                 <?php if($reload == false){ ?>
                     <div>
-                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">重新生成</button>
+
                         <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
+
+                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">
+                        <?php if($reCreated == true){ ?>
+                            重新生成
+                        <?php }else{ ?>
+                            生成
+                        <?php } ?>
+                        </button>
                     </div>
                 <?php } ?>
                 <br class="clear">
@@ -1990,13 +2004,13 @@ class Match_student {
                        <tbody id="the-list" data-wp-lists="list:user">
 
                        <?php foreach ($orderAllData as $data){ ?>
-                           <tr id="user-5" class="data-list">
+                           <tr class="data-list" data-id="<?=$data['user_id']?>">
                                <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
                                    <strong><?=$data['real_name']?></strong>
                                    <br>
                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                </td>
-                               <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userId']?></td>
+                               <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userID']?></td>
                                <td class="project_name column-project_name" data-colname="类别/项目">
                                    <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
                                        <?=$bonus_name['bonus_name']?><br />
@@ -2012,10 +2026,12 @@ class Match_student {
                                <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
                                <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
                                <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="javascript:;" target="_blank">暂无</a></td>
-                               <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card']?></td>
-                               <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
+                               <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card_num']?></td>
+                               <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
-                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?></td>
+                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #02892e">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?>
+                                    &ensp;<span style="color: #000000;cursor: pointer" class="update-send" data-status="<?=$data['is_send']?>">修改</span>
+                               </td>
 
                            </tr>
                        <?php } ?>
@@ -2078,6 +2094,49 @@ class Match_student {
                         });
                     });
 
+                    /**
+                     * 修改发放状态
+                     */
+
+                    $('.update-send').on('click', function () {
+                        var user_id = $(this).closest('tr').attr('data-id');
+                        var match_id = "<?=$match_id?>";
+                        var status = $(this).attr('data-status');
+                        var _this = $(this);
+                        if(status == 2){
+                            status = 1;
+                        }else if(status == 1){
+                            status = 2;
+                        }else{
+                            alert('参数错误');
+                            return false;
+                        };
+                        if(user_id == undefined || match_id == false){
+                            alert('参数错误');
+                            return false;
+                        }
+
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'update_send_bonus', 'user_id':user_id, 'match_id':match_id,'status' : status},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                               if(response['success'] == true){
+                                   _this.attr('data-status', status);
+                                   if(status=='1'){
+                                       _this.prev().css('color','#bf0000').text('未发放');
+                                   }else if(status == '2'){
+                                       _this.prev().css('color','#02892e').text('已发放');
+                                    }
+                                }
+                            },error : function () {
+                                alert('请求失败');
+                            }
+
+                        });
+                    });
                 })
             </script>
                 <div class="tablenav bottom">

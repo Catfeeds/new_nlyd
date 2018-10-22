@@ -3,25 +3,25 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__($match_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?>  <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                         </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                    <div class="matching-row layui-row">
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev"><?=__('前移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="next"><?=__('后移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="del"><?=__('删 除', 'nlyd-student')?></div>
+                            <button class="matching-btn active" id="prev"><?=__('前移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="next"><?=__('后移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="del"><?=__('删 除', 'nlyd-student')?></button>
                         </div>
                     </div>
                     <div class="matching-number-zoo">
@@ -36,7 +36,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                        <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                        <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
                         <?php } ?>
                     </div>
 
@@ -79,7 +79,7 @@ jQuery(function($) {
     //     }, 1000);
     // }
     var questions_answer=[];
-    var ready_poker= $.GetCookie('train_match','1');
+    var ready_poker= $.GetSession('train_match','1');
     if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){//记忆成功
         questions_answer=ready_poker['train_questions'];
         $('.count_down').attr('data-seconds',ready_poker['count_down'])
@@ -132,7 +132,6 @@ jQuery(function($) {
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){
-                    $.DelCookie('train_match','1')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -262,13 +261,12 @@ layui.use(['layer'], function(){
             }
         })
     })
-    // mTouch('.choose-wrapper ').on('tap','.choose-poker',function (e) {//扑克选择区tap事件
-$('.choose-poker').each(function(e){
+$('.choose-poker').each(function(e){//扑克选择区tap事件
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-            if(!_this.hasClass('disabled')){
-                $('.choose-poker').addClass('disabled')
+            if(!_this.hasClass('active')){
+                // $('.choose-poker').addClass('disabled')
                 _this.addClass('active');
                 var text=_this.attr('data-text');
                 var color=_this.attr('data-color');
@@ -315,7 +313,7 @@ $('.choose-poker').each(function(e){
                 })
                 initWidth();
                 initScroll()
-                $('.choose-poker').removeClass('disabled')
+                // $('.choose-poker').removeClass('disabled')
             }
         }
     });

@@ -2,7 +2,7 @@
 
 
                     <div class="answer-zoo">
-                        <div class="answerBtn"><?=__('你的答案', 'nlyd-student')?></div>
+                        <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
                         <div class="answers">
                             <div class="porker-zoo">
                                 <div class="poker-window">
@@ -78,6 +78,6 @@
                                     <?php endif;?>
                             </div>
                         </div>
-                        <div class="answerBtn porkerAnswer"><?=__('正确答案', 'nlyd-student')?></div>
+                        <button class="matching-btn active porkerAnswer"><?=__('正确答案', 'nlyd-student')?></button>
                     </div>
                

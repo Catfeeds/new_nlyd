@@ -15,9 +15,9 @@
             else
                 echo '<a class="mui-pull-left nl-goback static" href="'.home_url('account/info/').'">';
           ?>
-        <i class="iconfont">&#xe610;</i>
+        <div><i class="iconfont">&#xe610;</i></div>
         </a>
-        <h1 class="mui-title"><?=__('收件地址管理', 'nlyd-student')?></h1>
+        <h1 class="mui-title"><div><?=__('收件地址管理', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -53,7 +53,7 @@
                 $add_url = home_url('/account/addAddress');
                 if(isset($_GET['match_id'])) $add_url .= '/match_id/'.$_GET['match_id'];
                 ?>
-                <a class="a-btn" href="<?=$add_url;?>"><?=__('新增收件地址', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" href="<?=$add_url;?>"><div><?=__('新增收件地址', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

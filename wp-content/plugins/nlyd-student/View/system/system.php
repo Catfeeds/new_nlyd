@@ -4,9 +4,9 @@
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
-                    <i class="iconfont">&#xe610;</i>
+                    <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><?=__('体系标准', 'nlyd-student')?></h1>
+                <h1 class="mui-title"><div><?=__('体系标准', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <ul style="margin:0">

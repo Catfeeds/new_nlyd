@@ -17,8 +17,8 @@
 .matching-row{
     position: relative;
     width: 100%;
-    height:30px;
-    line-height: 30px;
+    /* height:30px; */
+    /* line-height: 30px; */
     margin-top: 20px;
 }
 
@@ -27,41 +27,26 @@
     width: -webkit-calc(100% - 74px);
     width: calc(100% - 74px);
 }
-.matching-btn{
-    float: left;
-    width: 70px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    color: #fff;
-    border-radius: 3px;
-    /* font-size: 12px; */
-    margin-left: 6px;
-    margin-bottom: 4px;
-    background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);
-    background: linear-gradient(90deg,#4394F9,#68AAFE);
-}
 /* 扑克展示区 */
 .matching-number-zoo{
     position: relative;
     width: 100%;
     margin: auto;
-    height: 199px;
+    min-height: 199px;
+    top: 0;
     margin-top: 15px;
     /* border: 1px solid red; */
 }
 .porker-zoo{
     width: 80%;
     margin: auto;
-    height: 199px;
+    min-height: 199px;
     overflow: hidden;
 }
 .poker-window{
     position: relative;
     width: 100%;
-    height: 216px;
+    min-height: 216px;
     -webkit-overflow-scrolling: touch;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -71,7 +56,7 @@
     width: 100000px;
     left: 0;
     top: 0;
-    height: 199px;
+    min-height: 199px;
 }
 .poker{
     position: relative;
@@ -140,15 +125,22 @@
     height: 47px;
 }
 .choose-color{
+    display: table;
     width: -webkit-calc(25% - 9px);
     width: calc(25% - 9px);
     height: 45px;
-    line-height: 45px;
+    line-height: 20px;
     text-align: center;
     border: 1px solid rgba(164, 164, 164, 1);
     border-radius: 6px;
     margin-right: 9px;
     float: left;
+}
+.choose-color div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
 }
 .choose-color:last-child{
     margin-right: 0;
@@ -163,6 +155,7 @@
     width: 100%;
     margin: auto;
     height: 174px;
+    top: 0;
     margin-top: 15px;
     /* border: 1px solid red; */
 }

@@ -213,11 +213,15 @@ class Download
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
 
-        $rows = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone FROM '.$wpdb->prefix.'order AS o 
+//        $rows = $wpdb->get_results('SELECT u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone FROM '.$wpdb->prefix.'order AS o
+//        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
+//        WHERE o.order_type=1 AND o.pay_status IN (2,3,4) AND u.ID != "" AND o.match_id='.$match->ID, ARRAY_A);
+
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
-        WHERE o.order_type=1 AND o.pay_status IN (2,3,4) AND u.ID != "" AND o.match_id='.$match->ID, ARRAY_A);
-
-
+        LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id 
+        LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC', ARRAY_A);
 
 
         $filename = 'match_student_';
@@ -235,17 +239,18 @@ class Download
         $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
 
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(45);
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title);
 
@@ -261,36 +266,39 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
 
 
-        $objPHPExcel->getActiveSheet()->mergeCells('A1:K1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
 
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', 'ID');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', 'ID');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '出生日期');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄组别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '所在地区');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '手机');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '邮箱');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '报名时间');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '证件号码');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '证件号码');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '电话');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '报名时间');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '战队名称');
         foreach ($rows as $k => $row){
             $usermeta = get_user_meta($row['ID'], '', true);
             $age = unserialize($usermeta['user_real_name'][0])['real_age'];
             $group = $this->getAgeGroupNameByAge($age);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$usermeta['user_ID'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$usermeta['user_ID'][0]);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_name']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$usermeta['user_gender'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$usermeta['user_birthday'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$group);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$row['telephone']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_email']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['created_time']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$usermeta['user_gender'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$age);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$group);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['user_email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('k'.($k+3),' '.$row['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('l'.($k+3),' '.$row['team_name']);
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -1562,6 +1570,188 @@ class Download
             }
         }
         return $totalRanking;
+    }
+
+    /**
+     * 导出比奖金明细
+     */
+    public function match_bonus(){
+        $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
+        if($match_id < 1) exit('比赛id参数此错误');
+
+        global $wpdb;
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+
+        //TODO 判断比赛是否结束
+        if(!$match || $match['match_status'] != -3){
+            exit('当前比赛未结束');
+        }
+        $match = get_post($match_id);
+        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id} ORDER BY all_bonus DESC", ARRAY_A);
+
+        //汇总
+        $countData = [
+            'bonus_all' => 0,
+            'tax_all' => 0,
+            'tax_send_all' => 0,
+        ];
+        foreach ($orderAllData as &$v) {
+            $countData['bonus_all'] += $v['all_bonus'];
+            $countData['tax_all'] += $v['tax_all'];
+            $countData['tax_send_all'] += $v['tax_send_bonus'];
+            $v['bonus_list'] = unserialize($v['bonus_list']);
+        }
+
+//        echo '<pre />';
+//        print_r($orderAllData);
+
+        $filename = 'bonus_';
+        $filename .= current_time('timestamp').".xls";
+//        $path = self::$downloadPath.$filename;
+//        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
+        $objPHPExcel = new \PHPExcel();
+
+//        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+//        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+
+        //居中显示
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
+
+        //行高
+//        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(50);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(70);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(40);
+
+
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(25);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
+        $titleObjRichText = new \PHPExcel_RichText();
+        $titlePayable = $titleObjRichText->createTextRun($match->post_title);
+        $titlePayable->getFont()->setBold( true);
+        $titlePayable->getFont()->setSize( 20);
+//        $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
+        $titleObjRichText->createTextRun("\n（奖金总额195000元，税后发放额156000元，代扣税39000元）")->getFont()->setSize( 16);
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $titleObjRichText);
+        //边加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('B2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('C2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('E2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('F2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('G2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('H2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('I2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('J2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('K2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('L2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+
+//        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
+
+        //自动换行
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '选手ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '选手姓名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '奖项/类别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '奖金数额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '奖金总额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '扣税总额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '税后发放总额');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '收款路径');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '身份证号');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '电话号码');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '所属战队');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '是否发放');
+
+        foreach ($orderAllData as $k => $row){
+
+            $bonus_name_str = [];
+            $bonus_str = [];
+             foreach ($row['bonus_list'] as $bonus_name){
+                 $bonus_name_str[] = $bonus_name['bonus_name'];
+                 $bonus_str[] = $bonus_name['bonus'];
+            }
+             if($row['is_send'] == 2){
+                 $is_send = '已发放';
+                 $color = \PHPExcel_Style_Color::COLOR_DARKGREEN;
+             }else{
+                 $is_send = '未发放';
+                 $color = '00bf0000';
+             }
+            $objRichText = new \PHPExcel_RichText();
+            $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
+
+            $tax_allObjRichText = new \PHPExcel_RichText();
+            $tax_allObjRichText->createTextRun(' ￥'.$row['tax_all'])->getFont()->setColor( new \PHPExcel_Style_Color( '00FF0000' ) );//设置颜色
+
+            $tax_send_bonusObjRichText = new \PHPExcel_RichText();
+            $tax_send_bonusObjRichText->createTextRun(' ￥'.$row['tax_send_bonus'])->getFont()->setColor( new \PHPExcel_Style_Color( '0008C715' ) );//设置颜色
+
+            //换行
+            $objPHPExcel->getActiveSheet()->getStyle('C'.($k+3))->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('D'.($k+3))->getAlignment()->setWrapText(true);
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['userID']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$row['real_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.join("\n",$bonus_name_str));
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.join("\n",$bonus_str));
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' ￥'.$row['all_bonus']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),$tax_allObjRichText);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),$tax_send_bonusObjRichText);
+//            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' 二维码收款路径');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['card_num']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['team']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),$objRichText);
+
+            //超链接
+            $path_bonusObjRichText = new \PHPExcel_RichText();
+            $path_bonusObjRichText->createTextRun('二维码收款路径')->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.($k+3), $path_bonusObjRichText);
+            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl($row['collect_path']);
+//            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setTooltip('Navigate to website');
+//            $objPHPExcel->getActiveSheet()->getStyle('H'.($k+3))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        }
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        return;
     }
 }
 new Download();

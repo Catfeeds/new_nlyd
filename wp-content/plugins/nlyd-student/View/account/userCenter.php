@@ -32,7 +32,7 @@
 
                         <?php
                             if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
-                                echo '语言';
+                                echo 'language';
                             }else{
                                 echo '语言';
                             }
@@ -78,7 +78,21 @@
                 <div class="userCenter-row width-padding layui-row layui-bg-white  layui-hide-lg ta_c text_1">
                     <p class="fs_14 c_black">
                         <?php if($brainpower):?>
-                            <?=$brainpower['range'] == 2 ? __('国际', 'nlyd-student') : __('中国', 'nlyd-student')?><span class="c_orange"><?=$brainpower['level']?></span><?=__($brainpower['type_name'], 'nlyd-student')?> |
+                            <?php
+                                $brainpower_name = '';
+                                switch ($brainpower['category_name']){
+                                    case 'xsl':
+                                        $brainpower_name = 'MA';
+                                        break;
+                                    case 'sdl':
+                                        $brainpower_name = 'R';
+                                        break;
+                                    case 'jyl':
+                                        $brainpower_name = 'M';
+                                        break;
+                                }
+                            ?>
+                            <?=__('脑力健将', 'nlyd-student')?><span class="c_orange"> <?=$brainpower['range'] == 2 ? __('国际', 'nlyd-student') : __('中国', 'nlyd-student')?>-<?=$brainpower_name?><?=$brainpower['level']?></span> |
                         <?php endif;?>
                         <?=__('记忆', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['memory'])?0:$my_skill['memory']?></span><?=__('级', 'nlyd-student')?> |
                         <?=__('速读', 'nlyd-student')?><span class="c_orange bold"><?=empty($my_skill['reading'])?0:$my_skill['reading']?></span><?=__('级', 'nlyd-student')?> |
@@ -215,9 +229,9 @@
         <div class="nl-right-content layui-show-lg-block layui-hide-md layui-hide-sm layui-hide-xs layui-bg-white">
             <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-            <i class="iconfont">&#xe610;</i>
+            <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('个人中心', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('个人中心', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
 
@@ -256,7 +270,7 @@ jQuery(document).ready(function($) {
             if(data[0]['value']=='English'){
                 $('#checked_lan').text('语言')
             }else if(data[0]['value']=='中文'){
-                $('#checked_lan').text('语言')
+                $('#checked_lan').text('language')
             }
             $.ajax({
                 url : window.admin_ajax,

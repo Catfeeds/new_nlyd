@@ -16,9 +16,9 @@
                         if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                     ?>
                     <a class="mui-pull-left nl-goback static" onclick="window.location.href = '<?=$url?>'">
-                        <i class="iconfont">&#xe610;</i>
+                        <div><i class="iconfont">&#xe610;</i></div>
                     </a>
-                    <h1 class="mui-title"><?=__('收件地址管理', 'nlyd-student')?></h1>
+                    <h1 class="mui-title"><div><?=__('收件地址管理', 'nlyd-student')?></div></h1>
                 </header>
                 <div class="layui-row nl-border nl-content">
                     <div class="form-inputs">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="a-btn" lay-filter="addAdressBtn" lay-submit=""><?=__('保存更改', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" lay-filter="addAdressBtn" lay-submit=""><div><?=__('保存更改', 'nlyd-student')?></div></a>
             </form>
         </div>           
     </div>

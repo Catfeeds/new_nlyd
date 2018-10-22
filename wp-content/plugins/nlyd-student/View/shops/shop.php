@@ -11,9 +11,9 @@
             
         <header class="mui-bar mui-bar-nav">
         <a class="mui-pull-left nl-goback">
-        <i class="iconfont">&#xe610;</i>
+        <div><i class="iconfont">&#xe610;</i></div>
         </a>
-        <h1 class="mui-title">教辅商城</h1>
+        <h1 class="mui-title"><div>教辅商城</div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <!-- <div class="title-img img-box">

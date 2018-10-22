@@ -28,9 +28,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['type'])){ ?>
-                    <a class="mui-pull-left nl-goback"><i class="iconfont">&#xe610;</i></a>
+                    <a class="mui-pull-left nl-goback"></div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
-                <h1 class="mui-title"><?=$match_title?><?=__('答题记录', 'nlyd-student')?></h1>
+                <h1 class="mui-title"><div><?=$match_title?><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
@@ -60,7 +60,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
+                                <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
                             <?php if(!empty($ranking)):?>
                                 <div class="one-info flex1">
@@ -124,10 +124,10 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         $title = '轮';
                     }
                 ?>
-                    <div class="a-btn" href="<?=$next_project_url?>"><?=__('距下一'.$title.'开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div>
+                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一'.$title.'开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
                 <?php if(empty($next_project)): ?>
-                    <a class="a-btn" href="<?=$next_project_url?>"><?=__('所有答题结束,查看详情', 'nlyd-student')?></a>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>
                 <?php endif;?>
             </div>
         </div>

@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
+                <h1 class="mui-title"><div><?=__($match_title, 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <form class="layui-form" lay-filter='reading'>
@@ -15,7 +15,7 @@
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </span>
-                            <div class="matching-sumbit match_info_font" id="sumbit"><?=__('提交', 'nlyd-student')?></div>
+                            <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                         </div>
                         <div class="reading-question">
                             <?php
@@ -49,8 +49,8 @@
                         </div>
                         
                         <div class="a-btn two">
-                            <div class="a-two left disabled"><?=__('上一题', 'nlyd-student')?></div>
-                            <div class="a-two right"><?=__('下一题', 'nlyd-student')?></div>
+                            <div class="a-two left disabled"><div><?=__('上一题', 'nlyd-student')?></div></div>
+                            <div class="a-two right"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
                 </form>
@@ -63,32 +63,6 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    /*var questions_answer=[];
-        var match_questions=[];
-        var checkIndex=['A','B','C','D','E','F','G']
-        var leavePage= $.GetCookie('train_match','1');
-        if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='wzsd'){//记忆成功
-            $('.count_down').attr('data-seconds',leavePage['count_down'])
-            questions_answer=leavePage['questions_answer']
-            match_questions=leavePage['match_questions']
-            // var z=0
-            // $.each(questions_answer,function(i,v){
-            //     z++
-            //     var select=''
-            //     $.each(v.problem_select,function(index,value){
-            //         select+='<div class="reading-select"><input type="radio" name="'+i+'" class="select_answer" data-name="'+value+'" value="'+value+'"><span>'+checkIndex[index]+'、'+value+'</span></div>'
-            //     })
-                
-            //     var index0=z==1 ? 'active' : '';
-            //     var matching_reading='<div class="matching-reading '+index0+'" data-index="'+z+'" data-id="'+i+'">'
-            //         +'<p class="c_black">'+z+'、'+match_questions[i]+'</p>'
-            //         +select
-            //     +'</div>'
-            //     $('.reading-question').append(matching_reading)
-            // })
-        }else{//未获取到比赛题目
-            $.alerts('未检测到题目信息')
-        }*/
     layui.use(['form'], function(){
         var form = layui.form
     })

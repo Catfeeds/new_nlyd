@@ -9,9 +9,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=$title?></h1>
+            <h1 class="mui-title"><div><?=$title?></div></h1>
         </header>  
             <div class="layui-row nl-border nl-content">
                 <div class="have-bottom">
@@ -80,14 +80,13 @@
                             </div>
                             <?php }?>
                             <?php if($_GET['type']=='mobile' && !isset($_GET['confirm']) ){ ?>
-                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit=""><?=__('下一步', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="safetySetting" lay-filter="safetySetting" lay-submit=""><div><?=__('下一步', 'nlyd-student')?></div></a>
                             <?php }else{ ?>
-                            <a class="a-btn" id="safetySetting" lay-filter="safetySetting" lay-submit=""><?=__('更 新', 'nlyd-student')?></a>
+                            <a class="a-btn a-btn-table" id="safetySetting" lay-filter="safetySetting" lay-submit=""><div><?=__('更 新', 'nlyd-student')?></div></a>
                             <?php } ?>
                         </div>
                     </form>
                 </div>
-                <!-- <a class="a-btn safetySetting">更 新</a> -->
             </div>
         </div>           
     </div>
