@@ -1403,7 +1403,7 @@ class Match_student {
     public function bonus_all_data($allData , $project_option,$ranking_name='',$ranking_bonus=0){
         if(!isset($allData[$project_option['user_id']])) $allData[$project_option['user_id']] = [];
 
-        if(!isset($allData[$project_option['user_id']]['userId'])) $allData[$project_option['user_id']]['userId'] = $project_option['userID'];
+        if(!isset($allData[$project_option['user_id']]['userID'])) $allData[$project_option['user_id']]['userID'] = $project_option['userID'];
         if(!isset($allData[$project_option['user_id']]['real_name'])) $allData[$project_option['user_id']]['real_name'] = $project_option['real_name'];
         if(!isset($allData[$project_option['user_id']]['user_id'])) $allData[$project_option['user_id']]['user_id'] = $project_option['user_id'];
 
@@ -1417,9 +1417,9 @@ class Match_student {
 
         if(!isset($allData[$project_option['user_id']]['all_bonus'])) $allData[$project_option['user_id']]['all_bonus'] = 0;
         $allData[$project_option['user_id']]['all_bonus'] += $ranking_bonus;
-        if(!isset($allData[$project_option['user_id']]['card'])) $allData[$project_option['user_id']]['card'] = $project_option['card'];
+        if(!isset($allData[$project_option['user_id']]['card_num'])) $allData[$project_option['user_id']]['card_num'] = $project_option['card'];
         if(!isset($allData[$project_option['user_id']]['real_type'])) $allData[$project_option['user_id']]['real_type'] = $project_option['real_type'];
-        if(!isset($allData[$project_option['user_id']]['user_mobile'])) $allData[$project_option['user_id']]['user_mobile'] = $project_option['user_mobile'];
+        if(!isset($allData[$project_option['user_id']]['mobile'])) $allData[$project_option['user_id']]['mobile'] = $project_option['user_mobile'];
         if(!isset($allData[$project_option['user_id']]['is_send'])) $allData[$project_option['user_id']]['is_send'] = 1;
         if(!isset($allData[$project_option['user_id']]['team'])) {
             global $wpdb;
@@ -1743,11 +1743,13 @@ class Match_student {
         //插入数据
         global $wpdb;
         $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_path`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
+        $insertValueArr = [];
         foreach ($orderAllData as $odv){
             $bonus_list = serialize($odv['bonus_list']);
-            $sql .= "({$match_id},'{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userId']}','{$odv['collect_path']}','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
+            $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
+                    '{$odv['real_name']}','{$odv['userID']}','{$odv['collect_path']}','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
         }
+        $sql .= join(',', $insertValueArr);
         $wpdb->query($sql);
         return ['orderAllData' => $orderAllData,'countData' => $countData];
     }
@@ -1771,13 +1773,15 @@ class Match_student {
                 if($old_data) exit('删除原数据失败');
             }
         }
-        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}", ARRAY_A);
+        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id} ORDER BY bonus_all DESC", ARRAY_A);
         if($reload == false){
             if(!$orderAllData){
+                $reCreated = false;
                 $allDatas = $this->getBonusData($match_id);
                 $countData = $allDatas['countData'];
                 $orderAllData = $allDatas['orderAllData'];
             }else{
+                $reCreated = true;
                 //汇总
                 $countData = [
                     'bonus_all' => 0,
@@ -1790,6 +1794,7 @@ class Match_student {
                     $countData['tax_send_all'] += $v['tax_send_bonus'];
                     $v['bonus_list'] = unserialize($v['bonus_list']);
                 }
+
             }
         }
 
@@ -1960,8 +1965,16 @@ class Match_student {
 
                 <?php if($reload == false){ ?>
                     <div>
-                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">重新生成</button>
+
                         <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
+
+                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">
+                        <?php if($reCreated == true){ ?>
+                            重新生成
+                        <?php }else{ ?>
+                            生成
+                        <?php } ?>
+                        </button>
                     </div>
                 <?php } ?>
                 <br class="clear">
@@ -1996,7 +2009,7 @@ class Match_student {
                                    <br>
                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                </td>
-                               <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userId']?></td>
+                               <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userID']?></td>
                                <td class="project_name column-project_name" data-colname="类别/项目">
                                    <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
                                        <?=$bonus_name['bonus_name']?><br />
@@ -2012,10 +2025,10 @@ class Match_student {
                                <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
                                <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
                                <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="javascript:;" target="_blank">暂无</a></td>
-                               <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card']?></td>
-                               <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
+                               <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card_num']?></td>
+                               <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
-                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?>
+                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #02892e">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?>
                                     &ensp;<span style="color: #000000;cursor: pointer" class="update-send" data-status="<?=$data['is_send']?>">修改</span>
                                </td>
 
@@ -2114,7 +2127,7 @@ class Match_student {
                                    if(status=='1'){
                                        _this.prev().css('color','#bf0000').text('未发放');
                                    }else if(status == '2'){
-                                       _this.prev().css('color','#0000cc').text('已发放');
+                                       _this.prev().css('color','#02892e').text('已发放');
                                     }
                                 }
                             },error : function () {
