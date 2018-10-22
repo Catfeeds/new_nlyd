@@ -10,8 +10,9 @@
     top: 0;
     left: 0;
     padding: 0;
-    height: 14px;
-    line-height: 14px;
+    height: auto;
+    padding: 1px 0;
+    line-height: 20px;
     color: #4394F9;
     font-size: 14px;
     text-align: center;
@@ -49,11 +50,11 @@
     -o-flex-direction: row;
     flex-direction: row;
 }
-.layui-layer.nl-box-skin .layui-layer-btn button{
+.layui-layer.nl-box-skin .layui-layer-btn div{
     margin: 0;
     padding: 0;
     height: 45px;
-    line-height: 45px;
+    line-height: 20px;
     text-align: center;
     width: 50%;
     border: none;

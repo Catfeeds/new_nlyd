@@ -66,7 +66,6 @@
                         <ul style="margin-left: 0" class="layui-tab-title">
                             <?php foreach ($category as $k => $val){ ?>
                                 <li data-id="<?=$val['ID']?>" class="<?=$val['ID'] == $_GET['category_id'] || (!isset($_GET['category_id']) && $k==0) ? 'layui-this' : '';?>">
-                                    <!-- <a href="<?=$url.'/category_id/'.$val['ID']?>" ><?=$val['post_title']?></a> -->
                                     <?=$val['post_title']?>
                                 </li>
                                 <?php if($k==0){ ?>

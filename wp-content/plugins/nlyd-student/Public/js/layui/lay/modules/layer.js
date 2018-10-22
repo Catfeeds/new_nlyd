@@ -238,7 +238,7 @@
             var button = '';
             typeof config.btn === 'string' && (config.btn = [config.btn]);
             for(var i = 0, len = config.btn.length; i < len; i++){
-              button += '<button class="'+ doms[6] +''+ i +'">'+ config.btn[i] +'</button>'
+              button += '<div class="'+ doms[6] +''+ i +'"><div>'+ config.btn[i] +'</div></div>'
             }
             return '<div class="'+ doms[6] +' layui-layer-btn-'+ (config.btnAlign||'') +'">'+ button +'</div>'
           }() : '')
@@ -627,7 +627,7 @@
       layer.ie == 6 && that.IE6(layero);
       
       //按钮
-      layero.find('.'+ doms[6]).children('button').on('click', function(){
+      layero.find('.'+ doms[6]).children('div').on('click', function(){
         var index = $(this).index();
         if(index === 0){
           if(config.yes){

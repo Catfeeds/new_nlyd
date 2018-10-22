@@ -3,16 +3,22 @@
 .layui-layer-btn{
     display: flex;
 }
- .layui-layer-btn button{
+ .layui-layer-btn div{
+    display: table; 
     margin: 0;
     padding: 0;
     height: 45px;
-    line-height: 45px;
+    line-height: 20px;
     text-align: center;
     width: 50%;
     border: none;
     border-radius: 0;
     flex:1;
+}
+.layui-layer-btn div div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; 
 }
 .layui-layer-btn .layui-layer-btn0{
     border-top: 1px solid transparent;
