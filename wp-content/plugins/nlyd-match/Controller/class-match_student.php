@@ -1990,7 +1990,7 @@ class Match_student {
                        <tbody id="the-list" data-wp-lists="list:user">
 
                        <?php foreach ($orderAllData as $data){ ?>
-                           <tr id="user-5" class="data-list">
+                           <tr class="data-list" data-id="<?=$data['user_id']?>">
                                <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
                                    <strong><?=$data['real_name']?></strong>
                                    <br>
@@ -2015,7 +2015,9 @@ class Match_student {
                                <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card']?></td>
                                <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
-                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?></td>
+                               <td class="is_send column-is_send line-c" data-colname="是否发放"><?=$data['is_send'] == 2 ? '<span style="color: #0000cc">已发放</span>' : '<span style="color: #bf0000">未发放</span>' ?>
+                                    &ensp;<span style="color: #000000;cursor: pointer" class="update-send" data-status="<?=$data['is_send']?>">修改</span>
+                               </td>
 
                            </tr>
                        <?php } ?>
@@ -2078,6 +2080,49 @@ class Match_student {
                         });
                     });
 
+                    /**
+                     * 修改发放状态
+                     */
+
+                    $('.update-send').on('click', function () {
+                        var user_id = $(this).closest('tr').attr('data-id');
+                        var match_id = "<?=$match_id?>";
+                        var status = $(this).attr('data-status');
+                        var _this = $(this);
+                        if(status == 2){
+                            status = 1;
+                        }else if(status == 1){
+                            status = 2;
+                        }else{
+                            alert('参数错误');
+                            return false;
+                        };
+                        if(user_id == undefined || match_id == false){
+                            alert('参数错误');
+                            return false;
+                        }
+
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action' : 'update_send_bonus', 'user_id':user_id, 'match_id':match_id,'status' : status},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                               if(response['success'] == true){
+                                   _this.attr('data-status', status);
+                                   if(status=='1'){
+                                       _this.prev().css('color','#bf0000').text('未发放');
+                                   }else if(status == '2'){
+                                       _this.prev().css('color','#0000cc').text('已发放');
+                                    }
+                                }
+                            },error : function () {
+                                alert('请求失败');
+                            }
+
+                        });
+                    });
                 })
             </script>
                 <div class="tablenav bottom">

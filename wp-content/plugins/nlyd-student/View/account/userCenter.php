@@ -32,7 +32,7 @@
 
                         <?php
                             if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
-                                echo '语言';
+                                echo 'language';
                             }else{
                                 echo '语言';
                             }
@@ -270,7 +270,7 @@ jQuery(document).ready(function($) {
             if(data[0]['value']=='English'){
                 $('#checked_lan').text('语言')
             }else if(data[0]['value']=='中文'){
-                $('#checked_lan').text('语言')
+                $('#checked_lan').text('language')
             }
             $.ajax({
                 url : window.admin_ajax,
