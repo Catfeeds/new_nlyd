@@ -54,12 +54,6 @@ jQuery(function($) {
         questions_answer=matching_question['questions_answer']
     }else{
         $.DelSession('matching_question')
-        // $.each(arrColor,function(i,v){
-        //     $.each(arrNum,function(index,val){
-        //         var item=v+'-'+val;
-        //         new_poker.push(item)
-        //     })
-        // })
         for(var i=0;i<100;i++){
             var num=Math.floor(Math.random()*10);//生成0-9的随机数
             questions_answer.push(num)
@@ -73,71 +67,9 @@ jQuery(function($) {
         $.SetSession('matching_question',sessionData)
     }
     $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number"><div>'+v+'</div></div>';
+            var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
-    // var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
-    // $.getJSON(file_path,function(JsonData){
-    //     var matchSession=$.GetSession('ready_shuzi','true');
-    //     if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
-    //         questions_answer=matchSession['questions_answer']
-    //     }else{
-    //         var questions_answers=JsonData;
-    //         var pos = Math.round(Math.random() * (questions_answers.length - 1));
-    //         var xx=questions_answers[pos]
-    //         questions_answer=xx.sort(function() {
-    //             return .5 - Math.random();
-    //         });
-    //         var sessionData={
-    //             match_id:_match_id,
-    //             project_id:<?=$project_id?>,
-    //             match_more:_match_more,
-    //             questions_answer:questions_answer
-    //         }
-    //         $.SetSession('ready_shuzi',sessionData)
-    //     }
-    //     $.each(questions_answer,function(i,v){
-    //         var dom='<div class="matching-number">'+v+'</div>';
-    //         $('.matching-number-zoo').append(dom)
-    //     })
-    // })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-// new AlloyFinger($('#complete')[0], {
-//     tap:function(){
-//         var _this=$(this);
-//         if(!_this.hasClass('disabled')){
-//             _this.addClass('disabled')
-//             var data={
-//                 action:'memory_complete',
-//                 _wpnonce:$('#inputComplete').val(),
-//                 match_id:<?=$_GET['match_id']?>,
-//                 project_id:<?=$project_id?>,
-//                 match_more:$('#inputMatchMore').val(),
-//                 match_action:'numberBattle',
-//                 match_questions:questions_answer,
-//                 type:'szzb'
-//             }
-//             $.ajax({
-//                 data:data,
-//                 success:function(res,ajaxStatu,xhr){  
-//                     if(res.success){
-//                         if(res.data.url){
-//                             window.location.href=res.data.url;
-//                             $.DelSession('ready_shuzi')
-//                         }   
-//                     }else{
-//                         $.alerts(res.data.info)
-//                         _this.removeClass('disabled')
-//                     }
-                    
-//                 },
-//                 error: function(jqXHR, textStatus, errorMsg){
-//                     _this.removeClass('disabled')
-//                 }
-//             })
-//         }
-//     }
-// })
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',

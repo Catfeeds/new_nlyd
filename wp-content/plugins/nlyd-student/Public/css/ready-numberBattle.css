@@ -13,10 +13,10 @@
 .fs-16{
     font-size: 0.16rem;
 }
-/* .matching-number-zoo{
+.matching-number-zoo{
     width: 100%;
     overflow: visible;
-    margin-top: 50px;
+    margin-top: 35px;
 }
 .matching-number{
     width: -webkit-calc(5% - 1px);
@@ -30,26 +30,8 @@
     text-align: center;
     border-right:1px solid transparent;
     background: #fff;
-} */
-.matching-number{
-    width: -webkit-calc(5% - 1px);
-    width: calc(5% - 1px);
-    float: left;
-    overflow: visible;
-    height: 25px;
-    display: table;
-    font-size: 0.16rem;
-    color: #262626;
-    text-align: center;
-    line-height: 20px;
-    border-right:1px solid transparent;
-    background: #fff;
 }
-.matching-number div{
-    height: 100%;
-    display: table-cell;
-    vertical-align: middle; 
-}
+
 .border-right{
     border-right:1px solid #262626;
 }

@@ -79,7 +79,7 @@ jQuery(function($) {
     //     }, 1000);
     // }
     var questions_answer=[];
-    var ready_poker= $.GetCookie('train_match','1');
+    var ready_poker= $.GetSession('train_match','1');
     if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){//记忆成功
         questions_answer=ready_poker['train_questions'];
         $('.count_down').attr('data-seconds',ready_poker['count_down'])
@@ -132,10 +132,10 @@ jQuery(function($) {
             }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){
-                    $.DelCookie('train_match','1')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
+                            $.DelSession('train_match','1')
                             window.location.href=res.data.url
                         }   
                     }else{
