@@ -19,10 +19,14 @@ class Brainpower
             $role = 'brainpower_join_directory';//权限名
             $wp_roles->add_cap('administrator', $role);
 
+            $role = 'brainpower_edit_brainpower';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
         }
 
         add_menu_page('脑力健将', '脑力健将', 'brainpower', 'brainpower',array($this,'index'),'dashicons-businessman',99);
         add_submenu_page('brainpower','加入名录','加入名录','brainpower_join_directory','brainpower-join_directory',array($this,'joinDirectory'));
+        add_submenu_page('brainpower','编辑脑力健将','编辑脑力健将','brainpower_edit_brainpower','brainpower-edit_brainpower',array($this,'editBrainpower'));
 //        add_submenu_page('order','我的学员','我的学员','administrator','teacher-student',array($this,'student'));
 //        add_submenu_page('order','我的课程','我的课程','administrator','teacher-course',array($this,'course'));
     }
@@ -57,7 +61,7 @@ class Brainpower
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS d.user_id,d.category_name,d.level,d.is_show,d.range,d.type_name,u.user_mobile,u.user_email FROM {$wpdb->prefix}directories AS d 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS d.id,d.user_id,d.category_name,d.level,d.is_show,d.range,d.type_name,u.user_mobile,u.user_email FROM {$wpdb->prefix}directories AS d 
                 LEFT JOIN {$wpdb->users} AS u ON u.ID=d.user_id{$searchJoinSql}
                 WHERE u.ID!=''{$whereStr} LIMIT {$start},{$pageSize}", ARRAY_A);
 
@@ -71,13 +75,14 @@ class Brainpower
             'total' => $pageAll,
             'current' => $page,
         ));
+
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">脑力健将</h1>
 
             <hr class="wp-header-end">
 
-            <h2 class="screen-reader-text">过滤用户列表</h2><ul class="subsubsub">
+            <h2 class="screen-reader-text">过滤脑力健将列表</h2><ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=0')?>" class="<?=($types === 0) ? 'current': ''?>">全部<span class="count"></span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=1')?>" class="<?=($types === 1) ? 'current': ''?>">心算类<span class="count"></span></a> |</li>
                 <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=2')?>" class="<?=($types === 2) ? 'current': ''?>">记忆类<span class="count"></span></a> |</li>
@@ -102,7 +107,7 @@ class Brainpower
                     </div>
                     <br class="clear">
                 </div>
-                <h2 class="screen-reader-text">用户列表</h2>
+                <h2 class="screen-reader-text">脑力健将列表</h2>
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
@@ -114,6 +119,7 @@ class Brainpower
                         <th scope="col" id="card_num" class="manage-column column-card_num">证件号码</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
                         <th scope="col" id="email" class="manage-column column-email">邮箱</th>
+                        <th scope="col" id="options" class="manage-column column-options">操作</th>
                     </tr>
 
                     </thead>
@@ -148,6 +154,7 @@ class Brainpower
                             <td class="card_num column-card_num line-c" data-colname="证件号码"><?=$user_real_name ? $user_real_name['real_ID'] : ''?></td>
                             <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>
                             <td class="email column-email line-c" data-colname="邮箱"><?=$data['user_email']?></td>
+                            <td class="options column-options line-c" data-colname="操作"><a href="<?=admin_url('admin.php?page=brainpower-edit_brainpower&data_id='.$data['id'])?>" class="options-a">编辑</a></td>
 
                         </tr>
                     <?php } ?>
@@ -166,6 +173,7 @@ class Brainpower
                         <th scope="col" class="manage-column column-card_num">证件号码</th>
                         <th scope="col" class="manage-column column-mobile">电话号码</th>
                         <th scope="col" class="manage-column column-email">邮箱</th>
+                        <th scope="col" class="manage-column column-options">操作</th>
                     </tr>
                     </tfoot>
 
@@ -182,6 +190,99 @@ class Brainpower
             </form>
 
             <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+     * 编辑脑力健将
+     */
+    public function editBrainpower(){
+        $msg = '';
+        $id = isset($_GET['data_id']) ? intval($_GET['data_id']) : 0;
+        $id < 1 && exit('参数错误');
+        global $wpdb;
+        if(is_post()){
+            $level = isset($_POST['level']) ? intval($_POST['level']) : 0;
+            if($level < 1){
+                $msg = '<span style="color: #a80000">参数错误</span>';
+            }else{
+                $bool = $wpdb->update($wpdb->prefix.'directories', ['level' => $level], ['id'=>$id]);
+                if($bool) $msg = '<span style="color: #20a831">修改成功</span>';
+                else $msg = '<span style="color: #a80000">修改失败</span>';
+            }
+
+        }
+        $row = $wpdb->get_row("SELECT d.id,d.user_id,d.level,d.is_show,d.range,d.type_name,d.certificate,um.meta_value AS user_real_name FROM {$wpdb->prefix}directories AS d 
+              LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=d.user_id AND um.meta_key='user_real_name'
+               WHERE d.id={$id}", ARRAY_A);
+        if(!$row){
+            exit('未查询到数据');
+        }else{
+            $row['user_real_name'] = unserialize($row['user_real_name']);
+        }
+
+        ?>
+
+
+        <div class="wrap" id="profile-page">
+
+
+            <hr class="wp-header-end">
+
+            <form id="your-profile" action="" method="post" novalidate="novalidate">
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="9699f260f1"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <p>
+                    <input type="hidden" name="from" value="profile">
+                    <input type="hidden" name="checkuser_id" value="1">
+                </p>
+
+                <h2><?=$row['user_real_name']['real_name']?> - 脑力健将</h2>
+                <h2><?=$msg?></h2>
+
+
+                <hr>
+
+
+                <table class="form-table">
+
+                </table>
+
+                <h2>姓名</h2>
+
+                <table class="form-table">
+                    <tbody>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="real_name">姓名</label>
+                        </th>
+                        <td><input type="text" name="real_name" id="real_name" value="<?=$row['user_real_name']['real_name']?>" disabled="disabled" class="regular-text"> </td>
+                    </tr>
+                    <tr class="user-user-login-wrap">
+                        <th>
+                            <label for="type_name">荣誉名称</label>
+                        </th>
+                        <td><input type="text" name="type_name" id="type_name" value="<?=$row['type_name']?>" disabled="disabled" class="regular-text"> </td>
+                    </tr>
+
+
+
+                    <tr class="user-first-name-wrap">
+                        <th><label for="level">等级</label></th>
+                        <td><input type="text" name="level" id="level" value="<?=$row['level']?>" class="regular-text"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+
+
+
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="data_id" id="user_id" value="<?=$id?>">
+
+                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="更新"></p>
+            </form>
         </div>
         <?php
     }
