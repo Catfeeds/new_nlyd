@@ -74,7 +74,7 @@ switch ($type){
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label">&nbsp;&nbsp;&nbsp;<?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
+                                <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
                             <?php if(!empty($ranking)):?>
                                 <div class="one-info flex1">
@@ -129,7 +129,7 @@ jQuery(function($) {
     });
     <?php } ?>
     $('#again').click(function(){
-        $.DelCookie('train_match','1')
+        $.DelSession('train_match')
     })
     <?php if($type == 'pkjl'): ?>
             initWidth=function() {

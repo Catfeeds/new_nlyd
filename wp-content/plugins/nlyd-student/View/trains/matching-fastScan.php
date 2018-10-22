@@ -99,8 +99,6 @@ jQuery(function($) {
                 }
 
             }
-            
-
     }  
     var isMatching=false;//判断用户是否刷新页面
     if(!isMatching){

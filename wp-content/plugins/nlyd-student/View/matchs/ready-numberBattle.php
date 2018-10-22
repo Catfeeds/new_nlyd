@@ -67,7 +67,7 @@ jQuery(function($) {
             $.SetSession('ready_shuzi',sessionData)
         }
         $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number"><div>'+v+'</div></div>';
+            var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
     })
