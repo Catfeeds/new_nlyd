@@ -15,9 +15,9 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12  detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title">战队详情</h1>
+            <h1 class="mui-title"><div>战队详情</div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="teamDetail-row layui-row layui-bg-white">

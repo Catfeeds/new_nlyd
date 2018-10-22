@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><?=__($match_title, 'nlyd-student')?></h1>
+            <h1 class="mui-title "><div class=""><?=__($match_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -19,7 +19,7 @@
                     <div class="matching-row">
                         <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>
                         <div class="matching-row-list">
-                            <button class="dis_table matching-btn active"><?=__('不划', 'nlyd-student')?></button>
+                            <button class="matching-btn active"><?=__('不划', 'nlyd-student')?></button>
                             <button class="matching-btn">2</button>
                             <button class="matching-btn">3</button>
                             <button class="matching-btn">4</button>

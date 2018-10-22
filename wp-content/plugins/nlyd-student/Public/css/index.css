@@ -540,34 +540,55 @@ p.no-info-text{
     float: left;
 }
 .mui-bar .mui-title {
-    right: 40px;
+    /* right: 40px;
     left: 40px;
     display: inline-block;
     overflow: hidden;
     width: auto;
     margin: 0;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
 }
 .mui-title {
+    display: table;
+    line-height: 20px;
     font-size: 0.17rem;
     font-weight: 500;
-    line-height: 44px;
-    position: absolute;
-    display: block;
-    width: 100%;
-    margin: 0 -10px;
-    padding: 0;
+    line-height: 20px;
+    height: 46px;
+    /* position: absolute;
+    display: block; */
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+    /* margin: 0 -10px;
+    padding: 0; */
+    margin: auto;
     text-align: center;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     color: #262626;
 }
+.mui-title div{
+    width: 100%;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; 
+}
+
 .nl-goback{
-    display: block;
+    display: table;
     width: 44px;
     height: 44px;
     text-align: left;
-    line-height: 44px;
+    line-height: 20px;
     color: #2484FE;
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
+.nl-goback div{
+    width: 100%;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle; 
 }
 a {
     text-decoration: none;

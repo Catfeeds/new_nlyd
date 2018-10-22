@@ -39,9 +39,9 @@ p.tips{
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
             <a class="mui-pull-left nl-goback">
-                <i class="iconfont">&#xe610;</i>
+                <div><i class="iconfont">&#xe610;</i></div>
             </a>
-            <h1 class="mui-title"><?=__('国际脑力运动', 'nlyd-student')?></h1>
+            <h1 class="mui-title"><div><?=__('国际脑力运动', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
 

@@ -15,10 +15,11 @@
         <?php }else{ ?>
                 <a class="mui-pull-left nl-goback">
         <?php } ?>
-
-        <i class="iconfont">&#xe610;</i>
+        <div>
+            <i class="iconfont">&#xe610;</i>
+        </div>
         </a>
-        <h1 class="mui-title"><?=__('报名信息确认', 'nlyd-student')?></h1>
+        <h1 class="mui-title"><div><?=__('报名信息确认', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <form id="pay-form" class="layui-form width-margin width-margin-pc" action="" >

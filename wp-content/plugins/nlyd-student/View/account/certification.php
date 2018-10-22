@@ -8,9 +8,9 @@
             <div class="main-header">
                 <header class="mui-bar mui-bar-nav">
                     <a class="mui-pull-left nl-goback">
-                        <i class="iconfont">&#xe610;</i>
+                        <div><i class="iconfont">&#xe610;</i></div>
                     </a>
-                    <h1 class="mui-title"><?=__('实名认证', 'nlyd-student')?></h1>
+                    <h1 class="mui-title"><div><?=__('实名认证', 'nlyd-student')?></div></h1>
                 </header>
             </div> 
             <div class="layui-row nl-border nl-content">

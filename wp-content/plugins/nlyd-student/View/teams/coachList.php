@@ -31,9 +31,9 @@
 
 
            ?>
-        <i class="iconfont">&#xe610;</i>
+        <div><i class="iconfont">&#xe610;</i></div>
         </a>
-        <h1 class="mui-title"><?=$action == 'myCoach' ? __('我的教练', 'nlyd-student') :__('教练列表', 'nlyd-student');?></h1>
+        <h1 class="mui-title"><div><?=$action == 'myCoach' ? __('我的教练', 'nlyd-student') :__('教练列表', 'nlyd-student');?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if($coachCount > 0){?>
