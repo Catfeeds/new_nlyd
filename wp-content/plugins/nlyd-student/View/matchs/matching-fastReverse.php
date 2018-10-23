@@ -46,7 +46,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解"><div><?=__('本题无解a', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解"><div><?=__('本题无解', 'nlyd-student')?></div></div>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
