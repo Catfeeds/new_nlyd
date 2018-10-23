@@ -32,3 +32,7 @@ __('国际脑力马拉松', 'nlyd-student');
 __('国际脑力马拉松专项训练', 'nlyd-student');
 __('全球数字脑王大赛', 'nlyd-student');
 __('全球数字脑王大赛专项训练', 'nlyd-student');
+__('正在进行', 'nlyd-student');
+__('即将进行', 'nlyd-student');
+__('距下一项开赛', 'nlyd-student');
+__('距下一轮开赛', 'nlyd-student');

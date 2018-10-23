@@ -18,7 +18,7 @@
                 <div class="width-margin width-margin-pc">
                     <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn"><?=__('分享战绩', 'nlyd-student')?></div></div>
                     <div class="single-match-title">
-                        <div class="single-match-name"><?=$project_title?></div>
+                        <div class="single-match-name"><?=__($project_title, 'nlyd-student')?></div>
                         <?php if(!empty($lists)):?>
                         <?php foreach ($lists as $v){?>
                         <div class="single-match-lun <?=$v['more']==1?'lun-active':'';?>" data-post-id="<?=$v['more']?>">第<?=chinanum($v['more'])?>轮</div>
