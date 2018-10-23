@@ -23,9 +23,6 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo layui-row">
-                        <!-- <?php for($i=0;$i<$str_length;++$i){ ?>
-                        <div class="matching-number <?=$i==0?'active':'';?>"></div>
-                        <?php } ?> -->
                     </div>
 
                     <div class="matching-keyboard">
