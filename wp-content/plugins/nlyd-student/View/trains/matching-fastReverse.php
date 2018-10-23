@@ -212,7 +212,7 @@ $('.number').each(function(){
                 var answer_Text=$('.answer div').text();
                 var answer_dateNumber=$('.answer').attr('date-number');
                 if(answer_dateNumber=='本题无解'){
-                    answer_dateNumber=''
+                    answer_Text=''
                 }
                 if(number_dateNumber=='本题无解'){
                     $('.answer div').text(number_Text)
@@ -347,40 +347,40 @@ new AlloyFinger($('#del')[0], {
         // if(!_this.hasClass('disabled')){
         //     _this.addClass('disabled')
             // var text=$('.answer div').text()
-            var answer_Text=$('.answer div').text();
-            var answer_dateNumber=$('.answer').attr('date-number');
-            var len=answer_Text.length;
-            var news='';
-            if(len>0){
-                if(answer_dateNumber!='本题无解'){
-                    var end=answer_Text.substr(answer_Text.length-1,1);
-                    var end_1=answer_Text.substr(answer_Text.length-2,1)
-                    if(!isNaN(parseInt(end))){//删除的是数字
-                        var endIndex=dataIndex.length-1
-                        var data_index=dataIndex[endIndex];
-                        $('.rand').each(function(){
-                            if($(this).attr('data-index')==data_index){
-                                $(this).removeClass('disabled')
-                                dataIndex.splice(endIndex,1)
-                                return false;
-                            }
-                        })
-                        if(!isNaN(parseInt(end_1))){//删除的两位数数字
-                            news=answer_Text.substring(0,len-2);
-                        }else{
-                            news=answer_Text.substring(0,len-1);
+        var answer_Text=$('.answer div').text();
+        var answer_dateNumber=$('.answer').attr('date-number');
+        var len=answer_Text.length;
+        var news='';
+        if(len>0){
+            if(answer_dateNumber!='本题无解'){
+                var end=answer_Text.substr(answer_Text.length-1,1);
+                var end_1=answer_Text.substr(answer_Text.length-2,1)
+                if(!isNaN(parseInt(end))){//删除的是数字
+                    var endIndex=dataIndex.length-1
+                    var data_index=dataIndex[endIndex];
+                    $('.rand').each(function(){
+                        if($(this).attr('data-index')==data_index){
+                            $(this).removeClass('disabled')
+                            dataIndex.splice(endIndex,1)
+                            return false;
                         }
+                    })
+                    if(!isNaN(parseInt(end_1))){//删除的两位数数字
+                        news=answer_Text.substring(0,len-2);
                     }else{
                         news=answer_Text.substring(0,len-1);
                     }
-                    $('.answer div').text(news)
                 }else{
-                    $('.answer div').text('')
+                    news=answer_Text.substring(0,len-1);
                 }
+                $('.answer div').text(news)
+            }else{
+                $('.answer div').text('')
             }
-            $('.answer').attr('date-number',"1");
         }
-    });
+        $('.answer').attr('date-number',"1");
+    }
+});
     //下一题tap事件
     // mTouch('body').on('tap','#next',function(e){
 new AlloyFinger($('#next')[0], {

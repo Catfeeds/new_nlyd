@@ -73,7 +73,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="a-btn a-btn-tableget_footer"><div><?=__('查看本项目比赛详情', 'nlyd-student')?></div></a>
+                            <a class="a-btn a-btn-table get_footer"><div><?=__('查看本项目比赛详情', 'nlyd-student')?></div></a>
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">

@@ -17,7 +17,7 @@
                         </span>
                     </div>
                     <div class="matching-row layui-row">
-                        <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>
+                        <div class="matching-row-label"><div><?=__('划辅助线', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
                             <button class="matching-btn active"><?=__('不划', 'nlyd-student')?></button>
                             <button class="matching-btn">2</button>
@@ -27,11 +27,11 @@
                             <button class="matching-btn">8</button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
+                    <div class="matching-number-zoo layui-row">
                         <div class="Glass"></div>
                     </div>
                 </div>
-                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete" href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

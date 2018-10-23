@@ -8,7 +8,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="fastScan-item answer"><?=__('开始答题', 'nlyd-student')?></div>
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -53,11 +53,11 @@ jQuery(function($) {
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
-    showHZ=6,//每5道题添加一个汉字
+    showHZ=7,//每5道题添加一个汉字
     itemAdd=2,//每隔itemAdd道题itemLen++
     nandu=0,//难度系数，越小越难,有几个不同字符（可变项）
     // nanduMax=4,//替换项的上线
-    nanduLen=6,//每nanduLen题nandu++
+    nanduLen=7,//每nanduLen题nandu++
     // stop=false,//停止计时
     answerHide=0.8,//正确答案消失的时间为0.8秒
     flaseQuestion=0,//错误答题，需要存入cookie

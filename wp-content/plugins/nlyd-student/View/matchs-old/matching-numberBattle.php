@@ -16,18 +16,17 @@
                         <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></div>
-                            <div class="matching-btn c_white" id="next"><?=__('后插一位', 'nlyd-student')?></div>
+                            <button class="matching-btn active c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></button>
+                            <button class="matching-btn active c_white" id="next"><?=__('后插一位', 'nlyd-student')?></button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
-                        <?php for($i=0;$i<$str_length;++$i){ ?>
+                    <div class="matching-number-zoo layui-row">
+                        <!-- <?php for($i=0;$i<$str_length;++$i){ ?>
                         <div class="matching-number <?=$i==0?'active':'';?>"></div>
-                        <?php } ?>
+                        <?php } ?> -->
                     </div>
-
                     <div class="matching-keyboard">
                         <div class="matching-keyboard-row">
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1"><div>1</div></div>

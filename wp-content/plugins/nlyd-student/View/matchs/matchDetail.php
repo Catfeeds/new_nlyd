@@ -27,42 +27,42 @@ endif;
                 <div class="width-margin width-margin-pc content-border">
                     <div class="width-padding-pc">
                         <ul class="flow-default">
-                            <li class="nl-match">
+                        <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
-                                    <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ' '; ?>"><?= $match['post_title'] ?></span>
-                                    <?php if ($match['is_me'] == 'y'): ?>
+                                    <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':' ';?>"><?=$match['post_title']?></span>
+                                    <?php if($match['is_me'] == 'y'): ?>
                                         <div class="nl-badge"><i class="iconfont">&#xe608;</i></div>
                                     <?php endif ?>
-                                    <p class="long-name fs_12 c_black3"><?= $match['post_content'] ?></p>
+                                    <p class="long-name fs_12 c_black3"><?=$match['post_content']?></p>
                                 </div>
                                 <div class="nl-match-body">
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?= __('开赛日期', 'nlyd-student') ?>:</div>
+                                        <div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>
                                         <div class="nl-match-info c_black">
-                                            <?= $match['match_start_time'] ?>
-                                            <span class="nl-match-type fs_12 <?= $match['match_status'] == 2 ? 'c_orange' : 'c_blue'; ?> "><?= $match['match_status_cn'] ?></span>
+                                            <div><?=$match['match_start_time']?></div>
+                                            <span class="nl-match-type fs_12 <?=$match['match_status'] == 2?'c_orange':'c_blue';?> "><?=__($match['match_status_cn'], 'nlyd-student')?></span>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?= __('结束时间', 'nlyd-student') ?>:</div>
+                                        <div class="nl-match-label"><div><?=__('结束时间', 'nlyd-student')?>:</div></div>
                                         <div class="nl-match-info c_black">
-                                            <?= $match['match_end_time'] ?>
+                                            <div><?=$match['match_end_time']?></div>
                                         </div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?= __('开赛地点', 'nlyd-student') ?>:</div>
-                                        <div class="nl-match-info c_black"><?= $match['match_address'] ?></div>
+                                        <div class="nl-match-label"><div><?=__('开赛地点', 'nlyd-student')?>:</div></div>
+                                        <div class="nl-match-info c_black"><div><?=$match['match_address']?></div></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?= __('报名费用', 'nlyd-student') ?>:</div>
-                                        <div class="nl-match-info c_black">¥<?= $match['match_cost'] ?></div>
+                                        <div class="nl-match-label"><div><?=__('报名费用', 'nlyd-student')?>:</div></div>
+                                        <div class="nl-match-info c_black"><div>¥<?=$match['match_cost']?></div></div>
                                     </div>
                                     <div class="nl-match-detail">
-                                        <div class="nl-match-label"><?= __('报名截止', 'nlyd-student') ?>:</div>
-                                        <div class="nl-match-info c_black" id="time_count"
-                                             data-end="<?= $match['entry_end_time'] ?>"><?= $match['entry_end_time'] < get_time('mysql') ? __('已截止', 'nlyd-student') : ''; ?></div>
-
+                                        <div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>:</div></div>
+                                        <div class="nl-match-info c_black">
+                                            <div id="time_count" data-end="<?=$match['entry_end_time']?>"><?=$match['entry_end_time']<get_time('mysql')?__('已截止', 'nlyd-student'):'';?></div>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -71,18 +71,15 @@ endif;
                                 <li class="nl-match">
                                     <div class="nl-match-header noMargin">
                                         <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?> "><?= __('比赛项目', 'nlyd-student') ?></span>
-                                        <a class="c_blue" style="float:right"
-                                           href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?= __('参赛须知', 'nlyd-student') ?></a>
+                                        <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?= __('参赛须知', 'nlyd-student') ?></a>
                                     </div>
                                     <div class="nl-match-body">
                                         <?php foreach ($match_project as $val) { ?>
                                             <div class="nl-match-detail layui-row">
-                                                <div class="nl-match-label"><?= $val['parent_title'] ?>:</div>
-                                                <div class="nl-match-info">
+                                                <div class="nl-match-label1"><?= $val['parent_title'] ?>:</div>
+                                                <div class="nl-match-info1">
                                                     <?php foreach ($val['project'] as $v) { ?>
-                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a
-                                                                href="<?= $v['rule_url'] ?>"
-                                                                class="c_blue"><?= __('比赛规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
+                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a href="<?= $v['rule_url'] ?>" class="c_blue"><?= __('比赛规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
                                                     <?php } ?>
                                                 </div>
                                             </div>

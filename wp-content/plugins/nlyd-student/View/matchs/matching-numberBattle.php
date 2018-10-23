@@ -6,7 +6,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -15,18 +15,18 @@
                         </span>
                         <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                    <div class="matching-row layui-row">
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></div>
-                            <div class="matching-btn c_white" id="next"><?=__('后插一位', 'nlyd-student')?></div>
+                            <button class="matching-btn active c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></button>
+                            <button class="matching-btn active c_white" id="next"><?=__('后插一位', 'nlyd-student')?></button>
                         </div>
                     </div>
                     <div class="matching-number-zoo layui-row">
 
                     </div>
 
-                    <div class="matching-keyboard">
+                    <div class="matching-keyboard layui-row">
                         <div class="matching-keyboard-row">
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1"><div>1</div></div>
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="2"><div>2</div></div>

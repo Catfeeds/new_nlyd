@@ -65,8 +65,8 @@
                                 </div>
                                 <div class="nl-match-body">
                                     <?php foreach ($match_project as $val){ ?>
-                                    <div class="nl-match-detail1 layui-row">
-                                        <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
+                                        <div class="nl-match-detail1 layui-row">
+                                            <div class="nl-match-label1"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
                                             <div class="nl-match-info1">
                                             <?php foreach ($val['project'] as $v ){ ?>
                                                 <?=__($v['post_title'], 'nlyd-student')?>&nbsp;&nbsp;<a href="<?=$v['rule_url']?>" class="c_blue"><?=__('规则', 'nlyd-student')?></a>&nbsp;&nbsp;
@@ -82,7 +82,7 @@
                                 <div class="nl-match-header">
                                     <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':'';?>"><?=__('报名列表', 'nlyd-student')?></span>
                                     <span class="nl-match-people <?=$match['match_status'] != -3?'c_blue':'';?>"><?php printf(__('%s位选手已报名', 'nlyd-student'),$total)?></span>
-      </div>
+                                </div>
                                 <div class="nl-match-body">
                                     <div class="nl-table-wapper">
                                         <table class="nl-table">
