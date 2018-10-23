@@ -1884,7 +1884,7 @@ class Student_Matchs extends Student_Home
 
         return $row;
     }
-
+    
     /**
      * 默认公用js/css引入
      */

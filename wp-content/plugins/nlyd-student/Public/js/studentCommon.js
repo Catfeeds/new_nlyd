@@ -65,9 +65,9 @@ jQuery(document).ready(function($) {
                     $("input[type='file']").attr('capture','camera');
                 }
                 
-                if(isWeiXin()){
-                    $("input[type='file']").attr('capture','camera');
-                }
+                // if(isWeiXin()){
+                //     $("input[type='file']").attr('capture','camera');
+                // }
                 
             }
             // if(isiOS){
