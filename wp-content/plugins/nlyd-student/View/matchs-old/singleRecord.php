@@ -19,9 +19,9 @@
                     <div class="match-title c_black"><?=$match_title?><div class="share" id="shareBtn"><?=__('分享战绩', 'nlyd-student')?></div></div>
                     <div class="single-match-title">
                         <div class="single-match-name"><?=$project_title?></div>
-                        <?php if(!empty($lists)):?>
-                        <?php foreach ($lists as $v){?>
-                        <div class="single-match-lun <?=$v['more']==1?'lun-active':'';?>" data-post-id="<?=$v['more']?>">第<?=chinanum($v['more'])?>轮</div>
+                        <?php if($match_more > 0):?>
+                        <?php for ($i=0;$i<$match_more;++$i){?>
+                        <div class="single-match-lun <?=$i==0?'lun-active':'';?>" data-post-id="<?=$i+1?>">第<?=chinanum($i+1)?>轮</div>
                         <?php } ?>
                         <?php endif; ?>
                     </div>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <?php if($my_log): ?>
-                    <a class="a-btn a-btn-tableget_footer"  data-href="<?=$answer_url?>"><div><?=__('查看本轮我的答题记录', 'nlyd-student')?></div></a>
+                    <a class="a-btn a-btn-table get_footer"  data-href="<?=$answer_url?>"><div><?=__('查看本轮我的答题记录', 'nlyd-student')?></div></a>
                     <?php endif;?>
                 </div>
             </div>
@@ -153,7 +153,7 @@ layui.use(['element','flow'], function(){
                                         +'</tr>'
                                 lis.push(dom)                           
                             })  
-                            if (res.data.info.length<10) {
+                            if (res.data.info.length<50) {
                                 next(lis.join(''),false)
                             }else{
                                 next(lis.join(''),true)

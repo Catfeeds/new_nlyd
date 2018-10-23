@@ -56,6 +56,7 @@ button.matching-btn {
     padding-right: 15px;
     padding-top: 0;
     padding-bottom: 0;
+    margin-top: 10px;
 }
 button.matching-btn.active {
     background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);

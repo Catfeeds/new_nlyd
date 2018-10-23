@@ -7,7 +7,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -16,15 +16,16 @@
                         </span>
                         <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                    
+                    <div class="matching-row layui-row">
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev"><?=__('前移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="next"><?=__('后移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="del"><?=__('删 除', 'nlyd-student')?></div>
+                            <button class="matching-btn active" id="prev"><?=__('前移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="next"><?=__('后移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="del"><?=__('删 除', 'nlyd-student')?></button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
+                    <div class="matching-number-zoo layui-row">
                         <div class="porker-zoo">
                             <div class="poker-window">
                                 <div class="poker-wrapper">
@@ -36,7 +37,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                        <div class="choose-color <?= $k==$list_keys[0] ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
                         <?php } ?>
                     </div>
 
@@ -44,23 +45,23 @@
                         <div class="choose-zoo">
                             <div class="choose-window">
                                 <?php foreach ($list as $k => $v){ ?>
-                                <div class="choose-wrapper <?= $k==$list_keys[0]?'active':''?> <?=$k?>">
-                                    <?php foreach ($v['content'] as $val){ ?>
-                                    <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
-                                        <div class="small poker-detail poker-top">
-                                            <div class="poker-name"><?=$val?></div>
-                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                        </div>
-                                        <div class="small poker-detail poker-bottom">
-                                            <div class="poker-name"><?=$val?></div>
-                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                        </div>
+                                    <div class="choose-wrapper <?= $k=='spade'?'active':''?> <?=$k?>">
+                                        <?php foreach ($v['content'] as $val){ ?>
+                                            <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
+                                                <div class="small poker-detail poker-top">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                                <div class="small poker-detail poker-bottom">
+                                                    <div class="poker-name"><?=$val?></div>
+                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
                                     </div>
-                                    <?php } ?>
-                                </div>
                                 <?php } ?>
                             </div>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,10 +73,21 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
+    var questions_answer=[];
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var matching_question= $.GetSession('matching_question','1');
+    console.log(matching_question)
+    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
+        questions_answer=matching_question['questions_answer'];
+    }else{//未获取到比赛题目
+        $.alerts('未检测到题目信息')
+    }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
@@ -118,20 +130,26 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'pkjl',
+                match_questions:questions_answer,
+                questions_answer:questions_answer,
+                project_more_id:$.Request('project_more_id'),
+
                 my_answer:my_answer,
-                match_action:'subjectPokerRelay',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            // console.log(data)
+            // return false;
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
@@ -269,11 +287,10 @@ $('.choose-poker').each(function(e){
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-            if(!_this.hasClass('disabled')){
-                $('.choose-poker').addClass('disabled')
+            if(!_this.hasClass('active')){
+                _this.addClass('active');
                 var text=_this.attr('data-text');
                 var color=_this.attr('data-color');
-                _this.addClass('active');
                 var i='';
                 if(color=='club'){
                     i='<i class="iconfont">&#xe635;</i>'
@@ -317,7 +334,6 @@ $('.choose-poker').each(function(e){
                 })
                 initWidth();
                 initScroll()
-                $('.choose-poker').removeClass('disabled')
             }
         }
     });

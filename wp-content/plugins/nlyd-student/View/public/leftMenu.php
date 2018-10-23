@@ -18,7 +18,7 @@
         </div>
         <div class="width-margin layui-row menu-wrapper">
             <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-                <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
+            <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
                             </div>
@@ -26,7 +26,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的比赛', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/matchList');?>">
+                    <a class="c_black8"  href="<?=home_url('/trains/history/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-train">
                             </div>
@@ -68,26 +68,33 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的推广', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/secure');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/secure');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-secure">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('安全中心', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 no_border" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8" href="<?=home_url('/safety/setting');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('其他设置', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 no_border disabled_a"  href="<?=home_url('/teams');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的钱包', 'nlyd-student')?></div>
+                    </a>
+                    <a class="c_black8"  href="<?=home_url('account/info');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper edit-info">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                 </div>
         </div>

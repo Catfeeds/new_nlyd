@@ -15,9 +15,8 @@
         <?php }else{ ?>
                 <a class="mui-pull-left nl-goback">
         <?php } ?>
-        <div>
-            <i class="iconfont">&#xe610;</i>
-        </div>
+
+        <div><i class="iconfont">&#xe610;</i></div>
         </a>
         <h1 class="mui-title"><div><?=__('报名信息确认', 'nlyd-student')?></div></h1>
         </header>
@@ -61,15 +60,15 @@
                             <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label"><?=$val['parent_title']?>:</div>
-                                    <!-- <span ><?=$val['parent_title']?>:</span> -->
+                                    <div class="nl-match-label"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
+                                    <!-- <span ><?=__($val['parent_title'], 'nlyd-student')?>:</span> -->
                                     <div class="nl-match-info">
                                         <input type="hidden" name="project_id[]" value="<?=$k?>"/>
                                         <span class="c_black">
                                             <?php
                                                 $str = '';
                                                 foreach ($val['project'] as $v) {
-                                                    $str .= $v['post_title'].'/';
+                                                    $str .= __($v['post_title'], 'nlyd-student').'/';
                                                 }
                                                 echo rtrim($str,'/');
                                             ?>
@@ -175,7 +174,7 @@
                         <?php if($orderStatus['status'] == 1){ ?>
                             <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
                         <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <a class="a-btn a-btn-table go"><div><?=__('已报名', 'nlyd-student')?></div></a>
+                            <a class="a-btn a-btn-table go"><div><?=__('已报名', 'nlyd-student')?> </div></a>
                         <?php }elseif($orderStatus['status'] == 0){ ?>
                             <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
                         <?php } ?>

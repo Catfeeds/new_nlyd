@@ -42,7 +42,7 @@ switch ($type){
             require_once leo_student_public_view.'leftMenu.php';
         }
         ?>
-        <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
+        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['back'])){ ?>
                     <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
