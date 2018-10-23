@@ -3202,7 +3202,7 @@ class Student_Ajax
         global $wpdb,$current_user;
         $match_id = intval($_POST['match_id']);
         if($match_id < 1) wp_send_json_error(['info' => __('比赛参数错误', 'nlyd-student')]);
-        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status,match_id FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
         if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student')]);
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;

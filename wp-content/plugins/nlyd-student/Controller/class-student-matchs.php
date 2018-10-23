@@ -318,7 +318,7 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('未设置比赛项的轮数', 'nlyd-student'));
             return;
         }
-        if($project_more['match_status'] == -3 || $this->end_project == 'y'){
+        if($project_more['match_status'] == -3 && $this->end_project == 'y'){
             $this->get_404(array('message'=>__('比赛已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$project_more['match_id'])));
             return;
         }
@@ -342,8 +342,16 @@ class Student_Matchs extends Student_Home
         $data['current_project'] = $this->current_project;
         $data['end_project'] = $this->end_project;
         $data['start_project'] = $this->start_project;
-
         $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
+
+        if(!empty($this->next_project)){
+            //var_dump($this->next_project);
+            $data['count_down'] = strtotime($this->next_project['start_time'])-get_time();
+        }
+
+        if($this->end_project == 'y'){
+            $data['count_down'] = strtotime($project_more['end_time'])-get_time();
+        }
 
         $buffer_time = get_time()-strtotime($project_more['start_time']);
         if(1 <= $buffer_time && $buffer_time <= 59 ){
@@ -1763,7 +1771,12 @@ class Student_Matchs extends Student_Home
                 $rows[$k]['project_alias'] = $v['project_alias'] = get_post_meta($v['project_id'],'project_alias')[0];
 
                 if($v['start_time'] <= $new_time && $new_time <= $v['end_time']){
+
                     $this->current_project = $v;
+                    $this->next_project = $rows[$k+1];
+                    if(empty($this->next_project)){
+                        $this->end_project = 'y';
+                    }
                     if($k == $num-1){
                         return $v;
                     }
