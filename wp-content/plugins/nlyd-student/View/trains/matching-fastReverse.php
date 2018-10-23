@@ -24,9 +24,7 @@
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
-                            <div class="fast-item answer"><div></div></div>
-                            <!-- <div class="fast-item error-fast">4A@#$%</div>
-                            <div class="fast-item right-fast">4A@#$%</div> -->
+                            <div class="fast-item answer" date-number="1"><div></div></div>
                         </div>
                     </div>
                     <div class="matching-keyboard">
@@ -46,7 +44,7 @@
                         </div>
                         <div class="matching-keyboard-row">
                             <div class="bg_orange matching-key c_white fs_16" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
-                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解"><div>本题无解</div></div>
+                            <div class="bg_gradient_blue matching-key c_white fs_16 number" date-number="本题无解"><div><?=__('本题无解', 'nlyd-student')?></div></div>
                             <div class="bg_orange matching-key c_white fs_16" id="next"><div><?=__('下一题', 'nlyd-student')?></div></div>
                         </div>
                     </div>
@@ -93,6 +91,7 @@ jQuery(function($) {
             var _len=ajaxData.length;
             var examples=valid(select)
             var _rights='本题无解'
+            
             if(examples.length>0){//有解
                 _rights=examples[0]
             }
@@ -106,7 +105,6 @@ jQuery(function($) {
             if(_flag || _flag1){//重复题目，连续无解
                 initQuestion()
             }else{
-                // select=['10','3','10','5']
                 console.log(examples)
                 var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
@@ -209,15 +207,16 @@ $('.number').each(function(){
                         return false;
                     }
                 })
-                var number=_this.text();
-                var text=$('.answer div').text()
-                if(text=='本题无解'){
-                    text=''
+                var number_Text=_this.text();
+                var number_dateNumber=_this.attr('date-number');
+                var answer_Text=$('.answer div').text();
+                var answer_dateNumber=$('.answer').attr('date-number');
+                if(answer_dateNumber=='本题无解'){
+                    answer_dateNumber=''
                 }
-                if(number=='本题无解'){
-                    $('.answer div').text(number)
+                if(number_dateNumber=='本题无解'){
+                    $('.answer div').text(number_Text)
                     $('.number').removeClass('disabled')
-                    $('.answer div').text(number) 
                         _this.stop(true).animate({
                             'opacity':'0.6',
                             'filter': 'alpha(opacity=60)',
@@ -225,20 +224,23 @@ $('.number').each(function(){
                             'opacity':'1',
                             'filter': 'alpha(opacity=100)',
                         },50)
+                    $('.answer').attr('date-number',"本题无解");
                 }else{
-                    var len=text.length;
-                    var x=text.charAt(len-1,1);
-                    if(!isNaN(parseInt(number))){//数字，前一位必须是符号
+                    var len=answer_Text.length;
+                    var x=answer_Text.charAt(len-1,1);
+                    if(!isNaN(parseInt(number_Text))){//数字，前一位必须是符号
                         if(len>0){
                             if(isNaN(parseInt(x)) && x!==')'){
-                                $('.answer div').text(text+number)
+                                $('.answer div').text(answer_Text+number_Text)
                                 _this.addClass('disabled')
                                 dataIndex.push(_this.attr('data-index'))
+                                $('.answer').attr('date-number',"1");
                             }
                         }else{
-                            $('.answer div').text(text+number)
+                            $('.answer div').text(answer_Text+number_Text)
                             _this.addClass('disabled')
                             dataIndex.push(_this.attr('data-index'))
+                            $('.answer').attr('date-number',"1");
                         }
                     }else{//符号
                         if(flag){//数字没有全部按下
@@ -265,10 +267,10 @@ $('.number').each(function(){
                                 }
                                 if(_this.hasClass('rightBrackets')){//右括号
                                     var leftBracket = 0, rightBracket = 0;
-                                    for (var i = 0; i < text.length; i++) {
-                                        if (text.charAt(i) === "(") {
+                                    for (var i = 0; i < answer_Text.length; i++) {
+                                        if (answer_Text.charAt(i) === "(") {
                                             leftBracket++;
-                                        } else if(text.charAt(i) === ")") {
+                                        } else if(answer_Text.charAt(i) === ")") {
                                             rightBracket++;
                                         }
                                     }
@@ -285,7 +287,7 @@ $('.number').each(function(){
                                 }
                             }
                             if(flag1){
-                                $('.answer div').text(text+number) 
+                                $('.answer div').text(answer_Text+number_Text) 
                                 _this.stop(true).animate({
                                     'opacity':'0.6',
                                     'filter': 'alpha(opacity=60)',
@@ -293,19 +295,20 @@ $('.number').each(function(){
                                     'opacity':'1',
                                     'filter': 'alpha(opacity=100)',
                                 },50)
+                                $('.answer').attr('date-number',"1");
                             }
                         }else{//数字键盘全部按下且有（
                             if(_this.hasClass('rightBrackets')){//点击右括号
                                 var leftBracket = 0, rightBracket = 0;
-                                for (var i = 0; i < text.length; i++) {
-                                    if (text.charAt(i) === "(") {
+                                for (var i = 0; i < answer_Text.length; i++) {
+                                    if (answer_Text.charAt(i) === "(") {
                                         leftBracket++;
-                                    } else if(text.charAt(i) === ")") {
+                                    } else if(answer_Text.charAt(i) === ")") {
                                         rightBracket++;
                                     }
                                 }
                                 if(leftBracket>rightBracket){
-                                    $('.answer div').text(text+number)  
+                                    $('.answer div').text(answer_Text+number_Text)  
                                     _this.stop(true).animate({
                                         'opacity':'0.6',
                                         'filter': 'alpha(opacity=60)',
@@ -313,20 +316,12 @@ $('.number').each(function(){
                                         'opacity':'1',
                                         'filter': 'alpha(opacity=100)',
                                     },50)
+                                    $('.answer').attr('date-number',"1");
                                 }
                              
                             }
                         }
                     }
-                }
-                try {
-            var new_texts=$('.answer div').text().replace(/×/g,'*');
-            new_texts=new_texts.replace(/÷/g,'/');
-                var AA=eval(new_texts); // no exception occured
-                    console.log(AA)
-                }
-                catch (e) {
-                    // console.log('括号错误')
                 }
             }
         }
@@ -351,13 +346,15 @@ new AlloyFinger($('#del')[0], {
         var _this=$('#del');
         // if(!_this.hasClass('disabled')){
         //     _this.addClass('disabled')
-            var text=$('.answer div').text()
-            var len=text.length;
+            // var text=$('.answer div').text()
+            var answer_Text=$('.answer div').text();
+            var answer_dateNumber=$('.answer').attr('date-number');
+            var len=answer_Text.length;
             var news='';
             if(len>0){
-                if(text!='本题无解'){
-                    var end=text.substr(text.length-1,1);
-                    var end_1=text.substr(text.length-2,1)
+                if(answer_dateNumber!='本题无解'){
+                    var end=answer_Text.substr(answer_Text.length-1,1);
+                    var end_1=answer_Text.substr(answer_Text.length-2,1)
                     if(!isNaN(parseInt(end))){//删除的是数字
                         var endIndex=dataIndex.length-1
                         var data_index=dataIndex[endIndex];
@@ -369,18 +366,19 @@ new AlloyFinger($('#del')[0], {
                             }
                         })
                         if(!isNaN(parseInt(end_1))){//删除的两位数数字
-                            news=text.substring(0,len-2);
+                            news=answer_Text.substring(0,len-2);
                         }else{
-                            news=text.substring(0,len-1);
+                            news=answer_Text.substring(0,len-1);
                         }
                     }else{
-                        news=text.substring(0,len-1);
+                        news=answer_Text.substring(0,len-1);
                     }
                     $('.answer div').text(news)
                 }else{
                     $('.answer div').text('')
                 }
             }
+            $('.answer').attr('date-number',"1");
         }
     });
     //下一题tap事件
@@ -391,9 +389,11 @@ new AlloyFinger($('#next')[0], {
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
             var flag=false;
-            var text=$('.answer div').text()
-            ajaxData[ajaxData.length-1].yours=text;
-            var new_text=text.replace(/×/g,'*');
+            // var text=$('.answer div').text()
+            var answer_Text=$('.answer div').text();
+            var answer_dateNumber=$('.answer').attr('date-number');
+            
+            var new_text=answer_Text.replace(/×/g,'*');
             new_text=new_text.replace(/÷/g,'/');
             $('.rand').each(function(){//所有数字按钮都已使用后
                 if(!$(this).hasClass('disabled')){
@@ -401,9 +401,8 @@ new AlloyFinger($('#next')[0], {
                     return false;
                 }
             })
-            if(text.length!=0){
-                if($('.answer div').text()=='本题无解'){
-                    text='unsolvable';
+            if(answer_Text.length!=0){
+                if(answer_dateNumber=='本题无解'){
                      if(ajaxData[ajaxData.length-1].rights=='本题无解'){
                         $('.answer').addClass('right-fast')
                         ajaxData[ajaxData.length-1]['isRight']=true;
@@ -411,7 +410,9 @@ new AlloyFinger($('#next')[0], {
                         $('.answer').addClass('error-fast')
                         ajaxData[ajaxData.length-1]['isRight']=false;
                      }
+                     ajaxData[ajaxData.length-1].yours=answer_dateNumber;
                 }else{
+                    ajaxData[ajaxData.length-1].yours=answer_Text;
                     if(flag){
                         _this.removeClass('disabled')
                         return false;
@@ -463,6 +464,7 @@ new AlloyFinger($('#next')[0], {
                     _this.removeClass('disabled')
                 }, 300);
             }else{
+                ajaxData[ajaxData.length-1].yours=answer_Text;
                 //跳过2s
                 $('.answer').addClass('error-fast')
                 ajaxData[ajaxData.length-1]['isRight']=false;
@@ -473,6 +475,7 @@ new AlloyFinger($('#next')[0], {
                     _this.removeClass('disabled')
                 }, 300);
             }
+            $('.answer').attr('date-number',"1");
         }
     }
 });
@@ -560,8 +563,15 @@ function isRights(text) {
                     }
                     ,btn2: function(index, layero){
                         layer.closeAll();
-                        var text=$('.answer div').text()
-                        isRights(text)
+                        // var text=$('.answer div').text()
+                        var answer_Text=$('.answer div').text();
+                        var answer_dateNumber=$('.answer').attr('date-number');
+                        if(answer_dateNumber=="本题无解"){
+                            isRights(answer_dateNumber)
+                        }else{
+                            isRights(answer_Text)
+                        }
+                        
                         submit(time);  
                     }
                     ,closeBtn:2
