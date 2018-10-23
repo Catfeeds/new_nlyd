@@ -8,16 +8,6 @@
 .fs-16{
     font-size: 0.16rem;
 }
-
-.matching-row{
-    position: relative;
-    width: 100%;
-    height:30px;
-    line-height: 30px;
-    margin-top: 20px;
-}
-
-
 .matching-fast{
     width: 90%;
     margin: auto;
