@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$content->ID?>">
-                <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete"  data-href="<?=$url?>"><div><?=__('阅读完成', 'nlyd-student')?></div></div>
+                <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete"  data-href="<?=$url?>"><div><?=__('阅读完成', 'nlyd-student')?></div></div>
             </div>
         </div>
     </div>

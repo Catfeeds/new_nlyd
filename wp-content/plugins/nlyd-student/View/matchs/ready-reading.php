@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
-                <div class="a-btn a-btn-table focus_none" style="position: relative;top:0;margin-top:30px" id="complete"  data-href="<?=$redirect_url?>"><div><?=__('阅读完成', 'nlyd-student')?></div></div>
+                <div class="a-btn a-btn-table focus_none" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete"  data-href="<?=$redirect_url?>"><div><?=__('阅读完成', 'nlyd-student')?></div></div>
             </div>
         </div>
     </div>

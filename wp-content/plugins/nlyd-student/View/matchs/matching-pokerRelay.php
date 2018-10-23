@@ -7,7 +7,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <span class="c_black match_info_font"><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
                         <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?>1/1<?=__('题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
@@ -17,15 +17,15 @@
                         <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     
-                    <div class="matching-row">
-                        <div class="matching-row-label"><?=__('辅助操作', 'nlyd-student')?></div>
+                    <div class="matching-row layui-row">
+                        <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
-                            <div class="matching-btn" id="prev"><?=__('前移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="next"><?=__('后移1位', 'nlyd-student')?></div>
-                            <div class="matching-btn" id="del"><?=__('删 除', 'nlyd-student')?></div>
+                            <button class="matching-btn active" id="prev"><?=__('前移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="next"><?=__('后移1位', 'nlyd-student')?></button>
+                            <button class="matching-btn active" id="del"><?=__('删 除', 'nlyd-student')?></button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
+                    <div class="matching-number-zoo layui-row">
                         <div class="porker-zoo">
                             <div class="poker-window">
                                 <div class="poker-wrapper">
@@ -37,7 +37,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
                         <?php } ?>
                     </div>
 
@@ -287,52 +287,54 @@ $('.choose-poker').each(function(e){
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-           var text=_this.attr('data-text');
-           var color=_this.attr('data-color');
-           _this.addClass('active');
-           var i='';
-           if(color=='club'){
-                i='<i class="iconfont">&#xe635;</i>'
-            }else if(color=='heart'){
-                i='<i class="iconfont">&#xe638;</i>'
-            }else if(color=='spade'){
-                i='<i class="iconfont">&#xe636;</i>'
-            }else if(color=='diamond'){
-                i='<i class="iconfont">&#xe634;</i>'
-            }
-            var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
-                        +'<div class="poker-detail poker-top">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                        +'<div class="poker-logo">'
-                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
-                        +'</div>'
-                        +'<div class="poker-detail poker-bottom">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                    +'</div>'
-            
-            if($('.poker-wrapper .poker.active').length>0){//绑定事件
-                var active=$('.poker-wrapper .poker.active')
-                active.after(poker);
-                active.removeClass('active')
-            }else{
-                $('.poker-wrapper .poker.active').removeClass('active')
-                $('.poker-wrapper').append(poker)
-            }
-
-            var newDom=$('.poker.active')
-            new AlloyFinger(newDom[0], {
-                tap:function(){
-                    var active=$('.poker-wrapper .poker.active')
-                    active.removeClass('active');
-                    newDom.addClass('active');
+            if(!_this.hasClass('active')){
+                _this.addClass('active');
+                var text=_this.attr('data-text');
+                var color=_this.attr('data-color');
+                var i='';
+                if(color=='club'){
+                    i='<i class="iconfont">&#xe635;</i>'
+                }else if(color=='heart'){
+                    i='<i class="iconfont">&#xe638;</i>'
+                }else if(color=='spade'){
+                    i='<i class="iconfont">&#xe636;</i>'
+                }else if(color=='diamond'){
+                    i='<i class="iconfont">&#xe634;</i>'
                 }
-            })
-            initWidth();
-            initScroll()
+                var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
+                            +'<div class="poker-detail poker-top">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                            +'<div class="poker-logo">'
+                                +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                            +'</div>'
+                            +'<div class="poker-detail poker-bottom">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                        +'</div>'
+                
+                if($('.poker-wrapper .poker.active').length>0){//绑定事件
+                    var active=$('.poker-wrapper .poker.active')
+                    active.after(poker);
+                    active.removeClass('active')
+                }else{
+                    $('.poker-wrapper .poker.active').removeClass('active')
+                    $('.poker-wrapper').append(poker)
+                }
+
+                var newDom=$('.poker.active')
+                new AlloyFinger(newDom[0], {
+                    tap:function(){
+                        var active=$('.poker-wrapper .poker.active')
+                        active.removeClass('active');
+                        newDom.addClass('active');
+                    }
+                })
+                initWidth();
+                initScroll()
+            }
         }
     });
 });

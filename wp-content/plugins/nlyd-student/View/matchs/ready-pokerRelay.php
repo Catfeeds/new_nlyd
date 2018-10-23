@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div class="matching-row layui-row">
-                        <div class="matching-row-label"><?=__('显示张数', 'nlyd-student')?></div>
+                        <div class="matching-row-label"><div><?=__('显示张数', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
                             <button class="matching-btn active"><?=__('全部', 'nlyd-student')?></button>
                             <button class="matching-btn">1</button>
@@ -27,7 +27,7 @@
                             <button class="matching-btn">6</button>
                         </div>
                     </div>
-                    <div class="matching-number-zoo">
+                    <div class="matching-number-zoo layui-row">
                         <i class="iconfont pokerBtn left disabled" style="display:none">&#xe647;</i>
                     
                         <i class="iconfont pokerBtn right disabled" style="display:none">&#xe648;</i>
@@ -42,7 +42,7 @@
                     </div>
                     <p class="ta_c" style="margin-top:20px"><?=__('当前记忆', 'nlyd-student')?> <span class="c_blue" id="number">0</span> <?=__('张', 'nlyd-student')?></p>
                 </div>
-                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete"  href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete"  href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>           
     </div>
