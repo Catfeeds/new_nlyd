@@ -158,9 +158,9 @@
         </div>           
     </div>
 </div>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*" multiple/>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*" multiple/>
-<input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" multiple/>
+<input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
+<input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
+<input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*"/>
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 <script>
 jQuery(document).ready(function($) {
