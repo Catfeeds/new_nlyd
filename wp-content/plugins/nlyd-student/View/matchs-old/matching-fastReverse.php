@@ -64,11 +64,14 @@ jQuery(function($) {
         // console.log(data);
         submit(time,4);
     })
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
     }
@@ -93,12 +96,42 @@ jQuery(function($) {
         // if(valid(select)=="本题无解"){
         //     initQuestion()
         // }else{
-            var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
-            ajaxData.push(thisRow)
-            if(!$.Request('test')){
-                var sessionData={ajaxData:ajaxData,match_id:$.Request('match_id'),project_id:$.Request('project_id'),match_more:$.Request('match_more')}
+            var _flag=false;//重复题目是true
+            var _flag1=false;//前面的4题连续无解是true
+            $.each(ajaxData,function(index,value){
+                var _select=value.question;
+                if(_select[0]==select[0] && _select[1]==select[1] && _select[2]==select[2] && _select[3]==select[3]){//重复题目
+                    _flag=true;
+                    return false;
+                }
+            })
+            var _len=ajaxData.length;
+            var examples=valid(select)
+            var _rights='<?=__('本题无解', 'nlyd-student')?>'
+            if(examples.length>0){//有解
+                _rights=examples[0]
+            }
+            if(_len>=4){//前面的4题连续无解
+                if(_rights=='<?=__('本题无解', 'nlyd-student')?>'){//本题也无解
+                    if(ajaxData[_len-1]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-2]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-3]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-4]['rights']=='<?=__('本题无解', 'nlyd-student')?>'){
+                        _flag1=true;
+                    }
+                }
+            }
+            if(_flag || _flag1){//重复题目，连续无解
+                initQuestion()
+            }else{
+                var thisRow={question:select,yours:'',isRight:false,rights:_rights}
+                ajaxData.push(thisRow) 
+                var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
                 $.SetSession('match',sessionData)
             }
+            // var thisRow={question:select,yours:'',isRight:false,rights:valid(select)}
+            // ajaxData.push(thisRow)
+            // if(!$.Request('test')){
+            //     var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
+            //     $.SetSession('match',sessionData)
+            // }
         // }
     }
     function nextQuestion() {
@@ -108,7 +141,7 @@ jQuery(function($) {
             var text= ajaxData[ajaxData.length-1]['question'][i]
             $(this).attr('date-number',text).children('div').text(text)
         }).removeClass('disabled')
-        $('.answer div').text('');
+        $('.answer div').text('')
         $('.answer').removeClass('error-fast').removeClass('right-fast');
     }
     function submit(time,submit_type){//提交答案
@@ -122,20 +155,23 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=empty($_GET['match_more']) ? 1 : $_GET['match_more']?>,
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'nxss',
+                project_more_id:$.Request('project_more_id'),
+
                 my_answer:ajaxData,
-                match_action:'subjectFastReverse',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            console.log(data)
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){    
                     $.DelSession('match')
@@ -407,13 +443,43 @@ new AlloyFinger($('#next')[0], {
                         _this.removeClass('disabled')
                         return false;
                     }else{
-                        if(calculateResult(new_text)==24){
+                        var _result=calculateResult(new_text)
+                        if(_result==24){
                             $('.answer').addClass('right-fast')
                             ajaxData[ajaxData.length-1]['isRight']=true;
-                            
                         }else{
-                            $('.answer').addClass('error-fast')
-                            ajaxData[ajaxData.length-1]['isRight']=false;
+                            if(_result=='error'){//符号错误
+                                $('.answer').addClass('error-fast')
+                                ajaxData[ajaxData.length-1]['isRight']=false;
+                            }else{
+                                if(_result%1==0){//整数
+                                    $('.answer').addClass('error-fast')
+                                    ajaxData[ajaxData.length-1]['isRight']=false;
+                                }else{//浮点数
+                                    var __flag=false;
+                                    $.each(ajaxData[ajaxData.length-1]['examples'],function(i,v){
+                                        var _item=v;
+                                        var AA='';
+                                        try {
+                                            AA=eval(_item); // no exception occured
+                                        }
+                                        catch (e) {
+                                            AA='error'; 
+                                        }
+                                        if(AA==_result){//相同浮点数
+                                            __flag=true;
+                                            return false;
+                                        }
+                                    })
+                                    if(__flag){//相同浮点数
+                                        $('.answer').addClass('right-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=true;
+                                    }else{
+                                        $('.answer').addClass('error-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=false;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -432,7 +498,7 @@ new AlloyFinger($('#next')[0], {
                     numbers:thisAjaxRow.question,
                     my_answer:'',
                     new_date:new Date().getTime(),
-                    match_more:$.Request('match_more') ? $.Request('match_more') : 1,
+                    match_more:_match_more ? _match_more : 1,
                     project_alias:"<?=!empty($project_alias) ? $project_alias : ''?>",
                 }
                 $.ajax({

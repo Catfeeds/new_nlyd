@@ -1515,6 +1515,58 @@ class Match_student {
 //        //是否开启总排名年龄组
 //        $all_age_able = isset($_POST['all_age_able']) ? $_POST['all_age_able'] : false;
 
+        /**
+         * 金额
+         */
+        //单项冠军金额
+        $project_champion_bonus = isset($_POST['project_champion_bonus']) ? intval($_POST['project_champion_bonus']) : 0;
+
+        //单项亚军金额
+        $project_runner_bonus = isset($_POST['project_runner_bonus']) ? intval($_POST['project_runner_bonus']) : 0;
+
+        //单项季军金额
+        $project_season_bonus = isset($_POST['project_season_bonus']) ? intval($_POST['project_season_bonus']) : 0;
+
+        //大类冠军金额
+        $cate_champion_bonus = isset($_POST['cate_champion_bonus']) ? intval($_POST['cate_champion_bonus']) : 0;
+
+        //大类亚军金额
+        $cate_runner_bonus = isset($_POST['cate_runner_bonus']) ? intval($_POST['cate_runner_bonus']) : 0;
+
+        //大类季军金额
+        $cate_season_bonus = isset($_POST['cate_season_bonus']) ? intval($_POST['cate_season_bonus']) : 0;
+
+        //大类优秀选手金额
+        $project_excellent_bonus = isset($_POST['project_excellent_bonus']) ? intval($_POST['project_excellent_bonus']) : 0;
+
+        //大类年龄组冠军金额
+        $cate_age_champion_bonus = isset($_POST['cate_age_champion_bonus']) ? intval($_POST['cate_age_champion_bonus']) : 0;
+
+        //大类年龄组亚军金额
+        $cate_age_runner_bonus = isset($_POST['cate_age_runner_bonus']) ? intval($_POST['cate_age_runner_bonus']) : 0;
+
+        //大类年龄组季军金额
+        $cate_age_season_bonus = isset($_POST['cate_age_season_bonus']) ? intval($_POST['cate_age_season_bonus']) : 0;
+
+        $bonus_set = [
+            'dan_gyj' => [
+                0 => $project_champion_bonus,
+                1 => $project_runner_bonus,
+                2 => $project_season_bonus,
+            ],
+            'lei_gyj' => [
+                0 => $cate_champion_bonus,
+                1 => $cate_runner_bonus,
+                2 => $cate_season_bonus,
+            ],
+            'lei_age' => [
+                0 => $cate_age_champion_bonus,
+                1 => $cate_age_runner_bonus,
+                2 => $cate_age_season_bonus,
+            ],
+            'lei_you' => $project_excellent_bonus
+        ];
+
         $projectArr = get_match_end_time($match_id);
         $ageArr = [
             1 => '老年组',
@@ -1611,24 +1663,7 @@ class Match_student {
 //                $allDataArr['all_honor']['data'] = $this->getBonusAllData($match_id,0,'3,'.$all_honor_num);
 //            }
 //        }
-        $bonus_set = [
-            'dan_gyj' => [
-                0 => 1000,
-                1 => 500,
-                2 => 200,
-            ],
-            'lei_gyj' => [
-                0 => 30000,
-                1 => 15000,
-                2 => 8000,
-            ],
-            'lei_age' => [
-                0 => 1000,
-                1 => 500,
-                2 => 200,
-            ],
-            'lei_you' => 500
-        ];
+
 
 //        leo_dump($projectDataArr);
 //        leo_dump($categoryDataArr);
@@ -1774,7 +1809,8 @@ class Match_student {
                 if($old_data) exit('删除原数据失败');
             }
         }
-        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id} ORDER BY bonus_all DESC", ARRAY_A);
+        $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}' ORDER BY all_bonus DESC", ARRAY_A);
+
         if($reload == false){
             if(!$orderAllData){
                 $reCreated = false;
@@ -1879,6 +1915,15 @@ class Match_student {
                                         <label for="project_champion" class="la">冠亚季军:</label>
                                         <input type="checkbox" id="project_champion" <?=isset($project_option_check) ? ($project_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_option_check" value="1">
                                     </div>
+                                    <div>
+                                        <span for="" class="title">奖金金额:</span>
+                                        <?=is_mobile()?'<br class="clear">':''?>
+                                        单项冠军: <input type="text" id="" name="project_champion_bonus" value="1000">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        单项亚军: <input type="text" id="" name="project_runner_bonus" value="500">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        单项季军: <input type="text" id="" name="project_season_bonus" value="200">
+                                    </div>
                                     <!--                       <div>-->
                                     <!--                           <span class="la">优秀选手:</span>-->
                                     <!--                           <?//=is_mobile()?'<br >':''?>-->
@@ -1896,7 +1941,8 @@ class Match_student {
 
                             </div>
                             <div id="category_option">
-                                <div class="title"><label for="category_able">大类设置:</label> <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
+                                <div class="title"><label for="category_able">大类设置:</label>
+                                    <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
                                 <div style="display: <?=isset($category_able) ? ($category_able!=false ? 'block':'none') : 'block'?>">
                                     <div>
                                         <label class="la" for="category_champion">冠亚季军:</label>
@@ -1904,16 +1950,33 @@ class Match_student {
                                     </div>
                                     <div>
                                         <span class="la">优秀选手:</span>
-                                        <?=is_mobile()?'<br >':''?>
+                                        <?=is_mobile()?'<br class="clear">':''?>
                                         <label for="category_honor_name" class="la">荣誉名称:</label>
                                         <input type="text" id="category_honor_name" name="category_honor_name" value="<?=isset($category_honor_name) ? $category_honor_name : '优秀选手'?>">
-                                        <?=is_mobile()?'<br >':''?>
+                                        <?=is_mobile()?'<br class="clear">':''?>
                                         <label for="category_honor_num" class="la">人数:</label>
                                         <input type="text" id="category_honor_num" name="category_honor_num" value="<?=isset($category_honor_num) ? $category_honor_num : 7?>">
                                     </div>
                                     <div>
                                         <label class="la" for="category_age_able">年龄组:</label>
                                         <input type="checkbox" <?=isset($category_age_able) ? ($category_age_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> id="category_age_able" name="category_age_able" value="1">
+                                    </div>
+                                    <div>
+                                        <span class="title">奖金金额:</span>
+                                        <?=is_mobile()?'<br class="clear">':''?>
+                                        大类冠军: <input type="text" id="" name="cate_champion_bonus" value="30000">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类亚军: <input type="text" id="" name="cate_runner_bonus" value="15000">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类季军: <input type="text" id="" name="cate_season_bonus" value="8000">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类优秀选手: <input type="text" id="" name="project_excellent_bonus" value="500">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类年龄组冠军: <input type="text" id="" name="cate_age_champion_bonus" value="1000">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类年龄组亚军: <input type="text" id="" name="cate_age_runner_bonus" value="500">
+                                        <?=is_mobile()?'<br class="clear"/>':''?>
+                                        大类年龄组季军: <input type="text" id="" name="cate_age_season_bonus" value="200">
                                     </div>
                                 </div>
                             </div>
@@ -1970,7 +2033,7 @@ class Match_student {
                         <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
 
                         <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">
-                        <?php if($reCreated == true){ ?>
+                        <?php if($reCreated == true || is_post()){ ?>
                             重新生成
                         <?php }else{ ?>
                             生成

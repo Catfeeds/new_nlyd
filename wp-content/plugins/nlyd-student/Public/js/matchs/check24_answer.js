@@ -23,10 +23,11 @@ this[8]=i8;
 }
 function valid(F)
 {
-n=1;//找出几个大案，0为全部
+n=0;//找出几个大案，0为全部
 b=new tb(F[0],F[1],F[2],F[3]);
 k=0;
-result="";
+// result="";
+result=[];
 for (i1=1;i1<=8;i1*=2)
  for (i2=1;i2<=8;i2*=2)
    for (i3=1;i3<=8;i3*=2)
@@ -39,40 +40,56 @@ for (i1=1;i1<=8;i1*=2)
                    {
 						m=oper(f3,oper(f2,oper(f1,b[i1],b[i2]) ,b[i3] ) ,b[i4]);
 						if (Math.abs(m-24)<1e-5 ) {
-							result=result+"(("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]+"\n";
-							return 	result
+							// result=result+"(("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]+",";
+							// return 	result
+							// console.log(result)
+							var example="(("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]
+							result.push(example)
 							if ((n!=0)&&(++k>=n)) return(false);
 						}
 						m=oper(f1, b[i1], oper(f3, oper(f2,b[i2],b[i3]) ,b[i4]) );
 						if (Math.abs(m-24)<1e-5){
-							result=result+b[i1]+disoper[f1]+"(("+b[i2]+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]+")\n";
-							return 	result
+							// result=result+b[i1]+disoper[f1]+"(("+b[i2]+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]+"),";
+							// return 	result
+							// console.log(result)
+							var example=b[i1]+disoper[f1]+"(("+b[i2]+disoper[f2]+b[i3]+")"+disoper[f3]+b[i4]+")"
+							result.push(example)
 							if ((n!=0)&&(++k>=n)) return(false);
 						}
 						m=oper(f3,oper(f1,b[i1], oper(f2,b[i2],b[i3]) ),b[i4]);
 						if (Math.abs(m-24)<1e-5){
-							result=result+"("+b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+b[i3]+"))"+disoper[f3]+b[i4]+"\n";
-							return 	result
+							// result=result+"("+b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+b[i3]+"))"+disoper[f3]+b[i4]+",";
+							// return 	result
+							// console.log(result)
+							var example="("+b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+b[i3]+"))"+disoper[f3]+b[i4]
+							result.push(example)
 							if ((n!=0)&&(++k>=n)) return(false);
 						}
 						m=oper(f1, b[i1], oper(f2, b[i2], oper(f3, b[i3], b[i4]) ) );
 						if (Math.abs(m-24)<1e-5){
-                            result=result+b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+"))\n";
-                            return 	result
+                            // result=result+b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+")),";
+							// return 	result
+							// console.log(result)
+							var example=b[i1]+disoper[f1]+"("+b[i2]+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+"))"
+							result.push(example)
 							if ((n!=0)&&(++k>=n)) return(false);
 						}
 						m=oper(f2,oper(f1,b[i1],b[i2]), oper(f3,b[i3],b[i4]) );
 						if (Math.abs(m-24)<1e-5){
-							result=result+"("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+")\n";
-							return 	result
+							// result=result+"("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+"),";
+							// console.log(result)
+							// return 	result
+							var example="("+b[i1]+disoper[f1]+b[i2]+")"+disoper[f2]+"("+b[i3]+disoper[f3]+b[i4]+")"
+							result.push(example)
 							if ((n!=0)&&(++k>=n)) return(false);
 						}
 
            			}
 		  }
 		 
-    // result=result+"----找全了!----\n"
-    result="本题无解"
+	// result=result;
+	// console.log(result)
+	// result="本题无解"
 	return 	result
 	return(false);
 }
@@ -88,10 +105,10 @@ for (i1=1;i1<=8;i1*=2)
 		}
 		catch (e) {
 			if (e instanceof SyntaxError) { // Syntax error exception
-				return 'Syntax error exception'; // exception occured
+				return 'error'; // exception occured
 			}
 			else {// Unspecified exceptions
-				return 'Unspecified exceptions'; // exception occured
+				return 'error'; // exception occured
 			}
 		}
 	}
