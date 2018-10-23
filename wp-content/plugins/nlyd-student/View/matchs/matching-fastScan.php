@@ -47,6 +47,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
     itemLen=5,//生成每一条选项的长度
@@ -96,7 +99,7 @@ jQuery(function($) {
             }else{
                 if(flaseQuestion<flaseMax){
                     var matchSessions=$.GetSession('match','true');
-                    if(matchSessions && matchSessions['match_id']===$.Request('match_id') && matchSessions['project_id']===$.Request('project_id') && matchSessions['match_more']===$.Request('match_more')){
+                    if(matchSessions && matchSessions['match_id']===_match_id && matchSessions['project_id']===_project_id && matchSessions['match_more']===_match_more){
                         matchSessions['fetchPage_time']=_count_time;//记录_count_time
                         $.SetSession('match',matchSessions);
                     }
@@ -114,7 +117,7 @@ jQuery(function($) {
 
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
+    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
         flaseQuestion=matchSession['flaseQuestion'];
@@ -258,9 +261,9 @@ jQuery(function($) {
             ajaxData.push(thisRow)
             var sessionData={
                 ajaxData:ajaxData,
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
+                match_id:_match_id,
+                project_id:<?=$project_id?>,
+                match_more:<?=$match_more?>,
                 nandu:nandu,
                 flaseQuestion:flaseQuestion,
                 itemLen:itemLen,
@@ -379,20 +382,24 @@ $('#selectWrapper .fastScan-item').each(function(){
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1?>,
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'kysm',
+                project_more_id:$.Request('project_more_id'),
+
                 my_answer:ajaxData,
-                match_action:'subjectfastScan',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
+            /*console.log(data);
+            return false;*/
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('match')

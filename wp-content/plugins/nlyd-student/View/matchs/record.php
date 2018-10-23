@@ -46,7 +46,7 @@
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
                                             <?php foreach ($default_category as $k =>$val){ ?>
-                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=__($val['post_title'], 'nlyd-student')?></div>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <a class="a-btn a-btn-table get_footer"><div><?=__('查看本项目比赛详情', 'nlyd-student')?></div></a>
+                            <a class="a-btn a-btn-tableget_footer"><div><?=__('查看本项目比赛详情', 'nlyd-student')?></div></a>
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">
@@ -245,8 +245,8 @@ jQuery(function($) {
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
                     // ,scrollElem:'#flow_'+arg['data_id']
-                    ,isAuto: false
-                    ,isLazyimg: true
+                    // ,isAuto: false
+                    // ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
                         if(arg['myPage']==1){
                             $('#rank_'+arg['data_id']).empty()
@@ -372,7 +372,7 @@ jQuery(function($) {
                                         lis.push(dom)                           
                                     })
                                 }
-                                    if (res.data.info.length<50) {
+                                    if (res.data.info.length<10) {
                                         next(lis.join(''),false)
                                     }else{
                                         next(lis.join(''),true)

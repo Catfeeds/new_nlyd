@@ -52,14 +52,14 @@ class Timer
         $map[] = ' a.post_status = "publish" ';
         $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time,c.meta_value as match_switch';
+        $filed = 'a.post_title,b.id,b.match_id,b.match_start_time,b.match_end_time,b.entry_end_time,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
-                LEFT JOIN {$wpdb->prefix}match_meta b ON a.ID = b.match_id
+                RIGHT JOIN {$wpdb->prefix}match_meta_new b ON a.ID = b.match_id
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
                 WHERE {$where}
                 ORDER BY b.match_start_time DESC
                 ";
-        //var_dump($sql);
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
             //var_dump($rows);
@@ -68,24 +68,48 @@ class Timer
 
                 if($v['match_switch'] == 'ON'){
 
-                    $rows = get_match_end_time($v['match_id']);
-                    $start_time = reset($rows)['project_start_time'];
-                    $end_time = end($rows)['project_end_time'];
-
-
-                    if($new_time < $v['entry_end_time']){     //报名中
-                        $save = array('match_status'=>1);
-                    }else if($v['entry_end_time'] < $new_time && $new_time < $start_time){       //等待开赛
-                        $save = array('match_status'=>-2);
-                    }else if($start_time < $new_time && $new_time < $end_time){       //比赛中
-                        $save = array('match_status'=>2);
-                    }else if($end_time < $new_time){
-                        $save = array('match_status'=>-3);
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['match_status'] = 1;
+                    }
+                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                        //等待开赛
+                        $save['match_status'] = -2;
+                    }
+                    elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                        //进行中
+                        $save['match_status'] = 2;
+                    }else{
+                        //已结束
+                        $save['match_status'] = -3;
                     }
                     //var_dump($v['match_id']);
                     //var_dump($save);
-                    $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
+                    //改变比赛状态
+                    $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
                     //var_dump($a);
+                    //改变比赛项目状态
+                    $sql1 = "select id,match_id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$v['match_id']} ";
+                    $project_rows = $wpdb->get_results($sql1,ARRAY_A);
+                    if(!empty($project_rows)){
+                        foreach ($project_rows as $val){
+
+                            if($new_time < $val['start_time']){
+                                //未开始
+                                $status['status'] = 1;
+                            }elseif ($val['start_time'] <= $new_time && $new_time <= $val['end_time']){
+                                //进行中
+                                $status['status'] = 2;
+                            }else{
+                                //进行中
+                                $status['status'] = -1;
+                            }
+                            
+                            //改变比赛项目状态
+                            $b = $wpdb->update($wpdb->prefix.'match_project_more',$status,array('id'=>$val['id'],'match_id'=>$val['match_id']));
+                        }
+                    }
+                    //print_r($project_rows);
                 }
             }
         }

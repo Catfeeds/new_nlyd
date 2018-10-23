@@ -10,145 +10,50 @@ use library\TwentyFour;
 class Student_Matchs extends Student_Home
 {
 
-    /********************比赛默认属性****************************/
 
-    /*
-     * 比賽id
+    public $redis;
+
+    /**
+     * @var 比赛id
      */
     public $match_id;
 
-    /*
-     * 比赛标题
+    /**
+     * @var 进行中的比赛项目
      */
-    public $match_title;
+    public $current_project;
 
-    /*
-     * 比赛开赛时间
+    /**
+     * @var 下一轮的比赛项目
      */
-    public $match_start_time;
+    public $next_project;
 
-    /*
-     * 后台设定的比赛轮数
+    /**
+     * @var 最后一轮
      */
-    public $match_more;
+    public $end_project = '';
 
-    /*
-     * 每轮项目初始倒计时
+    /**
+     * @var 第一轮
      */
-    public $match_count_down;
+    public $start_project = '';
 
-    /*
-     * 每轮项目间隔时间
+    /**
+     * @var 比赛别名
      */
-    public $match_project_interval;
+    public $project_alias = '';
 
-    /*
-     * 每轮题目间隔时间
-     */
-    public $match_subject_interval;
-
-    /********************比赛类别默认属性***三大类*************************/
-
-    /*
-     * 比赛类型排序后数组
-     */
-    public $category_order_array = array();
-
-    /*
-     * 比赛类型标题
-     */
-    public $category_title;
-
-    /*
-     * 比赛类型别名
-     */
-    public $category_alias;
-
-    /********************比赛项目默认属性***六小项*************************/
-
-    /*
-     * 比赛项目id
-     */
-    public $project_id;
-
-    /*
-     * 比赛类项目排序后数组
-     */
-    public $project_order_array = array();
-
-    /*
-     * 比赛类项目为键的数组
-     */
-    public $project_key_array = array();
-
-    /*
-     * 比赛类项目id的数组
-     */
-    public $project_id_array = array();
-
-    /*
-     * 比赛项目总数
-     */
-    public $match_project_total;
-
-    /*
-     * 比赛项目标题
-     */
-    public $project_title;
-
-    /*
-    * 比赛项目别名
-    */
-    public $project_alias;
-
-    /*
-     * 后台设定的比赛项目轮数
-     */
-    public $project_match_more;
-
-    /*
-     * 后台设定的比赛项目轮数间的间隔时间
-     */
-    public $project_time_interval;
-
-    /*
-    * 比赛项目开始时间
-    */
-    public $project_start_time;
-
-    /*
-    * 比赛项目结束时间
-    */
-    public $project_end_time;
-
-    /*
-     * 比赛项目内部小项倒计时
-     * 主要针对 正向速算/
-     */
-    public $child_count_down;
-
-    /*
-     * 比赛项目初始字符长度
-     * 主要针对 数字争霸/快眼扫描
-     */
-    public $project_str_len;
-
-    /*************************************************************/
-
-    public $next_project = array();         //即将开赛的项目初始
-    public $current_project = array();      //正在开赛的项目初始
-
-    public $default_match_more = 1;         //初始比赛轮数
-    public $default_count_down;             //比赛初始倒计时
-    public $default_more_interval;         //比赛轮数间的倒计时
-    public $current_more;                  //当前进行的比赛轮数
-
-    public $redis;
 
     public function __construct($action)
     {
 
         parent::__construct();
+
+        $this->match_id = $_GET['match_id'];
+        $this->project_alias = $_GET['project_alias'];
+        if(!empty($_GET['project_id'])){
+            $this->project_alias = get_post_meta($_GET['project_id'],'project_alias')[0];
+        }
 
         $this->redis = new Redis();
         $this->redis->connect('127.0.0.1',6379,1);
@@ -159,39 +64,6 @@ class Student_Matchs extends Student_Home
 
         $this->ajaxControll = new Student_Ajax();
 
-        /**********************获取比赛信息********************************/
-        if(isset($_GET['match_id'])){
-
-            $result = $this->get_match_content($_GET['match_id']);
-        }
-
-        /**********************获取比赛信息end********************************/
-
-        /*******************获取当前比赛项目配置******************************/
-        if(isset($_GET['project_id']) && in_array(ACTION,array('matchWaitting','initialMatch','answerMatch','answerLog','checkAnswerLog','singleRecord')) ){
-
-            if (empty($this->project_key_array[$_GET['project_id']])){
-                $this->get_404(__('比赛项目错误', 'nlyd-student'));
-                die;
-            }
-            $match_project = $this->project_key_array[$_GET['project_id']];
-
-            $this->project_id = $match_project['match_project_id'];
-            $this->project_title = $match_project['post_title'];
-            $this->project_alias = $match_project['project_alias'];
-            $this->project_match_more = $match_project['match_more'];
-            $this->project_count_down = $match_project['child_count_down'];
-            $this->project_str_len = $match_project['str_bit'];
-
-            //print_r($this->current_project);
-            /**********************初始配置********************************/
-            $this->setting_default_config($match_project);
-
-        }
-
-        /**********************获取当前比赛项目end********************************/
-
-        //print_r($this->default_count_down);
 
         //添加短标签
         add_shortcode('match-home',array($this,$action));
@@ -207,53 +79,36 @@ class Student_Matchs extends Student_Home
      */
     public function index(){
 
-        /*$a = new TwentyFour();
-       var_dump($a->calculate(array(5,5,5,9)));*/
+        global $wpdb;
 
-        global $wpdb,$current_user;
-
-        //if($current_user->ID == 66){}
-
-        $map = array();
-        $map[] = ' a.post_type = "match" ';
-        $map[] = ' a.post_status = "publish" ';
-        $map[] = ' c.meta_value="ON" ';
-        $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.match_id,b.match_use_time,b.match_more,b.match_project_interval,b.match_subject_interval,b.match_start_time,b.entry_start_time,b.entry_end_time,c.meta_value as match_switch';
-        $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
-                LEFT JOIN {$wpdb->prefix}match_meta b ON a.ID = b.match_id
-                LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
-                WHERE {$where}
-                ORDER BY b.match_start_time DESC
+        $sql = "select a.id,a.match_id,a.match_status,a.match_start_time,a.match_end_time,a.entry_end_time,c.meta_value match_switch
+                from {$wpdb->prefix}match_meta_new a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_id = c.post_id and meta_key = 'default_match_switch'
                 ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        //var_dump($rows);
+
         if(!empty($rows)){
-            //var_dump($rows);
             $new_time = get_time('mysql');
             foreach ($rows as $v){
 
-                if($v['match_switch'] == 'ON'){
-
-                    $rows = get_match_end_time($v['match_id']);
-                    $start_time = reset($rows)['project_start_time'];
-                    $end_time = end($rows)['project_end_time'];
-
-
-                    if($new_time < $v['entry_end_time']){     //报名中
-                        $save = array('match_status'=>1);
-                    }else if($v['entry_end_time'] < $new_time && $new_time < $start_time){       //等待开赛
-                        $save = array('match_status'=>-2);
-                    }else if($start_time < $new_time && $new_time < $end_time){       //比赛中
-                        $save = array('match_status'=>2);
-                    }else if($end_time < $new_time){
-                        $save = array('match_status'=>-3);
+                if($v['match_switch'] == 'ON') {
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['match_status'] = 1;
                     }
-                    //var_dump($v['match_id']);
-                    //var_dump($save);
-                    $a = $wpdb->update($wpdb->prefix.'match_meta',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
-                    //var_dump($a);
+                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
+                        //等待开赛
+                        $save['match_status'] = -2;
+                    }
+                    elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
+                        //进行中
+                        $save['match_status'] = 2;
+                    }else{
+                        //已结束
+                        $save['match_status'] = -3;
+                    }
                 }
+                $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
             }
         }
 
@@ -304,69 +159,6 @@ class Student_Matchs extends Student_Home
         return $match;
     }
 
-    /**
-     * 获取比赛项目
-     * @param $match_id 比赛id
-     * @param $default 是否调取默认项目
-     */
-    public function get_match_project($match_id,$default=false){
-        global $wpdb,$current_user;
-        if(!$default){
-            $sql1 = "select a.id,a.post_id,a.match_project_id,b.post_title,b.post_content,b.post_parent,c.post_title parent_title
-                     from {$wpdb->prefix}match_project a 
-                     left join {$wpdb->prefix}posts b on a.match_project_id = b.ID
-                     left join {$wpdb->prefix}posts c on b.post_parent = c.ID
-                     where a.post_id = {$match_id}   
-                    ";
-        }else{
-            $sql1 = "select b.ID,b.post_title,b.post_parent,c.post_title parent_title
-                     from {$wpdb->prefix}posts b
-                     left join {$wpdb->prefix}posts c on b.post_parent = c.ID
-                     where b.post_type = 'project' and b.post_status = 'publish' ";
-        }
-        //print_r($sql1);
-        $projects = $wpdb->get_results($sql1,ARRAY_A);
-        //print_r($projects);
-        $project = array();
-        if(!empty($projects)){
-            foreach ($projects as $val){
-                $k = &$val['post_parent'];
-                $project[$k]['parent_title'] = $val['parent_title'];
-                //获取主训教练
-
-                if(empty($project[$k]['major_coach']) && empty($project[$k]['coach_id'])){
-
-                    $sql = "select a.coach_id,b.display_name 
-                            from {$wpdb->prefix}my_coach a 
-                            left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                            where user_id = {$current_user->ID} and category_id = $k and major = 1
-                            ";
-                    $row = $wpdb->get_row($sql);
-                    //print_r($row);
-                    if(!empty($row)){
-                        /*$user_meta = get_user_meta($row->coach_id);
-                        if(!empty($user_meta['user_real_name'])){
-                            $user_real_name = unserialize($user_meta['user_real_name'][0]);
-                            $coach = $user_real_name['real_name'];
-                        }elseif (!empty($user_meta['last_name']) || !empty($user_meta['first_name'])){
-                            $coach = $user_meta['last_name'][0].$user_meta['first_name'][0];
-                        }else{
-                            $coach = $user_meta['nickname'][0];
-                        }
-                        $project[$k]['major_coach'] = $coach;*/
-                        $project[$k]['major_coach'] = preg_replace('/, /','',$row->display_name);
-                        $project[$k]['coach_id'] = $row->coach_id;
-                    }
-                }
-                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
-                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
-                $project[$k]['project'][] = $val;
-
-            }
-        }
-        //print_r($project);
-        return $project;
-    }
 
     /**
      * 比赛详情页
@@ -380,67 +172,97 @@ class Student_Matchs extends Student_Home
         global $wpdb,$current_user;
 
         //获取比赛详情
-        $match = $this->get_match_info($_GET['match_id']);
+        $match = $this->get_match_meta($_GET['match_id']);
         if(empty($match)){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
+        //print_r($match);
+
+        //根据时间修改比赛状态
         if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['match_start_time'])){
-            //修改比赛状态
-            $a = $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-2),array('match_id'=>$this->match_id));
+            $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_status'=>-2),array('match_id'=>$this->match_id));
             $match['match_status'] = -2;
             $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
         }
 
+        if($match['match_status'] == 1){
 
+            //获取比赛项目
+            $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
+            //print_r($project);
 
-        //print_r($match);
-        //获取比赛项目
-        $project = $this->get_match_project($_GET['match_id']);
-        //print_r($project);
-
-        //获取报名选手列表
-        $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
+            //获取所有报名选手总数
+            $sql2 = "select count(a.id) order_total
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
                   where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
-                  order by a.id desc limit 0,10";
-        $orders = $wpdb->get_results($sql2,ARRAY_A);
-        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
-        $order_total = $total['total'] > 0 ? $total['total'] : 0;
-        if (!empty($orders)){
-            //print_r($orders);
-            foreach ($orders as $k => $v){
-                $user = get_user_meta($v['user_id']);
-                $orders[$k]['nickname'] = $user['nickname'][0];
-                $orders[$k]['user_gender'] = !empty($user['user_gender'][0]) ? $user['user_gender'][0] : '--' ;
-                $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
-                if(!empty($user['user_real_name'])){
-                    $user_real = unserialize($user['user_real_name'][0]);
-                    $orders[$k]['real_age'] = $user_real['real_age'];
+                  order by a.id desc ";
+            //print_r($sql2);
+            $order_total = (int) $wpdb->get_var($sql2);
 
-                }else{
-                    $orders[$k]['real_age'] = '--';
+        }
+        else{
+
+            //判断是否存在缓存文件
+            $language = get_user_meta($current_user->ID,'locale')[0];
+            $path = leo_student_public_view.'cache/match_info/';
+            is_dir($path) OR mkdir($path, 0777, true);   // 如果文件夹不存在，将以递归方式创建该文件夹
+
+            $file_path = $path.$_GET['match_id'].'_'.$language.'.php';
+
+            if(!file_exists($file_path)){
+
+                //获取所有报名选手列表
+                $sql2 = "select a.id,a.user_id,a.created_time
+                      from {$wpdb->prefix}order a
+                      right join {$wpdb->prefix}users b on a.user_id = b.ID
+                      where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
+                      order by a.id desc ";
+                $orders = $wpdb->get_results($sql2,ARRAY_A);
+
+                if(!empty($orders)){
+
+                    foreach ($orders as $k => $v){
+                        $user = get_user_meta($v['user_id']);
+                        $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
+                        $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
+                        if(!empty($user['user_real_name'])){
+                            $user_real = unserialize($user['user_real_name'][0]);
+                            $orders[$k]['real_age'] = $user_real['real_age'];
+                            $orders[$k]['nickname'] = $user_real['real_name'];
+                        }else{
+                            $orders[$k]['real_age'] = '--';
+                            $orders[$k]['nickname'] = $user['nickname'][0];
+                        }
+
+                        $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
+                        $orders[$k]['nationality'] = $user_nationality_pic;
+                        $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
+                        $orders[$k]['nationality_short'] = $nationality_short;
+                    }
+                    //print_r($orders);die;
                 }
             }
+
         }
 
+
+        //判断选手是否报名
+        $sql3 = "select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} ";
+        $order_id = $wpdb->get_var($sql3);
+
+        if(!empty($order_id)) $match['is_me'] = 'y';
+
         if($match['is_me'] == 'y' && $match['match_status'] == -2){
-            $start = reset($this->project_order_array);
             //print_r($this->project_order_array);
             $match['down_time'] = strtotime($match['match_start_time'])-get_time();
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
         }
-        $end = end($this->project_order_array);
-        $match['match_end_time'] = $end['project_end_time'];
-        if(strtotime($end['project_end_time']) <= get_time()){
-            //修改比赛状态
-            $wpdb->update($wpdb->prefix.'match_meta',array('match_status'=>-3),array('match_id'=>$this->match_id));
-        }
-
-        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total,'entry_list'=>$orders);
+        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total > 0 ? $order_total : 0,'orders'=>$orders,'language'=>empty($language) ? 'zh_CN' : $language);
+        //print_r($data);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
@@ -475,7 +297,7 @@ class Student_Matchs extends Student_Home
 
         if(!isset($_GET['match_id'])){
             //获取用户即将开赛的比赛信息
-            $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta a 
+            $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta_new a 
                     left join {$wpdb->prefix}order b on a.match_id = b.match_id
                     WHERE a.match_status = -2 AND a.match_start_time > NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
                     ORDER BY match_start_time asc limit 1
@@ -487,68 +309,53 @@ class Student_Matchs extends Student_Home
                 $this->get_404(__('最近暂无比赛', 'nlyd-student'));
                 return;
             }
-            if(empty($this->project_order_array)){
-                $result = $this->get_match_content($row['match_id']);
-                /*if($result['status'] == -1){
-                    $this->get_404($result['info']);
-                }*/
-            }
-
             $this->match_id = $row['match_id'];
         }
 
+        $project_more = $this->get_match_project_more($this->match_id);
 
+        if($project_more == -1){
+            $this->get_404(__('未设置比赛项的轮数', 'nlyd-student'));
+            return;
+        }
+        if($project_more['match_status'] == -3 || $this->end_project == 'y'){
+            $this->get_404(array('message'=>__('比赛已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$project_more['match_id'])));
+            return;
+        }
 
-        /*print_r($this->next_project);
-        print_r($this->current_project);*/
-        //var_dump($this->current_project);
+        if($project_more['match_status'] == 1){
+            $this->get_404(__('比赛报名中,暂未开赛', 'nlyd-student'));
+            return;
+        }
+
+        $project_more_id = !empty($this->current_project) ? $this->current_project['id'] : $project_more['id'];
 
         //获取本轮比赛答案是否提交
         $sql = "select my_answer,answer_status from {$wpdb->prefix}match_questions where match_id = {$this->match_id} and project_id = {$this->current_project['project_id']} and match_more = {$this->current_project['match_more']}";
         $row = $wpdb->get_row($sql,ARRAY_A);
-
         $data['answer_status'] = !empty($row['answer_status']) ? $row['answer_status'] : '';
 
-        $data['match_title'] = $this->match_title;
-        $data['match_status'] = $this->match['match_status'];
-        $data['next_project'] = $this->next_project;
+        $data['count_down'] = strtotime($project_more['start_time'])-get_time();
+        $data['match_title'] = $project_more['match_title'];
+        $data['project_title'] = $project_more['project_title'];
+        $data['next_more_num'] = $project_more['more'];
         $data['current_project'] = $this->current_project;
+        $data['end_project'] = $this->end_project;
+        $data['start_project'] = $this->start_project;
 
-        //$data['count_down'] = $this->current_project['project_end_time']-get_time();
+        $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
 
-        $next_more_num = empty($this->current_project['match_type']) ? $this->current_project['match_more']+1 : 1;
-
-        if(!empty($this->next_project))  $next_more_num = $this->next_project['match_more'];
-        $data['next_more_num'] = $next_more_num;
-        $project_id = !empty($this->next_project['project_id']) ? $this->next_project['project_id'] : $this->current_project['project_id'];
-        $data['match_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$project_id.'/match_more/'.$data['next_more_num']);
-        $data['wait_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
-        $data['project_num'] = !empty($this->next_project) ? $this->next_project['project_num'] : $this->current_project['project_num'];
-
-        if($this->redis->get('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'])){
-
-            $data['count_down'] = $this->redis->get('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'])-get_time();
-
-        }else{
-
-            $count_down = $this->current_project['project_end_time']+rand(1,3);
-            $data['count_down'] = $count_down-get_time();
-
-            $this->redis->setex('start_count_down'.$current_user->ID.'project_id'.$project_id.'match_more'.$data['next_more_num'],$data['count_down'],$count_down);
-        }
-
-        if(isset($this->current_project['time_type']) && $this->current_project['time_type'] == 'end' && empty($this->next_project)){
-            $data['match_url'] = home_url('matchs/record/match_id/'.$this->match_id);
-        }
-
-        //未进入比赛缓冲时间设置
-        $buffer_time = get_time()-$this->current_project['project_start_time'];
-        //&& empty($row['answer_status'])
+        $buffer_time = get_time()-strtotime($project_more['start_time']);
         if(1 <= $buffer_time && $buffer_time <= 59 ){
 
             $data['buffer_time'] = true;
-            $data['buffer_url'] = home_url('matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$this->current_project['match_more']);
+            $data['buffer_url'] = $data['match_url'];
         }
+
+        /*print_r($this->current_project);
+        print_r($project_more);*/
+
+
 
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
@@ -566,7 +373,7 @@ class Student_Matchs extends Student_Home
      */
     public function initialMatch(){
 
-        if(empty($_GET['match_id']) || empty($_GET['project_id'])){
+        if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
@@ -586,253 +393,141 @@ class Student_Matchs extends Student_Home
             }
         }
 
-        //正式时取消此test
-        if(empty($_GET['test'])){
-            //print_r($this->current_project);
-            //print_r($this->next_project);
-            //if(($this->current_project['match_more'] == $_GET['match_more']) && $this->current_project['project_id'] == $_GET['project_id']){
+        //获取比赛项数据
+        $project_more = $this->get_match_more($_GET['match_id'],$_GET['project_more_id']);
+        if(empty($project_more)){
 
-                if( get_time() > $this->current_project['project_end_time'] + 60  ){
-
-                    $this->get_404(array('message'=>__('该轮比赛已结束', 'nlyd-student'),'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
-                    return;
-                }
-                //print_r($this->current_project);//die;
-                if( get_time() < $this->current_project['project_start_time']){
-
-                    $error_data = array(
-                        'message'=>__('该轮比赛未开始', 'nlyd-student'),
-                        'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),
-                        'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
-                        'start_count_down' => $this->project_start_time - get_time(),
-                    );
-                    //var_dump($error_data);die;
-                    $this->get_404($error_data);
-                    return;
-                }
-
-            /*}else{
-
-                $this->get_404(array('message'=>'该轮比赛已开始,尽快返回等待页','match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
-                return;
-            }*/
-
-        }
-        /*print_r($this->project_key_array);
-        print_r($this->project_key_array[$this->project_id]);*/
-
-        //子项倒计时
-        $this->set_child_count_down();
-
-        /*leo_dump(date('Y-m-d H:i:s',get_time()));
-        leo_dump(date('Y-m-d H:i:s',$this->project_start_time));
-        leo_dump(date('Y-m-d H:i:s',$this->project_end_time));*/
-        //var_dump($this->project_alias);
-
-        $match_more = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
-
-        if($match_more > $this->default_match_more) $match_more = $this->default_match_more;
-
-        //设置倒计时
-
-        /*****测试使用*****/
-        if($_GET['test'] == 1){
-            $a = $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
-            //$this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+            $this->get_404(__('数据信息错误', 'nlyd-student'));
+            return;
         }
 
-        $count_down_redis = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
-        //print_r($count_down);
-        //var_dump($this->current_project);
-
-        if(empty($count_down_redis)){
-            $count_down = get_time()+$this->default_count_down;
-            $this->redis->setex('count_down'.$current_user->ID.$this->project_alias.$this->current_more,$this->default_count_down,$count_down);
+        if(get_time() < strtotime($project_more['start_time'])-2){
+            $this->get_404(array('message'=>__('等待开赛', 'nlyd-student'),'waiting_url'=>home_url(CONTROLLER.'/matchWaitting/match_id/'.$_GET['match_id'])));
+            return;
         }
+        //print_r($project_more);
 
-        $match_questions = '';
-        $questions_answer = '';
-        //var_dump($this->project_alias);die;
         if($this->project_alias == 'wzsd'){
-            //var_dump($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
-            //var_dump($this->redis->get('wzsd_question'.$current_user->ID.'_'.$this->current_more));
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-                $question = json_decode($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more));
-                //var_dump($question);
-            }else{
 
-                //获取文章速读考题
-                //$category = get_term_by( 'slug', 'match-question', 'question_genre' );
-                $posts = get_posts(array(
-                        'numberposts' => 1, //输出的文章数量
-                        'post_type' => 'question',  //自定义文章类型名称
-                        'orderby'=>'post_date', //post_date rand
-                        'tax_query'=>array(
-                            array(
-                                'taxonomy'=>'question_genre', //自定义分类法名称
-                                'field'  =>  'slug',
-                                'terms'=>'match-question' //id为64的分类。也可是多个分类array(12,64)
-                            )
-                        ),
-                    )
+            //判断语言
+            $language = get_user_meta($current_user->ID,'locale')[0];
+            $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+            //获取文章速读考题
+            $posts = get_posts(array(
+                    'numberposts' => 1, //输出的文章数量
+                    'post_type' => 'question',  //自定义文章类型名称
+                    'orderby'=>'post_date', //post_date rand
+                    'tax_query'=>array(
+                        array(
+                            'taxonomy'=>'question_genre', //自定义分类法名称
+                            'field'  =>  'slug',
+                            'terms'=>$locale.'-match-question' //id为64的分类。也可是多个分类array(12,64)
+                        )
+                    ),
+                )
+            );
+            $question = $posts[0];
+            //print_r($question);die;
+            if(empty($question)){
+                $error_data = array(
+                    'status'=>-1,
+                    'message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),
+                    'match_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
                 );
-                $question = $posts[0];
-
-                if(empty($question)){
-                    $error_data = array(
-                        'status'=>-1,
-                        'message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),
-                        'match_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
-                    );
-                    $this->get_404($error_data);
-                    return;
-                }
-
-                $question->post_content = str_replace('<p', '<p style="text-indent:2em;"',ltrim($question->post_content));
-
-                //print_r($question);
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($question));
-
-                //获取当前题目所有问题
-                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                $this->get_404($error_data);
+                return;
+            }
+            $post_id = $question->ID;
+            //获取比赛题目
+            $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
                         from {$wpdb->prefix}posts a 
                         left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
-                        where a.post_parent = {$question->ID} order by b.id asc
+                        where a.post_parent = {$post_id} order by b.id asc
                         ";
 
-                $rows = $wpdb->get_results($sql1,ARRAY_A);
-                $questions_answer = array();
-                $match_questions = array();
-                if(!empty($rows)){
-                    $answer_total = 1;  //默认答案个数
-                    foreach ($rows as $k => $val){
-                        //$val['problem_answer'] = 1;
-                        $key = &$val['ID'];
-                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
-                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
-                        //if($val['problem_answer'] == 1) $answer_total += 1;
-                    }
-                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
+            $rows = $wpdb->get_results($sql1,ARRAY_A);
+            $questions_answer = array();
+            $match_questions = array();
+            if(!empty($rows)){
+                $answer_total = 1;  //默认答案个数
+                foreach ($rows as $k => $val){
+                    //$val['problem_answer'] = 1;
+                    $key = &$val['ID'];
+                    $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                    $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                    //if($val['problem_answer'] == 1) $answer_total += 1;
                 }
+                $match_questions = array_unique(array_column($rows,'post_title','ID'));
+            }
+        }
+        elseif (in_array($this->project_alias,array('kysm','zxss'))){
+
+            $match_default = get_option('match_project_use');
+            if($this->project_alias == 'kysm'){
+
+                $data['child_count_down'] = !empty($match_default['project_default']['kysm']['flicker']) ? $match_default['project_default']['kysm']['flicker'] : 5;
+            }else {
+                $zxss_default = $match_default['project_use']['zxss'];
+
+                if(empty($zxss_default)){
+                    $zxss_default = array(
+                        'even_add'=>180,
+                        'add_and_subtract'=>180,
+                        'wax_and_wane'=>180,
+                    );
+                }else{
+                    $zxss_default['even_add'] *= 60;
+                    $zxss_default['add_and_subtract'] *= 60;
+                    $zxss_default['wax_and_wane'] *= 60;
+                }
+
+                $data['child_count_down'] = $zxss_default;
 
             }
         }
-        /*elseif ($this->project_alias == 'pkjl'){
-            //$this->redis->del('wzsd_question'.$current_user->ID);
-            //var_dump($this->redis->get('wzsd_question'.$current_user->ID));
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-                $poker = json_decode($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,true);
-                //var_dump($poker);
-            }else{
 
-                $poker = poker_create();
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID,$this->default_count_down,json_encode($poker));
 
-                $match_questions = $questions_answer = $poker;
-                //var_dump($match_questions);
-            }
+        //unset($_SESSION['count_down']);
 
-            if(!empty($poker)){
-                $poker_array = array();
-                foreach ($poker as $k =>$val){
-                    $poker_array[] = str2arr($val,'-');
-                }
-                $question = json_encode($poker_array);
-            }
-        }
-        elseif ($this->project_alias == 'szzb'){
-
-            if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-                $rang_str = $this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
-                //var_dump($rang_str);
-                $question = !empty($rang_str) ? json_decode($rang_str,true) : '';
-            }else{
-                $rang_array = rang_str_arr($this->project_str_len);
-                $this->redis->setex($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more,$this->default_count_down,json_encode($rang_array));
-
-                $match_questions = $questions_answer = $question = $rang_array;
-            }
-        }*/
-
-        //保存题目
-        $sql = "select id,user_id,match_id,project_id,match_questions,answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$match_more}";
-        //print_r($sql);
-        $row = $wpdb->get_row($sql ,ARRAY_A);
-
-        if(empty($row)){
-
-            $insert_data = array(
-                'user_id'=>$current_user->ID,
-                'match_id'=>$_GET['match_id'],
-                'project_id'=>$_GET['project_id'],
-                'match_more'=>$match_more,
-                'match_questions'=>empty($match_questions) ? '' : json_encode($match_questions),
-                'questions_answer'=>empty($questions_answer) ? '' : json_encode($questions_answer),
-                'created_time'=>get_time('mysql'),
+        if(empty($_SESSION['count_down'])){
+            $_SESSION['count_down'] = array(
+                'match_title'=>$project_more['match_title'],
+                'project_title'=>$project_more['project_title'],
+                'count_down_time'=>get_time()+ $project_more['use_time']*60,
             );
-            //print_r($insert_data);die;
-            $a = $wpdb->insert($wpdb->prefix.'match_questions',$insert_data);
-            //leo_dump($a);
-
         }
         else{
 
-            //判断状态
-            if(!empty($row['answer_status'])){
-                if($row['answer_status'] == 1){
-                    $this->get_404(array('message'=>__('答案已提交', 'nlyd-student'),'match_url'=>home_url('/matchs/info/match_id/'.$this->match_id),'waiting_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id)));
-                    return;
-                }
+            //var_dump($_SESSION['count_down']);
+
+            if($_SESSION['count_down']['match_title'] != $project_more['match_title'] || $_SESSION['count_down']['project_title'] != $project_more['project_title'] || get_time() > $_SESSION['count_down']['count_down_time']){
+                $_SESSION['count_down'] = array(
+                    'match_title'=>$project_more['match_title'],
+                    'project_title'=>$project_more['project_title'],
+                    'count_down_time'=>get_time()+ $project_more['use_time']*60,
+                );
             }
-
-        }
-        //var_dump(date_i18n('H:i:s',$this->project_end_time));
-        //var_dump($this->current_project);
-        $data = array(
-            'questions'=>$question,
-            'match_title'=>$this->match_title,
-            'match_more_cn'=>chinanum($this->current_more),
-            'count_down'=> $this->current_project['project_start_time']+$this->current_project['match_use_time'] - get_time(),
-            'project_title'=>$this->project_title,
-            'project_alias'=>$this->project_alias,
-            'answer_total'=>isset($answer_total) ? $answer_total : 1,
-        );
-        //var_dump($data);
-        //$data['count_down'] = 3000;
-
-        if(in_array($this->project_alias,array('zxss','kysm'))){
-
-            $data['child_count_down'] = $this->child_count_down;
-            /*var_dump($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more));
-            leo_dump($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more)-get_time());
-            leo_dump($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more)-get_time());
-            leo_dump($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more)-get_time());*/
-
-            if(!empty($this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more))){
-
-                $data['child_type_down'] = $this->redis->get('even_add'.$current_user->ID.'_'.$this->current_more) - get_time();
-                $data['child_type'] = 0;
-
-            }
-            elseif (!empty($this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more))){
-
-                $data['child_type_down'] = $this->redis->get('add_and_subtract'.$current_user->ID.'_'.$this->current_more) - get_time();
-                $data['child_type'] = 1;
-
-
-            }
-            elseif (!empty($this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more))){
-
-                $data['child_type_down'] = $this->redis->get('wax_and_wane'.$current_user->ID.'_'.$this->current_more) - get_time();
-                $data['child_type'] = 2;
-            }
-            //$data['child_type'] = $this->redis->get('child_type'.$current_user->ID);
-
-            //$data['child_count_down'] = 700;
         }
 
-        //print_r($data);die;
-        $view = student_view_path.'matchs/match-initial.php';
+        $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
+        $data['match_title'] = $project_more['match_title'];
+        $data['project_title'] = $project_more['project_title'];
+        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
+        $data['project_id'] = $project_more['project_id'];
+        $data['match_more'] = $project_more['more'];
+        $data['redirect_url'] = home_url(CONTROLLER.'/answerMatch/match_id/'.$project_more['match_id'].'/project_more_id/'.$project_more['id'].'/project_alias/'.$project_more['project_alias']);
+
+        if(!empty($post_id)){
+            $data['questions'] = $question;
+            $data['post_id'] = $post_id;
+            $data['redirect_url'] .= '/post_id/'.$post_id;
+            $data['questions_answer'] = $questions_answer;
+            $data['match_questions'] = $match_questions;
+        }
+
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$data);
 
     }
@@ -909,7 +604,7 @@ class Student_Matchs extends Student_Home
      */
     public function answerMatch(){
 
-        if(empty($_GET['match_id']) || empty($_GET['project_id'])){
+        if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
@@ -929,92 +624,104 @@ class Student_Matchs extends Student_Home
             }
         }
 
+        //获取比赛项数据
+        $project_more = $this->get_match_more($_GET['match_id'],$_GET['project_more_id']);
+        if(empty($project_more)){
 
-        $match_more = isset($_GET['match_more']) ? $_GET['match_more'] : 1;
-
-        if($match_more > $this->default_match_more) $match_more = $this->default_match_more;
-
-        //获取比赛考题
-        $sql = "select id,user_id,match_id,project_id,match_questions,questions_answer,answer_status from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$match_more}";
-        //print_r($sql);
-        $row = $wpdb->get_row($sql ,ARRAY_A);
-        //print_r($row);
-
-        if(empty($row)){
-
-            $this->get_404(__('数据错误', 'nlyd-student'));
+            $this->get_404(__('数据信息错误', 'nlyd-student'));
             return;
-        }else{
+        }
 
-            //判断状态
-            if(!empty($row['answer_status'])){
-                if($row['answer_status'] == 1){
-                    $messahe = __('答案已提交', 'nlyd-student');
-                    $this->get_404($messahe);
+        switch ($_GET['project_alias']){
+            case 'wzsd':
+                if(empty($_GET['post_id'])){
+
+                    $this->get_404('参数错误');
                     return;
                 }
-            }
+                /*if(!empty($_COOKIE['train_match'])){
 
-        }
+                    $match_array = json_decode(stripslashes($_COOKIE['train_match']),true);
+                    $questions_answer = $match_array['questions_answer'];
+                    $match_questions = $match_array['match_questions'];
+                    //print_r($match_array);
+                }else{*/
 
-        $count_down = $this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
+                //获取比赛题目
+                $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
 
-        $data = array(
-            'match_title'=>$this->match_title,
-            'project_alias'=>$this->project_alias,
-            'match_more_cn'=>chinanum($match_more),
-            'count_down'=>$count_down-get_time(),
-            'project_title'=>$this->project_title,
-            'match_questions'=>empty($row['match_questions']) ? '' : json_decode($row['match_questions'],true),
-            'questions_answer' =>empty($row['questions_answer']) ? '' : json_decode($row['questions_answer'],true),
-        );
-
-
-        if ($this->project_alias == 'pkjl'){
-            $poker = poker_create(false);
-
-            if(!empty($poker)){
-                $list = array(
-                    'spade'=>array(),
-                    'heart'=>array(),
-                    'club'=>array(),
-                    'diamond'=>array(),
-                );
-                foreach ($poker as $v){
-                    $val = str2arr($v,'-');
-                    //'heart','club','diamond','spade'
-                    if($val[0] == 'heart'){
-
-                        $list['heart']['content'][] = $val[1];
-                        $list['heart']['color'] = '638;';
-
-                    }elseif ($val[0] == 'club'){
-
-                        $list['club']['content'][] = $val[1];
-                        $list['club']['color'] = '635';
-
-                    }elseif ($val[0] == 'spade'){
-
-                        $list['spade']['content'][] = $val[1];
-                        $list['spade']['color'] = '636';
-
+                $rows = $wpdb->get_results($sql1,ARRAY_A);
+                $questions_answer = array();
+                $match_questions = array();
+                if(!empty($rows)){
+                    $answer_total = 1;  //默认答案个数
+                    foreach ($rows as $k => $val){
+                        //$val['problem_answer'] = 1;
+                        $key = &$val['ID'];
+                        $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                        $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                        //if($val['problem_answer'] == 1) $answer_total += 1;
                     }
-                    elseif ($val[0] == 'diamond'){
-
-                        $list['diamond']['content'][] = $val[1];
-                        $list['diamond']['color'] = '634';
-
-                    }
+                    $match_questions = array_unique(array_column($rows,'post_title','ID'));
                 }
+                //}
+                $data['questions_answer'] = $questions_answer;
+                $data['match_questions'] = $match_questions;
+                $data['count_down'] = $_GET['surplus_time']-1;
+                //print_r($questions_answer);
+                //print_r($match_questions);
+                break;
+            case 'pkjl':
+                $path = leo_student_public_view.'cache/match_info/pkjl.php';
+                if(file_exists($path)){
+                    $kinds=array(
+                        "spade"=>array(
+                            'content'=>[],
+                            'color'=>636,
+                        ),
+                        "heart"=>array(
+                            'content'=>[],
+                            'color'=>638,
+                        ),
+                        "club"=>array(
+                            'content'=>[],
+                            'color'=>635,
+                        ),
+                        "diamond"=>array(
+                            'content'=>[],
+                            'color'=>634,
+                        ),
+                    );
+                    //kind数组盛放的是花型
+                    $nums=array("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" );//52张牌对应的数字
 
-            }
-            $data['list'] = $list;
-            $data['list_keys'] = array_keys($list);
-            //var_dump($list);
+                    foreach ($kinds as $k => $val){
+                        foreach ($nums as $v){
+                            $kinds[$k]['content'][] = $v;
+                        }
+                    }
+                    $data['list'] = $kinds;
+                }
+                break;
+            default:
+                break;
+
         }
-        if($this->project_alias == 'szzb'){
-            $data['str_length'] = $this->project_str_len;
-        }
+
+        $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
+        $data['match_title'] = $project_more['match_title'];
+        $data['project_title'] = $project_more['project_title'];
+        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more'] = $project_more['more'];
+        $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
+        $data['project_id'] = $project_more['project_id'];
+
+
+        $data['project_alias'] = $this->project_alias;
         //print_r($data);die;
         $view = student_view_path.CONTROLLER.'/match-answer.php';
         load_view_template($view,$data);
@@ -1025,21 +732,16 @@ class Student_Matchs extends Student_Home
      */
     public function answerLog(){
 
+        if(empty($_GET['match_id']) || empty($_GET['log_id']) || empty($_GET['project_alias']) || empty($_GET['project_more_id']) ){
 
-        if(empty($_GET['match_id']) || empty($_GET['project_id']) || empty($_GET['match_more'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
+
         global $wpdb,$current_user;
 
         //清空倒计时
-        if(!empty($this->redis->get('count_down'.$current_user->ID.$this->project_alias.$this->current_more))){
-            $this->redis->del('count_down'.$current_user->ID.$this->project_alias.$this->current_more);
-        }
-        //清空题目
-        if(!empty($this->redis->get($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more))){
-            $this->redis->del($this->project_alias.'_question'.$current_user->ID.'_'.$this->current_more);
-        }
+        unset($_SESSION['count_down']);
 
 
         $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
@@ -1053,23 +755,26 @@ class Student_Matchs extends Student_Home
                 return;
             }
         }
-
-        $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
+        //获取答题记录
+        $row = $this->get_match_questions($_GET['match_id'],$_GET['log_id']);
 
         if(empty($row)){
             $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
             return;
-        }else{
-            if($row['answer_status'] != 1){
-                $this->get_404(__('操作错误,你未进行答题', 'nlyd-student'));
-                return;
-            }
         }
+
+        //获取当前轮项目
+        $match_more = $this->get_match_more($_GET['match_id'],$_GET['project_more_id']);
+        if(empty($match_more)){
+            $this->get_404(__('数据错误', 'nlyd-student'));
+            return;
+        }
+
         $match_questions = json_decode($row['match_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
-        if(in_array($this->project_alias,array('wzsd'))){
+        if($row['project_alias'] == 'wzsd'){
             if(empty($questions_answer)){
                 $len = 0;
             }else{
@@ -1095,28 +800,19 @@ class Student_Matchs extends Student_Home
             }
 
         }
-        elseif ($this->project_alias == 'nxss'){
+        elseif ($row['project_alias'] == 'nxss'){
 
             $answer = $questions_answer;
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
-            //print_r($answer_array);
-            //print_r($questions_answer);die;
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
 
             $count_value = array_count_values($answer_array);
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
 
-            /*if(!empty($match_questions)){
-                $twentyfour = new TwentyFour();
-                foreach ($match_questions as $val){
-                    $results = $twentyfour->calculate($val);
-                    //print_r($results);
-                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
-                }
-                $questions_answer = $arr;
-            }*/
         }
         else{
 
@@ -1138,98 +834,48 @@ class Student_Matchs extends Student_Home
             }
         }
 
-
-        //判断是否有新的比赛轮次或者新的项目
-        /*print_r($this->current_project);
-        print_r($this->next_project);
-        print_r($this->project_end_time);*/
-
-        if(empty($this->next_project)){
-
-            if(!empty($this->current_project) && $this->current_project['match_more'] < $this->default_match_more){
-
-                $match_more = $this->current_project['match_more']+1;
-                $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->current_project['project_id'].'/match_more/'.$match_more);
-                $next_type = 1;
-                //$next_count_down = $this->current_project['project_end_time']-get_time();
-                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
-
-            }else{
-                $next_project_url = home_url('/matchs/record/match_id/'.$this->match_id);
-                $next_type = 4;
-                $wait_url = '';
-            }
-        }else{
-
-            if($this->next_project['project_start_time'] < get_time()){
-                $next_project_url = home_url('matchs/record/match_id/'.$this->match_id);
-                $next_type = 4;
-                $wait_url = '';
-            }else{
-                $match_more = 1;
-                $next_project_url = home_url('/matchs/initialMatch/match_id/'.$this->match_id.'/project_id/'.$this->next_project['project_id'].'/match_more/'.$match_more);
-                $next_type = 2;
-                //$next_count_down = $this->next_project['project_start_time']-get_time();
-                $wait_url = home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1');
-            }
-        }
-        //print_r($this->next_project);
-        if($this->project_alias == 'zxss'){
-
-            if($this->project_key_array[$this->project_id]['child_count_down'] > 0){
-                $child_count_down['even_add'] = $this->project_count_down * 60;
-                $child_count_down['add_and_subtract'] = $this->project_count_down * 60;
-                $child_count_down['wax_and_wane'] = $this->project_count_down * 60;
-            }elseif (!empty($child_count_down) && !empty($child_count_down['even_add']) && !empty($child_count_down['add_and_subtract']) && !empty($child_count_down['wax_and_wane'])){
-
-                $child_count_down['even_add'] *= 60;
-                $child_count_down['add_and_subtract'] *= 60;
-                $child_count_down['wax_and_wane'] *= 60;
-            }else{
-
-                $child_count_down['even_add'] = 180;
-                $child_count_down['add_and_subtract'] = 180;
-                $child_count_down['wax_and_wane'] = 180;
-            }
-
-            $this->default_count_down = $child_count_down['even_add']+$child_count_down['add_and_subtract']+$child_count_down['wax_and_wane'];
-        }
+        //print_r($match_more);
 
         $ranking = '';
-        if(($this->project_start_time + $this->default_count_down) <= get_time()){
+        if(strtotime($match_more['end_time']) <= get_time()){
             //获取本轮排名
-            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} group by my_score desc,surplus_time desc";
+            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$match_more['match_id']} and project_id = {$match_more['project_id']} and match_more = {$match_more['more']} group by my_score desc,surplus_time desc";
             $rows = $wpdb->get_results($sql,ARRAY_A);
 
             $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
         }
-        /*print_r($this->current_project['project_end_time_format']);
-        print_r($this->project_start_time-$this->default_count_down);
-        print_r(date_i18n('Y-m-d H:i:s',$this->project_start_time));*/
-        //print_r(date_i18n('Y-m-d H:i:s',$this->project_end_time));
-        $end_time = $this->current_project['project_start_time'] + $this->default_count_down;
-        //print_r(date_i18n('Y-m-d H:i:s',$end_time));
 
-        //$this->redis->delete('answer_log'.$current_user->ID);
-        if($this->redis->get('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more)){
+        //请求接下来的比赛项目
+        $next_project_more = $this->get_match_project_more($_GET['match_id']);
 
-            $next_count_down = $this->redis->get('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more)-get_time();
-            // var_dump($next_count_down);
-        }else{
-            $down = $this->current_project['project_end_time']+rand(1,3);
+        /*print_r($next_project_more);
+        print_r($match_more);*/
 
-            $this->redis->setex('answer_log'.$current_user->ID.'project_id'.$this->next_project['project_id'].'match_more'.$match_more,$down-get_time(),$down);
-            $next_count_down = $down-get_time();
+        if(!empty($next_project_more) && empty($this->end_project)){
+
+            if($next_project_more['project_alias'] != $match_more['project_alias']){
+                $next_project = 'y';
+            }else{
+                $next_project = 'n';
+            }
+
+            $next_project_url = home_url(CONTROLLER.'/initialMatch/match_id/'.$next_project_more['match_id'].'/project_alias/'.$next_project_more['project_alias'].'/project_more_id/'.$next_project_more['id']);
         }
-        //print_r($row);
+        if($this->end_project == 'y'){
+
+            $next_project = '';
+            $next_project_url = home_url(CONTROLLER.'/record/match_id/'.$match_more['match_id']);
+        }
+
         $data = array(
-            'project_alias'=>$this->project_alias,
-            'next_type'=>$next_type,
+            'next_count_down'=> !empty($next_project) ? strtotime($next_project_more['start_time'])-get_time() : 0,
+            'next_project'=>$next_project,
+            'project_alias'=>$row['project_alias'],
             'str_len'=>$len,
-            'match_more_cn'=>chinanum($_GET['match_more']),
+            'match_more_cn'=>chinanum($match_more['more']),
             'match_more'=>$this->match_more,
             'success_length'=>$success_len,
-            'use_time'=>$this->default_count_down-$row['surplus_time'],
+            'use_time'=>$match_more['use_time']*60-$row['surplus_time'],
             'surplus_time'=>$row['surplus_time'],
             'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
             'ranking'=>$ranking,
@@ -1238,22 +884,15 @@ class Student_Matchs extends Student_Home
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
             'my_score'=>$row['my_score'],
-            'project_title'=>$this->project_title,
+            'project_title'=>$match_more['project_title'],
             'match_title'=>$this->match_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'next_count_down'=>$next_count_down,
-            'end_time_count_down'=>$end_time-get_time() > 0 ? $end_time - get_time() : '',
             'next_project_url'=>$next_project_url,
-            'wait_url' =>$wait_url,
-            'record_url'=>home_url('matchs/record/match_id/'.$this->match_id.'/last/answerLog'),
+            'wait_url' =>home_url('matchs/matchWaitting/match_id/'.$match_more['match_id']),
+            'record_url'=>home_url('matchs/record/match_id/'.$match_more['match_id'].'/last/answerLog'),
             'match_row'=>$row
         ,
         );
-        //var_dump($data['end_time_count_down']);
-        /********测试使用*********/
-        if($_GET['test'] == 1){
-            $data['next_count_down'] = 50;
-        }
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
@@ -1271,7 +910,7 @@ class Student_Matchs extends Student_Home
         }
         global $wpdb,$current_user;
 
-        $row = $this->get_match_questions($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
+        $row = $this->get_project_all_more($_GET['match_id'],$_GET['project_id'],$_GET['match_more']);
         //print_r($row);
         if(empty($row)){
             $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
@@ -1288,18 +927,10 @@ class Student_Matchs extends Student_Home
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
         //获取比赛类型别名
-       /* $project_alias = get_post_meta($_GET['project_id'],'project_alias')[0];
-        if(empty($project_alias)){
-            $error_data = array(
-                'message'=>'该比赛项目未绑定比赛别名',
-                //'match_url'=>home_url('/matchs/singleRecord/match_id/'.$_GET['match_id'].'/project_id/'.$_GET['project_id']),
-            );
-            $this->get_404($error_data);
-            return;
-        }
-        $this->project_alias = $project_alias;*/
+        $project_alias = get_post_meta($_GET['project_id'],'project_alias')[0];
+        //print_r($row);
 
-        if(in_array($this->project_alias,array('wzsd'))){
+        if(in_array($project_alias,array('wzsd'))){
             if(empty($questions_answer)){
                 $len = 0;
             }else{
@@ -1325,7 +956,7 @@ class Student_Matchs extends Student_Home
             }
 
         }
-        elseif ($this->project_alias == 'nxss'){
+        elseif ($project_alias == 'nxss'){
 
             $answer = $questions_answer;
             $answer_array = $answer['result'];
@@ -1362,6 +993,7 @@ class Student_Matchs extends Student_Home
                 $success_len = 0;
                 $len = 0;
             }
+
         }
         //获取本轮排名
         $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$_GET['match_id']} and project_id = {$_GET['project_id']} and match_more = {$_GET['match_more']} group by my_score desc,surplus_time desc";
@@ -1374,7 +1006,7 @@ class Student_Matchs extends Student_Home
             'str_len'=>$len,
             'match_more_cn'=>chinanum($_GET['match_more']),
             'success_length'=>$success_len,
-            'use_time'=>$this->default_count_down-$row['surplus_time'],
+            'use_time'=>$row['use_time']*60-$row['surplus_time'],
             'surplus_time'=>$row['surplus_time'],
             'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
             'ranking'=>$ranking,
@@ -1383,11 +1015,15 @@ class Student_Matchs extends Student_Home
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
             'my_score'=>$row['my_score'],
-            'project_title'=>$this->project_title,
-            'match_title'=>$this->match_title,
+            'project_title'=>$row['project_title'],
+            'match_title'=>$row['match_title'],
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
+            'record_url'=>home_url('matchs/record/type/project/match_id/'.$row['match_id'].'/project_id/'.$row['project_id'].'/match_more/'.$row['more']),
         );
+        if($_GET['type'] == 'select'){
+
+            $data['record_url'] = home_url(CONTROLLER.'/record/match_id/'.$_GET['match_id']);
+        }
 
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
@@ -1407,12 +1043,24 @@ class Student_Matchs extends Student_Home
             return;
         }
         //获取比赛详情
-        $match = $this->get_match_info($_GET['match_id']);
+        $match = $this->get_match_meta($_GET['match_id']);
+
+        if(empty($match)) {
+            $this->get_404(__('比赛信息错误', 'nlyd-student'));
+            return;
+        }
 
         //获取比赛项目
+        $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
+
+        //print_r($match);
+
+
+
+
+
         //update_option('match_project_default',true);
-        $match_project_default = get_option('match_project_default');
-        $project = $this->get_match_project($_GET['match_id'],$match_project_default);
+        //$project = $this->get_match_project($_GET['match_id'],$match_project_default);
         //print_r($project);
         //获取选手信息
         global $current_user,$user_info,$wpdb;
@@ -1472,12 +1120,34 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
-
-        //获取当前项目排名
         global $wpdb,$current_user;
 
+        //获取所有参赛项目
+        $result = $this->get_match_all_project($_GET['match_id']);
+        if(empty($result)){
+            $this->get_404(__('比赛信息错误', 'nlyd-student'));
+            return;
+        }else{
+            $default_category = $result['projects'];
+            $match_status = $result['match_status'];
+        }
+        //print_r($result);
+
+        //判断是否报名该比赛
+        $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
+
+        if($match_status != -3){
+            if(!in_array($order->pay_status,array(2,3,4))){
+
+                $this->get_404(__('您未报名该比赛,须比赛结束方可查看成绩', 'nlyd-student'));
+                return;
+
+            }
+        }
+
+        //获取当前项目排名
         $page = ($page = isset($_GET['page']) ? intval($_GET['page']) : 1) < 1 ? 1 : $page;
-        $pageSize = 10;
+        $pageSize = 50;
         $start = ($page-1) * $pageSize;
 
         if($_GET['type'] == 'project'){
@@ -1492,22 +1162,24 @@ class Student_Matchs extends Student_Home
             $rows = $wpdb->get_results($sql,ARRAY_A);
 
             $title = $this->match_title;
-        }else{
+        }
+        else{
 
+            $first = $default_category[0];
+            //print_r($first);
             $where = " WHERE a.match_id = {$_GET['match_id']} AND a.pay_status = 4 and a.order_type = 1 ";
 
             $sql = "SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time 
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score , MAX(c.surplus_time) surplus_time 
                         FROM `{$wpdb->prefix}order` a 
-                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_GET['match_id']} 
-                        #where a.match_id = 56329
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_GET['match_id']} and project_id = {$first['ID']}
                         {$where}
                         GROUP BY user_id,project_id
                     ) x
                     GROUP BY user_id
                     ORDER BY my_score DESC,surplus_time DESC
-                    limit 0,10
+                    limit 0,50
                     ";
             //print_r($sql);
             /*if($current_user->ID == 66){
@@ -1519,7 +1191,7 @@ class Student_Matchs extends Student_Home
             //var_dump($total);
             $title = $this->match['post_title'];
             //获取比赛类别
-            $category = $this->ajaxControll->get_coach_category(false);
+            $match_category = $this->ajaxControll->get_coach_category(false);
 
         }
         $list = array();
@@ -1562,11 +1234,6 @@ class Student_Matchs extends Student_Home
                 }
             }
         }
-        $match_category = empty($category) ? '' : $category;
-        $default_category = empty($this->project_order_array) ? '' : $this->project_order_array;
-        //print_r($default_category);
-        //判断是否报名该比赛
-        $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
 
         $data = array('pay_status'=>$order->pay_status,'list'=>$list,'my_ranking'=>$my_ranking,'match_title'=>$title,'match_category'=>$match_category,'count'=>$total['total'] > 10 ? $total['total'] : 0,'default_category'=>$default_category);
         //print_r($data);
@@ -1581,23 +1248,23 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
+
+        //获取当前项目所有轮数
+        $rows = $this->get_project_all_more($_GET['match_id'],$_GET['project_id']);
+        //print_r($rows);
+
         //print_r($this->match_alias);
         //var_dump($this->project_key_array[$_GET['project_id']]);
         //判断是否存在我的本轮答题
         global $wpdb,$current_user;
         $sql = "select user_id from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and  project_id = {$_GET['project_id']}";
         $user_id = $wpdb->get_results($sql);
-	//中国赛加赛成绩查看页
-	/***************必要代码*****************/
-        if($_GET['match_id'] == 56522 && $_GET['project_id'] == 52704){
-            $this->default_match_more += 1;
-        }
-	/*****************勿删**************/
+
         $data = array(
             'my_log'=>!empty($user_id) ? true : false,
-            'project_title'=>$this->project_key_array[$_GET['project_id']]['post_title'],
-            'match_title'=>$this->match_title,
-            'match_more'=>$this->default_match_more,
+            'project_title'=>$rows[0]['project_title'],
+            'match_title'=>$rows[0]['match_title'],
+            'lists'=>$rows,
             'answer_url'=>home_url('/matchs/checkAnswerLog/match_id/'.$_GET['match_id'].'/project_id/'.$_GET['project_id'].'/type/select'),
         );
 
@@ -1624,22 +1291,6 @@ class Student_Matchs extends Student_Home
 
     }
 
-    /**
-     * 获取用户当前比赛信息
-     */
-    public function get_match_questions($match_id,$project_id,$match_more){
-
-        global $wpdb,$current_user;
-        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title
-                    from {$wpdb->prefix}match_questions a 
-                    left join {$wpdb->prefix}posts b on a.project_id = b.ID
-                    where a.user_id = {$current_user->ID} and a.match_id = {$match_id} and a.project_id = {$project_id} and a.match_more = {$match_more}
-                    ";
-        //print_r($sql);
-        $row = $wpdb->get_row($sql,ARRAY_A);
-
-        return $row;
-    }
 
 
     /**
@@ -2019,6 +1670,220 @@ class Student_Matchs extends Student_Home
     }
 
 
+    /**
+     * 获取比赛meta信息
+     * @param $match_id 比赛id
+     * @param $find 需要获取的字段
+     */
+    public function get_match_meta($match_id,$find='a.*,b.post_title'){
+
+        global $wpdb;
+        $sql = " select {$find},
+                   DATE_FORMAT(a.match_start_time,'%Y-%m-%d %H:%i') match_start_time, 
+                   DATE_FORMAT(a.match_end_time,'%Y-%m-%d %H:%i') match_end_time, 
+                   DATE_FORMAT(a.entry_end_time,'%Y-%m-%d %H:%i') entry_end_time
+                  from {$wpdb->prefix}match_meta_new a 
+                  left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                  where match_id = {$match_id} ";
+        $match = $wpdb->get_row($sql,ARRAY_A);
+
+        return $match;
+
+    }
+
+    /**
+     *  获取比赛项目
+     * @param $match_id 比赛id
+     * @param $match_project_id 比赛项目id集合
+     * @return array
+     */
+    public function get_match_project($match_id,$match_project_id){
+        global $wpdb,$current_user;
+        $sql = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}posts c on a.post_parent = c.ID
+                where a.ID in($match_project_id)";
+        $projects = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($projects);
+
+
+        $project = array();
+        if(!empty($projects)){
+            foreach ($projects as $val){
+                $k = &$val['post_parent'];
+                $project[$k]['parent_title'] = $val['parent_title'];
+                //获取主训教练
+
+                if(empty($project[$k]['major_coach']) && empty($project[$k]['coach_id'])){
+
+                    $sql = "select a.coach_id,b.display_name 
+                            from {$wpdb->prefix}my_coach a 
+                            left join {$wpdb->prefix}users b on a.coach_id = b.ID
+                            where user_id = {$current_user->ID} and category_id = $k and major = 1
+                            ";
+                    $row = $wpdb->get_row($sql);
+                    //print_r($row);
+                    if(!empty($row)){
+                        $project[$k]['major_coach'] = preg_replace('/, /','',$row->display_name);
+                        $project[$k]['coach_id'] = $row->coach_id;
+                    }
+                }
+                $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
+                $val['rule_url'] = home_url('matchs/matchRule/match_id/'.$match_id.'/project_id/'.$project_id);
+                $project[$k]['project'][] = $val;
+
+            }
+        }
+        //print_r($project);
+        return $project;
+    }
+
+    /**
+     * 获取比赛的项目所有轮数信息
+     * @param $match_id 比赛id
+     */
+    public function get_match_project_more($match_id){
+        global $wpdb;
+        $sql = "select a.*,b.post_title match_title,c.post_title project_title,d.match_status
+                from {$wpdb->prefix}match_project_more a
+                left join {$wpdb->prefix}posts b on b.ID = a.match_id
+                left join {$wpdb->prefix}posts c on c.ID = a.project_id
+                left join {$wpdb->prefix}match_meta_new d on d.match_id = a.match_id
+                where a.match_id = {$match_id} order by a.start_time asc ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(empty($rows)){
+            return -1; //未设置比赛项的轮数
+        }else{
+            $new_time = get_time('mysql');
+            $num = count($rows);
+
+            foreach ($rows as $k => $v){
+                //获取别名
+
+                $rows[$k]['project_alias'] = $v['project_alias'] = get_post_meta($v['project_id'],'project_alias')[0];
+
+                if($v['start_time'] <= $new_time && $new_time <= $v['end_time']){
+                    $this->current_project = $v;
+                    if($k == $num-1){
+                        return $v;
+                    }
+                }
+
+                if($new_time <= $v['start_time'] ){
+                    if($new_time < $rows[0]['start_time']){
+                        $this->start_project = 'y';
+                    }
+                    //print_r($v);
+                    //$this->next_project = $rows[$k-1];
+                    return $v;
+
+                }elseif ($rows[$num-1]['end_time'] < $new_time){
+
+                    $this->end_project = 'y';
+                    return $rows[$num-1];
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取指定轮数的数据
+     * @param $match_id 比赛id
+     * @param $match_project_id
+     */
+    public function get_match_more($match_id,$match_project_id){
+        global $wpdb;
+        $sql = "select a.*,b.post_title match_title,c.post_title project_title,d.meta_value project_alias
+                from {$wpdb->prefix}match_project_more a
+                left join {$wpdb->prefix}posts b on b.ID = a.match_id
+                left join {$wpdb->prefix}posts c on c.ID = a.project_id
+                left join {$wpdb->prefix}postmeta d on a.project_id = d.post_id and meta_key = 'project_alias'
+                where a.match_id = {$match_id} and a.id = {$match_project_id}  ";
+
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($sql);die;
+        return $row;
+    }
+
+    /**
+     * 获取比赛所有项目信息
+     * @param $match_id 比赛id
+     */
+    public function get_match_all_project($match_id){
+        global $wpdb;
+
+        $sql = " select match_project_id,match_status from {$wpdb->prefix}match_meta_new where match_id = {$match_id} ";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($match_project_id);die;
+        if(!empty($row)){
+
+            $sql1 = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}posts c on a.post_parent = c.ID
+                where a.ID in({$row['match_project_id']})";
+            $projects = $wpdb->get_results($sql1,ARRAY_A);
+            if(!empty($projects)){
+                return array('projects'=>$projects,'match_status'=>$row['match_status']);
+            }
+        }else{
+            return '';
+        }
+        //print_r($projects);
+    }
+
+    /**
+     * 获取当前比赛项目所有的轮数
+     * @param $match_id 比赛id
+     * @param $project_id   项目id
+     * @param $match_more   项目轮数
+     */
+    public function get_project_all_more($match_id,$project_id,$match_more=''){
+
+        global $wpdb,$current_user;
+
+        if(!empty($match_more)){
+            $str = " and a.more = {$match_more} ";
+        }else{
+
+            $str = '';
+        }
+
+        $sql = "select a.match_id,a.project_id,a.more,b.user_id,a.use_time,b.match_questions,b.questions_answer,b.my_answer,b.my_score,b.surplus_time,b.answer_status,c.post_title match_title,d.post_title project_title 
+                from {$wpdb->prefix}match_project_more a 
+                left join {$wpdb->prefix}match_questions b on a.match_id = b.match_id and a.project_id = b.project_id and a.more = b.match_more
+                left join {$wpdb->prefix}posts c on a.match_id = c.ID 
+                left join {$wpdb->prefix}posts d on a.project_id = d.ID 
+                where a.match_id = {$match_id} and a.project_id = {$project_id} {$str}
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($match_more)){
+            return $rows[0];
+        }
+        return $rows;
+    }
+
+
+    /**
+     * 获取答题记录
+     * @param $match_id 比赛id
+     * @param $log_id   答题记录
+     * @return array|null|object|void
+     */
+    public function get_match_questions($match_id,$log_id){
+
+        global $wpdb,$current_user;
+        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title,c.meta_value project_alias
+                    from {$wpdb->prefix}match_questions a 
+                    left join {$wpdb->prefix}posts b on a.project_id = b.ID
+                    LEFT JOIN {$wpdb->prefix}postmeta c ON a.project_id = c.post_id AND meta_key = 'project_alias'
+                    where a.user_id = {$current_user->ID} and a.match_id = {$match_id} and a.id = {$log_id} 
+                    ";
+        //print_r($sql);
+        $row = $wpdb->get_row($sql,ARRAY_A);
+
+        return $row;
+    }
 
     /**
      * 默认公用js/css引入
