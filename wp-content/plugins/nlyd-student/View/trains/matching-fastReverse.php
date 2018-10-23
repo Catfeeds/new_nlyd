@@ -320,7 +320,9 @@ $('.number').each(function(){
                     }
                 }
                 try {
-                var AA=eval($('.answer div').text()); // no exception occured
+            var new_texts=$('.answer div').text().replace(/×/g,'*');
+            new_texts=new_texts.replace(/÷/g,'/');
+                var AA=eval(new_texts); // no exception occured
                     console.log(AA)
                 }
                 catch (e) {
