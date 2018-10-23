@@ -109,7 +109,7 @@ jQuery(function($) {
             if(_flag || _flag1){//重复题目，连续无解
                 initQuestion()
             }else{
-                select=['10','3','10','5']
+                // select=['10','3','10','5']
                 var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
             }
