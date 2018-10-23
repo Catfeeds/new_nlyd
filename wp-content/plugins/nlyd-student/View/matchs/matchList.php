@@ -92,8 +92,8 @@ jQuery(function($) {
         function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
-                ,isAuto: false
-                ,isLazyimg: true
+                // ,isAuto: false
+                // ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_match_list',
@@ -147,10 +147,10 @@ jQuery(function($) {
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
-                                                    +'<div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>:</div></div>'
+                                                    +'<div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>:</div>'
                                                     +'<div class="nl-match-info">'
-                                                        +'<div class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                        +sys_second_text+'</div>'
+                                                        +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                        +sys_second_text+'</span>'
                                                     +'</div>'
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
@@ -170,10 +170,10 @@ jQuery(function($) {
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
-                                                    +'<div class="nl-match-label"><div><?=__('报名截止', 'nlyd-student')?>:</div></div>'
+                                                    +'<div class="nl-match-label"><?=__('报名截止', 'nlyd-student')?>:</div>'
                                                     +'<div class="nl-match-info">'
-                                                        +'<div class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
-                                                        +sys_second_text+'</div>'
+                                                        +'<span class="c_black getTimes'+id+'" data-seconds="'+sys_second+'">'
+                                                        +sys_second_text+'</span>'
                                                     +'</div>'
                                                 +'</div>'
                                     }
@@ -190,30 +190,30 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>:</div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<div class="c_black">'+v.match_start_time+'</div>'
+                                                                +'<span class="c_black">'+v.match_start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('比赛地点', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><?=__('比赛地点', 'nlyd-student')?>:</div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<div class="c_black">'+v.match_address+'</div>'
+                                                                +'<span class="c_black">'+v.match_address+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('报名费用', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>:</div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<div class="c_black">¥'+v.match_cost+'</div>'
+                                                                +'<span class="c_black">¥'+v.match_cost+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><?=__('已报选手', 'nlyd-student')?>:</div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<div class="c_black">'+v.entry_total+'人</div>'
-                                                                +'<a class="c_orange" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                                                +'<span class="c_black">'+v.entry_total+'人</span>'
+                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
@@ -227,7 +227,7 @@ jQuery(function($) {
                                             +'</li>'
                                     lis.push(dom) 
                                 })
-                                if (res.data.info.length<50) {
+                                if (res.data.info.length<10) {
                                     next(lis.join(''),false) 
                                 }else{
                                     next(lis.join(''),true) 

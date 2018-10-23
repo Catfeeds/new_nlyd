@@ -1256,9 +1256,9 @@ class Match_Ajax
             $title = '新增';
         }
 
-        $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
+        //$a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
 
-        if($result && $a){
+        if($result){
             $wpdb->commit();
             wp_send_json_success($title.'成功');
         }else{

@@ -58,24 +58,10 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var matching_question= $.GetSession('matching_question','1');
-    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-        questions_answer=matching_question['questions_answer'];
-        $.each(questions_answer,function(i,v){
-            var dom=i==0 ? '<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
-            $('.matching-number-zoo').append(dom)
-        })
-    }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
-    }
-    console.log(questions_answer)
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
 
@@ -117,20 +103,16 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-                project_alias:'szzb',
-                match_questions:questions_answer,
-                questions_answer:questions_answer,
-                project_more_id:$.Request('project_more_id'),
-
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:<?=$_GET['match_more']?>,
                 my_answer:my_answer,
+                match_action:'subjectNumberBattle',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }

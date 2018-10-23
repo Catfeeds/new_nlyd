@@ -28,7 +28,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         <div class="layui-col-lg8 layui-col-md8 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['type'])){ ?>
-                    <a class="mui-pull-left nl-goback"></div><i class="iconfont">&#xe610;</i></div></a>
+                    <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
                 <h1 class="mui-title"><div><?=$match_title?><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
@@ -94,22 +94,22 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     <?php
                     switch ($project_alias){
                         case 'szzb':    //数字争霸
-                            require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
+                            require_once student_view_path.'matchs/subject-numberBattle.php';
                             break;
                         case 'pkjl':    //扑克接力
-                            require_once student_view_path.CONTROLLER.'/subject-pokerRelay.php';
+                            require_once student_view_path.'matchs/subject-pokerRelay.php';
                             break;
                         case 'zxss':    //正向速算
-                            require_once student_view_path.CONTROLLER.'/subject-fastCalculation.php';
+                            require_once student_view_path.'matchs/subject-fastCalculation.php';
                             break;
                         case 'nxss':    //逆向速算
-                            require_once student_view_path.CONTROLLER.'/subject-fastReverse.php';
+                            require_once student_view_path.'matchs/subject-fastReverse.php';
                             break;
                         case 'wzsd':     //文章速读
-                            require_once student_view_path.CONTROLLER.'/subject-reading.php';
+                            require_once student_view_path.'matchs/subject-reading.php';
                             break;
                         case 'kysm':    //快眼扫描
-                            require_once student_view_path.CONTROLLER.'/subject-fastScan.php';
+                            require_once student_view_path.'matchs/subject-fastScan.php';
                             break;
                         default:
                             require_once student_view_path.'public/my-404.php';
@@ -117,16 +117,19 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     }
                     ?>
                 </div>
-                <?php if($next_count_down > 0):
-                    if($next_project == 'y'){
-                        $title = '项';
-                    }elseif ($next_project == 'n'){
-                        $title = '轮';
-                    }
-                ?>
-                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一'.$title.'开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
+                <!-- <?php if(!empty($end_time_count_down)):?>
+                    <div class="a-btn" style="display: none"><span class="count_down next_more_down" data-seconds="<?=$end_time_count_down?>">00:00:00</span></div>
+                <?php endif;?> -->
+                <?php if($next_type == 1 && !isset($_GET['type'])): ?>
+                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一轮开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
-                <?php if(empty($next_project)): ?>
+                <?php if($next_type == 2 && !isset($_GET['type'])): ?>
+                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一项目开赛', 'nlyd-student')?> <span class="count_down next_project_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
+                <?php endif;?>
+                <?php if($next_type == 3):?>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('下一项已开赛,进入比赛', 'nlyd-student')?></div></a>
+                <?php endif;?>
+                <?php if($next_type == 4):?>
                     <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>
                 <?php endif;?>
             </div>
@@ -135,8 +138,10 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 </div>
 <script>
     jQuery(function($) {
-        <?php if(isset($_GET['project_more_id'])): ?>
+        <?php if(!isset($_GET['type'])): ?>
           leavePageLoad('<?=$wait_url?>');
+        // var getTime=<?=$next_count_down?>;
+        // var now_Time=new Date().getTime()
         $('.count_down').countdown(function(S, d){//倒计时
             var _this=$(this);
             var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
@@ -145,7 +150,6 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
             $(this).attr('data-seconds',S).text(time)
-
             if(S==0){
                 var href=_this.parents('.a-btn').attr('href');
                 $.DelSession('leavePageWaits')

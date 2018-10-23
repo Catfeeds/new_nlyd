@@ -31,7 +31,7 @@
                         <div class="Glass"></div>
                     </div>
                 </div>
-                <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px" id="complete" href="<?=$redirect_url?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>
@@ -45,69 +45,31 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
+    var _match_id=<?=$_GET['match_id']?>;
+    var _project_id=<?=$project_id?>;
+    var _match_more=<?=$match_more;?>;
     var questions_answer=[]
-    var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
-    $.getJSON(file_path,function(JsonData){
-        var matchSession=$.GetSession('ready_shuzi','true');
-        if(matchSession && matchSession['match_id']===$.Request('match_id') && matchSession['project_id']===$.Request('project_id') && matchSession['match_more']===$.Request('match_more')){
-            questions_answer=matchSession['questions_answer']
-        }else{
-            var questions_answers=JsonData;
-            var pos = Math.round(Math.random() * (questions_answers.length - 1));
-            var xx=questions_answers[pos]
-            questions_answer=xx.sort(function() {
-                return .5 - Math.random();
-            });
-            var sessionData={
-                match_id:$.Request('match_id'),
-                project_id:$.Request('project_id'),
-                match_more:$.Request('match_more'),
-                questions_answer:questions_answer
-            }
-            $.SetSession('ready_shuzi',sessionData)
+    var matching_question=$.GetSession('matching_question','true');
+    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
+        questions_answer=matching_question['questions_answer']
+    }else{
+        $.DelSession('matching_question')
+        for(var i=0;i<100;i++){
+            var num=Math.floor(Math.random()*10);//生成0-9的随机数
+            questions_answer.push(num)
         }
-        $.each(questions_answer,function(i,v){
+        var sessionData={
+            match_id:_match_id,
+            project_id:_project_id,
+            match_more:_match_more,
+            questions_answer:questions_answer
+        }
+        $.SetSession('matching_question',sessionData)
+    }
+    $.each(questions_answer,function(i,v){
             var dom='<div class="matching-number">'+v+'</div>';
             $('.matching-number-zoo').append(dom)
         })
-    })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
-new AlloyFinger($('#complete')[0], {
-    tap:function(){
-        var _this=$(this);
-        if(!_this.hasClass('disabled')){
-            _this.addClass('disabled')
-            var data={
-                action:'memory_complete',
-                _wpnonce:$('#inputComplete').val(),
-                match_id:<?=$_GET['match_id']?>,
-                project_id:<?=$_GET['project_id']?>,
-                match_more:$('#inputMatchMore').val(),
-                match_action:'numberBattle',
-                match_questions:questions_answer,
-                type:'szzb'
-            }
-            $.ajax({
-                data:data,
-                success:function(res,ajaxStatu,xhr){  
-                    if(res.success){
-                        if(res.data.url){
-                            window.location.href=res.data.url;
-                            $.DelSession('ready_shuzi')
-                        }   
-                    }else{
-                        $.alerts(res.data.info)
-                        _this.removeClass('disabled')
-                    }
-                    
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    _this.removeClass('disabled')
-                }
-            })
-        }
-    }
-})
     function submit(time,submit_type){//提交答案
         $('#load').css({
                 'display':'block',
@@ -119,20 +81,24 @@ new AlloyFinger($('#complete')[0], {
             my_answer.push('')
         })
         var data={
-            action:'answer_submit',
-            _wpnonce:$('#inputSubmit').val(),
-            match_id:<?=$_GET['match_id']?>,
-            project_id:<?=$_GET['project_id']?>,
-            match_more:$('#inputMatchMore').val(),
-            my_answer:my_answer,
-            match_action:'subjectNumberBattle',
-            surplus_time:time,
-            match_questions:questions_answer,
-            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'szzb',
+                match_questions:questions_answer,
+                questions_answer:questions_answer,
+                project_more_id:$.Request('project_more_id'),
+
+                my_answer:my_answer,
+                surplus_time:time,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+
         }
 
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }

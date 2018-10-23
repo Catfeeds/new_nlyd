@@ -37,7 +37,7 @@
 
                     <div class="porker-color">
                         <?php foreach ($list as $k => $v){ ?>
-                            <div class="choose-color <?= $k=='spade' ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
+                        <div class="choose-color <?= $k==$list_keys[0] ? 'active' :'';?> <?=$k?>" id="<?=$k?>"><div><i class="iconfont">&#xe<?=$v['color']?></i></div></div>
                         <?php } ?>
                     </div>
 
@@ -45,23 +45,23 @@
                         <div class="choose-zoo">
                             <div class="choose-window">
                                 <?php foreach ($list as $k => $v){ ?>
-                                    <div class="choose-wrapper <?= $k=='spade'?'active':''?> <?=$k?>">
-                                        <?php foreach ($v['content'] as $val){ ?>
-                                            <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
-                                                <div class="small poker-detail poker-top">
-                                                    <div class="poker-name"><?=$val?></div>
-                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                                </div>
-                                                <div class="small poker-detail poker-bottom">
-                                                    <div class="poker-name"><?=$val?></div>
-                                                    <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
+                                <div class="choose-wrapper <?= $k==$list_keys[0]?'active':''?> <?=$k?>">
+                                    <?php foreach ($v['content'] as $val){ ?>
+                                    <div class="choose-poker" data-color="<?=$k?>" data-text="<?=$val?>">
+                                        <div class="small poker-detail poker-top">
+                                            <div class="poker-name"><?=$val?></div>
+                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                        </div>
+                                        <div class="small poker-detail poker-bottom">
+                                            <div class="poker-name"><?=$val?></div>
+                                            <div class="poker-type"><i class="iconfont">&#xe<?=$v['color']?></i></div>
+                                        </div>
                                     </div>
+                                    <?php } ?>
+                                </div>
                                 <?php } ?>
                             </div>
-                        </div>
+                        </div>    
                     </div>
                 </div>
             </div>
@@ -73,21 +73,10 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var questions_answer=[];
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var matching_question= $.GetSession('matching_question','1');
-    console.log(matching_question)
-    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-        questions_answer=matching_question['questions_answer'];
-    }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
-    }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
@@ -130,26 +119,20 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-                project_alias:'pkjl',
-                match_questions:questions_answer,
-                questions_answer:questions_answer,
-                project_more_id:$.Request('project_more_id'),
-
+                match_id:<?=$_GET['match_id']?>,
+                project_id:<?=$_GET['project_id']?>,
+                match_more:<?=!empty($_GET['match_more']) ? $_GET['match_more'] : 1;?>,
                 my_answer:my_answer,
+                match_action:'subjectPokerRelay',
                 surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
             }
-            // console.log(data)
-            // return false;
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
@@ -287,52 +270,56 @@ $('.choose-poker').each(function(e){
     var _this=$(this);
     new AlloyFinger(_this[0], {
         tap:function(){
-           var text=_this.attr('data-text');
-           var color=_this.attr('data-color');
-           _this.addClass('active');
-           var i='';
-           if(color=='club'){
-                i='<i class="iconfont">&#xe635;</i>'
-            }else if(color=='heart'){
-                i='<i class="iconfont">&#xe638;</i>'
-            }else if(color=='spade'){
-                i='<i class="iconfont">&#xe636;</i>'
-            }else if(color=='diamond'){
-                i='<i class="iconfont">&#xe634;</i>'
-            }
-            var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
-                        +'<div class="poker-detail poker-top">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                        +'<div class="poker-logo">'
-                            +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
-                        +'</div>'
-                        +'<div class="poker-detail poker-bottom">'
-                            +'<div class="poker-name">'+text+'</div>'
-                            +'<div class="poker-type">'+i+'</div>'
-                        +'</div>'
-                    +'</div>'
-            
-            if($('.poker-wrapper .poker.active').length>0){//绑定事件
-                var active=$('.poker-wrapper .poker.active')
-                active.after(poker);
-                active.removeClass('active')
-            }else{
-                $('.poker-wrapper .poker.active').removeClass('active')
-                $('.poker-wrapper').append(poker)
-            }
-
-            var newDom=$('.poker.active')
-            new AlloyFinger(newDom[0], {
-                tap:function(){
-                    var active=$('.poker-wrapper .poker.active')
-                    active.removeClass('active');
-                    newDom.addClass('active');
+            if(!_this.hasClass('disabled')){
+                $('.choose-poker').addClass('disabled')
+                var text=_this.attr('data-text');
+                var color=_this.attr('data-color');
+                _this.addClass('active');
+                var i='';
+                if(color=='club'){
+                    i='<i class="iconfont">&#xe635;</i>'
+                }else if(color=='heart'){
+                    i='<i class="iconfont">&#xe638;</i>'
+                }else if(color=='spade'){
+                    i='<i class="iconfont">&#xe636;</i>'
+                }else if(color=='diamond'){
+                    i='<i class="iconfont">&#xe634;</i>'
                 }
-            })
-            initWidth();
-            initScroll()
+                var poker='<div class="poker '+color+' active" data-color="'+color+'" data-text="'+text+'">'
+                            +'<div class="poker-detail poker-top">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                            +'<div class="poker-logo">'
+                                +'<img src="<?=student_css_url.'image/nlyd-big.png'?>">'
+                            +'</div>'
+                            +'<div class="poker-detail poker-bottom">'
+                                +'<div class="poker-name">'+text+'</div>'
+                                +'<div class="poker-type">'+i+'</div>'
+                            +'</div>'
+                        +'</div>'
+                
+                if($('.poker-wrapper .poker.active').length>0){//绑定事件
+                    var active=$('.poker-wrapper .poker.active')
+                    active.after(poker);
+                    active.removeClass('active')
+                }else{
+                    $('.poker-wrapper .poker.active').removeClass('active')
+                    $('.poker-wrapper').append(poker)
+                }
+
+                var newDom=$('.poker.active')
+                new AlloyFinger(newDom[0], {
+                    tap:function(){
+                        var active=$('.poker-wrapper .poker.active')
+                        active.removeClass('active');
+                        newDom.addClass('active');
+                    }
+                })
+                initWidth();
+                initScroll()
+                $('.choose-poker').removeClass('disabled')
+            }
         }
     });
 });
