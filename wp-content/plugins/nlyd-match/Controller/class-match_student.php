@@ -1918,11 +1918,11 @@ class Match_student {
                                     <div>
                                         <span for="" class="title">奖金金额:</span>
                                         <?=is_mobile()?'<br class="clear">':''?>
-                                        单项冠军: <input type="text" id="" name="project_champion_bonus" value="1000">
+                                        单项冠军: <input type="text" id="" name="project_champion_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        单项亚军: <input type="text" id="" name="project_runner_bonus" value="500">
+                                        单项亚军: <input type="text" id="" name="project_runner_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        单项季军: <input type="text" id="" name="project_season_bonus" value="200">
+                                        单项季军: <input type="text" id="" name="project_season_bonus" value="0">
                                     </div>
                                     <!--                       <div>-->
                                     <!--                           <span class="la">优秀选手:</span>-->
@@ -1964,19 +1964,19 @@ class Match_student {
                                     <div>
                                         <span class="title">奖金金额:</span>
                                         <?=is_mobile()?'<br class="clear">':''?>
-                                        大类冠军: <input type="text" id="" name="cate_champion_bonus" value="30000">
+                                        大类冠军: <input type="text" id="" name="cate_champion_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类亚军: <input type="text" id="" name="cate_runner_bonus" value="15000">
+                                        大类亚军: <input type="text" id="" name="cate_runner_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类季军: <input type="text" id="" name="cate_season_bonus" value="8000">
+                                        大类季军: <input type="text" id="" name="cate_season_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类优秀选手: <input type="text" id="" name="project_excellent_bonus" value="500">
+                                        大类优秀选手: <input type="text" id="" name="project_excellent_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组冠军: <input type="text" id="" name="cate_age_champion_bonus" value="1000">
+                                        大类年龄组冠军: <input type="text" id="" name="cate_age_champion_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组亚军: <input type="text" id="" name="cate_age_runner_bonus" value="500">
+                                        大类年龄组亚军: <input type="text" id="" name="cate_age_runner_bonus" value="0">
                                         <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组季军: <input type="text" id="" name="cate_age_season_bonus" value="200">
+                                        大类年龄组季军: <input type="text" id="" name="cate_age_season_bonus" value="0">
                                     </div>
                                 </div>
                             </div>
