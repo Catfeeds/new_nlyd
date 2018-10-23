@@ -326,7 +326,7 @@ $('.number').each(function(){
                     console.log(AA)
                 }
                 catch (e) {
-                    console.log('括号错误')
+                    // console.log('括号错误')
                 }
             }
         }
