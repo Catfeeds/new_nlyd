@@ -59,7 +59,8 @@
 <script>
 jQuery(function($) {
 
-    console.log(eval('8/(3-(8/3))'))    
+    console.log(eval('3*(10-10/5)'))  
+    console.log(eval('(10-(10/5))*3'))    
     var isSubmit=false;//是否正在提交
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
@@ -108,6 +109,7 @@ jQuery(function($) {
             if(_flag || _flag1){//重复题目，连续无解
                 initQuestion()
             }else{
+                select=['10','3','10','5']
                 var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
             }
@@ -456,7 +458,6 @@ new AlloyFinger($('#next')[0], {
                 //跳过2s
                 $('.answer').addClass('error-fast')
                 ajaxData[ajaxData.length-1]['isRight']=false;
-                var thisAjaxRow=ajaxData[ajaxData.length-1]
                 sys_second-=1
                 setTimeout(function() {
                     initQuestion()
@@ -467,6 +468,70 @@ new AlloyFinger($('#next')[0], {
         }
     }
 });
+
+
+function isRights(text) {
+    var flag=false;
+            ajaxData[ajaxData.length-1].yours=text;
+            var new_text=text.replace(/×/g,'*');
+            new_text=new_text.replace(/÷/g,'/');
+            $('.rand').each(function(){//所有数字按钮都已使用后
+                if(!$(this).hasClass('disabled')){
+                    flag=true;
+                    return false;
+                }
+            })
+            if(text.length!=0){
+                if(text=='本题无解'){
+                     if(ajaxData[ajaxData.length-1].rights=='本题无解'){
+                        ajaxData[ajaxData.length-1]['isRight']=true;
+                     }else{
+                        ajaxData[ajaxData.length-1]['isRight']=false;
+                     }
+                }else{
+                    if(flag){
+                        ajaxData[ajaxData.length-1]['isRight']=false;
+                    }else{
+                        var _result=calculateResult(new_text)
+                        if(_result==24){
+                            ajaxData[ajaxData.length-1]['isRight']=true;
+                        }else{
+                            if(_result=='error'){//符号错误
+                                ajaxData[ajaxData.length-1]['isRight']=false;
+                            }else{
+                                if(_result%1==0){//整数
+                                    ajaxData[ajaxData.length-1]['isRight']=false;
+                                }else{//浮点数
+                                    var __flag=false;
+                                    $.each(ajaxData[ajaxData.length-1]['examples'],function(i,v){
+                                        var _item=v;
+                                        var AA='';
+                                        try {
+                                            AA=eval(_item); // no exception occured
+                                        }
+                                        catch (e) {
+                                            AA='error'; 
+                                        }
+                                        if(AA==_result){//相同浮点数
+                                            __flag=true;
+                                            return false;
+                                        }
+                                    })
+                                    if(__flag){//相同浮点数
+                                        ajaxData[ajaxData.length-1]['isRight']=true;
+                                    }else{
+                                        ajaxData[ajaxData.length-1]['isRight']=false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                //跳过2s
+                ajaxData[ajaxData.length-1]['isRight']=false;
+            }
+}
     layui.use('layer', function(){
         // mTouch('body').on('tap','#sumbit',function(e){
     new AlloyFinger($('#sumbit')[0], {
@@ -487,9 +552,8 @@ new AlloyFinger($('#next')[0], {
                     }
                     ,btn2: function(index, layero){
                         layer.closeAll();
-                        var thisAjaxRow=ajaxData[ajaxData.length-1]
                         var text=$('.answer div').text()
-                        thisAjaxRow.yours=text;
+                        isRights(text)
                         submit(time);  
                     }
                     ,closeBtn:2
