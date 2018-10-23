@@ -32,8 +32,14 @@ if(!class_exists('Team')){
             $type = isset($_GET['team_type']) ? intval($_GET['team_type']) : 1;
             $user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : 1; //成员类型 1=学生 2=教练
             $search_str = isset($_GET['search']) ? trim($_GET['search']) : '';
-            $search_where = $search_str != '' ? ' AND (u.user_login LIKE "%'.$search_str.'%" OR u.user_mobile LIKE "%'.$search_str.'%" OR u.user_email LIKE "%'.$search_str.'%")' : '';
+
+            $joinSearch = '';
             global $wpdb;
+            if($search_str != ''){
+                $search_where = ' AND (u.user_login LIKE "%'.$search_str.'%" OR u.user_mobile LIKE "%'.$search_str.'%" OR u.user_email LIKE "%'.$search_str.'%" OR um.meta_value LIKE "%'.$search_str.'%")';
+                $joinSearch = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=m.user_id AND um.meta_key='user_real_name' ";
+            }
+
             //每个状态的数据数量
             $member_num = 0; // 所有战队成员数量
             $into_apply_num = 0; //申请入队数量
@@ -93,6 +99,7 @@ if(!class_exists('Team')){
             END AS status_title 
             FROM '.$wpdb->prefix.'match_team AS m 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
+            '.$joinSearch.'
             WHERE m.team_id='.$id.' AND m.status='.$status.$user_type_where.' AND u.ID !="" '.$search_where.'  
             ORDER BY m.status ASC 
             LIMIT '.$start.','.$pageSize;
@@ -144,15 +151,30 @@ if(!class_exists('Team')){
                                 <option value="4">驳回退队</option>
                             </select>
                             <input type="submit" id="doaction" class="button action  all-btn" value="应用">
+                            <input type="button" id="add_member" class="button action  all-btn" value="添加成员">
                         </div>
                         <p class="search-box">
                             <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                            <input type="text" id="s" placeholder="用户名/手机/邮箱" name="s" value="<?=$search_str?>">
+                            <input type="text" id="s" placeholder="用户名/姓名/手机/邮箱" name="s" value="<?=$search_str?>">
                             <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type='.$type.'&user_type='.$user_type.'&search=')?>'+document.getElementById('s').value" value="搜索用户">
                         </p>
 
                         <div class="tablenav-pages one-page">
                             <?=$pageHtml?>
+                        </div>
+                        <br class="clear">
+                        <div>
+                            <div>
+                                <input type="text" class="button">
+                                <button type="button" class="button">搜索用户</button>
+                            </div>
+                            <div>
+                                <select name="" id="">
+                                    <option value="">dddd</option>
+                                </select>
+                                <button type="button" class="button">确定</button>
+                            </div>
+                            
                         </div>
                     <h2 class="screen-reader-text">成员列表</h2><table class="wp-list-table widefat fixed striped users">
                         <thead>
