@@ -46,7 +46,7 @@
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
                                             <?php foreach ($default_category as $k =>$val){ ?>
-                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=__($val['post_title'], 'nlyd-student')?></div>
                                             <?php } ?>
                                         </div>
                                     </div>
@@ -81,7 +81,7 @@
                                 <?phP if(!empty($match_category)): ?>
                                 <?php foreach ($match_category as $k => $v){ ?>
                                 <div class="btn-wrap">
-                                    <div class="classify-btn <?=$k==0 ? 'classify-active' : '';?>" data-post-id="<?=$v['ID']?>"><?=$v['post_title']?></div>
+                                    <div class="classify-btn <?=$k==0 ? 'classify-active' : '';?>" data-post-id="<?=$v['ID']?>"><?=__($v['post_title'], 'nlyd-student')?></div>
                                 </div>
                                 <?php }?>
                                 <?php endif;?>
