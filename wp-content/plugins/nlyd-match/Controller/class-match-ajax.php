@@ -1321,6 +1321,68 @@ class Match_Ajax
         if($bool) wp_send_json_success(['info'=>'修改成功']);
         else wp_send_json_error(['info' => '修改失败']);
     }
+
+    /**
+     * 根据搜索信息查询用户
+     *
+     */
+    public function getUserBySearch(){
+        $val = isset($_POST['val']) ? trim($_POST['val']) : '';
+        $type = isset($_POST['type']) ? trim($_POST['type']) : '';
+        if($val == '' || $type == '') wp_send_json_error(['info' => '参数错误']);
+
+        global $wpdb;
+        $join = '';
+        $where = '';
+        switch ($type){
+            case 'team':
+//                $join = " RIGHT JOIN {$wpdb->prefix}match_team AS mt ON u.ID=mt.user_id";
+//                $where = ' AND mt.id=NULL';
+                break;
+        }
+//mt.status!=2 AND mt.status!=-1 AND mt.status!=1 OR
+        $result = $wpdb->get_results("SELECT  u.user_mobile,u.ID AS user_id,u.user_email,um1.meta_value AS user_real_name,um2.meta_value AS userID FROM {$wpdb->users} AS u 
+        LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=u.ID AND um1.meta_key='user_real_name' 
+        LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='user_ID' 
+        {$join}
+        WHERE (u.user_mobile LIKE '%{$val}%' OR u.user_email LIKE '%{$val}%' OR um1.meta_value LIKE '%{$val}%' OR um2.meta_value LIKE '%{$val}%'){$where}", ARRAY_A);
+        if($result){
+            foreach ($result as &$res){
+                if($res['user_real_name']){
+                    $res['user_real_name'] = unserialize($res['user_real_name']);
+                }else{
+                    $res['user_real_name']['real_name'] = '';
+                    $res['user_real_name']['real_ID'] = '';
+                    $res['user_real_name']['real_type'] = '';
+                    $res['user_real_name']['real_age'] = '';
+                }
+            }
+            wp_send_json_success(['info' => $result]);
+        }else{
+            wp_send_json_error(['info' => '无数据']);
+        }
+    }
+
+    /**
+     * 后台手动添加战队成员
+     */
+    public function addTeamMember(){
+        $team_id = isset($_POST['team_id']) ? intval($_POST['team_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        if($user_id < 1 || $team_id < 1) wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $teamUser = $wpdb->get_var("select id from {$wpdb->prefix}match_team where user_id = {$user_id} and user_type = 1 and (status=2 or status=1 or status=-1)");
+        if($teamUser) wp_send_json_error(['info' => '该用户已有战队或正在退入队申请']);
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}match_team where team_id = {$team_id} and user_id = {$user_id} and user_type = 1");
+
+        if(empty($id)){
+            $result = $wpdb->insert($wpdb->prefix.'match_team',array('team_id'=>$team_id,'user_id'=>$user_id,'user_type'=>1,'status'=>2,'created_time'=>get_time('mysql')));
+        }else{
+            $result = $wpdb->update($wpdb->prefix.'match_team',array('status'=>2,'created_time'=>get_time('mysql')),array('id'=>$id,'team_id'=>$team_id,'user_id'=>$user_id));
+        }
+        if($result) wp_send_json_success(['info' => '添加成功']);
+        else wp_send_json_error(['info' => '添加失败']);
+    }
 }
 
 new Match_Ajax();

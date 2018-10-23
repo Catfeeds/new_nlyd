@@ -19,7 +19,24 @@ if(!class_exists('Team')){
         public function add_submenu(){
 
             add_submenu_page( 'edit.php?post_type=team', '战队成员', '战队成员', 'manage_options', 'team-student', array($this,'student') );
+            add_submenu_page( 'edit.php?post_type=team', '移动成员', '移动成员', 'manage_options', 'team-student-move', array($this,'moveStudent') );
 
+        }
+
+        /**
+         * 移动成员
+         */
+        public function moveStudent(){
+            $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+            $id < 1 && exit('参数错误');
+            global $wpdb;
+            $row = $wpdb->get_row("SELECT p.post_title,um.meta_value AS user_real_name,mt.user_id FROM {$wpdb->prefix}match_team AS mt 
+            LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id 
+            LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id = mt.user_id AND um.meta_key='user_real_name' 
+            WHERE mt.id={$id}");
+
+            print_r($wpdb->last_query);
+            if(!$row) exit('未找到原数据');
         }
 
         /**
@@ -151,7 +168,7 @@ if(!class_exists('Team')){
                                 <option value="4">驳回退队</option>
                             </select>
                             <input type="submit" id="doaction" class="button action  all-btn" value="应用">
-                            <input type="button" id="add_member" class="button action  all-btn" value="添加成员">
+                            <input type="button" id="add_member_btn" class="button action  all-btn" value="添加成员">
                         </div>
                         <p class="search-box">
                             <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
@@ -163,19 +180,73 @@ if(!class_exists('Team')){
                             <?=$pageHtml?>
                         </div>
                         <br class="clear">
-                        <div>
+                        <div id="add_team_member_box" style="padding: 0.5em;border: #0a8406 1px solid;margin-top: 0.5em;margin-bottom: 0.5em;display: none">
                             <div>
-                                <input type="text" class="button">
-                                <button type="button" class="button">搜索用户</button>
+                                <input type="text" class="button" placeholder="姓名/证件号码/ID/手机/邮箱">
+                                <button type="button" class="button" id="search_member_btn">搜索用户</button>
                             </div>
+                            <br>
                             <div>
-                                <select name="" id="">
-                                    <option value="">dddd</option>
+<!--                                <div style="color:#a84a42;">无战队,无加入退出申请战队的用户</div>-->
+                                <select name="" id="add_team_member_select">
+
                                 </select>
-                                <button type="button" class="button">确定</button>
+                                <button type="button" class="button" id="confirm_add_team_member">确定</button>
+                                <button type="button" class="button" id="cancel_add_team_member">取消</button>
                             </div>
                             
                         </div>
+                        <script type="text/javascript">
+                            jQuery(document).ready(function($) {
+                                $('#search_member_btn').on('click', function () {
+                                    var val = $(this).prev().val();
+                                    if(val == '' || val == undefined || val == false) return false;
+                                    $.ajax({
+                                        type : 'post',
+                                        url : ajaxurl,
+                                        data : {'action':'getUserBySearch','val':val, 'type':'team'},
+                                        dataType : 'json',
+                                        success : function (response) {
+                                            if(response['success'] == true){
+                                                var _html = '';
+                                                $.each(response.data.info, function (i, v) {
+                                                    _html += '<option value="'+v.user_id+'">'+v.user_real_name.real_name+'</option>'
+                                                });
+                                                $('#add_team_member_select').html(_html);
+                                            }else{
+                                                alert(response.data.info);
+                                            }
+                                        },error : function () {
+                                            alert('请求失败');
+                                        }
+                                    });
+                                });
+                                $('#add_member_btn').on('click', function () {
+                                    $('#add_team_member_box').css('display', 'block');
+                                })
+                                $('#cancel_add_team_member').on('click', function () {
+                                    $('#add_team_member_box').css('display', 'none');
+                                })
+                                $('#confirm_add_team_member').on('click',function () {
+                                    var id = $(this).prev().val();
+                                    var team_id = <?=$id?>;
+                                    if(id == false || id == undefined || id== '' || id==null || team_id==false) return false;
+                                    $.ajax({
+                                        url : ajaxurl,
+                                        data : {'action':'addTeamMember', 'team_id':team_id,'user_id':id},
+                                        dataType : 'json',
+                                        type : 'post',
+                                        success : function (response) {
+                                            alert(response.data.info);
+                                            if(response['success'] == true) window.location.reload();
+                                        }, error : function () {
+                                            alert('请求失败');
+                                        }
+                                    });
+                                })
+                            })
+
+                        </script>
                     <h2 class="screen-reader-text">成员列表</h2><table class="wp-list-table widefat fixed striped users">
                         <thead>
                         <tr>
@@ -207,7 +278,7 @@ if(!class_exists('Team')){
                                     $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
                                 ?>
 
-                                <tr id="user-5" data-id="<?=$row['id']?>">
+                                <tr data-id="<?=$row['id']?>">
                                     <th scope="row" class="check-column">
                                         <label class="screen-reader-text" for="user_5"></label>
                                         <input type="checkbox" name="" id="" class="subscriber check" value="<?=$row['id']?>">
@@ -222,10 +293,11 @@ if(!class_exists('Team')){
                                                 <span class="edit"><a href="javascript:;" class="agree">同意入队</a> | </span>
                                                 <span class="delete"><a class="submitdelete refuse" href="javascript:;"">拒绝入队</a> </span>
                                             <?php }else if($row['status'] == 2){ ?>
-<!--                                                 <span class="delete"><a class="submitdelete expel" href="javascript:;"">踢出战队</a> </span>-->
+                                                 <span class="delete"><a class="submitdelete expel" href="javascript:;"">踢出战队</a> </span>
+                                                 <span class="delete"><a href="<?=admin_url('edit.php?post_type=team&page=team-student-move&id='.$id)?>">移动成员</a> </span>
                                             <?php } ?>
 
-                                            <span class=""><a class="submitdelete " href="javascript:;" style="height: 1em;display: inline-block"></a> </span>
+<!--                                            <span class=""><a class="submitdelete " href="javascript:;" style="height: 1em;display: inline-block"></a> </span>-->
                                         </div>
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
