@@ -965,7 +965,7 @@ class Student_Matchs extends Student_Home
             print_r($questions_answer);*/
             //die;
 
-            $count_value = array_count_values($answer_array);
+            $count_value = !empty($answer_array) ? array_count_values($answer_array) : array();
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
@@ -984,7 +984,7 @@ class Student_Matchs extends Student_Home
 
             if(!empty($questions_answer)){
                 $len = count($questions_answer);
-                $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                $error_arr = !empty($my_answer) ? array_diff_assoc($questions_answer,$my_answer) : array();
                 $error_len = count($error_arr);
                 $success_len = $len - $error_len;
             }else{
@@ -1970,6 +1970,7 @@ class Student_Matchs extends Student_Home
 
         //答案记录页面
         if(in_array(ACTION,array('answerLog','checkAnswerLog'))){
+
             if($this->project_alias=='nxss'){//逆向速算成绩页
                 wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
                 wp_enqueue_style( 'my-student-subject' );
