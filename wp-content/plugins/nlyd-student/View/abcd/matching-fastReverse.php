@@ -106,11 +106,14 @@ jQuery(function($) {
                 }
             })
             var _len=ajaxData.length;
-            var _rights=valid(select);
-            
+            var examples=valid(select)
+            var _rights='<?=__('本题无解', 'nlyd-student')?>'
+            if(examples.length>0){//有解
+                _rights=examples[0]
+            }
             if(_len>=4){//前面的4题连续无解
                 if(_rights=='<?=__('本题无解', 'nlyd-student')?>'){//本题也无解
-                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
+                    if(ajaxData[_len-1]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-2]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-3]['rights']=='<?=__('本题无解', 'nlyd-student')?>' && ajaxData[_len-4]['rights']=='<?=__('本题无解', 'nlyd-student')?>'){
                         _flag1=true;
                     }
                 }
@@ -440,13 +443,43 @@ new AlloyFinger($('#next')[0], {
                         _this.removeClass('disabled')
                         return false;
                     }else{
-                        if(calculateResult(new_text)==24){
+                        var _result=calculateResult(new_text)
+                        if(_result==24){
                             $('.answer').addClass('right-fast')
                             ajaxData[ajaxData.length-1]['isRight']=true;
-                            
                         }else{
-                            $('.answer').addClass('error-fast')
-                            ajaxData[ajaxData.length-1]['isRight']=false;
+                            if(_result=='error'){//符号错误
+                                $('.answer').addClass('error-fast')
+                                ajaxData[ajaxData.length-1]['isRight']=false;
+                            }else{
+                                if(_result%1==0){//整数
+                                    $('.answer').addClass('error-fast')
+                                    ajaxData[ajaxData.length-1]['isRight']=false;
+                                }else{//浮点数
+                                    var __flag=false;
+                                    $.each(ajaxData[ajaxData.length-1]['examples'],function(i,v){
+                                        var _item=v;
+                                        var AA='';
+                                        try {
+                                            AA=eval(_item); // no exception occured
+                                        }
+                                        catch (e) {
+                                            AA='error'; 
+                                        }
+                                        if(AA==_result){//相同浮点数
+                                            __flag=true;
+                                            return false;
+                                        }
+                                    })
+                                    if(__flag){//相同浮点数
+                                        $('.answer').addClass('right-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=true;
+                                    }else{
+                                        $('.answer').addClass('error-fast')
+                                        ajaxData[ajaxData.length-1]['isRight']=false;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

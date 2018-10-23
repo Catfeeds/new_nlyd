@@ -23,17 +23,22 @@
                         <p class="fs_12 ta_c bottom_tips c_black">
                             <?=__('中场休息', 'nlyd-student')?>
                         </p>
-                        <?php }else {
-                            if ($end_project == 'y') {
-                                $text = __('本轮结束后查看答题详情', 'nlyd-student');
-                            } else {
-                                $text = __('下一轮开赛', 'nlyd-student');
-                            }
-                        ?>
-                        <p class="fs_12 ta_c bottom_tips c_black">
-                            <?=$current_project['project_title']?><?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more'])?><?=$text?>
-                        </p>
                         <?php }
+                        else {
+                            if ($start_project != 'y') {
+
+                                if ($end_project == 'y') {
+                                    $text = __('本轮结束后查看答题详情', 'nlyd-student');
+                                } else {
+                                    $text = __('下一轮开赛', 'nlyd-student');
+                                }
+
+                                ?>
+                                <p class="fs_12 ta_c bottom_tips c_black">
+                                    <?= $current_project['project_title'] ?><?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more']) ?><?= $text ?>
+                                </p>
+                        <?php }
+                        }
                         ?>
 
                         

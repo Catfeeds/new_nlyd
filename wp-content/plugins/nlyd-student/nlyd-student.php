@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','2.0.9.3' );
+            define( 'leo_student_version','v2.1.0.1' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -205,7 +205,17 @@ if(!class_exists('StudentController')){
                 ";
                 //print_r($sql);
                 $row = $wpdb->get_row($sql,ARRAY_A);
-                
+
+                if(empty($row)){
+                    $sql = "select a.match_id,a.match_start_time from {$wpdb->prefix}match_meta_new a 
+                    left join {$wpdb->prefix}order b on a.match_id = b.match_id
+                    left join {$wpdb->prefix}posts c on a.match_id = c.ID
+                    WHERE a.match_status = -2 AND a.match_start_time >= NOW() AND b.user_id = {$current_user->ID} AND pay_status in(2,3,4) 
+                    ORDER BY match_start_time asc limit 1";
+                    //print_r($sql);
+                    $row = $wpdb->get_row($sql,ARRAY_A);
+                }
+
                 if(!empty($row)){   
                     $this->wait_match['match_start_time'] = strtotime($row['match_start_time'])-get_time();
                     $this->wait_match['match_url'] = home_url('matchs/matching/match_id/'.$row['match_id']);

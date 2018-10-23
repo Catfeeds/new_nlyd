@@ -372,6 +372,7 @@ class Student_Ajax
                 if ($success_len == $len){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
+
                 break;
             default:
                 break;
@@ -401,6 +402,22 @@ class Student_Ajax
 
         if($result){
             $log_id = $wpdb->insert_id;
+
+            if(!empty($_POST['post_id']) && $_POST['project_alias'] == 'wzsd'){
+
+                //获取该文章原始分类
+                $sql = " select b.slug from {$wpdb->prefix}term_relationships a left join {$wpdb->prefix}terms b on a.term_taxonomy_id = b.term_id where a.object_id = {$_POST['post_id']}";
+                $slug = $wpdb->get_var($sql);
+                if($slug == 'en-match-question'){
+                    $type = 'cn-test-question';
+                }else{
+                    $type = 'en-test-question';
+                }
+                //修改其分类
+                $a = wp_set_object_terms( $_POST['post_id'], array($type) ,'question_genre');
+                //var_dump($a);die;
+            }
+
             wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
         }else {
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));

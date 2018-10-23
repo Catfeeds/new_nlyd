@@ -46,7 +46,7 @@
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
                                             <?php foreach ($default_category as $k =>$val){ ?>
-                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['match_project_id']?> ><?=$val['post_title']?></div>
+                                            <div class="classify-btn <?=$k == 0 ? 'classify-active' : '';?>" data-post-id=<?=$val['ID']?> ><?=$val['post_title']?></div>
                                             <?php } ?>
                                         </div>
                                     </div>

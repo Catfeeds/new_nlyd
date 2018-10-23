@@ -145,6 +145,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
             $(this).attr('data-seconds',S).text(time)
+
             if(S==0){
                 var href=_this.parents('.a-btn').attr('href');
                 $.DelSession('leavePageWaits')
