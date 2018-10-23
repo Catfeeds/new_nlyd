@@ -319,6 +319,13 @@ $('.number').each(function(){
                         }
                     }
                 }
+                try {
+                var AA=eval($('.answer div').text()); // no exception occured
+                    console.log(AA)
+                }
+                catch (e) {
+                    console.log('括号错误')
+                }
             }
         }
     });
@@ -430,6 +437,7 @@ new AlloyFinger($('#next')[0], {
                                         catch (e) {
                                             AA='error'; 
                                         }
+                                        // console.log(_result)
                                         if(AA==_result){//相同浮点数
                                             __flag=true;
                                             return false;
