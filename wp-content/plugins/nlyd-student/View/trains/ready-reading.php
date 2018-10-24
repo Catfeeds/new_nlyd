@@ -40,7 +40,7 @@ jQuery(function($) {
             if(!$('#complete').hasClass('disabled')){
                 var time=$('.count_down').attr('data-seconds');
                 var href=$(this).attr('data-href')
-                var new_href=href+'/surplus_time/'+time;
+                var new_href=href+'/surplus_time/'+time
                 window.location.href=new_href
                 $('#complete').addClass('disabled')
             }

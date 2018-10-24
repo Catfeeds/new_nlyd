@@ -1,0 +1,291 @@
+﻿/*
+Theme Name: the7dtchild
+Author: Dream-Theme
+Author URI: http://dream-theme.com/
+Description: The7 is perfectly scalable, performance and SEO optimized, responsive, retina ready multipurpose WordPress theme. It will fit every site – big or small. From huge corporate portals to studio or personal sites – The7 will become a great foundation for your next project!
+Version: 1.0.0
+License: This WordPress theme is comprised of two parts: (1) The PHP code and integrated HTML are licensed under the GPL license as is WordPress itself.  You will find a copy of the license text in the same directory as this text file. Or you can read it here: http://wordpress.org/about/gpl/ (2) All other parts of the theme including, but not limited to the CSS code, images, and design are licensed according to the license purchased. Read about licensing details here: http://themeforest.net/licenses/regular_extended
+Template: dt-the7
+*/
+html, body, body.page, .wf-container > *{
+    font:normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
+    color: rgba(38, 38, 38, 0.6);
+}
+@font-face {font-family: 'iconfont';
+    src: url('iconfont.eot');
+    src: url('iconfont.eot?#iefix') format('embedded-opentype'),
+    url('font/iconfonts.woff') format('woff'),
+    url('font/iconfonts.ttf') format('truetype'),
+    url('font/iconfonts.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:0.16rem;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0;
+    -moz-osx-font-smoothing: grayscale;}
+
+.content{
+    padding: 0 10px;
+    position: relative;
+}
+input[type='tel']{
+    color: #b8bcbe;
+}
+a{
+    cursor: pointer;
+    text-decoration: none!important;
+}
+a:active,button:active,.opacity{
+    opacity:0.6;
+    filter: alpha(opacity=60);
+}
+
+.pace .pace-activity::after, .pace .pace-activity::before{
+    content: none!important;
+}
+#load .pace .pace-activity{
+    background: #fff url(./css/image/loading.gif) no-repeat center center !important;
+    background-size: contain!important;
+    border-radius:0 !important;
+}
+.spinner-loader .load-wrap,#load .load-wrap{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -65px;
+    margin-top: -65px;
+    width: 130px;
+    height: 130px;
+    background: #fff url(./css/image/loading.gif) no-repeat center center !important;
+    background-size: contain!important;
+    border-radius:0 !important;
+}
+.accent-gradient #load,#load{
+    background: #fff!important;
+    
+}
+a:hover {
+    color: currentColor;
+  }
+/* 中文字体 */
+.ff_cn{
+    font-family:'PingFang SC';
+}
+/* 数字和英文字体 */
+.ff_num{
+    font-family:'Arial'!important;
+}
+/* 字体大小 */
+.fs_20{
+    font-size: 0.20rem;
+}
+.fs_18{
+    font-size: 0.18rem;
+}
+.fs_16{
+    font-size: 0.16rem;
+}
+.fs_15{
+    font-size: 0.15rem;
+}
+.fs_14{
+    font-size: 0.14rem;
+}
+.fs_13{
+    font-size: 0.13rem;
+}
+.fs_12{
+    font-size: 0.12rem;
+}
+/* 字体颜色 */
+.c_white,a.c_white{
+    color: #fff;
+}
+a.c_white:hover{
+    color: #fff;
+}
+a.c_yellow,.c_yellow{
+    color: #FFAB1F;
+}
+a.c_yellow:hover{
+    color: #FFAB1F;
+}
+.c_blue,a.c_blue{
+    color: #2484FE;
+}
+a.c_blue:hover{
+    color: #2484FE;
+}
+.c_orange,a.c_orange{
+    color: #FB8E8E;
+}
+a.c_orange:hover{
+    color: #FB8E8E;
+}
+.c_black,a.c_black{
+    color: #262626;
+}
+a.c_black:hover{
+    color: #262626;
+}
+.c_black8,a.c_black8{
+    color: rgba(38, 38, 38, 0.8);
+}
+a.c_black8:hover{
+    color: rgba(38, 38, 38, 0.8);
+}
+.c_black6,a.c_black6{
+    color: rgba(38, 38, 38, 0.6);
+}
+a.c_black6:hover{
+    color: rgba(38, 38, 38, 0.6);
+}
+.c_black3,a.c_black3{
+    color: rgba(38, 38, 38, 0.3);
+}
+a.c_black3:hover{
+    color: rgba(38, 38, 38, 0.3);
+}
+.border{
+    border: 1px solid rgba(38, 38, 38, 0.1);
+}
+.bold{
+    font-weight: bold;
+}
+.ti_28{
+    text-indent: 0.28rem;
+}
+.ti_24{
+    text-indent: 0.24rem;
+}
+/* 背景 */
+.bg_blue{
+    background: #2484FE;
+}
+.bg_orange{
+    background: #FB8E8E;
+}
+.bg_yellow{
+    background: #F8BF36;
+}
+.bg_gradient_orange{
+    background: -webkit-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: -o-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: -moz-linear-gradient(90deg,#F9A9B8, #FB8E8E);
+    background: linear-gradient(90deg,#F9A9B8, #FB8E8E);
+}
+.bg_gradient_blue{
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
+}
+.bg_gradient_grey{
+    background: -webkit-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -o-linear-gradient(90deg,#b8bcbe,#919191);
+    background: -moz-linear-gradient(90deg,#b8bcbe,#919191);
+    background: linear-gradient(90deg,#b8bcbe,#919191);
+}
+
+/*  间距*/
+.mb_10{
+    margin-bottom: 10px;
+}
+.mb_15{
+    margin-bottom: 15px;
+}
+.pl_15{
+    padding-left: 15px;
+}
+.ml_10{
+    margin-left: 10px;
+}
+/* 图片 */
+.img-box{
+    min-height: 1px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.img-box img{
+    width: 100%;
+    height: auto;
+    margin :auto;
+}
+/* 省略 */
+.text_1{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.text_2{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    line-break:auto;
+    -webkit-box-orient:vertical;
+    word-wrap: break-word;
+}
+.text_3{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    line-break:auto;
+    -webkit-box-orient:vertical;
+    word-wrap: break-word;
+}
+.pointer{
+    cursor: pointer;
+}
+.ta_c{
+    text-align: center;
+}
+.ta_l{
+    text-align: left;
+}
+.ta_r{
+    text-align: right;
+}
+.pull-right{
+    float: right;
+}
+.pull-left{
+    float: left;
+}
+@media screen and (min-width:1200px) {
+    html{font-size:625%!important;}
+}
+@media screen and (min-width:360px) and (max-width:374px) and (orientation:portrait) {
+    html { font-size: 703%!important; }
+}
+@media screen and (min-width:375px) and (max-width:383px) and (orientation:portrait) {
+    html { font-size: 732.4%!important; }
+}
+@media screen and (min-width:384px) and (max-width:399px) and (orientation:portrait) {
+    html { font-size: 750%!important; }
+}
+@media screen and (min-width:400px) and (max-width:413px) and (orientation:portrait) {
+    html { font-size: 781.25%!important; }
+}
+@media screen and (min-width:414px) and (max-width:431px) and (orientation:portrait){
+    html { font-size: 808.6%!important; }
+}
+@media screen and (min-width:432px) and (max-width:479px) and (orientation:portrait){
+    html { font-size: 843.75%!important; }
+}
+@media screen and (max-width: 1199px){
+    html{font-size:625%!important;}
+    input::-webkit-input-placeholder {
+        color:#b8bcbe;font-size:0.12rem;
+    }
+    input:-moz-placeholder {
+        color:#b8bcbe;font-size:0.12rem;
+    }
+    input::-moz-placeholder {
+        color:#b8bcbe;font-size:0.12rem;
+    }
+    input:-ms-input-placeholder {
+        color:#b8bcbe;font-size:0.12rem;
+    }
+}  

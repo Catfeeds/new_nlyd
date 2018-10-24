@@ -556,15 +556,6 @@ p.no-info-text{
 .mui-pull-left {
     float: left;
 }
-.mui-bar .mui-title {
-    /* right: 40px;
-    left: 40px;
-    display: inline-block;
-    overflow: hidden;
-    width: auto;
-    margin: 0;
-    text-overflow: ellipsis; */
-}
 .mui-title {
     display: table;
     line-height: 20px;

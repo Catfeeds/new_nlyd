@@ -67,11 +67,22 @@ jQuery(function($) {
             type:'pkjl',
             count_down:$('.count_down').attr('data-seconds')
         }
-        $.SetSession('train_match',sessionData,0)
+        $.SetSession('train_match',sessionData)
     }
     $.each(questions_answer,function(i,v){
         var item=v.split('-')
         data_match.push(item)
+    })
+    new AlloyFinger($('#complete')[0], {
+        tap:function(){
+            var sessionData={//存储session
+                train_questions:questions_answer,
+                genre_id:$.Request('genre_id'),
+                type:'pkjl',
+                count_down:$('.count_down').attr('data-seconds')
+            }
+            $.SetSession('train_match',sessionData)
+        }
     })
     function splits(str) {
             return str.split('-');
@@ -199,7 +210,7 @@ jQuery(function($) {
 //             type:'pkjl',
 //             count_down:$('.count_down').attr('data-seconds')
 //         }
-//         $.SetSession('train_match',sessionData,0)
+//         $.SetSession('train_match',sessionData)
 //     }
 // })
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
