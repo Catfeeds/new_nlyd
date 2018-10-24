@@ -473,7 +473,7 @@ if(!class_exists('MatchController')){
         public function manage_match_columns($column_name, $id){
             global $wpdb;
             $sql = "select 
-                            match_slogan,match_genre,match_start_time,entry_start_time,entry_end_time,match_address,match_cost,match_status,match_use_time,match_more,match_subject_interval,match_project_interval,
+                            match_slogan,match_genre,match_start_time,entry_end_time,match_address,match_cost,match_status,match_use_time,
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 

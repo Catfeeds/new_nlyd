@@ -378,7 +378,7 @@ class Download
 
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-        $match = $wpdb->get_row('SELECT match_status,match_more FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
         $matchEnd = true;
