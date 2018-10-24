@@ -1592,6 +1592,11 @@ class Student_Matchs extends Student_Home
             wp_enqueue_style( 'my-student-record' );
 
         }
+        if(ACTION=='bonusDetail'){//奖金明细
+            wp_register_style( 'my-student-bonusDetail', student_css_url.'bonusDetail/bonusDetail.css',array('my-student') );
+            wp_enqueue_style( 'my-student-bonusDetail' );
+
+        }
         if(ACTION=='singleRecord'){//单项比赛成绩排名页
             wp_register_script( 'student-share',student_js_url.'share/NativeShare.js', leo_student_version  );
             wp_enqueue_script( 'student-share' );

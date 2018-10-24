@@ -275,8 +275,7 @@ jQuery(function($) {
                                 +'<td><?=__('姓名', 'nlyd-student')?></td>'
                                 +'<td><?=__('ID', 'nlyd-student')?></td>'
                                 +'<td><?=__('状态', 'nlyd-student')?></td>'
-                                +'<td><?=__('项目总分', 'nlyd-student')?></td>'
-                                +'<td><?=__('操作', 'nlyd-student')?></td>'
+                                +'<td><?=__('奖金明细', 'nlyd-student')?></td>'
                             }
                             $('#one_3_head').html(html_)
                         }
@@ -391,16 +390,26 @@ jQuery(function($) {
                                             lis.push(dom)                           
                                         })
                                     }else if(arg['rank_type']=="money"){//奖金
-                                        console.log(res)
                                         $.each(res.data.info,function(index,value){
-                                            // var dom='<tr>'
-                                            //             +'<td><div class="table_content c_black">'+value+'</div></td>'
-                                            //             +'<td><div class="table_content c_black">'+value.team_name+'</div></td>'
-                                            //             +'<td><div class="table_content">'+value.team_id+'</div></td>'
-                                            //             +'<td><div class="table_content c_green">'+value.my_score+'</div></td>'
-                                            //             +'<td><div class="table_content c_blue"><a href="'+value+'"><?=__('奖金明细', 'nlyd-student')?></a></div></td>'
-                                            //         +'</tr>'
-                                            // lis.push(dom)                           
+                                            var _type="";
+                                            var c_green="c_green";
+                                            if(value.is_send=="n"){
+                                                _type='等待发放'
+                                                c_green="c_black6";
+                                            }else if(value.is_send=="y"){
+                                                _type='已发放'
+                                            }else{
+                                                _type='等待发放'
+                                                c_green="c_black6";
+                                            }
+                                            var dom='<tr>'
+                                                        +'<td><div class="table_content c_black">'+value.num+'</div></td>'
+                                                        +'<td><div class="table_content c_black">'+value.real_name+'</div></td>'
+                                                        +'<td><div class="table_content c_black6">'+value.userID+'</div></td>'
+                                                        +'<td><div class="table_content '+c_green+'">'+_type+'</div></td>'
+                                                        +'<td><div class="table_content"><a class="c_blue" href="'+value.url+'"><?=__('查看', 'nlyd-student')?></a></div></td>'
+                                                    +'</tr>'
+                                            lis.push(dom)                           
                                         })
                                     }
                                     if (res.data.info.length<50) {
