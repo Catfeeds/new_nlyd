@@ -53,6 +53,7 @@
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
                                 <input type="hidden" name="loginType" value="<?=$_GET['loginType']?>">
+                                <input type="hidden" name="match_id" value="<?=$_GET['id']?>">
                                 <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPhone" lay-filter="bindPhone" lay-submit=""><?=__('确认绑定', 'nlyd-student')?></a>
                             </div>
                         </div>
@@ -84,6 +85,7 @@
                                 <input type="hidden" name="access" value="<?=$data['access']?>">
                                 <input type="hidden" name="open" value="<?=$data['open']?>">
                                 <input type="hidden" name="loginType" value="<?=$_GET['loginType']?>">
+                                <input type="hidden" name="match_id" value="<?=$_GET['id']?>">
                                 <a class="layui-btn submitBtn  bg_gradient_blue fs_16" id="bindPwd" lay-filter="bindPwd" lay-submit=""><?=__('登 录', 'nlyd-student')?></a>
                             </div>
                         </div>

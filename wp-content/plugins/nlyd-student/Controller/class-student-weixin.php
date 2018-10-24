@@ -236,8 +236,13 @@ class Student_Weixin
         if($type == false) {
             
             if($_SESSION['user_openid']) wp_redirect(home_url('account/certification/type/sign'));
-            
-            wp_redirect(home_url('account'));//跳转到用户中心
+
+            if(isset($_SESSION['redirect_url'])){
+                $url = $_SESSION['redirect_url'];
+                unset($_SESSION['redirect_url']);
+            }
+
+            wp_redirect($url);//跳转到用户中心
             exit;
         }
         return true;

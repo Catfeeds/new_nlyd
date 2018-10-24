@@ -12,11 +12,23 @@ class Student_Signs
 
     public $appid = 'wxb575928422b38270';
     public $appsecret = '1f55ec97e01f249b4ac57b7c99777173';
-    
+
     public function __construct($action)
     {
+        if(isset($_GET['match_id'])){
+
+            //确认比赛信息
+            global $wpdb;
+            $sql = "select match_status from {$wpdb->prefix}match_meta_new where match_id = {$_GET['match_id']} ";
+            $match_status = $wpdb->get_var($sql);
+            if(empty($match_status) || $match_status == -3){
+                echo '<h3>签到结束</h3>';
+                die;
+            }
+        }
 
         if(strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false && ACTION == 'index'){
+
             $this->index();
             die;
         }else{
@@ -28,10 +40,10 @@ class Student_Signs
 
     /**
     签到操作
-    */
+     */
     public function index(){
 
-    	if(isset($_SESSION['user_openid'])) unset($_SESSION['user_openid']);
+        if(isset($_SESSION['user_openid'])) unset($_SESSION['user_openid']);
 
         $this->getWebCode();
     }
@@ -52,22 +64,32 @@ class Student_Signs
             $real_ID = isset($user_real_name['real_ID']) ? hideStar($user_real_name['real_ID']) : '';
             $real_name = isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '';
             //var_dump($user_info);
+            $match = get_post($_GET['id']);
+
+            $match_title = $match->post_title;
+
+            //获取所有报名信息
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4)";
+            $results = $wpdb->get_results($sql,ARRAY_A);
+            $index = array_search($current_user->ID,array_column($results,'user_id')) + 1;
+            //print_r($index);
+            //print_r(array_column($results,'user_id'));
         }
         $view = student_view_path.CONTROLLER.'/success.php';
-        load_view_template($view,array('real_ID'=>$real_ID,'real_name'=>$real_name,'address'=>$user_address['province'].$user_address['city'].$user_address['area']));
+        load_view_template($view,array('index'=>$index,'match_title'=>$match_title,'real_ID'=>$real_ID,'real_name'=>$real_name,'address'=>$user_address['province'].$user_address['city'].$user_address['area']));
     }
 
 
     /*二维码页面展示*/
     public function signs(){ ?>
 
-    <script type="text/javascript">
-        jQuery(function($){
-            $.alerts(__('请使用微信扫码进行签到', 'nlyd-student'));
-        })
+        <script type="text/javascript">
+            jQuery(function($){
+                $.alerts("<?=__('请使用微信扫码进行签到', 'nlyd-student')?>");
+            })
             //alert('请使用微信扫码进行签到');
-    </script>
-    <?php
+        </script>
+        <?php
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
     }
@@ -124,7 +146,7 @@ class Student_Signs
      * 微信网页授权获取access_token
      */
     public function getWebAccessToken()
-    {   
+    {
         $code = $_GET['code'];
 
         $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
@@ -133,26 +155,28 @@ class Student_Signs
         $url .= '&code='.$code;
         $url .= '&grant_type=authorization_code';
         $data = request_get($url);
-        
+
         if (isset($data['errcode'])) {
 
             echo '<h1>错误：</h1>'.$data['errcode'];
-        	echo '<br/><h2>错误信息：</h2>'.$data['errmsg'];
-        	die;
+            echo '<br/><h2>错误信息：</h2>'.$data['errmsg'];
+            die;
         }
 
         $access_token = $data['access_token'];
         $openid = $data['openid'];
-		
-	    $_SESSION['user_openid'] == $openid;
+
+        $_SESSION['user_openid'] == $openid;
         //是否存在用户
         global $wpdb;
         $users = $wpdb->get_row('SELECT ID,user_mobile,user_email FROM '.$wpdb->users.' WHERE weChat_openid="'.$data['openid'].'" AND weChat_openid != ""');
+        $users_id = $users->ID == true ? $users->ID : 0;
 
         if(empty($users) || (!$users->user_mobile && !$users->user_email)){
             $users_id = $users->ID == true ? $users->ID : 0;
-            $url = home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/loginType/sign/id/'.$_GET['id']);
-        ?>
+            $url = home_url('logins/bindPhone/uid/'.$users_id.'/access/'.$access_token.'/oid/'.$openid.'/loginType/sign/id/'.$_GET['match_id']);
+            //var_dump($url);die;
+            ?>
             <script type="text/javascript">
                 alert("<?=__('你是新用户或未进行手机绑定\\n即将跳转到绑定页', 'nlyd-student')?>");
                 setTimeout(function(){
@@ -161,7 +185,7 @@ class Student_Signs
                 },1500)
             </script>
 
-        <?php
+            <?php
             exit;
         }
 
@@ -169,121 +193,51 @@ class Student_Signs
         wp_set_current_user($users->ID);
         wp_set_auth_cookie($users->ID);
 
-        $meta = get_user_meta($users->ID,'user_real_name')[0];
-        //var_dump($users->ID);die;
-        if(empty($meta['real_name'])){
-            $url = home_url('account/certification/type/sign/id/'.$_GET['id']);
-            //add_shortcode('student-signs',array($this,'signs'));
-        ?>
+        //获取报名列表
+        $sql = "select id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and user_id = $users->ID and pay_status in (2,3,4)";
+        $order_id = $wpdb->get_var($sql);
+        if(empty($order_id)){ ?>
             <script type="text/javascript">
-            	//$.alerts('即将跳转到实名认证页');
-                alert('<?=__('你未进行实名认证\\n即将跳转到实名认证页', 'nlyd-student')?>');
+                //$.alerts('即将跳转到实名认证页');
+                alert('<?=__('未检测到报名信息\\n请联系管理员核实', 'nlyd-student')?>');
                 setTimeout(function(){
-                    window.location.href='<?=$url?>';
+                    window.location.href='<?=home_url("matchs/info/match_id/".$_GET['match_id'])?>';
                     return false;
-                },1500)
+                },500)
             </script>
-        <?php
-            exit;
-        }
-        else{
 
-        	$sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$meta['real_name']}' ";
-            $row = $wpdb->get_row($sql,ARRAY_A);
-         	//var_dump($row);die;
-            if(empty($row)){
-				$url = home_url('account/certification/type/sign/id/'.$_GET['id']);
-			?>
-				<script type="text/javascript">
-            	//$.alerts('即将跳转到实名认证页');
-                alert('<?=__("该用户未成功匹配参赛资格\\n请确认该选手实名信息", 'nlyd-student')?>');
-                setTimeout(function(){
-                    window.location.href='<?=$url?>';
-                    return false;
-                },1500)
-            </script>
             <?php
+            exit;
+        }else{
+            $b = $wpdb->insert(
+                $wpdb->prefix.'match_sign',
+                array(
+                    'user_id'=>$users->ID,
+                    'match_id'=>56522,
+                    'created_time' => get_time('mysql')
+                )
+            );
+            if($b){
+                ?>
+
+                <script type="text/javascript">
+                    //$.alerts('即将跳转到实名认证页');
+                    alert('<?=__('签到成功', 'nlyd-student')?>');
+                    setTimeout(function(){
+                        window.location.href='<?=home_url('signs/success/id/'.$_GET['match_id'])?>';
+                        return false;
+                    },500)
+                </script>
+                <?php
                 exit;
-            }
-            else{
-            	$order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and user_id = {$users->ID} ");
-            	//var_dump($order_id);die;
-            	if(!empty($order_id)){
-            		$b = $wpdb->insert(
-                                        $wpdb->prefix.'match_sign',
-                                        array(
-                                            'user_id'=>$users->ID,
-                                            'match_id'=>$_GET['id'],
-                                            'created_time' => get_time('mysql')
-                                        )
-                                );
-            		//var_dump(is_user_logged_in());die;
-            		?>
-					<script type="text/javascript">
-		            	//$.alerts('即将跳转到实名认证页');
-		                alert('<?=__('签到成功', 'nlyd-student')?>');
-		                setTimeout(function(){
-		                    window.location.href='<?=home_url('signs/success/id/'.$_GET['id'])?>';
-		                    return false;
-		                },1500)
-            		</script>
-            	<?php
-                    exit;
-            	}
-            	else{
-
-						$wpdb->startTrans();
-                        //在平台创建订单
-                        $orde_data = array(
-                                    'user_id' => $users->ID,
-                                    'match_id' => 56522, //等待比赛创建后修改match_id
-                                    'order_type' =>1,
-                                    'pay_type' => 'wx',
-                                    'cost' => 0,
-                                    'pay_status' => 4,
-                                    'created_time' => get_time('mysql')
-                                );
-                        $a = $wpdb->insert($wpdb->prefix.'order',$orde_data);
-                        $orders_id_ = $wpdb->insert_id;
-                        $b = $wpdb->insert(
-                                        $wpdb->prefix.'match_sign',
-                                        array(
-                                            'user_id'=>$users->ID,
-                                            'match_id'=>56522,
-                                            'created_time' => get_time('mysql')
-                                        )
-                                );
-                        $c = $wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($users->ID,$orders_id_)], ['id' => $orders_id_]);
-
-                        if($a && $b && $c){
-                        	$wpdb->commit();
-                    	?>
-                    	<script type="text/javascript">
-			            	//$.alerts('即将跳转到实名认证页');
-			                alert('<?=__('签到成功', 'nlyd-student')?>');
-			                setTimeout(function(){
-			                    window.location.href='<?=home_url('signs/success/')?>';
-			                    return false;
-			                },1500)
-	            		</script>
-                    	<?php
-                            exit;
-                        }
-                        else{
-                        	$wpdb->rollback();
-                    	?>
-                    	<script type="text/javascript">
-			            	//$.alerts('即将跳转到实名认证页');
-			                alert('<?=__('签到失败,比赛订单创建失败\\n请联系管理员', 'nlyd-student')?>');
-	            		</script>
-                        <?php }
-            	}
+            }else{ ?>
+                <script type="text/javascript">
+                    //$.alerts('即将跳转到实名认证页');
+                    alert('<?=__('签到失败,比赛订单创建失败\\n请联系管理员', 'nlyd-student')?>');
+                </script>
+                <?php exit;
             }
         }
-
-        die;
-        var_dump($meta);
-
     }
 
     /**
@@ -296,7 +250,7 @@ class Student_Signs
 
         var_dump($res);die;
         //返回的是一个数组，里面存放用户的信息
-        
+
         if (isset($res['errcode'])) {
             if(is_ajax()){
                 wp_send_json_error(['info' => '获取微用户信息失败,请退出后重试']);
@@ -328,7 +282,7 @@ class Student_Signs
     /**
      * 默认公用js/css引入
      */
-    public function scripts_default(){ 
+    public function scripts_default(){
         if(ACTION == 'success'){
             wp_register_style( 'my-signs-success', student_css_url.'signs/success.css',array('my-student') );
             wp_enqueue_style( 'my-signs-success' );

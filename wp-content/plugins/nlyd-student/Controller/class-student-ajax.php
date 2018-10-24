@@ -1458,7 +1458,7 @@ class Student_Ajax
             $order = ' b.match_start_time asc ';
         }
         //获取最新比赛倒计时
-        $sql1 = "select match_start_time from {$wpdb->prefix}match_meta where match_status = -2 order by match_start_time desc ";
+        $sql1 = "select match_start_time from {$wpdb->prefix}match_meta_new where match_status = -2 order by match_start_time desc ";
 
         $row = $wpdb->get_row($sql1);
         if(!empty($row)){
@@ -1497,7 +1497,7 @@ class Student_Ajax
                 if(b.match_address = '','--',b.match_address) match_address,
                 b.match_cost,b.entry_end_time,b.match_status ,c.user_id
                 from {$wpdb->prefix}posts a
-                left join {$wpdb->prefix}match_meta b on a.ID = b.match_id
+                left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
@@ -2156,8 +2156,12 @@ class Student_Ajax
             $this->setUserCookie($user->ID);
 
             //do_action( 'wp_login', $user->user_login, $user );
+            if(isset($_SESSION['redirect_url'])){
+                $url = $_SESSION['redirect_url'];
+                unset($_SESSION['redirect_url']);
+            }
 
-            wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>home_url('/account/')));
+            wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
 
         }else{
 
@@ -2172,7 +2176,12 @@ class Student_Ajax
 
                     $this->setUserCookie($result);
 
-                    wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>home_url('account')));
+                    if(isset($_SESSION['redirect_url'])){
+                        $url = $_SESSION['redirect_url'];
+                        unset($_SESSION['redirect_url']);
+                    }
+
+                    wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
                 }else{
                     wp_send_json_error(array('info'=>__('登录失败', 'nlyd-student')));
                 }
@@ -3051,7 +3060,7 @@ class Student_Ajax
             wp_set_auth_cookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
-                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign')));
+                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
             }else{
 
                 wp_send_json_success(array('info'=>__('绑定成功', 'nlyd-student'), 'url' => home_url('account')));
