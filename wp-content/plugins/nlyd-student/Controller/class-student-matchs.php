@@ -1454,11 +1454,17 @@ class Student_Matchs extends Student_Home
             return;
         }
         global $wpdb;
-        $row = $wpdb->get_row("SELECT mb.id,um1.user_meta AS user_real_name,um2.user_meta AS userID,mb.is_send FROM {$wpdb->prefix}match_bonus AS mb 
+        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,um1.meta_value AS user_real_name,um2.meta_value AS userID,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id FROM {$wpdb->prefix}match_bonus AS mb 
+                  LEFT JOIN {$wpdb->posts} AS p ON p.ID=mb.match_id 
                   LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=mb.user_id AND um1.meta_key='user_real_name' 
-                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID' 
+                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID'  
                   WHERE mb.id={$id}", ARRAY_A);
-
+        $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                     LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id
+                     WHERE mt.user_id={$row['user_id']} AND mt.status=2");
+        $row['team_name'] = $team_name;
+        $row['bonus_list'] = unserialize($row['bonus_list']);
+//       var_dump($row);
         $view = student_view_path.CONTROLLER.'/matchBonusDetail.php';
         load_view_template($view,array('row' => $row));
     }
