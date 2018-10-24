@@ -41,42 +41,38 @@
 <script>
 jQuery(function($) { 
     var questions_answer=[]
-    var file_path = '<?=leo_student_url."/conf/rang_str.json";?>';
+    var leavePage= $.GetSession('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
+        questions_answer=leavePage['train_questions']
+    }else{
+        for(var i=0;i<100;i++){
+            var num=Math.floor(Math.random()*10);//生成0-9的随机数
+            questions_answer.push(num)
+        }
+        var sessionData={//存储session
+            train_questions:questions_answer,
+            genre_id:$.Request('genre_id'),
+            type:'szzb',
+            count_down:$('.count_down').attr('data-seconds')
+        }
+        $.SetSession('train_match',sessionData)
+    }
 
-    // $.getJSON(file_path,function(JsonData){
-        var leavePage= $.GetSession('train_match','1');
-        if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){
-            questions_answer=leavePage['train_questions']
-        }else{
-            for(var i=0;i<100;i++){
-                var num=Math.floor(Math.random()*10);//生成0-9的随机数
-                questions_answer.push(num)
-            }
-            var sessionData={//存储session
+    $.each(questions_answer,function(i,v){
+        var dom='<div class="matching-number">'+v+'</div>';
+        $('.matching-number-zoo').append(dom)
+    })
+    new AlloyFinger($('#complete')[0], {
+        tap:function(){
+            var _sessionData={//存储session
                 train_questions:questions_answer,
                 genre_id:$.Request('genre_id'),
                 type:'szzb',
                 count_down:$('.count_down').attr('data-seconds')
             }
-            $.SetSession('train_match',sessionData,0)
+            $.SetSession('train_match',_sessionData)
         }
-
-        $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number">'+v+'</div>';
-            $('.matching-number-zoo').append(dom)
-        })
-    // })
-// new AlloyFinger($('#complete')[0], {//记忆完成
-//     tap:function(){
-//         var sessionData={//存储session
-//             train_questions:questions_answer,
-//             genre_id:$.Request('genre_id'),
-//             type:'szzb',
-//             count_down:$('.count_down').attr('data-seconds')
-//         }
-//         $.SetSession('train_match',sessionData,0)
-//     }
-// })
+    })
     function submit(time){//提交答案
         $('#load').css({
                 'display':'block',
