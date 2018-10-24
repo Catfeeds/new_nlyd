@@ -132,16 +132,16 @@ jQuery(function($) {
             var pos = Math.round(Math.random() * (arr.length - 1));
             return arr[pos];
     }
-    function randZF5_1() {//生成随即字符
-            var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
-            var pos = Math.round(Math.random() * (arr.length - 6));
-            var newArr=[]
-            for(var i=0;i<5;i++){
-                newArr.push(arr[pos+i])
-            }
-            var newPos = Math.round(Math.random() * (newArr.length - 1));
-            return newArr[newPos]
-    }       
+    // function randZF5_1() {//生成随即字符
+    //         var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
+    //         var pos = Math.round(Math.random() * (arr.length - 6));
+    //         var newArr=[]
+    //         for(var i=0;i<5;i++){
+    //             newArr.push(arr[pos+i])
+    //         }
+    //         var newPos = Math.round(Math.random() * (newArr.length - 1));
+    //         return newArr[newPos]
+    // }       
     function pushHZ(string) {
         var arr=[];
         var len=string.length;
@@ -165,16 +165,16 @@ jQuery(function($) {
         }
         return x;
     }
-    function compare(old1,old2) {//比较字符是否相同
-        var newStr=randZF5_1();
-        var oldStr1=old1
-        var oldStr2=old2
-        if(oldStr1==newStr || oldStr2==newStr){
-            return compare(oldStr1,oldStr2)
-        }else{
-            return newStr
-        }
-    }
+    // function compare(old1,old2) {//比较字符是否相同
+    //     var newStr=randZF5_1();
+    //     var oldStr1=old1
+    //     var oldStr2=old2
+    //     if(oldStr1==newStr || oldStr2==newStr){
+    //         return compare(oldStr1,oldStr2)
+    //     }else{
+    //         return newStr
+    //     }
+    // }
     function rands(arr){
         var pos = Math.round(Math.random() * (arr.length - 6));
         var newArr=[]
