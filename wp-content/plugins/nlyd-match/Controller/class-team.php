@@ -178,7 +178,7 @@ if(!class_exists('Team')){
             $pageSize = 20;
             $start = ($page-1)*$pageSize;
             $sql = 'SELECT SQL_CALC_FOUND_ROWS 
-            m.id,u.user_login,u.display_name,u.user_email,u.user_mobile,m.status,m.user_id,
+            m.id,u.user_login,u.user_email,u.user_mobile,m.status,m.user_id,
             CASE m.status WHEN -3 THEN "'. "<span style='color:#6a1c25'>已退出</span>" .'" 
             WHEN -2 THEN "'. "<span style='color:rgba(191,34,49,0.91)'>已拒绝</span>" .'" 
             WHEN -1 THEN "'. "<span style='color:#61655b'>退队申请</span>" .'" 
