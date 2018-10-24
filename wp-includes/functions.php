@@ -6351,21 +6351,41 @@ function get_match_end_time($match_id){
     global $wpdb;
 
     //获取比赛信息
-    $sql = "select match_id,match_start_time,match_more,match_use_time,match_project_interval,match_subject_interval from {$wpdb->prefix}match_meta_new where match_id = {$match_id}";
+    $sql = "select match_project_id from {$wpdb->prefix}match_meta_new where match_id = {$match_id}";
 
-    $match = $wpdb->get_row($sql,ARRAY_A);
-    if(empty($match)){
+    $match_project_id = $wpdb->get_var($sql);
+    if(empty($match_project_id)){
         return -1; //error 比赛信息错误
     }
+    $sql = "SELECT p.post_title,pm.meta_value as project_alias,p.ID AS match_project_id FROM {$wpdb->posts} AS p 
+            LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.post_id AND pm.meta_key='project_alias' 
+            WHERE p.ID IN ({$match_project_id})";
+    $projectArr = $wpdb->get_results($sql, ARRAY_A);
+
+    if(empty($projectArr)){
+        return -2; //error 比赛项目未绑定
+    }
+
+    foreach ($projectArr as &$v){
+        $more_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}match_project_more WHERE match_id='{$match_id}' AND project_id='{$v['match_project_id']}' AND status IN(1,2)");
+        if($more_id) $v['is_end'] = false;
+        else $v['is_end'] = true;
+    }
+
+    return $projectArr;
+//    var_dump($projectArr);
+    die;
+
     //对比赛项目进行排序
-    $sql1 = "SELECT b.post_title,c.meta_value as project_alias,a.post_id match_id,a.match_project_id,a.project_use_time,a.match_more,a.project_start_time,a.project_time_interval,a.str_bit,a.child_count_down
-                         FROM {$wpdb->prefix}match_project a
-                         LEFT JOIN {$wpdb->prefix}posts b ON a.match_project_id = b.ID
-                         LEFT JOIN {$wpdb->prefix}postmeta c ON a.match_project_id = c.post_id AND meta_key = 'project_alias'
-                         WHERE a.post_id = {$match_id} ORDER BY a.project_start_time ASC , a.id ASC 
+    $sql1 = "SELECT b.post_title,c.meta_value as project_alias,a.match_id,a.project_id,a.use_time,a.more,a.start_time,a.end_time,a.status
+                         FROM {$wpdb->prefix}match_project_more a
+                         LEFT JOIN {$wpdb->prefix}posts b ON a.project_id = b.ID
+                         LEFT JOIN {$wpdb->prefix}postmeta c ON a.project_id = c.post_id AND meta_key = 'project_alias'
+                         WHERE a.match_id = {$match_id} ORDER BY a.start_time ASC , a.id ASC 
                          ";
     //print_r($sql1);
     $rows = $wpdb->get_results($sql1,ARRAY_A);
+
     if(empty($rows)){
         return -2; //error 比赛项目未绑定
     }

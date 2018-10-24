@@ -458,30 +458,6 @@ class Student_Ajax
         }
     }
 
-    /**
-     * 获取最新比赛倒计时
-     */
-    public function get_count_down(){
-
-        /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_get_count_down_code_nonce') ) {
-            wp_send_json_error(array('info'=>'非法操作'));
-        }*/
-
-        global $wpdb,$current_user;
-        //获取最新比赛倒计时
-        $sql1 = "select a.match_id,a.match_start_time,b.user_id from {$wpdb->prefix}match_meta a
-                 left join {$wpdb->prefix}order b on a.match_id = b.match_id and b.user_id = {$current_user->ID} and b.pay_status in(2,3,4) 
-                 where match_status = -2 order by match_start_time asc ";
-        //print_r($sql1);
-        $row = $wpdb->get_row($sql1);
-        if(!empty($row)){
-            $row = time_format(strtotime($row->match_start_time),'Y-m-d H:i:s');
-
-            wp_send_json_success(array('info'=>$row));
-        }
-
-        wp_send_json_error(array('info'=>__('最近暂无比赛', 'nlyd-student')));
-    }
 
     /**
      * 报名支付
@@ -1370,8 +1346,8 @@ class Student_Ajax
                     end match_status_cn
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
-                  left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) 
+                  left join {$wpdb->prefix}match_meta_new b on c.match_id = b.match_id 
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and b.match_start_time != ''
                   order by b.match_status desc limit $start,$pageSize
                   ";
         //print_r($sql_);
@@ -1474,23 +1450,6 @@ class Student_Ajax
 
         $where = join(' and ',$map);
 
-/*
-        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
-                a.post_content,
-                DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
-                if(b.match_address = '','--',b.match_address) match_address,
-                b.match_cost,b.entry_end_time,b.match_status ,c.user_id
-                from {$wpdb->prefix}posts a
-                left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id
-                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
-                where {$where} order by {$order} limit $start,$pageSize;
-                ";
-        //print_r($sql);
-
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-        if(empty($rows)){
-
-        }*/
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
                 a.post_content,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,

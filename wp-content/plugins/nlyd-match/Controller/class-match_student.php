@@ -715,7 +715,7 @@ class Match_student {
             }
             foreach ($projectArr as $pavGetIds){
                 if(in_array($pavGetIds['project_alias'],$project_alias_arr )){
-                    if($currentDateTime < $pavGetIds['project_end_time']){
+                    if(!$pavGetIds['is_end']){
                         $rankingView = ['status' => false, 'msg' => '当前分类未结束!'];
                         break;
                     }
@@ -728,7 +728,7 @@ class Match_student {
             $bonusUrlPrama = 'type=category&param='.$op2.'&age='.$op4;
         }elseif ($op1 == 3){
             foreach ($projectArr as $pavGetIds){
-                if($pavGetIds['match_project_id'] == $op3 && $currentDateTime < $pavGetIds['project_end_time']){
+                if($pavGetIds['match_project_id'] == $op3 && !$pavGetIds['is_end']){
                     $rankingView = ['status' => false, 'msg' => '当前项目未结束!'];
                     break;
                 }
@@ -1175,7 +1175,9 @@ class Match_student {
                     $surplus_timeArr = [];//项目所有剩余时间数组
                     $created_microtimeArrr = [];//项目所提交毫秒数组
                     $moreArr = []; //每一轮分数数组
-                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
+                    $match_more_all = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'].' GROUP BY project_id,user_id');
+
+//                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
                     for($mi = 1; $mi <= $match_more_all; ++$mi){
                         $moreArr[$mi] = '0';
                     }
