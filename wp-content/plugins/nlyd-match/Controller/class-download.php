@@ -392,15 +392,8 @@ class Download
         $projectArr = get_match_end_time($post->ID);
 
         $categoryArr = []; //分类选项卡数组
-        $currentDateTime = get_time('mysql');
         foreach ($projectArr as $pak => &$pav) {
-            if($currentDateTime < $pav['project_end_time']){
-                //未结束
-                $pav['is_end'] = 'false';
-            }else{
-                //已结束
-                $pav['is_end'] = 'true';
-            }
+
             $project_id_array[] = $pav['match_project_id'];
             //获取类别和项目选项卡
             if (in_array($pav['project_alias'], ['pkjl', 'szzb'])) {
@@ -559,8 +552,11 @@ class Download
                 $moreArr = [];
                 $scoreArr = [];
                 $surplus_timeArr = [];
+                $match_more_all = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'].' GROUP BY project_id,user_id');
+
                 if($selectType == 1){
-                    for($mi = 1; $mi <= $match['match_more']; ++$mi){
+                    for($mi = 1; $mi <= $match_more_all; ++$mi){
+//                    for($mi = 1; $mi <= $match['match_more']; ++$mi){
                         $moreArr[$mi] = '0/';
                     }
                 }
@@ -901,7 +897,7 @@ class Download
 
             foreach ($projectArr as $pavGetIds){
                 if($pavGetIds['match_project_id'] == $op3){
-                    if($currentDateTime < $pavGetIds['project_end_time']){
+                    if(!$pavGetIds['is_end']){
                         $rankingView = ['status' => false, 'msg' => '当前项目未结束!'];
                         break;
                     }
@@ -961,7 +957,7 @@ class Download
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
 
 
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $fileRankingName);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
 
             //加粗
             $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
@@ -1020,7 +1016,7 @@ class Download
                 }
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $fileRankingName);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
 
             //加粗
             $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
@@ -1250,7 +1246,9 @@ class Download
                     $surplus_timeArr = [];//项目所有剩余时间数组
                     $created_microtimeArrr = [];//项目所提交毫秒数组
                     $moreArr = []; //每一轮分数数组
-                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
+                    $match_more_all = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'].' GROUP BY project_id,user_id');
+
+//                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
                     for($mi = 1; $mi <= $match_more_all; ++$mi){
                         $moreArr[$mi] = '0';
                     }
