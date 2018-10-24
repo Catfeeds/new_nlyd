@@ -3546,6 +3546,7 @@ class Student_Ajax
             }else{
                 $res['user_real_name']['real_name'] = '-';
             }
+            $res['is_send'] = $res['is_send'] == 2 ? $res['is_send'] = 'y' : 'n';
         }
         wp_send_json_success(['info' => $result]);
     }

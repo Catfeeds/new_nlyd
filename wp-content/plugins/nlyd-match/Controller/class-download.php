@@ -1753,6 +1753,25 @@ class Download
         $objWriter->save('php://output');
         return;
     }
+
+    /**
+     * 导出战队成员
+     */
+    public function team_member(){
+        $team_id = isset($_GET['team_id']) ? intval($_GET['team_id']) : 0;
+        $team_id < 1 && exit('参数错误');
+
+        global $wpdb;
+        $sql = 'SELECT m.id,u.user_login,u.display_name,u.user_email,u.user_mobile,m.status,m.user_id 
+                FROM '.$wpdb->prefix.'match_team AS m 
+                LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
+                WHERE m.team_id='.$team_id.' AND m.status=2 AND u.ID !=""';
+        $rows = $wpdb->get_results($sql, ARRAY_A);
+        echo '<pre />';
+        print_r($rows);
+
+
+    }
 }
 new Download();
 
