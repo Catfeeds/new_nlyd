@@ -54,7 +54,7 @@ class Match_student {
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
-        LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id 
+        LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id AND mt.status=2 
         LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
         '.$joinSql.'
         WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC LIMIT '.$start.','.$pageSize, ARRAY_A);
@@ -1092,6 +1092,7 @@ class Match_student {
                     GROUP BY user_id
                     ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC {$limit}", ARRAY_A);
 
+
         $list = array();
         $ranking = 1;
         foreach ($result as $k => $val){
@@ -1106,8 +1107,6 @@ class Match_student {
                 $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                 $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
                 $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
-                //TODO 收款二维码路径
-                $result[$k]['collect_path'] = '';
                 if(!empty($user_info['user_age'])){
                     $age = $user_info['user_age'];
                     $group = getAgeGroupNameByAge($age);
@@ -1326,7 +1325,6 @@ class Match_student {
             if($limitStr != ''){
                 $limit = ' LIMIT '.$limitStr;
             }
-
         $result = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS x.user_id,SUM(x.my_score) my_score ,x.telephone,SUM(x.surplus_time) surplus_time,u.user_login,u.user_mobile,u.user_email,x.created_time,x.project_id,x.created_microtime  
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
@@ -1348,6 +1346,7 @@ class Match_student {
                 $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
                 $info = $wpdb->get_results($sql1,ARRAY_A);
 
+
                 if(!empty($info)){
                     $user_info = array_column($info,'meta_value','meta_key');
                     $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
@@ -1355,8 +1354,6 @@ class Match_student {
                     $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                     $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
                     $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
-                    //TODO 收款二维码路径
-                    $result[$k]['collect_path'] = '';
                     if(!empty($user_info['user_age'])){
                         $age = $user_info['user_age'];
                         $group = getAgeGroupNameByAge($age);
@@ -1783,7 +1780,7 @@ class Match_student {
         foreach ($orderAllData as $odv){
             $bonus_list = serialize($odv['bonus_list']);
             $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userID']}','{$odv['collect_path']}','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
+                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
         }
         $sql .= join(',', $insertValueArr);
         $wpdb->query($sql);
@@ -2088,7 +2085,7 @@ class Match_student {
                                <td class="bonus_all column-bonus_all line-c" data-colname="奖金总额"><?=$data['all_bonus']?></td>
                                <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
                                <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
-                               <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="javascript:;" target="_blank">暂无</a></td>
+                               <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="<?=get_user_meta($data['user_id'],'user_coin_code',true)[0]?>" target="_blank">收款二维码</a></td>
                                <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card_num']?></td>
                                <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
