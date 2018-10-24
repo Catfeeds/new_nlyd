@@ -347,16 +347,37 @@ if(!class_exists('MatchController')){
             }
 
             //查询题目类型
-            $questionType = $wpdb->get_results('SELECT term_id,`name`,slug FROM '.$wpdb->prefix.'terms', ARRAY_A);
-            $questionTypeArr = [];
-            foreach ($questionType as $qtv){
-                foreach (explode('-', $qtv['slug']) as $slug){
-                    if($slug == 'question'){
-                        $questionTypeArr[] = $qtv;
-                        continue 2;
+
+            $args = array(
+                'taxonomy' => 'question_genre', //自定义分类法
+                'pad_counts' => false,
+                'hide_empty' => false,
+            );
+            $category = get_categories($args);
+
+            $questionTypeArr = array();
+            if(!empty($category)){
+                foreach ($category as $k => $v){
+
+                    if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                        $questionTypeArr[] = array(
+                            'term_id'=>$v->term_id,
+                            'name'=>$v->name,
+                        );
                     }
                 }
             }
+
+//            $questionType = $wpdb->get_results('SELECT term_id,`name`,slug FROM '.$wpdb->prefix.'terms', ARRAY_A);
+//            $questionTypeArr = [];
+//            foreach ($questionType as $qtv){
+//                foreach (explode('-', $qtv['slug']) as $slug){
+//                    if($slug == 'question'){
+//                        $questionTypeArr[] = $qtv;
+//                        continue 2;
+//                    }
+//                }
+//            }
             ?>
 
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
@@ -455,8 +476,8 @@ if(!class_exists('MatchController')){
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
                 $columns['times'] = '比赛时间';
-                $columns['time_slot'] = '报名结束时间';
-//                $columns['time_slot'] = '报名时间段';
+//                $columns['time_slot'] = '报名结束时间';
+                $columns['time_slot'] = '报名时间段';
                 $columns['match_address'] = '比赛地点';
                 $columns['cost'] = '报名费用';
                 $columns['match_type'] = '比赛类型';
@@ -473,7 +494,7 @@ if(!class_exists('MatchController')){
         public function manage_match_columns($column_name, $id){
             global $wpdb;
             $sql = "select 
-                            match_slogan,match_genre,match_start_time,entry_end_time,match_address,match_cost,match_status,
+                            match_slogan,match_genre,match_start_time,entry_end_time,match_address,match_cost,match_status,created_time 
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 
@@ -559,8 +580,8 @@ if(!class_exists('MatchController')){
                     echo $row['match_start_time'].'<br/>'.$match_end_time;
                     break;
                 case 'time_slot':
-                    echo $row['entry_end_time'];
-//                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
+//                    echo $row['entry_end_time'];
+                    echo $row['created_time'].'<br />'.$row['entry_end_time'];
                     break;
                 case 'match_address':
                     echo $row['match_address'];
