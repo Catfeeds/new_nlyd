@@ -82,8 +82,8 @@ class Match_Ajax
             case 'match':
 
                 $table = "`{$wpdb->prefix}posts`";
-                $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}match_meta` WHERE match_id in({$ids})");
-                $wpdb->query("DELETE FROM `{$wpdb->prefix}match_project` WHERE post_id in({$ids})");
+                $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}match_meta_new` WHERE match_id in({$ids})");
+                $wpdb->query("DELETE FROM `{$wpdb->prefix}match_project_more` WHERE match_id in({$ids})");
                 $wpdb->query("DELETE FROM `{$wpdb->prefix}order` WHERE match_id in({$ids})");
 
                 break;
@@ -129,15 +129,21 @@ class Match_Ajax
     public function admin_get_category_list(){
         $args = array(
             'taxonomy' => 'question_genre', //自定义分类法
-            'pad_counts' => false
+            'pad_counts' => false,
+            'hide_empty' => false,
         );
         $category = get_categories($args);
+
         $new_category = array();
         if(!empty($category)){
             foreach ($category as $k => $v){
 
-                $new_category[$k]['id'] = $v->term_id;
-                $new_category[$k]['text'] = $v->name;
+                if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                    $new_category[] = array(
+                        'id'=>$v->term_id,
+                        'text'=>$v->name,
+                    );
+                }
             }
         }
         wp_send_json_success($new_category);

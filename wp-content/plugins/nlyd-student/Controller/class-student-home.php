@@ -13,9 +13,20 @@ class Student_Home
     {
 //        wp_logout();
 //        die;
+        if(!is_user_logged_in()){
+
+            $_SESSION['redirect_url'] = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        }
+
         if(CONTROLLER != 'account'){
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
+
+                if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+
+                    wp_redirect(home_url('weixin/webLogin'));
+                    exit;
+                }
 
                 wp_redirect(home_url('logins'));
             }
@@ -23,6 +34,12 @@ class Student_Home
 
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
+
+                if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+
+                    wp_redirect(home_url('weixin/webLogin'));
+                    exit;
+                }
 
                 wp_redirect(home_url('logins'));
             }
@@ -44,6 +61,7 @@ class Student_Home
             $user_info = array_column($rows,'meta_value','meta_key');
             //print_r($user_info);
             $user_level = get_the_author_meta('user_level',$current_user->ID);
+            //print_r($user_level);
             if($user_level == 0){
                 $user_info['user_type'] = __('学 员', 'nlyd-student');
             }elseif ($user_level == 10){

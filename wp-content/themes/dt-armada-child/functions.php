@@ -8,6 +8,15 @@
 //设置时区
 //date_default_timezone_set('Asia/Shanghai');
 
+/**
+ * 判断是否是微信浏览器
+ */
+// function is_weixin(){
+//     if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+//         return true;
+//     }
+//     return false;
+// }
 
 /**
  * 计算年龄

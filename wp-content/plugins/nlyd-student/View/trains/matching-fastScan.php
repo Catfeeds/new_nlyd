@@ -58,9 +58,9 @@ jQuery(function($) {
     flaseQuestion=0,//错误答题，需要存入cookie
     flaseMax=10,//错题数量
     breakRow=20,//字符长度达到breakRow开始换行
-    _count_time=6,//初始答题时间,会变化
+    _count_time=600,//初始答题时间,会变化
     fetchPage_time=0;
-    getAjaxTime=6;//程序获取时间
+    getAjaxTime=600;//程序获取时间
     showTime=function(){ 
         fetchPage_time=getAjaxTime
         // if(!stop){
@@ -132,16 +132,16 @@ jQuery(function($) {
             var pos = Math.round(Math.random() * (arr.length - 1));
             return arr[pos];
     }
-    function randZF5_1() {//生成随即字符
-            var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
-            var pos = Math.round(Math.random() * (arr.length - 6));
-            var newArr=[]
-            for(var i=0;i<5;i++){
-                newArr.push(arr[pos+i])
-            }
-            var newPos = Math.round(Math.random() * (newArr.length - 1));
-            return newArr[newPos]
-    }       
+    // function randZF5_1() {//生成随即字符
+    //         var arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"]
+    //         var pos = Math.round(Math.random() * (arr.length - 6));
+    //         var newArr=[]
+    //         for(var i=0;i<5;i++){
+    //             newArr.push(arr[pos+i])
+    //         }
+    //         var newPos = Math.round(Math.random() * (newArr.length - 1));
+    //         return newArr[newPos]
+    // }       
     function pushHZ(string) {
         var arr=[];
         var len=string.length;
@@ -165,32 +165,53 @@ jQuery(function($) {
         }
         return x;
     }
-    function compare(old) {//比较字符是否相同
-        var newStr=randZF5_1();
-        var oldStr=old
-        if(oldStr==newStr){
-            return compare(oldStr)
-        }else{
-            return newStr
+    // function compare(old1,old2) {//比较字符是否相同
+    //     var newStr=randZF5_1();
+    //     var oldStr1=old1
+    //     var oldStr2=old2
+    //     if(oldStr1==newStr || oldStr2==newStr){
+    //         return compare(oldStr1,oldStr2)
+    //     }else{
+    //         return newStr
+    //     }
+    // }
+    function rands(arr){
+        var pos = Math.round(Math.random() * (arr.length - 6));
+        var newArr=[]
+        for(var i=0;i<5;i++){
+            newArr.push(arr[pos+i])
         }
+        var newPos = Math.round(Math.random() * (newArr.length - 1));
+        return newArr[newPos]
     }
-    function levels(data,level,arrIndex,str,select) {
-        var randIndex1 = Math.round(Math.random() * (arrIndex.length - 1));//随机取一个下标
-        var arrtext=arrIndex[randIndex1]
+    function levels(data,level,arrIndex,str,select,indexArr) {
+        var _arr=["a","b","c","d","e","f","g","h","i","j","k","m","n","p","q","r","s","t","u","v","w","x","y","z","2","3","4","5","6","7","8","9","#","$","%","!","*","&","￥"];//题库
+        var randIndex1 = Math.round(Math.random() * (arrIndex.length - 1));//随机取一个非汉字的下标数组的下标
+        var arrtext=arrIndex[randIndex1];//下标
+
         // var newArrIndex=[];
         // for(var i in arrIndex){//去除已选中下标
         //     if(arrIndex[i]!=arrtext){
         //         newArrIndex.push(arrIndex[i])
         //     }
         // }
-        var oldStr1=data.slice(arrtext,arrtext+1);
-        var newStr1=compare(oldStr1);
+        var oldStr1=data.slice(arrtext,arrtext+1);//此下标下的正确答案的字符
+        var oldStrIndex = _arr.indexOf(oldStr1);//此下标下的正确答案的字符在题库的下标
+        _arr.splice(oldStrIndex, 1);//生成新题库
+ 
+        
+        $.each(indexArr[arrtext],function(_i,_v){//题库去重，获取新的题库
+            var _preIndex=_arr.indexOf(_v)
+            _arr.splice(_preIndex, 1);
+        })
+        var newStr1=rands(_arr);
         var newStrs= str.substring(0,arrtext) + newStr1 + str.substring(arrtext+1,data.length)
         
         if(level>0){
-            levels(data,level-1,arrIndex,newStrs,select)
+            levels(data,level-1,arrIndex,newStrs,select,indexArr)
         }else{
             select.push(newStrs)
+            indexArr[arrtext].push(newStr1)
         }
     }
     /*
@@ -199,8 +220,10 @@ jQuery(function($) {
     data
     */ 
     function buildSelect(data,total,level){//生成选项
+        // console.log(data,total,level)
         var len=data.length;
-        var select=[];
+        var select=[];//生成的选项
+        var index_arr={};//记录随机选中的下标和替换的字母
         var checkIndex=[];//存储已选中下标，进行排除
         for(var k=0; k<len ; k++){
             var code=data.charAt(k)
@@ -209,9 +232,13 @@ jQuery(function($) {
                 checkIndex.push(k)   
             }
         }
+        $.each(checkIndex,function(i,v){
+            index_arr[v]=[];
+        })
         for(var i=0;i<total;i++){
-            levels(data,level,checkIndex,data,select)
+            levels(data,level,checkIndex,data,select,index_arr)
         }
+        // console.log(checkIndex)
         return select;
     }
     
@@ -290,13 +317,11 @@ jQuery(function($) {
                 }, flashTime*1000);
             }
             //计时器
-
             if(fetchPage_time!=0){
                 _count_time=fetchPage_time
             }else{
                 _count_time=answerTime
             }
-             
             showTime()
 
     }
@@ -335,6 +360,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                 if(typeof(timer)!="undefined"){
                     clearTimeout(timer);
                 }
+                // console.log(ajaxData)
             }
         }
     })
