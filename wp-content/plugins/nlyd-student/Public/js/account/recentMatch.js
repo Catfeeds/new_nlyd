@@ -91,7 +91,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><div>'+_recentMatch.player+':</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+v.entry_total+_recentMatch.people+'</div>'
-                                                                +'<a class="c_orange" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA">'+_recentMatch.must+'</a>'
+                                                                +'<a class="c_orange" style="margin-left:10px" href="https://mp.weixin.qq.com/s/SrtckmXNfnjRDiP-5o9guQ?tdsourcetag=s_pctim_aiomsg">'+_recentMatch.must+'</a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
