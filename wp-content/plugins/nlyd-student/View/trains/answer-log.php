@@ -116,8 +116,8 @@ switch ($type){
 </div>
 <?php if(!isset($_GET['back'])){ ?>
 <div class="a-btn two get_footer">
-    <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><?=__('再来一局', 'nlyd-student')?></a>
-    <a class="a-two right c_white" href="<?=$revert_url?>"><?=__('返回列表', 'nlyd-student')?></a>
+    <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><div><?=__('再来一局', 'nlyd-student')?></div></a>
+    <a class="a-two right c_white" href="<?=$revert_url?>"><div><?=__('返回列表', 'nlyd-student')?></div></a>
 </div>
 <?php } ?>
 <script>

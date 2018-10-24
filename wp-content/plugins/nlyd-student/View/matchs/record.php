@@ -31,17 +31,17 @@
                    
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
-                        <li class="layui-this" data-id="1"><?=__('单项排名', 'nlyd-student')?></li>
-                        <li data-id="2"><?=__('分类排名', 'nlyd-student')?></li>
-                        <li data-id="3"><?=__('总排名', 'nlyd-student')?></li>
-                        <div class="nl-transform"><?=__('单项排名', 'nlyd-student')?></div>
+                        <li class="layui-this" data-id="1"><div><?=__('单项排名', 'nlyd-student')?></div></li>
+                        <li data-id="2"><div><?=__('分类排名', 'nlyd-student')?></div></li>
+                        <li data-id="3"><div><?=__('总排名', 'nlyd-student')?></div></li>
+                        <div class="nl-transform"><div><?=__('单项排名', 'nlyd-student')?></div></div>
                     </ul>
                     <?php endif;?>
                     <div class="layui-tab-content" style="padding: 0;">
                         <!-- 单项排名 -->
                         <div class="layui-tab-item layui-show">
                             <?php if(!empty($default_category)): ?>
-                            <div class="btn-wrapper one_1">
+                            <div class="btn-wrapper layui-row one_1">
                                 <div class="btn-zoo">
                                     <div class="btn-window">
                                         <div class="btn-inner-wrapper">
@@ -77,7 +77,7 @@
                         </div>
                         <!-- 分类排名 -->
                         <div class="layui-tab-item">
-                            <div class="btn-wrapper one_2">
+                            <div class="btn-wrapper layui-row one_2">
                                 <?phP if(!empty($match_category)): ?>
                                 <?php foreach ($match_category as $k => $v){ ?>
                                 <div class="btn-wrap">
@@ -122,7 +122,7 @@
 
                         <!-- 总排名 -->
                         <div class="layui-tab-item">
-                            <div class="btn-wrapper one_3">
+                            <div class="btn-wrapper layui-row one_3">
                                 <div class="btn-wrap">
                                     <div class="classify-btn classify-active" data-post-id="0"><?=__('个人排名', 'nlyd-student')?></div>
                                 </div>
@@ -209,14 +209,19 @@ jQuery(function($) {
         var href=window.home_url+'/matchs/singleRecord/match_id/'+match_id+'/project_id/'+project_id;
         window.location.href=href;
     })
-    initWidth=function() {//按钮滚动区域宽度
-        var len=$('.btn-inner-wrapper .classify-btn ').length;
-        var width=$('.btn-inner-wrapper .classify-btn ').width();
-        var marginRight=parseInt($('.btn-inner-wrapper .classify-btn ').css('marginRight'))
-        var W=width*len+marginRight*(len-1)+'px';
-        $('.btn-inner-wrapper').css('width',W);
-    }
-    initWidth()
+    $('.btn-inner-wrapper').each(function(){
+        var _this=$(this);
+        var len=_this.children('.classify-btn').length;
+        var marginRight=parseInt(_this.children('.classify-btn').css('marginRight'))
+        var width_total=0;
+        _this.children('.classify-btn').each(function(){
+            var __this=$(this);
+            var _width=__this.width()
+            width_total+=_width
+        })
+        var W=width_total+marginRight*(len-1)+'px';
+        _this.css('width',W);
+    })
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
