@@ -3506,13 +3506,48 @@ class Student_Ajax
         $cookieBool = setcookie('user_language', $lang, time()+3600*24*30*12,'/');
         if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
 //        print_r($_COOKIE);
-        update_user_meta($current_user->ID, 'locale', $lang);
+        $current_user->ID > 0 && update_user_meta($current_user->ID, 'locale', $lang);
         wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
 //        if($bool){
 //            wp_send_json_success(array('info'=>__('修改成功', 'nlyd-student')));
 //        }else{
 //            wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
 //        }
+    }
+
+    /**
+     * 比赛奖金明细列表
+     */
+    public function matchBonusLists(){
+        $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
+        if($match_id < 1) wp_send_json_error(['info' => __('参数错误', 'nlyd-student')]);
+
+        global $wpdb;
+        //断比赛是否结束
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student')]);
+
+        $is_user_view = $wpdb->get_val("SELECT is_user_view FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
+        $is_user_view == 2 && wp_send_json_error(['info' => __('后台奖金核实中', 'nlyd-student')]);
+
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 0;
+        $page < 1 && $page = 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        //查询列表
+        $result = $wpdb->get_results("SELECT mb.id,um1.user_meta AS user_real_name,um2.user_meta AS userID,mb.is_send FROM {$wpdb->prefix}match_bonus AS mb 
+                  LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=mb.user_id AND um1.meta_key='user_real_name' 
+                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID' 
+                  WHERE mb.match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
+        if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student')]);
+        foreach ($result as &$res){
+            if($res['user_real_name']){
+                $res['user_real_name'] = unserialize($res['user_real_name']);
+            }else{
+                $res['user_real_name']['real_name'] = '-';
+            }
+        }
+        wp_send_json_success(['info' => $result]);
     }
 
 }

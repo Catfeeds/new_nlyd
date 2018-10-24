@@ -1744,7 +1744,7 @@ class Download
             $path_bonusObjRichText = new \PHPExcel_RichText();
             $path_bonusObjRichText->createTextRun('二维码收款路径')->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
             $objPHPExcel->getActiveSheet()->setCellValue('H'.($k+3), $path_bonusObjRichText);
-            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl($row['collect_path']);
+            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl(get_user_meta($row['user_id'],'user_coin_code',true)[0]);
 //            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setTooltip('Navigate to website');
 //            $objPHPExcel->getActiveSheet()->getStyle('H'.($k+3))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         }
