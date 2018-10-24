@@ -952,12 +952,12 @@ class Download
         if($op1 == 1 && $op5 == 2){
             //战队
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(50);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
 
 
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title.'(战队排名)');
 
             //加粗
             $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
