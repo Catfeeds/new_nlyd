@@ -20,14 +20,16 @@
     display: none;
 }
 .layui-tab-title li{
-    display: inline-block;
-    vertical-align: middle;
+    display: table;
+    float: left;
+    white-space: initial;
+    line-height: 20px;
+    /* vertical-align: middle; */
     color:rgba(116, 116, 116, 1);
     height: 40px;
     margin-left: 12px;
     width: -webkit-calc(100%/3 - 10px);
     width: calc(100%/3 - 10px);
-    line-height: 40px;
     padding: 0;
     transition: none;
     -moz-transition: none;
@@ -41,19 +43,27 @@
     border-radius: 6px;
     font-size: 0.14rem;
 }
+.layui-tab-title li>div,
+.nl-transform>div{
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+}
 .nl-transform{
+    line-height: 20px;
+    display: table;
+    float: left;
+    white-space: initial;
     position: absolute;
     left: 0;
     top: 0;
     transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
     transform: translate3d(0px, 0px, 0px);
-    display: inline-block;
-    vertical-align: middle;
     color: #fff;
     height: 40px;
     width: -webkit-calc(100%/3 - 10px);
     width: calc(100%/3 - 10px);
-    line-height: 40px;
     padding: 0;
     min-width: 65px;
     text-align: center;
@@ -189,6 +199,7 @@ border-bottom-right-radius: 8px;
 .btn-wrapper{
     width: 100%;
     position: relative;
+    top: 0;
     margin-top: 20px;
 }
 .btn-zoo{
@@ -207,7 +218,7 @@ border-bottom-right-radius: 8px;
 }
 .btn-inner-wrapper{
     position: absolute;
-    width: 100000px;
+    /* width: 100000px; */
     left: 0;
     top: 0;
     height: 28px;
@@ -216,7 +227,7 @@ border-bottom-right-radius: 8px;
 .classify-btn{
     display: block;
     float: left;
-    width: 56px;
+    /* width: 56px; */
     height: 28px;
     text-align: center;
     line-height: 28px;
