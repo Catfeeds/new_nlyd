@@ -30,13 +30,84 @@ if(!class_exists('Team')){
             $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
             $id < 1 && exit('参数错误');
             global $wpdb;
-            $row = $wpdb->get_row("SELECT p.post_title,um.meta_value AS user_real_name,mt.user_id FROM {$wpdb->prefix}match_team AS mt 
+            $msg = '';
+            if(is_post()){
+                $move_team_id = isset($_POST['team_select']) ? intval($_POST['team_select']) : 0;
+                if($move_team_id > 0){
+                    $bool = $wpdb->update($wpdb->prefix.'match_team', ['team_id' => $move_team_id], ['id' => $id]);
+                    if($bool){
+                        $msg = '<span style="color: #0a8406">移动成功</span>';
+                    }else{
+                        $msg = '<span style="color: #c43137">移动失败</span>';
+                    }
+                }
+            }
+            $row = $wpdb->get_row("SELECT p.post_title,um.meta_value AS user_real_name,mt.user_id,p.ID AS team_id FROM {$wpdb->prefix}match_team AS mt 
             LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id 
             LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id = mt.user_id AND um.meta_key='user_real_name' 
-            WHERE mt.id={$id}");
+            WHERE mt.id={$id}", ARRAY_A);
 
-            print_r($wpdb->last_query);
             if(!$row) exit('未找到原数据');
+
+            ?>
+            <style type="text/css">
+                .min-box{
+                    padding-top: 1em;
+                }
+            </style>
+                <div class="wrap">
+                    <h2>移动战队成员</h2>
+                    <h4><?=$msg?></h4>
+                    <div style="font-size: 15px;margin-top: 1em;">
+                        <div class="min-box">
+                            <div style="font-weight: bold;font-size:15px;">搜索目标战队</div>
+                            <input type="text" style="height: 26px;" placeholder="战队名称" /> <button type="button" class="button" id="search_team_btn">搜索</button>
+
+                        </div>
+                        <div class="min-box">
+                            <form action="" method="post">
+                                将 <span style="font-weight: bold"><?=unserialize($row['user_real_name'])['real_name']?></span>从 <span style="font-weight: bold;color: #0a8406"><?=$row['post_title']?></span>移动到    <select name="team_select" id="team_select">
+
+                                </select>
+                                <button type="submit" class="button">确定</button>
+                            </form>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        jQuery(document).ready(function($) {
+                            $('#search_team_btn').on('click', function () {
+                                var val = $(this).prev().val();
+                                if(val == '' || val == false) return false;
+                                var _this = $(this);
+                                $.ajax({
+                                    url : ajaxurl,
+                                    data : {'action':'getTeamSearch', 'val':val,'team_id':<?=$row['team_id']?>},
+                                    type : 'post',
+                                    dataType : 'json',
+                                    success : function (response) {
+                                        if(response['success']) {
+                                            var _html = '';
+                                            $.each($(response.data.info), function (i,v) {
+                                                _html += '<option value="'+v.ID+'">'+v.post_title+'</option>';
+                                            });
+                                           $('#team_select').html(_html);
+                                        }else{
+                                            alert(response.data.info);
+                                        }
+                                    }, error : function () {
+                                        alert('请求失败');
+                                    }
+                                });
+                            });
+                            $('#team_select').on('change',function () {
+                                // $('#team_name').text($(this).find('option:selected').text());
+                            });
+                        })
+
+                    </script>
+                </div>
+            <?php
+
         }
 
         /**
@@ -294,7 +365,7 @@ if(!class_exists('Team')){
                                                 <span class="delete"><a class="submitdelete refuse" href="javascript:;"">拒绝入队</a> </span>
                                             <?php }else if($row['status'] == 2){ ?>
                                                  <span class="delete"><a class="submitdelete expel" href="javascript:;"">踢出战队</a> </span>
-                                                 <span class="delete"><a href="<?=admin_url('edit.php?post_type=team&page=team-student-move&id='.$id)?>">移动成员</a> </span>
+                                                 <span class="delete"><a href="<?=admin_url('edit.php?post_type=team&page=team-student-move&id='.$row['id'])?>">移动成员</a> </span>
                                             <?php } ?>
 
 <!--                                            <span class=""><a class="submitdelete " href="javascript:;" style="height: 1em;display: inline-block"></a> </span>-->

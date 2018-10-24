@@ -9,6 +9,7 @@
                     <div class="count-wrapper">
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
+                            <?php $hint = !empty($current_project) ? '正在' : '即将';?>
                             <p class="match-detail fs_14 c_black">
                                 <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>:</span><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
                             </p>
@@ -35,7 +36,7 @@
 
                                 ?>
                                 <p class="fs_12 ta_c bottom_tips c_black">
-                                    <?= $current_project['project_title'] ?><?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more']) ?><?= $text ?>
+                                    <?=__($current_project['project_title'], 'nlyd-student')?> <?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more']) ?><?= $text ?>
                                 </p>
                         <?php }
                         }

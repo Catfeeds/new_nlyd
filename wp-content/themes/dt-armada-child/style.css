@@ -111,6 +111,12 @@ a.c_yellow,.c_yellow{
 a.c_yellow:hover{
     color: #FFAB1F;
 }
+a.c_green,.c_green{
+    color: #5FB942;
+}
+a.c_green:hover{
+    color: #5FB942;
+}
 .c_blue,a.c_blue{
     color: #2484FE;
 }

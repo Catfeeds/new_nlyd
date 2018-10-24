@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
                         <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
-                        <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="total">0</span><?=__('题', 'nlyd-student')?></span>
+                        <span class="c_blue ml_10 match_info_font"><?=__('第<span id="total">0</span>题', 'nlyd-student')?></span>
                         <span class="c_blue ml_10 match_info_font">
                             <i class="iconfont">&#xe685;</i>
                             <span class="count_down" data-seconds="600"></span>

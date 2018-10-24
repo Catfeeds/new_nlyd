@@ -1389,6 +1389,23 @@ class Match_Ajax
         if($result) wp_send_json_success(['info' => '添加成功']);
         else wp_send_json_error(['info' => '添加失败']);
     }
+    /**
+     * 搜索战队
+     */
+    public function getTeamSearch(){
+        $val = isset($_POST['val']) ? trim($_POST['val']) : '';
+        $team_id = isset($_POST['team_id']) ? intval($_POST['team_id']) : 0;
+        if($val == '') wp_send_json_error(['info' => '请输入搜索内容']);
+        $where = '';
+        if($team_id > 0) $where = ' AND ID NOT IN('.$team_id.')';
+        global $wpdb;
+        $result = $wpdb->get_results("SELECT ID,post_title FROM {$wpdb->posts} WHERE post_title LIKE '%{$val}%' AND post_parent=0{$where}");
+        if($result){
+            wp_send_json_success(['info' => $result]);
+        }else{
+            wp_send_json_error(['info' => '找不到战队']);
+        }
+    }
 }
 
 new Match_Ajax();

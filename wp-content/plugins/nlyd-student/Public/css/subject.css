@@ -18,6 +18,15 @@
     border-radius: 6px;
     color: #2484FE;
 }
+.subject_info_font{
+    display: table;
+}
+.subject_info_font div{
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+    line-height: 20px;
+}
 .subject-title-info a.disabled-a{
     font-size: 0.12rem;
     border: 1px solid rgba(191, 190, 190, 1);

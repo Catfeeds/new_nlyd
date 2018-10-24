@@ -53,8 +53,8 @@ switch ($type){
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title flex-h">
-                            <div class="c_black flex1 match_info_font"><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div>
-                            <div class="c_blue flex1 ml_10 match_info_font"><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score)?></div>
+                            <div class="c_black flex1 subject_info_font"><div><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div></div>
+                            <div class="c_blue flex1 ml_10 subject_info_font"><div><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score)?></div></div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">

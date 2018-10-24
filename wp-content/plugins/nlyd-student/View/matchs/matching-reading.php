@@ -9,8 +9,9 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="c_black match_info_font"><?=$project_title?><span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></span>
-                            <span class="c_blue ml_10 match_info_font"><?=__('第', 'nlyd-student')?><span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?><?=__('题', 'nlyd-student')?></span>
+                            <span class="c_black match_info_font"><?=__($project_title, 'nlyd-student')?> <span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></span>
+                            <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
+                            <span class="c_blue ml_10 match_info_font"><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></span>
                             <span class="c_blue ml_10 match_info_font">
                                 <i class="iconfont">&#xe685;</i>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
