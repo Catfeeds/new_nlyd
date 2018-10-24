@@ -1897,6 +1897,16 @@ class Student_Matchs extends Student_Home
 
         return $row;
     }
+
+    /**
+     *奖金明细详情页
+     */
+    public function bonusDetail(){
+
+
+        $view = student_view_path.CONTROLLER.'/matchBonusDetail.php';
+        load_view_template($view,array('row' => 's'));
+    }
     
     /**
      * 默认公用js/css引入
