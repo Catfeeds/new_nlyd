@@ -455,7 +455,8 @@ if(!class_exists('MatchController')){
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
                 $columns['times'] = '比赛时间';
-                $columns['time_slot'] = '报名时间段';
+                $columns['time_slot'] = '报名结束时间';
+//                $columns['time_slot'] = '报名时间段';
                 $columns['match_address'] = '比赛地点';
                 $columns['cost'] = '报名费用';
                 $columns['match_type'] = '比赛类型';
@@ -558,7 +559,8 @@ if(!class_exists('MatchController')){
                     echo $row['match_start_time'].'<br/>'.$match_end_time;
                     break;
                 case 'time_slot':
-                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
+                    echo $row['entry_end_time'];
+//                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
                     break;
                 case 'match_address':
                     echo $row['match_address'];
