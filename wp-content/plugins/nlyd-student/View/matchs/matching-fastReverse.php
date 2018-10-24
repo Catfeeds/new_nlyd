@@ -9,13 +9,15 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__($project_title, 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span>
-                        <span class="c_blue ml_10 match_info_font"> <?=__('第<span id="total">0</span>题', 'nlyd-student')?></span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
-                        </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
+                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font">
+                            <div>
+                                <i class="iconfont">&#xe685;</i>
+                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</div>
+                            </div>
+                        </div>
+                        <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <p class="count_p fs_14">
                         <span class="c_black"><?=__('请用完给出的4个数字，并利用运算符号使运算结果等于24！', 'nlyd-student')?></span>
@@ -214,9 +216,13 @@ jQuery(function($) {
             } else {//倒计时结束
                 $('.count_down').text('00:00:00').attr('data-seconds',sys_second)
                 clearInterval(timer);
-                var thisAjaxRow=ajaxData[ajaxData.length-1]
-                var text=$('.answer div').text()
-                thisAjaxRow.yours=text;
+                var answer_Text=$('.answer div').text();
+                var answer_dateNumber=$('.answer').attr('date-number');
+                if(answer_dateNumber=="本题无解"){
+                    isRights(answer_dateNumber)
+                }else{
+                    isRights(answer_Text)
+                }
                 submit(0,3)
             }
 
@@ -505,6 +511,7 @@ new AlloyFinger($('#next')[0], {
                 }, 300);
             }
             $('.answer').attr('date-number',"1");
+            delete ajaxData[ajaxData.length-1].examples;
         }
     }
 });
@@ -570,6 +577,7 @@ function isRights(text) {
         //跳过2s
         ajaxData[ajaxData.length-1]['isRight']=false;
     }
+    delete ajaxData[ajaxData.length-1].examples;
 }
     layui.use('layer', function(){
         // mTouch('body').on('tap','#sumbit',function(e){

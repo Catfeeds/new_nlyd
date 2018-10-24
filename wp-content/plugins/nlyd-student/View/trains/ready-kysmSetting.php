@@ -28,7 +28,6 @@
                     //alert(url);
                     setTimeout(function(){
                         window.location.href = url;
-                        _this.removeClass('disabled')
                     }, 800);
                 }
             }

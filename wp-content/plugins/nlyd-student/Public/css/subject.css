@@ -2,11 +2,11 @@
 .subject-title{
     margin-top: 20px;
     margin-bottom: 15px;
+    height: 35px;
 }
-.subject-title>div{
+/* .subject-title>div{
     height: 32px;
-    line-height: 32px;
-}
+} */
 .subject-title-info a{
     display: block;
     margin: auto;
@@ -20,12 +20,13 @@
 }
 .subject_info_font{
     display: table;
+    height: 100%;;
 }
 .subject_info_font div{
     display: table-cell;
     vertical-align: middle;
     height: 100%;
-    line-height: 20px;
+    line-height: 16px;
 }
 .subject-title-info a.disabled-a{
     font-size: 0.12rem;
