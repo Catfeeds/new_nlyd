@@ -17,12 +17,24 @@ class Student_Home
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
 
+                if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+
+                    wp_redirect(home_url('weixin/webLogin'));
+                    exit;
+                }
+
                 wp_redirect(home_url('logins'));
             }
         }elseif ((CONTROLLER == 'account' && ACTION != 'index')){
 
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
+
+                if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+
+                    wp_redirect(home_url('weixin/webLogin'));
+                    exit;
+                }
 
                 wp_redirect(home_url('logins'));
             }

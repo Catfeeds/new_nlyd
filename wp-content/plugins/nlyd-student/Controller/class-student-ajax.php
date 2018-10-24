@@ -1474,7 +1474,7 @@ class Student_Ajax
 
         $where = join(' and ',$map);
 
-
+/*
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
                 a.post_content,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
@@ -1486,13 +1486,12 @@ class Student_Ajax
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
         //print_r($sql);
-        /*if($current_user->ID == 66){
-                print_r($sql);
-        }*/
-        
+
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(empty($rows)){
-            $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
+
+        }*/
+        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
                 a.post_content,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
@@ -1502,13 +1501,8 @@ class Student_Ajax
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
-            //print_r($sql);
-            /*if($current_user->ID == 66){
-                    print_r($sql);
-            }*/
+        $rows = $wpdb->get_results($sql,ARRAY_A);
 
-            $rows = $wpdb->get_results($sql,ARRAY_A);
-        }
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));

@@ -347,6 +347,7 @@ class Student_Matchs extends Student_Home
         if(!empty($this->next_project)){
             //var_dump($this->next_project);
             $data['count_down'] = strtotime($this->next_project['start_time'])-get_time();
+            $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$this->next_project['more']);
         }
 
         if($this->end_project == 'y'){
