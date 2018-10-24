@@ -476,8 +476,8 @@ if(!class_exists('MatchController')){
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
                 $columns['times'] = '比赛时间';
-//                $columns['time_slot'] = '报名结束时间';
-                $columns['time_slot'] = '报名时间段';
+                $columns['time_slot'] = '报名结束时间';
+//                $columns['time_slot'] = '报名时间段';
                 $columns['match_address'] = '比赛地点';
                 $columns['cost'] = '报名费用';
                 $columns['match_type'] = '比赛类型';
@@ -494,7 +494,7 @@ if(!class_exists('MatchController')){
         public function manage_match_columns($column_name, $id){
             global $wpdb;
             $sql = "select 
-                            match_slogan,match_genre,match_start_time,entry_end_time,match_address,match_cost,match_status,created_time 
+                            match_slogan,match_genre,match_start_time,entry_end_time,match_address,match_cost,match_status,
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 
@@ -580,8 +580,8 @@ if(!class_exists('MatchController')){
                     echo $row['match_start_time'].'<br/>'.$match_end_time;
                     break;
                 case 'time_slot':
-//                    echo $row['entry_end_time'];
-                    echo $row['created_time'].'<br />'.$row['entry_end_time'];
+                    echo $row['entry_end_time'];
+//                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
                     break;
                 case 'match_address':
                     echo $row['match_address'];

@@ -317,7 +317,7 @@ jQuery(function($) {
                                 match_id:$.Request('match_id'),
                                 page:arg['myPage'],
                             }
-                            console.log(postData)
+                            // console.log(postData)
                         }
 
                         $.ajax({
@@ -325,7 +325,6 @@ jQuery(function($) {
                             success:function(res,ajaxStatu,xhr){
                                 arg['myPage']++
                                 isClick[arg['data_id']]=true;
-                                // console.log(res)
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
                                     lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
@@ -399,7 +398,7 @@ jQuery(function($) {
                                             //             +'<td><div class="table_content c_black">'+value.team_name+'</div></td>'
                                             //             +'<td><div class="table_content">'+value.team_id+'</div></td>'
                                             //             +'<td><div class="table_content c_green">'+value.my_score+'</div></td>'
-                                            //             +'<td><div class="table_content c_blue"><a href="'+value+'">奖金明细</a></div></td>'
+                                            //             +'<td><div class="table_content c_blue"><a href="'+value+'"><?=__('奖金明细', 'nlyd-student')?></a></div></td>'
                                             //         +'</tr>'
                                             // lis.push(dom)                           
                                         })

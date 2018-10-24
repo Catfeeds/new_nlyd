@@ -129,8 +129,8 @@ class Student_Trains extends Student_Home
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         where a.slug = '{$locale}-test-question' ";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
-                //print_r($sql);
-                if(empty($rows)){
+                //print_r($rows);
+                if(empty($rows[0]['term_taxonomy_id'])){
                     $this->get_404(__('测试题库暂无文章,请联系管理员添加', 'nlyd-student'));
                     return;
                 }
