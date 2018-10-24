@@ -69,7 +69,7 @@ class Student_Signs
             $match_title = $match->post_title;
 
             //获取所有报名信息
-            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4)";
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4) order by id desc";
             $results = $wpdb->get_results($sql,ARRAY_A);
             $index = array_search($current_user->ID,array_column($results,'user_id')) + 1;
             //print_r($index);
@@ -92,12 +92,6 @@ class Student_Signs
         <?php
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
-    }
-
-
-    public function hint(){
-
-        $this->get_404('请使用');
     }
 
     public function get_404($tag){
