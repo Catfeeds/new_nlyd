@@ -52,10 +52,10 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>:</div><span class="c_blue"><?=$use_time;?>s</span>
+                                <div class="left-label"><?=__('答题用时', 'nlyd-student')?>:</div><span class="c_blue"><?=$use_time > 0 ? $use_time : 0;?>s</span>
                             </div>
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>:</div><span class="c_blue"><?=$surplus_time;?>s</span>
+                                <div class="left-label"><?=__('剩余时间', 'nlyd-student')?>:</div><span class="c_blue"><?=$surplus_time > 0 ? $surplus_time : 0;?>s</span>
                             </div>
                         </div>
                         <div class="subject-row flex-h">

@@ -50,6 +50,7 @@ function the_table_install () {
             `match_project_id` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛项目id合集',
             `created_id` int(20) DEFAULT NULL COMMENT '发布人',
             `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+            `match_notice_url` text DEFAULT NULL COMMENT '参赛须知链接',
               PRIMARY KEY (`id`,`match_id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
