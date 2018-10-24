@@ -325,7 +325,7 @@ jQuery(function($) {
                             success:function(res,ajaxStatu,xhr){
                                 arg['myPage']++
                                 isClick[arg['data_id']]=true;
-                                console.log(res)
+                                // console.log(res)
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
                                     lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
