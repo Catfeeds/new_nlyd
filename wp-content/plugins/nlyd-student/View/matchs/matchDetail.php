@@ -71,7 +71,7 @@ endif;
                                 <li class="nl-match">
                                     <div class="nl-match-header noMargin">
                                         <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?> "><?= __('比赛项目', 'nlyd-student') ?></span>
-                                        <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?= __('参赛须知', 'nlyd-student') ?></a>
+                                        <a class="c_blue" style="float:right" href="https://mp.weixin.qq.com/s/SrtckmXNfnjRDiP-5o9guQ?tdsourcetag=s_pctim_aiomsg"><?= __('参赛须知', 'nlyd-student') ?></a>
                                     </div>
                                     <div class="nl-match-body">
                                         <?php foreach ($match_project as $val) { ?>

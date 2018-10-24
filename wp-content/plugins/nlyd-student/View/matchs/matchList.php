@@ -213,7 +213,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><?=__('已报选手', 'nlyd-student')?>:</div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'人</span>'
-                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/p5c8L-afyE-HvTbH59D8vA"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/SrtckmXNfnjRDiP-5o9guQ?tdsourcetag=s_pctim_aiomsg"><?=__('参赛须知', 'nlyd-student')?></a>'
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
