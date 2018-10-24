@@ -480,7 +480,7 @@ if(!class_exists('MatchController')){
                             when 1 then '报名中' 
                             when 2 then '比赛中' 
                             end match_status_cn  
-                            from {$wpdb->prefix}match_meta   where match_id = {$id} 
+                            from {$wpdb->prefix}match_meta_new   where match_id = {$id} 
                             ";
             $row = $wpdb->get_row($sql,ARRAY_A);
             //print_r($sql);die;
