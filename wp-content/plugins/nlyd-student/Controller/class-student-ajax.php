@@ -3527,7 +3527,7 @@ class Student_Ajax
         $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
         if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student')]);
 
-        $is_user_view = $wpdb->get_val("SELECT is_user_view FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
+        $is_user_view = $wpdb->get_var("SELECT is_user_view FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
         $is_user_view == 2 && wp_send_json_error(['info' => __('后台奖金核实中', 'nlyd-student')]);
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 0;
