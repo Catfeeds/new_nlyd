@@ -9,12 +9,14 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row">
-                        <span class="c_black match_info_font"><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
-                        <span class="c_blue ml_10 match_info_font"><?=__('第1/1题', 'nlyd-student')?></span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
-                        </span>
+                        <div class="c_black match_info_font"><div><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></div></div>
+                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第1/1题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font">
+                            <div>
+                                <i class="iconfont">&#xe685;</i>
+                                <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="matching-row layui-row">
                         <div class="matching-row-label"><?=__('划辅助线', 'nlyd-student')?></div>

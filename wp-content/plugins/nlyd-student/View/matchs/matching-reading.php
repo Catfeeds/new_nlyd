@@ -9,14 +9,16 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row">
-                            <span class="c_black match_info_font"><?=__($project_title, 'nlyd-student')?> <span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></span>
+                            <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
-                            <span class="c_blue ml_10 match_info_font"><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></span>
-                            <span class="c_blue ml_10 match_info_font">
-                                <i class="iconfont">&#xe685;</i>
-                                <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
-                            </span>
-                            <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
+                            <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
+                            <div class="c_blue match_info_font">
+                                <div>
+                                    <i class="iconfont">&#xe685;</i>
+                                    <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                                </div>
+                            </div>
+                            <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                         </div>
                         <div class="reading-question">
                             <?php
