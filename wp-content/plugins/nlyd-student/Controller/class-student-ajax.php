@@ -3504,16 +3504,16 @@ class Student_Ajax
         if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student')]);
         foreach ($result as $k => &$res){
             if($res['user_real_name']){
-                $res['user_real_name'] = unserialize($res['user_real_name']);
+                $res['real_name'] = unserialize($res['user_real_name'])['real_name'];
             }else{
-                $res['user_real_name']['real_name'] = '-';
+                $res['real_name'] = '-';
             }
             $res['is_send'] = $res['is_send'] == 2 ? $res['is_send'] = 'y' : 'n';
             $res['num'] = $k+1;
+            $res['url'] = home_url('matchs/bonusDetail/id/'.$res['id']);
         }
         wp_send_json_success(['info' => $result]);
     }
-
 }
 
 new Student_Ajax();
