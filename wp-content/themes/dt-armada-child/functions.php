@@ -60,7 +60,7 @@ if(!function_exists('get_match_end_time')){
         global $wpdb;
 
         //获取比赛信息
-        $sql = "select match_id,match_start_time,match_more,match_use_time,match_project_interval,match_subject_interval from {$wpdb->prefix}match_meta where match_id = {$match_id}";
+        $sql = "select match_id,match_start_time,match_more,match_use_time,match_project_interval,match_subject_interval from {$wpdb->prefix}match_meta_new where match_id = {$match_id}";
 
         $match = $wpdb->get_row($sql,ARRAY_A);
         if(empty($match)){
