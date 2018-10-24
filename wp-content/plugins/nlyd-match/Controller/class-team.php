@@ -178,7 +178,7 @@ if(!class_exists('Team')){
             $pageSize = 20;
             $start = ($page-1)*$pageSize;
             $sql = 'SELECT SQL_CALC_FOUND_ROWS 
-            m.id,u.user_login,u.display_name,u.user_email,u.user_mobile,m.status,m.user_id,
+            m.id,u.user_login,u.user_email,u.user_mobile,m.status,m.user_id,
             CASE m.status WHEN -3 THEN "'. "<span style='color:#6a1c25'>已退出</span>" .'" 
             WHEN -2 THEN "'. "<span style='color:rgba(191,34,49,0.91)'>已拒绝</span>" .'" 
             WHEN -1 THEN "'. "<span style='color:#61655b'>退队申请</span>" .'" 
@@ -240,6 +240,7 @@ if(!class_exists('Team')){
                             </select>
                             <input type="submit" id="doaction" class="button action  all-btn" value="应用">
                             <input type="button" id="add_member_btn" class="button action  all-btn" value="添加成员">
+                            <input type="button"  class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=team_member&team_id='.$id)?>'" value="导出成员">
                         </div>
                         <p class="search-box">
                             <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
@@ -332,6 +333,8 @@ if(!class_exists('Team')){
                                 </a>
                             </th>
                             <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                            <th scope="col" id="ID" class="manage-column column-ID">ID</th>
+                            <th scope="col" id="address" class="manage-column column-address">所在地区</th>
                             <th scope="col" id="status" class="manage-column column-status status">状态</th>
                             <th scope="col" id="email" class="manage-column column-email sortable desc">
                                 <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
@@ -347,6 +350,9 @@ if(!class_exists('Team')){
                                 foreach ($rows as $row){
                                     $usermeta = get_user_meta($row['user_id']);
                                     $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
+                                    $user_address = isset($usermeta['user_address'][0]) ? unserialize($usermeta['user_address'][0]) : [];
+                                    if($user_address != []) $user_address = $user_address['province'].$user_address['city'].$user_address['area'];
+                                    else $user_address = '';
                                 ?>
 
                                 <tr data-id="<?=$row['id']?>">
@@ -374,6 +380,10 @@ if(!class_exists('Team')){
                                     </td>
                                     <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span><span class="screen-reader-text">未知</span></td>
 
+                                    <td class="ID column-status ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
+                                    <td class="address column-status address" data-colname="所在地区"><?=$user_address?></td>
+
+
                                     <td class="status column-status status" data-colname="状态"><?=$row['status_title']?></td>
                                     <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
                                     <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
@@ -394,6 +404,8 @@ if(!class_exists('Team')){
                                 <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                             </th>
                             <th scope="col" class="manage-column column-name">姓名</th>
+                            <th scope="col" class="manage-column column-ID">ID</th>
+                            <th scope="col" class="manage-column column-address">所在地区</th>
                             <th scope="col" class="manage-column column-status status">状态</th>
                             <th scope="col" class="manage-column column-email sortable desc">
                                 <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>

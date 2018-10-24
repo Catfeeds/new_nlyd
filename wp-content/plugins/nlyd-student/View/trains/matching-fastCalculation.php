@@ -8,14 +8,15 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row">
-                        <span class="c_black match_info_font"><?=__($title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span>
-                        <span class="c_blue ml_10 match_info_font"><?=__('第<span id="total">0</span>题', 'nlyd-student')?></span>
-                        <span class="c_blue ml_10 match_info_font">
-                            <i class="iconfont">&#xe685;</i>
-                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
-                            <!-- <span><?=$count_down?></span> -->
-                        </span>
-                        <div class="matching-sumbit match_info_font" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__($title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></div></div>
+                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font">
+                            <div>
+                                <i class="iconfont">&#xe685;</i>
+                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                            </div>
+                        </div>
+                        <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                    
                     <div class="matching-fast">

@@ -1903,10 +1903,20 @@ class Student_Matchs extends Student_Home
      *奖金明细详情页
      */
     public function bonusDetail(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
+        if($id < 1){
+            $this->get_404(__('参数错误', 'nlyd-student'));
+            return;
+        }
+        global $wpdb;
+        $row = $wpdb->get_row("SELECT mb.id,um1.user_meta AS user_real_name,um2.user_meta AS userID,mb.is_send FROM {$wpdb->prefix}match_bonus AS mb 
+                  LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=mb.user_id AND um1.meta_key='user_real_name' 
+                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID' 
+                  WHERE mb.id={$id}", ARRAY_A);
 
         $view = student_view_path.CONTROLLER.'/matchBonusDetail.php';
-        load_view_template($view,array('row' => 's'));
+        load_view_template($view,array('row' => $row));
     }
     
     /**

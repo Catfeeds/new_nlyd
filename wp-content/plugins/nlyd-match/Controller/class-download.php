@@ -378,7 +378,7 @@ class Download
 
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-        $match = $wpdb->get_row('SELECT match_status,match_more FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
         $matchEnd = true;
@@ -834,7 +834,7 @@ class Download
         global $wpdb;
         //首先获取当前比赛
         $post = get_post(intval($_GET['match_id']));
-        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status,match_id FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
 
         //TODO 判断比赛是否结束
         $matchEnd = true;
@@ -1580,7 +1580,7 @@ class Download
         if($match_id < 1) exit('比赛id参数此错误');
 
         global $wpdb;
-        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
 
         //TODO 判断比赛是否结束
         if(!$match || $match['match_status'] != -3){
@@ -1652,7 +1652,7 @@ class Download
         $titlePayable->getFont()->setBold( true);
         $titlePayable->getFont()->setSize( 20);
 //        $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
-        $titleObjRichText->createTextRun("\n（奖金总额195000元，税后发放额156000元，代扣税39000元）")->getFont()->setSize( 16);
+        $titleObjRichText->createTextRun("\n（奖金总额{$countData['bonus_all']}元，税后发放额{$countData['tax_send_all']}元，代扣税{$countData['tax_all']}元）")->getFont()->setSize( 16);
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $titleObjRichText);
         //边加粗
@@ -1744,7 +1744,7 @@ class Download
             $path_bonusObjRichText = new \PHPExcel_RichText();
             $path_bonusObjRichText->createTextRun('二维码收款路径')->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
             $objPHPExcel->getActiveSheet()->setCellValue('H'.($k+3), $path_bonusObjRichText);
-            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl($row['collect_path']);
+            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl(get_user_meta($row['user_id'],'user_coin_code',true)[0]);
 //            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setTooltip('Navigate to website');
 //            $objPHPExcel->getActiveSheet()->getStyle('H'.($k+3))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         }
@@ -1752,6 +1752,141 @@ class Download
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         return;
+    }
+
+    /**
+     * 导出战队成员
+     */
+    public function team_member(){
+        $team_id = isset($_GET['team_id']) ? intval($_GET['team_id']) : 0;
+        $team_id < 1 && exit('参数错误');
+
+        global $wpdb;
+        $sql = 'SELECT m.id,u.user_login,u.user_email,u.user_mobile,m.status,m.user_id,m.user_type 
+                FROM '.$wpdb->prefix.'match_team AS m 
+                LEFT JOIN '.$wpdb->users.' AS u ON u.ID=m.user_id 
+                WHERE m.team_id='.$team_id.' AND m.status=2 AND u.ID !=""';
+        $rows = $wpdb->get_results($sql, ARRAY_A);
+
+
+
+        $filename = 'team_member_';
+        $filename .= current_time('timestamp').".xls";
+//        $path = self::$downloadPath.$filename;
+//        file_put_contents($path,$html);
+        header('Pragma:public');
+        header('Content-Type:application/x-msexecl;name="'.$filename.'"');
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
+        $objPHPExcel = new \PHPExcel();
+
+//        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+//        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+
+        //居中显示
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('center');
+        $objPHPExcel->getDefaultStyle()->getAlignment()->setVertical('center');
+
+        //行高
+//        $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(50);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(70);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(40);
+
+
+
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
+
+        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
+        $titleObjRichText = new \PHPExcel_RichText();
+        $titlePayable = $titleObjRichText->createTextRun(get_post($team_id)->post_title);
+        $titlePayable->getFont()->setBold( true);
+        $titlePayable->getFont()->setSize( 20);
+//        $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $titleObjRichText);
+        //边加粗
+        $objPHPExcel->getActiveSheet()->getStyle('A2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('B2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('C2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('D2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('E2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('F2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('G2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('H2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+        $objPHPExcel->getActiveSheet()->getStyle('I2')->getBorders()->getAllBorders()->setBorderStyle('thin');
+
+//        $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'B2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'C2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'E2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'F2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'G2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'H2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
+
+        //自动换行
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
+
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '用户名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '姓名');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', 'ID');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '手机');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '类别');
+
+        foreach ($rows as $k => $row){
+            $usermeta = get_user_meta($row['user_id']);
+            $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
+            $user_address = isset($usermeta['user_address'][0]) ? unserialize($usermeta['user_address'][0]) : [];
+            if($user_address != []) $user_address = $user_address['province'].$user_address['city'].$user_address['area'];
+            else $user_address = '';
+
+//            $objRichText = new \PHPExcel_RichText();
+//            $objRichText->createTextRun($is_send)->getFont()->setColor( new \PHPExcel_Style_Color( $color ) );//设置颜色
+//
+//            $tax_allObjRichText = new \PHPExcel_RichText();
+//            $tax_allObjRichText->createTextRun(' ￥'.$row['tax_all'])->getFont()->setColor( new \PHPExcel_Style_Color( '00FF0000' ) );//设置颜色
+//
+//            $tax_send_bonusObjRichText = new \PHPExcel_RichText();
+//            $tax_send_bonusObjRichText->createTextRun(' ￥'.$row['tax_send_bonus'])->getFont()->setColor( new \PHPExcel_Style_Color( '0008C715' ) );//设置颜色
+
+            //换行
+            $objPHPExcel->getActiveSheet()->getStyle('C'.($k+3))->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('D'.($k+3))->getAlignment()->setWrapText(true);
+
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['user_login']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$usermeta['user_ID'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$user_address);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$row['user_email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$row['user_mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_type'] == 2 ? '教练' : '学员');
+
+        }
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        return;
+
     }
 }
 new Download();
@@ -1767,7 +1902,7 @@ new Download();
 //
 //        //首先获取当前比赛
 //        $post = get_post(intval($_GET['match_id']));
-////        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+////        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
 //        //TODO 判断比赛是否结束
 //
 //        //查询比赛项目
@@ -1853,7 +1988,7 @@ new Download();
 //
 ////首先获取当前比赛
 //$post = get_post(intval($_GET['match_id']));
-//$match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$post->ID, ARRAY_A);
+//$match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$post->ID, ARRAY_A);
 //
 ////TODO 判断比赛是否结束
 //if(!$match || $match['match_status'] != -3){

@@ -328,7 +328,7 @@ class Brainpower
         global $wpdb;
         $match_id = intval($_GET['match_id']);
         if($match_id < 1) exit('参数错误');
-        $match = $wpdb->get_row('SELECT match_status,match_more,match_id FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status,match_id FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
         //TODO 判断比赛是否结束
 
         if(!$match || $match['match_status'] != -3){
