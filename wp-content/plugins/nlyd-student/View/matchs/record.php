@@ -129,9 +129,9 @@
                                 <div class="btn-wrap">
                                     <div class="classify-btn" data-post-id="1"><?=__('战队排名', 'nlyd-student')?></div>
                                 </div>
-                                <!-- <div class="btn-wrap">
+                                <div class="btn-wrap">
                                     <div class="classify-btn" data-post-id="2"><?=__('奖金明细', 'nlyd-student')?></div>
-                                </div> -->
+                                </div>
                             </div>
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
@@ -253,8 +253,8 @@ jQuery(function($) {
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
                     // ,scrollElem:'#flow_'+arg['data_id']
-                    // ,isAuto: false
-                    // ,isLazyimg: true
+                    ,isAuto: false
+                    ,isLazyimg: true
                     ,done: function(page, next){ //加载下一页
                         if(arg['myPage']==1){
                             $('#rank_'+arg['data_id']).empty()
