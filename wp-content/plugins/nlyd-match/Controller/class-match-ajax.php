@@ -895,7 +895,7 @@ class Match_Ajax
                 wp_send_json_error(['info' => '比赛删除失败']);
             }
             //删除meta
-            $meta = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_meta WHERE match_id={$id}");
+            $meta = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_meta_new WHERE match_id={$id}");
             if($meta){
                 $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
                 if(!$metaBool){
@@ -964,7 +964,7 @@ class Match_Ajax
 //            wp_send_json_error(array('info'=>'当前学员未设置默认收货地址!'));
 //            return;
 //        }
-        $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id);
+        $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id);
         //新增订单
         $orderInsertData = [
             'user_id' => $user_id,

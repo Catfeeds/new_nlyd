@@ -3524,7 +3524,7 @@ class Student_Ajax
 
         global $wpdb;
         //断比赛是否结束
-        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta WHERE match_id='.$match_id, ARRAY_A);
+        $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
         if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student')]);
 
         $is_user_view = $wpdb->get_val("SELECT is_user_view FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
@@ -3540,13 +3540,14 @@ class Student_Ajax
                   LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID' 
                   WHERE mb.match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
         if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student')]);
-        foreach ($result as &$res){
+        foreach ($result as $k => &$res){
             if($res['user_real_name']){
                 $res['user_real_name'] = unserialize($res['user_real_name']);
             }else{
                 $res['user_real_name']['real_name'] = '-';
             }
             $res['is_send'] = $res['is_send'] == 2 ? $res['is_send'] = 'y' : 'n';
+            $res['num'] = $k+1;
         }
         wp_send_json_success(['info' => $result]);
     }
