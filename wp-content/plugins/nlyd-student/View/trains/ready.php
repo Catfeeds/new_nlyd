@@ -283,6 +283,7 @@
 jQuery(function($) { 
     $('#go').click(function(){
         $.DelSession('train_match')
+        $.DelSession('_match_train')
     })
 })
 </script>
