@@ -700,6 +700,7 @@ p.share-font{
     text-align: center;
     margin: auto;
     white-space: normal;
+    line-height: 20px;
     max-width: 117px;
 }
 /* 透明遮罩 */
