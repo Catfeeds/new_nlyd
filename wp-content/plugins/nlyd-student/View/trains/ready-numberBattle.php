@@ -40,6 +40,10 @@
 </div>
 <script>
 jQuery(function($) { 
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var questions_answer=[]
     var leavePage= $.GetSession('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){

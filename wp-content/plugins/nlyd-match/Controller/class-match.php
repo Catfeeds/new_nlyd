@@ -509,6 +509,18 @@ class Match
                 <input placeholder="https://" class="layui-input" value="<?=$this->meta['match_notice_url'];?>" type="text" name="match[match_notice_url]">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖金明细模版</label>
+            <div class="layui-input-block">
+                <select name="match_income_detail">
+                <?php if(!empty($lists)): ?>
+                <?php foreach ($lists as $x){?>
+                    <option value="<?=$x['id']?>"><?=$x['title']?></option>
+                <?php } ?>
+                <?php endif;?>
+                </select>
+            </div>
+        </div>
     <?php }
 
 
@@ -706,8 +718,7 @@ class Match
                                     <?php foreach ($rows as $k => $row){ ?>
                                     <li>
                                         第<?=$k+1?>轮
-                                        开始时间:<?=$row['start_time_format']?>
-                                        结束时间:<?=$row['end_time_format']?>
+                                        <?=$row['start_time_format'].'  '.$row['end_time_format']?>
                                     </li>
                                     <?php } ?>
                                 </ul>

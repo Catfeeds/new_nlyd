@@ -44,6 +44,10 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     var ajaxData=[],
     items=5,//生成5个错误选项，外加一个正确选项，共六个选项
@@ -61,6 +65,8 @@ jQuery(function($) {
     _count_time=6,//初始答题时间,会变化
     fetchPage_time=0;
     getAjaxTime=6;//程序获取时间
+    var sys_second=600;//倒计时的时间
+    var end_time=0;
     showTime=function(){ 
         fetchPage_time=getAjaxTime
         // if(!stop){
@@ -93,6 +99,11 @@ jQuery(function($) {
                 
             }else{
                 if(flaseQuestion<flaseMax){
+                    var matchSessions=$.GetSession('_match_train','true');
+                    if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='kysm'){
+                        matchSessions['fetchPage_time']=_count_time;//记录_count_time
+                        $.SetSession('_match_train',matchSessions);
+                    }
                     if(_count_time+1==getAjaxTime){
                         timer=setTimeout("showTime()",1000+answerHide*1000);
                     }else{
@@ -102,7 +113,21 @@ jQuery(function($) {
 
             }
     }  
+    var matchSession=$.GetSession('_match_train','true');
     var isMatching=false;//判断用户是否刷新页面
+    if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='kysm'){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+        flaseQuestion=matchSession['flaseQuestion'];
+        nandu=matchSession['nandu'];
+        itemLen=matchSession['itemLen'];
+        fetchPage_time=matchSession['fetchPage_time']?matchSession['fetchPage_time']:0;
+        end_time=matchSession['end_time'];
+        sys_second=$.GetSecond(end_time);
+        $('.count_down').attr('data-seconds',sys_second)
+    }else{
+
+    }
     if(!isMatching){
         // $('.matching-fastScan').css('paddingTop','40%');
         $('body').one('click','.answer',function(){
@@ -264,6 +289,17 @@ jQuery(function($) {
             select.splice(arr[randIndex], 0,right); //随机插入
             var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
+            end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
+            var sessionData={
+                ajaxData:ajaxData,
+                genre_id:$.Request('genre_id'),
+                type:'kysm',
+                end_time:end_time,
+                nandu:nandu,
+                flaseQuestion:flaseQuestion,
+                itemLen:itemLen,
+            }
+            $.SetSession('_match_train',sessionData)
         }else{
             var _time=$('.count_down').attr('data-seconds');
             $.alerts('<?=__('错误', 'nlyd-student')?>'+flaseMax+'<?=__('题', 'nlyd-student')?>')

@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','v2.1.0.3' );//样式版本
+            define( 'leo_match_version','v2.1.0.4' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -760,7 +760,9 @@ if(!class_exists('MatchController')){
                 }else{
                     update_post_meta($post_ID,'default_match_switch','OFF');
                 }
-
+                if(!empty($_POST['match_income_detail'])){
+                    update_post_meta($post_ID,'match_income_detail',$_POST['match_income_detail']);
+                }
                 if(isset($_POST['match']) && !empty($_POST['match'])){
 
                     $match_meta = $_POST['match'];

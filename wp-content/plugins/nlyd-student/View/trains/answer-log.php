@@ -122,15 +122,14 @@ switch ($type){
 <?php } ?>
 <script>
 jQuery(function($) {
+    $.DelSession('train_match')
+    $.DelSession('_match_train')
     <?php if(!isset($_GET['back'])){ ?>
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
     <?php } ?>
-    $('#again').click(function(){
-        $.DelSession('train_match')
-    })
     <?php if($type == 'pkjl'): ?>
             initWidth=function() {
                 var len=$('.first_wap.poker-wrapper .poker').length;

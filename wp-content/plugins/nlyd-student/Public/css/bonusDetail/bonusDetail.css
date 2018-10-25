@@ -4,13 +4,12 @@
 }
 .money_row{
       padding: 8px 0;
+      font-size:0.12rem;
 }
 .money_row:nth-child(odd){
     background: #F6FAFF;
   
 }
 .money_right{
-    width: 90px;
-    text-align: left;
     text-indent: 0;
 }

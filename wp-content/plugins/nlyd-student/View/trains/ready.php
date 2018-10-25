@@ -281,9 +281,11 @@
 
 <script>
 jQuery(function($) { 
-    $('#go').click(function(){
-        $.DelSession('train_match')
-        $.DelSession('_match_train')
-    })
+    $.DelSession('train_match')
+    $.DelSession('_match_train')
+    // $('#go').click(function(){
+    //     $.DelSession('train_match')
+    //     $.DelSession('_match_train')
+    // })
 })
 </script>
