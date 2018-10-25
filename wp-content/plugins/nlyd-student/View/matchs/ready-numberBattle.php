@@ -55,7 +55,7 @@ jQuery(function($) {
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
         questions_answer=matching_question['questions_answer']
     }else{
-        $.DelSession('matching_question')
+        // $.DelSession('matching_question')
         for(var i=0;i<100;i++){
             var num=Math.floor(Math.random()*10);//生成0-9的随机数
             questions_answer.push(num)
@@ -115,7 +115,7 @@ jQuery(function($) {
                 })
             },
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
+                // $.DelSession('leavePage')
                 if(res.success){
                     //return false;
                     if(res.data.url){

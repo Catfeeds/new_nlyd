@@ -135,6 +135,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 </div>
 <script>
     jQuery(function($) {
+        $.DelSession('match');//比赛记录参数
+        $.DelSession('leavePage');//切换页面参数参数
+        $.DelSession('matching_question');//准备页面题目参数
         <?php if(isset($_GET['project_more_id'])): ?>
           leavePageLoad('<?=$wait_url?>');
         $('.count_down').countdown(function(S, d){//倒计时

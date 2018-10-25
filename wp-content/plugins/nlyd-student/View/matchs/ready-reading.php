@@ -96,7 +96,7 @@ jQuery(function($) {
                 })
             },
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
+                // $.DelSession('leavePage')
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url

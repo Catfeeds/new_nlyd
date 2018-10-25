@@ -146,7 +146,7 @@ jQuery(function($) {
                     })
                 },
                 success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('leavePage')
+                    // $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

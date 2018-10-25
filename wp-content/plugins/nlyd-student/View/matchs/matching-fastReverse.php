@@ -178,8 +178,8 @@ jQuery(function($) {
                     })
                 },
                 success:function(res,ajaxStatu,xhr){    
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
+                    // $.DelSession('match')
+                    // $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

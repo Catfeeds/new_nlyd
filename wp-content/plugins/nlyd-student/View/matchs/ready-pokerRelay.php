@@ -146,7 +146,7 @@ jQuery(function($) {
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
         questions_answer=matching_question['questions_answer']
     }else{
-        $.DelSession('matching_question')
+        // $.DelSession('matching_question')
         // $.each(arrColor,function(i,v){
         //     $.each(arrNum,function(index,val){
         //         var item=v+'-'+val;
@@ -208,11 +208,11 @@ jQuery(function($) {
                 })
             },
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
+                // $.DelSession('leavePage')
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url
-                        $.DelSession('matching_question')
+                        // $.DelSession('matching_question')
                     }   
                 }else{
                     $('#load').css({
