@@ -343,7 +343,7 @@ class Student_Matchs extends Student_Home
         if(!empty($this->next_project)){
             //var_dump($this->next_project);
             $data['count_down'] = strtotime($this->next_project['start_time'])-get_time();
-            $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$this->next_project['more']);
+            $data['match_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$this->next_project['id']);
         }
 
         if($this->end_project == 'y'){
@@ -1188,15 +1188,19 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
-
+        global $wpdb,$current_user;
         //获取当前项目所有轮数
-        $rows = $this->get_project_all_more($_GET['match_id'],$_GET['project_id']);
+        $sql1 = "SELECT a.id,a.more,b.post_title project_title
+                FROM `{$wpdb->prefix}match_project_more` a 
+                left join {$wpdb->prefix}posts b on a.project_id = b.ID
+                WHERE a.match_id = {$_GET['match_id']} AND a.project_id = {$_GET['project_id']}";
+        $rows = $wpdb->get_results($sql1,ARRAY_A);
         //print_r($rows);
 
         //print_r($this->match_alias);
         //var_dump($this->project_key_array[$_GET['project_id']]);
         //判断是否存在我的本轮答题
-        global $wpdb,$current_user;
+
         $sql = "select user_id from {$wpdb->prefix}match_questions where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} and  project_id = {$_GET['project_id']}";
         $user_id = $wpdb->get_results($sql);
 
@@ -1400,7 +1404,7 @@ class Student_Matchs extends Student_Home
         global $wpdb,$current_user;
 
         if(!empty($match_more)){
-            $str = " and a.more = {$match_more} ";
+            $str = " and a.more = {$match_more} and b.user_id = {$current_user->ID} ";
         }else{
 
             $str = '';

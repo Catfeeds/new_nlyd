@@ -156,6 +156,7 @@ class Student_Ajax
                         $age_where .= "  y.meta_value > 59 ";
                         break;
                 }
+                $age_left = " left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' ";
             }
 
             if(!empty($_POST['match_more'])){
@@ -171,7 +172,7 @@ class Student_Ajax
                             {$where}
                             GROUP BY user_id,project_id
                         ) x
-                        left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age'
+                        {$age_left}
                         {$age_where}
                         GROUP BY user_id
                         ORDER BY my_score DESC,surplus_time DESC,x.created_microtime ASC";
