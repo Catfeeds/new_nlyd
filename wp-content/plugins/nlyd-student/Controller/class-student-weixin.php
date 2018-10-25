@@ -240,6 +240,8 @@ class Student_Weixin
             if(isset($_SESSION['redirect_url'])){
                 $url = $_SESSION['redirect_url'];
                 unset($_SESSION['redirect_url']);
+            }else{
+                $url = home_url('account');
             }
 
             wp_redirect($url);//跳转到用户中心

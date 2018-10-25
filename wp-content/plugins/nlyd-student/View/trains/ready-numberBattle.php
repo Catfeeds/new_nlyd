@@ -53,7 +53,7 @@ jQuery(function($) {
             train_questions:questions_answer,
             genre_id:$.Request('genre_id'),
             type:'szzb',
-            count_down:$('.count_down').attr('data-seconds')
+            end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
         }
         $.SetSession('train_match',sessionData)
     }
@@ -68,17 +68,17 @@ jQuery(function($) {
                 train_questions:questions_answer,
                 genre_id:$.Request('genre_id'),
                 type:'szzb',
-                count_down:$('.count_down').attr('data-seconds')
+                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
             }
             $.SetSession('train_match',_sessionData)
         }
     })
     function submit(time){//提交答案
-        $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
+        // $('#load').css({
+        //         'display':'block',
+        //         'opacity': '1',
+        //         'visibility': 'visible',
+        //     })
         var my_answer=[];
         $('.matching-number-zoo .matching-number').each(function(){
             my_answer.push('')
@@ -96,6 +96,13 @@ jQuery(function($) {
         }
         $.ajax({
             data:data,
+            beforeSend:function(XMLHttpRequest){
+                $('#load').css({
+                    'display':'block',
+                    'opacity': '1',
+                    'visibility': 'visible',
+                })
+            },
             success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     if(res.data.url){
@@ -112,12 +119,11 @@ jQuery(function($) {
                     $.alerts(res.data.info)
                 }
             },
-            error: function(jqXHR, textStatus, errorMsg){
-                $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+            complete: function(XMLHttpRequest, textStatus){
+                if(textStatus=='timeout'){
+                    var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                    window.location.href=href;
+        　　　　}
             }
         })
     } 

@@ -421,9 +421,11 @@ jQuery(function($) {
                                     next(lis.join(''),false)
                                 }
                             },
-                            error:function(){
-                                $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
-                                next(lis.join(''),true)
+                            complete:function(XMLHttpRequest, textStatus){
+								if(textStatus=='timeout'){
+									$.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+									next(lis.join(''),true)
+								｝
                             }
                         }) 
                     }

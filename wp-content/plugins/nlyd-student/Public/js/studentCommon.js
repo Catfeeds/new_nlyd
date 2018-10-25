@@ -283,12 +283,12 @@ jQuery(document).ready(function($) {
         aysnc: true ,
         type: "POST" , // 默认使用POST方式
         dataType:'json',
-        timeout:4000,
-        error: function(jqXHR, textStatus, errorMsg){ // 出错时默认的处理函数
+        timeout:2000,
+        complete: function(XMLHttpRequest, textStatus){
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"
             // errorMsg 可能为： "Not Found"、"Internal Server Error"等
-            if(errorMsg=='timeout'){
+            if(textStatus=='timeout'){
                 $.alerts(common.slow);
             }      
         }

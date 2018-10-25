@@ -81,12 +81,12 @@ jQuery(function($) {
     })
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var my_answer={}
             $('.matching-reading').each(function(){
                 var _this=$(this);
@@ -129,6 +129,14 @@ jQuery(function($) {
             }
             $.ajax({
                 data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
                 success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
                     if(res.success){
@@ -146,7 +154,7 @@ jQuery(function($) {
                         isSubmit=false;
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
+                complete: function(XMLHttpRequest, textStatus){
                     isSubmit=false;
                     $('#load').css({
                             'display':'none',

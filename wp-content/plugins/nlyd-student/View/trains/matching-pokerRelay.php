@@ -81,10 +81,11 @@ jQuery(function($) {
     //     }, 1000);
     // }
     var questions_answer=[];
-    var ready_poker= $.GetSession('train_match','1');
-    if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){//记忆成功
-        questions_answer=ready_poker['train_questions'];
-        $('.count_down').attr('data-seconds',ready_poker['count_down'])
+    var leavePage= $.GetSession('train_match','1');
+    if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){//记忆成功
+        questions_answer=leavePage['train_questions'];
+        var end_time=leavePage['end_time'];
+        $('.count_down').attr('data-seconds',$.GetSecond(end_time))
     }else{//未获取到比赛题目
         $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
     }
@@ -108,12 +109,12 @@ jQuery(function($) {
     });
     function submit(time){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var my_answer=[];
             $('.poker-wrapper .poker').each(function(){
                 var text=$(this).attr('data-text');
@@ -133,7 +134,16 @@ jQuery(function($) {
                 match_more:match_more,
             }
             $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){
+                data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -149,13 +159,12 @@ jQuery(function($) {
                         isSubmit=false;
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
-                    isSubmit=false;
-                    $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+                complete: function(XMLHttpRequest, textStatus){
+                    if(textStatus=='timeout'){
+                        //$.SetSession('train_data',data);
+                        var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        window.location.href=href;
+            　　　　}
                 }
             })
         }else{

@@ -506,7 +506,7 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">参赛须知</label>
             <div class="layui-input-block">
-                <input placeholder="比赛口号" class="layui-input" value="<?=$this->meta['match_notice_url'];?>" type="text" name="match[match_notice_url]">
+                <input placeholder="https://" class="layui-input" value="<?=$this->meta['match_notice_url'];?>" type="text" name="match[match_notice_url]">
             </div>
         </div>
     <?php }

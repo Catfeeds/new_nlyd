@@ -2118,6 +2118,8 @@ class Student_Ajax
             if(isset($_SESSION['redirect_url'])){
                 $url = $_SESSION['redirect_url'];
                 unset($_SESSION['redirect_url']);
+            }else{
+                $url = home_url('account');
             }
 
             wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
@@ -2138,6 +2140,8 @@ class Student_Ajax
                     if(isset($_SESSION['redirect_url'])){
                         $url = $_SESSION['redirect_url'];
                         unset($_SESSION['redirect_url']);
+                    }else{
+                        $url = home_url('account');
                     }
 
                     wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
@@ -3326,6 +3330,8 @@ class Student_Ajax
 
         ini_set('post_max_size','20M');
 
+        $_SESSION['train_list'] = $_POST;
+
         switch ($_POST['project_type']){
             case 'szzb':
             case 'pkjl':
@@ -3450,6 +3456,7 @@ class Student_Ajax
                 }
             }
             $match_more = isset($_POST['match_more']) ? $_POST['match_more'] : 1;
+
             wp_send_json_success(array('info'=>__('提交成功', 'nlyd-student'),'url'=>home_url('trains/logs/id/'.$id.'/type/'.$_POST['project_type'].'/match_more/'.$match_more)));
         }else{
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));

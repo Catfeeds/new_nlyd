@@ -65,7 +65,7 @@ jQuery(function($) {
             train_questions:questions_answer,
             genre_id:$.Request('genre_id'),
             type:'pkjl',
-            count_down:$('.count_down').attr('data-seconds')
+            end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
         }
         $.SetSession('train_match',sessionData)
     }
@@ -79,7 +79,7 @@ jQuery(function($) {
                 train_questions:questions_answer,
                 genre_id:$.Request('genre_id'),
                 type:'pkjl',
-                count_down:$('.count_down').attr('data-seconds')
+                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
             }
             $.SetSession('train_match',sessionData)
         }
@@ -159,11 +159,11 @@ jQuery(function($) {
         }
     // var file_path = '<?=leo_student_url."/conf/poker_create.json";?>'; 
     function submit(time){//提交答案
-        $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
+        // $('#load').css({
+        //         'display':'block',
+        //         'opacity': '1',
+        //         'visibility': 'visible',
+        //     })
         var my_answer=[];
         var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
         var data={
@@ -179,6 +179,13 @@ jQuery(function($) {
 
         $.ajax({
             data:data,
+            beforeSend:function(XMLHttpRequest){
+                $('#load').css({
+                    'display':'block',
+                    'opacity': '1',
+                    'visibility': 'visible',
+                })
+            },
             success:function(res,ajaxStatu,xhr){  
                 if(res.success){
                     if(res.data.url){
@@ -193,32 +200,14 @@ jQuery(function($) {
                     $.alerts(res.data.info)
                 }
             },
-            error: function(jqXHR, textStatus, errorMsg){
-                $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+            complete: function(XMLHttpRequest, textStatus){
+                if(textStatus=='timeout'){
+                    var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                    window.location.href=href;
+        　　　　}
             }
         })
     }
-// new AlloyFinger($('#complete')[0], {//记忆完成
-//     tap:function(){
-//         var sessionData={//存储session
-//             train_questions:questions_answer,
-//             genre_id:$.Request('genre_id'),
-//             type:'pkjl',
-//             count_down:$('.count_down').attr('data-seconds')
-//         }
-//         $.SetSession('train_match',sessionData)
-//     }
-// })
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0)
-    //     }, 1000);
-    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -294,16 +283,6 @@ jQuery(function($) {
 
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
-        // $.getJSON(file_path,function(JsonData){
-            // var ready_poker= $.GetSession('train_match','1');
-            // if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
-            //     questions_answer=ready_poker['train_questions']
-            // }else{
-            // }
-            // $.each(questions_answer,function(i,v){
-            //     var item=v.split('-')
-            //     data_match.push(item)
-            // })
             var data=pagation(data_match,nowPage,onePageItems)
     
         

@@ -71,12 +71,12 @@ jQuery(function($) {
     })
     function submit(time){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var my_answer={}
             $('.matching-reading').each(function(){
                 var _this=$(this);
@@ -108,6 +108,14 @@ jQuery(function($) {
             }
             $.ajax({
                 data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
                 success:function(res,ajaxStatu,xhr){  
                     if(res.success){
                         isSubmit=false;
@@ -124,13 +132,11 @@ jQuery(function($) {
                         isSubmit=false;
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
-                    isSubmit=false;
-                    $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+                complete: function(XMLHttpRequest, textStatus){
+                    if(textStatus=='timeout'){
+                        var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        window.location.href=href;
+            　　　　}
                 }
             })
         }else{
