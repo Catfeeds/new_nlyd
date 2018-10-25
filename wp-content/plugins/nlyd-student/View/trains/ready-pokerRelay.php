@@ -65,7 +65,7 @@ jQuery(function($) {
             train_questions:questions_answer,
             genre_id:$.Request('genre_id'),
             type:'pkjl',
-            count_down:$('.count_down').attr('data-seconds')
+            end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
         }
         $.SetSession('train_match',sessionData)
     }
@@ -79,7 +79,7 @@ jQuery(function($) {
                 train_questions:questions_answer,
                 genre_id:$.Request('genre_id'),
                 type:'pkjl',
-                count_down:$('.count_down').attr('data-seconds')
+                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
             }
             $.SetSession('train_match',sessionData)
         }
@@ -202,23 +202,6 @@ jQuery(function($) {
             }
         })
     }
-// new AlloyFinger($('#complete')[0], {//记忆完成
-//     tap:function(){
-//         var sessionData={//存储session
-//             train_questions:questions_answer,
-//             genre_id:$.Request('genre_id'),
-//             type:'pkjl',
-//             count_down:$('.count_down').attr('data-seconds')
-//         }
-//         $.SetSession('train_match',sessionData)
-//     }
-// })
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
-    //     setTimeout(function() {
-    //         submit(0)
-    //     }, 1000);
-    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -294,16 +277,6 @@ jQuery(function($) {
 
 
     initPagation=function(){//初始化分业，按钮是否禁用，宽度得初始化
-        // $.getJSON(file_path,function(JsonData){
-            // var ready_poker= $.GetSession('train_match','1');
-            // if(ready_poker && ready_poker['genre_id']==$.Request('genre_id') && ready_poker['type']=='pkjl'){
-            //     questions_answer=ready_poker['train_questions']
-            // }else{
-            // }
-            // $.each(questions_answer,function(i,v){
-            //     var item=v.split('-')
-            //     data_match.push(item)
-            // })
             var data=pagation(data_match,nowPage,onePageItems)
     
         

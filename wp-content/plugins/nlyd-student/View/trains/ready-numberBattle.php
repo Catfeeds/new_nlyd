@@ -53,7 +53,7 @@ jQuery(function($) {
             train_questions:questions_answer,
             genre_id:$.Request('genre_id'),
             type:'szzb',
-            count_down:$('.count_down').attr('data-seconds')
+            end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
         }
         $.SetSession('train_match',sessionData)
     }
@@ -68,7 +68,7 @@ jQuery(function($) {
                 train_questions:questions_answer,
                 genre_id:$.Request('genre_id'),
                 type:'szzb',
-                count_down:$('.count_down').attr('data-seconds')
+                end_time:$.GetEndTime($('.count_down').attr('data-seconds'))
             }
             $.SetSession('train_match',_sessionData)
         }

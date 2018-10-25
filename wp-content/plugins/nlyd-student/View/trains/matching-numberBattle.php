@@ -60,10 +60,10 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');
-    console.log(leavePage)
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
         questions_answer=leavePage['train_questions'];
-        $('.count_down').attr('data-seconds',leavePage['count_down'])
+        var end_time=leavePage['end_time'];
+        $('.count_down').attr('data-seconds',$.GetSecond(end_time))
         $.each(questions_answer,function(i,v){
             var dom=i==0 ? '<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
             $('.matching-number-zoo').append(dom)
@@ -113,12 +113,6 @@ jQuery(function($) {
                 surplus_time:time,
                 match_more:match_more,
             }
-            // var leavePage= $.GetSession('leavePage','1');
-            // if(leavePage && leavePage['match_id']===$.Request('match_id') && leavePage['project_id']===$.Request('project_id') && leavePage['match_more']===$.Request('match_more')){
-            //     if(leavePage.Time){
-            //         data['leave_page_time']=leavePage.Time;
-            //     }
-            // }
             $.ajax({
                 data:data,success:function(res,ajaxStatu,xhr){ 
                     if(res.success){

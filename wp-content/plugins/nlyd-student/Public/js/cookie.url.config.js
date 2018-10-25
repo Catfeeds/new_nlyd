@@ -217,6 +217,16 @@ Alert.prototype={
 				return null;
 			}
 		},
+		GetEndTime:function(second){//传入秒数获取结束时间
+			var now_time = new Date().getTime();
+			var end_time=now_time+second*1000;
+			return end_time
+		},
+		GetSecond:function(end_time){//传入结束时间获取倒计时秒数
+			var now_time = new Date().getTime();
+			var count_down=(end_time-now_time)/1000;
+			return count_down
+		},
 		/*更新URL参数*/
 		UrlUpdateParams: function (url, name, value) {
 			var r = url;

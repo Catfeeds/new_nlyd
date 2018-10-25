@@ -265,8 +265,9 @@ jQuery(function($) {
             var thisRow={rights:right,question:select,yours:'',isRight:false};
             ajaxData.push(thisRow)
         }else{
+            var _time=$('.count_down').attr('data-seconds');
             $.alerts('<?=__('错误', 'nlyd-student')?>'+flaseMax+'<?=__('题', 'nlyd-student')?>')
-            submit($('.count_down').attr('data-seconds'),2)
+            submit(_time)
         }
     }
     function getNewline(val) {
@@ -367,12 +368,11 @@ $('#selectWrapper .fastScan-item').each(function(){
 })
     function submit(time){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
             var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
                 action:'trains_submit',
@@ -386,7 +386,17 @@ $('#selectWrapper .fastScan-item').each(function(){
                 clearTimeout(timer);
             }
             $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){  
+                data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                    $.alerts('开始提交')
+                },
+                success:function(res,ajaxStatu,xhr){  
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -404,12 +414,21 @@ $('#selectWrapper .fastScan-item').each(function(){
                 },
                 error: function(jqXHR, textStatus, errorMsg){
                     isSubmit=false;
-                        $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
-                }
+                    $('#load').css({
+                        'display':'none',
+                        'opacity': '0',
+                        'visibility': 'hidden',
+                    })
+                    $.alerts("error！");
+                    console.log(textStatus,errorMsg)
+                },
+                complete:function(XMLHttpRequest,textStatus){
+                    if(textStatus=='timeout'){
+                        $.SetSession('train_data',data);
+                        var href="<?=home_url('trains/logs/back/1/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'].'/session_key/train_data')?>";
+                        window.location.href=href;
+            　　　　}
+                },
             })
         }else{
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
