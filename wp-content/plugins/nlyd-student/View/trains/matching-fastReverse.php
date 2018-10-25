@@ -565,7 +565,7 @@ function isRights(text) {
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
-                    ,btn: ['<?=__('按错了', 'nlyhd-student')?>','<?=__('提交', 'nlyhd-student')?>',  ]
+                    ,btn: ['<?=__('按错了', 'nlyd-student')?>','<?=__('提交', 'nlyd-student')?>',  ]
                     ,success: function(layero, index){
                     }
                     ,yes: function(index, layero){

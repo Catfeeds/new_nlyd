@@ -3497,20 +3497,15 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         //查询列表
-        $result = $wpdb->get_results("SELECT mb.id,um1.meta_value AS user_real_name,um2.meta_value AS userID,mb.is_send FROM {$wpdb->prefix}match_bonus AS mb 
-                  LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=mb.user_id AND um1.meta_key='user_real_name' 
-                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID' 
-                  WHERE mb.match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
+        $result = $wpdb->get_results("SELECT id,userID,is_send,real_name FROM {$wpdb->prefix}match_bonus AS mb 
+                  WHERE match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
         if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student')]);
+        $start+=1;
         foreach ($result as $k => &$res){
-            if($res['user_real_name']){
-                $res['real_name'] = unserialize($res['user_real_name'])['real_name'];
-            }else{
-                $res['real_name'] = '-';
-            }
             $res['is_send'] = $res['is_send'] == 2 ? $res['is_send'] = 'y' : 'n';
-            $res['num'] = $k+1;
+            $res['num'] = $start;
             $res['url'] = home_url('matchs/bonusDetail/id/'.$res['id']);
+            ++$start;
         }
         wp_send_json_success(['info' => $result]);
     }

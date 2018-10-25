@@ -243,9 +243,9 @@ if(!class_exists('Team')){
                             <input type="button"  class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=team_member&team_id='.$id)?>'" value="导出成员">
                         </div>
                         <p class="search-box">
-                            <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                            <input type="text" id="s" placeholder="用户名/姓名/手机/邮箱" name="s" value="<?=$search_str?>">
-                            <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type='.$type.'&user_type='.$user_type.'&search=')?>'+document.getElementById('s').value" value="搜索用户">
+                            <label class="screen-reader-text" for="team-member-search-input">搜索用户:</label>
+                            <input type="search" id="team-member-search-input" placeholder="用户名/姓名/手机/邮箱" name="s" value="<?=$search_str?>">
+                            <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type='.$type.'&user_type='.$user_type.'&search=')?>'+document.getElementById('team-member-search-input').value" value="搜索用户">
                         </p>
 
                         <div class="tablenav-pages one-page">
