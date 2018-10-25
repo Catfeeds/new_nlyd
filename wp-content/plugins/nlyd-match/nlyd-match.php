@@ -91,6 +91,18 @@ if(!class_exists('MatchController')){
             //添加子菜单
             add_action('admin_menu',array($this,'add_submenu'));
 
+            //加入admin_footer-edit.php执行
+            add_action('admin_footer-edit.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
+
+            //查询语句join
+            add_action('posts_join',array($this, 'filter_request_join'));
+
+            //查询语句where
+            add_action('posts_where',array($this, 'filter_request_where'));
+
+            //查询语句orderby
+            add_action('posts_orderby',array($this, 'filter_request_orderby'));
+
 
             if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student' ) ) ){
 
@@ -137,6 +149,78 @@ if(!class_exists('MatchController')){
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }
 
+        public function wpdx_add_custom_status_in_quick_edit(){
+            if($this->post_type == 'match'){
+                $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
+                global $wpdb;
+                $enrollNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=1");
+                $waitNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=-2");
+                $conductNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=2");
+                $endNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=-3");
+                ?>
+                <script type="text/javascript">
+                    jQuery(document).ready(function($) {
+                        var _html = ' | <li class="enroll"><a href="edit.php?post_status=enroll&post_type=match&match_status=1">报名中<span class="count">（<?=$enrollNum?>） </span></a></li>'+
+                                    ' | <li class="wait"><a href="edit.php?post_status=wait&post_type=match&match_status=-2">等待开赛<span class="count"> （<?=$waitNum?>）</span></a></li>'+
+                                    ' | <li class="conduct"><a href="edit.php?post_status=conduct&post_type=match&match_status=2">比赛中<span class="count"> （<?=$conductNum?>）</span></a></li>'+
+                                    ' | <li class="end"><a href="edit.php?post_status=end&post_type=match&match_status=-3">已结束<span class="count"> （<?=$endNum?>）</span></a></li>';
+                        $('.wrap').find('.subsubsub').append(_html);
+
+                        var match_status = '<?=$match_status?>';
+                        if(match_status != ''){
+                            if(match_status == '1'){
+                                $('.enroll').find('a').addClass('current');
+                            }else if (match_status == '-2'){
+                                $('.wait').find('a').addClass('current');
+                            }else if (match_status == '2'){
+                                $('.conduct').find('a').addClass('current');
+                            }else if (match_status == '-3'){
+                                $('.end').find('a').addClass('current');
+                            }
+                        }
+                    })
+
+                </script>
+                <?php
+            }
+
+        }
+
+        /**
+         * 增加查询语句join
+         */
+        public function filter_request_join($join){
+            if($this->post_type == 'match'){
+                global $wpdb;
+                $join .= " LEFT JOIN {$wpdb->prefix}match_meta_new AS mm ON mm.match_id={$wpdb->posts}.ID";
+            }
+            return $join;
+        }
+        /**
+         * 增加查询语句where
+         */
+        public function filter_request_where($where){
+            if( !is_admin() ){
+                return $where;
+            }
+            if($this->post_type == 'match'){
+                $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
+                if($match_status != '') $where .= " AND mm.match_status={$match_status}";
+            }
+            return $where;
+          }
+        /**
+         * 增加查询语句where
+         */
+        public function filter_request_orderby($orderby){
+            if( !is_admin() ){
+                return $orderby;
+            }
+            if($this->post_type == 'match'){
+                $orderby = ' mm.match_start_time DESC';
+            }
+            return $orderby;
+          }
 
 
         // 注册新的文章状态
@@ -529,8 +613,8 @@ if(!class_exists('MatchController')){
                 $columns['match_brainpower'] = '脑力健将';
                 $columns['slogan'] = '口号';
                 $columns['times'] = '比赛时间';
-                $columns['time_slot'] = '报名结束时间';
-//                $columns['time_slot'] = '报名时间段';
+//                $columns['time_slot'] = '报名结束时间';
+                $columns['time_slot'] = '报名时间段';
                 $columns['match_address'] = '比赛地点';
                 $columns['cost'] = '报名费用';
                 $columns['match_type'] = '比赛类型';
@@ -547,7 +631,7 @@ if(!class_exists('MatchController')){
         public function manage_match_columns($column_name, $id){
             global $wpdb;
             $sql = "select 
-                            match_slogan,match_genre,match_start_time,match_end_time,entry_end_time,match_address,match_cost,match_status,
+                            match_slogan,match_genre,match_start_time,match_end_time,entry_end_time,match_address,match_cost,match_status,created_time,
                             case match_status 
                             when -3 then '已结束' 
                             when -2 then '等待开赛' 
@@ -572,8 +656,8 @@ if(!class_exists('MatchController')){
                     echo $row['match_start_time'].'<br/>'.$row['match_end_time'];
                     break;
                 case 'time_slot':
-                    echo $row['entry_end_time'];
-//                    echo $row['entry_start_time'].'<br />'.$row['entry_end_time'];
+//                    echo $row['entry_end_time'];
+                    echo $row['created_time'].'<br />'.$row['entry_end_time'];
                     break;
                 case 'match_address':
                     echo $row['match_address'];

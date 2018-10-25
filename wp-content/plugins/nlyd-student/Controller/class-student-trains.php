@@ -412,7 +412,7 @@ class Student_Trains extends Student_Home
             if(isset($_SESSION['train_list'])){
 
                 $train_list = $_SESSION['train_list'];
-                //print_r($train_list);
+                print_r($train_list);
                 switch ($train_list['project_type']){
                     case 'szzb':
                     case 'pkjl':
@@ -433,8 +433,12 @@ class Student_Trains extends Student_Home
                         }else{
                             $my_score = 0;
                         }
+                    $match_questions = $train_list['train_questions'];
+                    $questions_answer = $train_list['train_answer'];
+                    $my_answer = $train_list['my_answer'];
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
 
-                        break;
+                    break;
                     case 'kysm':
                     case 'zxss':
                     case 'nxss':
@@ -472,17 +476,23 @@ class Student_Trains extends Student_Home
                         break;
                     case 'wzsd':
                         //print_r($_POST);die;
+                        $match_questions = $train_list['train_questions'];
                         $questions_answer = $train_list['train_answer'];
+                        $my_answer = $train_list['my_answer'];
+
                         $len = count($questions_answer);
                         $success_len = 0;
 
                         foreach ($questions_answer as $k=>$val){
                             $arr = array();
+                            $answerArr = array();
                             foreach ($val['problem_answer'] as $key => $v){
                                 if($v == 1){
                                     $arr[] = $key;
+                                    $answerArr[] = $key;
                                 }
                             }
+                            $questions_answer[$k]['problem_answer'] = $answerArr;
 
                             if(isset($train_list['my_answer'][$k])){
                                 if(arr2str($arr) == arr2str($train_list['my_answer'][$k])) ++$success_len;
