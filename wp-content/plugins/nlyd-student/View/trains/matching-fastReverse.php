@@ -58,10 +58,26 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {   
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=<?=$count_down?>;//倒计时的时间
-    initQuestion();//初始化数据
+    var end_time=0;
+    var matchSession=$.GetSession('_match_train','true');
+    var isMatching=false;//判断用户是否刷新页面
+    if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='nxss'){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+        end_time=matchSession['end_time'];
+        sys_second=$.GetSecond(end_time);
+        $('.count_down').attr('data-seconds',sys_second)
+    }
+    if(!isMatching){
+        initQuestion();//初始化数据
+    }
     nextQuestion();//初始化dom
     count_down();//倒计时
     function randSZ() {//生成随即数字
@@ -109,6 +125,14 @@ jQuery(function($) {
             }else{
                 var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
+                end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
+                var sessionData={
+                    ajaxData:ajaxData,
+                    genre_id:$.Request('genre_id'),
+                    type:'nxss',
+                    end_time:end_time
+                }
+                $.SetSession('_match_train',sessionData)
             }
         // }
     }

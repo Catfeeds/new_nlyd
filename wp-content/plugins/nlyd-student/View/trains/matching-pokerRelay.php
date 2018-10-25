@@ -73,6 +73,10 @@
 
 <script>
 jQuery(function($) { 
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
     //     $.alerts('比赛结束');

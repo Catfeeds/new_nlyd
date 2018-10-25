@@ -35,6 +35,10 @@
 
 <script>
 jQuery(function($) {
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     new AlloyFinger($('#complete')[0], {//阅读完成
         tap:function(){
             if(!$('#complete').hasClass('disabled')){
