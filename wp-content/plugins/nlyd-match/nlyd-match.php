@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','v2.1.0.2' );//样式版本
+            define( 'leo_match_version','v2.1.0.3' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -67,6 +67,14 @@ if(!class_exists('MatchController')){
 
             //自定义文章分类
             add_action('init',array($this,'create_question_category'));
+
+            //注册文章类型状态
+            add_action( 'init', array($this,'wpdx_add_custom_post_status'));
+
+            add_action( 'admin_footer-post.php', array($this,'wpdx_add_post_status_list'));
+            add_action( 'admin_footer-post-new.php', array($this,'wpdx_add_post_status_list'));
+            add_action( 'admin_footer-edit.php', array($this,'wpdx_add_custom_status_in_quick_edit'));
+
 
             //添加meta保存方法
             add_action( 'save_post', array($this,'add_movie_review_fields'), 10, 2 );
@@ -128,6 +136,51 @@ if(!class_exists('MatchController')){
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }
+
+
+
+        // 注册新的文章状态
+        public function wpdx_add_custom_post_status(){
+            register_post_status('registering', array(
+                'label'                     => _x( '报名中', 'post' ),
+                'public'                    => false,
+                'exclude_from_search'       => false,
+                'show_in_admin_all_list'    => true,
+                'show_in_admin_status_list' => true,
+            ) );
+        }
+
+        // 通过js添加新的状态到文章编辑页面
+        public function wpdx_add_post_status_list(){
+            global $post;
+            $complete = '';
+            $label = '';
+            if($post->post_type == 'match'){  //只对默认的post类型添加
+                if($post->post_status == 'registering'){
+                    $complete = ' selected="selected"';
+                    $label = '<span id="post-status-display"> 报名中</span>';
+                }
+                echo '
+		<script>
+		jQuery(document).ready(function($){
+			$("select#post_status").append("<option value=\"registering\" '.$complete.'>报名中</option>");
+			$(".misc-pub-section label").append("'.$label.'");
+		});
+		</script>
+		';
+            }
+        }
+
+        // 通过js添加新的状态到文章列表的快速编辑
+        public function wpdx_add_custom_status_in_quick_edit() {
+            echo "<script>
+        jQuery(document).ready( function($) {
+            $( 'select[name=\"_status\"]' ).append( '<option value=\"registering\">报名中</option>' );      
+        }); 
+        </script>";
+        }
+
+
 
 
         public function add_input_html($user_contactmethods){

@@ -17,7 +17,7 @@ class Student_Logins
         if($_SESSION['user_openid'] == false){
 
             if(is_user_logged_in()) wp_redirect(home_url('account'));    
-            if($this->is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+            if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
 
                 wp_redirect(home_url('weixin/webLogin'));
                 exit;
@@ -34,12 +34,12 @@ class Student_Logins
     /**
      * 判断是否是微信浏览器
      */
-    public function is_weixin(){
+    /*public function is_weixin(){
         if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
             return true;
         }
         return false;
-    }
+    }*/
 
     public function index(){
 
