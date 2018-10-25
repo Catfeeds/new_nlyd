@@ -462,12 +462,12 @@ jQuery(function($) {
     });
     function submit(time){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
                 action:'trains_submit',
@@ -478,7 +478,16 @@ jQuery(function($) {
                 match_more:match_more,
             }
             $.ajax({
-                    data:data,success:function(res,ajaxStatu,xhr){
+                data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -495,12 +504,11 @@ jQuery(function($) {
                     }
                 },
                 complete: function(XMLHttpRequest, textStatus){
-                    isSubmit=false;
-                    $('#load').css({
-                        'display':'none',
-                        'opacity': '0',
-                        'visibility': 'hidden',
-                    })
+                    if(textStatus=='timeout'){
+                        //$.SetSession('train_data',data);
+                        var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        window.location.href=href;
+            　　　　}
                 }
             })
         }else{

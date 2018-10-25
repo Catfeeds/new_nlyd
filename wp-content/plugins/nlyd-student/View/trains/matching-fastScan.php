@@ -394,7 +394,6 @@ $('#selectWrapper .fastScan-item').each(function(){
                         'opacity': '1',
                         'visibility': 'visible',
                     })
-                    $.alerts('开始提交')
                 },
                 success:function(res,ajaxStatu,xhr){  
                     if(res.success){
@@ -411,16 +410,6 @@ $('#selectWrapper .fastScan-item').each(function(){
                         $.alerts(res.data.info)
                         isSubmit=false;
                     }
-                },
-                error: function(jqXHR, textStatus, errorMsg){
-                    isSubmit=false;
-                    $('#load').css({
-                        'display':'none',
-                        'opacity': '0',
-                        'visibility': 'hidden',
-                    })
-                    $.alerts("error！");
-                    console.log(textStatus,errorMsg)
                 },
                 complete:function(XMLHttpRequest,textStatus){
                     if(textStatus=='timeout'){
