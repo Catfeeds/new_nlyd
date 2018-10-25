@@ -541,13 +541,11 @@ jQuery(function($) {
                          isSubmit=false;
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
-                    isSubmit=false;
-                    $('#load').css({
-                        'display':'none',
-                        'opacity': '0',
-                        'visibility': 'hidden',
-                    })
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        // var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        // window.location.href=href;
+            　　　　}
                 }
             })
         }else{

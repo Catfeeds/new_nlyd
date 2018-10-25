@@ -223,13 +223,12 @@ jQuery(function($) {
                     $.alerts(res.data.info)
                 }
             },
-            complete: function(XMLHttpRequest, textStatus){
-                $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
-            }
+            complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        // var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        // window.location.href=href;
+            　　　　}
+                }
         })
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
