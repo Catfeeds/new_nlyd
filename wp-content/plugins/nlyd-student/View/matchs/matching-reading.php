@@ -11,7 +11,7 @@
                         <div class="matching-row">
                             <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
-                            <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
+                            <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
                             <div class="c_blue match_info_font">
                                 <div>
                                     <i class="iconfont">&#xe685;</i>
