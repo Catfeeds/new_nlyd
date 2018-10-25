@@ -1317,13 +1317,15 @@ class Match_Ajax
      * 比赛奖金发放状态修改
      */
     public function update_send_bonus(){
-        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
         $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
         $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
-        if($user_id < 1 || $match_id < 1 || ($status !=2 && $status != 1)) wp_send_json_error(['info' => '参数错误']);
+        if($user_id == '' || $match_id < 1 || ($status !=2 && $status != 1)) wp_send_json_error(['info' => '参数错误']);
 
         global $wpdb;
-        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
+        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}' WHERE match_id='{$match_id}' AND user_id IN ({$user_id})";
+//        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
+        $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info'=>'修改成功']);
         else wp_send_json_error(['info' => '修改失败']);
     }

@@ -85,6 +85,12 @@ class Match_student {
             <!--                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（20）</span></a> |</li>-->
             <!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（7）</span></a></li>-->
             <!--            </ul>-->
+            <style type="text/css">
+                .cardImg,.codeImg{
+                    height: 35px;
+                    display: inline-block;
+                }
+            </style>
             <form method="get">
 
                 <p class="search-box">
@@ -135,12 +141,14 @@ class Match_student {
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
                         <th scope="col" id="card" class="manage-column column-card">证件号码</th>
+                        <th scope="col" id="card_image" class="manage-column column-card_image">证件照片</th>
+                        <th scope="col" id="user_coin_code" class="manage-column column-user_coin_code">收款二维码</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                         <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
                         <th scope="col" id="age_group" class="manage-column column-age_group">年龄组别</th>
                         <th scope="col" id="address" class="manage-column column-address">所在地区</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">电话</th>
-                        <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
+                        <th scope="col" id="nationality" class="manage-column column-nationality">国籍</th>
                         <th scope="col" id="entry_time" class="manage-column column-entry_time">报名时间</th>
                         <th scope="col" id="team_name" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" id="record" class="manage-column column-record">答题记录</th>-->
@@ -171,14 +179,21 @@ class Match_student {
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
 
                             <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
-                            <td class="name column-card" data-colname="证件号码"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span><span class="screen-reader-text">未知</span>&ensp;(<?=unserialize($usermeta['user_real_name'][0])['real_type']?>)</td>
+                            <td class="name column-card" data-colname="证件号码">
+                                <span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span>
+                                <span class="screen-reader-text">未知</span>&ensp;
+                                (<?=unserialize($usermeta['user_real_name'][0])['real_type']?>)
 
-                            <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
+                            </td>
+
+                            <td class="card_image column-card_image" id="cardImg-<?=$row['ID']?>" data-colname="证件照片"> <img class="cardImg" src="<?=isset($usermeta['user_ID_Card'][0]) ? unserialize($usermeta['user_ID_Card'][0])[0] : ''?>" alt=""></td>
+                            <td class="user_coin_code column-user_coin_code" id="codeImg-<?=$row['ID']?>" data-colname="收款二维码"> <img class="codeImg" src="<?=isset($usermeta['user_coin_code'][0]) ? unserialize($usermeta['user_coin_code'][0])[0] : ''?>" alt=""></td>
+                            <td class="sex column-sex" data-colname="性别"><span aria-hidden="true"><?=$usermeta['user_gender'][0]?></span><span class="screen-reader-text">未知</span></td>
                             <td class="birthday column-birthday" data-colname="出生日期"><?=unserialize($usermeta['user_real_name'][0])['real_age']?></td>
                             <td class="age_group column-age_group" data-colname="年龄组别"><?=getAgeGroupNameByAge(unserialize($usermeta['user_real_name'][0])['real_age'])?></td>
                             <td class="address column-address" data-colname="所在地区"><?=unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']?></td>
-                            <td class="mobile column-mobile" data-colname="手机"><a href="tel:dddddddddddddd@aa.aa"><?=$row['telephone'] ? $row['telephone'] : $row['user_mobile']?></a></td>
-                            <td class="email column-email" data-colname="电子邮件"><a href="mailto:dddddddddddddd@aa.aa"><?=$row['user_email']?></a></td>
+                            <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+                            <td class="nationality column-nationality" data-colname="国籍"><?=isset($usermeta['user_nationality']) ? $usermeta['user_nationality'][0] : ''?></td>
                             <td class="entry_time column-entry_time" data-colname="报名时间"><?=$row['created_time']?></td>
                             <td class="team_name column-team_name" data-colname="战队名称"><?=$row['team_name']?></td>
                             <!--                                <td class="role column-record" data-colname="答题记录">答题记录</td>-->
@@ -201,12 +216,14 @@ class Match_student {
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
                         <th scope="col" class="manage-column column-card">证件号码</th>
+                        <th scope="col" class="manage-column column-card_image">证件照片</th>
+                        <th scope="col" class="manage-column column-user_coin_code">收款二维码</th>
                         <th scope="col" class="manage-column column-sex">性别</th>
                         <th scope="col" class="manage-column column-birthday">年龄</th>
                         <th scope="col" class="manage-column column-age_group">年龄组别</th>
                         <th scope="col" class="manage-column column-address">所在地区</th>
                         <th scope="col" class="manage-column column-mobile">电话</th>
-                        <th scope="col" class="manage-column column-email">电子邮件</th>
+                        <th scope="col" class="manage-column column-nationality">国籍</th>
                         <th scope="col" class="manage-column column-entry_time">报名时间</th>
                         <th scope="col" class="manage-column column-team_name">战队名称</th>
                         <!--                        <th scope="col" class="manage-column column-record">答题记录</th>-->
@@ -214,6 +231,27 @@ class Match_student {
                     </tfoot>
 
                 </table>
+                <script type="text/javascript">
+                    jQuery(document).ready(function($) {
+                        layui.use('layer', function(){
+                            var layer = layui.layer;
+                            <?php foreach ($rows as $row){ ?>
+                            layer.photos({//图片预览
+                                photos: '#cardImg-<?=$row['ID']?>',
+                                move : false,
+                                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                            })
+                            layer.photos({//图片预览
+                                photos: '#codeImg-<?=$row['ID']?>',
+                                move : false,
+                                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                            })
+                            <?php } ?>
+
+                        });
+                    })
+
+                </script>
                 <div class="tablenav bottom">
 
                     <!--                    <div class="alignleft actions bulkactions">-->
@@ -2040,12 +2078,30 @@ class Match_student {
                         </button>
                     </div>
                 <?php } ?>
+                <div class="tablenav top">
+
+                    <div class="alignleft actions bulkactions">
+                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="2" class="hide-if-no-js">发放</option>
+                            <option value="1" class="hide-if-no-js">未发放</option>
+                        </select>
+                        <input type="submit" id="doaction" class="button action editStatus" value="应用">
+                    </div>
+
+
+                    <br class="clear">
+                </div>
                 <br class="clear">
                 <h2 class="screen-reader-text">奖金明细列表</h2>
                <?php if($reload == false){ ?>
                    <table class="wp-list-table widefat fixed striped users">
                        <thead>
                        <tr>
+                           <th id="cb" class="manage-column column-cb check-column">
+                               <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                               <input id="cb-select-all-1" type="checkbox">
+                           </th>
                            <th scope="col" id="real_name" class="manage-column column-real_name column-primary">
                                <span>姓名</span><span class="sorting-indicator"></span>
                            </th>
@@ -2067,6 +2123,11 @@ class Match_student {
 
                        <?php foreach ($orderAllData as $data){ ?>
                            <tr class="data-list" data-id="<?=$data['user_id']?>">
+                               <th scope="row" class="check-column">
+                                   <label class="screen-reader-text" for="user_13"></label>
+                                   <input type="checkbox" name="ids[]" class="subscriber" value="<?=$data['user_id']?>">
+                               </th>
+
                                <td class="real_name column-real_name has-row-actions column-primary line-c" style="vertical-align: center" data-colname="姓名">
                                    <strong><?=$data['real_name']?></strong>
                                    <br>
@@ -2101,6 +2162,7 @@ class Match_student {
                        <tfoot>
                        <tr>
                        <tr>
+                           <th class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></th>
                            <th scope="col" class="manage-column column-real_name column-primary">
                                <span>姓名</span><span class="sorting-indicator"></span>
                            </th>
@@ -2122,91 +2184,131 @@ class Match_student {
 
                    </table>
                 <?php } ?>
-            <script type="text/javascript">
-                jQuery(document).ready(function($) {
-                    $('.able_option').on('change', function () {
-                        if($(this).prop('checked') == true){
-                            $(this).closest('.title').next().css('display', 'block');
-                        }else{
-                            $(this).closest('.title').next().css('display', 'none');
-                        }
-                    });
-                    // var height = 0
-                    // $.each($('.data-list'), function (i,v) {
-                    //     height = $(v).height();
-                    //     $(v).find('.line-c').css({'height':height,'line-height': height+'px'});
-                    // })
-                    $('#is_user_view').on('change',function () {
-                        var is_view = $(this).prop('checked') == true ? 1 : 2;
-                        var status = is_view == 1 ? false : true;
-                        var _this = $(this);
-                        $.ajax({
-                           url : ajaxurl,
-                           data : {"is_view" : is_view, "match_id" : <?=$match_id?>, "action" : 'matchBonusUserView'},
-                            dataType : 'json',
-                            type : 'post',
-                            success : function (response) {
-                               if(response['success'] == false){
-                                   _this.prop('checked', status);
-                               }
-                                alert(response.data.info);
-                            },error : function () {
-                                alert('请求失败');
-                            }
-                        });
-                    });
 
-                    /**
-                     * 修改发放状态
-                     */
-
-                    $('.update-send').on('click', function () {
-                        var user_id = $(this).closest('tr').attr('data-id');
-                        var match_id = "<?=$match_id?>";
-                        var status = $(this).attr('data-status');
-                        var _this = $(this);
-                        if(status == 2){
-                            status = 1;
-                        }else if(status == 1){
-                            status = 2;
-                        }else{
-                            alert('参数错误');
-                            return false;
-                        };
-                        if(user_id == undefined || match_id == false){
-                            alert('参数错误');
-                            return false;
-                        }
-
-                        $.ajax({
-                            url : ajaxurl,
-                            data : {'action' : 'update_send_bonus', 'user_id':user_id, 'match_id':match_id,'status' : status},
-                            dataType : 'json',
-                            type : 'post',
-                            success : function (response) {
-                                alert(response.data.info);
-                               if(response['success'] == true){
-                                   _this.attr('data-status', status);
-                                   if(status=='1'){
-                                       _this.prev().css('color','#bf0000').text('未发放');
-                                   }else if(status == '2'){
-                                       _this.prev().css('color','#02892e').text('已发放');
-                                    }
-                                }
-                            },error : function () {
-                                alert('请求失败');
-                            }
-
-                        });
-                    });
-                })
-            </script>
                 <div class="tablenav bottom">
+
+                    <div class="alignleft actions bulkactions">
+                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
+                            <option value="-1">批量操作</option>
+                            <option value="2" class="hide-if-no-js">发放</option>
+                            <option value="1" class="hide-if-no-js">未发放</option>
+                        </select>
+                        <input type="submit" id="doaction2" class="button action editStatus" value="应用">
+                    </div>
+                    <div class="alignleft actions">
+                    </div>
 
                     <br class="clear">
                 </div>
 
+                <script type="text/javascript">
+                    jQuery(document).ready(function($) {
+                        $('.able_option').on('change', function () {
+                            if($(this).prop('checked') == true){
+                                $(this).closest('.title').next().css('display', 'block');
+                            }else{
+                                $(this).closest('.title').next().css('display', 'none');
+                            }
+                        });
+                        // var height = 0
+                        // $.each($('.data-list'), function (i,v) {
+                        //     height = $(v).height();
+                        //     $(v).find('.line-c').css({'height':height,'line-height': height+'px'});
+                        // })
+                        $('#is_user_view').on('change',function () {
+                            var is_view = $(this).prop('checked') == true ? 1 : 2;
+                            var status = is_view == 1 ? false : true;
+                            var _this = $(this);
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {"is_view" : is_view, "match_id" : <?=$match_id?>, "action" : 'matchBonusUserView'},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    if(response['success'] == false){
+                                        _this.prop('checked', status);
+                                    }
+                                    alert(response.data.info);
+                                },error : function () {
+                                    alert('请求失败');
+                                }
+                            });
+                        });
 
+                        /**
+                         * 修改发放状态
+                         */
+                        $('.editStatus').on('click', function () {
+                            var status = $(this).prev().val();
+                            if(status != '1' && status != '2') return false;
+
+                            var user_ids = '';
+                            $.each($('input[name="ids[]"]:checked'), function (i,v) {
+                                user_ids += $(v).val()+',';
+                            })
+                            if(user_ids == '')  return false;
+                            user_ids=user_ids.substring(0,user_ids.length-1)
+                            var match_id = "<?=$match_id?>";
+
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action' : 'update_send_bonus', 'user_id':user_ids, 'match_id':match_id,'status' : status},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success'] == true){
+                                        window.location.reload();
+                                    }
+                                },error : function () {
+                                    alert('请求失败');
+                                }
+
+                            });
+                        });
+
+
+                        $('.update-send').on('click', function () {
+                            var user_id = $(this).closest('tr').attr('data-id');
+                            var match_id = "<?=$match_id?>";
+                            var status = $(this).attr('data-status');
+                            var _this = $(this);
+                            if(status == 2){
+                                status = 1;
+                            }else if(status == 1){
+                                status = 2;
+                            }else{
+                                alert('参数错误');
+                                return false;
+                            };
+                            if(user_id == undefined || match_id == false){
+                                alert('参数错误');
+                                return false;
+                            }
+
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action' : 'update_send_bonus', 'user_id':user_id, 'match_id':match_id,'status' : status},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success'] == true){
+                                        _this.attr('data-status', status);
+                                        if(status=='1'){
+                                            _this.prev().css('color','#bf0000').text('未发放');
+                                        }else if(status == '2'){
+                                            _this.prev().css('color','#02892e').text('已发放');
+                                        }
+                                    }
+                                },error : function () {
+                                    alert('请求失败');
+                                }
+
+                            });
+                        });
+                    })
+                </script>
             <br class="clear">
         </div>
         <?php
@@ -2655,10 +2757,23 @@ class Match_student {
      * 引入当前页面css/js
      */
     public function register_scripts(){
+
         switch ($_GET['page']){
-            case 'match_student-add_student' or 'match_student-ranking':
+            case 'match_student-add_student':
                 wp_register_script('list-js',match_js_url.'match_student-lists.js');
                 wp_enqueue_script( 'list-js' );
+//                wp_register_style('list-css',match_css_url.'order-lists.css');
+//                wp_enqueue_style( 'list-css' );
+                break;
+            case 'match_student-ranking':
+                wp_register_script('list-js',match_js_url.'match_student-lists.js');
+                wp_enqueue_script( 'list-js' );
+//                wp_register_style('list-css',match_css_url.'order-lists.css');
+//                wp_enqueue_style( 'list-css' );
+                break;
+            case 'match_student':
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
 //                wp_register_style('list-css',match_css_url.'order-lists.css');
 //                wp_enqueue_style( 'list-css' );
                 break;

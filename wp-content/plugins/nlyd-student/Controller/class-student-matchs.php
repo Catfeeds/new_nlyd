@@ -1454,10 +1454,8 @@ class Student_Matchs extends Student_Home
             return;
         }
         global $wpdb;
-        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,um1.meta_value AS user_real_name,um2.meta_value AS userID,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id FROM {$wpdb->prefix}match_bonus AS mb 
+        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id,mb.userID,mb.real_name FROM {$wpdb->prefix}match_bonus AS mb 
                   LEFT JOIN {$wpdb->posts} AS p ON p.ID=mb.match_id 
-                  LEFT JOIN {$wpdb->usermeta} AS um1 ON um1.user_id=mb.user_id AND um1.meta_key='user_real_name' 
-                  LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=mb.user_id AND um2.meta_key='user_ID'  
                   WHERE mb.id={$id}", ARRAY_A);
         $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
                      LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id

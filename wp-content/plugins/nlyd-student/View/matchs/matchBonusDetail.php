@@ -21,7 +21,7 @@
                         <div class="width-margin width-margin-pc"><?=__('获奖选手', 'nlyd-student')?>：</div>
                     </div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc c_black ti_28"><?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : ''?>(ID<?=$row['userID']?>)</div>
+                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['real_name']?>(ID<?=$row['userID']?>)</div>
                     </div>
                 </div>
                 <div>

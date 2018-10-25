@@ -36,27 +36,89 @@ __('正在进行', 'nlyd-student');
 __('即将进行', 'nlyd-student');
 __('距下一项开赛', 'nlyd-student');
 __('距下一轮开赛', 'nlyd-student');
+
 __('正向速算单项冠军', 'nlyd-student');
 __('逆向速算单项冠军', 'nlyd-student');
 __('数字争霸单项冠军', 'nlyd-student');
 __('扑克接力单项冠军', 'nlyd-student');
 __('文章速读单项冠军', 'nlyd-student');
 __('快眼扫描单项冠军', 'nlyd-student');
+
+__('正向速算单项亚军', 'nlyd-student');
+__('逆向速算单项亚军', 'nlyd-student');
+__('数字争霸单项亚军', 'nlyd-student');
+__('扑克接力单项亚军', 'nlyd-student');
+__('文章速读单项亚军', 'nlyd-student');
+__('快眼扫描单项亚军', 'nlyd-student');
+
+__('正向速算单项季军', 'nlyd-student');
+__('逆向速算单项季军', 'nlyd-student');
+__('数字争霸单项季军', 'nlyd-student');
+__('扑克接力单项季军', 'nlyd-student');
+__('文章速读单项季军', 'nlyd-student');
+__('快眼扫描单项季军', 'nlyd-student');
+
+
+
 __('心算总冠军', 'nlyd-student');
 __('记忆总冠军', 'nlyd-student');
 __('速读总冠军', 'nlyd-student');
+
+__('心算总亚军', 'nlyd-student');
+__('记忆总亚军', 'nlyd-student');
+__('速读总亚军', 'nlyd-student');
+
+__('心算总季军', 'nlyd-student');
+__('记忆总季军', 'nlyd-student');
+__('速读总季军', 'nlyd-student');
+
+
 __('心算类老年组冠军', 'nlyd-student');
 __('心算类成年组冠军', 'nlyd-student');
 __('心算类少年组冠军', 'nlyd-student');
 __('心算类儿童组冠军', 'nlyd-student');
+
+__('心算类老年组亚军', 'nlyd-student');
+__('心算类成年组亚军', 'nlyd-student');
+__('心算类少年组亚军', 'nlyd-student');
+__('心算类儿童组亚军', 'nlyd-student');
+
+__('心算类老年组季军', 'nlyd-student');
+__('心算类成年组季军', 'nlyd-student');
+__('心算类少年组季军', 'nlyd-student');
+__('心算类儿童组季军', 'nlyd-student');
+
+
 __('记忆类老年组冠军', 'nlyd-student');
 __('记忆类成年组冠军', 'nlyd-student');
 __('记忆类少年组冠军', 'nlyd-student');
 __('记忆类儿童组冠军', 'nlyd-student');
+
+__('记忆类老年组亚军', 'nlyd-student');
+__('记忆类成年组亚军', 'nlyd-student');
+__('记忆类少年组亚军', 'nlyd-student');
+__('记忆类儿童组亚军', 'nlyd-student');
+
+__('记忆类老年组季军', 'nlyd-student');
+__('记忆类成年组季军', 'nlyd-student');
+__('记忆类少年组季军', 'nlyd-student');
+__('记忆类儿童组季军', 'nlyd-student');
+
 __('速读类老年组冠军', 'nlyd-student');
 __('速读类成年组冠军', 'nlyd-student');
 __('速读类少年组冠军', 'nlyd-student');
 __('速读类儿童组冠军', 'nlyd-student');
+
+__('速读类老年组亚军', 'nlyd-student');
+__('速读类成年组亚军', 'nlyd-student');
+__('速读类少年组亚军', 'nlyd-student');
+__('速读类儿童组亚军', 'nlyd-student');
+
+__('速读类老年组季军', 'nlyd-student');
+__('速读类成年组季军', 'nlyd-student');
+__('速读类少年组季军', 'nlyd-student');
+__('速读类儿童组季军', 'nlyd-student');
+
 __('速读类优秀选手', 'nlyd-student');
 __('心算类优秀选手', 'nlyd-student');
 __('记忆类优秀选手', 'nlyd-student');
