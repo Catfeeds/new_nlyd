@@ -3330,6 +3330,8 @@ class Student_Ajax
 
         ini_set('post_max_size','20M');
 
+        $_SESSION['train_list'] = $_POST;
+
         switch ($_POST['project_type']){
             case 'szzb':
             case 'pkjl':
