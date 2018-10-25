@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row">
                         <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
-                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第1/1题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <i class="iconfont">&#xe685;</i>
@@ -55,7 +55,7 @@ jQuery(function($) {
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
         questions_answer=matching_question['questions_answer']
     }else{
-        $.DelSession('matching_question')
+        // $.DelSession('matching_question')
         for(var i=0;i<100;i++){
             var num=Math.floor(Math.random()*10);//生成0-9的随机数
             questions_answer.push(num)
@@ -115,7 +115,7 @@ jQuery(function($) {
                 })
             },
             success:function(res,ajaxStatu,xhr){  
-                $.DelSession('leavePage')
+                // $.DelSession('leavePage')
                 if(res.success){
                     //return false;
                     if(res.data.url){
@@ -132,13 +132,12 @@ jQuery(function($) {
                     $.alerts(res.data.info)
                 }
             },
-            complete: function(XMLHttpRequest, textStatus){
-                $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
-            }
+            complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        // var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        // window.location.href=href;
+            　　　　}
+                }
         })
     } 
     if(<?=$count_down?><=0){//进入页面判断时间是否结束

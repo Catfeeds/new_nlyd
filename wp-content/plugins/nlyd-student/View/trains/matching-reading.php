@@ -65,7 +65,10 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    // $('.count_down').attr('data-seconds',$.Request('count_time'))
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     layui.use(['form'], function(){
         var form = layui.form
     })

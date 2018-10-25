@@ -57,6 +57,10 @@
 
 <script>
 jQuery(function($) { 
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');

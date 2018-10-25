@@ -135,6 +135,9 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 </div>
 <script>
     jQuery(function($) {
+        $.DelSession('match');//比赛记录参数
+        $.DelSession('leavePage');//切换页面参数参数
+        $.DelSession('matching_question');//准备页面题目参数
         <?php if(isset($_GET['project_more_id'])): ?>
           leavePageLoad('<?=$wait_url?>');
         $('.count_down').countdown(function(S, d){//倒计时
@@ -167,7 +170,34 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         //     })
         // }
         <?php endif;?>
-
+        <?php if($next_count_down > 0):
+                    if($next_project == 'y'){
+                        $title = '项';
+                    }elseif ($next_project == 'n'){
+                        $title = '轮';
+                    }
+                ?>
+        var endTimes=0;
+        new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
+            touchStart: function () {
+                var counts_down=$('.count_down').attr('data-seconds')
+                endTimes=$.GetEndTime(counts_down)
+            },
+            touchMove: function () {
+                // console.log(2)
+            },
+            touchEnd: function () {
+                var count_down=$('.count_down').attr('data-seconds')
+                var new_count=$.GetSecond(endTimes);
+                console.log(count_down,new_count)
+                if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                    window.location.reload()
+                }
+            },
+            touchCancel: function () {
+            }
+        })
+        <?php endif;?>
          <?php if($project_alias == 'pkjl'): ?>
             initWidth=function() {
                 var len=$('.first_wap.poker-wrapper .poker').length;

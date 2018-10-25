@@ -10,7 +10,7 @@
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row">
                         <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
-                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <i class="iconfont">&#xe685;</i>
@@ -413,8 +413,8 @@ $('#selectWrapper .fastScan-item').each(function(){
                     })
                 },
                 success:function(res,ajaxStatu,xhr){  
-                    $.DelSession('match')
-                    $.DelSession('leavePage')
+                    // $.DelSession('match')
+                    // $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -430,13 +430,11 @@ $('#selectWrapper .fastScan-item').each(function(){
                         isSubmit=false;
                     }
                 },
-                complete: function(XMLHttpRequest, textStatus){
-                    isSubmit=false;
-                        $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        // var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        // window.location.href=href;
+            　　　　}
                 }
             })
         }else{

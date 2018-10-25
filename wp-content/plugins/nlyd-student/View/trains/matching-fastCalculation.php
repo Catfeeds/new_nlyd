@@ -66,40 +66,45 @@
 
 <script>
 jQuery(function($) {
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     var even_add_time = 180; //连加
     var add_and_subtract_time = 180; //加减
     var wax_and_wane_time = 180; //乘除
     var level={number:2,symbol:1};//题目难度
-    var end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
+    var sys_second=<?=$count_down?>;
+    var end_time=0;//结束时间
     n_type=0,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
-
     var matchSession=$.GetSession('_match_train','true');
     var isMatching=false;//判断用户是否刷新页面
-    console.log(matchSession)
     if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='zxss'){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
         level=matchSession['level'];
         n_type=matchSession['n_type'];
         nextBtn_click=matchSession['nextBtn_click'];
-        end_time=matchSession['end_time']
+        end_time=matchSession['end_time'];
+        sys_second=$.GetSecond(end_time);
+        $('.count_down').attr('data-seconds',sys_second)
     }
 
     if(n_type==0){
         type="<?=__('连加运算', 'nlyd-student')?>"
-        even_add_time=<?=$count_down?>-add_and_subtract_time-wax_and_wane_time
+        even_add_time=sys_second-add_and_subtract_time-wax_and_wane_time
     }else if(n_type==1){
         type="<?=__('加减运算', 'nlyd-student')?>"
-        add_and_subtract_time=<?=$count_down?>-wax_and_wane_time
+        add_and_subtract_time=sys_second-wax_and_wane_time
     }else{
         type='<?=__('乘除运算', 'nlyd-student')?>'
-        wax_and_wane_time=<?=$count_down?>
+        wax_and_wane_time=sys_second
     }
     $('#type').text(type)
 
@@ -540,7 +545,7 @@ jQuery(function($) {
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    if(sys_second<=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         setTimeout(function() {
             submit(0)
