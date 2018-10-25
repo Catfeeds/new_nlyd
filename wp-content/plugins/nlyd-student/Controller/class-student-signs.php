@@ -176,7 +176,7 @@ class Student_Signs
                 setTimeout(function(){
                     window.location.href='<?=$url?>';
                     return false;
-                },1500)
+                },50)
             </script>
 
             <?php
@@ -188,7 +188,7 @@ class Student_Signs
         wp_set_auth_cookie($users->ID);
 
         //获取报名列表
-        $sql = "select id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and user_id = $users->ID and pay_status in (2,3,4)";
+        $sql = "select id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and user_id = $users->ID and pay_status in (2,3,4) order by id desc ";
         $order_id = $wpdb->get_var($sql);
         if(empty($order_id)){ ?>
             <script type="text/javascript">
@@ -197,7 +197,7 @@ class Student_Signs
                 setTimeout(function(){
                     window.location.href='<?=home_url("matchs/info/match_id/".$_GET['match_id'])?>';
                     return false;
-                },500)
+                },50)
             </script>
 
             <?php
@@ -216,11 +216,12 @@ class Student_Signs
 
                 <script type="text/javascript">
                     //$.alerts('即将跳转到实名认证页');
-                    alert('<?=__('签到成功', 'nlyd-student')?>');
+                    window.location.href='<?=home_url('signs/success/id/'.$_GET['match_id'])?>';
+                    /*alert('=__('签到成功', 'nlyd-student')');
                     setTimeout(function(){
-                        window.location.href='<?=home_url('signs/success/id/'.$_GET['match_id'])?>';
+                        window.location.href='home_url('signs/success/id/'.$_GET['match_id'])';
                         return false;
-                    },500)
+                    },500)*/
                 </script>
                 <?php
                 exit;
