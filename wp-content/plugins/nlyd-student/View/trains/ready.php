@@ -276,7 +276,7 @@
             </pre>
         </div>
     </div>
-    <a class="a-btn a-btn-table" id="go" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'])?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
+    <a class="a-btn a-btn-table" id="go" href="<?=home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/match_more/1')?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
 </div>
 
 <script>
