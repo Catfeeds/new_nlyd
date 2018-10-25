@@ -12,12 +12,15 @@
 /**
  * 判断是否是微信浏览器
  */
-/*function is_weixin(){
-    if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
-        return true;
+if(!function_exists('is_weixin')){
+
+    function is_weixin(){
+        if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+            return true;
+        }
+        return false;
     }
-    return false;
-}*/
+}
 
 /**
  * 计算年龄
