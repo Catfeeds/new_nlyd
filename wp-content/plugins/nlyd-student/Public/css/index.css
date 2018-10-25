@@ -695,7 +695,7 @@ p.share-font{
     color: rgba(38, 38, 38, 0.8);
 }
 .content .nl-table tbody td div.table_content,
-.content .nl-table thead td div.table_content,
+.content .nl-table thead td div.table_content
 {
     text-align: center;
     margin: auto;
