@@ -73,11 +73,11 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     function submit(time,submit_type){//提交答案
-        $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
+        // $('#load').css({
+        //         'display':'block',
+        //         'opacity': '1',
+        //         'visibility': 'visible',
+        //     })
         var my_answer=[];
         $('.matching-number-zoo .matching-number').each(function(){
             my_answer.push('')
@@ -107,6 +107,13 @@ jQuery(function($) {
             }
         $.ajax({
             data:data,
+            beforeSend:function(XMLHttpRequest){
+                $('#load').css({
+                    'display':'block',
+                    'opacity': '1',
+                    'visibility': 'visible',
+                })
+            },
             success:function(res,ajaxStatu,xhr){  
                 $.DelSession('leavePage')
                 if(res.success){
