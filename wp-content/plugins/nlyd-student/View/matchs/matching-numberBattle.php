@@ -67,7 +67,6 @@ jQuery(function($) {
         submit(time,4);
     })
     var matching_question= $.GetSession('matching_question','1');
-    console.log(matching_question);
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
         questions_answer=matching_question['questions_answer'];
         $.each(questions_answer,function(i,v){
@@ -77,7 +76,6 @@ jQuery(function($) {
     }else{//未获取到比赛题目
         $.alerts('未检测到题目信息')
     }
-    console.log(questions_answer)
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
 
@@ -105,12 +103,12 @@ jQuery(function($) {
     });
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var my_answer=[];
             $('.matching-number-zoo .matching-number').each(function(){
                 var answer=$(this).text();
@@ -138,7 +136,16 @@ jQuery(function($) {
                 }
             }
             $.ajax({
-                data:data,success:function(res,ajaxStatu,xhr){  
+                data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
+                success:function(res,ajaxStatu,xhr){  
                     $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;

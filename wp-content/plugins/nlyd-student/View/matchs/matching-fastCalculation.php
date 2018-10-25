@@ -488,12 +488,12 @@ jQuery(function($) {
     });
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
-            $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
-            isSubmit=true;
+            // $('#load').css({
+            //     'display':'block',
+            //     'opacity': '1',
+            //     'visibility': 'visible',
+            // })
+            // isSubmit=true;
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
@@ -514,7 +514,16 @@ jQuery(function($) {
                 }
             }
             $.ajax({
-                    data:data,success:function(res,ajaxStatu,xhr){
+                data:data,
+                beforeSend:function(XMLHttpRequest){
+                    isSubmit=true;
+                    $('#load').css({
+                        'display':'block',
+                        'opacity': '1',
+                        'visibility': 'visible',
+                    })
+                },
+                success:function(res,ajaxStatu,xhr){
                     $.DelSession('match')
                     $.DelSession('leavePage')
                     if(res.success){

@@ -171,11 +171,11 @@ jQuery(function($) {
 
 
     function submit(time,submit_type){//提交答案
-        $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
+        // $('#load').css({
+        //         'display':'block',
+        //         'opacity': '1',
+        //         'visibility': 'visible',
+        //     })
         var my_answer=[];
         var data={
             action:'answer_submit',
@@ -200,6 +200,13 @@ jQuery(function($) {
             }
         $.ajax({
             data:data,
+            beforeSend:function(XMLHttpRequest){
+                $('#load').css({
+                    'display':'block',
+                    'opacity': '1',
+                    'visibility': 'visible',
+                })
+            },
             success:function(res,ajaxStatu,xhr){  
                 $.DelSession('leavePage')
                 if(res.success){

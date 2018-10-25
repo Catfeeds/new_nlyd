@@ -48,11 +48,11 @@ jQuery(function($) {
       
     });
     function submit(time){//提交答案
-        $('#load').css({
-                'display':'block',
-                'opacity': '1',
-                'visibility': 'visible',
-            })
+        // $('#load').css({
+        //         'display':'block',
+        //         'opacity': '1',
+        //         'visibility': 'visible',
+        //     })
         var my_answer={};
         var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
         var data={
@@ -67,6 +67,13 @@ jQuery(function($) {
         }
         $.ajax({
             data:data,
+            beforeSend:function(XMLHttpRequest){
+                $('#load').css({
+                    'display':'block',
+                    'opacity': '1',
+                    'visibility': 'visible',
+                })
+            },
             success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     if(res.data.url){
@@ -82,11 +89,10 @@ jQuery(function($) {
                 }
             },
             complete: function(XMLHttpRequest, textStatus){
-                $('#load').css({
-                            'display':'none',
-                            'opacity': '0',
-                            'visibility': 'hidden',
-                        })
+                if(textStatus=='timeout'){
+                    var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                    window.location.href=href;
+        　　　　}
             }
         })
     }
