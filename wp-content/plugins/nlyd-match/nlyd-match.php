@@ -61,7 +61,6 @@ if(!class_exists('MatchController')){
             //用户新增时添加html
             add_filter('user_contactmethods',array($this,'add_input_html'));
 
-
             //自定义文章页
             add_action( 'init', array($this,'create_match_view'));
 
@@ -70,11 +69,6 @@ if(!class_exists('MatchController')){
 
             //注册文章类型状态
             add_action( 'init', array($this,'wpdx_add_custom_post_status'));
-
-            add_action( 'admin_footer-post.php', array($this,'wpdx_add_post_status_list'));
-            add_action( 'admin_footer-post-new.php', array($this,'wpdx_add_post_status_list'));
-            add_action( 'admin_footer-edit.php', array($this,'wpdx_add_custom_status_in_quick_edit'));
-
 
             //添加meta保存方法
             add_action( 'save_post', array($this,'add_movie_review_fields'), 10, 2 );
@@ -254,16 +248,6 @@ if(!class_exists('MatchController')){
 		';
             }
         }
-
-        // 通过js添加新的状态到文章列表的快速编辑
-        public function wpdx_add_custom_status_in_quick_edit() {
-            echo "<script>
-        jQuery(document).ready( function($) {
-            $( 'select[name=\"_status\"]' ).append( '<option value=\"registering\">报名中</option>' );      
-        }); 
-        </script>";
-        }
-
 
 
 
