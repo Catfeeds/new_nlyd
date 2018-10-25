@@ -212,7 +212,7 @@ layui.use(['element','flow','layer','form'], function(){
                                     }
                                     _this.removeClass('opacity')
                                 },
-                                error:function(){
+                                complete:function(XMLHttpRequest, textStatus){
                                     _this.removeClass('opacity')
                                 }
                                 
@@ -349,7 +349,7 @@ layui.use(['element','flow','layer','form'], function(){
                                                     }
                                                     _this.removeClass('opacity')
                                                 },
-                                                error:function(){
+                                                complete:function(XMLHttpRequest, textStatus){
                                                     _this.removeClass('opacity')
                                                 }
                                             })
@@ -431,7 +431,7 @@ layui.use(['element','flow','layer','form'], function(){
                             }
                             _this.removeClass('opacity')
                         },
-                        error:function(){
+                        complete:function(XMLHttpRequest, textStatus){
                             _this.removeClass('opacity')
                         }
                     })
@@ -495,7 +495,7 @@ layui.use(['element','flow','layer','form'], function(){
                             }
                             _this.removeClass('opacity')
                         },
-                        error:function(){
+                        complete:function(XMLHttpRequest, textStatus){
                             _this.removeClass('opacity')
                         }
                     })

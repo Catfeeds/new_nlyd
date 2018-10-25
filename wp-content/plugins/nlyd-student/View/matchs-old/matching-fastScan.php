@@ -412,7 +412,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                         isSubmit=false;
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
+                complete: function(XMLHttpRequest, textStatus){
                     isSubmit=false;
                         $('#load').css({
                             'display':'none',
