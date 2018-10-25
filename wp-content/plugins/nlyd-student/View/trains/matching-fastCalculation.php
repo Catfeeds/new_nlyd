@@ -70,13 +70,26 @@ jQuery(function($) {
     var even_add_time = 180; //连加
     var add_and_subtract_time = 180; //加减
     var wax_and_wane_time = 180; //乘除
-    var level={number:2,symbol:1},//题目难度
+    var level={number:2,symbol:1};//题目难度
+    var end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
     n_type=0,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
+
+    var matchSession=$.GetSession('_match_train','true');
+    var isMatching=false;//判断用户是否刷新页面
+    console.log(matchSession)
+    if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='zxss'){
+        isMatching=true;
+        ajaxData=matchSession['ajaxData'];
+        level=matchSession['level'];
+        n_type=matchSession['n_type'];
+        nextBtn_click=matchSession['nextBtn_click'];
+        end_time=matchSession['end_time']
+    }
 
     if(n_type==0){
         type="<?=__('连加运算', 'nlyd-student')?>"
@@ -90,8 +103,9 @@ jQuery(function($) {
     }
     $('#type').text(type)
 
-    inItFastCalculation(level,type);
-    
+    if(!isMatching){
+        inItFastCalculation(level,type);
+    }
     nextQuestion()
     count_down()  
 
@@ -340,6 +354,17 @@ jQuery(function($) {
             row=CX(levels);
         }
         ajaxData.push(row)
+        end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
+        var sessionData={
+            ajaxData:ajaxData,
+            genre_id:$.Request('genre_id'),
+            type:'zxss',
+            level:level,
+            n_type:n_type,
+            nextBtn_click:nextBtn_click,
+            end_time:end_time
+        }
+        $.SetSession('_match_train',sessionData)
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
