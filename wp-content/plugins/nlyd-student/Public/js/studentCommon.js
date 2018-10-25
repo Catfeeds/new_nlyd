@@ -283,7 +283,7 @@ jQuery(document).ready(function($) {
         aysnc: true ,
         type: "POST" , // 默认使用POST方式
         dataType:'json',
-        timeout:10,
+        timeout:2000,
         complete: function(XMLHttpRequest, textStatus){ // 出错时默认的处理函数
             // jqXHR 是经过jQuery封装的XMLHttpRequest对象
             // textStatus 可能为： null、"timeout"、"error"、"abort"或"parsererror"

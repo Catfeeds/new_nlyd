@@ -253,8 +253,10 @@ jQuery(function($) {
                             });
                         },
                         complete:function(XMLHttpRequest, textStatus){
-                            $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
-                            next(lis.join(''),true)
+							if(textStatus=='timeout'){
+								$.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+								next(lis.join(''),true)
+							｝	
                         }
                     })       
                 }
