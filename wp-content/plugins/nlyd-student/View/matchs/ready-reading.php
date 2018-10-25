@@ -103,7 +103,7 @@ jQuery(function($) {
                     $.alerts(res.data.info)
                 }
             },
-            error: function(jqXHR, textStatus, errorMsg){
+            complete: function(XMLHttpRequest, textStatus){
                 $('#load').css({
                             'display':'none',
                             'opacity': '0',

@@ -66,7 +66,7 @@ new AlloyFinger($('#complete')[0], {
                         _this.removeClass('disabled')
                     }
                 },
-                error: function(jqXHR, textStatus, errorMsg){
+                complete: function(XMLHttpRequest, textStatus){
                     _this.removeClass('disabled')
                 }
             })
@@ -114,7 +114,7 @@ new AlloyFinger($('#complete')[0], {
                     $.alerts(res.data.info)
                 }
             },
-            error: function(jqXHR, textStatus, errorMsg){
+            complete: function(XMLHttpRequest, textStatus){
                 $('#load').css({
                             'display':'none',
                             'opacity': '0',

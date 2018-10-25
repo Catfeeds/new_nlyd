@@ -174,7 +174,7 @@ layui.use(['element','layer','flow'], function(){
                             next(lis.join(''),false)
                         }
                     },
-                    error:function(){
+                    complete:function(XMLHttpRequest, textStatus){
                         $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
@@ -224,7 +224,7 @@ layui.use(['element','layer','flow'], function(){
                             next(lis.join(''),false)
                         }
                     },
-                    error:function(){
+                    complete:function(XMLHttpRequest, textStatus){
                         $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
                         next(lis.join(''),true)
                     }
