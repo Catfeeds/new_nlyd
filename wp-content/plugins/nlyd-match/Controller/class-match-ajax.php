@@ -1262,8 +1262,13 @@ class Match_Ajax
             $title = '新增';
         }
 
-        //$a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
+        $sql = "select id,end_time from {$wpdb->match_project_more} where match_id = {$_POST['post_id']} order by end_time desc";
+        $results = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($results)){
+            $end_time =  end($results)[0];
+        }
 
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
         if($result){
             $wpdb->commit();
             wp_send_json_success($title.'成功');

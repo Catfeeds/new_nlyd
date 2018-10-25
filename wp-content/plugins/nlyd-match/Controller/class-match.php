@@ -706,8 +706,7 @@ class Match
                                     <?php foreach ($rows as $k => $row){ ?>
                                     <li>
                                         第<?=$k+1?>轮
-                                        开始时间:<?=$row['start_time_format']?>
-                                        结束时间:<?=$row['end_time_format']?>
+                                        <?=$row['start_time_format'].'  '.$row['end_time_format']?>
                                     </li>
                                     <?php } ?>
                                 </ul>
