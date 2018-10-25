@@ -322,106 +322,205 @@ class Student_Trains extends Student_Home
      */
     public function logs(){
 
-        global $wpdb,$current_user;
-        $sql = "select * from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} and id = {$_GET['id']}";
-        $row = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($_GET['id']) || empty($row)){
-            $this->get_404(__('参数错误', 'nlyd-student'));
-            return;
-        }
+        if(isset($_GET['id'])){
+            global $wpdb,$current_user;
+            $sql = "select * from {$wpdb->prefix}user_train_logs where user_id = {$current_user->ID} and id = {$_GET['id']}";
+            $row = $wpdb->get_row($sql,ARRAY_A);
 
-        $match_questions = !empty($row['train_questions']) ? json_decode($row['train_questions'],true) : array();
-        $questions_answer = !empty($row['train_answer']) ? json_decode($row['train_answer'],true) : array();
-        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
-
-        if(in_array($row['project_type'],array('wzsd'))){
-            if(empty($questions_answer)){
-                $len = 0;
-            }else{
-
-                $len = count($questions_answer);
+            if(empty($_GET['id']) || empty($row)){
+                $this->get_404(__('参数错误', 'nlyd-student'));
+                return;
             }
-            $success_len = 0;
-            if(!empty($questions_answer)){
-                foreach ($questions_answer as $k=>$val){
-                    $arr = array();
-                    $answerArr = array();
-                    foreach ($val['problem_answer'] as $key => $v){
-                        if($v == 1){
-                            $arr[] = $key;
-                            $answerArr[] = $key;
+
+            $match_questions = !empty($row['train_questions']) ? json_decode($row['train_questions'],true) : array();
+            $questions_answer = !empty($row['train_answer']) ? json_decode($row['train_answer'],true) : array();
+            $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+            if(in_array($row['project_type'],array('wzsd'))){
+                if(empty($questions_answer)){
+                    $len = 0;
+                }else{
+
+                    $len = count($questions_answer);
+                }
+                $success_len = 0;
+                if(!empty($questions_answer)){
+                    foreach ($questions_answer as $k=>$val){
+                        $arr = array();
+                        $answerArr = array();
+                        foreach ($val['problem_answer'] as $key => $v){
+                            if($v == 1){
+                                $arr[] = $key;
+                                $answerArr[] = $key;
+                            }
+                        }
+                        $questions_answer[$k]['problem_answer'] = $answerArr;
+                        if(isset($my_answer[$k])){
+                            if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
                         }
                     }
-                    $questions_answer[$k]['problem_answer'] = $answerArr;
-                    if(isset($my_answer[$k])){
-                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                }
+
+            }
+            elseif ($row['project_type'] == 'nxss'){
+
+                $answer = $questions_answer;
+
+                //print_r($answer);
+                $answer_array = $answer['result'];
+                $questions_answer = $answer['examples'];
+                //print_r($answer_array);
+                //print_r($questions_answer);die;
+
+                $count_value = array_count_values($answer_array);
+                $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+                $len = count($answer['result']);
+
+                /*if(!empty($match_questions)){
+                    $twentyfour = new TwentyFour();
+                    foreach ($match_questions as $val){
+                        $results = $twentyfour->calculate($val);
+                        //print_r($results);
+                        $arr[] = !empty($results) ? $results[0] : 'unsolvable';
                     }
+                    $questions_answer = $arr;
+                }*/
+            }
+            else{
+
+                if(!empty($questions_answer)){
+                    $len = count($questions_answer);
+                    if(!empty($my_answer)){
+
+                        $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                        $error_len = count($error_arr);
+                        $success_len = $len - $error_len;
+                    }else{
+                        $success_len = 0;
+                    }
+                }else{
+                    $my_answer = array();
+                    $error_arr = array();
+                    $success_len = 0;
+                    $len = 0;
                 }
             }
 
-        }
-        elseif ($row['project_type'] == 'nxss'){
-
-            $answer = $questions_answer;
-
-            //print_r($answer);
-            $answer_array = $answer['result'];
-            $questions_answer = $answer['examples'];
-            //print_r($answer_array);
-            //print_r($questions_answer);die;
-
-            $count_value = array_count_values($answer_array);
-            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
-
-            $len = count($answer['result']);
-
-            /*if(!empty($match_questions)){
-                $twentyfour = new TwentyFour();
-                foreach ($match_questions as $val){
-                    $results = $twentyfour->calculate($val);
-                    //print_r($results);
-                    $arr[] = !empty($results) ? $results[0] : 'unsolvable';
-                }
-                $questions_answer = $arr;
-            }*/
         }
         else{
+            if(isset($_SESSION['train_list'])){
 
-            if(!empty($questions_answer)){
-                $len = count($questions_answer);
-                if(!empty($my_answer)){
+                $train_list = $_SESSION['train_list'];
+                //print_r($train_list);
+                switch ($train_list['project_type']){
+                    case 'szzb':
+                    case 'pkjl':
 
-                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
-                    $error_len = count($error_arr);
-                    $success_len = $len - $error_len;
-                }else{
-                    $success_len = 0;
+                        if(!empty($train_list['my_answer'])){
+
+                            $len = count($train_list['train_questions']);
+
+                            $error_len = count(array_diff_assoc($train_list['train_answer'],$train_list['my_answer']));
+
+                            $score = $train_list['project_type'] == 'szzb' ? 12 : 18;
+
+                            $my_score = ($len-$error_len)*$score;
+                            $success_len = $len-$error_len;
+                            if ($error_len == 0 && !empty($train_list['my_answer'])){
+                                $my_score += $train_list['surplus_time'] * 1;
+                            }
+                        }else{
+                            $my_score = 0;
+                        }
+
+                        break;
+                    case 'kysm':
+                    case 'zxss':
+                    case 'nxss':
+
+                        $data_arr = $train_list['my_answer'];
+
+                        if(!empty($data_arr)){
+                            $match_questions = array_column($data_arr,'question');
+                            $questions_answer = array_column($data_arr,'rights');
+                            $my_answer = array_column($data_arr,'yours');
+                        }
+                        if($_POST['project_type'] == 'nxss'){
+                            $isRight = array_column($data_arr,'isRight');
+
+                            $success_len = 0;
+                            if(!empty($isRight)){
+                                $count_value = array_count_values($isRight);
+                                $success_len += $count_value['true'];
+                            }
+                            $answer['examples'] = $questions_answer;
+                            $answer['result'] = $isRight;
+                            $questions_answer = $answer;
+
+                            $my_score = $success_len * 10;
+
+                        }else{
+
+                            $len = count($match_questions);
+
+                            $error_len = count(array_diff_assoc($questions_answer,$my_answer));
+                            $my_score = ($len-$error_len)*10;
+                            $success_len = $len-$error_len;
+                        }
+
+                        break;
+                    case 'wzsd':
+                        //print_r($_POST);die;
+                        $questions_answer = $train_list['train_answer'];
+                        $len = count($questions_answer);
+                        $success_len = 0;
+
+                        foreach ($questions_answer as $k=>$val){
+                            $arr = array();
+                            foreach ($val['problem_answer'] as $key => $v){
+                                if($v == 1){
+                                    $arr[] = $key;
+                                }
+                            }
+
+                            if(isset($train_list['my_answer'][$k])){
+                                if(arr2str($arr) == arr2str($train_list['my_answer'][$k])) ++$success_len;
+                            }
+                        }
+                        $my_score = $success_len * 23;
+                        if ($success_len == $len){
+                            $my_score += $train_list['surplus_time'] * 1;
+                        }
+                        break;
+                    default:
+                        break;
                 }
-            }else{
-                $my_answer = array();
-                $error_arr = array();
-                $success_len = 0;
-                $len = 0;
             }
+
+            //var_dump($success_len);
         }
-        $this->project_type = $row['project_type'];
+
+        $this->project_type = !empty($row['project_type']) ? $row['project_type'] :$train_list['project_type'];
+        $surplus_time = !empty($row['surplus_time']) ? $row['surplus_time'] :$train_list['surplus_time'];
+        $genre_id = !empty($row['genre_id']) ? $row['genre_id'] :$train_list['genre_id'];
+
 
         $match_more = $_GET['match_more'] + 1;
-
         $data = array(
-            'type'=>$row['project_type'],
+            'type'=>$this->project_type,
             'str_len'=>$len,
             'success_length'=>$success_len,
-            'use_time'=>$this->get_count_down($row['project_type'])-$row['surplus_time'],
-            'surplus_time'=>$row['surplus_time'],
+            'use_time'=>$this->get_count_down($this->project_type)-$surplus_time,
+            'surplus_time'=>$surplus_time,
             'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
             'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
-            'my_score'=>$row['my_score'],
+            'my_score'=>!empty($row['my_score']) ? $row['my_score'] : $my_score,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
-            'recur_url'=>home_url('/trains/initial/genre_id/'.$row['genre_id'].'/type/'.$row['project_type'].'/match_more/'.$match_more), //再来一局
+            'recur_url'=>home_url('/trains/initial/genre_id/'.$genre_id.'/type/'.$this->project_type.'/match_more/'.$match_more), //再来一局
             'revert_url'=>home_url('trains'),//返回项目列表,
             'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );

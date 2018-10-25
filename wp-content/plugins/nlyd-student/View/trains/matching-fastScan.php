@@ -394,6 +394,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                         'opacity': '1',
                         'visibility': 'visible',
                     })
+                    $.alerts('开始提交')
                 },
                 success:function(res,ajaxStatu,xhr){  
                     if(res.success){
@@ -411,10 +412,20 @@ $('#selectWrapper .fastScan-item').each(function(){
                         isSubmit=false;
                     }
                 },
+                error: function(jqXHR, textStatus, errorMsg){
+                    isSubmit=false;
+                    $('#load').css({
+                        'display':'none',
+                        'opacity': '0',
+                        'visibility': 'hidden',
+                    })
+                    $.alerts("error！");
+                    console.log(textStatus,errorMsg)
+                },
                 complete:function(XMLHttpRequest,textStatus){
                     if(textStatus=='timeout'){
-                        // $.SetSession('train_data',data);
-                        var href="<?=home_url('trains/logs/back/1/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'].'/session_key/train_data')?>";
+                        //$.SetSession('train_data',data);
+                        var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                         window.location.href=href;
             　　　　}
                 },
