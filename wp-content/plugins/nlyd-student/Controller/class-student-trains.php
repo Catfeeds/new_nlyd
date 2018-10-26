@@ -412,7 +412,7 @@ class Student_Trains extends Student_Home
             if(isset($_SESSION['train_list'])){
 
                 $train_list = $_SESSION['train_list'];
-                print_r($train_list);
+                //print_r($train_list);
                 switch ($train_list['project_type']){
                     case 'szzb':
                     case 'pkjl':
