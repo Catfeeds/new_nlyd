@@ -283,8 +283,6 @@ jQuery(document).ready(function($) {
                     }else{
                         // $.alerts(response.data.info)
                     }
-                },complete:function(XMLHttpRequest, textStatus){
-
                 }
             });
         }
