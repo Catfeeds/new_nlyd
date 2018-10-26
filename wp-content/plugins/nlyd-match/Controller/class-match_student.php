@@ -44,8 +44,8 @@ class Match_student {
         $searchWhere = '';
         $joinSql = '';
         if($searchStr != ''){
-            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%" OR p.post_title LIKE "%'.$searchStr.'%")';
-            $joinSql = ' LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID"';
+            $searchWhere = ' AND (u.user_mobile LIKE "%'.$searchStr.'%" OR u.user_email LIKE "%'.$searchStr.'%" OR um.meta_value LIKE "%'.$searchStr.'%" OR p.post_title LIKE "%'.$searchStr.'%" OR um2.meta_value LIKE "%'.$searchStr.'%")';
+            $joinSql = ' LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=u.ID AND um.meta_key="user_ID" LEFT JOIN '.$wpdb->usermeta.' AS um2 ON um2.user_id=u.ID AND um2.meta_key="user_real_name"';
         }
 
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
@@ -95,7 +95,7 @@ class Match_student {
 
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="search_val" name="search_val" placeholder="手机/邮箱/ID/战队" value="<?=$searchStr?>">
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/手机/邮箱/ID/战队" value="<?=$searchStr?>">
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 

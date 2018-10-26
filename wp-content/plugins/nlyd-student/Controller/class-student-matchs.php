@@ -670,17 +670,151 @@ class Student_Matchs extends Student_Home
      */
     public function answerLog(){
 
-        if(empty($_GET['match_id']) || empty($_GET['log_id']) || empty($_GET['project_alias']) || empty($_GET['project_more_id']) ){
-
-            $this->get_404(__('参数错误', 'nlyd-student'));
-            return;
-        }
-
         global $wpdb,$current_user;
+
+        if(isset($_GET['log_id'])){
+
+            if(empty($_GET['match_id']) || empty($_GET['log_id']) || empty($_GET['project_alias']) || empty($_GET['project_more_id']) ){
+
+                $this->get_404(__('参数错误', 'nlyd-student'));
+                return;
+            }
+        }else{
+
+            if(isset($_SESSION['match_data'])){
+
+                $match_data = $_SESSION['match_data'];
+                //print_r($match_data);
+
+                $sql1 = "select * from {$wpdb->prefix}match_questions where match_id = {$match_data['match_id']} and project_id = {$match_data['project_id']} and match_more = {$match_data['match_more']} and user_id = {$current_user->ID}";
+                $row = $wpdb->get_row($sql1,ARRAY_A);
+                //print_r($row);
+                if(empty($row)){
+
+                    //计算成绩
+                    switch ($match_data['project_alias']){
+                        case 'szzb':
+                        case 'pkjl':
+
+                            if(!empty($match_data['my_answer'])){
+
+                                $len = count($match_data['questions_answer']);
+
+                                $error_len = count(array_diff_assoc($match_data['questions_answer'],$match_data['my_answer']));
+
+                                $score = $match_data['project_type'] == 'szzb' ? 12 : 18;
+
+                                $my_score = ($len-$error_len)*$score;
+
+                                if ($error_len == 0 && !empty($match_data['my_answer'])){
+                                    $my_score += $match_data['surplus_time'] * 1;
+                                }
+                            }else{
+                                $my_score = 0;
+                            }
+
+                            break;
+                        case 'kysm':
+                        case 'zxss':
+                        case 'nxss':
+
+
+                            $data_arr = $_POST['my_answer'];
+                            //print_r($data_arr);die;
+                            if(!empty($data_arr)){
+                                $match_questions = array_column($data_arr,'question');
+                                $questions_answer = array_column($data_arr,'rights');
+                                $_POST['my_answer'] = array_column($data_arr,'yours');
+                            }
+
+                            if($_POST['project_alias'] == 'nxss'){
+                                $isRight = array_column($data_arr,'isRight');
+
+                                $success_len = 0;
+                                if(!empty($isRight)){
+                                    $count_value = array_count_values($isRight);
+                                    $success_len += $count_value['true'];
+                                }
+                                $answer['examples'] = $questions_answer;
+                                $answer['result'] = $isRight;
+                                $questions_answer = $answer;
+
+                                $my_score = $success_len * 10;
+
+                            }else{
+
+                                $len = count($match_questions);
+                                $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
+                                $my_score = ($len-$error_len)*10;
+                            }
+
+
+                            $_POST['match_questions'] = $match_questions;
+                            $_POST['questions_answer'] = $questions_answer;
+
+                            break;
+                        case 'wzsd':
+                            //print_r($_POST);die;
+                            if(empty($match_data['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                            //print_r($_POST);die;
+                            $questions_answer = $match_data['questions_answer'];
+                            $len = count($questions_answer);
+                            $success_len = 0;
+
+                            foreach ($questions_answer as $k=>$val){
+                                $arr = array();
+                                foreach ($val['problem_answer'] as $key => $v){
+                                    if($v == 1){
+                                        $arr[] = $key;
+                                    }
+                                }
+
+                                if(isset($match_data['my_answer'][$k])){
+                                    if(arr2str($arr) == arr2str($match_data['my_answer'][$k])) ++$success_len;
+                                }
+                            }
+                            $my_score = $success_len * 23;
+                            if ($success_len == $len){
+                                $my_score += $match_data['surplus_time'] * 1;
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                    $insert = array(
+                        'user_id'=>$current_user->ID,
+                        'match_id'=>$match_data['match_id'],
+                        'project_id'=>$match_data['project_id'],
+                        'match_more'=>$match_data['match_more'],
+                        'match_questions'=>json_encode($match_data['match_questions']),
+                        'questions_answer'=>json_encode($match_data['questions_answer']),
+                        'my_answer'=>json_encode($match_data['my_answer']),
+                        'surplus_time'=>$match_data['surplus_time'],
+                        'my_score'=>$my_score,
+                        'answer_status'=>1,
+                        'submit_type'=>isset($match_data['submit_type']) ? $match_data['submit_type'] : 1,
+                        'leave_page_time'=>isset($match_data['leave_page_time']) ? json_encode($match_data['leave_page_time']) : '',
+                        'created_time'=>get_time('mysql'),
+                        'created_microtime'=>str2arr(microtime(),' ')[0],
+                    );
+
+                    /*print_r($insert);
+                    die;*/
+
+                    $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
+                    if($result){
+                        $_GET['log_id'] = $wpdb->insert_id;
+                    }
+                }
+
+            }
+
+        }
 
         //清空倒计时
         unset($_SESSION['count_down']);
-
 
         $order = $this->get_match_order($current_user->ID,$_GET['match_id']);
         if(empty($order)){
