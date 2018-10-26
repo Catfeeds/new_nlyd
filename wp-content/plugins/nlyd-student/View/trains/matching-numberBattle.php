@@ -6,9 +6,9 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <div class="c_black match_info_font"><div><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></div></div>
-                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第1/1题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <i class="iconfont">&#xe685;</i>
@@ -17,7 +17,7 @@
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <div class="matching-row">
+                    <div class="matching-row layui-row">
                         <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
                             <button class="matching-btn active c_white" id="prev"><?=__('前插一位', 'nlyd-student')?></button>
