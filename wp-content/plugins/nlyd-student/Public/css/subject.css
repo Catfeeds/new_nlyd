@@ -3,9 +3,10 @@
     position: relative;
     margin-top: 20px;
     margin-bottom: 15px;
-    width: -webkit-calc(100% - 70px);
-    width: calc(100% - 70px);
-    padding-right: 70px;
+    width: -webkit-calc(100% - 90px);
+    width: calc(100% - 90px);
+    padding-right: 90px;
+    line-height: 20px;
 }
 
 /* .subject-title>div{
