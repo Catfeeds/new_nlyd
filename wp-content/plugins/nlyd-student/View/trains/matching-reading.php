@@ -69,6 +69,7 @@ jQuery(function($) {
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
+    $('.count_down').attr('data-seconds',$.GetSecond($.Request('end_time')))
     layui.use(['form'], function(){
         var form = layui.form
     })
