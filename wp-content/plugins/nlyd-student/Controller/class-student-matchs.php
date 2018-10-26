@@ -719,12 +719,12 @@ class Student_Matchs extends Student_Home
                         case 'nxss':
 
 
-                            $data_arr = $_POST['my_answer'];
+                            $data_arr = $match_data['my_answer'];
                             //print_r($data_arr);die;
                             if(!empty($data_arr)){
                                 $match_questions = array_column($data_arr,'question');
                                 $questions_answer = array_column($data_arr,'rights');
-                                $_POST['my_answer'] = array_column($data_arr,'yours');
+                                $match_data['my_answer'] = array_column($data_arr,'yours');
                             }
 
                             if($_POST['project_alias'] == 'nxss'){
@@ -744,13 +744,13 @@ class Student_Matchs extends Student_Home
                             }else{
 
                                 $len = count($match_questions);
-                                $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
+                                $error_len = count(array_diff_assoc($questions_answer,$match_data['my_answer']));
                                 $my_score = ($len-$error_len)*10;
                             }
 
 
-                            $_POST['match_questions'] = $match_questions;
-                            $_POST['questions_answer'] = $questions_answer;
+                            $match_data['match_questions'] = $match_questions;
+                            $match_data['questions_answer'] = $questions_answer;
 
                             break;
                         case 'wzsd':
@@ -807,6 +807,8 @@ class Student_Matchs extends Student_Home
                     if($result){
                         $_GET['log_id'] = $wpdb->insert_id;
                     }
+                }else{
+                    $_GET['log_id'] = $row['id'];
                 }
 
             }
