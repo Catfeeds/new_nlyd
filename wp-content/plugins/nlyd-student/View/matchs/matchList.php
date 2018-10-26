@@ -92,8 +92,8 @@ jQuery(function($) {
         function pagation(id,match_page){
             flow.load({
                 elem: '#'+id //流加载容器
-                // ,isAuto: false
-                // ,isLazyimg: true
+                ,isAuto: false
+                ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
                         action:'get_match_list',
@@ -112,6 +112,7 @@ jQuery(function($) {
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
+                            console.log(res)
                             match_page++
                             isClick[id]=true
                             if(res.success){

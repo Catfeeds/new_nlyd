@@ -124,10 +124,12 @@ class Match
             $role = 'match_more_list';//权限名
             $wp_roles->add_cap('administrator', $role);
 
-
+            $role = 'match_bonus_list';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page( 'edit.php?post_type=match', '轮数设置', '轮数设置', 'match_more_list', 'match_more', array($this,'match_more_list'),45);
+        add_submenu_page( 'edit.php?post_type=match', '奖金设置', '奖金设置', 'match_bonus_list', 'match_bonus', array($this,'match_bonus_list'),45);
 
     }
 
@@ -154,6 +156,12 @@ class Match
 
     }
 
+    /**
+     * 奖金设置
+     */
+    public function match_bonus_list(){
+
+    }
 
     /**
      * 比赛开关控制
