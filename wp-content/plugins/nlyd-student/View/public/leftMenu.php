@@ -18,7 +18,7 @@
         </div>
         <div class="width-margin layui-row menu-wrapper">
             <div class="userCenter-detail layui-row layui-bg-white width-margin-pc">
-            <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
+                    <a class="c_black8" href="<?=home_url('/account/recentMatch');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
                             </div>

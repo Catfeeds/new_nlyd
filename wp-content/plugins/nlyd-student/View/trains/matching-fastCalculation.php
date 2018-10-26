@@ -13,7 +13,7 @@
                         <div class="c_blue match_info_font">
                             <div>
                                 <i class="iconfont">&#xe685;</i>
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?></span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -22,7 +22,7 @@
                     <div class="matching-fast">
                         <p class="count_p c_black">
                             <span id="type"></span>
-                            <span class="count_downs" data-seconds="10"><?=__('初始中', 'nlyd-student')?>...</span>
+                            <span class="count_downs" data-seconds="10"><?=__('初始中', 'nlyd-student')?></span>
                             <!-- <span><?=!empty($child_type_down) ? $child_type_down : ''?></span> -->
                             <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
                             <input type="hidden"id="add_and_subtract_time" value="<?=$child_count_down['add_and_subtract'] ?>">
@@ -165,7 +165,7 @@ jQuery(function($) {
                     clearInterval(timer);
                 }
                 if(n_type<=2){
-                    $('.count_downs').text('<?=__('初始中', 'nlyd-student')?>...').attr('data-seconds',sys_second)
+                    $('.count_downs').text('<?=__('初始中', 'nlyd-student')?>').attr('data-seconds',sys_second)
                     $('#type').text(type)
                     $('#answer').removeClass('error-fast').removeClass('right-fast').addClass('answer')
                     $('#answer div').text('') 
