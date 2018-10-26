@@ -54,14 +54,14 @@ switch ($type){
                     <div class="match-subject-info">
                         <div class="subject-title flex-h">
                             <div class="c_black flex1 subject_info_font"><div><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div></div>
-                            <div class="c_blue flex1 ml_10 subject_info_font"><div><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score)?></div></div>
+                            <div class="c_blue flex1 ml_10 subject_info_font"><div><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score > 0 ? $my_score : 0)?></div></div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$str_len;?></span>
+                                <div class="left-label"><?=__('答题数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$str_len > 0 ? $str_len : 0;?></span>
                             </div>
                             <div class="one-info flex1">
-                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$success_length;?></span>
+                                <div class="left-label"><?=__('正确数量', 'nlyd-student')?>:</div><span class="c_blue"><?=$success_length > 0 ? $success_length : 0;?></span>
                             </div>
                         </div>
                         <div class="subject-row flex-h">
