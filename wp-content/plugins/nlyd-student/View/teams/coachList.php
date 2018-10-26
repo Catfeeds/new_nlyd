@@ -213,7 +213,9 @@ layui.use(['element','flow','layer','form'], function(){
                                     _this.removeClass('opacity')
                                 },
                                 complete:function(XMLHttpRequest, textStatus){
-                                    _this.removeClass('opacity')
+                                    if(textStatus=='timeout'){
+                                        _this.removeClass('opacity')
+                                    }
                                 }
                                 
                             })
@@ -350,7 +352,9 @@ layui.use(['element','flow','layer','form'], function(){
                                                     _this.removeClass('opacity')
                                                 },
                                                 complete:function(XMLHttpRequest, textStatus){
-                                                    _this.removeClass('opacity')
+                                                    if(textStatus=='timeout'){
+                                                        _this.removeClass('opacity')
+                                                    }
                                                 }
                                             })
                                         }
@@ -432,7 +436,9 @@ layui.use(['element','flow','layer','form'], function(){
                             _this.removeClass('opacity')
                         },
                         complete:function(XMLHttpRequest, textStatus){
-                            _this.removeClass('opacity')
+                            if(textStatus=='timeout'){
+                                _this.removeClass('opacity')
+                            }
                         }
                     })
                 }
@@ -496,7 +502,9 @@ layui.use(['element','flow','layer','form'], function(){
                             _this.removeClass('opacity')
                         },
                         complete:function(XMLHttpRequest, textStatus){
-                            _this.removeClass('opacity')
+                            if(textStatus=='timeout'){
+                                _this.removeClass('opacity')
+                            }
                         }
                     })
                 }
