@@ -1413,6 +1413,52 @@ class Match_Ajax
             wp_send_json_error(['info' => '找不到战队']);
         }
     }
+
+    /**
+     * 更新奖金明细奖金设置
+     */
+    public function updateBonusTmp(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $project1 = isset($_POST['project1']) ? intval($_POST['project1']) : 0;
+        $project2 = isset($_POST['project2']) ? intval($_POST['project2']) : 0;
+        $project3 = isset($_POST['project3']) ? intval($_POST['project3']) : 0;
+        $category1 = isset($_POST['category1']) ? intval($_POST['category1']) : 0;
+        $category2 = isset($_POST['category2']) ? intval($_POST['category2']) : 0;
+        $category3 = isset($_POST['category3']) ? intval($_POST['category3']) : 0;
+        $category_excellent = isset($_POST['category_excellent']) ? intval($_POST['category_excellent']) : 0;
+        $category1_age = isset($_POST['category1_age']) ? intval($_POST['category1_age']) : 0;
+        $category2_age = isset($_POST['category2_age']) ? intval($_POST['category2_age']) : 0;
+        $category3_age = isset($_POST['category3_age']) ? intval($_POST['category3_age']) : 0;
+        $tmp_name = isset($_POST['tmp_name']) ? trim($_POST['tmp_name']) : '';
+        if($project1<1||$project2<1||$project3<1||$category1<1||$category2<1||$category3<1||$category_excellent<1||$category1_age<1||$category2_age<1||$category3_age<1||$tmp_name==''){
+            wp_send_json_error(['info' => '奖金金额不能小于1,名称必填']);
+        }
+        global $wpdb;
+        if($id < 1){
+            $sql = "INSERT INTO {$wpdb->prefix}match_bonus_tmp (`project1`,`project2`,`project3`,`category1`,`category2`,`category3`,`category_excellent`,`category1_age`,`category2_age`,`category3_age`,`bonus_tmp_name`) 
+            VALUES ('{$project1}','{$project2}','{$project3}','{$category1}','{$category2}','{$category3}','{$category_excellent}','{$category1_age}','{$category2_age}','{$category3_age}','{$tmp_name}')";
+        }else{
+            $sql = "UPDATE {$wpdb->prefix}match_bonus_tmp SET `project1`='{$project1}',`project2`='{$project2}',`project3`='{$project3}',
+            `category1`='{$category1}',`category2`='{$category2}',`category3`='{$category3}',`category_excellent`='{$category_excellent}',
+            `category1_age`='{$category1_age}',`category2_age`='{$category2_age}',`category3_age`='{$category3_age}',`bonus_tmp_name`='{$tmp_name}' 
+            WHERE `id`={$id}";
+        }
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info' => '操作成功']);
+        else wp_send_json_error(['info' => '操作失败']);
+    }
+
+    /**
+     * 删除奖金明细设置
+     */
+    public function delBonusTmp(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        if($id < 1)  wp_send_json_error(['info' => '参数错误']);
+        global $wpdb;
+        $bool = $wpdb->delete($wpdb->prefix.'match_bonus_tmp',['id'=>$id]);
+        if($bool) wp_send_json_success(['info' => '删除成功']);
+        else wp_send_json_error(['info' => '删除失败']);
+    }
 }
 
 new Match_Ajax();
