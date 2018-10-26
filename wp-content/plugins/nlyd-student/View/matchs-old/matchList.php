@@ -112,6 +112,7 @@ jQuery(function($) {
                     $.ajax({
                         data: postData,
                         success:function(res,ajaxStatu,xhr){
+                            console.log(res)
                             match_page++
                             isClick[id]=true
                             if(res.success){

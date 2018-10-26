@@ -28,13 +28,13 @@
                 <a href="<?=home_url('account/messages')?>" class="userCenter-message layui-hide-lg"><i class="iconfont">&#xe60d;</i>&nbsp;&nbsp;<?=__('消息', 'nlyd-student')?><?=$message_total > 0 ? '<span class="layui-badge-dot"></span>' : '';?></a>
                 <!-- 编辑 -->
                 <?php endif;?>
-                <a id="language" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;<span id="checked_lan">
-
+                <a id="language" class="userCenter-edit layui-hide-lg"><i class="iconfont">&#xe600;</i>&nbsp;&nbsp;
+                <span id="checked_lan">
                         <?php
                             if(isset($_COOKIE['user_language']) && $_COOKIE['user_language'] == 'zh_CN'){
-                                echo 'language';
+                                echo 'English';
                             }else{
-                                echo '语言';
+                                echo '中文';
                             }
                         ?>
                     </span></a>
@@ -246,31 +246,22 @@ jQuery(document).ready(function($) {
     // 模拟手机下拉列表，选择性别
     // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
     var selectData= <?=json_encode($select)?>;
-    var posiotion=[0];//初始化位置，高亮展示
-    if($('#checked_lan').text().length>0 && $('#trigger3').text()){
-        $.each(selectData,function(index,value){
-            if(value==$('#checked_lan').text()){
-                posiotion=[index]
-                return false;
-            }
-        })
-    }
     var mobileSelect2 = new MobileSelect({
         trigger: '#checked_lan',
         title: '语言 language',
         wheels: [
             {data: selectData}
         ],
-        position:posiotion, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        position:0, //初始化定位 打开时默认选中的哪个 如果不填默认为0
         transitionEnd:function(indexArr, data){
             // console.log(data);
         },
         callback:function(indexArr, data){
             var languageId = data[0]['id'];
             if(data[0]['value']=='English'){
-                $('#checked_lan').text('语言')
+                $('#checked_lan').text('中文')
             }else if(data[0]['value']=='中文'){
-                $('#checked_lan').text('language')
+                $('#checked_lan').text('English')
             }
             $.ajax({
                 url : window.admin_ajax,

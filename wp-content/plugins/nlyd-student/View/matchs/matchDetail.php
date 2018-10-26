@@ -76,11 +76,13 @@ endif;
                                     <div class="nl-match-body">
                                         <?php foreach ($match_project as $val) { ?>
                                             <div class="nl-match-detail layui-row">
-                                                <div class="nl-match-label1"><?= $val['parent_title'] ?>:</div>
-                                                <div class="nl-match-info1">
+                                                <div class="nl-match-label"><div><?= $val['parent_title'] ?>:</div></div>
+                                                <div class="nl-match-info">
+                                                    <div>
                                                     <?php foreach ($val['project'] as $v) { ?>
-                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a href="<?= $v['rule_url'] ?>" class="c_blue"><?= __('比赛规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
+                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a href="<?= $v['rule_url'] ?>" class="c_blue"><?= __('规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
                                                     <?php } ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -221,8 +223,8 @@ jQuery(function($) {
         var match_page=1;
         flow.load({
             elem: '#flow-table' //流加载容器
-            // ,isAuto: false
-            // ,isLazyimg: true
+            ,isAuto: false
+            ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
                     action:'get_entry_list',
