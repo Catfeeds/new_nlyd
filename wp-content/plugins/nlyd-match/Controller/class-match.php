@@ -733,6 +733,8 @@ class Match
             'order' => 'DESC',
         );
         $the_query = new WP_Query( $args );
+        global $wpdb;
+        $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">比赛口号</label>
@@ -771,7 +773,7 @@ class Match
                 <select name="match_income_detail">
                 <?php if(!empty($lists)): ?>
                 <?php foreach ($lists as $x){?>
-                    <option value="<?=$x['id']?>"><?=$x['title']?></option>
+                    <option <?=get_post_meta($this->meta['match_id'],'match_income_detail',true) == $x['id'] ? 'selected="selected"':''?> value="<?=$x['id']?>"><?=$x['bonus_tmp_name']?></option>
                 <?php } ?>
                 <?php endif;?>
                 </select>
