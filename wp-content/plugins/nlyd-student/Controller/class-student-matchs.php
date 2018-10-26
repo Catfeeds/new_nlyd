@@ -183,66 +183,21 @@ class Student_Matchs extends Student_Home
             $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
         }
 
-        if($match['match_status'] == 1){
+        //获取比赛项目
+        $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
+        //print_r($project);
 
-            //获取比赛项目
-            $project = $this->get_match_project($_GET['match_id'],$match['match_project_id']);
-            //print_r($project);
-
-            //获取所有报名选手总数
-            $sql2 = "select count(a.id) order_total
+        //获取所有报名选手总数
+        $sql2 = "select count(a.id) order_total
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
                   where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
                   order by a.id desc ";
-            //print_r($sql2);
-            $order_total = (int) $wpdb->get_var($sql2);
+        //print_r($sql2);
+        $order_total = (int) $wpdb->get_var($sql2);
 
-        }
-        else{
 
-            //判断是否存在缓存文件
-            $language = get_user_meta($current_user->ID,'locale')[0];
-            $path = leo_student_public_view.'cache/match_info/';
-            is_dir($path) OR mkdir($path, 0777, true);   // 如果文件夹不存在，将以递归方式创建该文件夹
 
-            $file_path = $path.$_GET['match_id'].'_'.$language.'.php';
-
-            if(!file_exists($file_path)){
-
-                //获取所有报名选手列表
-                $sql2 = "select a.id,a.user_id,a.created_time
-                      from {$wpdb->prefix}order a
-                      right join {$wpdb->prefix}users b on a.user_id = b.ID
-                      where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
-                      order by a.id desc ";
-                $orders = $wpdb->get_results($sql2,ARRAY_A);
-
-                if(!empty($orders)){
-
-                    foreach ($orders as $k => $v){
-                        $user = get_user_meta($v['user_id']);
-                        $orders[$k]['user_gender'] = $user['user_gender'][0] ? $user['user_gender'][0] : '--' ;
-                        $orders[$k]['user_head'] = isset($user['user_head']) ? $user['user_head'][0] : student_css_url.'image/nlyd.png';
-                        if(!empty($user['user_real_name'])){
-                            $user_real = unserialize($user['user_real_name'][0]);
-                            $orders[$k]['real_age'] = $user_real['real_age'];
-                            $orders[$k]['nickname'] = $user_real['real_name'];
-                        }else{
-                            $orders[$k]['real_age'] = '--';
-                            $orders[$k]['nickname'] = $user['nickname'][0];
-                        }
-
-                        $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
-                        $orders[$k]['nationality'] = $user_nationality_pic;
-                        $nationality_short = $user['nationality_short'][0] ? $user['nationality_short'][0] : '' ;
-                        $orders[$k]['nationality_short'] = $nationality_short;
-                    }
-                    //print_r($orders);die;
-                }
-            }
-
-        }
 
 
         //判断选手是否报名
@@ -257,7 +212,7 @@ class Student_Matchs extends Student_Home
             $match['match_url'] = home_url('matchs/matchWaitting/match_id/'.$this->match_id);
             //var_dump($data['match_url']);
         }
-        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total > 0 ? $order_total : 0,'orders'=>$orders,'language'=>empty($language) ? 'zh_CN' : $language);
+        $data = array('match'=>$match,'match_project'=>$project,'total'=>$order_total > 0 ? $order_total : 0,'language'=>empty($language) ? 'zh_CN' : $language);
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
@@ -327,7 +282,8 @@ class Student_Matchs extends Student_Home
         $project_more_id = !empty($this->current_project) ? $this->current_project['id'] : $project_more['id'];
 
         //获取本轮比赛答案是否提交
-        $sql = "select my_answer,answer_status from {$wpdb->prefix}match_questions where match_id = {$this->match_id} and project_id = {$this->current_project['project_id']} and match_more = {$this->current_project['match_more']}";
+        $sql = "select my_answer,answer_status from {$wpdb->prefix}match_questions where match_id = {$this->match_id} and project_id = {$this->current_project['project_id']} and match_more = {$this->current_project['more']}";
+
         $row = $wpdb->get_row($sql,ARRAY_A);
         $data['answer_status'] = !empty($row['answer_status']) ? $row['answer_status'] : '';
 
@@ -348,13 +304,14 @@ class Student_Matchs extends Student_Home
 
         if($this->end_project == 'y'){
             $data['count_down'] = strtotime($project_more['end_time'])-get_time();
+            $data['match_url'] = home_url('matchs/record/match_id/'.$_GET['match_id']);
         }
 
         $buffer_time = get_time()-strtotime($project_more['start_time']);
         if(1 <= $buffer_time && $buffer_time <= 59 ){
 
             $data['buffer_time'] = true;
-            $data['buffer_url'] = $data['match_url'];
+            $data['buffer_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
         }
 
         /*print_r($this->current_project);
@@ -410,6 +367,11 @@ class Student_Matchs extends Student_Home
 
         if(get_time() < strtotime($project_more['start_time'])-2){
             $this->get_404(array('message'=>__('等待开赛', 'nlyd-student'),'waiting_url'=>home_url(CONTROLLER.'/matchWaitting/match_id/'.$_GET['match_id'])));
+            return;
+        }
+        if(get_time() < strtotime($project_more['end_time'])){
+
+            $this->get_404(array('message'=>__('比赛结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
             return;
         }
         //print_r($project_more);
