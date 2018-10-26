@@ -112,8 +112,8 @@ jQuery(function($) {
             },
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
-                        // var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
-                        // window.location.href=href;
+                        var href="<?=home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])?>";
+                        window.location.href=href;
             　　　　}
                 }
         })

@@ -99,7 +99,7 @@
             var m=d.minute<10 ? '0'+d.minute : d.minute;
             var s=d.second<10 ? '0'+d.second : d.second;
             var time=D+h+':'+m+':'+s;
-            $(this).text(time);
+            $(this).attr('data-seconds',S).text(time);
             if(S<=0){//
                 $.DelSession('leavePageWaitting')
                 window.location.href="<?=$match_url?>"
