@@ -56,13 +56,16 @@ class Student_Signs
 
         if(is_user_logged_in()){
             global $wpdb,$current_user;
-            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender') ",ARRAY_A);
+            $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('user_nationality','user_nationality_pic','user_nationality_short','user_birthday','nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender') ",ARRAY_A);
             $user_info = array_column($rows,'meta_value','meta_key');
             $user_address = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
             $user_real_name = isset($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
 
             $real_ID = isset($user_real_name['real_ID']) ? hideStar($user_real_name['real_ID']) : '';
             $real_name = isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '';
+            $user_gender = $user_info['user_gender'];
+            $user_birthday = !empty($user_info['user_birthday']) ? $user_info['user_birthday'] : substr($user_real_name['real_ID'],6,8);
+            $age_type = getAgeGroupNameByAge($user_real_name['real_age']);
             //var_dump($user_info);
             $match = get_post($_GET['id']);
 
@@ -75,8 +78,22 @@ class Student_Signs
             //print_r($index);
             //print_r(array_column($results,'user_id'));
         }
+        $data = array(
+                'index'=>$index,
+                'match_title'=>$match_title,
+                'match_content'=>$match->post_content,
+                'real_ID'=>$real_ID,
+                'real_name'=>$real_name,
+                'user_gender'=>$user_gender,
+                'user_birthday'=>$user_birthday,
+                'user_nationality'=>$user_info['user_nationality'],
+                'user_nationality_pic'=>$user_info['user_nationality_pic'],
+                'user_nationality_short'=>$user_info['user_nationality_short'],
+                'age_type'=>$age_type,
+                'address'=>$user_address['province'].$user_address['city'].$user_address['area']
+            );
         $view = student_view_path.CONTROLLER.'/success.php';
-        load_view_template($view,array('index'=>$index,'match_title'=>$match_title,'real_ID'=>$real_ID,'real_name'=>$real_name,'address'=>$user_address['province'].$user_address['city'].$user_address['area']));
+        load_view_template($view,$data);
     }
 
 

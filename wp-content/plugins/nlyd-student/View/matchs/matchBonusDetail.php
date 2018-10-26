@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc"><?=__('收款途径', 'nlyd-student')?><?=__('奖项与奖金', 'nlyd-student')?>：</div>
+                        <div class="width-margin width-margin-pc"><?=__('收款途径', 'nlyd-student')?>：</div>
                     </div>
                     <div class="money_row">
                         <div class="width-margin width-margin-pc c_black ti_28"><?=$row['match_id'] == 56522 ? __('银行卡收款', 'nlyd-student') : __('二维码收款', 'nlyd-student')?></div>

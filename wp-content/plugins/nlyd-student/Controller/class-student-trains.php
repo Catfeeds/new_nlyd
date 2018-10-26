@@ -111,6 +111,7 @@ class Student_Trains extends Student_Home
      */
     public function initial(){
 
+        unset($_SESSION['train_list']);
 
         if(empty($_GET['type'])){
             $this->get_404(__('参数错误', 'nlyd-student'));

@@ -378,6 +378,8 @@ class Student_Matchs extends Student_Home
      */
     public function initialMatch(){
 
+        unset($_SESSION['match_data']);
+
         if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;

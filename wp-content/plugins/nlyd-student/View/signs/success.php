@@ -13,8 +13,8 @@
             <div class="layui-row nl-border nl-content">
                 <div class="signs_header">
                     <div class="ta_c c_black fs_16">
-                    亿盖教育2018脑力世界杯总决赛<br>
-                    <span class="fs_12">2018 INTELLECTUAL WORLD CUP FINAL</span>
+                    <?=$match_title?><br>
+                    <span class="fs_12"><?=$match_content?></span>
                     </div>
                 </div>
                 <div class="signs_box">
@@ -28,15 +28,15 @@
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('选手国籍', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black fs_15">中华人民共和国 <span class="fastbannerform__span f32 NOFLAG cn"></span></div>
+                        <div class="signs_value c_black fs_15"><?=$user_nationality?> <span class="fastbannerform__span f32 NOFLAG <?=$user_nationality_pic?>"></span></div>
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('选手姓名', 'nlyd-student')?>&<?=__('证件号码', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black fs_15"><?=$real_name?><br><?=$real_ID?>(身份证)</div>
+                        <div class="signs_value c_black fs_15"><?=$real_name?><br><?=$real_ID?></div>
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('性别', 'nlyd-student')?>&<?=__('年龄', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black fs_15">女 1991/03/07 儿童组</div>
+                        <div class="signs_value c_black fs_15"><?=$user_gender?> <?=$user_birthday?> <?=$age_type?></div>
                     </div>
                     <!-- <div class="signs_row fs_16">
                         <div class="signs_label"><?=__('证件号码', 'nlyd-student')?>：</div>
