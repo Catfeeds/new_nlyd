@@ -134,7 +134,7 @@ jQuery(function($) {
             },
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
-                        var href="<?=home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])?>";
+                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
                 }
