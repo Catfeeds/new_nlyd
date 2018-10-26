@@ -232,6 +232,53 @@ class Match
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
+                    <tr data-id="0" style="display: none">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text"></label>
+                            <input type="checkbox" name="users[]" class="subscriber" value="">
+                        </th>
+                        <td class="tmp_name column-tmp_name has-row-actions column-primary" data-colname="名称">
+                            <strong>
+                                <input type="text" name="tmp_name" value="">
+                            </strong>
+
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="project1 column-project1" data-colname="单项冠军">
+                            <input type="text" name="project1" value="">
+                        </td>
+                        <td class="project2 column-project2" data-colname="单项亚军">
+                            <input type="text" name="project2" value="">
+                        </td>
+                        <td class="project3 column-project3" data-colname="单项季军">
+                            <input type="text" name="project3" value="">
+                        </td>
+                        <td class="category1 column-category1" data-colname="大类冠军">
+                            <input type="text" name="category1" value="">
+                        </td>
+                        <td class="category2 column-category2" data-colname="大类亚军">
+                            <input type="text" name="category2" value="">
+                        </td>
+                        <td class="category3 column-category3" data-colname="大类季军">
+                            <input type="text" name="category3" value="">
+                        </td>
+                        <td class="category_excellent column-category_excellent" data-colname="大类优秀选手">
+                            <input type="text" name="category_excellent" value="">
+                        </td>
+                        <td class="category1_age column-category1_age" data-colname="大类年龄冠军">
+                            <input type="text" name="category1_age" value="">
+                        </td>
+                        <td class="category2_age column-category2_age" data-colname="大类年龄亚军">
+                            <input type="text" name="category2_age" value="">
+                        </td>
+                        <td class="category3_age column-category3_age" data-colname="大类年龄季军">
+                            <input type="text" name="category3_age" value="">
+                        </td>
+                        <td class="category3_age column-category3_age" data-colname="大类年龄季军">
+                            <button type="button" class="button sub-btn">提交</button>
+                            <button type="button" class="button del-btn">删除</button>
+                        </td>
+                    </tr>
                     <?php foreach ($rows as $row){ ?>
                         <tr data-id="<?=$row['id']?>">
                             <th scope="row" class="check-column">
@@ -337,6 +384,9 @@ class Match
 
                         var data = {'action':'updateBonusTmp','id':id,'project1':project1,'project2':project2,'project3':project3,'category1':category1,'category2':category2,'category3':category3
                         ,'category_excellent':category_excellent,'category1_age':category1_age,'category2_age':category2_age,'category3_age':category3_age,'tmp_name':tmp_name}
+                        if(id != ''){
+                            if(!confirm('修改后关联此设置的比赛都将受到影响,是否确定提交?')) return false;
+                        }
                         $.ajax({
                             url : ajaxurl,
                             type : 'post',
@@ -395,13 +445,7 @@ class Match
                     });
                     $('#add-tmp').on('click', function () {
                         var _html = $('#the-list').find('tr').first().clone(true);
-                        _html.attr('data-id', '0');
-                        _html.find('input[type="text"]').val('').prop('disabled',false);
-                        _html.find('.edit-btn').remove();
-                        _html.find('.cancel-btn').remove();
-                        _html.find('.sub-btn').removeClass('btn-none');
-                        _html.find('.del-btn').removeClass('btn-none');
-                        console.log(_html)
+                        _html.css('display','table-row')
                         $('#the-list').append(_html);
                     });
                 })
@@ -733,6 +777,8 @@ class Match
             'order' => 'DESC',
         );
         $the_query = new WP_Query( $args );
+        global $wpdb;
+        $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">比赛口号</label>
@@ -771,7 +817,7 @@ class Match
                 <select name="match_income_detail">
                 <?php if(!empty($lists)): ?>
                 <?php foreach ($lists as $x){?>
-                    <option value="<?=$x['id']?>"><?=$x['title']?></option>
+                    <option <?=$this->meta['match_income_detail'] == $x['id'] ? 'selected="selected"':''?> value="<?=$x['id']?>"><?=$x['bonus_tmp_name']?></option>
                 <?php } ?>
                 <?php endif;?>
                 </select>

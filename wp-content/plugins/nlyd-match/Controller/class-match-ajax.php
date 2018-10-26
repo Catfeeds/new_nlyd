@@ -1430,7 +1430,7 @@ class Match_Ajax
         $category2_age = isset($_POST['category2_age']) ? intval($_POST['category2_age']) : 0;
         $category3_age = isset($_POST['category3_age']) ? intval($_POST['category3_age']) : 0;
         $tmp_name = isset($_POST['tmp_name']) ? trim($_POST['tmp_name']) : '';
-        if($project1<1||$project2<1||$project3<1||$category1<1||$category2<1||$category3<1||$category_excellent<1||$category1_age<1||$category2_age<1||$category3_age<1||$tmp_name==''){
+        if($tmp_name==''){
             wp_send_json_error(['info' => '奖金金额不能小于1,名称必填']);
         }
         global $wpdb;

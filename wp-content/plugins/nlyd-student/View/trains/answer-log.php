@@ -52,9 +52,9 @@ switch ($type){
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title flex-h">
-                            <div class="c_black flex1 subject_info_font"><div><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div></div>
-                            <div class="c_blue flex1 ml_10 subject_info_font"><div><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score > 0 ? $my_score : 0)?></div></div>
+                        <div class="subject-title">
+                            <div class="c_black match_info_font"><div><?=$title?> <?/*=__('第'.$match_more.'轮', 'nlyd-student')*/?></div></div>
+                            <div class="c_blue ml_10 match_info_font"><div><?=sprintf(__('您的得分%s分', 'nlyd-student'), $my_score > 0 ? $my_score : 0)?></div></div>
                         </div>
                         <div class="subject-row flex-h">
                             <div class="one-info flex1">

@@ -1,7 +1,10 @@
 /* 比赛页面 */
 .matching-sumbit{
     display: table;
-    float: right;
+    /* float: right; */
+    position: absolute;
+    right: 0;
+    top: -5px;
     height: 28px;
     border: 1px solid #2484FE;
     border-radius: 6px;
@@ -9,6 +12,7 @@
     text-align: center;
     color: #2484FE;
     width: 55px;
+    font-size: 0.12rem;
 }
 .matching-sumbit div{
     height: 100%;
@@ -19,11 +23,16 @@
 .matching-row{
     width: 100%;
     margin-top: 20px;
-    height: 35px;
+    /* height: 35px; */
+    line-height: 20px;
     position: relative;
     top: 0;
 }
-
+.matching-row.have-submit{
+    width: -webkit-calc(100% - 70px);
+    width: calc(100% - 70px);
+    padding-right: 70px;
+}
 /*  */
 .match-page-title{
     margin-top: 20px;
@@ -34,18 +43,24 @@
     height: 32px;
 } */
 .match_info_font{
-    display: table;
-    height: 100%;;
+    /* display: table;
+    height: 100%;
     float: left;
     width: -webkit-calc(100% / 3 - 20px);
-    width: calc(100% / 3 - 20px);
+    width: calc(100% / 3 - 20px); */
+    display:inline;
+    margin-left: 10px;
+}
+.match_info_font:first-child{
+    margin-left: 0;
 }
 .match_info_font div{
-    display: table-cell;
+    display:inline;
+    /* display: table-cell;
     vertical-align: middle;
     text-align: center;
     height: 100%;
-    line-height: 16px;
+    line-height: 16px; */
 }
 /*  */
 

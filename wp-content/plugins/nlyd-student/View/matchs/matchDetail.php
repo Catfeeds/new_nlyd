@@ -66,11 +66,11 @@
                                     <div class="nl-match-body">
                                         <?php foreach ($match_project as $val) { ?>
                                             <div class="nl-match-detail layui-row">
-                                                <div class="nl-match-label"><div><?= $val['parent_title'] ?>:</div></div>
+                                                <div class="nl-match-label"><div><?= __($val['parent_title'],'nlyd-student') ?>:</div></div>
                                                 <div class="nl-match-info">
                                                     <div>
                                                     <?php foreach ($val['project'] as $v) { ?>
-                                                        <?= $v['post_title'] ?>&nbsp;&nbsp;<a href="<?= $v['rule_url'] ?>" class="c_blue"><?= __('规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
+                                                        <?= __($v['post_title'],'nlyd-student') ?>&nbsp;&nbsp;<a href="<?= $v['rule_url'] ?>" class="c_blue"><?= __('规则', 'nlyd-student') ?></a>&nbsp;&nbsp;
                                                     <?php } ?>
                                                     </div>
                                                 </div>

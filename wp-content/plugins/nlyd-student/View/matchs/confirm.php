@@ -61,15 +61,15 @@
                             <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
                                 <div class="nl-match-detail">
-                                    <div class="nl-match-label"><?=$val['parent_title']?>:</div>
-                                    <!-- <span ><?=$val['parent_title']?>:</span> -->
+                                    <div class="nl-match-label"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
+                                    <!-- <span ><?=__($val['parent_title'], 'nlyd-student')?>:</span> -->
                                     <div class="nl-match-info">
                                         <input type="hidden" name="project_id[]" value="<?=$k?>"/>
                                         <span class="c_black">
                                             <?php
                                                 $str = '';
                                                 foreach ($val['project'] as $v) {
-                                                    $str .= $v['post_title'].'/';
+                                                    $str .= __($v['post_title'], 'nlyd-student').'/';
                                                 }
                                                 echo rtrim($str,'/');
                                             ?>

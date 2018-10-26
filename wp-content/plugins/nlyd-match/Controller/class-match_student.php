@@ -1142,7 +1142,6 @@ class Match_student {
             if(!empty($info)){
                 $user_info = array_column($info,'meta_value','meta_key');
                 $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
-
                 $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                 $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
                 $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
@@ -1465,6 +1464,7 @@ class Match_student {
             $team_name = $wpdb->get_row("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.status=2 AND mt.user_id={$project_option['user_id']}");
             $allData[$project_option['user_id']]['team'] = $team_name->post_title;
         };
+
         return $allData;
     }
 
@@ -1504,107 +1504,7 @@ class Match_student {
      * 比赛奖金明细
      * 字段 ID 姓名 奖项及金额 奖金总额 税后发放额 收款二维码 身份证号 电话号码 所属战队 发放状态
      */
-    public function getBonusData($match_id){
-        //是否允许前端用户查看
-        $is_user_view = isset($_POST['is_user_view']) ? $_POST['is_user_view'] : false;
-
-        //单项是否开启
-        $project_able = isset($_POST['project_able']) ? $_POST['project_able'] : true;
-
-        //单项冠亚季军选项
-        $project_option_check = isset($_POST['project_option_check']) ? $_POST['project_option_check'] : true;
-
-//        //单项优秀选手荣誉名称
-//        $project_honor_name = isset($_POST['project_honor_name']) ? $_POST['project_honor_name'] : '';
-//
-//        //单项优秀选手数量
-//        $project_honor_num = isset($_POST['project_honor_num']) ? intval($_POST['project_honor_num']) : 0;
-
-//        //是否开启单项年龄组
-//        $project_age_able = isset($_POST['project_age_able']) ? $_POST['project_age_able'] : false;
-
-        //大类是否开启
-        $category_able = isset($_POST['category_able']) ? $_POST['category_able'] : true;
-
-        //大类冠亚季军选项
-        $category_option_check = isset($_POST['category_option_check']) ? $_POST['category_option_check'] : true;
-
-        //大类优秀选手荣誉名称
-        $category_honor_name = isset($_POST['category_honor_name']) ? $_POST['category_honor_name'] : '优秀选手';
-
-        //大类优秀选手数量
-        $category_honor_num = isset($_POST['category_honor_num']) ? intval($_POST['category_honor_num']) : 7;
-
-        //是否开启大类年龄组
-        $category_age_able = isset($_POST['category_age_able']) ? $_POST['category_age_able'] : true;
-
-//        //是否开启总排名
-//        $all_able = isset($_POST['all_able']) ? $_POST['all_able'] : false;
-//
-//        //总排名冠亚季军选项
-//        $all_option_check = isset($_POST['all_option_check']) ? $_POST['all_option_check'] : false;
-//
-//        //总排名优秀选手荣誉名称
-//        $all_honor_name = isset($_POST['all_honor_name']) ? $_POST['all_honor_name'] : '';
-//
-//        //总排名优秀选手数量
-//        $all_honor_num = isset($_POST['all_honor_num']) ? intval($_POST['all_honor_num']) : 0;
-//
-//        //是否开启总排名年龄组
-//        $all_age_able = isset($_POST['all_age_able']) ? $_POST['all_age_able'] : false;
-
-        /**
-         * 金额
-         */
-        //单项冠军金额
-        $project_champion_bonus = isset($_POST['project_champion_bonus']) ? intval($_POST['project_champion_bonus']) : 0;
-
-        //单项亚军金额
-        $project_runner_bonus = isset($_POST['project_runner_bonus']) ? intval($_POST['project_runner_bonus']) : 0;
-
-        //单项季军金额
-        $project_season_bonus = isset($_POST['project_season_bonus']) ? intval($_POST['project_season_bonus']) : 0;
-
-        //大类冠军金额
-        $cate_champion_bonus = isset($_POST['cate_champion_bonus']) ? intval($_POST['cate_champion_bonus']) : 0;
-
-        //大类亚军金额
-        $cate_runner_bonus = isset($_POST['cate_runner_bonus']) ? intval($_POST['cate_runner_bonus']) : 0;
-
-        //大类季军金额
-        $cate_season_bonus = isset($_POST['cate_season_bonus']) ? intval($_POST['cate_season_bonus']) : 0;
-
-        //大类优秀选手金额
-        $project_excellent_bonus = isset($_POST['project_excellent_bonus']) ? intval($_POST['project_excellent_bonus']) : 0;
-
-        //大类年龄组冠军金额
-        $cate_age_champion_bonus = isset($_POST['cate_age_champion_bonus']) ? intval($_POST['cate_age_champion_bonus']) : 0;
-
-        //大类年龄组亚军金额
-        $cate_age_runner_bonus = isset($_POST['cate_age_runner_bonus']) ? intval($_POST['cate_age_runner_bonus']) : 0;
-
-        //大类年龄组季军金额
-        $cate_age_season_bonus = isset($_POST['cate_age_season_bonus']) ? intval($_POST['cate_age_season_bonus']) : 0;
-
-        $bonus_set = [
-            'dan_gyj' => [
-                0 => $project_champion_bonus,
-                1 => $project_runner_bonus,
-                2 => $project_season_bonus,
-            ],
-            'lei_gyj' => [
-                0 => $cate_champion_bonus,
-                1 => $cate_runner_bonus,
-                2 => $cate_season_bonus,
-            ],
-            'lei_age' => [
-                0 => $cate_age_champion_bonus,
-                1 => $cate_age_runner_bonus,
-                2 => $cate_age_season_bonus,
-            ],
-            'lei_you' => $project_excellent_bonus
-        ];
-
+    public function getBonusData($match_id,$bonusTmp){
         $projectArr = get_match_end_time($match_id);
         $ageArr = [
             1 => '老年组',
@@ -1617,90 +1517,40 @@ class Match_student {
         $projectDataArr = [];
         $categoryDataArr = [];
         $allDataArr = [];
-        if($project_able != false){
-            //单项数据
-            foreach ($projectArr as $proProv){
 
-                //单项冠亚季
-                if($project_option_check != false){
-                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
-                    $projectDataArr[$proProv['match_project_id']]['project_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],0,'0,3');
-                }
+        //单项数据
+        foreach ($projectArr as $proProv) {
 
-//                //单项年龄组冠亚季
-//                if($project_age_able != false){
-//                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
-//                    $projectDataArr[$proProv['match_project_id']]['project_age'] = [];
-//                    foreach ($ageArr as $ageNumK => $ageNum){
-//                        //每个年龄组
-//                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['name'] = $ageNum;
-//                        $projectDataArr[$proProv['match_project_id']]['project_age'][$ageNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],$ageNumK,'0,3');
-//                    }
-//                }
-//
-//                //单项优秀选手
-//                if($project_honor_num > 0){
-//                    $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
-//                    $projectDataArr[$proProv['match_project_id']]['project_honor']['name'] = $project_honor_name;
-//                    $projectDataArr[$proProv['match_project_id']]['project_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id],$proProv['match_project_id'],0,'3,'.$project_honor_num);
-//                }
-            }
+            $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
+            $projectDataArr[$proProv['match_project_id']]['project_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id], $proProv['match_project_id'], 0, '0,3');
 
-        }
-        if($category_able){
+
             //大类数据
 
             $cateArr = $this->getCategoryArr($projectArr);
-            foreach ($cateArr as $cateCatK => $cateCateV){
+            foreach ($cateArr as $cateCatK => $cateCateV) {
                 //大类冠亚季
-                if($category_option_check != false){
-                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
-                    $categoryDataArr[$cateCatK]['cate_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),0,'0,3');
-                }
+                $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                $categoryDataArr[$cateCatK]['cate_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id], join(',', $cateCateV['id']), 0, '0,3');
+
 
                 //大类年龄组冠亚季
-                if($category_age_able != false){
-                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
-                    $categoryDataArr[$cateCatK]['category_age'] = [];
-                    foreach ($ageArr as $cateAgeNumK => $cateAgeNum){
-                        //每个年龄组
-                        $categoryDataArr[$cateCatK]['category_age'][$cateAgeNumK]['name'] = $cateAgeNum;
-                        $categoryDataArr[$cateCatK]['category_age'][$cateAgeNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),$cateAgeNumK,'0,3');
-                    }
+                $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                $categoryDataArr[$cateCatK]['category_age'] = [];
+                foreach ($ageArr as $cateAgeNumK => $cateAgeNum) {
+                    //每个年龄组
+                    $categoryDataArr[$cateCatK]['category_age'][$cateAgeNumK]['name'] = $cateAgeNum;
+                    $categoryDataArr[$cateCatK]['category_age'][$cateAgeNumK]['data'] = $this->getCategoryRankingData(['match_id' => $match_id], join(',', $cateCateV['id']), $cateAgeNumK, '0,3');
                 }
+
 
                 //大类优秀选手
-                if($category_honor_num > 0){
-                    $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
-                    $categoryDataArr[$cateCatK]['category_honor']['name'] = $category_honor_name;
-                    $categoryDataArr[$cateCatK]['category_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id],join(',', $cateCateV['id']),0,'3,'.$category_honor_num);
-                }
+                $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
+                $categoryDataArr[$cateCatK]['category_honor']['name'] = '优秀';
+                $categoryDataArr[$cateCatK]['category_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id], join(',', $cateCateV['id']), 0, '3,7');
+
             }
-
-
         }
-//        if($all_able){
-//            //总排名数据
-//
-//            //总排名冠亚季
-//            if($all_option_check != false){
-//                $allDataArr['all_option_check'] = $this->getBonusAllData($match_id,0,'0,3');
-//            }
-//            //总排名年龄组冠亚季
-//            if($all_age_able != false){
-//                foreach ($ageArr as $cateAgeNumK => $cateAgeNum){
-//                    //每个年龄组
-//                    $allDataArr['all_age_able'][$cateAgeNumK]['name'] = $cateAgeNum;
-//                    $allDataArr['all_age_able'][$cateAgeNumK]['data'] = $this->getBonusAllData($match_id,$cateAgeNumK,'0,3');
-//                }
-//            }
-//
-//            //总排名优秀选手
-//            if($all_honor_num > 0){
-//                $allDataArr['all_honor']['name'] = $all_honor_name;
-//                $allDataArr['all_honor']['data'] = $this->getBonusAllData($match_id,0,'3,'.$all_honor_num);
-//            }
-//        }
 
 
 //        leo_dump($projectDataArr);
@@ -1712,16 +1562,19 @@ class Match_student {
                 $ranking_bonus = 0;
                 switch ($project_option['ranking']){
                     case 1:
+                        if($bonusTmp['project1'] == 0) continue 2;
                         $ranking_name.='单项冠军';
-                        $ranking_bonus = $bonus_set['dan_gyj'][0];
+                        $ranking_bonus = $bonusTmp['project1'];
                         break;
                     case 2:
+                        if($bonusTmp['project2'] == 0) continue;
                         $ranking_name.='单项亚军';
-                        $ranking_bonus = $bonus_set['dan_gyj'][1];
+                        $ranking_bonus = $bonusTmp['project2'];
                         break;
                     case 3:
+                        if($bonusTmp['project3'] == 0) continue;
                         $ranking_name.='单项季军';
-                        $ranking_bonus = $bonus_set['dan_gyj'][2];
+                        $ranking_bonus = $bonusTmp['project3'];
                         break;
                 }
                 $allData = $this->bonus_all_data($allData, $project_option, $ranking_name, $ranking_bonus);
@@ -1736,16 +1589,19 @@ class Match_student {
                     $ranking_bonus = 0;
                     switch ($cate_option['ranking']){
                         case 1:
+                            if($bonusTmp['category1'] == 0) continue 2;
                             $ranking_name.='总冠军';
-                            $ranking_bonus = $bonus_set['lei_gyj'][0];
+                            $ranking_bonus = $bonusTmp['category1'];
                             break;
                         case 2:
+                            if($bonusTmp['category2'] == 0) continue;
                             $ranking_name.='总亚军';
-                            $ranking_bonus = $bonus_set['lei_gyj'][1];
+                            $ranking_bonus = $bonusTmp['category2'];
                             break;
                         case 3:
+                            if($bonusTmp['category3'] == 0) continue;
                             $ranking_name.='总季军';
-                            $ranking_bonus = $bonus_set['lei_gyj'][2];
+                            $ranking_bonus = $bonusTmp['category3'];
                             break;
                     }
                     $allData = $this->bonus_all_data($allData, $cate_option, $ranking_name, $ranking_bonus);
@@ -1761,16 +1617,19 @@ class Match_student {
                             $ranking_bonus = 0;
                             switch ($cateAV['ranking']){
                                 case 1:
+                                    if($bonusTmp['category1_age'] == 0) continue 2;
                                     $ranking_name.='冠军';
-                                    $ranking_bonus = $bonus_set['lei_age'][0];
+                                    $ranking_bonus = $bonusTmp['category1_age'];
                                     break;
                                 case 2:
                                     $ranking_name.='亚军';
-                                    $ranking_bonus = $bonus_set['lei_age'][1];
+                                    if($bonusTmp['category2_age'] == 0) continue;
+                                    $ranking_bonus = $bonusTmp['category2_age'];
                                     break;
                                 case 3:
+                                    if($bonusTmp['category3_age'] == 0) continue;
                                     $ranking_name.='季军';
-                                    $ranking_bonus = $bonus_set['lei_age'][2];
+                                    $ranking_bonus = $bonusTmp['category3_age'];
                                     break;
                             }
                             $allData = $this->bonus_all_data($allData, $cateAV, $ranking_name, $ranking_bonus);
@@ -1779,14 +1638,17 @@ class Match_student {
                 }
             }
             //大类优秀选手
-            if(isset($cdaV['category_honor'])){
-                foreach ($cdaV['category_honor']['data'] as $cate_honor){
-                    if(!isset($allData[$cate_honor['user_id']])) $allData[$cate_honor['user_id']] = [];
-                    $ranking_name = $cdaV['name'].'类'.$cdaV['category_honor']['name'];
-                    $ranking_bonus = $bonus_set['lei_you'];
-                    $allData = $this->bonus_all_data($allData, $cate_honor, $ranking_name, $ranking_bonus);
+            if($bonusTmp['category_excellent'] > 0){
+                if(isset($cdaV['category_honor'])){
+                    foreach ($cdaV['category_honor']['data'] as $cate_honor){
+                        if(!isset($allData[$cate_honor['user_id']])) $allData[$cate_honor['user_id']] = [];
+                        $ranking_name = $cdaV['name'].'类'.$cdaV['category_honor']['name'];
+                        $ranking_bonus = $bonusTmp['category_excellent'];
+                        $allData = $this->bonus_all_data($allData, $cate_honor, $ranking_name, $ranking_bonus);
+                    }
                 }
             }
+
         }
         //汇总
         $countData = [
@@ -1814,14 +1676,19 @@ class Match_student {
                 }
             }
         }
+
         //插入数据
         global $wpdb;
         $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_path`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
         $insertValueArr = [];
-        foreach ($orderAllData as $odv){
-            $bonus_list = serialize($odv['bonus_list']);
-            $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
+        foreach ($orderAllData as $k => $odv){
+            if($odv['tax_send_bonus'] > 0){
+                $bonus_list = serialize($odv['bonus_list']);
+                $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
+                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card_num']}','{$odv['real_type']}','{$odv['mobile']}','{$odv['team']}')";
+            }else{
+                unset($orderAllData[$k]);
+            }
         }
         $sql .= join(',', $insertValueArr);
         $wpdb->query($sql);
@@ -1838,8 +1705,13 @@ class Match_student {
         if(!$match || $match['match_status'] != -3){
             exit(__('当前比赛未结束', 'nlyd-match'));
         }
+        //查找当前比赛奖金设置
+        $bonusTmpId = get_post_meta($match_id,'match_income_detail',true);
+        $bonusTmp = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}match_bonus_tmp WHERE id={$bonusTmpId}" ,ARRAY_A);
+//        var_dump($bonusTmp);
+        if(!$bonusTmp) exit('当前比赛未找到奖金设置');
         $match = get_post($match_id);
-        $reload = isset($_GET['reload_data']) && $_GET['reload_data'] == 'y' ? true : false;
+//        $reload = isset($_GET['reload_data']) && $_GET['reload_data'] == 'y' ? true : false;
         if(is_post()){
             $delBool = $wpdb->delete($wpdb->prefix.'match_bonus', ['match_id' => $match_id]);
             if(!$delBool){
@@ -1849,29 +1721,33 @@ class Match_student {
         }
         $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}' ORDER BY all_bonus DESC", ARRAY_A);
 
-        if($reload == false){
-            if(!$orderAllData){
-                $reCreated = false;
-                $allDatas = $this->getBonusData($match_id);
+        if(!$orderAllData){
+            $reCreated = false;
+            if(is_post()){
+                $allDatas = $this->getBonusData($match_id,$bonusTmp);
                 $countData = $allDatas['countData'];
                 $orderAllData = $allDatas['orderAllData'];
             }else{
-                $reCreated = true;
-                //汇总
-                $countData = [
-                    'bonus_all' => 0,
-                    'tax_all' => 0,
-                    'tax_send_all' => 0,
-                ];
-                foreach ($orderAllData as &$v) {
-                    $countData['bonus_all'] += $v['all_bonus'];
-                    $countData['tax_all'] += $v['tax_all'];
-                    $countData['tax_send_all'] += $v['tax_send_bonus'];
-                    $v['bonus_list'] = unserialize($v['bonus_list']);
-                }
-
+                $orderAllData = [];
             }
+
+        }else{
+            $reCreated = true;
+            //汇总
+            $countData = [
+                'bonus_all' => 0,
+                'tax_all' => 0,
+                'tax_send_all' => 0,
+            ];
+            foreach ($orderAllData as &$v) {
+                $countData['bonus_all'] += $v['all_bonus'];
+                $countData['tax_all'] += $v['tax_all'];
+                $countData['tax_send_all'] += $v['tax_send_bonus'];
+                $v['bonus_list'] = unserialize($v['bonus_list']);
+            }
+
         }
+
 
         ?>
 
@@ -1900,12 +1776,12 @@ class Match_student {
                         {
                             font-weight: bold;
                         }
-                        #bonus_all_box >div{
+                        #bonus_all_box >div,#bonus_tmp_box >div{
                             padding-top: 0.8em;
                         }
-                        #bonus_all_box .bonus_all_title{
+                        #bonus_all_box .bonus_all_title,#bonus_tmp_box .bonus_all_title{
                             display: inline-block;
-                            width: 6em;
+                            width: 8em;
                             text-align: right;
                             font-weight: bold;
                             padding-right: 1em;
@@ -1915,11 +1791,22 @@ class Match_student {
                             padding-right: 0.2em;
                             color: #0a8406;
                         }
+                        #bonus_tmp_box .tmp{
+                            font-weight: bold;
+                            padding-right: 0.2em;
+                            color: #3c7184;
+                        }
                         #option-form  .la
                         {
                             width: 4.5em;
                             display: inline-block;
                             text-align: right;
+                        }
+                        .hide_tmp{
+                            display: none;
+                        }
+                        .view_tmp{
+                            display: inline-block;
                         }
                         #option-form input[type="checkbox"],#is_user_view{
                             width: 1em;
@@ -1941,144 +1828,57 @@ class Match_student {
                             width: 10em;
                             height: 1.3em;
                         }
+
                     </style>
 
-                    <?php if($reload == true){ ?>
-                        <form action="<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id)?>" method="post" id="option-form">
 
-                            <div id="project_option">
-                                <div class="title"><label for="project_able">单项设置:</label> <input type="checkbox" id="project_able" class="able_option" <?=isset($project_able) ? ($project_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_able" value="1"></div>
-                                <div style="display: <?=isset($project_able) ? ($project_able!=false ? 'block':'none') : 'block'?>">
-                                    <div>
-                                        <label for="project_champion" class="la">冠亚季军:</label>
-                                        <input type="checkbox" id="project_champion" <?=isset($project_option_check) ? ($project_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> name="project_option_check" value="1">
-                                    </div>
-                                    <div>
-                                        <span for="" class="title">奖金金额:</span>
-                                        <?=is_mobile()?'<br class="clear">':''?>
-                                        单项冠军: <input type="text" id="" name="project_champion_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        单项亚军: <input type="text" id="" name="project_runner_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        单项季军: <input type="text" id="" name="project_season_bonus" value="0">
-                                    </div>
-                                    <!--                       <div>-->
-                                    <!--                           <span class="la">优秀选手:</span>-->
-                                    <!--                           <?//=is_mobile()?'<br >':''?>-->
-                                    <!--                           <label for="project_honor_name" class="la">荣誉名称:</label>-->
-                                    <!--                           <input type="text" id="project_honor_name" name="project_honor_name" value="--><?//=isset($project_honor_name) ? $project_honor_name : ''?><!--">-->
-                                    <!--                           <?//=is_mobile()?'<br >':''?>-->
-                                    <!--                           <label for="project_honor_num" class="la">人数:</label>-->
-                                    <!--                           <input type="text" id="project_honor_num" name="project_honor_num" value="--><?//=isset($project_honor_num) ? $project_honor_num : 0?><!--">-->
-                                    <!--                       </div>-->
-                                    <!--                       <div>-->
-                                    <!--                           <label class="la" for="project_age_able">年龄组:</label>-->
-                                    <!--                           <input type="checkbox" --><?//=isset($project_age_able) && $project_age_able!=false ? 'checked="checked"':''?><!-- id="project_age_able" name="project_age_able" value="1">-->
-                                    <!--                       </div>-->
-                                </div>
+                    <div id="bonus_tmp_box" class="hide_tmp">
+                        <div><span class="bonus_all_title">奖金设置名称:</span><span style="color: black;font-weight: bold"><?=$bonusTmp['bonus_tmp_name']?></span></div>
+                        <div><span class="bonus_all_title">单项冠军:</span><span class="tmp"><?=$bonusTmp['project1']?></span>元</div>
+                        <div><span class="bonus_all_title">单项亚军:</span><span class="tmp"><?=$bonusTmp['project2']?></span>元</div>
+                        <div><span class="bonus_all_title">单项季军:</span><span class="tmp"><?=$bonusTmp['project3']?></span>元</div>
+                        <div><span class="bonus_all_title">大类冠军:</span><span class="tmp"><?=$bonusTmp['category1']?></span>元</div>
+                        <div><span class="bonus_all_title">大类亚军:</span><span class="tmp"><?=$bonusTmp['category2']?></span>元</div>
+                        <div><span class="bonus_all_title">大类季军:</span><span class="tmp"><?=$bonusTmp['category3']?></span>元</div>
+                        <div><span class="bonus_all_title">大类年龄组冠军:</span><span class="tmp"><?=$bonusTmp['category1_age']?></span>元</div>
+                        <div><span class="bonus_all_title">大类年龄组亚军:</span><span class="tmp"><?=$bonusTmp['category2_age']?></span>元</div>
+                        <div><span class="bonus_all_title">大类年龄组季军:</span><span class="tmp"><?=$bonusTmp['category3_age']?></span>元</div>
+                        <div><span class="bonus_all_title">大类优秀选手:</span><span class="tmp"><?=$bonusTmp['category_excellent']?></span>元</div>
 
-                            </div>
-                            <div id="category_option">
-                                <div class="title"><label for="category_able">大类设置:</label>
-                                    <input type="checkbox" id="category_able" class="able_option" name="category_able" <?=isset($category_able) ? ($category_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1"></div>
-                                <div style="display: <?=isset($category_able) ? ($category_able!=false ? 'block':'none') : 'block'?>">
-                                    <div>
-                                        <label class="la" for="category_champion">冠亚季军:</label>
-                                        <input type="checkbox" id="category_champion" name="category_option_check" <?=isset($category_option_check) ? ($category_option_check!=false ? 'checked="checked"':'') : 'checked="checked"'?> value="1">
-                                    </div>
-                                    <div>
-                                        <span class="la">优秀选手:</span>
-                                        <?=is_mobile()?'<br class="clear">':''?>
-                                        <label for="category_honor_name" class="la">荣誉名称:</label>
-                                        <input type="text" id="category_honor_name" name="category_honor_name" value="<?=isset($category_honor_name) ? $category_honor_name : '优秀选手'?>">
-                                        <?=is_mobile()?'<br class="clear">':''?>
-                                        <label for="category_honor_num" class="la">人数:</label>
-                                        <input type="text" id="category_honor_num" name="category_honor_num" value="<?=isset($category_honor_num) ? $category_honor_num : 7?>">
-                                    </div>
-                                    <div>
-                                        <label class="la" for="category_age_able">年龄组:</label>
-                                        <input type="checkbox" <?=isset($category_age_able) ? ($category_age_able!=false ? 'checked="checked"':'') : 'checked="checked"'?> id="category_age_able" name="category_age_able" value="1">
-                                    </div>
-                                    <div>
-                                        <span class="title">奖金金额:</span>
-                                        <?=is_mobile()?'<br class="clear">':''?>
-                                        大类冠军: <input type="text" id="" name="cate_champion_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类亚军: <input type="text" id="" name="cate_runner_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类季军: <input type="text" id="" name="cate_season_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类优秀选手: <input type="text" id="" name="project_excellent_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组冠军: <input type="text" id="" name="cate_age_champion_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组亚军: <input type="text" id="" name="cate_age_runner_bonus" value="0">
-                                        <?=is_mobile()?'<br class="clear"/>':''?>
-                                        大类年龄组季军: <input type="text" id="" name="cate_age_season_bonus" value="0">
-                                    </div>
-                                </div>
-                            </div>
-                            <!--                <div id="all_option">-->
-                            <!--                    <div class="title"><label for="all_able">总排名设置:</label> <input type="checkbox" id="all_able" --><?//=isset($all_able) && $all_able!=false ? 'checked="checked"':''?><!-- class="able_option" name="all_able" value="1"></div>-->
-                            <!--                    <div style="display: --><?//=isset($all_able) && $all_able!=false ? 'block':'none'?><!--">-->
-                            <!--                        <div>-->
-                            <!--                            <label class="la" for="all_champion">冠亚季军:</label>-->
-                            <!--                            <input type="checkbox" id="all_champion" name="all_option_check" --><?//=isset($all_option_check) && $all_option_check!=false ? 'checked="checked"':''?><!-- value="1">-->
-                            <!--                          </div>-->
-                            <!--                        <div>-->
-                            <!--                            <span class="la">优秀选手:</span>-->
-                            <!--                            <?//=is_mobile()?'<br >':''?>-->
-                            <!--                            <label for="all_honor_name" class="la">荣誉名称:</label>-->
-                            <!--                            <input type="text" id="all_honor_name" name="all_honor_name" value="--><?//=isset($all_honor_name) ? $all_honor_name : ''?><!--">-->
-                            <!--                            <?//=is_mobile()?'<br >':''?>-->
-                            <!--                            <label for="all_honor_num" class="la">人数:</label>-->
-                            <!--                            <input type="text" id="all_honor_num" name="all_honor_num" value="--><?//=isset($all_honor_num) ? $all_honor_num : 0?><!--">-->
-                            <!--                        </div>-->
-                            <!--                        <div>-->
-                            <!--                            <label class="la" for="all_age_able">年龄组:</label>-->
-                            <!--                            <input type="checkbox" --><?//=isset($all_age_able) && $all_age_able!=false ? 'checked="checked"':''?><!-- id="all_age_able" name="all_age_able" value="1">-->
-                            <!--                        </div>-->
-                            <!--                    </div>-->
-                            <!--                </div>-->
-                            <div>
-                                <input type="submit" class="button" value=确定>
-                                <button class="button" type="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id)?>'">返回</button>
-                            </div>
-                        </form>
-                    <?php }else{ ?>
-                        <div id="bonus_all_box">
-                            <div><span class="bonus_all_title">奖金总额:</span><span class="bonus_all_value"><?=$countData['bonus_all']?></span>元</div>
-                            <div><span class="bonus_all_title">税后发放额:</span><span class="bonus_all_value"><?=$countData['tax_send_all']?></span>元</div>
-                            <div><span class="bonus_all_title">代扣税:</span><span class="bonus_all_value"><?=$countData['tax_all']?></span>元</div>
+                        <hr>
+                    </div>
 
+                    <div id="bonus_all_box">
 
-                        </div>
-                        <br class="clear">
-                        <div id="view_option">
-                            <label for="is_user_view" class="title" style="font-weight: bold">允许选手查看:</label>
-                            <input type="checkbox" id="is_user_view" <?=$orderAllData[0]['is_user_view'] == 1 ? 'checked="checked"' : ''?> name="is_user_view" value="1">
-                        </div>
-                    <?php } ?>
+                        <div><span class="bonus_all_title">奖金总额:</span><span class="bonus_all_value"><?=$countData['bonus_all']?></span>元</div>
+                        <div><span class="bonus_all_title">税后发放额:</span><span class="bonus_all_value"><?=$countData['tax_send_all']?></span>元</div>
+                        <div><span class="bonus_all_title">代扣税:</span><span class="bonus_all_value"><?=$countData['tax_all']?></span>元</div>
 
-
+                    </div>
+                    <br class="clear">
+                    <div id="view_option">
+                        <label for="is_user_view" class="title" style="font-weight: bold">允许选手查看:</label>
+                        <input type="checkbox" id="is_user_view" <?=$orderAllData[0]['is_user_view'] == 1 ? 'checked="checked"' : ''?> name="is_user_view" value="1">
+                    </div>
 
                 </div>
 
 
-                <?php if($reload == false){ ?>
                     <div>
+                        <form action="" method="post">
+                            <button class="button" type="button" id="bonus_tmp_box_view">查看设置</button>
+                            <button class="button" type="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
 
-                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
 
-                        <button class="button" onclick="window.location.href='<?=admin_url('admin.php?page=match_student-bonus&match_id='.$match_id.'&reload_data=y')?>'">
-                        <?php if($reCreated == true || is_post()){ ?>
-                            重新生成
-                        <?php }else{ ?>
-                            生成
-                        <?php } ?>
-                        </button>
+                            <button class="button" type="submit" ">
+                                <?php if($reCreated == true || is_post()){ ?>
+                                    重新生成
+                                <?php }else{ ?>
+                                    生成
+                                <?php } ?>
+                            </button>
+                        </form>
                     </div>
-                <?php } ?>
                 <div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
@@ -2095,7 +1895,7 @@ class Match_student {
                 </div>
                 <br class="clear">
                 <h2 class="screen-reader-text">奖金明细列表</h2>
-               <?php if($reload == false){ ?>
+
                    <table class="wp-list-table widefat fixed striped users">
                        <thead>
                        <tr>
@@ -2122,7 +1922,9 @@ class Match_student {
 
                        <tbody id="the-list" data-wp-lists="list:user">
 
-                       <?php foreach ($orderAllData as $data){ ?>
+                       <?php foreach ($orderAllData as $data){
+                           $mobile = get_user_by('ID',$data['user_id']);
+                           ?>
                            <tr class="data-list" data-id="<?=$data['user_id']?>">
                                <th scope="row" class="check-column">
                                    <label class="screen-reader-text" for="user_13"></label>
@@ -2136,12 +1938,12 @@ class Match_student {
                                </td>
                                <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userID']?></td>
                                <td class="project_name column-project_name" data-colname="类别/项目">
-                                   <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
+                                   <?php if(!empty($data['bonus_list'])) foreach ($data['bonus_list'] as $bonus_name){ ?>
                                        <?=$bonus_name['bonus_name']?><br />
                                    <?php } ?>
                                </td>
                                <td class="bonus column-bonus" data-colname="奖金数额">
-                                   <?php foreach ($data['bonus_list'] as $bonusV){ ?>
+                                   <?php if(!empty($data['bonus_list'])) foreach ($data['bonus_list'] as $bonusV){ ?>
                                        <?=$bonusV['bonus']?><br />
                                    <?php } ?>
                                </td>
@@ -2184,7 +1986,6 @@ class Match_student {
                        </tfoot>
 
                    </table>
-                <?php } ?>
 
                 <div class="tablenav bottom">
 
@@ -2308,6 +2109,13 @@ class Match_student {
 
                             });
                         });
+                        $('#bonus_tmp_box_view').on('click', function(){
+                            if($('#bonus_tmp_box').hasClass('hide_tmp')){
+                                $('#bonus_tmp_box').removeClass('hide_tmp').addClass('view_tmp');
+                            }else{
+                                $('#bonus_tmp_box').removeClass('view_tmp').addClass('hide_tmp');
+                            }
+                        })
                     })
                 </script>
             <br class="clear">
