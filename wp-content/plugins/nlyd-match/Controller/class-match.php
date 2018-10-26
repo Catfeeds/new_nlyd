@@ -160,7 +160,126 @@ class Match
      * 奖金设置
      */
     public function match_bonus_list(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 0;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM {$wpdb->prefix}match_bonus_tmp LIMIT {$start},{$pageSize}", ARRAY_A);
+        var_dump($rows);
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">奖金设置</h1>
 
+            <a href="javascript:;" class="page-title-action">新增</a>
+
+            <hr class="wp-header-end">
+
+
+            <form method="get">
+
+                <p class="search-box">
+                </p>
+
+
+                    <div class="alignleft actions">
+
+                    </div>
+
+                    <br class="clear">
+                </div>
+                <h2 class="screen-reader-text">奖金列表</h2><table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <td id="cb" class="manage-column column-cb check-column">
+                            <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                            <input id="cb-select-all-1" type="checkbox">
+                        </td>
+                        <th scope="col" id="tmp_name" class="manage-column column-tmp_name column-primary">
+                            <span>名称</span>
+                        </th>
+                        <th scope="col" id="project1" class="manage-column column-project1">单项冠军</th>
+                        <th scope="col" id="project2" class="manage-column column-project2">单项亚军</th>
+                        <th scope="col" id="project3" class="manage-column column-project3">单项季军</th>
+                        <th scope="col" id="category1" class="manage-column column-category1">大类冠军</th>
+                        <th scope="col" id="category2" class="manage-column column-category2">大类亚军</th>
+                        <th scope="col" id="category3" class="manage-column column-category3">大类季军</th>
+                        <th scope="col" id="category_excellent" class="manage-column column-category_excellent">大类优秀选手</th>
+                        <th scope="col" id="category1_age" class="manage-column column-category1_age">大类年龄冠军</th>
+                        <th scope="col" id="category2_age" class="manage-column column-category2_age">大类年龄亚军</th>
+                        <th scope="col" id="category3_age" class="manage-column column-category3_age">大类年龄季军</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <tr data-id="0">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text"></label>
+                            <input type="checkbox" name="users[]" class="subscriber" value="5">
+                        </th>
+                        <td class="username column-username has-row-actions column-primary" data-colname="用户名">
+                             <strong>
+                                 <input type="text" name="tmp_name" value="">
+                             </strong>
+
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="name column-name" data-colname="姓名"><span aria-hidden="true">—</span><span class="screen-reader-text">未知</span></td>
+                        <td class="email column-email" data-colname="电子邮件"><a href="mailto:"></a></td>
+                        <td class="role column-role" data-colname="角色">学生</td>
+                        <td class="posts column-posts num" data-colname="文章">0</td>
+                        <td class="mycred_default column-mycred_default" data-colname="积分">
+                            <div id="mycred-user-5-balance-mycred_default"> <span>10</span> </div>
+                            <div id="mycred-user-5-balance-mycred_default"><small style="display:block;"><strong>Total</strong>: <span>10</span></small></div>
+                            <div class="row-actions">
+                                <span class="history"><a href="http://127.0.0.1/nlyd/wp-admin/admin.php?page=mycred&amp;user=5">历史记录</a> | </span>
+                                <span class="adjust">
+                                    <a href="javascript:void(0)" class="mycred-open-points-editor" data-userid="5" data-current="10" data-total="10" data-type="mycred_default" data-username="13982242710" data-zero="0">调整</a>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tfoot>
+                    <tr>
+                        <td class="manage-column column-cb check-column">
+                            <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                            <input id="cb-select-all-2" type="checkbox">
+                        </td>
+                        <th scope="col" class="manage-column column-tmp_name column-primary">
+                            <span>名称</span>
+                        </th>
+                        <th scope="col" class="manage-column column-project1">单项冠军</th>
+                        <th scope="col" class="manage-column column-project2">单项亚军</th>
+                        <th scope="col" class="manage-column column-project3">单项季军</th>
+                        <th scope="col" class="manage-column column-category1">大类冠军</th>
+                        <th scope="col" class="manage-column column-category2">大类亚军</th>
+                        <th scope="col" class="manage-column column-category3">大类季军</th>
+                        <th scope="col" class="manage-column column-category_excellent">大类优秀选手</th>
+                        <th scope="col" class="manage-column column-category1_age">大类年龄冠军</th>
+                        <th scope="col" class="manage-column column-category2_age">大类年龄亚军</th>
+                        <th scope="col" class="manage-column column-category3_age">大类年龄季军</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+                    <div class="alignleft actions bulkactions">
+
+                    </div>
+                    <div class="alignleft actions">
+
+                    </div>
+
+                    <br class="clear">
+                </div>
+            </form>
+
+            <br class="clear">
+
+        </div>
+        <?php
     }
 
     /**
