@@ -98,7 +98,7 @@ if(!class_exists('MatchController')){
             add_action('posts_orderby',array($this, 'filter_request_orderby'));
 
 
-            if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student' ) ) ){
+            if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student','question' ) ) ){
 
                 //为文章管理页面添加列
                 add_filter("manage_{$this->post_type}_posts_columns", array($this,'add_new_match_columns'));
@@ -144,6 +144,7 @@ if(!class_exists('MatchController')){
         }
 
         public function wpdx_add_custom_status_in_quick_edit(){
+
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
@@ -176,6 +177,38 @@ if(!class_exists('MatchController')){
 
                 </script>
                 <?php
+            }elseif($this->post_type == 'question'){
+                //查询题目类型
+                $questions_status = isset($_GET['questions_status']) ? $_GET['questions_status'] : '';
+                $args = array(
+                    'taxonomy' => 'question_genre', //自定义分类法
+                    'pad_counts' => false,
+                    'hide_empty' => false,
+                );
+                $category = get_categories($args);
+                global $wpdb;
+                if(!empty($category)){
+                    foreach ($category as $k => $v){
+                        if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                            $num = $wpdb->get_var("SELECT COUNT(term_taxonomy_id) FROM {$wpdb->term_relationships} WHERE term_taxonomy_id='{$v->term_id}'");
+                            ?>
+                            <script type="text/javascript">
+                                jQuery(document).ready(function($) {
+                                    var _html = ' | <li class="question-<?=$v->term_id?>"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
+
+                                    $('.wrap').find('.subsubsub').append(_html);
+                                    $('.question-<?=$questions_status?>').find('a').addClass('current');
+                                })
+
+                            </script>
+                            <?php
+                        }
+                    }
+                }
+
+                ?>
+
+                <?php
             }
 
         }
@@ -187,6 +220,10 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 global $wpdb;
                 $join .= " LEFT JOIN {$wpdb->prefix}match_meta_new AS mm ON mm.match_id={$wpdb->posts}.ID";
+            }
+            if($this->post_type == 'question'){
+                global $wpdb;
+                $join .= " LEFT JOIN {$wpdb->term_relationships} AS tr ON tr.object_id={$wpdb->posts}.ID";
             }
             return $join;
         }
@@ -200,6 +237,10 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 if($match_status != '') $where .= " AND mm.match_status={$match_status}";
+            }
+            if($this->post_type == 'question'){
+                $questions_status = isset($_GET['questions_status']) ? $_GET['questions_status'] : '';
+                if($questions_status != '') $where .= " AND tr.term_taxonomy_id={$questions_status}";
             }
             return $where;
           }
@@ -604,6 +645,8 @@ if(!class_exists('MatchController')){
                 $columns['match_type'] = '比赛类型';
                 $columns['date'] = '创建日期';
                 $columns['options'] = '操作';
+            }elseif ($this->post_type == 'question'){
+                $columns['question_type'] = '类型';
             }
 
             return $columns;
@@ -725,6 +768,12 @@ if(!class_exists('MatchController')){
                     $color = 'style="color:#424242"';
                     if($student_num>0) $color = 'style="color:#bf0000"';
                     echo '<a '.$color. ' href="' .admin_url('edit.php?post_type=team&page=team-student&id='.$id.'&team_type=3').'" class="">'.$student_num.'个</a>';
+                    break;
+                case 'question_type':
+                    //题库类型
+                    $question_name =   $termRes = $wpdb->get_var("SELECT t.name FROM {$wpdb->prefix}term_relationships AS r 
+                                          LEFT JOIN {$wpdb->terms} AS t ON t.term_id=r.term_taxonomy_id WHERE r. object_id={$id}");
+                    echo $question_name;
                     break;
                 default:
                     break;
