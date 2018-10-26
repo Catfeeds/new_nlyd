@@ -28,7 +28,7 @@
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('选手国籍', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black fs_15">中华人民共和国 <span class="fastbannerform__span f32 NOFLAG <?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>"></span></div>
+                        <div class="signs_value c_black fs_15">中华人民共和国 <span class="fastbannerform__span f32 NOFLAG cn"></span></div>
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('选手姓名', 'nlyd-student')?>&<?=__('证件号码', 'nlyd-student')?>：</div>
