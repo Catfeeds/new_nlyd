@@ -93,7 +93,7 @@
     padding-left: 10px;
     text-align: left;
 }
-.nl-match-info div,.nl-match-info a,.nl-match-info span{
+.nl-match-info div,.nl-match-info span{
     height: 100%;
     display: table-cell;
     vertical-align: middle;
@@ -106,8 +106,8 @@ p.long-name{
 }
 .nl-match-info{
     float: left;
-    width: -webkit-calc(100% - 120px);
-    width: calc(100% - 120px);
+    width: -webkit-calc(100% - 85px);
+    width: calc(100% - 85px);
     text-align: left;
 }
 .nl-match-footer{
