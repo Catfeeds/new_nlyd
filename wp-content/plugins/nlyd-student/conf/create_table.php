@@ -500,6 +500,27 @@ function the_table_install () {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;";
         dbDelta($sql);
     }
+
+    $table_name = $wpdb->prefix . "match_bonus_tmp";  //比赛奖金模板表
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+        $sql = "CREATE TABLE `{$table_name}` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `project1` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '单项冠军奖金金额',
+          `project2` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '单项亚军奖金金额',
+          `project3` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '单项季军奖金金额',
+          `category1` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类冠军奖金金额',
+          `category2` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类亚军奖金金额',
+          `category3` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大季军奖金金额',
+          `category_excellent` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类优秀选手奖金金额',
+          `category1_age` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类年龄组冠军奖金金额',
+          `category2_age` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类年龄组亚军奖金金额',
+          `category3_age` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '大类年龄组季军奖金金额',
+          `bonus_tmp_name` varchar(255) NOT NULL COMMENT '奖金模板名称',
+          PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;";
+        dbDelta($sql);
+    }
 }
 
 

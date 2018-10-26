@@ -1142,7 +1142,6 @@ class Match_student {
             if(!empty($info)){
                 $user_info = array_column($info,'meta_value','meta_key');
                 $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
-
                 $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                 $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
                 $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
@@ -1465,6 +1464,7 @@ class Match_student {
             $team_name = $wpdb->get_row("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.status=2 AND mt.user_id={$project_option['user_id']}");
             $allData[$project_option['user_id']]['team'] = $team_name->post_title;
         };
+
         return $allData;
     }
 
@@ -1562,14 +1562,17 @@ class Match_student {
                 $ranking_bonus = 0;
                 switch ($project_option['ranking']){
                     case 1:
+                        if($bonusTmp['project1'] == 0) continue 2;
                         $ranking_name.='单项冠军';
                         $ranking_bonus = $bonusTmp['project1'];
                         break;
                     case 2:
+                        if($bonusTmp['project2'] == 0) continue;
                         $ranking_name.='单项亚军';
                         $ranking_bonus = $bonusTmp['project2'];
                         break;
                     case 3:
+                        if($bonusTmp['project3'] == 0) continue;
                         $ranking_name.='单项季军';
                         $ranking_bonus = $bonusTmp['project3'];
                         break;
@@ -1586,14 +1589,17 @@ class Match_student {
                     $ranking_bonus = 0;
                     switch ($cate_option['ranking']){
                         case 1:
+                            if($bonusTmp['category1'] == 0) continue 2;
                             $ranking_name.='总冠军';
                             $ranking_bonus = $bonusTmp['category1'];
                             break;
                         case 2:
+                            if($bonusTmp['category2'] == 0) continue;
                             $ranking_name.='总亚军';
                             $ranking_bonus = $bonusTmp['category2'];
                             break;
                         case 3:
+                            if($bonusTmp['category3'] == 0) continue;
                             $ranking_name.='总季军';
                             $ranking_bonus = $bonusTmp['category3'];
                             break;
@@ -1611,14 +1617,17 @@ class Match_student {
                             $ranking_bonus = 0;
                             switch ($cateAV['ranking']){
                                 case 1:
+                                    if($bonusTmp['category1_age'] == 0) continue 2;
                                     $ranking_name.='冠军';
                                     $ranking_bonus = $bonusTmp['category1_age'];
                                     break;
                                 case 2:
                                     $ranking_name.='亚军';
+                                    if($bonusTmp['category2_age'] == 0) continue;
                                     $ranking_bonus = $bonusTmp['category2_age'];
                                     break;
                                 case 3:
+                                    if($bonusTmp['category3_age'] == 0) continue;
                                     $ranking_name.='季军';
                                     $ranking_bonus = $bonusTmp['category3_age'];
                                     break;
@@ -1629,14 +1638,17 @@ class Match_student {
                 }
             }
             //大类优秀选手
-            if(isset($cdaV['category_honor'])){
-                foreach ($cdaV['category_honor']['data'] as $cate_honor){
-                    if(!isset($allData[$cate_honor['user_id']])) $allData[$cate_honor['user_id']] = [];
-                    $ranking_name = $cdaV['name'].'类'.$cdaV['category_honor']['name'];
-                    $ranking_bonus = $bonusTmp['category_excellent'];
-                    $allData = $this->bonus_all_data($allData, $cate_honor, $ranking_name, $ranking_bonus);
+            if($bonusTmp['category_excellent'] > 0){
+                if(isset($cdaV['category_honor'])){
+                    foreach ($cdaV['category_honor']['data'] as $cate_honor){
+                        if(!isset($allData[$cate_honor['user_id']])) $allData[$cate_honor['user_id']] = [];
+                        $ranking_name = $cdaV['name'].'类'.$cdaV['category_honor']['name'];
+                        $ranking_bonus = $bonusTmp['category_excellent'];
+                        $allData = $this->bonus_all_data($allData, $cate_honor, $ranking_name, $ranking_bonus);
+                    }
                 }
             }
+
         }
         //汇总
         $countData = [
@@ -1664,14 +1676,19 @@ class Match_student {
                 }
             }
         }
+
         //插入数据
         global $wpdb;
         $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_path`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
         $insertValueArr = [];
-        foreach ($orderAllData as $odv){
-            $bonus_list = serialize($odv['bonus_list']);
-            $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card']}','{$odv['real_type']}','{$odv['user_mobile']}','{$odv['team']}')";
+        foreach ($orderAllData as $k => $odv){
+            if($odv['tax_send_bonus'] > 0){
+                $bonus_list = serialize($odv['bonus_list']);
+                $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
+                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card_num']}','{$odv['real_type']}','{$odv['mobile']}','{$odv['team']}')";
+            }else{
+                unset($orderAllData[$k]);
+            }
         }
         $sql .= join(',', $insertValueArr);
         $wpdb->query($sql);
@@ -1816,6 +1833,7 @@ class Match_student {
 
 
                     <div id="bonus_tmp_box" class="hide_tmp">
+                        <div><span class="bonus_all_title">奖金设置名称:</span><span style="color: black;font-weight: bold"><?=$bonusTmp['bonus_tmp_name']?></span></div>
                         <div><span class="bonus_all_title">单项冠军:</span><span class="tmp"><?=$bonusTmp['project1']?></span>元</div>
                         <div><span class="bonus_all_title">单项亚军:</span><span class="tmp"><?=$bonusTmp['project2']?></span>元</div>
                         <div><span class="bonus_all_title">单项季军:</span><span class="tmp"><?=$bonusTmp['project3']?></span>元</div>
@@ -1848,7 +1866,7 @@ class Match_student {
 
                     <div>
                         <form action="" method="post">
-                            <button class="button" type="button" id="bonus_tmp_box_view">奖金设置</button>
+                            <button class="button" type="button" id="bonus_tmp_box_view">查看设置</button>
                             <button class="button" type="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
 
 
@@ -1904,7 +1922,9 @@ class Match_student {
 
                        <tbody id="the-list" data-wp-lists="list:user">
 
-                       <?php foreach ($orderAllData as $data){ ?>
+                       <?php foreach ($orderAllData as $data){
+                           $mobile = get_user_by('ID',$data['user_id']);
+                           ?>
                            <tr class="data-list" data-id="<?=$data['user_id']?>">
                                <th scope="row" class="check-column">
                                    <label class="screen-reader-text" for="user_13"></label>
@@ -1918,12 +1938,12 @@ class Match_student {
                                </td>
                                <td class="real_ID column-real_ID line-c" data-colname="选手ID"><?=$data['userID']?></td>
                                <td class="project_name column-project_name" data-colname="类别/项目">
-                                   <?php foreach ($data['bonus_list'] as $bonus_name){ ?>
+                                   <?php if(!empty($data['bonus_list'])) foreach ($data['bonus_list'] as $bonus_name){ ?>
                                        <?=$bonus_name['bonus_name']?><br />
                                    <?php } ?>
                                </td>
                                <td class="bonus column-bonus" data-colname="奖金数额">
-                                   <?php foreach ($data['bonus_list'] as $bonusV){ ?>
+                                   <?php if(!empty($data['bonus_list'])) foreach ($data['bonus_list'] as $bonusV){ ?>
                                        <?=$bonusV['bonus']?><br />
                                    <?php } ?>
                                </td>
