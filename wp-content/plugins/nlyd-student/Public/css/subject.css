@@ -1,26 +1,56 @@
 
 .subject-title{
+    position: relative;
     margin-top: 20px;
     margin-bottom: 15px;
-    height: 35px;
+    width: -webkit-calc(100% - 90px);
+    width: calc(100% - 90px);
+    padding-right: 90px;
+    line-height: 20px;
 }
+
 /* .subject-title>div{
     height: 32px;
 } */
-.subject-title-info a{
-    display: block;
-    margin: auto;
-    width: 79px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    border: 1px solid rgba(111, 175, 255, 1);
+.subject-title-info{
+    display: table;
+    /* float: right; */
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 28px;
+    border: 1px solid #2484FE;
     border-radius: 6px;
+    line-height: 20px;
+    text-align: center;
     color: #2484FE;
+}
+.subject-title-info div{
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: 20px;
+}
+.match_info_font{
+    display: inline;
+    /* display: table;
+    height: 100%; */
+}
+.match_info_font div{
+    display: inline;
+    /* display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    height: 100%;
+    line-height: 16px; */
 }
 .subject_info_font{
     display: table;
     height: 100%;;
+}
+.one-info {
+    padding-right: 10px;
+    word-break: break-word;
 }
 .subject_info_font div{
     display: table-cell;
@@ -28,7 +58,7 @@
     height: 100%;
     line-height: 16px;
 }
-.subject-title-info a.disabled-a{
+ a.disabled-a{
     font-size: 0.12rem;
     border: 1px solid rgba(191, 190, 190, 1);
     color: rgba(191, 190, 190, 1);
@@ -39,10 +69,16 @@
 .subject-title span:first-child{
     text-align: left;
 }
+.subject-row{
+    line-height: 20px;
+    margin-bottom: 8px;
+}
 .left-label{
-    width: 80px;
+    display: inline;
+    margin-right: 10px;
+    /* width: 80px;
     float: left;
-    text-align: left;
+    text-align: left; */
 }
 .getBottom{
     bottom: 80px;

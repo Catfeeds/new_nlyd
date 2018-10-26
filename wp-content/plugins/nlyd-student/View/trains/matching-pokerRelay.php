@@ -7,9 +7,9 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row layui-row">
+                    <div class="matching-row layui-row have-submit">
                         <div class="c_black match_info_font"><div><?=__($title, 'nlyd-student')?>  <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></div></div>
-                        <div class="c_blue match_info_font"><div>&nbsp;&nbsp;&nbsp;&nbsp;<?=__('第1/1题', 'nlyd-student')?></div></div>
+                        <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <i class="iconfont">&#xe685;</i>

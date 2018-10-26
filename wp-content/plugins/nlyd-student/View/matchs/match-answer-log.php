@@ -35,11 +35,11 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title flex-h">
-                            <div class="c_black flex1 subject_info_font"><div><?=__($project_title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more_cn)?> </div></div>
-                            <div class="c_blue flex1 ml_10 subject_info_font"><div><?=__('您的得分', 'nlyd-student')?> <?=$my_score > 0 ? : 0?><?=__('分', 'nlyd-student')?></div></div>
+                        <div class="subject-title layui-row">
+                            <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more_cn)?> </div></div>
+                            <div class="c_blue ml_10 match_info_font"><div><?=__('您的得分', 'nlyd-student')?> <?=$my_score > 0 ? : 0?><?=__('分', 'nlyd-student')?></div></div>
                             <?php if( (ACTION == 'checkAnswerLog') || $_GET['match_more'] == $match_more):?>
-                            <div class="subject-title-info flex1"><a <?= !empty($ranking) ? "class='c_blue' href='{$record_url}'" :'class="disabled-a"';?> ><?=__('全部排名', 'nlyd-student')?></a></div>
+                            <a <?= !empty($ranking) ? "class='c_blue subject-title-info' href='{$record_url}'" :'class="disabled-a subject-title-info"';?> ><div><?=__('全部排名', 'nlyd-student')?></div></a>
                             <?php endif;?>
                         </div>
                         <div class="subject-row flex-h">
