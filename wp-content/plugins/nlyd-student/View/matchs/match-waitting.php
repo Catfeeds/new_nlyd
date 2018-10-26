@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         <?php }
-                        if($buffer_time){
+                        if($buffer_time && empty($answer_status)){
                         ?>
                             <a class="a-btn a-btn-table back" href="<?=$buffer_url?>">
                                 <div><?=__('进入比赛', 'nlyd-student')?></div>

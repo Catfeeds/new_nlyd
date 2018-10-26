@@ -230,7 +230,7 @@ class Student_Ajax
 
                     if($k != 0){
                         if(($my_score == $rows[$k-1]['my_score'] && $surplus_time == $rows[$k-1]['surplus_time']) || ($my_score == 0 &&  $rows[$k-1]['my_score'] == 0)){
-                            $list[$k]['ranking'] = $list[$k-1]['ranking'];
+                            $list[$k]['ranking'] = !empty($list[$k-1]['ranking']) ? $list[$k-1]['ranking'] : $list[$k-2]['ranking'];
                         }
                     }
                     if( !empty($_POST['lastItem']) ){

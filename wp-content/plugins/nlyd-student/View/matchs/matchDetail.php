@@ -1,13 +1,3 @@
-<?php
-$path = leo_student_public_view.'cache/match_info/'.$_GET['match_id'].'_'.$language.'.php';
-if( file_exists($path) && $match['match_status'] != 1){
-    include_once $path;
-}else{
-
-if ($match['match_status'] != 1):
-    ob_start();
-endif;
-?>
 <!-- 比赛详情 -->
 <?php require_once PLUGINS_PATH . 'nlyd-student/View/public/student-footer-menu.php'; ?>
 
@@ -118,50 +108,13 @@ endif;
                                             </tr>
                                             </thead>
                                             <tbody id="flow-table">
-                                            <?php
-                                            if ($match['match_status'] != 1):
-                                                foreach ($orders as $v) {
-                                                    ?>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="player-img">
-                                                                <img src="<?=$v['user_head']?>">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table_content"><?=$v['nickname']?></div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table_content"><?=$v['user_gender']?></div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table_content"><?=$v['real_age']?></div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="table_content">
-                                                                <span class="fastbannerform__span f32 NOFLAG <?=$v['nationality']?>"></span><?=$v['nationality_short']?>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                            <?php endif; ?>
+
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </li>
                         </ul>
-                        <?php
-                        if ($match['match_status'] != 1):
-                            $path = leo_student_public_view . 'cache/match_info/' . $_GET['match_id'] . '_' . $language . '.php';
-                            $info = ob_get_contents(); //得到缓冲区的内容并且赋值给$info
-                            $file = fopen($path, 'w'); //打开文件info.txt
-                            fwrite($file, $info); //写入信息到info.txt
-                            fclose($file); //关闭文件info.txt
-                        endif;
-                        }
-                        ?>
-
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
                         <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"></div><?=__('报名参赛', 'nlyd-student')?></div></a>
                         <?php endif; ?>
@@ -218,7 +171,6 @@ jQuery(function($) {
     });
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
-        <?php if($match['match_status'] == 1){ ?>
         var flow = layui.flow;//流加载
         var match_page=1;
         flow.load({
@@ -286,7 +238,6 @@ jQuery(function($) {
                 })       
             }
         });
-        <?php } ?>
     });
 })
 </script>

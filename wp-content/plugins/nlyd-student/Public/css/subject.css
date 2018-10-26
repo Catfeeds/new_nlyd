@@ -3,9 +3,9 @@
     position: relative;
     margin-top: 20px;
     margin-bottom: 15px;
-    width: -webkit-calc(100% - 90px);
-    width: calc(100% - 90px);
-    padding-right: 90px;
+    width: -webkit-calc(100% - 70px);
+    width: calc(100% - 70px);
+    padding-right: 70px;
     line-height: 20px;
 }
 
@@ -24,6 +24,7 @@
     line-height: 20px;
     text-align: center;
     color: #2484FE;
+    font-size: 0.12rem;
 }
 .subject-title-info div{
     height: 100%;
