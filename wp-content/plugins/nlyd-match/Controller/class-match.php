@@ -161,32 +161,52 @@ class Match
      */
     public function match_bonus_list(){
         global $wpdb;
-        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 0;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM {$wpdb->prefix}match_bonus_tmp LIMIT {$start},{$pageSize}", ARRAY_A);
-        var_dump($rows);
+
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+//        var_dump($rows);
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">奖金设置</h1>
-
-            <a href="javascript:;" class="page-title-action">新增</a>
-
             <hr class="wp-header-end">
-
-
             <form method="get">
-
                 <p class="search-box">
                 </p>
+                <div class="alignleft actions">
 
-
-                    <div class="alignleft actions">
-
-                    </div>
-
-                    <br class="clear">
                 </div>
+                <div class="tablenav top">
+
+                    <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
+                    </div>
+                    <a href="javascript:;" class="page-title-action" id="add-tmp">新增</a>
+                    <br class="clear">
+
+                </div>
+                <br class="clear">
+               
+                <style type="text/css">
+                    #the-list input[type="text"]{
+                        width: 100%;
+                    }
+                    #the-list .btn-none{
+                        display: none;
+                    }
+                </style>
                 <h2 class="screen-reader-text">奖金列表</h2><table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
@@ -207,38 +227,62 @@ class Match
                         <th scope="col" id="category1_age" class="manage-column column-category1_age">大类年龄冠军</th>
                         <th scope="col" id="category2_age" class="manage-column column-category2_age">大类年龄亚军</th>
                         <th scope="col" id="category3_age" class="manage-column column-category3_age">大类年龄季军</th>
+                        <th scope="col" id="operation" class="manage-column column-operation">操作</th>
                     </tr>
                     </thead>
 
                     <tbody id="the-list" data-wp-lists="list:user">
+                    <?php foreach ($rows as $row){ ?>
+                        <tr data-id="<?=$row['id']?>">
+                            <th scope="row" class="check-column">
+                                <label class="screen-reader-text"></label>
+                                <input type="checkbox" name="users[]" class="subscriber" value="<?=$row['id']?>">
+                            </th>
+                            <td class="tmp_name column-tmp_name has-row-actions column-primary" data-colname="名称">
+                                <strong>
+                                    <input type="text" name="tmp_name" disabled="disabled" value="<?=$row['bonus_tmp_name']?>">
+                                </strong>
 
-                    <tr data-id="0">
-                        <th scope="row" class="check-column">
-                            <label class="screen-reader-text"></label>
-                            <input type="checkbox" name="users[]" class="subscriber" value="5">
-                        </th>
-                        <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                             <strong>
-                                 <input type="text" name="tmp_name" value="">
-                             </strong>
-
-                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
-                        </td>
-                        <td class="name column-name" data-colname="姓名"><span aria-hidden="true">—</span><span class="screen-reader-text">未知</span></td>
-                        <td class="email column-email" data-colname="电子邮件"><a href="mailto:"></a></td>
-                        <td class="role column-role" data-colname="角色">学生</td>
-                        <td class="posts column-posts num" data-colname="文章">0</td>
-                        <td class="mycred_default column-mycred_default" data-colname="积分">
-                            <div id="mycred-user-5-balance-mycred_default"> <span>10</span> </div>
-                            <div id="mycred-user-5-balance-mycred_default"><small style="display:block;"><strong>Total</strong>: <span>10</span></small></div>
-                            <div class="row-actions">
-                                <span class="history"><a href="http://127.0.0.1/nlyd/wp-admin/admin.php?page=mycred&amp;user=5">历史记录</a> | </span>
-                                <span class="adjust">
-                                    <a href="javascript:void(0)" class="mycred-open-points-editor" data-userid="5" data-current="10" data-total="10" data-type="mycred_default" data-username="13982242710" data-zero="0">调整</a>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+                            <td class="project1 column-project1" data-colname="单项冠军">
+                                <input type="text" name="project1" disabled="disabled" value="<?=$row['project1']?>">
+                            </td>
+                            <td class="project2 column-project2" data-colname="单项亚军">
+                                <input type="text" name="project2" disabled="disabled" value="<?=$row['project2']?>">
+                            </td>
+                            <td class="project3 column-project3" data-colname="单项季军">
+                                <input type="text" name="project3" disabled="disabled" value="<?=$row['project3']?>">
+                            </td>
+                            <td class="category1 column-category1" data-colname="大类冠军">
+                                <input type="text" name="category1" disabled="disabled" value="<?=$row['category1']?>">
+                            </td>
+                            <td class="category2 column-category2" data-colname="大类亚军">
+                                <input type="text" name="category2" disabled="disabled" value="<?=$row['category2']?>">
+                            </td>
+                            <td class="category3 column-category3" data-colname="大类季军">
+                                <input type="text" name="category3" disabled="disabled" value="<?=$row['category3']?>">
+                            </td>
+                            <td class="category_excellent column-category_excellent" data-colname="大类优秀选手">
+                                <input type="text" name="category_excellent" disabled="disabled" value="<?=$row['category_excellent']?>">
+                            </td>
+                            <td class="category1_age column-category1_age" data-colname="大类年龄冠军">
+                                <input type="text" name="category1_age" disabled="disabled" value="<?=$row['category1_age']?>">
+                            </td>
+                            <td class="category2_age column-category2_age" data-colname="大类年龄亚军">
+                                <input type="text" name="category2_age" disabled="disabled" value="<?=$row['category2_age']?>">
+                            </td>
+                            <td class="category3_age column-category3_age" data-colname="大类年龄季军">
+                                <input type="text" name="category3_age" disabled="disabled" value="<?=$row['category3_age']?>">
+                            </td>
+                            <td class="category3_age column-category3_age" data-colname="大类年龄季军">
+                                <button type="button" class="button sub-btn btn-none">提交</button>
+                                <button type="button" class="button cancel-btn btn-none">取消</button>
+                                <button type="button" class="button edit-btn">编辑</button>
+                                <button type="button" class="button del-btn">删除</button>
+                            </td>
+                        </tr>
+                    <?php } ?>
 
                     <tfoot>
                     <tr>
@@ -259,25 +303,110 @@ class Match
                         <th scope="col" class="manage-column column-category1_age">大类年龄冠军</th>
                         <th scope="col" class="manage-column column-category2_age">大类年龄亚军</th>
                         <th scope="col" class="manage-column column-category3_age">大类年龄季军</th>
+                        <th scope="col" class="manage-column column-operation">操作</th>
                     </tr>
                     </tfoot>
-
                 </table>
                 <div class="tablenav bottom">
-
-                    <div class="alignleft actions bulkactions">
-
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
+                        <?=$pageHtml?>
                     </div>
-                    <div class="alignleft actions">
-
-                    </div>
-
                     <br class="clear">
                 </div>
             </form>
-
+            
             <br class="clear">
+            <script type="text/javascript">
 
+                jQuery(document).ready(function($) {
+                    $('.sub-btn').on('click', function () {
+                        var _tr = $(this).closest('tr');
+                        var id = _tr.attr('data-id');
+                        var project1 = _tr.find('input[name="project1"]').val();
+                        var project2 = _tr.find('input[name="project2"]').val();
+                        var project3 = _tr.find('input[name="project3"]').val();
+                        var category1 = _tr.find('input[name="category1"]').val();
+                        var category2 = _tr.find('input[name="category2"]').val();
+                        var category3 = _tr.find('input[name="category3"]').val();
+                        var category_excellent = _tr.find('input[name="category_excellent"]').val();
+                        var category1_age = _tr.find('input[name="category1_age"]').val();
+                        var category2_age = _tr.find('input[name="category2_age"]').val();
+                        var category3_age = _tr.find('input[name="category3_age"]').val();
+                        var tmp_name = _tr.find('input[name="tmp_name"]').val();
+
+                        var data = {'action':'updateBonusTmp','id':id,'project1':project1,'project2':project2,'project3':project3,'category1':category1,'category2':category2,'category3':category3
+                        ,'category_excellent':category_excellent,'category1_age':category1_age,'category2_age':category2_age,'category3_age':category3_age,'tmp_name':tmp_name}
+                        $.ajax({
+                            url : ajaxurl,
+                            type : 'post',
+                            dataType : 'json',
+                            data : data,
+                            success : function (response) {
+                                if(response['success'] == true){
+                                    window.location.reload();
+                                }else{
+                                    alert(response.data.info)
+                                }
+                            }, error : function () {
+                                alert('请求失败')
+                            }
+                        });
+                    });
+                    $('.edit-btn').on('click', function () {
+                        $(this).closest('td').find('.sub-btn').removeClass('btn-none');
+                        $(this).closest('td').find('.cancel-btn').removeClass('btn-none');
+                        $(this).closest('td').find('.del-btn').addClass('btn-none');
+                        $(this).addClass('btn-none');
+                        $(this).closest('tr').find('input[type="text"]').prop('disabled', false)
+                    });
+                    $('.cancel-btn').on('click', function () {
+                        $(this).closest('td').find('.sub-btn').addClass('btn-none');
+                        $(this).closest('td').find('.edit-btn').removeClass('btn-none');
+                        $(this).closest('td').find('.del-btn').removeClass('btn-none');
+                        $(this).addClass('btn-none');
+                        $(this).closest('tr').find('input[type="text"]').prop('disabled', true)
+                    });
+                    $('.del-btn').on('click', function () {
+                        var _tr = $(this).closest('tr');
+                        var id = _tr.attr('data-id');
+                        if(id == '0') {
+                            _tr.remove();
+                            return false;
+                        }
+                        if(confirm('是否确定删除此设置?使用此设置的比赛将无法生成奖金明细')){
+                            $.ajax({
+                                url : ajaxurl,
+                                dataType : 'json',
+                                data : {'action' : 'delBonusTmp','id':id},
+                                type : 'post',
+                                success : function (response) {
+                                    if(response['success'] == false){
+                                        alert(response.data.info);
+                                    }else{
+                                        _tr.remove();
+                                    }
+                                }, error : function () {
+                                    alert('请求失败')
+                                }
+                            });
+                        }
+
+                    });
+                    $('#add-tmp').on('click', function () {
+                        var _html = $('#the-list').find('tr').first().clone(true);
+                        _html.attr('data-id', '0');
+                        _html.find('input[type="text"]').val('').prop('disabled',false);
+                        _html.find('.edit-btn').remove();
+                        _html.find('.cancel-btn').remove();
+                        _html.find('.sub-btn').removeClass('btn-none');
+                        _html.find('.del-btn').removeClass('btn-none');
+                        console.log(_html)
+                        $('#the-list').append(_html);
+                    });
+                })
+
+            </script>
         </div>
         <?php
     }

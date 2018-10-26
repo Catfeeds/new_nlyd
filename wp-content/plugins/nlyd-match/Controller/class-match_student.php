@@ -99,7 +99,8 @@ class Match_student {
                     <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 
-                <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
                     <!--                    <div class="alignleft actions bulkactions">-->
                     <!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
