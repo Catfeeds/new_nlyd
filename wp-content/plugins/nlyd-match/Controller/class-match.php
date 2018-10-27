@@ -1,4 +1,4 @@
- <?php
+<?php
 
 /**
  * 页面自定义box控制
@@ -833,19 +833,19 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">报名结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['entry_end_time']?>" name="match[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['entry_end_time']))?>" name="match[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['match_start_time']?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_start_time']))?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=$this->meta['match_end_time']?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_end_time']))?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
             </div>
         </div>
         <div class="layui-form-item">
@@ -1014,6 +1014,7 @@ class Match
                         <?php if(in_array($k,$match_project_id)): ?>
                         <span>(<?=$total > 0 ? $total : 0;?>)</span>
                         <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
+                        <?php endif;?>
                     </div>
                     <div>
                         <?php if($total >0): ?>
@@ -1032,7 +1033,6 @@ class Match
                         </div>
                         <?php endif;?>
                     </div>
-                    <?php endif;?>
                 </div>
             <?php }
         }else{ ?>

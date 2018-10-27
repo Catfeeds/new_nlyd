@@ -63,7 +63,13 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        // console.log(data);
+        var answer_Text=$('.answer div').text();
+        var answer_dateNumber=$('.answer').attr('date-number');
+        if(answer_dateNumber=="本题无解"){
+            isRights(answer_dateNumber)
+        }else{
+            isRights(answer_Text)
+        }
         submit(time,4);
     })
     var _match_id=<?=$_GET['match_id']?>;
