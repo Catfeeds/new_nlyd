@@ -1205,7 +1205,7 @@ class Match_Ajax
         if(!empty($_POST['end_time'])){
 
             $end_time = $_POST['end_time'];
-
+            $use_time = (strtotime($end_time)-strtotime($_POST['start_time']))/60;
         }
         elseif (!empty($_POST['use_time'])){
             $use_time = $_POST['use_time'];
@@ -1262,13 +1262,15 @@ class Match_Ajax
             $title = '新增';
         }
 
-        $sql = "select id,end_time from {$wpdb->match_project_more} where match_id = {$_POST['post_id']} order by end_time desc";
+        $sql = "select id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$_POST['post_id']} order by end_time asc";
         $results = $wpdb->get_results($sql,ARRAY_A);
+
         if(!empty($results)){
-            $end_time =  end($results)[0];
+            $start_time = $results[0]['start_time'];
+            $end_time =  end($results)['end_time'];
         }
 
-        $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
+        $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_start_time'=>$start_time,'match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
         if($result){
             $wpdb->commit();
             wp_send_json_success($title.'成功');

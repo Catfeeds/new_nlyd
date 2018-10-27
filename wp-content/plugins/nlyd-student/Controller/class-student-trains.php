@@ -410,6 +410,7 @@ class Student_Trains extends Student_Home
 
         }
         else{
+            //unset($_SESSION['train_list']);
             if(isset($_SESSION['train_list'])){
 
                 $train_list = $_SESSION['train_list'];
@@ -436,7 +437,8 @@ class Student_Trains extends Student_Home
                         }
                     $match_questions = $train_list['train_questions'];
                     $questions_answer = $train_list['train_answer'];
-                    $my_answer = $train_list['my_answer'];
+                    $my_answer = !empty($train_list['my_answer']) ? $train_list['my_answer'] : array();
+
                     $error_arr = array_diff_assoc($questions_answer,$my_answer);
 
                     break;
@@ -509,11 +511,10 @@ class Student_Trains extends Student_Home
                         break;
                 }
             }
-
             //var_dump($success_len);
         }
 
-        $this->project_type = !empty($row['project_type']) ? $row['project_type'] :$train_list['project_type'];
+        $this->project_type = $_GET['type'];
         $surplus_time = !empty($row['surplus_time']) ? $row['surplus_time'] :$train_list['surplus_time'];
         $genre_id = !empty($row['genre_id']) ? $row['genre_id'] :$train_list['genre_id'];
 
@@ -536,7 +537,7 @@ class Student_Trains extends Student_Home
             'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );
 
-        //print_r($data);
+
         $view = student_view_path.CONTROLLER.'/answer-log.php';
         load_view_template($view,$data);
     }

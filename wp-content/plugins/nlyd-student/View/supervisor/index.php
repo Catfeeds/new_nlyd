@@ -20,16 +20,16 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
-                            <input type="text" value=""  class="nl-input nl-foucs">
+                            <input type="text" name="student_name" value=""  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手座位号', 'nlyd-student')?></div></div>
                             <input type="text" name="seat_number" value="" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
-                        <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('比赛项目/场次', 'nlyd-student')?></div></div>
+                        <!--<div class="form-input-row">
+                            <div class="form-input-label"><div><?/*=__('比赛项目/场次', 'nlyd-student')*/?></div></div>
                             <input type="text" name="match" value="" lay-verify="required"  class="nl-input nl-foucs">
-                        </div>
+                        </div>-->
                                
                         <div class="layui-bg-white img-zoos img-zoos1">
                             <p class="tps"><?=__('拍照佐证（点击拍照或上传）', 'nlyd-student')?></p>
@@ -158,9 +158,10 @@ jQuery(document).ready(function($) {
             // 监听提交
             form.on('submit(sub)', function(data){//实名认证提交
                 var fd = new FormData();
+                fd.append('student_name',data.field.student_name);
                 fd.append('seat_number',data.field.seat_number);
-                fd.append('match',data.field.match);
                 fd.append('describe',data.field.describe);
+                fd.append('action','upload_match_evidence');
                 // $.each(imgs, function (i, v) {
                 //     fd.append('images[]',v);
                 // })
