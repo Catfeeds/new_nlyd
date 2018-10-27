@@ -31,6 +31,28 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "prison_match_log";  //比赛meta
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+              `supervisor_id` int(20) NOT NULL COMMENT '监赛官id',
+              `match_id` int(20) NOT NULL COMMENT '比赛id',
+              `project_id` int(20) NOT NULL COMMENT '比赛项目id',
+              `match_more` tinyint(5) DEFAULT NULL COMMENT '比赛轮数',
+              `student_name` varchar(255) DEFAULT NULL COMMENT '学生姓名',
+              `seat_number` smallint(10) NOT NULL COMMENT '座位号',
+              `evidence` varchar(255) DEFAULT NULL COMMENT '证据照片',
+              `describe` varchar(255) DEFAULT NULL COMMENT '证据描述',
+              `created_time` datetime DEFAULT NULL COMMENT '提交时间',
+              PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "match_meta_new";  //比赛meta
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
