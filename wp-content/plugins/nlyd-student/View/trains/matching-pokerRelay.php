@@ -73,10 +73,6 @@
 
 <script>
 jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
     var isSubmit=false;//是否正在提交
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
     //     $.alerts('比赛结束');
@@ -87,11 +83,16 @@ jQuery(function($) {
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){//记忆成功
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
         questions_answer=leavePage['train_questions'];
         var end_time=leavePage['end_time'];
         $('.count_down').attr('data-seconds',$.GetSecond(end_time))
     }else{//未获取到比赛题目
         $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
+        window.location.href=window.history.go(-1);
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
