@@ -359,6 +359,7 @@ class Student_Matchs extends Student_Home
 
         //获取比赛项数据
         $project_more = $this->get_match_more($_GET['match_id'],$_GET['project_more_id']);
+
         if(empty($project_more)){
 
             $this->get_404(__('数据信息错误', 'nlyd-student'));
@@ -375,6 +376,11 @@ class Student_Matchs extends Student_Home
             return;
         }
         //print_r($project_more);
+        $sql = " select from {$wpdb->prefix}match_questions where match_id = {$project_more['match_id']} and project_id = {$project_more['project_id']} and match_more = {$project_more['more']}";
+        $row = $wpdb->get_row($sql);
+        if(!empty($row)){
+            $this->get_404(array('message'=>__('答题记录已存在', 'nlyd-student'),'waiting_url'=>home_url(CONTROLLER.'/matchWaitting/match_id/'.$_GET['match_id'])));
+        }
 
         if($this->project_alias == 'wzsd'){
 
@@ -495,7 +501,7 @@ class Student_Matchs extends Student_Home
             $data['match_questions'] = $match_questions;
         }
 
-        //print_r($data);
+        //print_r($data);die;
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$data);
 

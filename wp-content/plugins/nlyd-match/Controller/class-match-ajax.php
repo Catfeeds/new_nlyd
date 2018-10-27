@@ -1205,7 +1205,7 @@ class Match_Ajax
         if(!empty($_POST['end_time'])){
 
             $end_time = $_POST['end_time'];
-
+            $use_time = (strtotime($end_time)-strtotime($_POST['start_time']))/60;
         }
         elseif (!empty($_POST['use_time'])){
             $use_time = $_POST['use_time'];
