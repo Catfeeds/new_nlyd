@@ -7,6 +7,55 @@
  * Time: 20:28
  */
 
+if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
+    <style>
+        @media screen and (max-width: 1199px){
+            #page {
+                top: 0;
+            }
+        }
+    </style>
+    <div class="detail-content-wrapper">
+        <div class="count_down_" data-seconds="5"></div>
+    </div>
+
+    <script>
+        jQuery(function($) {
+            //console.log(data);return false;
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+            // var data=$.GetSession('match_data','1')
+            $('.count_down_').countdown(function (S, d) {
+                $('.count_down_').text(S).attr('data-seconds',S)
+                if (S <= 0) {//取消遮擋
+                    var data = $.GetSession('match_data', '1')
+                    $.ajax({
+                        data: data,
+                        success: function (res, ajaxStatu, xhr) {
+                            console.log(res)
+                            if(res.success){
+                                if(res.data.url){
+                                    window.location.href=res.data.url
+                                }
+                            }else{
+                                $.alerts(res.data.info)
+                            }
+                        },
+                        complete:function (XMLHttpRequest, textStatus) {
+                            if(textStatus=='timeout'){
+                                $.alerts("网络延迟")
+                                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
+                            }
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+
+<?php }else{
 
 if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
     $data['message'] = __('比赛项目未绑定', 'nlyd-student');
@@ -218,3 +267,4 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
 
     })
 </script>
+<?php } ?>

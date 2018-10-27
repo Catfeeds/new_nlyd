@@ -799,12 +799,15 @@ class Student_Matchs extends Student_Home
                 return;
             }
         }
-        //获取答题记录
-        $row = $this->get_match_questions($_GET['match_id'],$_GET['log_id']);
 
-        if(empty($row)){
-            $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
-            return;
+        if(isset($_GET['log_id'])){
+
+            //获取答题记录
+            $row = $this->get_match_questions($_GET['match_id'],$_GET['log_id']);
+            if(empty($row)){
+                $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
+                return;
+            }
         }
 
         //获取当前轮项目
