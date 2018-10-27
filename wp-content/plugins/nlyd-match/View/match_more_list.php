@@ -112,13 +112,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">开始时间</label>
                 <div class="layui-input-block">
-                    <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker" readonly/>
+                    <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker"/>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">结束时间</label>
                 <div class="layui-input-block">
-                    <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker" readonly/>
+                    <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker"/>
                 </div>
             </div>
             <div class="layui-form-item">

@@ -227,6 +227,7 @@ jQuery(function($) {
                 var text=day+hour+':'+minute+':'+second;
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
+                $('#next').addClass('disabled')
                 $('.count_down').text('00:00:00').attr('data-seconds',sys_second)
                 clearInterval(timer);
                 var answer_Text=$('.answer div').text();
