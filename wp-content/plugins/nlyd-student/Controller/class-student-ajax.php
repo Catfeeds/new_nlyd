@@ -3518,6 +3518,44 @@ class Student_Ajax
         }
         wp_send_json_success(['info' => $result]);
     }
+
+    /**
+     * 生成奖金明细
+     */
+    public function createBonus(){
+
+        //判断是否是管理员
+        if(!is_admin()) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
+
+        $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
+        if($match_id < 1) wp_send_json_error(['info' => __('参数错误', 'nlyd-student')]);
+
+        global $wpdb;
+        //判断是否已经生成
+        $row = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}'", ARRAY_A);
+        if($row) wp_send_json_error(['info' => __('当前比赛奖金已生成', 'nlyd-student')]);
+        //获取模板
+        //查找当前比赛奖金设置
+        $bonusTmpId = get_post_meta($match_id,'match_income_detail',true);
+        $bonusTmp = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}match_bonus_tmp WHERE id={$bonusTmpId}" ,ARRAY_A);
+        //去生成
+        $matchStudentObj = new Match_student();
+        $allDatas = $matchStudentObj->getBonusData($match_id,$bonusTmp);
+        if($allDatas['bool']) wp_send_json_success(['info' => __('生成成功', 'nlyd-student')]);
+        else wp_send_json_error(['info' => __('生成失败!', 'nlyd-student')]);
+    }
+
+    /**
+     * 下载奖金明细
+     */
+    public function downloadBonus(){
+        //判断是否是管理员
+        if(!is_admin()) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
+
+        $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
+        if($match_id < 1) wp_send_json_error(['info' => __('参数错误', 'nlyd-student')]);
+        wp_send_json_success(['info' => admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)]);
+    }
 }
 
 new Student_Ajax();
