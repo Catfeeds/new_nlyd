@@ -1018,7 +1018,7 @@ class Match
                     <div>
                         <?php if($total >0): ?>
                         <div class="layui-input-inline title">
-                            <label class="layui-form-label"></label>
+                            <label class="layui-form-label">轮数</label>
                         </div>
                         <div class="layui-input-inline">
                             <ul>
