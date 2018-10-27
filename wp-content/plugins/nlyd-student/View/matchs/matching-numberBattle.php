@@ -79,9 +79,9 @@ jQuery(function($) {
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
 
-        setTimeout(function() {
+        // setTimeout(function() {
             submit(0,3)
-        }, 1000);
+        // }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
@@ -96,9 +96,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });
     function submit(time,submit_type){//提交答案
@@ -164,6 +164,7 @@ jQuery(function($) {
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}

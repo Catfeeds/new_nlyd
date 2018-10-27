@@ -205,6 +205,7 @@ jQuery(function($) {
                 }
             },
             complete: function(XMLHttpRequest, textStatus){
+                $.SetSession('train_data',data);
                 if(textStatus=='timeout'){
                     var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                     window.location.href=href;
@@ -225,9 +226,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0)
-            }, 1000);
+            // }, 1000);
         }
     });
     //设置扑克窗口宽度

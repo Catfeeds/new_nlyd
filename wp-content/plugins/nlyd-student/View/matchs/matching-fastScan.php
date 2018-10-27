@@ -432,6 +432,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
@@ -447,9 +448,9 @@ $('#selectWrapper .fastScan-item').each(function(){
             clearTimeout(timer);
         }
         $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-        setTimeout(function(){
+        // setTimeout(function(){
             submit(0,3)
-        }, 1000);
+        // }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day<10 ? '0'+d.day : d.day;
@@ -469,9 +470,9 @@ $('#selectWrapper .fastScan-item').each(function(){
             }
             
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });
 layui.use('layer', function(){

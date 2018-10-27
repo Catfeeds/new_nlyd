@@ -62,6 +62,7 @@
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
+        $('#next').addClass('disabled')
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         var answer_Text=$('.answer div').text();
         var answer_dateNumber=$('.answer').attr('date-number');
@@ -203,6 +204,7 @@ jQuery(function($) {
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
@@ -510,7 +512,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }else{
                 ajaxData[ajaxData.length-1].yours=answer_Text;
@@ -521,7 +525,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }
             $('.answer').attr('date-number',"1");
