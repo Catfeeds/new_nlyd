@@ -20,8 +20,7 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');
 <div class="wrap">
     <h1 id="add-new-user">项目时长设置</h1>
     <div id="ajax-response"></div>
-    <form name="match_default" id="match_default" class="validate" novalidate="novalidate">
-
+    <form name="match_default" id="match_default" class="validate layui-form" novalidate="novalidate">
         <input name="action" type="hidden" value="setting_project_use">
         <?php if(!empty($lists)){?>
         <?php
@@ -29,30 +28,60 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');
                 $alias = get_post_meta($v->ID,'project_alias')[0];
                //print_r($alias);
         ?>
-        <div>
-            <label><?=$v->post_title?></label>
+       
+            <!-- <label><?=$v->post_title?></label> -->
             <?php if($alias == 'zxss'){ ?>
-                <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><?=$v->post_title?></label>
+                    <!-- <div class="layui-input-block">
+                        <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker" readonly/>
+                    </div> -->
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">连加运算(分)</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="project_use[<?=$alias?>][even_add]" value="<?=$match_project[$alias]['even_add']?>" class="layui-input"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">加减运算(分)</label>
+                    <div class="layui-input-block">
+                    <input type="text" name="project_use[<?=$alias?>][add_and_subtract]" value="<?=$match_project[$alias]['add_and_subtract']?>" class="layui-input"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">乘除运算(分)</label>
+                    <div class="layui-input-block">
+                    <input type="text" name="project_use[<?=$alias?>][wax_and_wane]" value="<?=$match_project[$alias]['wax_and_wane']?>" class="layui-input"/>
+                    </div>
+                </div>
+                <!-- <div>
                     <label>连加运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][even_add]" value="<?=$match_project[$alias]['even_add']?>"/>分钟
+                    <input type="text" name="project_use[<?=$alias?>][even_add]" value="<?=$match_project[$alias]['even_add']?>"/>分
                 </div>
                 <div>
                     <label>加减运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][add_and_subtract]" value="<?=$match_project[$alias]['add_and_subtract']?>"/>分钟
+                    <input type="text" name="project_use[<?=$alias?>][add_and_subtract]" value="<?=$match_project[$alias]['add_and_subtract']?>"/>分
                 </div>
                 <div>
                     <label>乘除运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][wax_and_wane]" value="<?=$match_project[$alias]['wax_and_wane']?>"/>分钟
-                </div>
+                    <input type="text" name="project_use[<?=$alias?>][wax_and_wane]" value="<?=$match_project[$alias]['wax_and_wane']?>"/>分
+                </div> -->
             <?php }else{ ?>
-            <input type="text" name="project_use[<?=$alias?>]" value="<?=$match_project[$alias]?>"/>分钟
+            <div class="layui-form-item">
+                <label class="layui-form-label"><?=$v->post_title?>(分)</label>
+                <div class="layui-input-block">
+                    <input type="text" name="project_use[<?=$alias?>]" value="<?=$match_project[$alias]?>"  class="layui-input"/>
+                </div>
+            </div>
             <?php } ?>
-        </div>
         <?php } ?>
         <?php } ?>
-        <div>
-            <label>快眼闪烁时间</label>
-            <input type="text" name="project_default['kysm'][flicker]" value="<?=!empty($project_default['kysm']['flicker']) ? $project_default['kysm']['flicker'] : 5;?>"/>分钟
+        <div class="layui-form-item">
+            <label class="layui-form-label">快眼显示时间(秒)</label>
+            <div class="layui-input-block">
+            <input type="text" name="project_default['kysm'][flicker]" value="<?=!empty($project_default['kysm']['flicker']) ? $project_default['kysm']['flicker'] : 5;?>" class="layui-input"/>
+            </div>
         </div>
         <p><input type="submit" id="match_default_sub" class="button button-primary" value="提交"></p>
     </form>

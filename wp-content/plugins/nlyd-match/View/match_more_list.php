@@ -164,28 +164,15 @@
     jQuery(document).ready(function($){
 
 
-        // jQuery('.page-title-action').live('click',function(event){
-        //     jQuery('.add_more_form').show();
+        // $('.page-title-action').live('click',function(event){
+        //     $('.add_more_form').show();
         // });
 
-        jQuery('.update_more').live('click',function(event){
-            // jQuery('.add_more_form').show();
-            var _this=$(this);
-            var title=_this.parents('tr').find('td').eq(0).text()
-            var start_time=_this.parents('tr').find('td').eq(1).text()
-            var end_time=_this.parents('tr').find('td').eq(2).text()
-            var _time=_this.parents('tr').find('td').eq(3).text()
-            showForm(title)
-            jQuery('#match_more_id').val(jQuery(this).attr('data-id'))
-            $('input[name=start_time]').val(start_time)
-            $('input[name=end_time]').val(end_time)
-            $('input[name=use_time]').val(_time)
-        });
 
 
         //新增/编辑
-        // jQuery('.add_more_submit').live('click',function(event){
-        //     var query = jQuery('.add_more_form').serialize();
+        // $('.add_more_submit').live('click',function(event){
+        //     var query = $('.add_more_form').serialize();
         //     $.post(ajaxurl,query,function (data) {
         //         alert(data.data);
         //         history.go(0);
@@ -196,16 +183,30 @@
         // });
 
         //删除
-        jQuery('.remove_more').live('click',function(event){
-            var id = jQuery(this).attr('data-id');
+        $('.remove_more').live('click',function(event){
+            var id = $(this).attr('data-id');
             $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {
                 alert(data.data);
                 history.go(0);
             },'json')
             return false;
         });
-        jQuery('.page-title-action').live('click',function(event){
+        $('.update_more').live('click',function(event){//编辑
+            // $('.add_more_form').show();
+            var _this=$(this);
+            var title=_this.parents('tr').find('td').eq(0).text()
+            var start_time=_this.parents('tr').find('td').eq(1).text()
+            var end_time=_this.parents('tr').find('td').eq(2).text()
+            var _time=_this.parents('tr').find('td').eq(3).text()
+            showForm(title)
+            $('#match_more_id').val($(this).attr('data-id'))
+            $('input[name=start_time]').val(start_time)
+            $('input[name=end_time]').val(end_time)
+            $('input[name=use_time]').val(_time)
+        });
+        $('.page-title-action').live('click',function(event){//新增
             showForm('新增轮数')
+            $('#match_more_id').val('')
             $('input[name=start_time]').val('')
             $('input[name=end_time]').val('')
             $('input[name=use_time]').val('')
@@ -238,7 +239,7 @@
                 ,btn2: function(index, layero){
                     //按钮【按钮二】的回调
                     layer.closeAll();
-                    var query = jQuery('.add_more_form').serialize();
+                    var query = $('.add_more_form').serialize();
                     $.post(ajaxurl,query,function (data) {
                         alert(data.data);
                         history.go(0);
