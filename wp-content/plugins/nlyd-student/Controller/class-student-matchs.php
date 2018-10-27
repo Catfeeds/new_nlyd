@@ -369,9 +369,9 @@ class Student_Matchs extends Student_Home
             $this->get_404(array('message'=>__('等待开赛', 'nlyd-student'),'waiting_url'=>home_url(CONTROLLER.'/matchWaitting/match_id/'.$_GET['match_id'])));
             return;
         }
-        if(get_time() < strtotime($project_more['end_time'])){
+        if(strtotime($project_more['end_time'])+80 < get_time() ){
 
-            $this->get_404(array('message'=>__('比赛结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
+            $this->get_404(array('message'=>__('该项目比赛结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
             return;
         }
         //print_r($project_more);

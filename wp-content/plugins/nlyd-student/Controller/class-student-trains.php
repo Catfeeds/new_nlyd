@@ -451,17 +451,18 @@ class Student_Trains extends Student_Home
                             $questions_answer = array_column($data_arr,'rights');
                             $my_answer = array_column($data_arr,'yours');
                         }
-                        if($_POST['project_type'] == 'nxss'){
+                        if($train_list['project_type'] == 'nxss'){
                             $isRight = array_column($data_arr,'isRight');
 
                             $success_len = 0;
+                            $len = count($data_arr);
+
                             if(!empty($isRight)){
                                 $count_value = array_count_values($isRight);
                                 $success_len += $count_value['true'];
                             }
-                            $answer['examples'] = $questions_answer;
-                            $answer['result'] = $isRight;
-                            $questions_answer = $answer;
+                            //print_r($train_list['my_answer']);
+                            $answer_array = $isRight;
 
                             $my_score = $success_len * 10;
 
@@ -516,7 +517,6 @@ class Student_Trains extends Student_Home
         $surplus_time = !empty($row['surplus_time']) ? $row['surplus_time'] :$train_list['surplus_time'];
         $genre_id = !empty($row['genre_id']) ? $row['genre_id'] :$train_list['genre_id'];
 
-
         $match_more = $_GET['match_more'] + 1;
         $data = array(
             'type'=>$this->project_type,
@@ -536,7 +536,7 @@ class Student_Trains extends Student_Home
             'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );
 
-
+        //print_r($data);
         $view = student_view_path.CONTROLLER.'/answer-log.php';
         load_view_template($view,$data);
     }
