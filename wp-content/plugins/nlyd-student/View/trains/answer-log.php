@@ -37,6 +37,7 @@ if(empty($_SESSION['train_list'])){ ?>
                         success: function (res, ajaxStatu, xhr) {
                             console.log(res)
                             if(res.success){
+                                $.DelSession('train_data')
                                 if(res.data.url){
                                     window.location.href=res.data.url
                                 }
@@ -47,6 +48,7 @@ if(empty($_SESSION['train_list'])){ ?>
                         complete:function (XMLHttpRequest, textStatus) {
                             if(textStatus=='timeout'){
                                 $.alerts("网络延迟")
+                                $.DelSession('train_data')
                                 window.location.href= '<?=home_url("/trains/history/")?>'
                             }
                         }
