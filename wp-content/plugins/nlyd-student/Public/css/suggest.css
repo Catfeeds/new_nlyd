@@ -36,76 +36,13 @@ input[type=text].suggest-input{
 textarea.suggest-textarea{
     padding: 15px 15px;
 }
-.post-img{
-    width: 62px;
-    height: 62px;
-    border: 1px dashed #333;
-    position: relative;
-    margin-right: 8px;
-    float: left;
-    margin-bottom: 5px;
-    overflow: hidden;
-}
-.post-img.no-dash{
+
+/* .post-img.no-dash{
     border: 1px solid #eee;
 }
 .suggest-row .post-img:last-child{
     margin-right: 0;
-}
-.add-zoo{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-}
-.img-zoo{
-    position: absolute;
-    left: 0;
-    top: 0;
-}
-.img-zoo img{
-    z-index: 2;
-}
-.vertical{
-    position: relative;
-    width: 1px;
-    height: 40px;
-    background: #333;
-    top: 50%;
-    left: 50%;
-    margin-top: -20px;
-}
-.transverse{
-    position: relative;
-    width: 40px;
-    height: 1px;
-    background: #333;
-    top: 50%;
-    left: 50%;
-    margin-left: -20px;
-}
-.img-zoos{
-    padding: 15px;
-    overflow: hidden;
-}
-.del{
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 3;
-    width: 20px;
-    height: 20px;
-    text-align: right;
-}
-.del i{
-    font-size: 0.19rem;
-}
-.hide{
-    display: none;
-}
-.show{
-    display: block;
-}
+} */
+
 
 

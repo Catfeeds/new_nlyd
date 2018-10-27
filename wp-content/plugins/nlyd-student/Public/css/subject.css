@@ -34,16 +34,9 @@
 }
 .match_info_font{
     display: inline;
-    /* display: table;
-    height: 100%; */
 }
 .match_info_font div{
     display: inline;
-    /* display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    height: 100%;
-    line-height: 16px; */
 }
 .subject_info_font{
     display: table;
