@@ -136,52 +136,12 @@
                 </div>
             </div>
         </div>
-        <!-- <div>
-            <label>开始时间</label>
-            <input type="text" value="" name="start_time" class="layui-input"/>
-        </div>
-        <div>
-            <label>结束时间</label>
-            <input type="text" value="" name="end_time"/>
-        </div>
-        <div>
-            <label>比赛时长</label>
-            <input type="text" value="" name="use_time"/>分钟
-        </div>
-        <div>
-            <label>比赛状态</label>
-            已结束<input type="radio" value="-1" name="status"/>
-            未开始<input type="radio" value="1" name="status"/>
-            进行中<input type="radio" value="2" name="status"/>
-        </div> -->
-
-        <!-- <input type="submit" class="add_more_submit" value="提交"/> -->
     </form>
     <br class="clear">
     <?php } ?>
 </div>
 <script>
     jQuery(document).ready(function($){
-
-
-        // $('.page-title-action').live('click',function(event){
-        //     $('.add_more_form').show();
-        // });
-
-
-
-        //新增/编辑
-        // $('.add_more_submit').live('click',function(event){
-        //     var query = $('.add_more_form').serialize();
-        //     $.post(ajaxurl,query,function (data) {
-        //         alert(data.data);
-        //         history.go(0);
-        //         /*setTimeout(function () {
-        //         },900)*/
-        //     },'json')
-        //     return false;
-        // });
-
         //删除
         $('.remove_more').live('click',function(event){
             var id = $(this).attr('data-id');

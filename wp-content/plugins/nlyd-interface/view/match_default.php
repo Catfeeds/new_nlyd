@@ -28,14 +28,9 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');
                 $alias = get_post_meta($v->ID,'project_alias')[0];
                //print_r($alias);
         ?>
-       
-            <!-- <label><?=$v->post_title?></label> -->
             <?php if($alias == 'zxss'){ ?>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><?=$v->post_title?></label>
-                    <!-- <div class="layui-input-block">
-                        <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker" readonly/>
-                    </div> -->
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">连加运算(分)</label>
@@ -55,18 +50,6 @@ require_once(ABSPATH . 'wp-admin/admin-header.php');
                     <input type="text" name="project_use[<?=$alias?>][wax_and_wane]" value="<?=$match_project[$alias]['wax_and_wane']?>" class="layui-input"/>
                     </div>
                 </div>
-                <!-- <div>
-                    <label>连加运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][even_add]" value="<?=$match_project[$alias]['even_add']?>"/>分
-                </div>
-                <div>
-                    <label>加减运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][add_and_subtract]" value="<?=$match_project[$alias]['add_and_subtract']?>"/>分
-                </div>
-                <div>
-                    <label>乘除运算</label>
-                    <input type="text" name="project_use[<?=$alias?>][wax_and_wane]" value="<?=$match_project[$alias]['wax_and_wane']?>"/>分
-                </div> -->
             <?php }else{ ?>
             <div class="layui-form-item">
                 <label class="layui-form-label"><?=$v->post_title?>(分)</label>
