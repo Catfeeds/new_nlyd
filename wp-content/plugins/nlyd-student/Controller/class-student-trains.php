@@ -536,7 +536,7 @@ class Student_Trains extends Student_Home
             'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );
 
-        print_r($data);
+        //print_r($data);
         $view = student_view_path.CONTROLLER.'/answer-log.php';
         load_view_template($view,$data);
     }
