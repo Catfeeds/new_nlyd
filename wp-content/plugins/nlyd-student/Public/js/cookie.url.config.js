@@ -225,6 +225,7 @@ Alert.prototype={
 		GetSecond:function(end_time){//传入结束时间获取倒计时秒数
 			var now_time = new Date().getTime();
 			var count_down=(end_time-now_time)/1000;
+			count_down=Math.floor(count_down)
 			return count_down
 		},
 		/*更新URL参数*/

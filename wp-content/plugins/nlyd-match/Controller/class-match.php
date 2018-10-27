@@ -1014,20 +1014,25 @@ class Match
                         <?php if(in_array($k,$match_project_id)): ?>
                         <span>(<?=$total > 0 ? $total : 0;?>)</span>
                         <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
-                        <div>
-                            <?php if($total >0): ?>
-                                <ul>
-                                    <?php foreach ($rows as $k => $row){ ?>
-                                    <li>
-                                        第<?=$k+1?>轮
-                                        <?=$row['start_time_format'].'  '.$row['end_time_format']?>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
-                            <?php endif;?>
+                    </div>
+                    <div>
+                        <?php if($total >0): ?>
+                        <div class="layui-input-inline title">
+                            <label class="layui-form-label"></label>
+                        </div>
+                        <div class="layui-input-inline">
+                            <ul>
+                                <?php foreach ($rows as $k => $row){ ?>
+                                <li>
+                                    第<?=$k+1?>轮
+                                    <?=$row['start_time_format'].'  '.$row['end_time_format']?>
+                                </li>
+                                <?php } ?>
+                            </ul>
                         </div>
                         <?php endif;?>
                     </div>
+                    <?php endif;?>
                 </div>
             <?php }
         }else{ ?>
