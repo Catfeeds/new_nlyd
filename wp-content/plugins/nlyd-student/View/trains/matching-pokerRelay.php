@@ -72,11 +72,7 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 
 <script>
-jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
+jQuery(function($) {
     var isSubmit=false;//是否正在提交
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
     //     $.alerts('比赛结束');
@@ -87,6 +83,10 @@ jQuery(function($) {
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='pkjl'){//记忆成功
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
         questions_answer=leavePage['train_questions'];
         var end_time=leavePage['end_time'];
         $('.count_down').attr('data-seconds',$.GetSecond(end_time))
