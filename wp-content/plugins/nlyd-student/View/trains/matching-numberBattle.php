@@ -145,7 +145,7 @@ jQuery(function($) {
                 },
                 complete: function(XMLHttpRequest, textStatus){
                     if(textStatus=='timeout'){
-                        //$.SetSession('train_data',data);
+                        $.SetSession('train_data',data);
                         var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                         window.location.href=href;
             　　　　}

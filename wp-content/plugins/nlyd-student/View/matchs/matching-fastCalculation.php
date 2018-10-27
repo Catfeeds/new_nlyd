@@ -553,6 +553,7 @@ jQuery(function($) {
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
