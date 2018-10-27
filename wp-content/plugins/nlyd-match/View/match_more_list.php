@@ -1,3 +1,17 @@
+<style>
+.show_form{
+    /* width:600px; */
+    padding:20px;
+}
+.layui-layer.nl-box-skin{
+    width:800px;
+}
+.nl-box-skin .layui-layer-title{
+    font-size:20px;
+    height:50px;
+    line-height:50px;
+}
+</style>
 <div class="wrap">
     <?php if(empty($_GET['post_id']) || empty($_GET['project_id'])){ ?>
         <h4>参数错误</h4>
@@ -89,14 +103,42 @@
             </div>
     </form>
     <!--轮数新增/修改form-->
-    <form class="add_more_form" style="display: none" >
-        <input type="hidden" name="action" value="match_more_add"/>
-        <input type="hidden" name="post_id" value="<?=$_GET['post_id']?>"/>
-        <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
-        <input id="match_more_id" type="hidden" name="more_id" value=""/>
-        <div>
+    <div class="show_form" style="display: none" >
+        <form class="add_more_form layui-form">
+            <input type="hidden" name="action" value="match_more_add"/>
+            <input type="hidden" name="post_id" value="<?=$_GET['post_id']?>"/>
+            <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
+            <input id="match_more_id" type="hidden" name="more_id" value=""/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-block">
+                    <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker" readonly/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-block">
+                    <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker" readonly/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">比赛时长</label>
+                <div class="layui-input-block">
+                    <input type="text" value="" name="use_time" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">比赛状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="-1" title="已结束">
+                    <input type="radio" name="status" value="1" title="未开始">
+                    <input type="radio" name="status" value="2" title="进行中">
+                </div>
+            </div>
+        </div>
+        <!-- <div>
             <label>开始时间</label>
-            <input type="text" value="" name="start_time"/>
+            <input type="text" value="" name="start_time" class="layui-input"/>
         </div>
         <div>
             <label>结束时间</label>
@@ -111,9 +153,9 @@
             已结束<input type="radio" value="-1" name="status"/>
             未开始<input type="radio" value="1" name="status"/>
             进行中<input type="radio" value="2" name="status"/>
-        </div>
+        </div> -->
 
-        <input type="submit" class="add_more_submit" value="提交"/>
+        <!-- <input type="submit" class="add_more_submit" value="提交"/> -->
     </form>
     <br class="clear">
     <?php } ?>
@@ -122,27 +164,36 @@
     jQuery(document).ready(function($){
 
 
-        jQuery('.page-title-action').live('click',function(event){
-            jQuery('.add_more_form').show();
-        });
+        // jQuery('.page-title-action').live('click',function(event){
+        //     jQuery('.add_more_form').show();
+        // });
 
         jQuery('.update_more').live('click',function(event){
-            jQuery('.add_more_form').show();
+            // jQuery('.add_more_form').show();
+            var _this=$(this);
+            var title=_this.parents('tr').find('td').eq(0).text()
+            var start_time=_this.parents('tr').find('td').eq(1).text()
+            var end_time=_this.parents('tr').find('td').eq(2).text()
+            var _time=_this.parents('tr').find('td').eq(3).text()
+            showForm(title)
             jQuery('#match_more_id').val(jQuery(this).attr('data-id'))
+            $('input[name=start_time]').val(start_time)
+            $('input[name=end_time]').val(end_time)
+            $('input[name=use_time]').val(_time)
         });
 
 
         //新增/编辑
-        jQuery('.add_more_submit').live('click',function(event){
-            var query = jQuery('.add_more_form').serialize();
-            $.post(ajaxurl,query,function (data) {
-                alert(data.data);
-                history.go(0);
-                /*setTimeout(function () {
-                },900)*/
-            },'json')
-            return false;
-        });
+        // jQuery('.add_more_submit').live('click',function(event){
+        //     var query = jQuery('.add_more_form').serialize();
+        //     $.post(ajaxurl,query,function (data) {
+        //         alert(data.data);
+        //         history.go(0);
+        //         /*setTimeout(function () {
+        //         },900)*/
+        //     },'json')
+        //     return false;
+        // });
 
         //删除
         jQuery('.remove_more').live('click',function(event){
@@ -153,32 +204,54 @@
             },'json')
             return false;
         });
-        layui.use('layer', function(){ //独立版的layer无需执行这一句
-            
-            // layer.open({
-            //     type: 1
-            //     ,maxWidth:300
-            //     ,title: '提示' //不显示标题栏
-            //     ,skin:'nl-box-skin'
-            //     ,id: 'certification' //防止重复弹出
-            //     ,content: '<div class="box-conent-wrapper">111</div>'
-            //     ,btn: ['按错了','提交',  ]
-            //     ,success: function(layero, index){
-            //     }
-            //     ,yes: function(index, layero){
-            //         layer.closeAll();
-            //     }
-            //     ,btn2: function(index, layero){
-            //         //按钮【按钮二】的回调
-            //         layer.closeAll();
-            //         submit(time,1)
-            //     }
-            //     ,closeBtn:2
-            //     ,btnAagn: 'c' //按钮居中
-            //     ,shade: 0.3 //遮罩
-            //     ,isOutAnim:true//关闭动画
-            // });
-
-        });
+        jQuery('.page-title-action').live('click',function(event){
+            showForm('新增轮数')
+            $('input[name=start_time]').val('')
+            $('input[name=end_time]').val('')
+            $('input[name=use_time]').val('')
+        })
+        layui.use(['layer','laydate'], function(){
+            var laydate = layui.laydate;
+            $('.date-picker').each(function(){
+                var id=$(this).attr('id');
+                    laydate.render({
+                        elem: '#'+id
+                        ,type: 'datetime'
+                        ,format: 'yyyy-MM-dd HH:mm'
+                    });
+            })
+        }); 
+        function showForm(title) { 
+            layer.open({
+                type: 1
+                ,maxWidth:1000
+                ,title: title //不显示标题栏
+                ,skin:'nl-box-skin'
+                ,id: 'certification' //防止重复弹出
+                ,content:$('.show_form')
+                ,btn: ['按错了','提交',  ]
+                ,success: function(layero, index){
+                }
+                ,yes: function(index, layero){
+                    layer.closeAll();
+                }
+                ,btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    layer.closeAll();
+                    var query = jQuery('.add_more_form').serialize();
+                    $.post(ajaxurl,query,function (data) {
+                        alert(data.data);
+                        history.go(0);
+                        /*setTimeout(function () {
+                        },900)*/
+                    },'json')
+                }
+                ,closeBtn:2
+                ,btnAagn: 'c' //按钮居中
+                ,shade: 0.3 //遮罩
+                ,isOutAnim:true//关闭动画
+            });
+           
+        }
     });
 </script>
