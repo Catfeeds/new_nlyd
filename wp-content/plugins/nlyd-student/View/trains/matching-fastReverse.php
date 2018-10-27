@@ -64,7 +64,7 @@ jQuery(function($) {
     });
     var isSubmit=false;//是否正在提交
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
-    var sys_second=<?=$count_down?>;//倒计时的时间
+    var sys_second=10;//倒计时的时间
     var end_time=0;
     var matchSession=$.GetSession('_match_train','true');
     var isMatching=false;//判断用户是否刷新页面
@@ -502,7 +502,10 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>=0){
+                        _this.removeClass('disabled')
+                    }
+                    
                 }, 300);
             }else{
                 ajaxData[ajaxData.length-1].yours=answer_Text;
@@ -513,7 +516,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>=0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }
             $('.answer').attr('date-number',"1");

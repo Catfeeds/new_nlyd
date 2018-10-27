@@ -510,7 +510,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }else{
                 ajaxData[ajaxData.length-1].yours=answer_Text;
@@ -521,7 +523,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }
             $('.answer').attr('date-number',"1");
