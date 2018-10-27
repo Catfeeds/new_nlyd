@@ -62,6 +62,7 @@
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
+        $('#next').addClass('disabled')
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         var answer_Text=$('.answer div').text();
         var answer_dateNumber=$('.answer').attr('date-number');

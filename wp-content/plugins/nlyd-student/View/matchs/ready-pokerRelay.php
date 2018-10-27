@@ -233,9 +233,9 @@ jQuery(function($) {
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-        setTimeout(function() {
+        // setTimeout(function() {
             submit(0,3)
-        }, 1000);
+        // }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day : '';
@@ -250,9 +250,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });
     //设置扑克窗口宽度

@@ -487,9 +487,9 @@ $('#selectWrapper .fastScan-item').each(function(){
             // }
             
             $('#selectWrapper .fastScan-item').addClass('noClick');//确保无重复点击
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0)
-            }, 1000);
+            // }, 1000);
         }
     });
 layui.use('layer', function(){

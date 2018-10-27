@@ -106,9 +106,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0)
-            }, 1000);
+            // }, 1000);
         }
     });
     function submit(time){//提交答案

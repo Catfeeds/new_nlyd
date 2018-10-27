@@ -484,7 +484,10 @@ jQuery(function($) {
                     $('#answer div').text('') 
                     inItFastCalculation(level,type);
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if($('.count_down').attr('data-seconds')>0){
+                        _this.removeClass('disabled')
+                    }
+                    
                 }, 300);
             }
         }
@@ -546,10 +549,8 @@ jQuery(function($) {
         }
     }
     if(sys_second<=0){//进入页面判断时间是否结束
-        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-        setTimeout(function() {
-            submit(0)
-        }, 1000);
+        // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+        submit(0)
     }
 
     $('.count_down').countdown(function(S, d){//倒计时
@@ -560,14 +561,15 @@ jQuery(function($) {
         var time=D+h+':'+m+':'+s;
         $(this).text(time).attr('data-seconds',S)
         if(S<=0){//本轮比赛结束
-            if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
-            }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
-            }
-            setTimeout(function() {
+            $('#next').addClass('disabled')
+            // if(S==0){
+            //     $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
+            // }else{
+            //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
+            // }
+            // setTimeout(function() {
                 submit(0)
-            }, 1000);
+            // }, 1000);
         }
     });  
 layui.use('layer', function(){
