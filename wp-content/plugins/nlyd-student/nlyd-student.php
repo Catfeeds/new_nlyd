@@ -335,7 +335,7 @@ if(!class_exists('StudentController')){
 
             <?php
             }
-            if(strpos($agent, 'android'))
+            elseif(strpos($agent, 'android'))
             { ?>
                 <script>
                     function isWeiXin(){

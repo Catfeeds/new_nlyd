@@ -3518,6 +3518,44 @@ class Student_Ajax
         }
         wp_send_json_success(['info' => $result]);
     }
+
+
+    /**
+     * 监赛官上传证据
+     *
+     */
+    public function upload_match_evidence(){
+        global $current_user,$wpdb;
+        //获取当前比赛项目
+        $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+            $new_time = get_time('mysql');
+            foreach ($rows as $val){
+                if($val['start_time'] < $new_time && $new_time < $val['end_time']){
+                    $match = $val;
+                }
+            }
+        }
+
+        //获取所有报名信息
+        $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4) order by id desc";
+        $results = $wpdb->get_results($sql,ARRAY_A);
+        $index = array_search($current_user->ID,array_column($results,'user_id')) + 1;
+
+        $insert = array(
+            'supervisor_id'=>$current_user->ID,
+            'match_id'=>$match['match_id'],
+            'project_id'=>$match['project_id'],
+            'match_more'=>$match['more'],
+            'match_id'=>$match['match_id'],
+            'student_name'=>$current_user->ID,
+            'seat_number'=>$current_user->ID,
+            'evidence'=>$current_user->ID,
+            'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+            'created_time'=>get_time('mysql'),
+        );
+    }
 }
 
 new Student_Ajax();
