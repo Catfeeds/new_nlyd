@@ -1712,8 +1712,8 @@ class Match_student {
             }
         }
         $sql .= join(',', $insertValueArr);
-        $wpdb->query($sql);
-        return ['orderAllData' => $orderAllData,'countData' => $countData];
+        $bool = $wpdb->query($sql);
+        return ['orderAllData' => $orderAllData,'countData' => $countData,'bool'=>$bool];
     }
 
     /**
