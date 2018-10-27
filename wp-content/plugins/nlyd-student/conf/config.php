@@ -99,6 +99,11 @@ return array(
             'post_content'=>'[train-home]',
             'url'=>'/trains',
         ),
-
+        array(
+            'post_title'=>'监赛中心',
+            'post_name'=>'supervisor',
+            'post_content'=>'[supervisor-home]',
+            'url'=>'/supervisor',
+        ),
     ),
 );
