@@ -954,11 +954,13 @@ class Match_student {
                                 <th scope="col" id="ID" class="manage-column column-ID column-primary">学员ID</th>
                                 <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
                                 <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                                <th scope="col" id="nationality" class="manage-column column-nationality">国籍</th>
+                                <th scope="col" id="card_num" class="manage-column column-card_num">证件号码</th>
                                 <th scope="col" id="birthday" class="manage-column column-birthday">年龄</th>
                                 <th scope="col" id="age" class="manage-column column-age">年龄组别</th>
                                 <th scope="col" id="address" class="manage-column column-address">所在地区</th>
                                 <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
-                                <th scope="col" id="email" class="manage-column column-email">邮箱</th>
+                                <th scope="col" id="team_name" class="manage-column column-team_name">战队</th>
                                 <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
 
                                 <th scope="col" id="ranking" class="manage-column column-ranking">名次</th>
@@ -993,7 +995,7 @@ class Match_student {
                                         <input type="checkbox" name="users[]" id="" class="subscriber" value="">
                                     </th>
 
-                                    <td class="name column-ID column-primary" data-colname="学员ID">
+                                    <td class="ID column-ID column-primary" data-colname="学员ID">
                                         <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
 
                                         <div class="row-actions">
@@ -1004,17 +1006,19 @@ class Match_student {
 
                                         <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                     </td>
-                                    <td class="name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
-                                    <td class="name column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['ageGroup']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-address" data-colname="所在地区"><span aria-hidden="true"><?=$raV['address']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['telephone'] ? $raV['telephone'] : $raV['user_mobile']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-email" data-colname="邮箱"><span aria-hidden="true"><?=$raV['user_email']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-created_time" data-colname="报名时间"><span aria-hidden="true"><?=$raV['created_time']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="real_name column-real_name" data-colname="姓名"><span aria-hidden="true"><?=$raV['real_name']?></span><span class="screen-reader-text"></span></td>
+                                    <td class="sex column-sex" data-colname="性别"><span aria-hidden="true"><?=$raV['sex']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="nationality column-nationality" data-colname="国籍"><span aria-hidden="true"><?=$raV['user_nationality']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="card_num column-card_num" data-colname="证件号码"><span aria-hidden="true"><?=$raV['card']?>(<?=$raV['real_type']?>)</span><span class="screen-reader-text">-</span></td>
+                                    <td class="birthday column-birthday" data-colname="出生日期"><span aria-hidden="true"><?=$raV['age']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="age column-age" data-colname="年龄组别"><span aria-hidden="true"><?=$raV['ageGroup']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="address column-address" data-colname="所在地区"><span aria-hidden="true"><?=$raV['address']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="mobile column-mobile" data-colname="手机"><span aria-hidden="true"><?=$raV['user_mobile']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="team_name column-team_name" data-colname="战队"><span aria-hidden="true"><?=$raV['team_name']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="created_time column-created_time" data-colname="报名时间"><span aria-hidden="true"><?=$raV['created_time']?></span><span class="screen-reader-text">-</span></td>
 
-                                    <td class="name column-ranking" data-colname="名次"><span aria-hidden="true"><?=$raV['ranking']?></span><span class="screen-reader-text">-</span></td>
-                                    <td class="name column-total_score" data-colname="得分"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="ranking column-ranking" data-colname="名次"><span aria-hidden="true"><?=$raV['ranking']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="total_score column-total_score" data-colname="得分"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
 
                                     <?php
                                     if(isset($raV['projectScore'])) {
@@ -1042,11 +1046,13 @@ class Match_student {
                                 <th scope="col" class="manage-column column-ID column-primary">学员ID</th>
                                 <th scope="col" class="manage-column column-real_name">姓名</th>
                                 <th scope="col" class="manage-column column-sex">性别</th>
+                                <th scope="col" class="manage-column column-nationality">国籍</th>
+                                <th scope="col" class="manage-column column-card_num">证件号码</th>
                                 <th scope="col" class="manage-column column-birthday">年龄</th>
                                 <th scope="col" class="manage-column column-age">年龄组别</th>
                                 <th scope="col" class="manage-column column-address">所在地区</th>
                                 <th scope="col" class="manage-column column-mobile">手机</th>
-                                <th scope="col" class="manage-column column-email">邮箱</th>
+                                <th scope="col" class="manage-column column-team_name">战队</th>
                                 <th scope="col" class="manage-column column-created_time">报名时间</th>
 
                                 <th scope="col" class="manage-column column-ranking">名次</th>
@@ -1136,15 +1142,22 @@ class Match_student {
         $ranking = 1;
         foreach ($result as $k => $val){
 //            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
-            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
+            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday','user_nationality') ";
             $info = $wpdb->get_results($sql1,ARRAY_A);
 
             if(!empty($info)){
+                //战队
+                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$val['user_id']} AND mt.status=2");
+                $result[$k]['team_name'] = $team_name;
+
                 $user_info = array_column($info,'meta_value','meta_key');
                 $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
                 $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
                 $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
                 $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
+                $result[$k]['user_nationality'] = isset($user_info['user_nationality']) ? $user_info['user_nationality'] : '';
+
                 if(!empty($user_info['user_age'])){
                     $age = $user_info['user_age'];
                     $group = getAgeGroupNameByAge($age);
@@ -1230,18 +1243,25 @@ class Match_student {
                     $trv['surplus_time'] += $scoreArr == [] ? 0 : max($surplus_timeArr);//每个项目最大剩余时间和
                     $trv['created_microtime'] += $created_microtimeArrr == [] ? 0 : max($created_microtimeArrr);//每个项目提交毫秒时间和
                 }
+                //战队
+                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$trv['user_id']} AND mt.status=2");
+                $trv['team_name'] = $team_name;
 
                 $usermeta = get_user_meta($trv['user_id'], '', true);
                 $user_real_name = unserialize($usermeta['user_real_name'][0]);
                 $age = $user_real_name['real_age'];
-                $user_real_name = $user_real_name['real_name'];
+                $real_name = $user_real_name['real_name'];
                 $trv['age'] = $age;
                 $trv['ageGroup'] = getAgeGroupNameByAge($age);
                 $trv['userID'] = $usermeta['user_ID'][0];
-                $trv['real_name'] = $user_real_name;
+                $trv['real_name'] = $real_name;
                 $trv['sex'] = $usermeta['user_gender'][0];
                 $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '-';
                 $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
+                $trv['user_nationality'] = isset($usermeta['user_nationality']) ? $usermeta['user_nationality'][0] : '';
+                $trv['card'] = isset($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '';
+                $trv['real_type'] = isset($user_real_name['real_type']) ? $user_real_name['real_type'] : '';
             }
 
         }else{
@@ -1459,11 +1479,12 @@ class Match_student {
         if(!isset($allData[$project_option['user_id']]['real_type'])) $allData[$project_option['user_id']]['real_type'] = $project_option['real_type'];
         if(!isset($allData[$project_option['user_id']]['mobile'])) $allData[$project_option['user_id']]['mobile'] = $project_option['user_mobile'];
         if(!isset($allData[$project_option['user_id']]['is_send'])) $allData[$project_option['user_id']]['is_send'] = 1;
-        if(!isset($allData[$project_option['user_id']]['team'])) {
-            global $wpdb;
-            $team_name = $wpdb->get_row("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.status=2 AND mt.user_id={$project_option['user_id']}");
-            $allData[$project_option['user_id']]['team'] = $team_name->post_title;
-        };
+        if(!isset($allData[$project_option['user_id']]['team'])) $allData[$project_option['user_id']]['team'] = $project_option['team_name'];
+//        if(!isset($allData[$project_option['user_id']]['team'])) {
+//            global $wpdb;
+//            $team_name = $wpdb->get_row("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.status=2 AND mt.user_id={$project_option['user_id']}");
+//            $allData[$project_option['user_id']]['team'] = $team_name->post_title;
+//        };
 
         return $allData;
     }
@@ -1500,7 +1521,7 @@ class Match_student {
         return $cateArr;
     }
 
-/**
+    /**
      * 比赛奖金明细
      * 字段 ID 姓名 奖项及金额 奖金总额 税后发放额 收款二维码 身份证号 电话号码 所属战队 发放状态
      */
@@ -1691,10 +1712,13 @@ class Match_student {
             }
         }
         $sql .= join(',', $insertValueArr);
-        $wpdb->query($sql);
-        return ['orderAllData' => $orderAllData,'countData' => $countData];
+        $bool = $wpdb->query($sql);
+        return ['orderAllData' => $orderAllData,'countData' => $countData,'bool'=>$bool];
     }
 
+    /**
+     * 奖金明细列表
+     */
     public function match_bonus(){
         $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
         $match_id < 1 && exit('match_id参数错误');
@@ -1828,7 +1852,9 @@ class Match_student {
                             width: 10em;
                             height: 1.3em;
                         }
-
+                        .codeImg{
+                            height: 35px;
+                        }
                     </style>
 
 
@@ -1923,7 +1949,6 @@ class Match_student {
                        <tbody id="the-list" data-wp-lists="list:user">
 
                        <?php foreach ($orderAllData as $data){
-                           $mobile = get_user_by('ID',$data['user_id']);
                            ?>
                            <tr class="data-list" data-id="<?=$data['user_id']?>">
                                <th scope="row" class="check-column">
@@ -1951,7 +1976,7 @@ class Match_student {
                                <td class="bonus_all column-bonus_all line-c" data-colname="奖金总额"><?=$data['all_bonus']?></td>
                                <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
                                <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
-                               <td class="bonus_path column-bonus_path line-c" data-colname="收款路径"><a href="<?=get_user_meta($data['user_id'],'user_coin_code',true)[0]?>" target="_blank">收款二维码</a></td>
+                               <td class="bonus_path column-bonus_path line-c" id="codeImg-<?=$data['user_id']?>" data-colname="收款路径"><img class="codeImg" src="<?=get_user_meta($data['user_id'],'user_coin_code',true)[0]?>" alt=""></td>
                                <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card_num']?></td>
                                <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
@@ -2115,9 +2140,22 @@ class Match_student {
                             }else{
                                 $('#bonus_tmp_box').removeClass('view_tmp').addClass('hide_tmp');
                             }
-                        })
+                        });
+                        layui.use('layer', function(){
+                            var layer = layui.layer;
+                            <?php foreach ($orderAllData as $row2){ ?>
+                            layer.photos({//图片预览
+                                photos: '#codeImg-<?=$row2['user_id']?>',
+                                move : false,
+                                anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                            })
+
+                            <?php } ?>
+
+                        });
                     })
                 </script>
+
             <br class="clear">
         </div>
         <?php
@@ -2581,6 +2619,12 @@ class Match_student {
 //                wp_enqueue_style( 'list-css' );
                 break;
             case 'match_student':
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
+//                wp_register_style('list-css',match_css_url.'order-lists.css');
+//                wp_enqueue_style( 'list-css' );
+                break;
+            case 'match_student-bonus':
                 wp_register_script('layui-js',match_js_url.'layui/layui.js');
                 wp_enqueue_script( 'layui-js' );
 //                wp_register_style('list-css',match_css_url.'order-lists.css');

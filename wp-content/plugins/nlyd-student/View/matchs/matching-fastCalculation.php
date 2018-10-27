@@ -68,6 +68,13 @@
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
+        var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+        ajaxData[ajaxData.length-1]['yours']=yours;
+        if(yours==ajaxData[ajaxData.length-1]['rights']){
+            ajaxData[ajaxData.length-1]['isRight']=true;
+        }else{
+            ajaxData[ajaxData.length-1]['isRight']=false;
+        }
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
@@ -596,13 +603,12 @@ layui.use('layer', function(){
                     layer.closeAll();
                 }
                 ,btn2: function(index, layero){
-                    var thisAjaxRow=ajaxData[ajaxData.length-1]
                     var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
-                    thisAjaxRow['yours']=yours;
-                    if(yours==thisAjaxRow['rights']){
-                        thisAjaxRow['isRight']=true;
+                    ajaxData[ajaxData.length-1]['yours']=yours;
+                    if(yours==ajaxData[ajaxData.length-1]['rights']){
+                        ajaxData[ajaxData.length-1]['isRight']=true;
                     }else{
-                        thisAjaxRow['isRight']=false;
+                        ajaxData[ajaxData.length-1]['isRight']=false;
                     }
                     layer.closeAll();
                     submit(time,1);

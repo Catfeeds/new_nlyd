@@ -244,16 +244,17 @@ class Download
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(45);
+//        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(45);
 
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title);
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title.'(报名选手)');
 
         $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'A2')->getFont()->setBold(true);
@@ -268,6 +269,7 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
+//        $objPHPExcel->getActiveSheet()->getStyle( 'M2')->getFont()->setBold(true);
 
 
         $objPHPExcel->getActiveSheet()->mergeCells('A1:L1');
@@ -276,30 +278,33 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', 'ID');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '证件号码');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄组别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '所在地区');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '电话');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '邮箱');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '国籍');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '电话');
+//        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '邮箱');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '报名时间');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '战队名称');
         foreach ($rows as $k => $row){
             $usermeta = get_user_meta($row['ID'], '', true);
             $age = unserialize($usermeta['user_real_name'][0])['real_age'];
+            $user_nationality = isset($usermeta['user_nationality']) ? $usermeta['user_nationality'][0] : '';
             $group = $this->getAgeGroupNameByAge($age);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['user_login']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$usermeta['user_ID'][0]);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_name']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$usermeta['user_gender'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$age);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$group);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['user_mobile']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['user_email']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('k'.($k+3),' '.$row['created_time']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('l'.($k+3),' '.$row['team_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$user_nationality);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$usermeta['user_gender'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$age);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$group);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['user_mobile']);
+//            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['user_email']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),' '.$row['team_name']);
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -999,19 +1004,21 @@ class Download
             $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-            $end = 'K';
+            $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
+            $end = 'M';
             if(isset($data[0]['projectScore'])) {
-                $a = 'L';
+                $a = 'N';
                 foreach ($projectArr as $titleV) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(15);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($a)->setWidth(18);
                     ++$end;
                     ++$a;
                 }
@@ -1032,9 +1039,11 @@ class Download
             $objPHPExcel->getActiveSheet()->getStyle( 'I2')->getFont()->setBold(true);
             $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
             $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getStyle( 'M2')->getFont()->setBold(true);
 
             if(isset($data[0]['projectScore'])) {
-                $a = 'K';
+                $a = 'M';
                 foreach ($projectArr as $titleV) {
                     ++$a;
                     $objPHPExcel->getActiveSheet()->getStyle( $a.'2')->getFont()->setBold(true);
@@ -1045,12 +1054,12 @@ class Download
             $objPHPExcel->getActiveSheet()->getStyle('A1:'.--$end.'1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
 
 
-            for ($b = 'A'; $b <= 'K'; ++$b){
+            for ($b = 'A'; $b <= 'M'; ++$b){
                 $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
             }
 
             if(isset($data[0]['projectScore'])) {
-                $a = 'L';
+                $a = 'N';
                 foreach ($projectArr as $titleV) {
                     $objPHPExcel->getActiveSheet()->getStyle($a. '2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
                     ++$a;
@@ -1060,20 +1069,22 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '学员ID');
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '真实姓名');
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '性别');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '年龄');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '年龄组别');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '所在地区');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '手机');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '邮箱');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '报名时间');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '名次');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '得分');
-            for ($b = 'A'; $b <= 'K'; ++$b){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '国籍');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '证件号码');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '年龄');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄组别');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '所在地区');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '手机');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '战队');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '报名时间');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '名次');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', '得分');
+            for ($b = 'A'; $b <= 'M'; ++$b){
                 $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             }
 
             if(isset($data[0]['projectScore'])) {
-                $a = 'L';
+                $a = 'N';
                 foreach ($projectArr as $titleV) {
                     $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
                     ++$a;
@@ -1081,7 +1092,7 @@ class Download
             }
 
             if(isset($data[0]['projectScore'])) {
-                $a = 'L';
+                $a = 'N';
                 foreach ($projectArr as $titleV) {
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.'2', $titleV['post_title'].'得分');
                     $objPHPExcel->getActiveSheet()->getStyle($a.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
@@ -1091,25 +1102,26 @@ class Download
 
             $k = 0;
             foreach ($data as $raV){
-                $mobile = $raV['telephone'] ? $raV['telephone'] : $raV['user_mobile'];
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['userID']);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['real_name']);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['sex']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['age']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['ageGroup']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['address']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$mobile);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['user_email']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['created_time']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['ranking']);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['my_score']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['user_nationality']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['card']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$raV['age']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$raV['ageGroup']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$raV['address']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$raV['user_mobile']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$raV['team_name']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$raV['created_time']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),' '.$raV['ranking']);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.($k+3),' '.$raV['my_score']);
 
-                for ($b = 'A'; $b <= 'K'; ++$b){
+                for ($b = 'A'; $b <= 'M'; ++$b){
                     $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
                 }
 
                 if(isset($data[0]['projectScore'])) {
-                    $a = 'L';
+                    $a = 'N';
                     foreach ($raV['projectScore'] as $ravV) {
                         $objPHPExcel->setActiveSheetIndex(0)->setCellValue($a.($k+3),' '.$ravV);
                         $objPHPExcel->getActiveSheet()->getStyle($a.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
@@ -1170,14 +1182,22 @@ class Download
         $ranking = 1;
         foreach ($result as $k => $val){
 //            $result[$k]['projectScore'] = [$result[$k]['my_score']];//与总排名数据格式一致
-            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday') ";
+            $sql1 = " select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_address','user_ID','user_real_name','user_age','user_gender','user_birthday','user_nationality') ";
             $info = $wpdb->get_results($sql1,ARRAY_A);
 
             if(!empty($info)){
+                //战队
+                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$val['user_id']} AND mt.status=2");
+                $result[$k]['team_name'] = $team_name;
+
                 $user_info = array_column($info,'meta_value','meta_key');
                 $user_real_name = !empty($user_info['user_real_name']) ? unserialize($user_info['user_real_name']) : '';
-
                 $result[$k]['real_name'] = !empty($user_real_name['real_name']) ? $user_real_name['real_name'] : '-';
+                $result[$k]['card'] = !empty($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '-';
+                $result[$k]['real_type'] = !empty($user_real_name['real_type']) ? $user_real_name['real_type'] : '-';
+                $result[$k]['user_nationality'] = isset($user_info['user_nationality']) ? $user_info['user_nationality'] : '';
+
                 if(!empty($user_info['user_age'])){
                     $age = $user_info['user_age'];
                     $group = getAgeGroupNameByAge($age);
@@ -1223,7 +1243,6 @@ class Download
      */
     public function getAllRankingData($match,$projectArr,$op5){
         global $wpdb;
-
         if($op5 == 1){
             //个人排名
             //先查询所有成员
@@ -1264,18 +1283,25 @@ class Download
                     $trv['surplus_time'] += $scoreArr == [] ? 0 : max($surplus_timeArr);//每个项目最大剩余时间和
                     $trv['created_microtime'] += $created_microtimeArrr == [] ? 0 : max($created_microtimeArrr);//每个项目提交毫秒时间和
                 }
+                //战队
+                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$trv['user_id']} AND mt.status=2");
+                $trv['team_name'] = $team_name;
 
                 $usermeta = get_user_meta($trv['user_id'], '', true);
                 $user_real_name = unserialize($usermeta['user_real_name'][0]);
                 $age = $user_real_name['real_age'];
-                $user_real_name = $user_real_name['real_name'];
+                $real_name = $user_real_name['real_name'];
                 $trv['age'] = $age;
                 $trv['ageGroup'] = getAgeGroupNameByAge($age);
                 $trv['userID'] = $usermeta['user_ID'][0];
-                $trv['real_name'] = $user_real_name;
+                $trv['real_name'] = $real_name;
                 $trv['sex'] = $usermeta['user_gender'][0];
                 $trv['birthday'] = isset($usermeta['user_birthday']) ? $usermeta['user_birthday'][0] : '-';
                 $trv['address'] = unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city'];
+                $trv['user_nationality'] = isset($usermeta['user_nationality']) ? $usermeta['user_nationality'][0] : '';
+                $trv['card'] = isset($user_real_name['real_ID']) ? $user_real_name['real_ID'] : '';
+                $trv['real_type'] = isset($user_real_name['real_type']) ? $user_real_name['real_type'] : '';
             }
 
         }else{
@@ -1304,17 +1330,26 @@ class Download
             $totalRanking = [];
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
+
+
                 $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
-                          (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,MAX(created_microtime) AS created_microtime FROM `{$wpdb->prefix}match_questions` AS mq 
-                          LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
-                          WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
-                          GROUP BY mq.project_id,mq.user_id) AS child  
-                          ORDER BY my_score DESC limit 0,5
-                       ";
-                $row = $wpdb->get_row($sql,ARRAY_A);
-                $tuV2['my_score'] = $row['my_score'] > 0 ? $row['my_score'] : 0;
-                $tuV2['surplus_time'] = $row['surplus_time'] > 0 ? $row['surplus_time'] : 0;
-                $tuV2['created_microtime'] = $row['created_microtime'] > 0 ? $row['created_microtime'] : 0;
+                  (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
+                  LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
+                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                  GROUP BY mq.project_id,mq.user_id) AS child  
+                  GROUP BY user_id 
+                  ORDER BY my_score DESC limit 0,5
+               ";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                // leo_dump($wpdb->last_query);
+                $tuV2['my_score'] = 0;
+                $tuV2['surplus_time'] = 0;
+                $tuV2['created_microtime'] = 0;
+                foreach ($rows as $key => $value) {
+                    $tuV2['my_score'] += $value['my_score'];
+                    $tuV2['surplus_time'] += $value['surplus_time'];
+                    $tuV2['created_microtime'] += $value['created_microtime'];
+                }
                 $totalRanking[] = $tuV2;
             }
         }
