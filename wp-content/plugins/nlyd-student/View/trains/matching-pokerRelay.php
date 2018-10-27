@@ -91,7 +91,7 @@ jQuery(function($) {
         var end_time=leavePage['end_time'];
         $('.count_down').attr('data-seconds',$.GetSecond(end_time))
     }else{//未获取到比赛题目
-        $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
+        $.alerts('<?=__('触发防作弊系统', 'nlyd-student')?>')
         window.location.href = '<?=home_url("/trains/initial/type/pkjl/genre_id/")?>'+$.Request('genre_id')+'/match_more/'+$.Request('match_more');
     }
     $('.count_down').countdown(function(S, d){//倒计时

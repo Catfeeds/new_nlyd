@@ -73,7 +73,7 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     }else{//未获取到比赛题目
-        $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
+        $.alerts('<?=__('触发防作弊系统', 'nlyd-student')?>')
         window.location.href = '<?=home_url("/trains/initial/type/szzb/genre_id/")?>'+$.Request('genre_id')+'/match_more/'+$.Request('match_more');
     }
     $('.count_down').countdown(function(S, d){//倒计时
