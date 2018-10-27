@@ -71,23 +71,7 @@
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('matching_question');//准备页面题目参数
         <?php if($match_status == 2 || $count_down <= 120): ?>
-         history.pushState(null, null, document.URL);
-         window.addEventListener('popstate', function () {
-             history.pushState(null, null, document.URL);
-         });
-        $(window).on("blur",function(){
-            var sessionData={
-                match_id:$.Request('match_id')
-            }
-            $.SetSession('leavePageWaitting',sessionData)
-        })
-        $(window).on("focus", function(e) {
-            var leavePageWaitting= $.GetSession('leavePageWaitting','1');
-            if(leavePageWaitting && leavePageWaitting['match_id']===$.Request('match_id')){
-                $.DelSession('leavePageWaitting')
-                window.location.reload()
-            }
-        });
+        matchWaitting()
         <?php endif;?>
         if($('.count_down').attr('data-seconds')<=0){
             $.DelSession('leavePageWaitting')
