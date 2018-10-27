@@ -92,6 +92,7 @@ jQuery(function($) {
         $('.count_down').attr('data-seconds',$.GetSecond(end_time))
     }else{//未获取到比赛题目
         $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
+        window.location.href = '<?=home_url("/trains/initial/type/pkjl/genre_id/")?>'+$.Request('genre_id')+'/match_more/'+$.Request('match_more');
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';

@@ -74,7 +74,9 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     }else{//未获取到比赛题目
+
         $.alerts('未检测到题目信息')
+        window.location.href = '<?=home_url("/matchs/initialMatch/project_alias/szzb/match_id/")?>'+_match_id+'/project_more_id/'+$.Request('project_more_id');
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
