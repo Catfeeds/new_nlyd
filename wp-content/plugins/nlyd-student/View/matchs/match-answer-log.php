@@ -36,6 +36,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                         success: function (res, ajaxStatu, xhr) {
                             console.log(res)
                             if(res.success){
+                                $.DelSession('match_data')
                                 if(res.data.url){
                                     window.location.href=res.data.url
                                 }
@@ -46,6 +47,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                         complete:function (XMLHttpRequest, textStatus) {
                             if(textStatus=='timeout'){
                                 $.alerts("网络延迟")
+                                $.DelSession('match_data')
                                 window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
                             }
                         }
