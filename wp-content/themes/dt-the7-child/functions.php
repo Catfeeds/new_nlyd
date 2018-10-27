@@ -893,6 +893,12 @@ if(is_admin()){
         $columns = [];
         $columns['username'] = '用户名';
         $columns['real_name'] = '姓名';
+        $columns['user_ID'] = 'ID';
+        $columns['card_num'] = '证件号码';
+        $columns['nationality'] = '国籍';
+        $columns['sex'] = '性别';
+        $columns['age'] = '年龄';
+        $columns['team'] = '战队';
         $columns['mobile'] = '手机';
         $columns['email'] = '邮箱';
         $columns['role'] = '角色';
@@ -905,13 +911,41 @@ if(is_admin()){
         global $wpdb;
         switch ($column_name){
             case 'real_name':
-                $real_name = isset(get_user_meta($user_id, 'user_real_name')[0]) ? get_user_meta($user_id, 'user_real_name')[0]['real_name'] : '-';
+                $user_real_name = get_user_meta($user_id, 'user_real_name', true);
+                $real_name = !empty($user_real_name) ? $user_real_name['real_name'] : '';
                 return $real_name;
                 break;
             case 'mobile':
                 $row = $wpdb->get_row('SELECT user_mobile FROM '.$wpdb->users.' WHERE ID='.$user_id);
                 $mobile = $row->user_mobile ? $row->user_mobile : '-';
                 return $mobile;
+                break;
+            case 'user_ID':
+                $user_ID = get_user_meta($user_id, 'user_ID',true);
+                return $user_ID;
+                break;
+            case 'card_num':
+                $user_real_name = get_user_meta($user_id, 'user_real_name', true);
+                $real_ID = !empty($user_real_name) ? $user_real_name['real_ID'] : '';
+                return $real_ID;
+                break;
+            case 'nationality':
+                $nationality = get_user_meta($user_id, 'user_nationality', true);
+                return $nationality;
+                break;
+            case 'sex':
+                $nationality = get_user_meta($user_id, 'user_gender', true);
+                return $nationality;
+                break;
+            case 'age':
+                $user_real_name = get_user_meta($user_id, 'user_real_name', true);
+                $age = !empty($user_real_name) ? $user_real_name['real_age'] : '';
+                return $age;
+                break;
+            case 'team':
+                $team_name = $wpdb->get_var("SELECT p.post_title FROM {$wpdb->prefix}match_team AS mt 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=mt.team_id WHERE mt.user_id={$user_id} AND mt.status=2");
+                return $team_name;
                 break;
         }
         return $value;
