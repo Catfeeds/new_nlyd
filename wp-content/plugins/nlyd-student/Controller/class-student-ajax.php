@@ -3516,7 +3516,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         //查询列表
-        $result = $wpdb->get_results("SELECT id,userID,is_send,real_name FROM {$wpdb->prefix}match_bonus AS mb 
+        $result = $wpdb->get_results("SELECT id,userID,is_send,real_name,is_user_view FROM {$wpdb->prefix}match_bonus AS mb 
                   WHERE match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
         if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student'),'is_admin'=>$is_admin,'is_data'=>'false','is_user_view'=>'false']);
         $start+=1;
