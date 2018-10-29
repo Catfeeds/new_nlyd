@@ -984,7 +984,9 @@ if(is_admin()){
     function extra_user_profile_fields( $user ) {
         $user_real_name = get_user_meta($user->ID, 'user_real_name', true);
         $user_address = get_user_meta($user->ID, 'user_address', true);
-//        leo_dump($user_address);
+//        leo_dump(get_user_meta($user->ID));
+        $str = file_get_contents(leo_student_path."conf/nationality_array.json");
+        $nationalityArr = json_decode($str, true);
         ?>
         <h3><?='额外信息'?></h3>
 
@@ -1014,7 +1016,10 @@ if(is_admin()){
                 <th><label for="nationality"><?php _e("国籍"); ?></label></th>
                 <td>
                     <select name="nationality" id="nationality">
-                        <option value="<?php echo esc_attr( get_the_author_meta( 'user_nationality_pic', $user->ID ) ); ?>"><?php echo esc_attr( get_the_author_meta( 'user_nationality', $user->ID ) ); ?></option>
+                        <?php foreach ($nationalityArr as $nav){ ?>
+
+                        <option <?php if(esc_attr( get_the_author_meta( 'user_nationality_pic', $user->ID ) ) == $nav['id']){ echo 'selected="selected"'; } ?> value="<?=$nav['id'].','.$nav['short'].','.$nav['value']?>"><?=$nav['value']?></option>
+                        <?php } ?>
                     </select>
                 </td>
             </tr>
@@ -1045,8 +1050,12 @@ if(is_admin()){
         $user_real_name = get_user_meta($user_id, 'user_real_name', true);
         $user_real_name['real_name'] = $_POST['real_name'];
         $user_real_name['real_age'] = $_POST['age'];
+        $nationalityArr = explode(',', $_POST['nationality']);
         update_user_meta( $user_id, 'user_real_name', $user_real_name );
         update_user_meta( $user_id, 'user_gender', $_POST['sex'] );
+        update_user_meta( $user_id,'user_nationality',$nationalityArr[2]);
+        update_user_meta( $user_id,'user_nationality_pic',$nationalityArr[0]);
+        update_user_meta( $user_id,'user_nationality_short',$nationalityArr[1]);
     }
 
 
