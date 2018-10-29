@@ -14,11 +14,17 @@
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-margin flow-default" id="flow-list">
-                    <?php if(!empty($rows)){ ?>
-                    <a class="message-row active_bg read" href="http://127.0.0.1/nlyd/account/messageDetail/messages_id/1">
-                        <div class="message-title"><span class="accept-name">测试1</span><span class="message-time">2018-07-12 11:22:57</span></div>
-                        <p class="message-detail">测试内容1</p>
+                    <?php if(!empty($lists)){
+                        foreach ($lists as $v){
+                    ?>
+                    <a class="message-row active_bg read" href="<?=home_url('supervisor/index/id/'.$v['id'])?>">
+                        <div class="message-title">
+                            <span class="accept-name"><?=$v['match_title']?></span>
+                            <span class="message-time"><?=$v['created_time']?></span>
+                        </div>
+                        <p class="message-detail"><?=$v['project_title']?></p>
                     </a>
+                    <?php } ?>
                     <?php }else{?>
                         <div class="no-info-page">
                             <div class="no-info-img">

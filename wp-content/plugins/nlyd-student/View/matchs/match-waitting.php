@@ -11,7 +11,7 @@
                         <div class="match_tips">
                             <?php $hint = !empty($current_project) ? '正在' : '即将';?>
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>:</span><?=$project_title?><?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__($project_title,'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
                             </p>
                         </div>
 

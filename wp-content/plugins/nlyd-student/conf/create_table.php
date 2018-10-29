@@ -112,6 +112,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
             `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
             `user_id` int(20) NOT NULL,
+            `type` tinyint(2) DEFAULT NULL COMMENT '题库类型 1 比赛题库 2 训练题库',
             `post_id` text COMMENT '已使用的文章id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";

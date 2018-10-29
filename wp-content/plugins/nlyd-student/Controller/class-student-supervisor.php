@@ -32,9 +32,25 @@ class Student_Supervisor extends Student_Home
      * 首页
      */
     public function index(){
+        $data = array();
+        if(isset($_GET['id'])){
+            global $wpdb,$current_user;
+            $sql = "select id,student_name,seat_number,evidence,`describe` from {$wpdb->prefix}prison_match_log where id={$_GET['id']} and supervisor_id = {$current_user->ID} ";
+            //print_r($sql);
+            $row = $wpdb->get_row($sql,ARRAY_A);
+
+            if(!empty($row)){
+                if(!empty($row['evidence'])){
+                    $row['evidence'] = json_decode($row['evidence'],true);
+                }
+                //print_r($row);
+                $data['list'] = $row;
+            }
+
+        }
 
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,$data);
 
     }
 
@@ -44,11 +60,15 @@ class Student_Supervisor extends Student_Home
     public function logs(){
 
         global $wpdb,$current_user;
-        $sql = "select * from {$wpdb->prefix}prison_match_log where supervisor_id = {$current_user->ID}";
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-print_r($rows);
+        $sql = "select a.id,a.created_time,a.student_name,b.post_title match_title,c.post_title project_title
+                from {$wpdb->prefix}prison_match_log a
+                 left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                 left join {$wpdb->prefix}posts c on a.project_id = c.ID
+                 where supervisor_id = {$current_user->ID}";
+        $data['lists'] = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
         $view = student_view_path.CONTROLLER.'/logs.php';
-        load_view_template($view,$rows);
+        load_view_template($view,$data);
     }
 
     /**
@@ -59,5 +79,13 @@ print_r($rows);
 
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
+
+        if(ACTION == 'logs'){
+            wp_register_script( 'student-messagesList',student_js_url.'account/messagesList.js',array('jquery'), leo_student_version ,true );
+            wp_enqueue_script( 'student-messagesList' );
+            wp_register_style( 'my-student-messagesList', student_css_url.'messagesList.css',array('my-student') );
+            wp_enqueue_style( 'my-student-messagesList' );
+        }
+
     }
 }

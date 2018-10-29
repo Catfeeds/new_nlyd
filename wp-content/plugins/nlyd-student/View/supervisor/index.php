@@ -20,11 +20,11 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
-                            <input type="text" name="student_name" value=""  class="nl-input nl-foucs">
+                            <input type="text" name="student_name" value="<?=$list['student_name']?>"  class="nl-input nl-foucs">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手座位号', 'nlyd-student')?></div></div>
-                            <input type="text" name="seat_number" value="" lay-verify="required"  class="nl-input nl-foucs">
+                            <input type="text" name="seat_number" value="<?=$list['seat_number']?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
                         <!--<div class="form-input-row">
                             <div class="form-input-label"><div><?/*=__('比赛项目/场次', 'nlyd-student')*/?></div></div>
@@ -33,6 +33,19 @@
                                
                         <div class="layui-bg-white img-zoos img-zoos1">
                             <p class="tps"><?=__('拍照佐证（点击拍照或上传）', 'nlyd-student')?></p>
+                            <?php if(!empty($list['evidence'])){
+                                foreach ($list['evidence'] as $val){
+                                    ?>
+                                    <div class="post-img no-dash">
+                                        <div class="img-zoo img-box">
+                                            <img src="<?=$val?>"/>
+                                        </div>
+                                        <input type="hidden" name="evidence[]" value="<?=$val?>" />
+                                        <div class="del">
+                                            <i class="iconfont">&#xe633;</i>
+                                        </div>
+                                    </div>
+                                <?php } }?>
                             <div class="post-img dash">
                                 <div class="add-zoo" data-file="img-zoos1">
                                     <div class="transverse"></div>
@@ -42,10 +55,11 @@
                         </div>        
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('备注说明', 'nlyd-student')?></div></div>
-                            <input type="text" name="describe" value=""  class="nl-input nl-foucs">
+                            <input type="text" name="describe" value="<?=$list['describe']?>"  class="nl-input nl-foucs">
                         </div>       
-                        <a class="a-btn a-btn-table" lay-filter="sub" lay-submit=""><div><?=__('提交记录', 'nlyd-student')?></div></a>
+                        <a class="a-btn a-btn-table" lay-filter="sub" lay-submit=""><div><?=__('提交', 'nlyd-student')?></div></a>
                     </div>
+                    <input type="hidden" name="id" value="<?=$list['id']?>">
                 </form>
             </div>
         </div>           
@@ -162,6 +176,7 @@ jQuery(document).ready(function($) {
                 fd.append('seat_number',data.field.seat_number);
                 fd.append('describe',data.field.describe);
                 fd.append('action','upload_match_evidence');
+                fd.append('id',data.field.id);
                 // $.each(imgs, function (i, v) {
                 //     fd.append('images[]',v);
                 // })

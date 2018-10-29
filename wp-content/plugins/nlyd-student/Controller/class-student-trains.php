@@ -140,7 +140,7 @@ class Student_Trains extends Student_Home
                 //print_r($posts_arr);
 
                 //获取已训练文章
-                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type != 1";
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
 
