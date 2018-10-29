@@ -982,7 +982,8 @@ if(is_admin()){
     add_action( 'add_user_profile', 'extra_user_profile_fields' );
 
     function extra_user_profile_fields( $user ) {
-
+        $user_real_name = get_user_meta($user->ID, 'user_real_name', true);
+//        leo_dump(get_user_meta($user->ID));
         ?>
         <h3><?='额外信息'?></h3>
 
@@ -990,21 +991,21 @@ if(is_admin()){
             <tr>
                 <th><label for="real_name"><?php _e('真实姓名'); ?></label></th>
                 <td>
-                    <input type="text" name="real_name" id="real_name" value="<?php echo esc_attr( get_the_author_meta( 'user_real_name', $user->ID )['real_name'] ); ?>" class="regular-text" /><br />
+                    <input type="text" name="real_name" id="real_name" value="<?php echo $user_real_name['real_name'] ; ?>" class="regular-text" /><br />
 
                 </td>
             </tr>
             <tr>
                 <th><label for="sex"><?php _e("性别"); ?></label></th>
                 <td>
-                    <input type="radio" name="sex" value="男" class="regular-text" />男
-                    <input type="radio" name="sex" value="女" class="regular-text" />女<br />
+                    <input type="radio" <?php echo esc_attr( get_the_author_meta( 'user_gender', $user->ID ) ) == '男' ? 'checked="checked"' : '' ?> name="sex" value="男" class="regular-text" />男
+                    <input type="radio" <?php echo esc_attr( get_the_author_meta( 'user_gender', $user->ID ) ) == '女' ? 'checked="checked"' : '' ?> name="sex" value="女" class="regular-text" />女<br />
                 </td>
             </tr>
             <tr>
                 <th><label for="age"><?php _e("年龄"); ?></label></th>
                 <td>
-                    <input type="text" name="age" id="age" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+                    <input type="text" name="age" id="age" value="<?php echo $user_real_name['real_age'] ?>" class="regular-text" /><br />
 
                 </td>
             </tr>
@@ -1012,6 +1013,13 @@ if(is_admin()){
                 <th><label for="nationality"><?php _e("国籍"); ?></label></th>
                 <td>
                     <input type="text" name="nationality" id="nationality" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+
+                </td>
+            </tr>
+            <tr>
+                <th><label for="area"><?php _e("所在地区"); ?></label></th>
+                <td>
+                    <input type="text" name="area" id="area" value="<?php echo esc_attr( get_the_author_meta( 'area', $user->ID ) ); ?>" class="regular-text" /><br />
 
                 </td>
             </tr>
@@ -1025,9 +1033,11 @@ if(is_admin()){
     function save_extra_user_profile_fields( $user_id ) {
 
         if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
-
-        update_user_meta( $user_id, 'facebook', $_POST['facebook'] );
-        update_user_meta( $user_id, 'twitter', $_POST['twitter'] );
+        $user_real_name = get_user_meta($user_id, 'user_real_name', true);
+        $user_real_name['real_name'] = $_POST['real_name'];
+        $user_real_name['real_age'] = $_POST['age'];
+        update_user_meta( $user_id, 'user_real_name', $user_real_name );
+        update_user_meta( $user_id, 'user_gender', $_POST['sex'] );
     }
 
 

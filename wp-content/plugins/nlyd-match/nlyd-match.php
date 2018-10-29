@@ -155,10 +155,10 @@ if(!class_exists('MatchController')){
                 ?>
                 <script type="text/javascript">
                     jQuery(document).ready(function($) {
-                        var _html = ' | <li class="enroll"><a href="edit.php?post_status=enroll&post_type=match&match_status=1">报名中<span class="count">（<?=$enrollNum?>） </span></a></li>'+
+                        var _html = '<span id="li_sp"></span><li class="enroll"><a href="edit.php?post_status=enroll&post_type=match&match_status=1">报名中<span class="count">（<?=$enrollNum?>） </span></a></li>'+
                                     ' | <li class="wait"><a href="edit.php?post_status=wait&post_type=match&match_status=-2">等待开赛<span class="count"> （<?=$waitNum?>）</span></a></li>'+
                                     ' | <li class="conduct"><a href="edit.php?post_status=conduct&post_type=match&match_status=2">比赛中<span class="count"> （<?=$conductNum?>）</span></a></li>'+
-                                    ' | <li class="end"><a href="edit.php?post_status=end&post_type=match&match_status=-3">已结束<span class="count"> （<?=$endNum?>）</span></a></li>';
+                                    ' | <li class="end"><a href="edit.php?post_status=end&post_type=match&match_status=-3">已结束<span class="count"> （<?=$endNum?>）</span></a></li><span id="la_li_sp"></span>';
                         $('.wrap').find('.subsubsub').append(_html);
 
                         var match_status = '<?=$match_status?>';
@@ -173,6 +173,15 @@ if(!class_exists('MatchController')){
                                 $('.end').find('a').addClass('current');
                             }
                         }
+                        if($('.trash').length  > 0){
+                            var trash = $('.trash').clone(true);
+                            $('.trash').remove();
+                            $('.wrap').find('.subsubsub').append(trash);
+                            $('#la_li_sp').text(' | ');
+                        }else{
+                            $('#li_sp').text(' | ');
+                        }
+
                     })
 
                 </script>
