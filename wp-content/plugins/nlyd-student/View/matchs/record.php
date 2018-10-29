@@ -134,9 +134,9 @@
                                 </div>
                             </div>
                             <div class="power">
-                                <div class="power-btn c_orange active" data-id="0"><?=__('生成明细表', 'nlyd-student')?></div>
-                                <div class="power-btn c_orange" data-id="1"><?=__('允许选手查看', 'nlyd-student')?></div>
-                                <div class="power-btn c_orange" data-id="2"><?=__('下载表格', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-id="0" id="detail"><?=__('生成明细表', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-id="1" id="look"><?=__('允许选手查看', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-id="2" id="download"><?=__('下载表格', 'nlyd-student')?></div>
                             </div>
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
@@ -395,6 +395,16 @@ jQuery(function($) {
                                             lis.push(dom)                           
                                         })
                                     }else if(arg['rank_type']=="money"){//奖金
+                                        console.log(res)
+                                        //奖金列表有数据
+                                        // if(){//是管理员
+                                        //    $('.power').addClass('active');  //显示选手查看，下载表格 
+                                        //    $('#detail').removeClass('active')   
+                                        //    $('#look').addClass('active');
+                                        //    $('#download').addClass('active');
+                                        // }else{
+                                        //     $('.power').removeClass('active');
+                                        // }
                                         $.each(res.data.info,function(index,value){
                                             var _type="";
                                             var c_green="c_green";
@@ -422,8 +432,19 @@ jQuery(function($) {
                                     }else{
                                         next(lis.join(''),true)
                                     }
-                                }else{
+                                }else{//false
+                                    console.log(res)
                                     next(lis.join(''),false)
+                                    if(arg['rank_type']=="money"){//奖金明细无数据
+                                        // if(){//是管理员
+                                        //     $('.power').addClass('active');//显示生成明细列表
+                                        //     $('#detail').addClass('active')  
+                                        //     $('#look').removeClass('active');
+                                        //     $('#download').removeClass('active');
+                                        // }else{
+                                        //     $('.power').removeClass('active');
+                                        // }     
+                                    }
                                 }
                             },
                             complete:function(XMLHttpRequest, textStatus){
@@ -471,20 +492,14 @@ jQuery(function($) {
                 }
             }
         })
-        $('.power-btn').click(function(){//奖金明细权限操作
-            var _this=$(this);
-            var post_id=_this.attr('post-id');
-            if(!_this.hasClass('active')){
-                $('.power-btn.active').removeClass('active')
-                _this.addClass('active')
-            }
-            if(post_id==0){//生成明细表
+        $('body').on('click','#detail','click',function(){//生成明细表
 
-            }else if(post_id==1){//允许选手查看
+        })
+        $('body').on('click','#look','click',function(){//允许选手查看
 
-            }else if(post_id==2){//下载表格
+        })
+        $('body').on('click','#download','click',function(){//下载表格
 
-            }
         })
         $('.show-type').click(function(){//下拉
             var _this=$(this);
