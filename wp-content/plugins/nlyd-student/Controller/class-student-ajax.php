@@ -3497,18 +3497,18 @@ class Student_Ajax
      */
     public function matchBonusLists(){
         $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
-        if($match_id < 1) wp_send_json_error(['info' => __('参数错误', 'nlyd-student'),'is_admin'=>'false','is_data'=>'false']);
+        if($match_id < 1) wp_send_json_error(['info' => __('参数错误', 'nlyd-student'),'is_admin'=>'false','is_data'=>'false','is_user_view'=>'false']);
         //是否是管理员
         global $wpdb,$current_user;
         $is_admin = in_array('administrator', $current_user->roles) ? 'true' : 'false';
 
         //断比赛是否结束
         $match = $wpdb->get_row('SELECT match_status FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id, ARRAY_A);
-        if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student'),'is_admin'=>$is_admin,'is_data'=>'false']);
+        if(!$match || $match['match_status'] != -3) wp_send_json_error(['info' => __('当前比赛未结束', 'nlyd-student'),'is_admin'=>$is_admin,'is_data'=>'false','is_user_view'=>'false']);
 
         if($is_admin == 'false'){
             $is_user_view = $wpdb->get_var("SELECT is_user_view FROM {$wpdb->prefix}match_bonus WHERE match_id={$match_id}");
-            $is_user_view == 2 && wp_send_json_error(['info' => __('后台奖金核实中', 'nlyd-student')]);
+            $is_user_view == 2 && wp_send_json_error(['info' => __('后台奖金核实中', 'nlyd-student'),'is_admin'=>$is_admin,'is_user_view'=>'false','is_data'=>'false']);
         }
 
         $page = isset($_POST['page']) ? intval($_POST['page']) : 0;
@@ -3518,15 +3518,16 @@ class Student_Ajax
         //查询列表
         $result = $wpdb->get_results("SELECT id,userID,is_send,real_name FROM {$wpdb->prefix}match_bonus AS mb 
                   WHERE match_id={$match_id} ORDER BY all_bonus DESC LIMIT {$start},{$pageSize}", ARRAY_A);
-        if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student'),'is_admin'=>$is_admin,'is_data'=>'false']);
+        if(!$result) wp_send_json_error(['info' => __('无数据', 'nlyd-student'),'is_admin'=>$is_admin,'is_data'=>'false','is_user_view'=>'false']);
         $start+=1;
         foreach ($result as $k => &$res){
             $res['is_send'] = $res['is_send'] == 2 ? $res['is_send'] = 'y' : 'n';
             $res['num'] = $start;
             $res['url'] = home_url('matchs/bonusDetail/id/'.$res['id']);
             ++$start;
+            $is_user_view = $res['is_user_view'] == 1 ? 'true' : 'false';
         }
-        wp_send_json_success(['info' => $result,'is_admin'=>$is_admin,'is_data'=>'true']);
+        wp_send_json_success(['info' => $result,'is_admin'=>$is_admin,'is_data'=>'true','is_user_view'=>$is_user_view]);
     }
 
     /**
