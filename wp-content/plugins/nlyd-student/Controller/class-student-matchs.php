@@ -736,7 +736,9 @@ class Student_Matchs extends Student_Home
                             break;
                         case 'wzsd':
                             //print_r($_POST);die;
-                            if(empty($match_data['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                            if(empty($match_data['post_id'])){
+                                $this->get_404('文章id不存在');
+                            }
                             //print_r($_POST);die;
                             $questions_answer = $match_data['questions_answer'];
                             $len = count($questions_answer);
@@ -787,6 +789,20 @@ class Student_Matchs extends Student_Home
                     $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
                     if($result){
                         $_GET['log_id'] = $wpdb->insert_id;
+
+                        if(!empty($match_data['post_id']) && $match_data['project_alias'] == 'wzsd'){
+
+                            $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                            $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                            if($use_id){
+                                $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$match_data['post_id']},CONCAT_WS(',',post_id,{$match_data['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                                $a = $wpdb->query($sql2);
+                            }else{
+
+                                $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$match_data['post_id'],'type'=>1));
+                            }
+
+                        }
                     }
                 }else{
                     $_GET['log_id'] = $row['id'];
