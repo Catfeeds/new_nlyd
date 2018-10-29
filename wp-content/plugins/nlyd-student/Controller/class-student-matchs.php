@@ -383,35 +383,56 @@ class Student_Matchs extends Student_Home
 
         if($this->project_alias == 'wzsd'){
 
-            //判断语言
-            $language = get_user_meta($current_user->ID,'locale')[0];
-            $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
-            //获取文章速读考题
-            $posts = get_posts(array(
-                    'numberposts' => 1, //输出的文章数量
-                    'post_type' => 'question',  //自定义文章类型名称
-                    'orderby'=>'post_date', //post_date rand
-                    'tax_query'=>array(
-                        array(
-                            'taxonomy'=>'question_genre', //自定义分类法名称
-                            'field'  =>  'slug',
-                            'terms'=>$locale.'-match-question' //id为64的分类。也可是多个分类array(12,64)
-                        )
-                    ),
-                )
-            );
-            $question = $posts[0];
-            //print_r($question);die;
-            if(empty($question)){
-                $error_data = array(
-                    'status'=>-1,
-                    'message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),
-                    'match_url'=>home_url('matchs/matchWaitting/match_id/'.$this->match_id.'/wait/1/'),
-                );
-                $this->get_404($error_data);
-                return;
+            if(isset($_SESSION['match_post_id'])){
+
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                //获取文章速读考题
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        where a.slug = '{$locale}-match-question' ";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                //print_r($sql);
+                if(empty($rows[0]['term_taxonomy_id'])){
+                    $this->get_404(__('暂无比赛题目,联系管理员录题', 'nlyd-student'));
+                    return;
+                }
+
+                $posts_arr = array_column($rows,'object_id');
+                //print_r($posts_arr);
+
+                //获取已比赛文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+
+                if(!empty($post_str)){
+                    $post_arr = str2arr($post_str,',');
+                    //print_r($posts_arr);
+
+                    $result = array_diff($posts_arr,$post_arr);
+                    if(empty($result)){
+                        $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student')));
+                        return;
+                    }
+                    //print_r($result);
+
+                }else{
+                    $result = $posts_arr;
+                }
+                //print_r($result);
+                $post_id = $result[array_rand($result)];
+
+                $_SESSION['match_post_id'] = $post_id;
+            }else{
+                $post_id = $_SESSION['match_post_id'];
             }
-            $post_id = $question->ID;
+
+
+            //获取文章
+            $question = get_post($post_id );
+
             //获取比赛题目
             $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
                         from {$wpdb->prefix}posts a 
@@ -423,7 +444,6 @@ class Student_Matchs extends Student_Home
             $questions_answer = array();
             $match_questions = array();
             if(!empty($rows)){
-                $answer_total = 1;  //默认答案个数
                 foreach ($rows as $k => $val){
                     //$val['problem_answer'] = 1;
                     $key = &$val['ID'];
@@ -510,6 +530,8 @@ class Student_Matchs extends Student_Home
      * 比赛项目记忆完成答题页
      */
     public function answerMatch(){
+
+        unset($_SESSION['match_post_id']);
 
         if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
@@ -724,7 +746,9 @@ class Student_Matchs extends Student_Home
                             break;
                         case 'wzsd':
                             //print_r($_POST);die;
-                            if(empty($match_data['post_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+                            if(empty($match_data['post_id'])){
+                                $this->get_404('文章id不存在');
+                            }
                             //print_r($_POST);die;
                             $questions_answer = $match_data['questions_answer'];
                             $len = count($questions_answer);
@@ -775,6 +799,20 @@ class Student_Matchs extends Student_Home
                     $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
                     if($result){
                         $_GET['log_id'] = $wpdb->insert_id;
+
+                        if(!empty($match_data['post_id']) && $match_data['project_alias'] == 'wzsd'){
+
+                            $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                            $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                            if($use_id){
+                                $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$match_data['post_id']},CONCAT_WS(',',post_id,{$match_data['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                                $a = $wpdb->query($sql2);
+                            }else{
+
+                                $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$match_data['post_id'],'type'=>1));
+                            }
+
+                        }
                     }
                 }else{
                     $_GET['log_id'] = $row['id'];

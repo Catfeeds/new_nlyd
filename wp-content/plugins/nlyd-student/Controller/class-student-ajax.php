@@ -272,6 +272,8 @@ class Student_Ajax
 
         unset($_SESSION['count_down']);
 
+        unset($_SESSION['match_post_id']);
+
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
 
         $_SESSION['match_data'] = $_POST;
@@ -399,7 +401,6 @@ class Student_Ajax
 
          /*print_r($insert);
          die;*/
-
         $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
 
         if($result){
@@ -407,7 +408,7 @@ class Student_Ajax
 
             if(!empty($_POST['post_id']) && $_POST['project_alias'] == 'wzsd'){
 
-                //获取该文章原始分类
+                /*//获取该文章原始分类
                 $sql = " select b.slug from {$wpdb->prefix}term_relationships a left join {$wpdb->prefix}terms b on a.term_taxonomy_id = b.term_id where a.object_id = {$_POST['post_id']}";
                 $slug = $wpdb->get_var($sql);
                 if($slug == 'en-match-question'){
@@ -417,7 +418,18 @@ class Student_Ajax
                 }
                 //修改其分类
                 $a = wp_set_object_terms( $_POST['post_id'], array($type) ,'question_genre');
-                //var_dump($a);die;
+                //var_dump($a);die;*/
+
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                    $a = $wpdb->query($sql2);
+                }else{
+
+                    $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>1));
+                }
+
             }
 
             wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$log_id.'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
@@ -3454,13 +3466,13 @@ class Student_Ajax
         }
         if($result){
             if($_POST['project_type'] == 'wzsd'){
-                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID}";
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type != 1";
                 $use_id = $wpdb->get_row($sql1,ARRAY_A);
                 if($use_id){
-                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID}";
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} type = 2";
                     $wpdb->query($sql2);
                 }else{
-                    $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id']));
+                    $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>2));
                 }
             }
             $match_more = isset($_POST['match_more']) ? $_POST['match_more'] : 1;
@@ -3608,62 +3620,76 @@ class Student_Ajax
 
 
         if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
-
-        if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
-
-        //获取当前比赛项目
-        $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-        if(!empty($rows)){
-            $new_time = get_time('mysql');
-            $match = array();
-            foreach ($rows as $val){
-                if($val['start_time'] < $new_time && $new_time < $val['end_time']){
-                    $match = $val;
+        if(isset($_POST['id']) && !empty($_POST['id'])){
+            if(empty($_POST['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+        }else{
+            if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+            //获取当前比赛项目
+            $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+            if(!empty($rows)){
+                $new_time = get_time('mysql');
+                $match = array();
+                foreach ($rows as $val){
+                    if($val['start_time'] < $new_time && $new_time < $val['end_time']){
+                        $match = $val;
+                    }
                 }
             }
+            if(empty($match)) wp_send_json_error(array('info'=>'当前时间段无比赛'));
+            //获取所有报名信息
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$match['match_id']} and pay_status in(2,3,4) order by id desc";
+            $results = $wpdb->get_results($sql,ARRAY_A);
+            $index = $_POST['seat_number']-1;
+            $user_id = $results[$index]['user_id'];
+            if(empty($user_id)) wp_send_json_error(array('info'=>'座位信息错误'));
         }
-        if(empty($match)) wp_send_json_error(array('info'=>'当前时间段无比赛'));
 
-        //获取所有报名信息
-        $sql = "select user_id from {$wpdb->prefix}order where match_id = {$match['match_id']} and pay_status in(2,3,4) order by id desc";
-        $results = $wpdb->get_results($sql,ARRAY_A);
-        $index = $_POST['seat_number']-1;
-        $user_id = $results[$index]['user_id'];
-        if(empty($user_id)) wp_send_json_error(array('info'=>'座位信息错误'));
+
         if(empty($_POST['student_name'])){
             $user_real_name = get_user_meta($user_id,'user_real_name')[0];
             $real_name = $user_real_name['real_name'];
         }else{
             $real_name = $_POST['student_name'];
         }
+        if(isset($_FILES['evidence'])){
+            $upload_dir = wp_upload_dir();
+            $dir = '/evidence/';
 
-        $upload_dir = wp_upload_dir();
-        $dir = '/evidence/';
-        $imagePathArr = [];
-        $num = 0;
-        foreach ($_FILES['evidence']['tmp_name'] as $upd){
-            $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
-            if($file){
-                $imagePathArr[] = $upload_dir['baseurl'].$dir.$file;
-                ++$num;
+            $num = 0;
+            foreach ($_FILES['evidence']['tmp_name'] as $upd){
+                $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+                if($file){
+                    $_POST['evidence'][] = $upload_dir['baseurl'].$dir.$file;
+                    ++$num;
+                }
             }
         }
 
-        $insert = array(
-            'supervisor_id'=>$current_user->ID,
-            'match_id'=>$match['match_id'],
-            'project_id'=>$match['project_id'],
-            'match_more'=>$match['more'],
-            'match_id'=>$match['match_id'],
-            'student_name'=>$real_name,
-            'seat_number'=>$_POST['seat_number'],
-            'evidence'=>!empty($imagePathArr) ? json_encode($imagePathArr) : $imagePathArr,
-            'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
-            'created_time'=>get_time('mysql'),
-        );
-
-        $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+        if(isset($_POST['id']) && !empty($_POST['id'])){
+            $update = array(
+                'supervisor_id'=>$current_user->ID,
+                'student_name'=>$real_name,
+                'seat_number'=>$_POST['seat_number'],
+                'evidence'=>!empty($_POST['evidence']) ? json_encode($_POST['evidence']) : '',
+                'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+            );
+            $result = $wpdb->update($wpdb->prefix.'prison_match_log',$update,array('id'=>$_POST['id'],'supervisor_id'=>$current_user->ID));
+        }else{
+            $insert = array(
+                'supervisor_id'=>$current_user->ID,
+                'match_id'=>$match['match_id'],
+                'project_id'=>$match['project_id'],
+                'match_more'=>$match['more'],
+                'match_id'=>$match['match_id'],
+                'student_name'=>$real_name,
+                'seat_number'=>$_POST['seat_number'],
+                'evidence'=>!empty($_POST['evidence']) ? json_encode($_POST['evidence']) : '',
+                'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+                'created_time'=>get_time('mysql'),
+            );
+            $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+        }
         if($result){
             wp_send_json_success(array('info'=>'上传成功'));
         }else{

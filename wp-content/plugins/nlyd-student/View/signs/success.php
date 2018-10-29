@@ -38,17 +38,8 @@
                         <div class="signs_label"><?=__('性别', 'nlyd-student')?>&<?=__('年龄', 'nlyd-student')?>：</div>
                         <div class="signs_value c_black fs_15"><?=__($user_gender,'nlyd-student')?> <?=$user_birthday?> <?=__($age_type,'nlyd-student')?></div>
                     </div>
-                    <!-- <div class="signs_row fs_16">
-                        <div class="signs_label"><?=__('证件号码', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black"><?=$real_ID?></div>
-                    </div> -->
-                    <!-- <div class="signs_row fs_16">
-                        <div class="signs_label"><?=__('城市信息', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black"><?=$address?></div>
-                    </div> -->
                     <a href="<?=home_url('/matchs');?>" class="a-btn"><div><?=__('去赛事中心', 'nlyd-student')?></div></a>
                 </div>
-
                 <div class="signs_footer">
                     <div class="img-box logo_img">
                         <img src="<?=student_css_url.'image/nlyd-big.png'?>">

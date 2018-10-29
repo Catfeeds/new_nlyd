@@ -57,6 +57,9 @@
     border: 1px solid rgba(191, 190, 190, 1);
     color: rgba(191, 190, 190, 1);
 }
+a.disabled-a:hover{
+    color: rgba(191, 190, 190, 1);
+}
 .subject-title span{
     text-align: center;
 }

@@ -72,8 +72,8 @@ jQuery(function($) {
                 match_more:_match_more,
                 project_alias:'wzsd',
                 post_id:<?=$post_id?>,
-                train_questions:<?=json_encode($match_questions)?>,
-                train_answer:<?=json_encode($questions_answer)?>,
+                match_questions:<?=json_encode($match_questions)?>,
+                questions_answer:<?=json_encode($questions_answer)?>,
                 project_more_id:$.Request('project_more_id'),
 
                 my_answer:my_answer,
