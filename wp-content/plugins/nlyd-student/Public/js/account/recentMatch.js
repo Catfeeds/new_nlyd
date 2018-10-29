@@ -26,6 +26,7 @@ jQuery(function($) {
                 $.ajax({
                     data:postData,
                     success:function(res,ajaxStatu,xhr){ 
+                        console.log(res)
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
