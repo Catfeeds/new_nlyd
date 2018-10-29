@@ -131,6 +131,7 @@ jQuery(function($) {
                                     var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
                                     var sys_second = (end_time-serverTimes)/1000;
                                     var sys_second_text=sys_second>0 ? '' :  "<?=__('报名结束', 'nlyd-student')?>";
+                                    var match_notice_url='';//参赛须知
                                     if(v.user_id!=null){//我报名参加的赛事
                                         isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                     }
@@ -178,6 +179,9 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                     }
+                                    if(v.match_notice_url && v.match_notice_url.length>0){//参赛须知
+                                        match_notice_url='<a class="c_blue" style="margin-left:10px" href="'+v.match_notice_url+'"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                    }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
                                         onBtn="onBtn"
@@ -214,7 +218,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.entry_total+'人</span>'
-                                                                +'<a class="c_blue" style="margin-left:10px" href="https://mp.weixin.qq.com/s/SrtckmXNfnjRDiP-5o9guQ?tdsourcetag=s_pctim_aiomsg"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                                                +match_notice_url
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
