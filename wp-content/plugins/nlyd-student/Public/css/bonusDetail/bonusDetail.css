@@ -6,9 +6,8 @@
       padding: 8px 0;
       font-size:0.12rem;
 }
-.money_row:nth-child(odd){
+div .money_row:first-child{
     background: #F6FAFF;
-  
 }
 .money_right{
     text-indent: 0;
