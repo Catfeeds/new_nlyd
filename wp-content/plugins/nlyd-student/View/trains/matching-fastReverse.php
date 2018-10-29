@@ -193,7 +193,7 @@ jQuery(function($) {
                 },
                 complete: function(XMLHttpRequest, textStatus){
                     if(textStatus=='timeout'){
-                        //$.SetSession('train_data',data);
+                        $.SetSession('train_data',data);
                         var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                         window.location.href=href;
             　　　　}
@@ -218,6 +218,7 @@ jQuery(function($) {
                 var text=day+hour+':'+minute+':'+second;
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
+                $('#next').addClass('disabled')
                 $('.count_down').text('00:00:00').attr('data-seconds',sys_second)
                 clearInterval(timer);
                 var answer_Text=$('.answer div').text();
@@ -501,7 +502,10 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>=0){
+                        _this.removeClass('disabled')
+                    }
+                    
                 }, 300);
             }else{
                 ajaxData[ajaxData.length-1].yours=answer_Text;
@@ -512,7 +516,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if(sys_second>=0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }
             $('.answer').attr('date-number',"1");

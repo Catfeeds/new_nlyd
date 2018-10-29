@@ -125,6 +125,7 @@ jQuery(function($) {
             },
             complete: function(XMLHttpRequest, textStatus){
                 if(textStatus=='timeout'){
+                    $.SetSession('train_data',data);
                     var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                     window.location.href=href;
         　　　　}
@@ -144,9 +145,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0)
-            }, 1000);
+            // }, 1000);
         }
     });
     $('.matching-btn').each(function(){

@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','v2.1.0.6' );
+            define( 'leo_student_version','v2.1.0.9' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -335,7 +335,7 @@ if(!class_exists('StudentController')){
 
             <?php
             }
-            if(strpos($agent, 'android'))
+            elseif(strpos($agent, 'android'))
             { ?>
                 <script>
                     function isWeiXin(){

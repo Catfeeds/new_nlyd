@@ -68,6 +68,7 @@
 jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
+        $('#next').addClass('disabled')
         var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
         ajaxData[ajaxData.length-1]['yours']=yours;
         if(yours==ajaxData[ajaxData.length-1]['rights']){
@@ -487,7 +488,9 @@ jQuery(function($) {
                     $('#answer div').text('') 
                     inItFastCalculation(level,type);
                     nextQuestion()
-                    _this.removeClass('disabled')
+                    if($('.count_down').attr('data-seconds')>0){
+                        _this.removeClass('disabled')
+                    }
                 }, 300);
             }
         }
@@ -550,6 +553,7 @@ jQuery(function($) {
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
@@ -560,10 +564,11 @@ jQuery(function($) {
         }
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-        setTimeout(function() {
+        // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+        $('#next').addClass('disabled')
+        // setTimeout(function() {
             submit(0,3)
-        }, 1000);
+        // }, 1000);
     }
 
     $('.count_down').countdown(function(S, d){//倒计时
@@ -574,14 +579,15 @@ jQuery(function($) {
         var time=D+h+':'+m+':'+s;
         $(this).text(time).attr('data-seconds',S)
         if(S<=0){//本轮比赛结束
-            if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
-            }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
-            }
-            setTimeout(function() {
+            $('#next').addClass('disabled')
+            // if(S==0){
+            //     $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
+            // }else{
+            //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
+            // }
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });  
 layui.use('layer', function(){

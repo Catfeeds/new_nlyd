@@ -88,13 +88,14 @@ jQuery(function($) {
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
         questions_answer=matching_question['questions_answer'];
     }else{//未获取到比赛题目
-        $.alerts('未检测到题目信息')
+        $.alerts('触发防作弊系统')
+        window.location.href = '<?=home_url("/matchs/initialMatch/project_alias/pkjl/match_id/")?>'+_match_id+'/project_more_id/'+$.Request('project_more_id');
     }
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-        setTimeout(function() {
+        // setTimeout(function() {
             submit(0,3)
-        }, 1000);
+        // }, 1000);
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
@@ -109,9 +110,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });
     function submit(time,submit_type){//提交答案
@@ -181,7 +182,7 @@ jQuery(function($) {
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
-
+                        $.SetSession('match_data',data);
                         var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id']).'/match_more/'?>"+_match_more;
                         window.location.href=href;
             　　　　}

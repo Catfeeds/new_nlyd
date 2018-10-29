@@ -3585,6 +3585,78 @@ class Student_Ajax
         if(!$updateBool) wp_send_json_error(['info' => __('修改失败', 'nlyd-student')]);
         else wp_send_json_success(['info' => __('修改成功', 'nlyd-student')]);
     }
+
+    /**
+     * 监赛官上传证据
+     *
+     */
+    public function upload_match_evidence(){
+        global $current_user,$wpdb;
+
+
+        if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
+
+        if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+
+        //获取当前比赛项目
+        $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+            $new_time = get_time('mysql');
+            $match = array();
+            foreach ($rows as $val){
+                if($val['start_time'] < $new_time && $new_time < $val['end_time']){
+                    $match = $val;
+                }
+            }
+        }
+        if(empty($match)) wp_send_json_error(array('info'=>'当前时间段无比赛'));
+
+        //获取所有报名信息
+        $sql = "select user_id from {$wpdb->prefix}order where match_id = {$match['match_id']} and pay_status in(2,3,4) order by id desc";
+        $results = $wpdb->get_results($sql,ARRAY_A);
+        $index = $_POST['seat_number']-1;
+        $user_id = $results[$index]['user_id'];
+        if(empty($user_id)) wp_send_json_error(array('info'=>'座位信息错误'));
+        if(empty($_POST['student_name'])){
+            $user_real_name = get_user_meta($user_id,'user_real_name')[0];
+            $real_name = $user_real_name['real_name'];
+        }else{
+            $real_name = $_POST['student_name'];
+        }
+
+        $upload_dir = wp_upload_dir();
+        $dir = '/evidence/';
+        $imagePathArr = [];
+        $num = 0;
+        foreach ($_FILES['evidence']['tmp_name'] as $upd){
+            $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+            if($file){
+                $imagePathArr[] = $upload_dir['baseurl'].$dir.$file;
+                ++$num;
+            }
+        }
+
+        $insert = array(
+            'supervisor_id'=>$current_user->ID,
+            'match_id'=>$match['match_id'],
+            'project_id'=>$match['project_id'],
+            'match_more'=>$match['more'],
+            'match_id'=>$match['match_id'],
+            'student_name'=>$real_name,
+            'seat_number'=>$_POST['seat_number'],
+            'evidence'=>!empty($imagePathArr) ? json_encode($imagePathArr) : $imagePathArr,
+            'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+            'created_time'=>get_time('mysql'),
+        );
+
+        $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+        if($result){
+            wp_send_json_success(array('info'=>'上传成功'));
+        }else{
+            wp_send_json_error(array('info'=>'上传失败'));
+        }
+    }
 }
 
 new Student_Ajax();

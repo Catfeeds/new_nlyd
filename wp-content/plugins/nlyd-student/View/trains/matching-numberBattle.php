@@ -56,15 +56,15 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 
 <script>
-jQuery(function($) { 
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
+jQuery(function($) {
     var isSubmit=false;//是否正在提交
     var questions_answer=[];
     var leavePage= $.GetSession('train_match','1');
     if(leavePage && leavePage['genre_id']==$.Request('genre_id') && leavePage['type']=='szzb'){//记忆成功
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
         questions_answer=leavePage['train_questions'];
         var end_time=leavePage['end_time'];
         $('.count_down').attr('data-seconds',$.GetSecond(end_time))
@@ -73,7 +73,8 @@ jQuery(function($) {
             $('.matching-number-zoo').append(dom)
         })
     }else{//未获取到比赛题目
-        $.alerts('<?=__('未检测到题目信息', 'nlyd-student')?>')
+        $.alerts('<?=__('触发防作弊系统', 'nlyd-student')?>')
+        window.location.href = '<?=home_url("/trains/initial/type/szzb/genre_id/")?>'+$.Request('genre_id')+'/match_more/'+$.Request('match_more');
     }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
@@ -88,9 +89,9 @@ jQuery(function($) {
             }else{
                 $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             }
-            setTimeout(function() {
+            // setTimeout(function() {
                 submit(0,3)
-            }, 1000);
+            // }, 1000);
         }
     });
     function submit(time,submit_type){//提交答案
@@ -145,7 +146,7 @@ jQuery(function($) {
                 },
                 complete: function(XMLHttpRequest, textStatus){
                     if(textStatus=='timeout'){
-                        //$.SetSession('train_data',data);
+                        $.SetSession('train_data',data);
                         var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
                         window.location.href=href;
             　　　　}
