@@ -180,7 +180,7 @@ jQuery(function($) {
                                                 +'</div>'
                                     }
                                     if(v.match_notice_url && v.match_notice_url.length>0){//参赛须知
-                                        match_notice_url='<a class="c_blue" style="margin-left:10px" href="'+v.match_notice_url+'"><?=__('参赛须知', 'nlyd-student')?></a>'
+                                        match_notice_url='<a class="c_orange" style="margin-left:10px" href="'+v.match_notice_url+'"><?=__('参赛须知', 'nlyd-student')?></a>'
                                     }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
