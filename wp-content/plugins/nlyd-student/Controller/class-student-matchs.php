@@ -1343,7 +1343,7 @@ class Student_Matchs extends Student_Home
     public function get_match_meta($match_id,$find='a.*,b.post_title'){
 
         global $wpdb;
-        $sql = " select {$find},
+        $sql = " select {$find},a.match_notice_url,
                    DATE_FORMAT(a.match_start_time,'%Y-%m-%d %H:%i') match_start_time, 
                    DATE_FORMAT(a.match_end_time,'%Y-%m-%d %H:%i') match_end_time, 
                    DATE_FORMAT(a.entry_end_time,'%Y-%m-%d %H:%i') entry_end_time
