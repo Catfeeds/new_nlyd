@@ -34,7 +34,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                     $.ajax({
                         data: data,
                         success: function (res, ajaxStatu, xhr) {
-                            console.log(res)
                             if(res.success){
                                 $.DelSession('match_data')
                                 if(res.data.url){

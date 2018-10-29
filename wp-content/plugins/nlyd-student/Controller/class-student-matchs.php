@@ -191,8 +191,7 @@ class Student_Matchs extends Student_Home
         $sql2 = "select count(a.id) order_total
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
-                  where a.match_id = {$_GET['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
-                  order by a.id desc ";
+                  where a.match_id = {$_GET['match_id']} and pay_status in(2,3,4) and order_type=1";
         //print_r($sql2);
         $order_total = (int) $wpdb->get_var($sql2);
 

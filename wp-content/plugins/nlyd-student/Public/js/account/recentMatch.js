@@ -31,6 +31,7 @@ jQuery(function($) {
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
                                     var match_status='c_blue';//比赛中高亮
                                     var rightBtn='';   
+                                    var match_notice_url="";//参赛须知
                                     if(v.match_status==2){//比赛进行中
                                         match_status='c_orange';   
                                     }
@@ -44,6 +45,9 @@ jQuery(function($) {
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
                                             +'<button type="button" class="'+className+'">'+v.button_title+'</button>'
                                         +'</div>'
+                                    }
+                                    if(v.match_notice_url && v.match_notice_url.length>0){//参赛须知
+                                        match_notice_url='<a class="c_orange" style="margin-left:10px" href="'+v.match_notice_url+'">'+_recentMatch.must+'</a>'
                                     }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
@@ -91,7 +95,7 @@ jQuery(function($) {
                                                             +'<div class="nl-match-label"><div>'+_recentMatch.player+':</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+v.entry_total+_recentMatch.people+'</div>'
-                                                                +'<a class="c_orange" style="margin-left:10px" href="https://mp.weixin.qq.com/s/SrtckmXNfnjRDiP-5o9guQ?tdsourcetag=s_pctim_aiomsg">'+_recentMatch.must+'</a>'
+                                                                +match_notice_url
                                                             +'</div>'
                                                         +'</div>'
                                                     +'</div>'
