@@ -39,6 +39,19 @@ class Student_Supervisor extends Student_Home
     }
 
     /**
+     * 监赛提交记录
+     */
+    public function logs(){
+
+        global $wpdb,$current_user;
+        $sql = "select * from {$wpdb->prefix}prison_match_log where supervisor_id = {$current_user->ID}";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+print_r($rows);
+        $view = student_view_path.CONTROLLER.'/logs.php';
+        load_view_template($view,$rows);
+    }
+
+    /**
      * 默认公用js/css引入
      */
     public function scripts_default(){
