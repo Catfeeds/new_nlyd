@@ -31,7 +31,7 @@
                             </a>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('版本号', 'nlyd-student')?></div></div>
-                                <span class="form-input-right">V<?=leo_student_version?></span>
+                                <span class="form-input-right"><?=leo_student_version?></span>
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('清除缓存', 'nlyd-student')?></div></div>
