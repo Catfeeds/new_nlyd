@@ -1023,20 +1023,6 @@ if(is_admin()){
                     </select>
                 </td>
             </tr>
-            <tr>
-                <th><label for="area"><?php _e("所在地区"); ?></label></th>
-                <td>
-                   <select name="province" id="province">
-                        <option value="<?=$user_address['province']?>"><?=$user_address['province']?></option>
-                    </select>
-                    <select name="city" id="city">
-                        <option value="<?=$user_address['city']?>"><?=$user_address['city']?></option>
-                    </select>
-                    <select name="area" id="area">
-                        <option value="<?=$user_address['area']?>"><?=$user_address['area']?></option>
-                    </select>
-                </td>
-            </tr>
 
         </table>
     <?php }
