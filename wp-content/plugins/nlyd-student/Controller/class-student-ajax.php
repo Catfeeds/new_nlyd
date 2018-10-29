@@ -3580,7 +3580,7 @@ class Student_Ajax
     public function isUserViewBonus(){
         global $wpdb,$current_user;
         //判断是否是管理员
-        if(empty($current_user->roles) || !in_array('administrator', $current_user->roles)) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
+//        if(empty($current_user->roles) || !in_array('administrator', $current_user->roles)) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
 
         $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
         $is_view = intval($_POST['is_view']);

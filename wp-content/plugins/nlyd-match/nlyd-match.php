@@ -144,7 +144,6 @@ if(!class_exists('MatchController')){
         }
 
         public function wpdx_add_custom_status_in_quick_edit(){
-
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
