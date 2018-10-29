@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
-                                    <input name='user_gender' value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
+                                    <input name='user_gender' data-value='<?=isset($user_info['user_gender']) ? $user_info['user_gender'] : '';?>' value='<?=isset($user_info['user_gender']) ? __($user_info['user_gender'],'nlyd-student') : '';?>' type="text" readonly id="trigger3" placeholder="<?=__('请选择您的性别', 'nlyd-student')?>" class="nl-input">
                                 </div>
                                 <div class="form-input-row" id="birth" style="display:none">
                                     <div class="form-input-label"><div><?=__('生 日', 'nlyd-student')?></div></div>
@@ -241,7 +241,7 @@ jQuery(document).ready(function($) {
             }
         });
         // 模拟手机下拉列表，选择性别
-        var sexSelectData= ['<?=__('男', 'nlyd-student')?>','<?=__('女', 'nlyd-student')?>',]
+        var sexSelectData= [{id:"男",value:'<?=__('男', 'nlyd-student')?>'},{id:"女",value:'<?=__('女', 'nlyd-student')?>'},]
         var posiotionSex=[0];//初始化位置，高亮展示
         if($('#trigger3').val().length>0 && $('#trigger3').val()){
             $.each(sexSelectData,function(index,value){
@@ -262,7 +262,7 @@ jQuery(document).ready(function($) {
                 // console.log(data);
             },
             callback:function(indexArr, data){
-                $('#trigger3').val(data[0])
+                $('#trigger3').val(data[0]['value']).attr('data-value',data[0]['id'])
             }
         });
 
@@ -502,7 +502,7 @@ jQuery(document).ready(function($) {
                 fd.append('meta_val[real_type]',data.field['meta_val[real_type]']);
                 fd.append('meta_val[real_name]',data.field['meta_val[real_name]']);
                 fd.append('meta_val[real_ID]',data.field['meta_val[real_ID]']);
-                fd.append('user_gender',data.field.user_gender);
+                fd.append('user_gender',$('#trigger3').attr('data-value'));
                 fd.append('meta_val[real_age]',data.field['meta_val[real_age]']);
                 fd.append('user_address[area]',data.field['user_address[area]']);
                 fd.append('user_address[city]',data.field['user_address[city]']);
