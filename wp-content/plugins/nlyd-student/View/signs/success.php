@@ -24,7 +24,7 @@
                     <h3 class="signs_tips c_blue"><?=__('恭喜您，签到成功', 'nlyd-student')?></h3>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('参赛座位号', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_blue fs_15">第<?=$index?>号</div>
+                        <div class="signs_value c_blue fs_15"><?=sprintf(__('第%s号','nlyd-student'),$index)?></div>
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('选手国籍', 'nlyd-student')?>：</div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="signs_row">
                         <div class="signs_label"><?=__('性别', 'nlyd-student')?>&<?=__('年龄', 'nlyd-student')?>：</div>
-                        <div class="signs_value c_black fs_15"><?=$user_gender?> <?=$user_birthday?> <?=$age_type?></div>
+                        <div class="signs_value c_black fs_15"><?=__($user_gender,'nlyd-student')?> <?=$user_birthday?> <?=__($age_type,'nlyd-student')?></div>
                     </div>
                     <!-- <div class="signs_row fs_16">
                         <div class="signs_label"><?=__('证件号码', 'nlyd-student')?>：</div>
