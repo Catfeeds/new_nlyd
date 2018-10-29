@@ -1471,11 +1471,15 @@ class Student_Ajax
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
         foreach ($rows as $k => $val){
 
+            //获取参赛须知
+            $match_notice_url = get_post_meta($val['ID'],'match_notice_url')[0];
+            $rows[$k]['match_notice_url'] = !empty($match_notice_url) ? $match_notice_url : '';
             //获取报名人数
             $sql_ = "select count(a.id) total 
                       from {$wpdb->prefix}order a 
                       right join {$wpdb->prefix}users b on a.user_id = b.ID
                       where match_id = {$val['ID']} and pay_status in(2,3,4) and order_type=1";
+
             //print_r($sql_);
             $row = $wpdb->get_row($sql_,ARRAY_A);
             $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
