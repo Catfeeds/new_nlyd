@@ -1,22 +1,19 @@
 .img-box.right_img{
-    width: 100px;
+    width: 60px;
     margin: auto;
 }
 h3.signs_tips{
     text-align: center;
-    /* color: #59b53d; */
-    margin-top: 20px;
-    /* margin-bottom: 30px; */
+    margin-top: 5px;
     margin-bottom: 0;
-    font-size: 0.28rem;
-    /* font-weight: bold; */
+    font-size: 0.20rem;
 }
 .signs_title{
     text-align: center;
 }
 .signs_row{
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     padding-left: 40px;
 }
 .signs_row:first-child{
@@ -32,28 +29,12 @@ h3.signs_tips{
 .signs_box{
     width: 300px;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 10px;
 }
-/* .go_match{
-    display: table;
-    margin: auto;
-    width: 200px;
-    height: 45px;
-    color: #61a6fd;
-    border:1px solid #61a6fd;
-    text-align: center;
-    border-radius: 22.5px;
-    margin-top: 30px;
-}
-.go_match div{
-    display: table-cell;
-    vertical-align: middle;
-    line-height: 20px;
-} */
 .a-btn{
     position: relative;
     top: 0;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 .go_match:hover{
     color: #61a6fd;
@@ -62,21 +43,8 @@ h3.signs_tips{
     margin-top: 30px;
 }
 .signs_header{
-    margin-top: 30px;
+    margin-top: 20px;
 }
 .signs_value{
-    margin-top: 5px;
+    margin-top: 0;
 }
-/* @media screen and (min-width: 375px){
-    .signs_footer{
-        position: absolute; 
-        width: 100%;
-        bottom: 0;
-        left: 0;
-    }
-}
-@media screen and (max-width: 374px){
-    .signs_footer{
-        margin-top: 30px;
-    }
-} */
