@@ -272,6 +272,8 @@ class Student_Ajax
 
         unset($_SESSION['count_down']);
 
+        unset($_SESSION['match_post_id']);
+
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['match_more']) ) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
 
         $_SESSION['match_data'] = $_POST;
