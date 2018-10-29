@@ -1314,10 +1314,12 @@ class Student_Ajax
                 $orders[$k]['nickname'] = $user['nickname'][0];
             }
             $orders[$k]['created_time'] = date_i18n('Ymd',strtotime($v['created_time']));
+
             $user_nationality_pic = $user['user_nationality_pic'][0] ? $user['user_nationality_pic'][0] : 'cn' ;
+            $str = file_get_contents(leo_student_path."conf/nationality_array.json");
+            $contents = json_decode($str,true);
+            $orders[$k]['nationality_short'] = $contents[$user_nationality_pic]['short'];
             $orders[$k]['nationality'] = $user_nationality_pic;
-            $nationality_short = $user['user_nationality_short'][0] ? $user['user_nationality_short'][0] : '' ;
-            $orders[$k]['nationality_short'] = $nationality_short;
 
         }
 
