@@ -3580,7 +3580,7 @@ class Student_Ajax
     public function isUserViewBonus(){
         global $wpdb,$current_user;
         //判断是否是管理员
-//        if(empty($current_user->roles) || !in_array('administrator', $current_user->roles)) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
+        if(empty($current_user->roles) || !in_array('administrator', $current_user->roles)) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
 
         $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
         $is_view = intval($_POST['is_view']);
@@ -3588,7 +3588,7 @@ class Student_Ajax
         if($is_view != 1 && $is_view != 2) wp_send_json_error(['info' => __('参数错误', 'nlyd-student')]);
 
         //判断是否已经生成
-        $rows = $wpdb->get_result("SELECT id FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}'", ARRAY_A);
+        $rows = $wpdb->get_results("SELECT id FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}'", ARRAY_A);
         if(!$rows) wp_send_json_error(['info' => __('当前比赛奖金未生成', 'nlyd-student')]);
 
         //开始修改
