@@ -983,7 +983,8 @@ if(is_admin()){
 
     function extra_user_profile_fields( $user ) {
         $user_real_name = get_user_meta($user->ID, 'user_real_name', true);
-//        leo_dump(get_user_meta($user->ID));
+        $user_address = get_user_meta($user->ID, 'user_address', true);
+//        leo_dump($user_address);
         ?>
         <h3><?='额外信息'?></h3>
 
@@ -1012,15 +1013,23 @@ if(is_admin()){
             <tr>
                 <th><label for="nationality"><?php _e("国籍"); ?></label></th>
                 <td>
-                    <input type="text" name="nationality" id="nationality" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
-
+                    <select name="nationality" id="nationality">
+                        <option value="<?php echo esc_attr( get_the_author_meta( 'user_nationality_pic', $user->ID ) ); ?>"><?php echo esc_attr( get_the_author_meta( 'user_nationality', $user->ID ) ); ?></option>
+                    </select>
                 </td>
             </tr>
             <tr>
                 <th><label for="area"><?php _e("所在地区"); ?></label></th>
                 <td>
-                    <input type="text" name="area" id="area" value="<?php echo esc_attr( get_the_author_meta( 'area', $user->ID ) ); ?>" class="regular-text" /><br />
-
+                   <select name="province" id="province">
+                        <option value="<?=$user_address['province']?>"><?=$user_address['province']?></option>
+                    </select>
+                    <select name="city" id="city">
+                        <option value="<?=$user_address['city']?>"><?=$user_address['city']?></option>
+                    </select>
+                    <select name="area" id="area">
+                        <option value="<?=$user_address['area']?>"><?=$user_address['area']?></option>
+                    </select>
                 </td>
             </tr>
 

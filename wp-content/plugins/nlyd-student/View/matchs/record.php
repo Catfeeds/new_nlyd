@@ -133,6 +133,11 @@
                                     <div class="classify-btn" data-post-id="2"><?=__('奖金明细', 'nlyd-student')?></div>
                                 </div>
                             </div>
+                            <div class="power">
+                                <div class="power-btn c_orange active" data-id="0"><?=__('生成明细表', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-id="1"><?=__('允许选手查看', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-id="2"><?=__('下载表格', 'nlyd-student')?></div>
+                            </div>
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
                                     <thead>
@@ -441,6 +446,7 @@ jQuery(function($) {
         $('.classify-btn').click(function(){//选择比赛项目
             var _this=$(this);
             if(!_this.hasClass('classify-active')){
+                $('.power').removeClass('active');//奖金明细权限操作按钮组
                 _this.parents('.btn-wrapper').find('.classify-btn').removeClass('classify-active');
                 _this.addClass('classify-active');
                 if(_this.parents('.btn-wrapper').hasClass('one_1')){//单项排名
@@ -455,6 +461,7 @@ jQuery(function($) {
                     }else if(id=="1"){//战队排名
                         pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"team"})
                     }else if(id=='2'){//奖金明细
+                        $('.power').addClass('active')
                         pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"money"})
                     }
                 }else{//分类排名
@@ -462,6 +469,21 @@ jQuery(function($) {
                     $('#flow_2').empty();
                     pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:id,project_id:null,age_group:null,rank_type:"danxiang"})
                 }
+            }
+        })
+        $('.power-btn').click(function(){//奖金明细权限操作
+            var _this=$(this);
+            var post_id=_this.attr('post-id');
+            if(!_this.hasClass('active')){
+                $('.power-btn.active').removeClass('active')
+                _this.addClass('active')
+            }
+            if(post_id==0){//生成明细表
+
+            }else if(post_id==1){//允许选手查看
+
+            }else if(post_id==2){//下载表格
+
             }
         })
         $('.show-type').click(function(){//下拉
