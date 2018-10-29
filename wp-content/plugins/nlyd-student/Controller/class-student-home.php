@@ -61,12 +61,15 @@ class Student_Home
         switch ($current_user->roles[0]){
             case 'administrator':
                 $user_info['user_type'] = __('管理员', 'nlyd-student');
+                $user_info['user_roles'] = 'administrator';
                 break;
             case 'supervisor':
                 $user_info['user_type'] = __('监赛官', 'nlyd-student');
+                $user_info['user_roles'] = 'supervisor';
                 break;
             case 'editor':
                 $user_info['user_type'] = __('教练', 'nlyd-student');
+                $user_info['user_roles'] = 'editor';
                 break;
             default:
                 $user_info['user_type'] = __('学 员', 'nlyd-student');
