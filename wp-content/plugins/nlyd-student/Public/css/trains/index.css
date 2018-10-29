@@ -28,8 +28,8 @@
 }
 .train_name{
     float: left;
-    width: -webkit-calc(100% - 121px);
-    width: calc(100% - 121px);
+    width: -webkit-calc(100% - 140px);
+    width: calc(100% - 140px);
     text-align: left;
 }
 .train_row.disable{
@@ -39,6 +39,7 @@
     color: rgba(38, 38, 38, 0.6);
 }
 .train_tips{
+    width: 50px;
     float: right;
     color: rgba(38, 38, 38, 0.4);
     font-size: 0.12rem;
