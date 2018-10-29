@@ -134,9 +134,9 @@
                                 </div>
                             </div>
                             <div class="power">
-                                <div class="power-btn c_orange active" data-id="0"><?=__('生成明细表', 'nlyd-student')?></div>
-                                <div class="power-btn c_orange" data-id="1"><?=__('允许选手查看', 'nlyd-student')?></div>
-                                <div class="power-btn c_orange" data-id="2"><?=__('下载表格', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" id="detail"><?=__('生成明细表', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" data-look="true" id="look"><?=__('允许选手查看', 'nlyd-student')?></div>
+                                <div class="power-btn c_orange" id="download"><?=__('下载表格', 'nlyd-student')?></div>
                             </div>
                             <div class="nl-table-wapper">
                                 <table class="nl-table">
@@ -329,6 +329,7 @@ jQuery(function($) {
                             success:function(res,ajaxStatu,xhr){
                                 arg['myPage']++
                                 isClick[arg['data_id']]=true;
+                                console.log(res)
                                 if(res.success){ 
                                     var itemLen=res.data.info.length;
                                     lastItem['lastItem_'+arg['data_id']]=itemLen>0 ? res.data.info[itemLen-1] : {};
@@ -366,6 +367,11 @@ jQuery(function($) {
                                                     +'</tr>'
                                             lis.push(dom)                           
                                         })
+                                        if (res.data.info.length<50){
+                                                next(lis.join(''),false)
+                                            }else{
+                                                next(lis.join(''),true)
+                                            }
                                     }else if(arg['rank_type']=="team"){//战队
                                         if(res.data.my_team){//我的战队
                                             var rows=res.data.my_team
@@ -394,35 +400,69 @@ jQuery(function($) {
                                                     +'</tr>'
                                             lis.push(dom)                           
                                         })
-                                    }else if(arg['rank_type']=="money"){//奖金
-                                        $.each(res.data.info,function(index,value){
-                                            var _type="";
-                                            var c_green="c_green";
-                                            if(value.is_send=="n"){
-                                                _type='等待发放'
-                                                c_green="c_black6";
-                                            }else if(value.is_send=="y"){
-                                                _type='已发放'
+                                        if (res.data.info.length<50){
+                                                next(lis.join(''),false)
                                             }else{
-                                                _type='等待发放'
-                                                c_green="c_black6";
+                                                next(lis.join(''),true)
                                             }
-                                            var dom='<tr>'
-                                                        +'<td><div class="table_content c_black">'+value.num+'</div></td>'
-                                                        +'<td><div class="table_content c_black">'+value.real_name+'</div></td>'
-                                                        +'<td><div class="table_content c_black6">'+value.userID+'</div></td>'
-                                                        +'<td><div class="table_content '+c_green+'">'+_type+'</div></td>'
-                                                        +'<td><div class="table_content"><a class="c_blue" href="'+value.url+'"><?=__('查看', 'nlyd-student')?></a></div></td>'
-                                                    +'</tr>'
-                                            lis.push(dom)                           
-                                        })
+                                    }else if(arg['rank_type']=="money"){//奖金
+                                        //奖金列表有数据
+                                        if(res.data.is_admin=="true"){//是管理员
+                                            //当前显示状态与期望状态相反
+                                           var text_=res.data.is_user_view=="true" ? "<?=__('禁止选手查看', 'nlyd-student')?>" : "<?=__('允许选手查看', 'nlyd-student')?>";
+                                           var data_look=res.data.is_user_view=="true" ? 2 : 1;
+                                           $('.power').addClass('active');  //显示选手查看，下载表格 
+                                           $('#detail').removeClass('active');
+                                           $('#download').addClass('active');
+                                           $('#look').addClass('active').text(text_).attr('data-look',data_look);
+                                        }else{
+                                            $('.power').removeClass('active');
+                                        }
+                                        if(res.data.is_data=="true" || res.data.is_admin=="true"){//管理员或者允许选手查看
+                                            $.each(res.data.info,function(index,value){
+                                                var _type="";
+                                                var c_green="c_green";
+                                                if(value.is_send=="n"){
+                                                    _type='等待发放'
+                                                    c_green="c_black6";
+                                                }else if(value.is_send=="y"){
+                                                    _type='已发放'
+                                                }else{
+                                                    _type='等待发放'
+                                                    c_green="c_black6";
+                                                }
+                                                var dom='<tr>'
+                                                            +'<td><div class="table_content c_black">'+value.num+'</div></td>'
+                                                            +'<td><div class="table_content c_black">'+value.real_name+'</div></td>'
+                                                            +'<td><div class="table_content c_black6">'+value.userID+'</div></td>'
+                                                            +'<td><div class="table_content '+c_green+'">'+_type+'</div></td>'
+                                                            +'<td><div class="table_content"><a class="c_blue" href="'+value.url+'"><?=__('查看', 'nlyd-student')?></a></div></td>'
+                                                        +'</tr>'
+                                                lis.push(dom)                           
+                                            })
+                                            if (res.data.info.length<50){
+                                                next(lis.join(''),false)
+                                            }else{
+                                                next(lis.join(''),true)
+                                            }
+                                        }else{
+                                            next(lis.join(''),false)
+                                        }
                                     }
-                                    if (res.data.info.length<50) {
-                                        next(lis.join(''),false)
-                                    }else{
-                                        next(lis.join(''),true)
+                                }else{//false
+                                    if(arg['rank_type']=="money"){//奖金明细无数据
+                                        if(res.data.is_admin=="true"){//是管理员
+                                            //当前显示状态与期望状态相反
+                                            var text_=res.data.is_user_view=="true" ? "<?=__('禁止选手查看', 'nlyd-student')?>" : "<?=__('允许选手查看', 'nlyd-student')?>";
+                                            var data_look=res.data.is_user_view=="true" ? 2 : 1;
+                                            $('.power').addClass('active');//显示生成明细列表
+                                            $('#detail').addClass('active');
+                                            $('#download').removeClass('active');
+                                            $('#look').addClass('active').text(text_).attr('data-look',data_look);
+                                        }else{
+                                            $('.power').removeClass('active');
+                                        }
                                     }
-                                }else{
                                     next(lis.join(''),false)
                                 }
                             },
@@ -471,20 +511,43 @@ jQuery(function($) {
                 }
             }
         })
-        $('.power-btn').click(function(){//奖金明细权限操作
-            var _this=$(this);
-            var post_id=_this.attr('post-id');
-            if(!_this.hasClass('active')){
-                $('.power-btn.active').removeClass('active')
-                _this.addClass('active')
+        $('body').on('click','#detail','click',function(){//生成明细表
+            var data={
+                action:"createBonus",
+                match_id:$.Request('match_id')
             }
-            if(post_id==0){//生成明细表
-
-            }else if(post_id==1){//允许选手查看
-
-            }else if(post_id==2){//下载表格
-
+            $.ajax({
+                data:data,
+                success:function(res) {
+                    console.log(res)
+                },
+            })
+        })
+        $('body').on('click','#look','click',function(){//允许选手查看
+            var is_view=$('#look').attr('data-look');
+            var data={
+                action:"isUserViewBonus",
+                match_id:$.Request('match_id'),
+                is_view:is_view//1修改为允许,2修改为禁止用户查看
             }
+            $.ajax({
+                data:data,
+                success:function(res) {
+                    console.log(res)
+                },
+            })
+        })
+        $('body').on('click','#download','click',function(){//下载表格
+            var data={
+                action:"downloadBonus",
+                match_id:$.Request('match_id')
+            }
+            $.ajax({
+                data:data,
+                success:function(res) {
+                    console.log(res)
+                },
+            })
         })
         $('.show-type').click(function(){//下拉
             var _this=$(this);
