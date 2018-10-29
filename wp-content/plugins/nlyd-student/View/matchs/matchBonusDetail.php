@@ -40,7 +40,7 @@
                         <div class="width-margin width-margin-pc"><?=__('所属战队', 'nlyd-student')?>：</div>
                     </div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['team']?></div>
+                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['team'] ? $row['team'] : '未加入战队'?></div>
                     </div>
                 </div>
                 <div>

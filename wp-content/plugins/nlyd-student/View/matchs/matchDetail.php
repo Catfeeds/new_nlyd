@@ -61,7 +61,9 @@
                                 <li class="nl-match">
                                     <div class="nl-match-header noMargin">
                                         <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?> "><?= __('比赛项目', 'nlyd-student') ?></span>
+                                        <?php if(!empty($match['match_notice_url'])): ?>
                                         <a class="c_orange" style="float:right" href="<?=$match['match_notice_url']?>"><?= __('参赛须知', 'nlyd-student') ?></a>
+                                        <?php endif;?>
                                     </div>
                                     <div class="nl-match-body">
                                         <?php foreach ($match_project as $val) { ?>
