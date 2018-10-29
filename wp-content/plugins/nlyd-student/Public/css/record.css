@@ -308,11 +308,11 @@ border-bottom-right-radius: 8px;
     display: block;
 }
 .power-btn{
-    display: inline-block;
+    display: none;
     margin-right: 10px;
 }
 .power-btn.active{
-    border-bottom: 2px solid #FB8E8E;
+    display: inline-block;
 }
 .power-btn:last-child{
     margin-right: 0;
