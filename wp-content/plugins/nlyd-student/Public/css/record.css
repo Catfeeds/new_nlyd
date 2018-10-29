@@ -300,6 +300,23 @@ border-bottom-right-radius: 8px;
     color: #fff;
     cursor: pointer;
 }
+
+.power{
+    display: none;
+}
+.power.active{
+    display: block;
+}
+.power-btn{
+    display: inline-block;
+    margin-right: 10px;
+}
+.power-btn.active{
+    border-bottom: 2px solid #FB8E8E;
+}
+.power-btn:last-child{
+    margin-right: 0;
+}
 @media screen and (min-width: 1199px){
     .layui-tab-content .layui-tab-item:last-child{
         padding-bottom: 80px;

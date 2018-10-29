@@ -15,9 +15,16 @@ if(empty($_SESSION['train_list'])){ ?>
                 top: 0;
             }
         }
+        .count_down_wrap{
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            margin-top: -30px;
+        }
     </style>
     <div class="detail-content-wrapper">
-        <div class="count_down_" data-seconds="5"></div>
+        <div class="count_down_wrap c_bkue"><span class="count_down_" data-seconds="5"></span><?=__('秒', 'nlyd-student')?><?=__('之后跳转', 'nlyd-student')?>...</div>
     </div>
 
     <script>
@@ -47,7 +54,7 @@ if(empty($_SESSION['train_list'])){ ?>
                         },
                         complete:function (XMLHttpRequest, textStatus) {
                             if(textStatus=='timeout'){
-                                $.alerts("网络延迟")
+                                $.alerts("<?=__('网络延迟', 'nlyd-student')?>")
                                 $.DelSession('train_data')
                                 window.location.href= '<?=home_url("/trains/history/")?>'
                             }
@@ -176,6 +183,7 @@ switch ($type){
 jQuery(function($) {
     $.DelSession('train_match')
     $.DelSession('_match_train')
+    $.DelSession('train_data')
     <?php if(!isset($_GET['back'])){ ?>
     history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {

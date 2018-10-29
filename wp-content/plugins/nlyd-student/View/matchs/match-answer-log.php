@@ -14,9 +14,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                 top: 0;
             }
         }
+        .count_down_wrap{
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            margin-top: -30px;
+        }
     </style>
     <div class="detail-content-wrapper">
-        <div class="count_down_" data-seconds="5"></div>
+        <div class="count_down_wrap c_bkue"><span class="count_down_" data-seconds="5"></span><?=__('秒', 'nlyd-student')?><?=__('之后跳转', 'nlyd-student')?>......</div>
     </div>
 
     <script>
@@ -45,7 +52,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                         },
                         complete:function (XMLHttpRequest, textStatus) {
                             if(textStatus=='timeout'){
-                                $.alerts("网络延迟")
+                                $.alerts("<?=__('网络延迟', 'nlyd-student')?>")
                                 $.DelSession('match_data')
                                 window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
                             }
@@ -188,6 +195,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('matching_question');//准备页面题目参数
+        $.DelSession('match_data')
         <?php if(isset($_GET['project_more_id'])): ?>
           leavePageLoad('<?=$wait_url?>');
         $('.count_down').countdown(function(S, d){//倒计时
