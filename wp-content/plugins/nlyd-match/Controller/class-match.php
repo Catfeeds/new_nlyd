@@ -817,7 +817,7 @@ class Match
                 <select name="match_income_detail">
                 <?php if(!empty($lists)): ?>
                 <?php foreach ($lists as $x){?>
-                    <option <?=$this->meta['match_income_detail'] == $x['id'] ? 'selected="selected"':''?> value="<?=$x['id']?>"><?=$x['bonus_tmp_name']?></option>
+                    <option <?=get_post_meta($_GET['post'],'match_income_detail',true) == $x['id'] ? 'selected="selected"':''?> value="<?=$x['id']?>"><?=$x['bonus_tmp_name']?></option>
                 <?php } ?>
                 <?php endif;?>
                 </select>
