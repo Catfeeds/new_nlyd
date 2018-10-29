@@ -977,56 +977,58 @@ if(is_admin()){
     //后台用户列表自定义搜索字段==========================end
 
     //后台添加编辑用户增加信息================================begin
-//    add_action( 'show_user_profile', 'extra_user_profile_fields' );
-//    add_action( 'edit_user_profile', 'extra_user_profile_fields' );
-//    add_action( 'add_user_profile', 'extra_user_profile_fields' );
-//
-//    function extra_user_profile_fields( $user ) {
-//        ?>
-<!--        <h3>--><?//='额外信息'?><!--</h3>-->
-<!---->
-<!--        <table class="form-table">-->
-<!--            <tr>-->
-<!--                <th><label for="facebook">--><?php //_e("性别"); ?><!--</label></th>-->
-<!--                <td>-->
-<!--                    <input type="text" name="facebook" id="facebook" value="--><?php //echo esc_attr( get_the_author_meta( 'facebook', $user->ID ) ); ?><!--" class="regular-text" /><br />-->
-<!--                    <span class="description">--><?php //_e("请输入您的 Facebook 地址"); ?><!--</span>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <th><label for="twitter">--><?php //_e("年龄"); ?><!--</label></th>-->
-<!--                <td>-->
-<!--                    <input type="text" name="twitter" id="twitter" value="--><?php //echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?><!--" class="regular-text" /><br />-->
-<!--                    <span class="description">--><?php //_e("请输入您的 Twitter 用户名"); ?><!--</span>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <th><label for="twitter">--><?php //_e("国籍"); ?><!--</label></th>-->
-<!--                <td>-->
-<!--                    <input type="text" name="twitter" id="twitter" value="--><?php //echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?><!--" class="regular-text" /><br />-->
-<!--                    <span class="description">--><?php //_e("请输入您的 Twitter 用户名"); ?><!--</span>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <th><label for="twitter">--><?php //_e('真实姓名'); ?><!--</label></th>-->
-<!--                <td>-->
-<!--                    <input type="text" name="twitter" id="twitter" value="--><?php //echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?><!--" class="regular-text" /><br />-->
-<!--                    <span class="description">--><?php //_e("请输入您的 Twitter 用户名"); ?><!--</span>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </table>-->
-<!--    --><?php //}
-//
-//    add_action( 'personal_options_update', 'save_extra_user_profile_fields' );
-//    add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
-//
-//    function save_extra_user_profile_fields( $user_id ) {
-//
-//        if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
-//
-//        update_user_meta( $user_id, 'facebook', $_POST['facebook'] );
-//        update_user_meta( $user_id, 'twitter', $_POST['twitter'] );
-//    }
+    add_action( 'show_user_profile', 'extra_user_profile_fields' );
+    add_action( 'edit_user_profile', 'extra_user_profile_fields' );
+    add_action( 'add_user_profile', 'extra_user_profile_fields' );
+
+    function extra_user_profile_fields( $user ) {
+
+        ?>
+        <h3><?='额外信息'?></h3>
+
+        <table class="form-table">
+            <tr>
+                <th><label for="real_name"><?php _e('真实姓名'); ?></label></th>
+                <td>
+                    <input type="text" name="real_name" id="real_name" value="<?php echo esc_attr( get_the_author_meta( 'user_real_name', $user->ID )['real_name'] ); ?>" class="regular-text" /><br />
+
+                </td>
+            </tr>
+            <tr>
+                <th><label for="sex"><?php _e("性别"); ?></label></th>
+                <td>
+                    <input type="radio" name="sex" value="男" class="regular-text" />男
+                    <input type="radio" name="sex" value="女" class="regular-text" />女<br />
+                </td>
+            </tr>
+            <tr>
+                <th><label for="age"><?php _e("年龄"); ?></label></th>
+                <td>
+                    <input type="text" name="age" id="age" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+
+                </td>
+            </tr>
+            <tr>
+                <th><label for="nationality"><?php _e("国籍"); ?></label></th>
+                <td>
+                    <input type="text" name="nationality" id="nationality" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+
+                </td>
+            </tr>
+
+        </table>
+    <?php }
+
+    add_action( 'personal_options_update', 'save_extra_user_profile_fields' );
+    add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
+
+    function save_extra_user_profile_fields( $user_id ) {
+
+        if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
+
+        update_user_meta( $user_id, 'facebook', $_POST['facebook'] );
+        update_user_meta( $user_id, 'twitter', $_POST['twitter'] );
+    }
 
 
     //后台添加编辑用户增加信息================================end
