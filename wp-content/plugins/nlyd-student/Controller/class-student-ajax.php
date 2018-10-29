@@ -1453,7 +1453,7 @@ class Student_Ajax
         $where = join(' and ',$map);
 
         $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
-                a.post_content,
+                a.post_content,b.match_notice_url,
                 DATE_FORMAT(b.match_start_time,'%Y-%m-%d %H:%i') match_start_time,
                 if(b.match_address = '','--',b.match_address) match_address,
                 b.match_cost,b.entry_end_time,b.match_status ,c.user_id
@@ -1472,8 +1472,8 @@ class Student_Ajax
         foreach ($rows as $k => $val){
 
             //获取参赛须知
-            $match_notice_url = get_post_meta($val['ID'],'match_notice_url')[0];
-            $rows[$k]['match_notice_url'] = !empty($match_notice_url) ? $match_notice_url : '';
+            $rows[$k]['match_notice_url'] = !empty($val['match_notice_url']) ? $val['match_notice_url'] : '';
+
             //获取报名人数
             $sql_ = "select count(a.id) total 
                       from {$wpdb->prefix}order a 
