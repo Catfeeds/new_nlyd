@@ -3554,6 +3554,8 @@ class Student_Ajax
         //查找当前比赛奖金设置
         $bonusTmpId = get_post_meta($match_id,'match_income_detail',true);
         $bonusTmp = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}match_bonus_tmp WHERE id={$bonusTmpId}" ,ARRAY_A);
+        if(!$bonusTmp) wp_send_json_error(['info' => __('未找到奖金设置模板', 'nlyd-student')]);
+
         //去生成
         $matchStudentObj = new Match_student();
         $allDatas = $matchStudentObj->getBonusData($match_id,$bonusTmp);
