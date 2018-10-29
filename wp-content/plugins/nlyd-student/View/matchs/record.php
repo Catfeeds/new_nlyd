@@ -454,11 +454,11 @@ jQuery(function($) {
                                         if(res.data.is_admin=="true"){//是管理员
                                             //当前显示状态与期望状态相反
                                             var text_=res.data.is_user_view=="true" ? "<?=__('禁止选手查看', 'nlyd-student')?>" : "<?=__('允许选手查看', 'nlyd-student')?>";
-                                            var data_look=res.data.is_user_view=="true" ? 2 : 1;
+                                            var data_look=res.data.is_user_view=="true" ? '2' : '1';
                                             $('.power').addClass('active');//显示生成明细列表
                                             $('#detail').addClass('active');
                                             $('#download').removeClass('active');
-                                            $('#look').addClass('active').text(text_).attr('data-look',data_look);
+                                            $('#look').removeClass('active').text(text_).attr('data-look',data_look);
                                         }else{
                                             $('.power').removeClass('active');
                                         }
@@ -512,42 +512,105 @@ jQuery(function($) {
             }
         })
         $('body').on('click','#detail','click',function(){//生成明细表
-            var data={
-                action:"createBonus",
-                match_id:$.Request('match_id')
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                var data={
+                    action:"createBonus",
+                    match_id:$.Request('match_id')
+                }
+                $.ajax({
+                    data:data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success:function(res) {//隐藏生成明细表按钮，显示允许选手查看表格
+                        $.alerts(res.data.info)
+                        if(res.success){
+                            window.location.reload();
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            _this.removeClass('disabled')
+                            $.alerts('<?=__('网络超时', 'nlyd-student')?>')
+                　　　　}
+                    }
+                })
+            }else{
+                $.alerts('<?=__('正在处理您的操作', 'nlyd-student')?>')
             }
-            $.ajax({
-                data:data,
-                success:function(res) {
-                    console.log(res)
-                },
-            })
         })
         $('body').on('click','#look','click',function(){//允许选手查看
-            var is_view=$('#look').attr('data-look');
-            var data={
-                action:"isUserViewBonus",
-                match_id:$.Request('match_id'),
-                is_view:is_view//1修改为允许,2修改为禁止用户查看
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                var is_view=_this.attr('data-look');
+                var data={
+                    action:"isUserViewBonus",
+                    match_id:$.Request('match_id'),
+                    is_view:is_view//1修改为允许,2修改为禁止用户查看
+                }
+                $.ajax({
+                    data:data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success:function(res) {
+                        $.alerts(res.data.info)
+                        if(res.success){
+                            var data_look="";
+                            var text_="";
+                            if(is_view=="1"){
+                                data_look='2'
+                                text_='<?=__('禁止选手查看', 'nlyd-student')?>'
+                            }else if(is_view=="2"){
+                                data_look='1'
+                                text_='<?=__('允许选手查看', 'nlyd-student')?>'
+                            }
+                            _this.attr('data-look',data_look).text(text_);
+                        }
+                        _this.removeClass('disabled')
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            _this.removeClass('disabled')
+                            $.alerts('<?=__('网络超时', 'nlyd-student')?>')
+                　　　　}
+                    }
+                })
+            }else{
+                $.alerts('<?=__('正在处理您的操作', 'nlyd-student')?>')
             }
-            $.ajax({
-                data:data,
-                success:function(res) {
-                    console.log(res)
-                },
-            })
         })
         $('body').on('click','#download','click',function(){//下载表格
-            var data={
-                action:"downloadBonus",
-                match_id:$.Request('match_id')
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                var data={
+                    action:"downloadBonus",
+                    match_id:$.Request('match_id')
+                }
+                $.ajax({
+                    data:data,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success:function(res) {
+                        if(res.success){
+                            if(res.data.info){
+                                window.location.href=res.data.info
+                            }
+                            _this.removeClass('disabled')
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            _this.removeClass('disabled')
+                            $.alerts('<?=__('网络超时', 'nlyd-student')?>')
+                　　　　}
+                    }
+                })
+            }else{
+                $.alerts('<?=__('正在处理您的操作', 'nlyd-student')?>')
             }
-            $.ajax({
-                data:data,
-                success:function(res) {
-                    console.log(res)
-                },
-            })
         })
         $('.show-type').click(function(){//下拉
             var _this=$(this);
