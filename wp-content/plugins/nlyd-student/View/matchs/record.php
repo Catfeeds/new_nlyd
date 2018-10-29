@@ -528,6 +528,7 @@ jQuery(function($) {
                         if(res.success){
                             window.location.reload();
                         }
+                        _this.removeClass('disabled')
                     },
                     complete: function(jqXHR, textStatus){
                         if(textStatus=='timeout'){
@@ -598,8 +599,8 @@ jQuery(function($) {
                             if(res.data.info){
                                 window.location.href=res.data.info
                             }
-                            _this.removeClass('disabled')
                         }
+                        _this.removeClass('disabled')
                     },
                     complete: function(jqXHR, textStatus){
                         if(textStatus=='timeout'){
