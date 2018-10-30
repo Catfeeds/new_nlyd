@@ -189,7 +189,7 @@
                         <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                     <?php if($user_info['user_roles'] == 'supervisor'):?>
-                    <a class="c_black8"  href="<?=home_url('supervisor');?>">
+                    <a class="c_black8"  href="<?=home_url('supervisor/logs');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper edit-info">
                             </div>
