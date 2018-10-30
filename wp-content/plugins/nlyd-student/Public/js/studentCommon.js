@@ -293,54 +293,6 @@ jQuery(document).ready(function($) {
             }      
         }
     } );
-    // var visibilityChange; 
-    // if (typeof document.hidden !== "undefined") {
-    //     visibilityChange = "visibilitychange";
-    // } else if (typeof document.mozHidden !== "undefined") {
-    //     visibilityChange = "mozvisibilitychange";
-    // } else if (typeof document.msHidden !== "undefined") {
-    //     visibilityChange = "msvisibilitychange";
-    // } else if (typeof document.webkitHidden !== "undefined") {
-    //     visibilityChange = "webkitvisibilitychange";
-    // }
-
-    // document.addEventListener(visibilityChange, function() {
-    //     var isHidden = document.hidden;
-    //     if (isHidden) {
-
-    //     // alert('当焦点不在当前窗口时的网页标题')
-    //     } else {
-            
-    //     }
-    // });
-    // jQuery(window).on("blur",function(){
-    //     var leavePage = jQuery.GetSession('leavePage','1');
-    //     if(leavePage){
-    //         leavePage['leavePage']+=1;
-    //     }else{
-    //         var sessionData={
-    //             leavePage:1,
-    //         }
-    //         leavePage= sessionData
-    //     }
-    //     jQuery.SetSession('leavePage',leavePage)
-    // })  
-    // jQuery(window).on("focus", function(e) {
-    //     var leavePage= jQuery.GetSession('leavePage','1');
-    //     if(leavePage){
-    //         var leveTimes=parseInt(leavePage['leavePage'])
-    //         jQuery.SetSession('leavePage',leavePage)
-    //         console.log(leveTimes)
-    //         if(leveTimes>0 && leveTimes<1){
-    //             jQuery.alerts('第'+leveTimes+'次离开考试页面,到达1次自动提交答题')
-    //         }
-    //         if(leveTimes>=1){
-    //             jQuery.alerts(_leavePage.submit)
-    //         }
-    //     }else{
-    //         jQuery.DelSession('leavePage')
-    //     }
-    // });
 // 初始化
     getMatchTime()
     initHeight();//手机端最小高度为屏幕高度
