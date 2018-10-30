@@ -2327,6 +2327,7 @@ class Student_Ajax
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;
+        if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24*30*12,'/');
         //update_user_meta($user_id,'last_login_time',get_time());
     }
 
