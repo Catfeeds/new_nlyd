@@ -15,30 +15,38 @@
                             </p>
                         </div>
 
-                        <?php if($answer_status == 1): ?>
+                        <?php /*if($answer_status == 1): */?><!--
                         <p class="fs_12 ta_c bottom_tips c_black">
-                            <?=__('您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛', 'nlyd-student')?>
+                            <?/*=__('您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛', 'nlyd-student')*/?>
                         </p>
-                        <?php endif;?>
+                        --><?php /*endif;*/?>
                         <?php if(empty($current_project) && empty($start_project) && empty($end_project) ){ ?>
                         <p class="fs_12 ta_c bottom_tips c_black">
                             <?=__('中场休息', 'nlyd-student')?>
                         </p>
                         <?php }
                         else {
-                            if ($start_project != 'y') {
 
-                                if ($end_project == 'y') {
-                                    $text = __('本轮结束后查看答题详情', 'nlyd-student');
-                                } else {
-                                    $text = __('下一轮开赛', 'nlyd-student');
-                                }
-
-                                ?>
+                            if($answer_status == 1){ ?>
                                 <p class="fs_12 ta_c bottom_tips c_black">
-                                    <?=__($current_project['project_title'], 'nlyd-student')?> <?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more']) ?><?= $text ?>
+                                    <?=__('您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛', 'nlyd-student')?>
                                 </p>
-                        <?php }
+                        <?php }else {
+
+                                if ($start_project != 'y') {
+
+                                    if ($end_project == 'y') {
+                                        $text = __('本轮结束后查看答题详情', 'nlyd-student');
+                                    } else {
+                                        $text = __('下一轮开赛', 'nlyd-student');
+                                    }
+
+                                    ?>
+                                    <p class="fs_12 ta_c bottom_tips c_black">
+                                        <?= __($current_project['project_title'], 'nlyd-student') ?><?php printf(__('第%s轮已开赛，禁止进入比赛，您可等待', 'nlyd-student'), $current_project['more']) ?><?= $text ?>
+                                    </p>
+                                <?php }
+                            }
                         }
                         ?>
                         <?php if($count_down > 0 ){ ?>

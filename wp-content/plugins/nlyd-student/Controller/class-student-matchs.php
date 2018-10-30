@@ -383,7 +383,7 @@ class Student_Matchs extends Student_Home
 
         if($this->project_alias == 'wzsd'){
 
-            if(isset($_SESSION['match_post_id'])){
+            if(!isset($_SESSION['match_post_id'])){
 
                 //判断语言
                 $language = get_user_meta($current_user->ID,'locale')[0];
