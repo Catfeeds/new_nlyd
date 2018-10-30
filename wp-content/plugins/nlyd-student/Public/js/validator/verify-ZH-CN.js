@@ -5,6 +5,7 @@
     $.validationLayui = {
         newLang: function(){
             $.validationLayui.allRules = {
+
                 required: [
                   /[\S]+/
                   ,verify_ZH.required
@@ -48,7 +49,25 @@
                 chineseName:[
                   /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/,
                   verify_ZH.chineseName
-                ]
+                ],
+                filterSqlStr:function(value) {//过滤有关数据库操作的非法字符
+                    var str = "and,delete,or,exec,insert,select,union,update,count,*,',join,>,<";
+                    var sqlStr = str.split(',');
+                    var flag = true;
+                    var errorStr='';
+                    for (var i = 0; i < sqlStr.length; i++) {
+                        if (value.toLowerCase().indexOf(sqlStr[i]) != -1) {
+                            flag = false;
+                            errorStr=sqlStr[i]
+                            break;
+                        }
+                    }
+                    // alert(flag);
+                    if(!flag){
+                        return verify_ZH.filterSqlStr+":"+errorStr;
+                    }
+                    
+                }
               }
             
         },

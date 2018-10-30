@@ -42,7 +42,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <div class="input-icon "><div class="login_icon code_grey"></div></div>
-                                <input type="tel" name="send_code" lay-verify="required" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input hasIcon">
+                                <input type="tel" name="send_code" lay-verify="number" placeholder="<?=__('输入验证码', 'nlyd-student')?>" autocomplete="off" class="layui-input hasIcon">
                                 <a type="button" class="getCodeBtn c_blue getCode" data-sendCodeCase="17"><div><?=__('获取验证码', 'nlyd-student')?></div></a>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <div class="input-icon "><div class="login_icon code_grey"></div></div>
-                                <input type="password" name="password" lay-verify="required" placeholder="<?=__('输入密码', 'nlyd-student')?>" autocomplete="off" class="layui-input hasIcon">
+                                <input type="password" name="password" lay-verify="required|filterSqlStr" placeholder="<?=__('输入密码', 'nlyd-student')?>" autocomplete="off" class="layui-input hasIcon">
                             </div>
                         </div>
                         <div class="layui-form-item">

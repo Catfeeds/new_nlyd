@@ -24,7 +24,7 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('姓名', 'nlyd-student')?></div></div>
-                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="<?=__('请填写联系人姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                            <input name='fullname' value='<?=$row['fullname']?>' type="text" placeholder="<?=__('请填写联系人姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|filterSqlStr">
                             <input name='action' value='save_address' type="hidden">
                             <input type="hidden" name="_wpnonce"  value="<?=wp_create_nonce('student_save_address_code_nonce');?>">
                             <input type="hidden" name="id"  value="<?php echo isset($row['id']) ? $row['id'] : 0; ?>">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('详细地址', 'nlyd-student')?></div></div>
-                            <input type="text" name="address" lay-verify="required" placeholder="<?=__('详细地址', 'nlyd-student')?>" autocomplete="off" class="nl-input nl-foucs" value="<?=$row['address']?>">
+                            <input type="text" name="address" lay-verify="required|filterSqlStr" placeholder="<?=__('详细地址', 'nlyd-student')?>" autocomplete="off" class="nl-input nl-foucs" value="<?=$row['address']?>">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('设为默认', 'nlyd-student')?></div></div>

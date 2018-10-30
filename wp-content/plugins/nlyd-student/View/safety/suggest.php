@@ -24,7 +24,7 @@
                             </div>
                             <div class="layui-bg-white suggest-row">
                                 <div class="">
-                                    <textarea type="tel" id="contents" name="content" value="" placeholder="<?=__('您对我们的平台有什么建议或反馈？请告诉我们', 'nlyd-student')?>" lay-verify="required"  class="suggest-textarea nl-foucs"  style="resize:none"></textarea>
+                                    <textarea type="tel" id="contents" name="content" value="" placeholder="<?=__('您对我们的平台有什么建议或反馈？请告诉我们', 'nlyd-student')?>" lay-verify="required|filterSqlStr"  class="suggest-textarea nl-foucs"  style="resize:none"></textarea>
                                 </div>    
                             </div>
 
