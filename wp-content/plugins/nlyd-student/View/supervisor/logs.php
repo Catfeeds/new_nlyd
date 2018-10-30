@@ -20,10 +20,10 @@
                     ?>
                     <a class="message-row active_bg read" href="<?=home_url('supervisor/index/id/'.$v['id'])?>">
                         <div class="message-title">
-                            <span class="accept-name">张卓然(第5座位号)</span>
-                            <span class="message-time">2018-10-10 11:22:54</span>
+                            <span class="accept-name"><?=$v['student_name']?>(第<?=$v['seat_number']?>座位号)</span>
+                            <span class="message-time"><?=$v['created_time']?></span>
                         </div>
-                        <p class="message-detail">张卓然在逆向速算第一轮未到场答题</p>
+                        <p class="message-detail"><?=$v['student_name'].'在'.$v['match_title'].$v['project_title'].'第'.$v['match_more']?>轮未到场答题</p>
                     </a>
                     <?php } ?>
                 </div>

@@ -3701,6 +3701,21 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'上传失败'));
         }
     }
+
+
+    /**
+     * 删除监赛记录
+     */
+    public function remove_prison_match_log(){
+        global $wpdb;
+        $result = $wpdb->delete($wpdb->prefix.'prison_match_log',array('id'=>$_POST['id']));
+        if($result){
+            wp_send_json_success(array('info'=>'删除成功'));
+        }else{
+            wp_send_json_error(array('info'=>'删除失败'));
+        }
+    }
+
 }
 
 new Student_Ajax();
