@@ -3708,10 +3708,19 @@ class Student_Ajax
      */
     public function remove_prison_match_log(){
         global $wpdb;
+
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}prison_match_log where id = {$_POST['id']}",ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('数据错误'));
+
+        $wpdb->startTrans();
         $result = $wpdb->delete($wpdb->prefix.'prison_match_log',array('id'=>$_POST['id']));
-        if($result){
+
+        $b = $wpdb->update($wpdb->prefix.'match_questions',array('is_true'=>1),array('match_id'=>$row['match_id'],'project_id'=>$row['project_id'],'match_more'=>$row['match_more'],'user_id'=>$row['user_id']));
+        if($result && $b){
+            $wpdb->commit();
             wp_send_json_success(array('info'=>'删除成功'));
         }else{
+            $wpdb->rollback();
             wp_send_json_error(array('info'=>'删除失败'));
         }
     }

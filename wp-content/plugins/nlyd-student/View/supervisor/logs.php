@@ -1,6 +1,4 @@
 <!--监赛提交列表-->
-
-
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -17,17 +15,13 @@
                     <?php if(!empty($lists)){
                         foreach ($lists as $v){
                     ?>
-                    <div class="address-row width-margin width-margin-pc"
-                    <?php if(isset($_GET['match_id'])){?>
-                        href="<?=home_url('supervisor/index/id/'.$v['id'])?>"
-                    <?php } ?>
-                    >
+                    <div class="address-row width-margin width-margin-pc" href="<?=home_url('supervisor/index/id/'.$v['id'])?>">
                         <div class="address-left">
                             <div class="address-title">
-                                <span class="accept-name"><?=$val['fullname']?></span>
-                                <span class="phone-number ff_num"><?=$val['telephone']?></span>
+                                <span class="accept-name c_blue"><?=$v['student_name']?>(第<?=$v['seat_number']?>座位号)</span>
+                                <span class="phone-number ff_num"><?=$v['created_time']?></span>
                             </div>
-                            <p class="address-detail"><?=$val['user_address']?></p>
+                            <p class="address-detail c_black"><?=$v['student_name'].'在'.$v['match_title'].$v['project_title'].'第'.$v['match_more']?>轮未到场答题</p>
                         </div>
                         <div  class="address-right">
                             <a class="address-btn bg_gradient_blue c_white" href="<?=home_url('supervisor/index/id/'.$v['id'])?>"><?=__('修改', 'nlyd-student')?></a>
@@ -53,8 +47,8 @@ jQuery(function($) {
                 ,title: '提示' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper">'+_address.delete+'</div>'
-                ,btn: [_address.think, _address.sure, ]
+                ,content: '<div class="box-conent-wrapper"><?=__('是否删除', 'nlyd-student')?>?</div>'
+                ,btn: ["<?=__('点错了', 'nlyd-student')?>", "<?=__('确认', 'nlyd-student')?>", ]
                 ,success: function(layero, index){
 
                 }
@@ -63,8 +57,7 @@ jQuery(function($) {
                 }
                 ,btn2: function(index, layero){
                     var postData={
-                        action:'remove_address',
-                        _wpnonce:$("#delAddress").val(),
+                        action:'remove_prison_match_log',
                         id:_this.attr('data-id')
                     }
                     $.ajax({
@@ -108,5 +101,5 @@ $('.address-row').each(function(i){//左滑动
 })
 });
 
-})
+
 </script>
