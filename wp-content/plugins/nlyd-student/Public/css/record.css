@@ -256,12 +256,6 @@ border-bottom-right-radius: 8px;
 .btn-wrapper .btn-wrap:first-child .classify-btn{
     float: left;
 }
-/* .btn-wrapper.one-rank{
-    display: flex;
-}
-.btn-wrapper.one-rank{
-    flex: 1;
-} */
 .classify-active{
     border-bottom: 2px solid #2484FE;
     color: #2484FE;

@@ -276,6 +276,7 @@ if(!class_exists('StudentController')){
                     'password'=>__('密码必须是6位以上含字母及数字','nlyd-student'),
                     'differPass'=>__('两次输入密码不一致','nlyd-student'),
                     'chineseName'=>__('姓名格式不正确','nlyd-student'),
+                    'filterSqlStr'=>__('含有非法字符','nlyd-student'),
                 ]);
 
                 wp_register_script( 'student-common',student_js_url.'studentCommon.js',array('jquery'), leo_student_version  );
