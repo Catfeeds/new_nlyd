@@ -2455,7 +2455,7 @@ class Match_student {
         $match_id = intval($_GET['match_id']);
         $post = get_post($match_id);
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
-        $pageSize = 10;
+        $pageSize = 20;
         $start = ($page - 1)*$pageSize;
         $searchCode = '';
         $rows = [];
@@ -2469,9 +2469,9 @@ class Match_student {
                 LEFT JOIN '.$wpdb->usermeta.' AS um3 ON u.ID=um3.user_id AND um3.meta_key="user_real_name" 
                 LEFT JOIN '.$wpdb->prefix.'order AS o ON u.ID=o.user_id AND o.match_id='.$match_id.' AND o.pay_status IN(2,3,4) 
                 WHERE o.id is NULL 
-                AND (u.user_login LIKE "%'.$searchCode.'%" 
-                OR u.user_mobile LIKE "%'.$searchCode.'%" 
+                AND (u.user_mobile LIKE "%'.$searchCode.'%" 
                 OR u.user_email LIKE "%'.$searchCode.'%" 
+                OR um3.meta_value LIKE "%'.$searchCode.'%" 
                 OR um.meta_value LIKE "%'.$searchCode.'%") LIMIT '.$start.','.$pageSize, ARRAY_A);
 
                 $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -2506,7 +2506,7 @@ class Match_student {
                     <tr class="form-field">
                         <th scope="row"><label for="url">输入学员信息</label></th>
                         <td>
-                            <input name="searchCode" type="text" id="url" class="code" value="<?=$searchCode?>" placeholder="用户名/手机/邮箱/学员ID">
+                            <input name="searchCode" type="text" id="url" class="code" value="<?=$searchCode?>" placeholder="手机/邮箱/学员ID/姓名/证件号">
                             <button type="submit" class="button">搜索学员</button>
                         </td>
                     </tr>

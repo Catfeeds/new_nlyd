@@ -8,7 +8,7 @@
  */
 
 //unset($_SESSION['train_list']);
-if(empty($_SESSION['train_list'])){ ?>
+if(empty($_SESSION['train_list']) && !isset($_GET['back'])){ ?>
     <style>
         @media screen and (max-width: 1199px){
             #page {

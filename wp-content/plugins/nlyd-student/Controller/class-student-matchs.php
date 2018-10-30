@@ -383,44 +383,52 @@ class Student_Matchs extends Student_Home
 
         if($this->project_alias == 'wzsd'){
 
-            //判断语言
-            $language = get_user_meta($current_user->ID,'locale')[0];
-            $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
-            //获取文章速读考题
-            $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+            if(isset($_SESSION['match_post_id'])){
+
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                //获取文章速读考题
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         where a.slug = '{$locale}-match-question' ";
-            $rows = $wpdb->get_results($sql,ARRAY_A);
-            //print_r($sql);
-            if(empty($rows[0]['term_taxonomy_id'])){
-                $this->get_404(__('暂无比赛题目,联系管理员录题', 'nlyd-student'));
-                return;
-            }
-
-            $posts_arr = array_column($rows,'object_id');
-            //print_r($posts_arr);
-
-            //获取已比赛文章
-            $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
-            //print_r($sql1);
-            $post_str = $wpdb->get_var($sql1);
-
-            if(!empty($post_str)){
-                $post_arr = str2arr($post_str,',');
-                //print_r($posts_arr);
-
-                $result = array_diff($posts_arr,$post_arr);
-                if(empty($result)){
-                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student')));
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                //print_r($sql);
+                if(empty($rows[0]['term_taxonomy_id'])){
+                    $this->get_404(__('暂无比赛题目,联系管理员录题', 'nlyd-student'));
                     return;
                 }
-                //print_r($result);
 
+                $posts_arr = array_column($rows,'object_id');
+                //print_r($posts_arr);
+
+                //获取已比赛文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+
+                if(!empty($post_str)){
+                    $post_arr = str2arr($post_str,',');
+                    //print_r($posts_arr);
+
+                    $result = array_diff($posts_arr,$post_arr);
+                    if(empty($result)){
+                        $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student')));
+                        return;
+                    }
+                    //print_r($result);
+
+                }else{
+                    $result = $posts_arr;
+                }
+                //print_r($result);
+                $post_id = $result[array_rand($result)];
+
+                $_SESSION['match_post_id'] = $post_id;
             }else{
-                $result = $posts_arr;
+                $post_id = $_SESSION['match_post_id'];
             }
-            //print_r($result);
-            $post_id = $result[array_rand($result)];
+
 
             //获取文章
             $question = get_post($post_id );
@@ -498,7 +506,7 @@ class Student_Matchs extends Student_Home
         $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
-        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more_cn'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
         $data['match_more'] = $project_more['more'];
@@ -522,6 +530,8 @@ class Student_Matchs extends Student_Home
      * 比赛项目记忆完成答题页
      */
     public function answerMatch(){
+
+        unset($_SESSION['match_post_id']);
 
         if(empty($_GET['match_id']) || empty($_GET['project_more_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
@@ -634,7 +644,7 @@ class Student_Matchs extends Student_Home
         $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
-        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more_cn'] = $project_more['more'];
         $data['match_more'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
@@ -946,7 +956,7 @@ class Student_Matchs extends Student_Home
             'next_project'=>$next_project,
             'project_alias'=>$row['project_alias'],
             'str_len'=>$len,
-            'match_more_cn'=>chinanum($match_more['more']),
+            'match_more_cn'=>$match_more['more'],
             'match_more'=>$this->match_more,
             'success_length'=>$success_len,
             'use_time'=>$match_more['use_time']*60-$row['surplus_time'],
@@ -1078,7 +1088,7 @@ class Student_Matchs extends Student_Home
         $data = array(
             'project_alias'=>$this->project_alias,
             'str_len'=>$len,
-            'match_more_cn'=>chinanum($_GET['match_more']),
+            'match_more_cn'=>$_GET['match_more'],
             'success_length'=>$success_len,
             'use_time'=>$row['use_time']*60-$row['surplus_time'],
             'surplus_time'=>$row['surplus_time'],

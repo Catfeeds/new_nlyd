@@ -21,7 +21,7 @@
                         <div class="single-match-name"><?=__($project_title, 'nlyd-student')?></div>
                         <?php if(!empty($lists)):?>
                         <?php foreach ($lists as $v){?>
-                        <div class="single-match-lun <?=$v['more']==1?'lun-active':'';?>" data-post-id="<?=$v['more']?>"><?=sprintf(__('第%s轮', 'nlyd-student'),chinanum($v['more']))?></div>
+                        <div class="single-match-lun <?=$v['more']==1?'lun-active':'';?>" data-post-id="<?=$v['more']?>"><?=sprintf(__('第%s轮', 'nlyd-student'),$v['more'])?></div>
                         <?php } ?>
                         <?php endif; ?>
                     </div>
