@@ -601,7 +601,8 @@ layui.define('layer', function(exports){
             } else {
               $.alerts(errorText);
             }
-            if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
+            item.focus()
+            // if(!device.android && !device.ios) item.focus(); //非移动设备自动定位焦点
             othis.addClass(DANGER);
             return stop = true;
           }

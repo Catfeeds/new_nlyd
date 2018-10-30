@@ -30,7 +30,7 @@
                         </div>
                         <!-- <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('账户昵称', 'nlyd-student')?></div></div>
-                            <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="<?=__('账户昵称', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                            <input name='meta_val' value="<?=isset($user_info['nickname']) ? $user_info['nickname'] : '';?>" type="text" placeholder="<?=__('账户昵称', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="filterSqlStr">
                             <input  type="hidden" name="action" value="student_saveInfo"/>
                             <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
                             <input  type="hidden" name="meta_key" value="user_nicename"/>
@@ -43,7 +43,6 @@
                         </a> -->
                         <a class="form-input-row a address-row layui-row" href="<?=home_url('/account/address');?>">
                             <div class="form-input-label"><div><?=__('收件地址', 'nlyd-student')?></div></div>
-                            <div class="form-input-right c_blue"><div><?=__('修改收件地址', 'nlyd-student')?></div></div>
                             <div  class="nl-input">  
                                 <div>
                                 <?php if($user_address){ ?>
@@ -54,6 +53,7 @@
                                 <?php }?>
                                 </div>
                             </div>
+                            <div class="form-input-right c_blue"><div><?=__('修改收件地址', 'nlyd-student')?></div></div>
                         </a>
                     <!-- </div>
                 </form>
@@ -61,7 +61,7 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom">
                             <div class="form-inputs"> -->
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('国 籍', 'nlyd-student')?></div></div>
+                                    <div class="form-input-label"><div><?=__('国家或地区', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
                                     <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">
@@ -79,11 +79,11 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('证件号码', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required"  class="nl-input nl-foucs">
+                                    <input type="text" name="meta_val[real_ID]" id="meta_val[real_ID]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_ID'] : '';?>" placeholder="<?=__('输入证件上的真实证件号', 'nlyd-student')?>" lay-verify="required|filterSqlStr|validate"  class="nl-input nl-foucs">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('姓 名', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|filterSqlStr|validate">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
@@ -487,7 +487,7 @@ jQuery(document).ready(function($) {
             var form = layui.form
             form.render();
             // 自定义验证规则
-            // form.verify($.validationLayui.allRules);
+            form.verify($.validationLayui.allRules);
             // 监听提交
             form.on('submit(nicenameFormBtn)', function(data){//昵称
                 sendloginAjax(data.field)

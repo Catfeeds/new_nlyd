@@ -641,6 +641,16 @@ layui.use(['element','flow','layer','form'], function(){
             }
         });
     }
+    function transform() {
+        var _this=$('.layui-this')
+        var left=_this.position().left+parseInt(_this.css('marginLeft'));
+        var html=_this.html();
+        var id=_this.attr('data-id')
+        $('.nl-transform').css({
+            'transform':'translate3d('+left+'px, 0px, 0px)'
+        }).html(html)
+    }
+    transform()
     var isClick={}
     pagation($('.layui-this').attr('data-id'))
     element.on('tab(tabs)', function(){//tabs

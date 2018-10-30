@@ -27,11 +27,11 @@
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('新密码', 'nlyd-student')?></div></div>
-                                <input name='new_pass' value="" type="text" placeholder="<?=__('新密码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='new_pass' value="" type="text" placeholder="<?=__('新密码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="password|filterSqlStr">
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('再次输入', 'nlyd-student')?></div></div>
-                                <input name='confirm_pass' value="" type="text" placeholder="<?=__('再次输入', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='confirm_pass' value="" type="text" placeholder="<?=__('再次输入', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|filterSqlStr">
                             </div>
                             <?php } ?>
                             <?php if($_GET['type'] == 'mobile'){ ?>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
-                                <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="number">
                             </div>
                             <?php }?>
                             <?php if(!empty($user_info['user_mobile']) && $_GET['confirm'] == 1){ ?>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('验证码', 'nlyd-student')?></div></div>
-                                <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required">
+                                <input name='verify_code' value="" type="tel" placeholder="<?=__('验证码', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="number">
                             </div>
                             <?php } ?>
                             <?php } ?>

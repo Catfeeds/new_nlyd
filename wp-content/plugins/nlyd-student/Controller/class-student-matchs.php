@@ -506,7 +506,7 @@ class Student_Matchs extends Student_Home
         $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
-        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more_cn'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
         $data['match_more'] = $project_more['more'];
@@ -644,7 +644,7 @@ class Student_Matchs extends Student_Home
         $data['count_down'] = $_SESSION['count_down']['count_down_time']-get_time();
         $data['match_title'] = $project_more['match_title'];
         $data['project_title'] = $project_more['project_title'];
-        $data['match_more_cn'] = chinanum($project_more['more']);
+        $data['match_more_cn'] = $project_more['more'];
         $data['match_more'] = $project_more['more'];
         $data['project_alias'] = $this->project_alias = $project_more['project_alias'];
         $data['project_id'] = $project_more['project_id'];
@@ -956,7 +956,7 @@ class Student_Matchs extends Student_Home
             'next_project'=>$next_project,
             'project_alias'=>$row['project_alias'],
             'str_len'=>$len,
-            'match_more_cn'=>chinanum($match_more['more']),
+            'match_more_cn'=>$match_more['more'],
             'match_more'=>$this->match_more,
             'success_length'=>$success_len,
             'use_time'=>$match_more['use_time']*60-$row['surplus_time'],
@@ -1088,7 +1088,7 @@ class Student_Matchs extends Student_Home
         $data = array(
             'project_alias'=>$this->project_alias,
             'str_len'=>$len,
-            'match_more_cn'=>chinanum($_GET['match_more']),
+            'match_more_cn'=>$_GET['match_more'],
             'success_length'=>$success_len,
             'use_time'=>$row['use_time']*60-$row['surplus_time'],
             'surplus_time'=>$row['surplus_time'],
