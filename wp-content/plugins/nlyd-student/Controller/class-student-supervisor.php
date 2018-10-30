@@ -81,8 +81,8 @@ class Student_Supervisor extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
 
         if(ACTION == 'logs'){
-            wp_register_style( 'my-student-messagesList', student_css_url.'messagesList.css',array('my-student') );
-            wp_enqueue_style( 'my-student-messagesList' );
+            wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
+            wp_enqueue_style( 'my-student-address' );
         }
 
     }
