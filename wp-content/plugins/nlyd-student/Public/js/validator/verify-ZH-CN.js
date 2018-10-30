@@ -51,7 +51,7 @@
                   verify_ZH.chineseName
                 ],
                 filterSqlStr:function(value) {//过滤有关数据库操作的非法字符
-                    var str = "and,delete,or,exec,insert,select,union,update,count,*,',join,>,<";
+                    var str = "and,delete,or,exec,insert,select,union,update,count,*,',join,>,<,null,undefined";
                     var sqlStr = str.split(',');
                     var flag = true;
                     var errorStr='';
@@ -66,10 +66,25 @@
                     if(!flag){
                         return verify_ZH.filterSqlStr+":"+errorStr;
                     }
-                    
-                }
+                },
+                validate:function(value) {
+                    // var pattern = /[`~!@#$%^&*()_+<>?:"{},./;'[]]/im;
+                    var arr = ['[','`','~','!','@','#','$','%','^','&','*','(',')','_','+','<','>','?',':','"','{','}',',','.','/',';','[',']']
+                    var flag = true;
+                    var errorStr='';
+                    for (var i = 0; i < arr.length; i++) {
+                        if (value.toLowerCase().indexOf(arr[i]) != -1) {
+                            flag = false;
+                            errorStr=arr[i]
+                            break;
+                        }
+                    }
+                    // alert(flag);
+                    if(!flag){
+                        return verify_ZH.filterSqlStr+":"+errorStr;
+                    }
+                },
               }
-            
         },
         date:function(){
                 var date=new Date()

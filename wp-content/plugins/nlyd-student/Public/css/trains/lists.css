@@ -42,7 +42,7 @@
     display: table;
     width: 13px;
     margin-right: 10px;
-    margin-top: 7px;
+    margin-top: 3px;
 }
 .item_img img{
     display: table-cell;
@@ -50,8 +50,9 @@
     width: 100%;
 }
 .name_wrapper{
-    width: -webkit-calc(100% - 17px);
-    width: calc(100% - 17px);
+    width: -webkit-calc(100% - 23px);
+    width: calc(100% - 23px);
+    float: left;
 }
 .arrow_box{
     position: absolute;

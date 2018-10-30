@@ -105,7 +105,7 @@
                                                     <div class="table_content"><?= __('年 龄', 'nlyd-student') ?></div>
                                                 </td>
                                                 <td>
-                                                    <div class="table_content"><?= __('国 籍', 'nlyd-student') ?></div>
+                                                    <div class="table_content"><?= __('区 域', 'nlyd-student') ?></div>
                                                 </td>
                                             </tr>
                                             </thead>

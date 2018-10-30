@@ -55,17 +55,24 @@ class Teacher
         
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
         $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
-        $serachWhere = $searchStr != '' ? " AND (b.user_login LIKE '%{$searchStr}%' OR b.user_mobile LIKE '%{$searchStr}%' OR b.user_email LIKE '%{$searchStr}%')" : '';
+        $serachWhere = '';
+        $join = '';
+        global $wpdb;
+        if($searchStr != ''){
+            $join = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
+            $serachWhere = " AND (b.user_mobile LIKE '%{$searchStr}%' OR b.user_email LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')" ;
+        }
+
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        global $wpdb;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,b.user_email,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile   
-                    FROM {$wpdb->prefix}coach_skill a  
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,b.user_email,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
+                    FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
+                    LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
+                    {$join} 
                     WHERE a.coach_id > 0 AND b.ID !='' {$serachWhere} 
                     LIMIT {$start},{$pageSize}";
         $rows = $wpdb->get_results($sql, ARRAY_A);
-
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -95,7 +102,7 @@ class Teacher
                     </div>
                     <p class="search-box">
                         <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                        <input type="text" id="searchs" name="s" placeholder="用户名/手机/邮箱" value="<?=$searchStr?>">
+                        <input type="text" id="searchs" name="s" placeholder="姓名/手机/邮箱" value="<?=$searchStr?>">
                         <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
                     </p>
                     <div class="tablenav-pages one-page">
@@ -114,6 +121,7 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="datum" class="manage-column column-name">教练资料</th>
                         <th scope="col" id="student" class="manage-column column-name">查看学员</th>
                         <th scope="col" id="student" class="manage-column column-apply_student">申请中</th>
@@ -157,6 +165,10 @@ class Teacher
                                 <span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span>
                                 <span class="screen-reader-text">未知</span>
                             </td>
+                            <td class="ID column-ID" data-colname="ID">
+                                <span aria-hidden="true"><?=$row['userID']?></span>
+                                <span class="screen-reader-text">未知</span>
+                            </td>
                             <td class="name column-name" data-colname="教练资料">
                                 <span aria-hidden="true"><a href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">教练资料</a></span>
                                 <span class="screen-reader-text">-</span>
@@ -190,10 +202,13 @@ class Teacher
                         <th scope="col" class="manage-column column-username column-primary sortable desc">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
-                        <th scope="col" class="manage-column column-datum column-primary">
+                        <th scope="col" class="manage-column column-datum">
                             姓名
                         </th>
-                        <th scope="col" class="manage-column column-student column-primary">
+                        <th scope="col" class="manage-column column-ID">
+                            ID
+                        </th>
+                        <th scope="col" class="manage-column column-student">
                             教练资料
                         </th>
                         <th scope="col" class="manage-column column-name">查看学员</th>
@@ -447,11 +462,19 @@ class Teacher
         if($type == 0) $typeWhere = '';
         else $typeWhere = ' AND co.apply_status='.$type;
         $typeWhere .= ' AND co.apply_status!=-1';
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+
+        $searchWhere = '';
+        $searchJoin = '';
+        if($searchStr != ''){
+            $searchWhere = " AND (u.user_mobile LIKE '%{$searchStr}%' OR u.user_email LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
+            $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=co.user_id AND um2.meta_key='user_real_name'";
+        }
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
-        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,u.ID AS user_id, 
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,u.ID AS user_id,um.meta_value AS userID, 
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
                 WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
@@ -460,7 +483,9 @@ class Teacher
                 END AS apply_name 
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
                 LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
-                WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.' 
+                LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=co.user_id AND um.meta_key="user_ID" 
+                '.$searchJoin.'   
+                WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.$searchWhere.' 
                 ORDER BY co.apply_status ASC 
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
@@ -474,7 +499,6 @@ class Teacher
             'total' => $pageAll,
             'current' => $page
         ));
-
 
         ?>
         <div class="wrap">
@@ -513,6 +537,11 @@ class Teacher
                     }
                 </script>
             </div>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="text" id="searchs" name="s" placeholder="姓名/手机/邮箱" value="">
+                <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher-student&id='.$coach_id.'&s=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
+            </p>
             <form method="get" onsubmit="return false;">
 
 
@@ -545,6 +574,7 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                         <th scope="col" id="age" class="manage-column column-age">年龄</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
@@ -585,6 +615,7 @@ class Teacher
                                      </div>
                                  </td>
                                  <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span><span class="screen-reader-text">未知</span></td>
+                                 <td class="ID column-ID" data-colname="ID"><span aria-hidden="true"><?=$row['userID']?></span><span class="screen-reader-text">未知</span></td>
                                  <td class="mobile column-sex" data-colname="性别"><?=isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '-'?></td>
                                  <td class="mobile column-age" data-colname="年龄"><?=isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '-'?></td>
 
@@ -609,6 +640,7 @@ class Teacher
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col"  class="manage-column column-name">姓名</th>
+                        <th scope="col"  class="manage-column column-ID">ID</th>
                         <th scope="col"  class="manage-column column-sex">性别</th>
                         <th scope="col"  class="manage-column column-age">年龄</th>
                         <th scope="col"  class="manage-column column-mobile">手机</th>

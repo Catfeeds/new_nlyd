@@ -1768,17 +1768,22 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' ￥'.$row['all_bonus']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),$tax_allObjRichText);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),$tax_send_bonusObjRichText);
-//            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' 二维码收款路径');
+
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$row['card_num']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['mobile']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['team']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),$objRichText);
 
             //超链接
-            $path_bonusObjRichText = new \PHPExcel_RichText();
-            $path_bonusObjRichText->createTextRun('二维码收款路径')->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.($k+3), $path_bonusObjRichText);
-            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl(get_user_meta($row['user_id'],'user_coin_code',true)[0]);
+            if(get_user_meta($row['user_id'],'user_coin_code',true)[0]){
+                $path_bonusObjRichText = new \PHPExcel_RichText();
+                $path_bonusObjRichText->createTextRun('二维码收款路径')->getFont()->setColor( new \PHPExcel_Style_Color( '005e70cc' ) );//设置颜色
+                $objPHPExcel->getActiveSheet()->setCellValue('H'.($k+3), $path_bonusObjRichText);
+                $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setUrl(get_user_meta($row['user_id'],'user_coin_code',true)[0]);
+            }else{
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' ');
+            }
+
 //            $objPHPExcel->getActiveSheet()->getCell('H'.($k+3))->getHyperlink()->setTooltip('Navigate to website');
 //            $objPHPExcel->getActiveSheet()->getStyle('H'.($k+3))->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         }

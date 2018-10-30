@@ -29,7 +29,7 @@
                                             $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($val->ID), 'thumbnail');
                                             ?>
                                             <div class="item_img"><img src="<?=$thumbnail_image_url[0]?>"></div>
-                                            <div class="name_wrapper"><?=__($val->post_title, 'nlyd-student')?></div>
+                                            <div class="name_wrapper dis_table"><div class="dis_cell"><?=__($val->post_title, 'nlyd-student')?></div></div>
                                             <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
                                
                                         </a>
