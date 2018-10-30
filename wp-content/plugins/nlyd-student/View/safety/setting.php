@@ -19,18 +19,22 @@
                         <div class="form-inputs">
                             <a class="form-input-row a" href="<?=home_url('/safety/userAgreement');?>">
                                 <div class="form-input-label"><div><?=__('用户协议', 'nlyd-student')?></div></div>
+                                <div class="nl-input"></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <a class="form-input-row a" href="<?=home_url('/safety/privacyAgreement');?>">
                                 <div class="form-input-label"><div><?=__('隐私协议', 'nlyd-student')?></div></div>
+                                <div class="nl-input"></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <a class="form-input-row a" href="<?=home_url('/safety/suggest');?>">
                                 <div class="form-input-label"><div><?=__('意见反馈', 'nlyd-student')?></div></div>
+                                <div class="nl-input"></div>
                                 <span class="form-input-right"><i class="iconfont">&#xe727;</i></span>
                             </a>
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('版本号', 'nlyd-student')?></div></div>
+                                <div class="nl-input"></div>
                                 <span class="form-input-right"><?=leo_student_version?></span>
                             </div>
                             <div class="form-input-row">

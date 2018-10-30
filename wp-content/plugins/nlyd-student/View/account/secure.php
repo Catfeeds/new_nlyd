@@ -28,6 +28,7 @@
                                 <div class="nl-input"><div><?=hideStar($user_info['user_mobile'])?></div></div>
                                 <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><div><?=__('修改', 'nlyd-student')?></div></a>
                                 <?php }else{ ?>
+                                    <div class="nl-input"></div>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/mobile')?>"><div><?=__('去设置', 'nlyd-student')?></div></a>
                                 <?php } ?>
                             </div>
@@ -37,6 +38,7 @@
                                     <div class="nl-input"><div><?=hideStar($user_info['user_email'])?></div></div>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><div><?=__('修改', 'nlyd-student')?></div></a>
                                 <?php }else{ ?>
+                                    <div class="nl-input"></div>
                                     <a class="form-input-right c_blue" href="<?=home_url('safety/safetySetting/type/email')?>"><div><?=__('去设置', 'nlyd-student')?></div></a>
                                 <?php } ?>
                             </div>
