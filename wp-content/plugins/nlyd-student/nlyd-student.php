@@ -110,7 +110,7 @@ if(!class_exists('StudentController')){
             //页面配置
             if(is_file(leo_student_path.'conf/config.php')){
 
-                $config = include(leo_student_path.'conf/config.php');
+                $config = include_once(leo_student_path.'conf/config.php');
                 //判断是否需要页面生成
                 if(!empty($config['page'])){
 
@@ -121,7 +121,7 @@ if(!class_exists('StudentController')){
 
             //数据表配置
             if(is_file(leo_student_path.'conf/create_table.php')){
-                include(leo_student_path.'conf/create_table.php');
+                include_once(leo_student_path.'conf/create_table.php');
             }
 
         }

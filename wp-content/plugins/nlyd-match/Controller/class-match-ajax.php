@@ -1461,6 +1461,138 @@ class Match_Ajax
         if($bool) wp_send_json_success(['info' => '删除成功']);
         else wp_send_json_error(['info' => '删除失败']);
     }
+
+    /**
+     * 获取监赛单条记录
+     */
+    public function get_prison_row(){
+        global $wpdb;
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}prison_match_log where id = {$_POST['id']}",ARRAY_A);
+        if(empty($row)) wp_send_json_error('数据错误');
+        if(!empty($row['evidence'])){
+            $row['evidence'] = json_decode($row['evidence'],true);
+        }
+        wp_send_json_success($row);
+    }
+
+    /**
+     * 编辑监赛记录
+     */
+    public function save_prison(){
+        global $current_user,$wpdb;
+
+        if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
+        if(isset($_POST['id']) && !empty($_POST['id'])){
+            if(empty($_POST['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+        }
+        else{
+            if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+            //获取当前比赛项目
+            $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+            if(!empty($rows)){
+                $new_time = get_time('mysql');
+                $match = array();
+                foreach ($rows as $val){
+                    if($val['start_time'] < $new_time && $new_time < $val['end_time']){
+                        $match = $val;
+                    }
+                }
+            }
+            if(empty($match)) wp_send_json_error(array('info'=>'当前时间段无比赛'));
+            //获取所有报名信息
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$match['match_id']} and pay_status in(2,3,4) order by id desc";
+            $results = $wpdb->get_results($sql,ARRAY_A);
+            $index = $_POST['seat_number']-1;
+            $user_id = $results[$index]['user_id'];
+            if(empty($user_id)) wp_send_json_error(array('info'=>'座位信息错误'));
+        }
+
+
+        if(empty($_POST['student_name'])){
+            $user_real_name = get_user_meta($user_id,'user_real_name')[0];
+            $real_name = $user_real_name['real_name'];
+        }else{
+            $real_name = $_POST['student_name'];
+        }
+
+        if(isset($_FILES['evidence'])){
+
+            $upload_dir = wp_upload_dir();
+            $dir = '/evidence/';
+
+            $num = 0;
+            foreach ($_FILES['evidence']['tmp_name'] as $upd){
+                //print_r($upd);
+                $file = $this->saveIosFile($upd,$upload_dir['basedir'].$dir);
+
+                if($file){
+                    $_POST['evidence'][] = $upload_dir['baseurl'].$dir.$file;
+                    ++$num;
+                }
+            }
+        }
+
+        if(isset($_POST['id']) && !empty($_POST['id'])){
+            $update = array(
+                'supervisor_id'=>$current_user->ID,
+                'student_name'=>$real_name,
+                'seat_number'=>$_POST['seat_number'],
+                'evidence'=>!empty($_POST['evidence']) ? json_encode($_POST['evidence']) : '',
+                'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+            );
+
+            $result = $wpdb->update($wpdb->prefix.'prison_match_log',$update,array('id'=>$_POST['id']));
+            //print_r($result);die;
+        }else{
+            $insert = array(
+                'supervisor_id'=>$current_user->ID,
+                'match_id'=>$match['match_id'],
+                'project_id'=>$match['project_id'],
+                'match_more'=>$match['more'],
+                'match_id'=>$match['match_id'],
+                'student_name'=>$real_name,
+                'seat_number'=>$_POST['seat_number'],
+                'evidence'=>!empty($_POST['evidence']) ? json_encode($_POST['evidence']) : '',
+                'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
+                'created_time'=>get_time('mysql'),
+            );
+            $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+        }
+        if($result){
+            wp_send_json_success(array('info'=>'编辑成功'));
+        }else{
+            wp_send_json_error(array('info'=>'编辑失败'));
+        }
+    }
+
+
+    /**
+     * ios关联上传
+     * 一般文件流上传
+     *@param  $filecontent 文件流
+     *@param  $path         文件保存目录
+     *
+     */
+    public function saveIosFile($filecontent,$upload_dir){
+
+        if(empty($filecontent)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+        //$base64 = htmlspecialchars($filecontent);
+        //$fileName = iconv ( "UTF-8", "GB2312", $filecontent );
+
+        $filename = date('YmdHis').'_'.rand(1000,9999).'.jpg';          //定义图片名字及格式
+
+        if(!file_exists($upload_dir)){
+            mkdir($upload_dir,0755,true);
+        }
+        $savepath = $upload_dir.'/'.$filename;
+        // $this->apiReturn(4001,$savepath);
+        if (move_uploaded_file($filecontent, $savepath)) {
+            return $filename;
+        }else{
+            return false;
+        }
+    }
 }
 
 new Match_Ajax();
