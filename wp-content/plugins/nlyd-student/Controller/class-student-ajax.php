@@ -122,7 +122,7 @@ class Student_Ajax
         }
         else{
 
-            $where = " WHERE a.match_id = {$_POST['match_id']} AND (a.pay_status = 4 or a.pay_status = 2) and a.order_type = 1 ";
+            $where = " WHERE a.match_id = {$_POST['match_id']} AND (a.pay_status = 4 or a.pay_status = 2) and a.order_type = 1 and c.is_true = 1 ";
             $age_where = '';
             $left_where = '';
             //判断是否存在分类id
@@ -163,12 +163,11 @@ class Student_Ajax
                 $left_where .= " and c.match_more = {$_POST['match_more']} ";
             }
 
-            $sql3 = "SELECT x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time ,x.created_microtime
+            $sql3 = "SELECT x.user_id,SUM(x.my_score) my_score ,SUM(x.surplus_time) surplus_time ,x.created_microtime,x.evidence
                         FROM(
-                            SELECT a.user_id,a.match_id,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime ,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time 
+                            SELECT a.user_id,a.match_id,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime ,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time,d.evidence 
                             FROM `{$wpdb->prefix}order` a 
                             LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
-                            #where a.match_id = 56329
                             {$where}
                             GROUP BY user_id,project_id
                         ) x
@@ -2327,6 +2326,7 @@ class Student_Ajax
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;
+        if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24*30*12,'/');
         //update_user_meta($user_id,'last_login_time',get_time());
     }
 
@@ -3678,6 +3678,7 @@ class Student_Ajax
         }else{
             $insert = array(
                 'supervisor_id'=>$current_user->ID,
+                'user_id'=>$user_id,
                 'match_id'=>$match['match_id'],
                 'project_id'=>$match['project_id'],
                 'match_more'=>$match['more'],
@@ -3688,7 +3689,11 @@ class Student_Ajax
                 'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
                 'created_time'=>get_time('mysql'),
             );
+
             $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+
+            $b = $wpdb->update($wpdb->prefix.'match_questions',array('is_true'=>2),array('match_id'=>$match['match_id'],'project_id'=>$match['project_id'],'match_more'=>$match['more'],'user_id'=>$user_id));
+
         }
         if($result){
             wp_send_json_success(array('info'=>'上传成功'));

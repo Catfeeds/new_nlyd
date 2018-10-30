@@ -417,6 +417,7 @@ function the_table_install () {
           `leave_page_time` text DEFAULT NULL COMMENT '记录每次离开页面的时间',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           `created_microtime` float(8,5) DEFAULT NULL COMMENT '提交时间毫秒',
+          `is_true` tinyint(2) DEFAULT '1' COMMENT '成绩真实性 1 真实 2 虚假',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

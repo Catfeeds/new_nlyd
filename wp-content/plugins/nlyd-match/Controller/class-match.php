@@ -129,7 +129,62 @@ class Match
         }
 
         add_submenu_page( 'edit.php?post_type=match', '轮数设置', '轮数设置', 'match_more_list', 'match_more', array($this,'match_more_list'),45);
+        add_submenu_page( 'edit.php?post_type=match', '监赛列表', '监赛列表', 'match_more_list', 'match_prison', array($this,'match_prison_list'),45);
         add_submenu_page( 'edit.php?post_type=match', '奖金设置', '奖金设置', 'match_bonus_list', 'match_bonus', array($this,'match_bonus_list'),45);
+
+    }
+
+    /**
+     * 监赛列表
+     */
+
+    public function match_prison_list(){
+        global $wpdb;
+        $wap = array();
+        $where = '';
+        if(isset($_GET['match_title'])){
+            $wap[] = " b.post_title like '%{$_GET['post_title']}%' ";
+        }
+        if(isset($_GET['project_title'])){
+            $wap[] = " c.post_title like '%{$_GET['post_title']}%' ";
+        }
+        if(isset($_GET['student_name'])){
+            $wap[] = " a.student_name like '%{$_GET['student_name']}%' ";
+        }
+        if(isset($_GET['student_name'])){
+            $wap[] = " a.seat_number = {$_GET['seat_number']} ";
+        }
+
+        if(!empty($wap)){
+            $where = ' where '.join($wap,' and ');
+        }
+        $page = ($page = isset($_GET['paged']) ? intval($_GET['paged']) : 1) < 1 ? 1 : $page;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+
+        //获取轮数列表
+        $sql = "select SQL_CALC_FOUND_ROWS a.id,a.match_more,a.student_name,a.seat_number,b.post_title match_title,c.post_title project_title,a.created_time
+                from {$wpdb->prefix}prison_match_log a
+                left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                left join {$wpdb->prefix}posts c on a.project_id = c.ID
+                $where
+                order by a.id desc
+                limit {$start},{$pageSize}
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'paged', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+        //print_r($sql);
+        include_once match_view_path.'match_prison_list.php';
 
     }
 
