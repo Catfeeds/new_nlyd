@@ -98,4 +98,100 @@ jQuery(document).ready(function($) {
             });
       })
     })
+    $('.remove_more').live('click',function(event){//删除
+        var id = $(this).attr('data-id');
+        $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {
+            alert(data.data);
+            history.go(0);
+        },'json')
+        return false;
+    });
+    $('.update_more').live('click',function(event){//编辑
+        var _this=$(this);
+        var project_id=_this.attr('data-project')
+        var project_name=_this.attr('data-name');
+        var title=project_name+_this.parent('li').find('.match_more').text();//弹框title
+        var start_time=_this.parent('li').find('.start_time').text();//开始时间
+        var end_time=_this.parent('li').find('.end_time').text()//结束时间
+        var _time=_this.parent('li').find('.use_time').text();//比赛时常
+        var status=_this.parent('li').find('.status').text();//比赛状态
+        showForm(title)
+        //表单数据
+        $('#match_more_id').val($(this).attr('data-id'))
+        $('.show_form .layui-unselect').each(function(){
+            if($(this).find('div').text()==status){
+                $(this).click()
+                return false;
+            }
+        })
+        $('input[name=project_id]').val(project_id)
+        $('input[name=start_time]').val(start_time)
+        $('input[name=end_time]').val(end_time)
+        $('input[name=use_time]').val(_time)
+ 
+        return false;
+    });
+    $('.add_new').live('click',function(event){//新增
+        var _this=$(this);
+        var project_id=_this.attr('data-project');
+        var project_name=_this.attr('data-name');
+        //表单数据清空
+        $('#match_more_id').val('')
+        $('input[name=project_id]').val(project_id)
+        $('input[name=start_time]').val('')
+        $('input[name=end_time]').val('')
+        $('input[name=use_time]').val('')
+        showForm(project_name+'新增轮数')
+        return false;
+    })
+    function showForm(title) {
+        layer.open({
+            type: 1
+            ,maxWidth:1000
+            ,title: title //不显示标题栏
+            ,skin:'nl-box-skin'
+            ,id: 'certification1' //防止重复弹出
+            ,content:$('.show_form')
+            ,btn: ['按错了','提交',  ]
+            ,success: function(layero, index){
+                
+            }
+            ,yes: function(index, layero){
+                layer.closeAll();
+            }
+            ,btn2: function(index, layero){
+                //按钮【按钮二】的回调
+                layer.closeAll();
+                // var query = $('.add_more_form').serialize();
+                var query={
+                    action:'match_more_add',
+                    post_id:$('input[name=post_id]').val(),
+                    project_id:$('input[name=project_id]').val(),
+                    more_id:$('#match_more_id').val(),
+                    start_time:$('input[name=start_time]').val(),
+                    end_time:$('input[name=end_time]').val(),
+                    use_time:$('input[name=use_time]').val(),
+                    status:$('input[name=status]:checked').val()
+                }
+                console.log(query)
+                $.post(ajaxurl,query,function (data) {
+                    //return false;
+                    alert(data.data);
+                    if(data.success == true){
+                        history.go(0);
+                    }
+                    
+                    /*setTimeout(function () {
+                    },900)*/
+                },'json')
+            }
+            ,closeBtn:2
+            ,btnAagn: 'c' //按钮居中
+            ,shade: 0.3 //遮罩
+            ,isOutAnim:true//关闭动画
+        });
+       
+    }
+
+
 });

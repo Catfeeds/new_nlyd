@@ -15,7 +15,12 @@
                 <div><?=__('训练类型', 'nlyd-student')?></div>
                 </h1>
             </header>
-
+  <!-- <div id="bdtts_div_id">
+    <audio id="tts_autio_id" autoplay="autoplay">
+      <source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&amp;ie=UTF-8&amp;spd=5&amp;per=1&amp;text=请输入文字" type="audio/mpeg">
+      <embed id="tts_embed_id" height="0" width="0" src="">
+    </audio>
+  </div> -->
                     <?php if (empty($list)){ ?>
                         <div class="layui-row nl-border nl-content">
                             <div class="width-padding width-padding-pc">
@@ -51,3 +56,27 @@
         </div>
     </div>
 </div>
+<script>
+    // function doTTS() {
+    //   var ttsDiv = document.getElementById('bdtts_div_id');
+    //   var ttsAudio = document.getElementById('tts_autio_id');
+    // //   var ttsText = document.getElementById('ttsText').value;
+    // var ttsText ="1,2,3,4,5,6,7"
+    //   // 文字转语音
+    //   ttsDiv.removeChild(ttsAudio);
+    //   var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+    //   var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=3&spd=5&text=' + ttsText + '" type="audio/mpeg">';
+    //   var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+    //   var au2 = '</audio>';
+    //   ttsDiv.innerHTML = au1 + sss + eee + au2;
+
+    //   ttsAudio = document.getElementById('tts_autio_id');
+
+    //   ttsAudio.play();
+    // }
+    // doTTS()
+jQuery(function($) {
+
+})
+</script>
+

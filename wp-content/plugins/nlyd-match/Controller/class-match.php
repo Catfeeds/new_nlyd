@@ -994,12 +994,67 @@ class Match
         }
         //print_r($default_project);
 
-        if (!empty($default_project)) {
+        if (!empty($default_project)) { ?>
+<style>
+.show_form{
+    /* width:600px; */
+    padding:20px;
+}
+.layui-layer.nl-box-skin{
+    width:800px;
+}
+.nl-box-skin .layui-layer-title{
+    font-size:20px;
+    height:50px;
+    line-height:50px;
+}
+</style>
+        
+           <!--轮数新增/修改form-->
+            <div class="show_form" style="display: none" >
+                    <input type="hidden" name="post_id" value="<?=$_GET['post']?>"/>
+                    <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
+                    <input id="match_more_id" type="hidden" name="more_id" value=""/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">比赛时长</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="use_time" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">比赛状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="-1" title="已结束">
+                            <input type="radio" name="status" value="1" title="未开始">
+                            <input type="radio" name="status" value="2" title="进行中">
+                        </div>
+                    </div>
+            </div>
+        <?php
             global $wpdb;
             foreach ($default_project as $k => $val){
 
                 //获取每个项目信息
-                $sql = "select *,date_format(start_time, '%Y-%m-%d %H:%i') start_time_format,date_format(end_time, '%Y-%m-%d %H:%i') end_time_format from {$wpdb->prefix}match_project_more where match_id = {$posts->ID} and project_id = {$k}";
+                $sql = "select *,
+                        case status
+                        when -1 then '已结束'
+                        when 1 then '未开始'
+                        when 2 then '进行中'
+                        end status_cn,
+                        date_format(start_time, '%Y-%m-%d %H:%i') start_time_format,date_format(end_time, '%Y-%m-%d %H:%i') end_time_format 
+                        from {$wpdb->prefix}match_project_more where match_id = {$posts->ID} and project_id = {$k}";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
                 $total = count($rows);
                 //print_r($rows);
@@ -1012,7 +1067,7 @@ class Match
                         <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$k?>"  <?= in_array($k,$match_project_id) ? 'checked':''; ?> lay-skin="primary" title="<?=$val?>"/>
                         <?php if(in_array($k,$match_project_id)): ?>
                         <span>(<?=$total > 0 ? $total : 0;?>)</span>
-                        <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
+                        <a class="add_new" data-project="<?=$k?>" data-name="<?=$val?>" href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
                         <?php endif;?>
                     </div>
                     <div>
@@ -1022,10 +1077,15 @@ class Match
                         </div>
                         <div class="layui-input-inline">
                             <ul>
-                                <?php foreach ($rows as $k => $row){ ?>
+                                <?php foreach ($rows as $row){ ?>
                                 <li>
-                                    第<?=$k+1?>轮
-                                    <?=$row['start_time_format'].'  '.$row['end_time_format']?>
+                                    <span class="match_more">第<?=$row['more']?>轮</span>
+                                    <span>时长<span class="use_time"><?=$row['use_time']?></span>分钟</span>
+                                    <span class="status"><?=$row['status_cn']?></span>
+                                    <span class="start_time"><?=$row['start_time_format']?></span>
+                                    <span class="end_time"><?=$row['end_time_format']?></span>
+                                    <a style="color:#4394F9" class="update_more" data-project="<?=$row['project_id']?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">编辑</a>
+                                    <a style="color:#4394F9" class="remove_more" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">删除</a>
                                 </li>
                                 <?php } ?>
                             </ul>
