@@ -13,7 +13,7 @@
                             <div class="c_blue match_info_font"><div><?=__('第', 'nlyd-student')?><span id="number">1</span>/<?=!empty($match_questions) ? count($match_questions) : 1?><?=__('题', 'nlyd-student')?></div></div>
                             <div class="c_blue match_info_font">
                                 <div>
-                                    <i class="iconfont">&#xe685;</i>
+                                    <!-- <i class="iconfont">&#xe685;</i> -->
                                     <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                                 </div>
                             </div>
