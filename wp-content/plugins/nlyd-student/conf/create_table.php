@@ -31,6 +31,28 @@ function the_table_install () {
 
     }*/
 
+
+    $table_name = $wpdb->prefix . "grading_meta";  //我的战队   储存我的战队信息
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `category_id` int(20) NOT NULL COMMENT '考级类别',
+          `entry_end_time` datetime NOT NULL COMMENT '报名截止时间',
+          `start_time` datetime NOT NULL COMMENT '开始时间',
+          `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+          `address` varchar(255) DEFAULT NULL COMMENT '考级地址',
+          `cost` decimal(10,2) DEFAULT NULL COMMENT '考级费用',
+          `status` tinyint(2) DEFAULT NULL COMMENT '考级状态 -3:已结束 -2等待开赛 1:报名中 2:进行中',
+          `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "prison_match_log";  //比赛meta
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在

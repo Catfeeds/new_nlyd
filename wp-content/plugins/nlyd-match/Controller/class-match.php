@@ -47,69 +47,13 @@ class Match
                 $sql = " select * from {$wpdb->prefix}problem_meta where problem_id = {$_GET['post']} order by id asc ";
                 $this->problem = $wpdb->get_results($sql,ARRAY_A);
             }
-
-
-
-
-
-            /*if(in_array($post_type,array('match','genre','project','match-category'))){
-
-                //获取比赛meta
-                $sql = "select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['post']}";
-                $post_meta = $wpdb->get_row($sql,ARRAY_A);
-                $this->meta = $post_meta;
-
-
-                switch ($post_type){
-                    case 'match':
-                        //获取比赛选项
-                        $sql = " select a.id,a.post_id,a.match_project_id ID,
-                                  if(a.project_use_time < 1,'',a.project_use_time) project_use_time, 
-                                  if(a.match_more < 1,'',a.match_more) match_more,
-                                  if(unix_timestamp(a.project_start_time) > 1,a.project_start_time,'') project_start_time, 
-                                  if(a.project_washing_out < 1,'',a.project_washing_out) project_washing_out, 
-                                  if(a.project_time_interval < 1,'',a.project_time_interval) project_time_interval,
-                                  if(a.str_bit < 1,'',a.str_bit) str_bit,
-                                  if(child_count_down < 1,'',child_count_down) child_count_down,
-                                  b.post_title
-                                  from {$wpdb->prefix}match_project a
-                                  left join {$wpdb->prefix}posts b on a.match_project_id = b.ID
-                                  where a.post_id = {$_GET['post']} order by a.project_start_time ASC ,a.id asc
-                               ";
-                        //print_r($sql);
-                        $rows = $wpdb->get_results($sql,ARRAY_A);
-                        //$this->temp_key = array_column($rows,'match_project_id');
-                        $this->temp_key = array_column($rows,'ID');
-                        $match_project = array_combine($this->temp_key,$rows) ;
-                        //print_r($this->temp_key );
-                        $this->project = $match_project;
-                        break;
-                    case 'project':
-
-                        //获取当前项目别名
-                        $alias = get_post_meta($_GET['post'],'project_alias');
-                        $this->alias = $alias[0];
-                        if(in_array($this->alias,array('zxss','kysm'))){
-                            $child_count_down = get_post_meta($_GET['post'],'child_count_down');
-                            $this->child_count_down = $child_count_down[0];
-
-                            $this->default_str_lenth = get_post_meta($_GET['post'],'default_str_length')[0];
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            elseif ($post_type == 'team'){
-                //获取战队基本资料
-                $sql = " select * from {$wpdb->prefix}team_meta where team_id = {$_GET['post']} ";
-                $this->team_meta = $wpdb->get_row($sql,ARRAY_A);
-                //print_r($this->team_meta);
-            }elseif ($post_type == 'problem'){
+            elseif ($post_type == 'grading'){
                 //获取题目选项以及答案
-                $sql = " select * from {$wpdb->prefix}problem_meta where problem_id = {$_GET['post']} order by id asc ";
-                $this->problem = $wpdb->get_results($sql,ARRAY_A);
-            }*/
+                $sql = " select * from {$wpdb->prefix}grading_meta where grading_id = {$_GET['post']} order by id asc ";
+                $this->grading = $wpdb->get_row($sql,ARRAY_A);
+                //print_r($this->grading );
+            }
+
         }
 
         add_action('admin_menu',array($this,'add_submenu'));
@@ -1096,5 +1040,79 @@ class Match
         <?php }
     }
 
+
+    /**
+     * 比赛时间box
+     */
+    public function grading_type_box($post){
+        $args = array(
+            'post_type' => array('match-category'),
+            'post_status' => array('publish'),
+            'order' => 'asc',
+            'orderby' => 'menu_order',
+        );
+        $the_query = new WP_Query( $args );
+    ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label">考级类别</label>
+            <div class="layui-input-block">
+                <?php if(!empty($the_query->post)){ ?>
+                    <select name="grading[category_id]" lay-search="">
+                        <option value="">请选择</option>
+                        <?php
+                        foreach ($the_query->posts as $v){
+                            $selected = $v->ID == $this->grading['category_id'] ? "selected":" ";
+                            echo '<option value="'.$v->ID.'" '.$selected.'>'.$v->post_title.'</option>';
+                        }
+                        ?>
+                    </select>
+                <?php }else{ ?>
+                    <b>暂无类别</b>
+                    <a href="post-new.php?post_type=match-category">去添加</a>
+                <?php }?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛地点</label>
+            <div class="layui-input-block">
+                <input placeholder="比赛地点" class="layui-input" value="<?=$this->grading['address']?>" type="text" name="grading[address]">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛费用</label>
+            <div class="layui-input-block">
+                <input placeholder="比赛费用" class="layui-input" value="<?=$this->grading['cost']?>" type="text" name="grading[cost]">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">报名结束时间</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->grading['entry_end_time']))?>" name="grading[entry_end_time]" class="layui-input date-picker" readonly  id="entry_end_time" placeholder="报名结束时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛时间</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->grading['start_time']))?>" name="grading[start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-block">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->grading['end_time']))?>" name="grading[end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">比赛状态</label>
+
+            <div class="layui-input-block">
+                <!-- <span class="layui-input <?/*=$className*/?>"><?/*=$text*/?></span>-->
+                <input title="已结束" type="radio" name="grading[status]" value="-3" <?=$this->grading['status'] == -3?'checked':'';?> >
+                <input title="报名中" type="radio" name="grading[status]" value="1" <?=$this->grading['status'] == 1?'checked':'';?> >
+                <input title="等待开赛" type="radio" name="grading[status]" value="-2" <?=$this->grading['status'] == -2?'checked':'';?> >
+                <input title="进行中" type="radio" name="grading[status]" value="2" <?=$this->grading['status'] == 2?'checked':'';?> >
+            </div>
+        </div>
+    <?php }
 
 }

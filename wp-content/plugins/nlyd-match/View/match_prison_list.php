@@ -218,7 +218,7 @@
         //删除
         $('.remove_more').live('click',function(event){
             var id = $(this).attr('data-id');
-            $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {
+            $.post(ajaxurl,{action:'remove_prison_log',id:id},function (data) {
                 alert(data.data);
                 history.go(0);
             },'json')

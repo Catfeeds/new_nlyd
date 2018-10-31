@@ -60,7 +60,7 @@ class Student_Supervisor extends Student_Home
     public function logs(){
 
         global $wpdb,$current_user;
-        $sql = "select a.id,a.created_time,a.student_name,a.match_more,a.seat_number,b.post_title match_title,c.post_title project_title
+        $sql = "select a.id,a.created_time,a.student_name,a.match_more,a.seat_number,a,describe,b.post_title match_title,c.post_title project_title
                 from {$wpdb->prefix}prison_match_log a
                  left join {$wpdb->prefix}posts b on a.match_id = b.ID
                  left join {$wpdb->prefix}posts c on a.project_id = c.ID

@@ -1566,6 +1566,24 @@ class Match_Ajax
         }
     }
 
+    /**
+     * 删除监赛记录
+     */
+    public function remove_prison_log(){
+        global $wpdb;
+
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}prison_match_log where id = {$_POST['id']}",ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('数据错误'));
+
+        $result = $wpdb->delete($wpdb->prefix.'prison_match_log',array('id'=>$_POST['id']));
+
+        $b = $wpdb->update($wpdb->prefix.'match_questions',array('is_true'=>1),array('match_id'=>$row['match_id'],'project_id'=>$row['project_id'],'match_more'=>$row['match_more'],'user_id'=>$row['user_id']));
+        if($result){
+            wp_send_json_success('删除成功');
+        }else{
+            wp_send_json_error('删除失败');
+        }
+    }
 
     /**
      * ios关联上传
