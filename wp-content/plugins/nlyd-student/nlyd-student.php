@@ -25,7 +25,7 @@ if(!class_exists('StudentController')){
             //项目默认路径
             define( 'leo_student_path', PLUGINS_PATH.$this->project.'/' );
             define( 'leo_student_url', plugins_url($this->project ) );
-            define( 'leo_student_version','V2.1.1.1' );
+            define( 'leo_student_version','V2.1.1.2' );
 
             define( 'student_css_url', leo_student_url.'/Public/css/' );
             define( 'student_js_url', leo_student_url.'/Public/js/' );
@@ -110,7 +110,7 @@ if(!class_exists('StudentController')){
             //页面配置
             if(is_file(leo_student_path.'conf/config.php')){
 
-                $config = include(leo_student_path.'conf/config.php');
+                $config = include_once(leo_student_path.'conf/config.php');
                 //判断是否需要页面生成
                 if(!empty($config['page'])){
 
@@ -121,7 +121,7 @@ if(!class_exists('StudentController')){
 
             //数据表配置
             if(is_file(leo_student_path.'conf/create_table.php')){
-                include(leo_student_path.'conf/create_table.php');
+                include_once(leo_student_path.'conf/create_table.php');
             }
 
         }

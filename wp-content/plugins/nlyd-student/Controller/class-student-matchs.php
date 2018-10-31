@@ -310,7 +310,7 @@ class Student_Matchs extends Student_Home
         if(1 <= $buffer_time && $buffer_time <= 59 ){
 
             $data['buffer_time'] = true;
-            $data['buffer_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$project_more['project_alias'].'/project_more_id/'.$project_more_id);
+            $data['buffer_url'] = home_url(CONTROLLER.'/initialMatch/match_id/'.$this->match_id.'/project_alias/'.$this->current_project['project_alias'].'/project_more_id/'.$project_more_id);
         }
 
         /*print_r($this->current_project);
@@ -383,7 +383,7 @@ class Student_Matchs extends Student_Home
 
         if($this->project_alias == 'wzsd'){
 
-            if(isset($_SESSION['match_post_id'])){
+            if(!isset($_SESSION['match_post_id'])){
 
                 //判断语言
                 $language = get_user_meta($current_user->ID,'locale')[0];
@@ -1405,7 +1405,7 @@ class Student_Matchs extends Student_Home
         $sql = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}posts c on a.post_parent = c.ID
-                where a.ID in($match_project_id)";
+                where a.ID in($match_project_id) order by a.menu_order asc";
         $projects = $wpdb->get_results($sql,ARRAY_A);
         //print_r($projects);
 
@@ -1528,7 +1528,7 @@ class Student_Matchs extends Student_Home
             $sql1 = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}posts c on a.post_parent = c.ID
-                where a.ID in({$row['match_project_id']})";
+                where a.ID in({$row['match_project_id']}) order by menu_order asc ";
             $projects = $wpdb->get_results($sql1,ARRAY_A);
             if(!empty($projects)){
                 return array('projects'=>$projects,'match_status'=>$row['match_status']);

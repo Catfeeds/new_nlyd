@@ -167,8 +167,7 @@ class Student_Ajax
                         FROM(
                             SELECT a.user_id,a.match_id,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime ,c.project_id,if(MAX(c.my_score) > 0 ,MAX(c.my_score),0) my_score , if(MAX(c.surplus_time) ,MAX(c.surplus_time) ,0) surplus_time 
                             FROM `{$wpdb->prefix}order` a 
-                            LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} {$left_where}
-                            #where a.match_id = 56329
+                            LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$_POST['match_id']} and c.is_true = 1  {$left_where}
                             {$where}
                             GROUP BY user_id,project_id
                         ) x
@@ -3679,6 +3678,7 @@ class Student_Ajax
         }else{
             $insert = array(
                 'supervisor_id'=>$current_user->ID,
+                'user_id'=>$user_id,
                 'match_id'=>$match['match_id'],
                 'project_id'=>$match['project_id'],
                 'match_more'=>$match['more'],
@@ -3689,7 +3689,11 @@ class Student_Ajax
                 'describe'=>!empty($_POST['describe']) ? $_POST['describe'] : '',
                 'created_time'=>get_time('mysql'),
             );
+
             $result = $wpdb->insert($wpdb->prefix.'prison_match_log',$insert);
+
+            $b = $wpdb->update($wpdb->prefix.'match_questions',array('is_true'=>2),array('match_id'=>$match['match_id'],'project_id'=>$match['project_id'],'match_more'=>$match['more'],'user_id'=>$user_id));
+
         }
         if($result){
             wp_send_json_success(array('info'=>'上传成功'));
@@ -3697,6 +3701,27 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'上传失败'));
         }
     }
+
+
+    /**
+     * 删除监赛记录
+     */
+    public function remove_prison_match_log(){
+        global $wpdb;
+
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}prison_match_log where id = {$_POST['id']}",ARRAY_A);
+        if(empty($row)) wp_send_json_error(array('数据错误'));
+
+        $result = $wpdb->delete($wpdb->prefix.'prison_match_log',array('id'=>$_POST['id']));
+
+        $b = $wpdb->update($wpdb->prefix.'match_questions',array('is_true'=>1),array('match_id'=>$row['match_id'],'project_id'=>$row['project_id'],'match_more'=>$row['match_more'],'user_id'=>$row['user_id']));
+        if($result){
+            wp_send_json_success(array('info'=>'删除成功'));
+        }else{
+            wp_send_json_error(array('info'=>'删除失败'));
+        }
+    }
+
 }
 
 new Student_Ajax();

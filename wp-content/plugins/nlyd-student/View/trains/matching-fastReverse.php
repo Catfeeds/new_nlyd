@@ -13,7 +13,7 @@
                         <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <i class="iconfont">&#xe685;</i>
+                                <!-- <i class="iconfont">&#xe685;</i> -->
                                 <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?></span>
                             </div>
                         </div>

@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','V2.1.1.1' );//样式版本
+                define( 'leo_match_version','V2.1.1.2' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -856,7 +856,8 @@ if(!class_exists('MatchController')){
 
                     //var_dump($a);die;
                 }
-            }elseif ($post_data->post_type == 'team'){
+            }
+            elseif ($post_data->post_type == 'team'){
                 if(isset($_POST['team']) && !empty($_POST['team'])){
 
                     $data = $_POST['team'];
@@ -871,6 +872,17 @@ if(!class_exists('MatchController')){
                 if(!empty($_POST['problem'])){
 
                     $this->save_problem($post_ID,$_POST['problem']);
+                }
+            }elseif ($post_data->post_type == 'grading'){
+                if(!empty($_POST['grading'])){
+
+                    $insert = $_POST['grading'];
+                    $insert['grading_id'] = $post_ID;
+                    $insert['created_time'] = get_time('mysql');
+                    $wpdb->delete($wpdb->prefix.'grading_meta',array('grading_id'=>$post_ID));
+                    //print_r($insert);die;
+                    $a = $wpdb->insert($wpdb->prefix.'grading_meta',$insert);
+                    //var_dump($a);die;
                 }
             }
 
@@ -1065,6 +1077,14 @@ if(!class_exists('MatchController')){
                         $this->post_type, 'normal', 'low'
                     );
                     break;
+                case 'grading':
+                    add_meta_box( 'grading_type_box',
+                        '参数设置',
+                        array($this->match,'grading_type_box'),
+                        $this->post_type, 'normal', 'low'
+                    );
+
+                    break;
             }
 
 
@@ -1076,6 +1096,57 @@ if(!class_exists('MatchController')){
          * 自定义页面
          */
         public function create_match_view(){
+
+            //学生考级
+            $args = array(
+                'labels' => array(
+                    'name'               => _x( '考 级', 'post type 名称' ),
+                    'add_new'            => _x( '新建考级', '添加新内容的链接名称' ),
+                    'add_new_item'       => __( '新建 考级' ),
+                    'edit_item'          => __( '编辑考级' ),
+                    'new_item'           => __( '新考级' ),
+                    'all_items'          => __( '考 级' ),
+                    'view_item'          => __( '查看' ),
+                    'search_items'       => __( '搜索' ),
+                    'not_found'          => __( '没有找到有关考级' ),
+                    'not_found_in_trash' => __( '回收站里面没有相关考级' ),
+                    'menu_name'          => '考级',
+                ),
+                'capability_type'=>array('grading','gradings'),
+                'public'        => true,
+                'menu_icon'     =>'dashicons-welcome-learn-more',
+                'menu_position' => 105,
+                'supports'      => array( 'title', 'editor', 'thumbnail' ),
+                'has_archive'   => true,
+            );
+
+            register_post_type( 'grading', $args );
+
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'grading' ) ) {
+                global $wp_roles;
+
+                $role = 'edit_grading';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'edit_gradings';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'edit_others_gradings';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'publish_gradings';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'read_grading';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'read_private_gradings';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'delete_grading';//权限名
+                $wp_roles->add_cap('administrator', $role);
+            }
+
             //我的战队
             $args = array(
                 'labels' => array(
@@ -1460,7 +1531,7 @@ if(!class_exists('MatchController')){
             wp_enqueue_style( 'admin_index_css' );
             //in_array($this->post_type,array('team','match','genre'));
             //if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
-            if(in_array($this->post_type,array('team','match'))){
+            if(in_array($this->post_type,array('team','match','grading'))){
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
                 wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
@@ -1477,7 +1548,7 @@ if(!class_exists('MatchController')){
 
             wp_register_script( 'admin_match_question',match_js_url.'question.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'admin_match_question' );
-            if($this->post_type == 'match'){
+            if(in_array($this->post_type,array('match','grading'))){
                 wp_register_script( 'team_leader',match_js_url.'team_leader.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'team_leader' );
                 wp_register_style( 'match_css',match_css_url.'match/match.css','', leo_match_version  );
