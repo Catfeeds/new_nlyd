@@ -14,7 +14,7 @@
                             <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
                             <div class="c_blue match_info_font">
                                 <div>
-                                    <i class="iconfont">&#xe685;</i>
+                                    <!-- <i class="iconfont">&#xe685;</i> -->
                                     <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                                 </div>
                             </div>
