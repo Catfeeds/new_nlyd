@@ -113,12 +113,17 @@ jQuery(document).ready(function($) {
         var title=project_name+_this.parent('li').find('.match_more').text();//弹框title
         var start_time=_this.parent('li').find('.start_time').text();//开始时间
         var end_time=_this.parent('li').find('.end_time').text()//结束时间
-        var _time="";//比赛时常
+        var _time=_this.parent('li').find('.use_time').text();//比赛时常
+        var status=_this.parent('li').find('.status').text();//比赛状态
         showForm(title)
         //表单数据
-        // $('input:radio[name="status"]').removeAttr('checked')
-        // $('.show_form .ayui-form-radio').removeClass('layui-form-radioed')
         $('#match_more_id').val($(this).attr('data-id'))
+        $('.show_form .layui-unselect').each(function(){
+            if($(this).find('div').text()==status){
+                $(this).click()
+                return false;
+            }
+        })
         $('input[name=project_id]').val(project_id)
         $('input[name=start_time]').val(start_time)
         $('input[name=end_time]').val(end_time)
@@ -132,8 +137,6 @@ jQuery(document).ready(function($) {
         var project_name=_this.attr('data-name');
         //表单数据清空
         $('#match_more_id').val('')
-        // $('input:radio[name="status"]').removeAttr('checked')
-        // $('.show_form .ayui-form-radio').removeClass('layui-form-radioed')
         $('input[name=project_id]').val(project_id)
         $('input[name=start_time]').val('')
         $('input[name=end_time]').val('')
@@ -161,7 +164,7 @@ jQuery(document).ready(function($) {
                 layer.closeAll();
                 // var query = $('.add_more_form').serialize();
                 var query={
-                    action:$('input[name=action]').val(),
+                    action:'match_more_add',
                     post_id:$('input[name=post_id]').val(),
                     project_id:$('input[name=project_id]').val(),
                     more_id:$('#match_more_id').val(),
@@ -172,8 +175,12 @@ jQuery(document).ready(function($) {
                 }
                 console.log(query)
                 $.post(ajaxurl,query,function (data) {
+                    //return false;
                     alert(data.data);
-                    history.go(0);
+                    if(data.success == true){
+                        history.go(0);
+                    }
+                    
                     /*setTimeout(function () {
                     },900)*/
                 },'json')
