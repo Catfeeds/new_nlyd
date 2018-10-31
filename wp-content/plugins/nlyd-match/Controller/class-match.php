@@ -994,7 +994,58 @@ class Match
         }
         //print_r($default_project);
 
-        if (!empty($default_project)) {
+        if (!empty($default_project)) { ?>
+<style>
+.show_form{
+    /* width:600px; */
+    padding:20px;
+}
+.layui-layer.nl-box-skin{
+    width:800px;
+}
+.nl-box-skin .layui-layer-title{
+    font-size:20px;
+    height:50px;
+    line-height:50px;
+}
+</style>
+        
+           <!--轮数新增/修改form-->
+            <div class="show_form" style="display: none" >
+                <form class="add_more_form layui-form">
+                    <input type="hidden" name="action" value="match_more_add"/>
+                    <input type="hidden" name="post_id" value="<?=$_GET['post']?>"/>
+                    <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
+                    <input id="match_more_id" type="hidden" name="more_id" value=""/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">开始时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">结束时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">比赛时长</label>
+                        <div class="layui-input-block">
+                            <input type="text" value="" name="use_time" class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">比赛状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="-1" title="已结束">
+                            <input type="radio" name="status" value="1" title="未开始">
+                            <input type="radio" name="status" value="2" title="进行中">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        <?php
             global $wpdb;
             foreach ($default_project as $k => $val){
 
@@ -1012,7 +1063,7 @@ class Match
                         <input type="checkbox" name="match[match_project][<?=$k?>][match_project_id]" value="<?=$k?>"  <?= in_array($k,$match_project_id) ? 'checked':''; ?> lay-skin="primary" title="<?=$val?>"/>
                         <?php if(in_array($k,$match_project_id)): ?>
                         <span>(<?=$total > 0 ? $total : 0;?>)</span>
-                        <a href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
+                        <a class="add_new" data-project="<?=$k?>" data-name="<?=$val?>" href="<?=admin_url('edit.php?post_type=match&page=match_more&post_id='.$posts->ID.'&project_id='.$k);?>">新增轮数</a>
                         <?php endif;?>
                     </div>
                     <div>
@@ -1024,8 +1075,11 @@ class Match
                             <ul>
                                 <?php foreach ($rows as $k => $row){ ?>
                                 <li>
-                                    第<?=$k+1?>轮
-                                    <?=$row['start_time_format'].'  '.$row['end_time_format']?>
+                                    <span class="match_more">第<?=$k+1?>轮</span>
+                                    <span class="start_time"><?=$row['start_time_format']?></span>
+                                    <span class="end_time"><?=$row['end_time_format']?></span>
+                                    <a class="update_more" data-project="<?=$k?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">编辑</a>
+                                    <a class="remove_more" data-project="<?=$k?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">删除</a>
                                 </li>
                                 <?php } ?>
                             </ul>

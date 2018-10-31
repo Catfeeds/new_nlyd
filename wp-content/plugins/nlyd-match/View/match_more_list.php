@@ -135,11 +135,10 @@
                     <input type="radio" name="status" value="2" title="进行中">
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
     <br class="clear">
     <?php } ?>
-</div>
 <script>
     jQuery(document).ready(function($){
         //删除
@@ -182,7 +181,7 @@
                     });
             })
         }); 
-        function showForm(title) { 
+        function showForm(title) {
             layer.open({
                 type: 1
                 ,maxWidth:1000
