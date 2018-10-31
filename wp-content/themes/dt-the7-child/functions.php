@@ -957,7 +957,7 @@ if(is_admin()){
     function wpdaxue_pre_user_query($user_search) {
         global $wpdb;
         $vars = $user_search->query_vars;
-        if (!is_null($vars['search'])) {
+        if (!is_null($vars['search']) && $vars['search'] != '') {
             // 出于某种原因，搜索词被星号包括，删除它们
             $search = preg_replace('/^\*/', '', $vars['search']);
             $search = preg_replace('/\*$/', '', $search);

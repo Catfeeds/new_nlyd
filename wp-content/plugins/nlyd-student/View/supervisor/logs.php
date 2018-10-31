@@ -21,7 +21,7 @@
                                 <span class="accept-name c_blue"><?=$v['student_name']?>(第<?=$v['seat_number']?>座位号)</span>
                                 <span class="phone-number ff_num"><?=$v['created_time']?></span>
                             </div>
-                            <p class="address-detail c_black"><?=$v['student_name'].'在'.$v['match_title'].$v['project_title'].'第'.$v['match_more']?>轮未到场答题</p>
+                            <p class="address-detail c_black"><?=$v['describe']?></p>
                         </div>
                         <div  class="address-right">
                             <a class="address-btn bg_gradient_blue c_white" href="<?=home_url('supervisor/index/id/'.$v['id'])?>"><?=__('修改', 'nlyd-student')?></a>
