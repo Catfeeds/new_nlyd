@@ -124,13 +124,21 @@ class Setting{
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,um.meta_value AS userID,um2.meta_value AS user_real_name,SUM(sl.commission) AS commission,SUM(cl.money) AS cash FROM `{$wpdb->prefix}spread` AS s 
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $likeWhere = '';
+        if($searchStr != ''){
+            $likeWhere = " AND (um2.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%')";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,um.meta_value AS userID,um2.meta_value AS user_real_name,
+                SUM(sl1.commission) AS commission1,SUM(sl2.commission) AS commission2,SUM(cl.money) AS cash 
+                FROM `{$wpdb->prefix}spread` AS s  
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=s.superior 
-                LEFT JOIN `{$wpdb->prefix}spread_log` AS sl ON sl.user_id=s.superior 
+                LEFT JOIN `{$wpdb->prefix}spread_log` AS sl1 ON sl1.user_id=s.superior AND sl1.under_level=1 
+                LEFT JOIN `{$wpdb->prefix}spread_log` AS sl2 ON sl2.user_id=s.superior AND sl2.under_level=2 
                 LEFT JOIN `{$wpdb->prefix}cash_log` AS cl ON cl.user_id=s.superior AND cl.status=2 AND cl.type=1
                 LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=s.superior AND um.meta_key='user_ID'  
                 LEFT JOIN `{$wpdb->usermeta}` AS um2 ON um2.user_id=s.superior AND um2.meta_key='user_real_name'  
-                WHERE u.ID!='' GROUP BY s.superior ORDER BY s.id DESC LIMIT {$start},{$pageSize}", ARRAY_A);
+                WHERE u.ID!='' {$likeWhere} GROUP BY s.superior ORDER BY s.id DESC LIMIT {$start},{$pageSize}", ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -157,8 +165,8 @@ class Setting{
 
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                    <input type="search" id="user-search-input" name="s" value="">
-                    <input type="submit" id="search-submit" class="button" value="搜索用户">
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名/手机" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=spread-spread_user&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="79918ab357"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -182,9 +190,12 @@ class Setting{
                             <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                             <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                             <th scope="col" id="get_money" class="manage-column column-get_money">已获佣金</th>
+                            <th scope="col" id="get_money_1" class="manage-column column-get_money_1">一级佣金</th>
+                            <th scope="col" id="get_money_2" class="manage-column column-get_money_2">二级佣金</th>
                             <th scope="col" id="cash_money" class="manage-column column-cash_money">提现佣金</th>
                             <th scope="col" id="surplus_money" class="manage-column column-surplus_money">剩余佣金</th>
                             <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
+                            <th scope="col" id="get_log" class="manage-column column-get_log">获取记录</th>
                         </tr>
                     </thead>
 
@@ -205,10 +216,13 @@ class Setting{
                             <td class="real_name column-real_name" data-colname="姓名"><?=$row['user_real_name'] ? unserialize($row['user_real_name'])['real_name'] : ''?></td>
                             <td class="ID column-ID" data-colname="ID"><?=$row['userID']?></td>
                             <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                            <td class="get_money column-get_money" data-colname="已获佣金"><?=$row['commission']?></td>
+                            <td class="get_money column-get_money" data-colname="已获佣金"><?=$row['commission1']+$row['commission2']?></td>
+                            <td class="get_money_1 column-get_money_1" data-colname="一级佣金"><?=$row['commission1']?></td>
+                            <td class="get_money_2 column-get_money_2" data-colname="二级佣金"><?=$row['commission2']?></td>
                             <td class="cash_money column-cash_money" data-colname="提现佣金"><?=$row['cash']?></td>
                             <td class="surplus_money column-surplus_money" data-colname="剩余佣金"><?= $row['commission']-$row['cash']?></td>
-                            <td class="view_member column-view_member" data-colname="剩余查看成员佣金">查看成员</td>
+                            <td class="view_member column-view_member" data-colname="查看成员">查看成员</td>
+                            <td class="get_log column-get_log" data-colname="获取记录">获取记录</td>
                         </tr>
                     <?php } ?>
                     <tfoot>
@@ -220,9 +234,12 @@ class Setting{
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-get_money">已获佣金</th>
+                        <th scope="col" class="manage-column column-get_money_1">一级佣金</th>
+                        <th scope="col" class="manage-column column-get_money_2">二级佣金</th>
                         <th scope="col" class="manage-column column-cash_money">提现佣金</th>
                         <th scope="col" class="manage-column column-surplus_money">剩余佣金</th>
                         <th scope="col" class="manage-column column-view_member">查看成员</th>
+                        <th scope="col" class="manage-column column-get_log">获取记录</th>
                     </tr>
                     </tfoot>
 
