@@ -1084,8 +1084,8 @@ class Match
                                     <span class="status"><?=$row['status_cn']?></span>
                                     <span class="start_time"><?=$row['start_time_format']?></span>
                                     <span class="end_time"><?=$row['end_time_format']?></span>
-                                    <a class="update_more" data-project="<?=$row['project_id']?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">编辑</a>
-                                    <a class="remove_more" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">删除</a>
+                                    <a style="color:#4394F9" class="update_more" data-project="<?=$row['project_id']?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">编辑</a>
+                                    <a style="color:#4394F9" class="remove_more" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">删除</a>
                                 </li>
                                 <?php } ?>
                             </ul>
