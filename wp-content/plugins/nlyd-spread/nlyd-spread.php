@@ -32,6 +32,10 @@ if(!class_exists('SpreadController')){
 
         private function main(){
             require_once spread_controller_path.'class-setting.php';
+
+            require_once spread_controller_path.'class-spread.php';
+
+            require_once spread_controller_path.'class-spread-ajax.php';
         }
 
 
