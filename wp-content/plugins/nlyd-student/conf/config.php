@@ -105,5 +105,11 @@ return array(
             'post_content'=>'[supervisor-home]',
             'url'=>'/supervisor',
         ),
+        array(
+            'post_title'=>'考级中心',
+            'post_name'=>'grading',
+            'post_content'=>'[grading-home]',
+            'url'=>'/grading',
+        ),
     ),
 );
