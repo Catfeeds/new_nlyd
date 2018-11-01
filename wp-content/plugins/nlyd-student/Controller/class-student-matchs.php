@@ -306,7 +306,7 @@ class Student_Matchs extends Student_Home
             $data['match_url'] = home_url('matchs/record/match_id/'.$_GET['match_id']);
         }
 
-        $buffer_time = get_time()-strtotime($project_more['start_time']);
+        $buffer_time = get_time()-strtotime($this->current_project['start_time']);
         if(1 <= $buffer_time && $buffer_time <= 59 ){
 
             $data['buffer_time'] = true;
@@ -395,7 +395,7 @@ class Student_Matchs extends Student_Home
                 $rows = $wpdb->get_results($sql,ARRAY_A);
                 //print_r($sql);
                 if(empty($rows[0]['term_taxonomy_id'])){
-                    $this->get_404(__('暂无比赛题目,联系管理员录题', 'nlyd-student'));
+                    $this->get_404(array('message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
                     return;
                 }
 
@@ -920,20 +920,19 @@ class Student_Matchs extends Student_Home
 
         //print_r($match_more);
 
+        //请求接下来的比赛项目
+        $next_project_more = $this->get_match_project_more($_GET['match_id']);
+
+        /*print_r($next_project_more);
+        print_r($match_more);*/
         $ranking = '';
-        if(strtotime($match_more['end_time']) <= get_time()){
+        if(strtotime($match_more['end_time']) <= get_time() && $match_more['project_alias'] != $next_project_more['project_alias']){
             //获取本轮排名
             $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$match_more['match_id']} and project_id = {$match_more['project_id']} and match_more = {$match_more['more']} group by my_score desc,surplus_time desc";
             $rows = $wpdb->get_results($sql,ARRAY_A);
 
             $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
         }
-
-        //请求接下来的比赛项目
-        $next_project_more = $this->get_match_project_more($_GET['match_id']);
-
-        /*print_r($next_project_more);
-        print_r($match_more);*/
 
         if(!empty($next_project_more) && empty($this->end_project)){
 
@@ -1522,20 +1521,20 @@ class Student_Matchs extends Student_Home
 
         $sql = " select match_project_id,match_status from {$wpdb->prefix}match_meta_new where match_id = {$match_id} ";
         $row = $wpdb->get_row($sql,ARRAY_A);
-        //print_r($match_project_id);die;
+        //print_r($row);die;
         if(!empty($row)){
 
             $sql1 = "select a.ID,a.post_title,a.post_parent,c.post_title parent_title
                 from {$wpdb->prefix}posts a
                 left join {$wpdb->prefix}posts c on a.post_parent = c.ID
-                where a.ID in({$row['match_project_id']}) order by menu_order asc ";
+                where a.ID in({$row['match_project_id']}) order by a.menu_order asc ";
             $projects = $wpdb->get_results($sql1,ARRAY_A);
+            //print_r($sql1);
             if(!empty($projects)){
                 return array('projects'=>$projects,'match_status'=>$row['match_status']);
             }
-        }else{
-            return '';
         }
+        return '';
         //print_r($projects);
     }
 

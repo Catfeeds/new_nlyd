@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-                define( 'leo_match_version','V2.1.1.2' );//样式版本
+                define( 'leo_match_version','V2.1.1.3' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -320,8 +320,8 @@ if(!class_exists('MatchController')){
 
             }
             add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'question_import', 'question_import', array($this,'questionImport') );
-            add_submenu_page( 'edit.php?post_type=grading', '词汇上传', '词汇上传', 'vocabulary_import', 'vocabulary_import', array($this,'vocabulary_import') );
-
+            add_submenu_page( 'edit.php?post_type=grading', '速记上传', '速记上传', 'vocabulary_import', 'vocabulary_import', array($this,'vocabulary_import') );
+            add_submenu_page( 'edit.php?post_type=grading', '速读上传', '速读上传', 'question_import', 'question_import', array($this,'questionImport') );
         }
 
         /**
@@ -329,6 +329,15 @@ if(!class_exists('MatchController')){
          */
         public function vocabulary_import(){
 
+            $args = array(
+                'post_type' => array('match-category'),
+                'post_status' => array('publish'),
+                'order' => 'asc',
+                'orderby' => 'menu_order',
+            );
+            $the_query = new WP_Query( $args );
+
+            include_once match_view_path.'grading_upload.php';
         }
 
         /**
