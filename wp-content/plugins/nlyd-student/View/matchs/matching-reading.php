@@ -12,13 +12,15 @@
                             <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?> <span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
                             <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
-                            <div class="c_blue match_info_font">
+                            <!-- <div class="c_blue match_info_font">
                                 <div>
-                                    <!-- <i class="iconfont">&#xe685;</i> -->
                                     <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
+                        </div>
+                        <div class="layui-row">
+                            <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                         </div>
                         <div class="reading-question">
                             <?php

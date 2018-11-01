@@ -309,14 +309,25 @@ if(!class_exists('MatchController')){
          * 添加子菜单
          */
         public function add_submenu(){
-            if ( current_user_can( 'administrator' ) && !current_user_can( 'question_import' ) ) {
+            if ( current_user_can( 'administrator' ) ) {
                 global $wp_roles;
 
                 $role = 'question_import';//权限名
                 $wp_roles->add_cap('administrator', $role);
 
+                $role = 'vocabulary_import';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
             }
             add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'question_import', 'question_import', array($this,'questionImport') );
+            add_submenu_page( 'edit.php?post_type=grading', '词汇上传', '词汇上传', 'vocabulary_import', 'vocabulary_import', array($this,'vocabulary_import') );
+
+        }
+
+        /**
+         * 考级词汇上传
+         */
+        public function vocabulary_import(){
 
         }
 
@@ -1255,6 +1266,7 @@ if(!class_exists('MatchController')){
                 'labels' => array(
                     'name'               => _x( '比赛 类型', 'post type 名称' ),
                     'add_new'            => _x( '新建类型', '添加新内容的链接名称' ),
+
                     'add_new_item'       => __( '新建 类型' ),
                     'edit_item'          => __( '编辑类型' ),
                     'new_item'           => __( '新类型' ),
