@@ -191,7 +191,7 @@
                     <?php if(in_array($user_info['user_roles'],array('supervisor','administrator'))):?>
                     <a class="c_black8"  href="<?=home_url('supervisor/logs');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper edit-info">
+                            <div class="menuImg-wrapper jiansai-center">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('监赛中心', 'nlyd-student')?></div>

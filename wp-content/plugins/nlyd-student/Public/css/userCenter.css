@@ -88,6 +88,10 @@
     width: 30px;
     background-position: -338px 3px;
 }
+.jiansai-center{
+    width: 30px;
+    background-position: -372px 3px;
+}
 .userCenter-detail a:active{
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
@@ -384,7 +388,7 @@
     .userCenter-detail a:nth-child(4n){
         border-right: none;
     }
-    .userCenter-detail a:nth-last-child(1){
+    /* .userCenter-detail a:nth-last-child(1){
         border-bottom: none;
     }
     .userCenter-detail a:nth-last-child(2){
@@ -392,7 +396,7 @@
     }
     .userCenter-detail a:nth-last-child(3){
         border-bottom: none;
-    }
+    } */
 }
 @media screen and (max-width: 374px){
 /* iphone6以下 */
@@ -412,10 +416,10 @@
     .userCenter-detail a:nth-child(3n){
         border-right: none;
     }
-    .userCenter-detail a:nth-last-child(1){
+    /* .userCenter-detail a:nth-last-child(1){
         border-bottom: none;
     }
     .userCenter-detail a:nth-last-child(2){
         border-bottom: none;
-    }
+    } */
 }
