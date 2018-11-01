@@ -173,16 +173,11 @@ jQuery(document).ready(function($) {
                     use_time:$('input[name=use_time]').val(),
                     status:$('input[name=status]:checked').val()
                 }
-                console.log(query)
                 $.post(ajaxurl,query,function (data) {
-                    //return false;
                     alert(data.data);
                     if(data.success == true){
                         history.go(0);
                     }
-                    
-                    /*setTimeout(function () {
-                    },900)*/
                 },'json')
             }
             ,closeBtn:2

@@ -49,3 +49,16 @@
 .display_none{
     display: none;
 }
+.matching-keyboard.match_zimu .matching-keyboard-row .matching-key{
+    margin-left: 10px;
+    width: -webkit-calc(100% / 7 - 60px / 7);
+    width: calc(100% / 7 - 60px / 7);
+}
+.matching-keyboard.match_zimu .matching-keyboard-row .matching-key:first-child{
+    margin-left: 0;
+}
+.matching-keyboard.match_zimu .matching-keyboard-row:last-child .matching-key:first-child{
+    width: -webkit-calc(200% / 7 - 120px / 7 + 10px);
+    width: calc(200% / 7 - 120px / 7 + 10px);
+}
+

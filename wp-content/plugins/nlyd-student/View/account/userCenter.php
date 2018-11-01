@@ -139,14 +139,14 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的教练', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
+                    <a class="c_black8"  href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的订单', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a" >
+                    <a class="c_black8" href="<?=home_url('grading');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>
@@ -191,7 +191,7 @@
                     <?php if(in_array($user_info['user_roles'],array('supervisor','administrator'))):?>
                     <a class="c_black8"  href="<?=home_url('supervisor/logs');?>">
                         <div class="userCenter-detail-head">
-                            <div class="menuImg-wrapper edit-info">
+                            <div class="menuImg-wrapper jiansai-center">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('监赛中心', 'nlyd-student')?></div>

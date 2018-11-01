@@ -276,7 +276,7 @@ function the_table_install () {
           `express_company` text COMMENT '快递公司',
           `pay_type` varchar(255) DEFAULT NULL COMMENT '支付类型 支付宝:zfb 微信:wx 银联卡:ylk 其他:线下',
           `cost` decimal(10,2) DEFAULT NULL COMMENT '总价',
-          `pay_status` tinyint(2) DEFAULT NULL COMMENT '支付状态 -2:已退款 -1:待退款 1:待支付 2:支付完成',
+          `pay_status` tinyint(2) DEFAULT NULL COMMENT '支付状态 -2:已退款 -1:待退款 1:待支付 2:待发货 3:待收货 4:完成 5:订单失效',
           `pay_lowdown` text COMMENT '支付反馈信息',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)

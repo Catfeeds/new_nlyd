@@ -2409,8 +2409,8 @@ class Student_Ajax
             case 4://订单完成 (已收货)
                 $payStatusWhere = 'pay_status=4';
                 break;
-            case 5://订单失效
-                $payStatusWhere = 'pay_status=5';
+//            case 5://订单失效
+//                $payStatusWhere = 'pay_status=5';
                 break;
             case -1://待退款
                 $payStatusWhere = 'pay_status=-1';
@@ -2425,7 +2425,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT 
-        id,
+        id AS order_id,
         serialnumber,
         pay_status,
         match_id,
@@ -2449,14 +2449,14 @@ class Student_Ajax
         WHEN -2 THEN "已退款" 
         WHEN -1 THEN "待退款" 
         WHEN 1 THEN "待支付" 
-        WHEN 2 THEN "已支付" 
+        WHEN 2 THEN "待发货" 
         WHEN 3 THEN "待收货" 
         WHEN 4 THEN "已完成" 
         WHEN 5 THEN "已失效" 
         END AS pay_status_title,
         created_time
         FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' 
-        AND '.$payStatusWhere.' 
+        AND '.$payStatusWhere.' AND pay_status!=5 
         LIMIT '.$start.','.$pageSize, ARRAY_A);
 
         //查询商品或比赛
