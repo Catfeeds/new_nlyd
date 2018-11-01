@@ -400,6 +400,14 @@ jQuery(function($) {
             })
 
     })
+    // $('.number').on('tap',function(){
+    //     var _this=$(this)
+    //     var number=_this.attr('date-number');
+    //     var text=$('#answer div').text()
+    //     if(text.length<21){
+    //         $('#answer div').text(text+number)
+    //     }
+    // })
     new AlloyFinger($('#del')[0], {//删除
         touchStart: function () {
             $('#del').addClass("opacity");
