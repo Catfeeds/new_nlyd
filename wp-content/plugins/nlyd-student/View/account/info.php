@@ -362,7 +362,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect4 = new MobileSelect({
             trigger: '#trigger4',
-            title: '<?=__('国籍', 'nlyd-student')?>',
+            title: '<?=__('国家&地区', 'nlyd-student')?>',
             wheels: [
                 {data: contrySelectData}
             ],
