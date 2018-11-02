@@ -18,7 +18,6 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo layui-row">
-                        <div class="Glass"></div>
                      
                     </div>
                 </div>

@@ -18,7 +18,7 @@
     float: left;
     /* height: 120px; */
 }
-.matching-card:nth-child(3n+2){
+.matching-card:nth-child(3n+1){
     margin-left: 0;
 }
 .card_img{
