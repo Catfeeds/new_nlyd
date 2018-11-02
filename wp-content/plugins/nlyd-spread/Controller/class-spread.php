@@ -191,7 +191,7 @@ class Spread{
             $start = ($page-1)*$pageSize;
             $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.ID AS user_id FROM `{$wpdb->users}` AS u 
                           LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=u.ID AND um.meta_key='user_real_name' 
-                          WHERE um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' LIMIT {$start},{$pageSize    }", ARRAY_A);
+                          WHERE um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' LIMIT {$start},{$pageSize}", ARRAY_A);
             $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
             $pageAll = ceil($count['count']/$pageSize);
             $pageHtml = paginate_links( array(
@@ -201,7 +201,7 @@ class Spread{
                 'next_text' => __('&raquo;'),
                 'total' => $pageAll,
                 'current' => $page,
-//            'add_fragment' => '&searchCode='.$searchCode,
+                    'add_fragment' => '&s='.$searchStr,
             ));
         }
 //        leo_dump($rows);
