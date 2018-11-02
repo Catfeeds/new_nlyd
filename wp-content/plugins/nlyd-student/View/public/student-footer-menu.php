@@ -27,7 +27,7 @@
         </div>
         <div class="nl-foot-name"><?=__('比赛', 'nlyd-student')?></div>
     </a>
-    <a class="nl-foot-item flex1 <?=CONTROLLER == 'grading' ? 'active':'';?>" href="<?=home_url('grading');?>">
+    <a class="nl-foot-item flex1 disabled_a <?=CONTROLLER == 'grading' ? 'active':'';?>" href="<?=home_url('grading');?>">
         <div class="nl-foot-icon">
             <div class="footer-kaoji"></div>
         </div>
