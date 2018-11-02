@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-                define( 'leo_match_version','V2.1.1.4' );//样式版本
+                define( 'leo_match_version','V2.1.1.5' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -537,7 +537,6 @@ if(!class_exists('MatchController')){
             }
 
             //查询题目类型
-
             $args = array(
                 'taxonomy' => 'question_genre', //自定义分类法
                 'pad_counts' => false,
@@ -549,7 +548,12 @@ if(!class_exists('MatchController')){
             if(!empty($category)){
                 foreach ($category as $k => $v){
 
-                    if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                    if($_GET['post_type'] == 'question' && in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                        $questionTypeArr[] = array(
+                            'term_id'=>$v->term_id,
+                            'name'=>$v->name,
+                        );
+                    }elseif ($_GET['post_type'] == 'grading' && in_array($v->slug,array('en-grading-question','cn-grading-question','en-grading-test-question','cn-grading-test-question'))){
                         $questionTypeArr[] = array(
                             'term_id'=>$v->term_id,
                             'name'=>$v->name,
@@ -968,7 +972,8 @@ if(!class_exists('MatchController')){
          */
         public function remove_meta_boxes() {
 
-           // remove_meta_box( 'submitdiv', 'team', 'side' );
+            //remove_meta_box( 'submitdiv', 'team', 'side' );
+            remove_meta_box( 'question_genrediv', 'question', 'side' );
 
         }
 
@@ -1058,7 +1063,7 @@ if(!class_exists('MatchController')){
                         );
                     }
                     break;
-                case 'team';
+                case 'team':
 
                     add_meta_box( 'nationality_meta_box',
                         '国籍口号设置',
@@ -1095,6 +1100,11 @@ if(!class_exists('MatchController')){
                         '设置问题',
                         array($this->match,'go_problem_meta_box'),
                         $this->post_type, 'normal', 'low'
+                    );
+                    add_meta_box( 'set_question_genre',
+                        '题目类型',
+                        array($this->match,'set_question_genre'),
+                        $this->post_type, 'side', 'low'
                     );
                     break;
                 case 'grading':
