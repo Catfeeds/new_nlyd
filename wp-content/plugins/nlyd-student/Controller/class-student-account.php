@@ -244,12 +244,20 @@ class Student_Account extends Student_Home
             wp_enqueue_style( 'my-student-cropper' );
             wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-mobileSelect' );
+            wp_localize_script('student-mobileSelect','_mobileSelect',[
+                'sure'=>__('确认','nlyd-student'),
+                'cancel'=>__('取消','nlyd-student')
+            ]);
             wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
             wp_enqueue_style( 'my-student-mobileSelect' );
         }
         if(ACTION == 'info' || ACTION == 'certification'){
             wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-mobileSelect' );
+            wp_localize_script('student-mobileSelect','_mobileSelect',[
+                'sure'=>__('确认','nlyd-student'),
+                'cancel'=>__('取消','nlyd-student')
+            ]);
             wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
             wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-info', student_css_url.'info.css',array('my-student') );
@@ -309,6 +317,10 @@ class Student_Account extends Student_Home
         if(ACTION=='addAddress'){//新增地址
             wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
             wp_enqueue_script( 'student-mobileSelect' );
+            wp_localize_script('student-mobileSelect','_mobileSelect',[
+                'sure'=>__('确认','nlyd-student'),
+                'cancel'=>__('取消','nlyd-student')
+            ]);
             wp_register_script( 'student-addAddress',student_js_url.'account/addAddress.js',array('jquery'), leo_student_version ,true );
             wp_enqueue_script( 'student-addAddress' );
             wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );

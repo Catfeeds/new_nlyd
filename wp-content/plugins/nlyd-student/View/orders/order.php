@@ -37,16 +37,16 @@
                         </div>
                         <div class="layui-tab layui-tab-brief" lay-filter="tabs">
                             <ul style="margin-left: 0" class="layui-tab-title">
-                                <li class="layui-this" data-id="all">全部(8)</li>
-                                <li data-id="apply">待支付(1)</li>
-                                <li data-id="send">待发货(1)</li>
-                                <li data-id="accept">待收货(1)</li>
-                                <div class="nl-transform">全部(8)</div>
+                                <li class="layui-this" data-id="all" pay_status="10">全部</li>
+                                <li data-id="apply" pay_status="1">待支付</li>
+                                <li data-id="send" pay_status="2">待发货</li>
+                                <li data-id="accept" pay_status="3">待收货</li>
+                                <div class="nl-transform">全部</div>
                             </ul>
                             <div class="layui-tab-content">
                                 <!-- 全部 -->
                                 <div class="layui-tab-item layui-show flow-default" id="all">
-                                    <div class="order-row layui-row">
+                                    <!-- <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">完成时间：2017-07-24 13:20</span>
                                             <span class="pull-right">交易成功</span>
@@ -101,7 +101,7 @@
                                         <div class="order-footer layui-row width-padding width-padding-pc">
                                             <div class="order-left-btn">删除订单</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div> 
                                 <!-- 待支付 -->
                                 <div class="layui-tab-item flow-default" id="apply">
@@ -165,7 +165,7 @@
                                 </div> 
                                 <!-- 代发货 -->
                                 <div class="layui-tab-item flow-default" id="send">
-                                    <div class="order-row layui-row">
+                                    <!-- <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">支付时间：2017-07-24 13:20</span>
                                             <span class="pull-right blue">代发货</span>
@@ -221,11 +221,11 @@
                                             <a href="" class="order-right-btn blue">查看详情</a>
                                             <div class="order-left-btn">提醒发货</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div> 
                                 <!-- 待收货 -->
                                 <div class="layui-tab-item flow-default" id="accept">
-                                    <div class="order-row layui-row">
+                                    <!-- <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">发货时间：2017-07-24 13:20</span>
                                             <span class="pull-right blue">待收货</span>
@@ -253,7 +253,7 @@
                                             <div class="order-left-btn ml-20">查看物流</div>
                                             <div class="order-left-btn">查看详情</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div> 
                             </div> 
                         </div>    
@@ -271,76 +271,8 @@ layui.use(['element','flow'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载
     var isClick={all:true,apply:false,send:false,accept:false}
-    flow.load({
-        elem: '#all'
-        ,isAuto: false
-        ,isLazyimg: true
-        ,done: function(page, next){ //加载下一页
-            var postData={
-                action:'getOrderList',
-                page:page,
-            }
-            var lis = [];
-            $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){  
-                    console.log(res)
-                    if(res.success){
-                        $.each(res.data.info,function(i,v){
-                            var order_type=v.order_type;
-                            var dom='<div class="order-row layui-row">'
-                                        +'<div class="order-title layui-row width-padding width-padding-pc">'
-                                            +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'
-                                            +'<span class="pull-right blue">待收货</span>'
-                                        +'</div>'
-                                        +'<div class="order-body layui-row  width-padding width-padding-pc">'
-                                            +'<div class="order-body-top layui-row">'
-                                                +'<div class="order-img img-box pull-left">'
-                                                    +'<img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">'
-                                                +'</div>'
-                                                +'<div class="order-detail pull-left">'
-                                                    +'<p class="order-name">2018脑力世界杯总决赛（重庆）报名</p>'
-                                                    +'<p class="order-content">脑力世界杯是一年一度的国际大赛，汇聚了海内外很多脑力健将</p>'
-                                                +'</div>'
-                                                +'<div class="order-right-info  pull-left">'
-                                                    +'<p class="order-price">￥380.00</p>'
-                                                    +'<p class="order-price">x1</p>'
-                                                +'</div>'
-                                            +'</div>'
-                                            +'<p class="order-body-bottom">'    
-                                                +'共1件商品 实际支付: ￥155.00'
-                                            +'</p>'
-                                        +'</div>'
-                                        +'<div class="order-footer layui-row width-padding width-padding-pc">'
-                                            +'<a href="" class="order-right-btn blue">确认收货</a>'
-                                            +'<div class="order-left-btn ml-20">查看物流</div>'
-                                            +'<div class="order-left-btn">查看详情</div>'
-                                        +'</div>'
-                                    +'</div>'
-                            lis.push(dom) 
-                        })
-                        if (res.data.info.length<50) {
-                            next(lis.join(''),false) 
-                        }else{
-                            next(lis.join(''),true) 
-                        }
-                        
-                    }else{
-                        next(lis.join(''),false)
-                    }
-                }
-            })       
-        }
-    });
-    element.on('tab(tabs)', function(){//tabs
-        var left=$(this).position().left+parseInt($(this).css('marginLeft'));
-        var html=$(this).html();
-        var data_id=$(this).attr('data-id')
-        $('.nl-transform').css({
-            'transform':'translate3d('+left+'px, 0px, 0px)'
-        }).html(html)
-
-        if(!isClick[data_id]){
-            flow.load({
+    function pagation(data_id,pay_status) {
+        flow.load({
                 elem: '#'+data_id
                 ,isAuto: false
                 ,isLazyimg: true
@@ -348,10 +280,12 @@ layui.use(['element','flow'], function(){
                     var postData={
                         action:'getOrderList',
                         page:page,
+                        pay_status:pay_status,//10全部,1待支付,2待发货,3待收货,4已完成,-1待退款,-2已退款
                     }
                     var lis = [];
                     $.ajax({
-                        data:postData,success:function(res,ajaxStatu,xhr){  
+                        data:postData
+                        ,success:function(res,ajaxStatu,xhr){  
                             console.log(res)
                             isClick[data_id]=true
                             if(res.success){
@@ -401,6 +335,19 @@ layui.use(['element','flow'], function(){
                     })       
                 }
             });
+    }
+    pagation("all",10)
+    element.on('tab(tabs)', function(){//tabs
+        var left=$(this).position().left+parseInt($(this).css('marginLeft'));
+        var html=$(this).html();
+        var data_id=$(this).attr('data-id')
+        var pay_status=$(this).attr('pay_status')
+        $('.nl-transform').css({
+            'transform':'translate3d('+left+'px, 0px, 0px)'
+        }).html(html)
+
+        if(!isClick[data_id]){
+            pagation(data_id)
         }
     });
 })

@@ -89,9 +89,13 @@ class Student_Grading extends Student_Home
             wp_enqueue_style( 'my-student-matching-word' );
         }
 
-        if(ACTION == 'match_card' || ACTION == 'ready_card'){//人脉信息记忆
-            wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-card' );
+        if( ACTION == 'ready_card'){//人脉信息记忆
+            wp_register_style( 'my-student-ready-card', student_css_url.'grading/ready-card.css',array('my-student') );
+            wp_enqueue_style( 'my-student-ready-card' );
+        }
+        if(ACTION == 'match_card'){
+            wp_register_style( 'my-student-match_card-card', student_css_url.'grading/match-card.css',array('my-student') );
+            wp_enqueue_style( 'my-student-match_card-card' );
         }
     }
 }
