@@ -1,0 +1,56 @@
+
+.matching-number{
+    width: -webkit-calc(100% / 12);
+    width: calc(100% / 12);
+    float: left;
+    overflow: visible;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    color: #262626;
+    text-align: center;
+}
+
+input[type=text].matching-number-input{
+    width: 85%;
+    margin: auto;
+    height: 35px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #4394F9;
+    color: #4394F9;
+    padding: 0;
+    text-align: center;
+}
+input[type=text].matching-number-input:disabled{
+    border-bottom: 1px solid #262626;
+    color: #262626;
+}
+input[type=text].matching-number-input:focus{
+    background: rgba(67, 148, 249, 0.3);
+    color: #4394F9!important;
+}
+
+
+.content ul.flow-default{
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+}
+
+
+
+.matching-reading{
+    display: none;
+}
+.matching-reading.active{
+    padding-bottom: 70px;
+    display: block;
+}
+
+.a-two.disabled{
+    background:#fff; 
+    color:#d8d6d6;
+    border:1px solid #d8d6d6;
+}

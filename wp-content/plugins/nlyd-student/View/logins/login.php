@@ -28,7 +28,7 @@
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show"> 
                     <!-- 手机号码登陆 -->
-                    <div class="tabs-wraps a1">
+                    <div class="tabs-wraps a1 display-block">
                         <form class="layui-form" action="" id='loginFormFast' lay-filter='loginFormFast'>
                             <!-- 使用手机验证码快速登录 -->
                             <div class="layui-form-item">
@@ -122,7 +122,7 @@
 
                 <!-- 注册 -->
                 <div class="layui-tab-item">
-                    <form class="layui-form" action="" id='registerForm' lay-filter='registerForm'>
+                    <form class="layui-form display-block" action="" id='registerForm' lay-filter='registerForm'>
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="hidden" name="action" value="student_register">
@@ -151,6 +151,7 @@
                             </div>
                         </div>
                     </form>
+                        
                 </div> 
             </div> 
             <div class="nl-agreement"><?=__('登录或注册即同意', 'nlyd-student')?><br /><a class="c_blue pointer"><?=__('【脑力中国用户协议】', 'nlyd-student')?></a></div>

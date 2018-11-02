@@ -17,11 +17,17 @@
                         </div>
                     </div>
                     <div class="matching-number-zoo layui-row">
-                        <p>正在播放语音中...</p>
-                        
+                        <div class="ta_c c_black voice_title">正在播放语音中...</div>
+                        <div class="img-box voice_img">
+                            <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
+                        </div>
+
+                        <div class="layui-progress layui-progress-big" lay-showPercent="true">
+                            <div class="layui-progress-bar layui-bg-blue" lay-percent="80%"></div>
+                        </div>
                     </div>
                 </div>
-                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('grading/match_word')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('grading/match_voice')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>
@@ -58,7 +64,7 @@ jQuery(function($) {
     var matching_question=$.GetSession('matching_question','true');
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
         questions_answer=matching_question['questions_answer'];
-        window.location.href="<?=home_url('grading/match_voice/')?>";
+        // window.location.href="<?=home_url('grading/match_voice/')?>";
     }else{
         for(var i=0;i<question_leng;i++){
             var num=Math.floor(Math.random()*10);//生成0-9的随机数
@@ -71,8 +77,9 @@ jQuery(function($) {
             questions_answer:questions_answer
         }
         $.SetSession('matching_question',sessionData)
-        doTTS(JSON.stringify(questions_answer))
+        // doTTS("1,2,3")
     }
+    doTTS("1,2,3")
     function submit(time,submit_type){//提交答案
         // $('#load').css({
         //         'display':'block',
@@ -164,5 +171,20 @@ jQuery(function($) {
             // }, 1000);
         }
     });
+    var time=questions_answer.length;
+    showTime=function(){
+        time--
+        if(time>0){
+            var percent=(questions_answer.length-time)/questions_answer.length*100;
+            $('.layui-progress').html('<div class="layui-progress-bar layui-bg-blue" lay-percent="'+percent+'%"></div>')
+            $('.layui-progress-bar').css('width',percent+'%')
+            timer=setTimeout("showTime()",1000);
+        }else{
+            clearTimeout(timer)
+            //跳转
+        }
+
+    }  
+    showTime()
 })
 </script>

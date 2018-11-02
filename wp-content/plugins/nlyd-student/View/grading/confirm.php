@@ -360,21 +360,32 @@ jQuery(function($) {
     $('.selectBottom').on('click','.cancel',function(){
         $(this).parents('.selectBottom').removeClass('selectBottom-show');
     })
-    // var sexSelectData= [{id:"男",value:'<?=__('男', 'nlyd-student')?>'},{id:"女",value:'<?=__('女', 'nlyd-student')?>'},]
-    // var mobileSelect2 = new MobileSelect({
-    //     trigger: '#trigger3',
-    //     title: '<?=__('性别', 'nlyd-student')?>',
-    //     wheels: [
-    //         {data: sexSelectData}
-    //     ],
-    //     position:0, //初始化定位 打开时默认选中的哪个 如果不填默认为0
-    //     transitionEnd:function(indexArr, data){
-    //         // console.log(data);
-    //     },
-    //     callback:function(indexArr, data){
-    //         // $('#trigger3').val(data[0]['value']).attr('data-value',data[0]['id'])
-    //     }
-    // });
+    var sexSelectData= [
+        {id:"1",value:'<?=__('记忆一级', 'nlyd-student')?>'},
+        {id:"2",value:'<?=__('记忆二级', 'nlyd-student')?>'},
+        {id:"3",value:'<?=__('记忆三级', 'nlyd-student')?>'},
+        {id:"4",value:'<?=__('记忆四级', 'nlyd-student')?>'},
+        {id:"5",value:'<?=__('记忆五级', 'nlyd-student')?>'},
+        {id:"6",value:'<?=__('记忆六级', 'nlyd-student')?>'},
+        {id:"7",value:'<?=__('记忆七级', 'nlyd-student')?>'},
+        {id:"8",value:'<?=__('记忆八级', 'nlyd-student')?>'},
+        {id:"9",value:'<?=__('记忆九级', 'nlyd-student')?>'},
+        {id:"10",value:'<?=__('记忆十级', 'nlyd-student')?>'},
+    ]
+    var mobileSelect2 = new MobileSelect({
+        trigger: '#trigger3',
+        title: '<?=__('选择记忆级别', 'nlyd-student')?>',
+        wheels: [
+            {data: sexSelectData}
+        ],
+        position:0, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            $('#trigger3').val(data[0]['value']).attr('data-value',data[0]['id'])
+        }
+    });
 
 })
 </script>
