@@ -76,6 +76,11 @@ class Student_Grading extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-voice.php';
         load_view_template($view);
     }
+    public function matching_silent(){//国学经典默写
+        $view = student_view_path.CONTROLLER.'/matching-silent.php';
+        load_view_template($view);
+    }
+    
     /**
      * 默认公用js/css引入
      */
@@ -104,12 +109,18 @@ class Student_Grading extends Student_Home
                 'sure'=>__('确认','nlyd-student'),
                 'cancel'=>__('取消','nlyd-student')
             ]);
+            wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
+            wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-confirm', student_css_url.'confirm.css',array('my-student') );
             wp_enqueue_style( 'my-student-confirm' );
         }
         if(ACTION == 'match_szzb' || ACTION == 'matching_PI'){//进入数字争霸比赛页面
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
+        }
+        if(ACTION == 'ready_voice'){
+            wp_register_style( 'my-student-voice', student_css_url.'grading/voice.css',array('my-student') );
+            wp_enqueue_style( 'my-student-voice' );
         }
         if(ACTION == 'match_voice'){
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
@@ -128,6 +139,10 @@ class Student_Grading extends Student_Home
         if(ACTION == 'match_card' || ACTION == 'ready_card'){//人脉信息记忆
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
+        }
+        if(ACTION == 'matching_silent'){//国学经典默写
+            wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matching-silent' );
         }
     }
 }

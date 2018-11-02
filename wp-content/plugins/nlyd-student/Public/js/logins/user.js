@@ -29,6 +29,12 @@ function goCenter(){
     }
 }
 goCenter()
+$(document).keyup(function(event){
+    if(event.keyCode ==13){
+        $('.layui-tab-item.layui-show .display-block .submitBtn').click()
+    }
+});
+
         sendloginAjax=function(formData){
             //type：确定回调函数
             //url:ajax地址

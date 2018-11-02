@@ -1,33 +1,3 @@
-<!-- 
-<div class="layui-fluid">
-    <div class="layui-row">
-
-
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
-            <div class="main-header">
-                <header class="mui-bar mui-bar-nav main">
-                    <a class="mui-pull-left nl-goback static" href="<?=home_url('supervisor/logs')?>">
-                        <div><i class="iconfont">&#xe610;</i></div>
-                    </a>
-                    <h1 class="mui-title"><div><?=__('考级中心', 'nlyd-student')?></div></h1>
-                </header>
-            </div> 
-            <div class="layui-row nl-border nl-content">
-                <a href="<?=home_url('grading/ready_szzb/type/1')?>">随机数字记忆</a><br>
-                <a href="<?=home_url('grading/ready_szzb/type/2')?>">随机字母记忆</a><br>
-                <a href="<?=home_url('grading/ready_word/')?>">随机中文词语记忆</a><br>
-                <a href="<?=home_url('grading/matching_PI/')?>">圆周率默写</a><br>
-                <a href="<?=home_url('grading/ready_card/')?>">人脉信息记忆</a><br>
-                <a href="<?=home_url('grading/ready_voice/')?>">语音听记数字记忆</a><br>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-jQuery(document).ready(function($) {
-    $.DelSession('matching_question');
-})
-</script> -->
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
@@ -50,18 +20,15 @@ jQuery(document).ready(function($) {
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                    
+                                <a href="<?=home_url('grading/ready_szzb/type/1')?>">随机数字记忆</a><br>
+                                <a href="<?=home_url('grading/ready_szzb/type/2')?>">随机字母记忆</a><br>
+                                <a href="<?=home_url('grading/ready_word/')?>">随机中文词语记忆</a><br>
+                                <a href="<?=home_url('grading/matching_PI/')?>">圆周率默写</a><br>
+                                <a href="<?=home_url('grading/ready_card/')?>">人脉信息记忆</a><br>
+                                <a href="<?=home_url('grading/ready_voice/')?>">语音听记数字记忆</a><br>
+                                <a href="<?=home_url('grading/matching_silent/')?>">国学经典默写</a><br>
                                 </ul>
                             </div>
-                            <!-- 比赛中 -->
-                            <!-- <div class="layui-tab-item">
-                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新比赛倒计时', 'nlyd-student')?>
-                                    <span class="getTime" id="getTimes">00:00:00</span>        
-                                </div>
-                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
-
-                                </ul>
-                            </div> -->
                             <!-- 往期比赛 -->
                             <div class="layui-tab-item">
                                 <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
@@ -99,6 +66,7 @@ jQuery(document).ready(function($) {
 <script>
     
 jQuery(function($) { 
+    $.DelSession('matching_question');
     $('body').on('click','.nl-match-button button',function(){
         var _this=$(this);
         var href=_this.attr('href');
