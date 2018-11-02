@@ -9,28 +9,44 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row">
-                        <div class="c_black match_info_font"><div><?=__('人脉信息记忆', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <!-- <i class="iconfont">&#xe685;</i> -->
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </div>
                         </div>
                     </div>
                     <div class="matching-number-zoo layui-row">
-                     
+                        <p>正在播放语音中...</p>
+                        
                     </div>
                 </div>
-                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('grading/match_card')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('grading/match_word')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>
 </div>
+<div id="bdtts_div_id">
+
+</div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
+    function doTTS(ttsText) {
+      var ttsDiv = document.getElementById('bdtts_div_id');
+      // 文字转语音
+      var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
+      var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=1&spd=1&text=' + ttsText + '" type="audio/mpeg">';
+      var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
+      var au2 = '</audio>';
+      ttsDiv.innerHTML = au1 + sss + eee + au2;
+
+      ttsAudio = document.getElementById('tts_autio_id');
+
+      ttsAudio.play();
+    }
+    // doTTS()
 jQuery(function($) { 
     var question_leng=100;//题目长度
-    var question_type=2;//1，数字.2,字母
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -38,49 +54,25 @@ jQuery(function($) {
     var _match_id=1;
     var _project_id=2;
     var _match_more=3;
-    var questions_answer=['','','']
-    // var matching_question=$.GetSession('matching_question','true');
-    // if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
-    //     questions_answer=matching_question['questions_answer']
-    // }else{
-    //     // $.getJSON("js/userinfo.json", function (data){
-            
-    //     // }) 
-    //     for(var i=0;i<question_leng;i++){
-    //         if(question_type==1){
-    //             var num=Math.floor(Math.random()*10);//生成0-9的随机数
-    //         }else if(question_type==2){
-    //             var num=randZF();//生成A-Z的随机数
-    //         }
-            
-    //         questions_answer.push(num)
-    //     }
-    //     var sessionData={
-    //         match_id:_match_id,
-    //         project_id:_project_id,
-    //         match_more:_match_more,
-    //         question_type:question_type,
-    //         questions_answer:questions_answer
-    //     }
-    //     $.SetSession('matching_question',sessionData)
-    // }
-    function randZF() {//生成随即字符
-        var arr=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-        var pos = Math.round(Math.random() * (arr.length - 1));
-        return arr[pos];
+    var questions_answer=[]
+    var matching_question=$.GetSession('matching_question','true');
+    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
+        questions_answer=matching_question['questions_answer'];
+        window.location.href="<?=home_url('grading/match_voice/')?>";
+    }else{
+        for(var i=0;i<question_leng;i++){
+            var num=Math.floor(Math.random()*10);//生成0-9的随机数
+            questions_answer.push(num)
+        }
+        var sessionData={
+            match_id:_match_id,
+            project_id:_project_id,
+            match_more:_match_more,
+            questions_answer:questions_answer
+        }
+        $.SetSession('matching_question',sessionData)
+        doTTS(JSON.stringify(questions_answer))
     }
-    $.each(questions_answer,function(i,v){
-        var dom='<div class="matching-card">'
-                    +'<div class="img-box card_img">'
-                        +'<img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">'
-                    +'</div>'
-                    +'<div class="card_detail">'
-                        +'<div class="card_name c_black">名字</div>'
-                        +'<div class="card_phone c_black">18140022053</div>'
-                    +'</div>'
-                +'</div>'
-        $('.matching-number-zoo').append(dom)
-    })
     function submit(time,submit_type){//提交答案
         // $('#load').css({
         //         'display':'block',
@@ -172,6 +164,5 @@ jQuery(function($) {
             // }, 1000);
         }
     });
-
 })
 </script>

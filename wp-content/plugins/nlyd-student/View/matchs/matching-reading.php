@@ -8,9 +8,9 @@
             <div class="layui-row nl-border nl-content">
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
-                        <div class="matching-row layui-row">
+                        <!-- <div class="matching-row layui-row">
                             <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
-                        </div>
+                        </div> -->
                         <div class="matching-row layui-row have-submit" style="margin-top:0;">
                             <div class="c_black match_info_font"><div><span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
