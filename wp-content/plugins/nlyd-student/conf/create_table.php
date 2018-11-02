@@ -32,7 +32,7 @@ function the_table_install () {
     }*/
 
 
-    $table_name = $wpdb->prefix . "grading_meta";  //我的战队   储存我的战队信息
+    $table_name = $wpdb->prefix . "grading_meta";  //考級   储存考级meta信息
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
 

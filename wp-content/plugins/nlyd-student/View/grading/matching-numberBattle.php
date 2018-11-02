@@ -6,12 +6,8 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row layui-row">
-                        <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
-                    </div>
-                    <div class="matching-row layui-row have-submit" style="margin-top:0;">
-                        <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
-                        <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
+                    <div class="matching-row layui-row have-submit">
+                        <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                            <div> 
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
@@ -19,6 +15,9 @@
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
+                    <!-- <div class="layui-row">
+                        <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                    </div> -->
                     <div class="matching-row layui-row">
                         <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
                         <div class="matching-row-list">
@@ -30,7 +29,7 @@
 
                     </div>
 
-                    <div class="matching-keyboard layui-row">
+                    <div class="matching-keyboard layui-row match_number" style="display:none">
                         <div class="matching-keyboard-row">
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="1"><div>1</div></div>
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="2"><div>2</div></div>
@@ -46,9 +45,50 @@
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="8"><div>8</div></div>
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="9"><div>9</div></div>
                         </div>
-                        <div class="matching-keyboard-row">
-                            <div class="bg_orange matching-key fs_16 c_white" id="del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                        <div class="matching-keyboard-row"> 
+                            <div class="bg_orange matching-key fs_16 c_white _del"><div><?=__('删除', 'nlyd-student')?></div></div>
                             <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0"><div>0</div></div>
+                        </div>
+                    </div>
+
+                    <div class="matching-keyboard layui-row match_zimu"  style="display:none">
+                        <div class="matching-keyboard-row">
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="A"><div>A</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="B"><div>B</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="C"><div>C</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="D"><div>D</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="E"><div>E</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="F"><div>F</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="G"><div>G</div></div>
+                            
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="H"><div>H</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="I"><div>I</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="J"><div>J</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="K"><div>K</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="L"><div>L</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="M"><div>M</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="N"><div>N</div></div>
+
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="O"><div>O</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="P"><div>P</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Q"><div>Q</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="R"><div>R</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="S"><div>S</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="T"><div>T</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="U"><div>U</div></div>
+                            
+                        </div>
+                        <div class="matching-keyboard-row">
+                            <div class="bg_orange matching-key fs_16 c_white _del"><div><?=__('删除', 'nlyd-student')?></div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="V"><div>V</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="W"><div>W</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="X"><div>X</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Y"><div>Y</div></div>
+                            <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Z"><div>Z</div></div>
                         </div>
                     </div>
                 </div> 
@@ -61,9 +101,9 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
+    var _match_id=1;
+    var _project_id=2;
+    var _match_more=3;
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -71,6 +111,13 @@ jQuery(function($) {
     var matching_question= $.GetSession('matching_question','1');
     if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
         questions_answer=matching_question['questions_answer'];
+        if(matching_question['question_type']=='1'){
+            $('.match_number').css('display',"block")
+            $('.match_zimu').css('display',"none")
+        }else if(matching_question['question_type']=='2'){
+            $('.match_zimu').css('display',"block")
+            $('.match_number').css('display',"none")
+        }
         $.each(questions_answer,function(i,v){
             var dom=i==0 ? '<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
             $('.matching-number-zoo').append(dom)
@@ -80,13 +127,10 @@ jQuery(function($) {
         $.alerts('触发防作弊系统')
         window.location.href = '<?=home_url("/matchs/initialMatch/project_alias/szzb/match_id/")?>'+_match_id+'/project_more_id/'+$.Request('project_more_id');
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-
-        // setTimeout(function() {
-            submit(0,3)
-        // }, 1000);
-    }
+    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
+    //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+    //         submit(0,3)
+    // }
     $('.count_down').countdown(function(S, d){//倒计时
         var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
         var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -227,22 +271,22 @@ jQuery(function($) {
         })
     })
     //删除tap事件
-    // mTouch('body').on('tap','#del',function(e){
-    new AlloyFinger($('#del')[0], {//删除
+$('._del').each(function(){//数字键盘
+    var _this=$(this);
+    new AlloyFinger(_this[0], {//删除
         touchStart: function () {
-            $('#del').addClass("opacity");
+            _this.addClass("opacity");
         },
         touchMove: function () {
-            $('#del').removeClass("opacity");
+            _this.removeClass("opacity");
         },
         touchEnd: function () {
-            $('#del').removeClass("opacity");
+            _this.removeClass("opacity");
         },
         touchCancel: function () {
-            $('#del').removeClass("opacity");
+            _this.removeClass("opacity");
         },
         tap:function(){
-            var _this=$('#del')
         // if(!_this.hasClass('opcity')){
         //     _this.addClass('opcity')
             var active=$('.matching-number.active');
@@ -283,6 +327,7 @@ jQuery(function($) {
             }
         }
     })
+})
     //前插tap事件
     // mTouch('body').on('tap','#prev',function(e){
     new AlloyFinger($('#prev')[0], {

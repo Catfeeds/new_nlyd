@@ -1,0 +1,5890 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Application Student 项目学生端\n"
+"POT-Creation-Date: 2018-10-31 11:04+0800\n"
+"PO-Revision-Date: 2018-10-31 11:11+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: nlyd-student.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: Controller/class-student-account.php:177
+#: Controller/class-student-ajax.php:884 Controller/class-student-ajax.php:1233
+#: Controller/class-student-ajax.php:2302
+#: Controller/class-student-ajax.php:2899
+#: Controller/class-student-ajax.php:2944
+#: Controller/class-student-ajax1.php:300
+#: Controller/class-student-ajax1.php:908
+#: Controller/class-student-ajax1.php:1257
+#: Controller/class-student-ajax1.php:2310
+#: Controller/class-student-ajax1.php:2906
+#: Controller/class-student-ajax1.php:2951
+#: Controller/class-student-matchs-old.php:945
+#: Controller/class-student-matchs.php:853
+msgid "数据错误"
+msgstr "Data error"
+
+#: Controller/class-student-account.php:276 View/matchs-old/matchList.php:133
+#: View/matchs-old/matchList.php:249 View/matchs/matchList.php:133
+#: View/matchs/matchList.php:253
+msgid "报名结束"
+msgstr "Enrollment End"
+
+#: Controller/class-student-account.php:277 View/matchs-old/confirm.php:33
+#: View/matchs-old/matchDetail.php:31 View/matchs-old/matchList.php:194
+#: View/matchs/confirm.php:34 View/matchs/matchDetail.php:31
+#: View/matchs/matchList.php:198
+msgid "开赛日期"
+msgstr "Start Date"
+
+#: Controller/class-student-account.php:278 View/matchs-old/matchList.php:201
+#: View/matchs/matchList.php:205
+msgid "比赛地点"
+msgstr "Venue"
+
+#: Controller/class-student-account.php:279 View/matchs-old/confirm.php:46
+#: View/matchs-old/matchDetail.php:48 View/matchs-old/matchList.php:207
+#: View/matchs/confirm.php:47 View/matchs/matchDetail.php:48
+#: View/matchs/matchList.php:211
+msgid "报名费用"
+msgstr "Fee"
+
+#: Controller/class-student-account.php:280 View/matchs-old/matchDetail.php:52
+#: View/matchs-old/matchList.php:151 View/matchs-old/matchList.php:174
+#: View/matchs/matchDetail.php:52 View/matchs/matchList.php:152
+#: View/matchs/matchList.php:175
+msgid "报名截止"
+msgstr "Enrollment End"
+
+#: Controller/class-student-account.php:281 View/matchs-old/matchList.php:214
+#: View/matchs/matchList.php:218
+msgid "已报选手"
+msgstr "Athletes"
+
+#: Controller/class-student-account.php:282 View/matchs-old/matchList.php:223
+#: View/matchs/matchList.php:227 View/teams/coachList.php:615
+msgid "查看详情"
+msgstr "Details"
+
+#: Controller/class-student-account.php:283 View/matchs-old/matchDetail.php:64
+#: View/matchs-old/matchList.php:217 View/matchs/matchDetail.php:65
+#: View/matchs/matchList.php:183
+msgid "参赛须知"
+msgstr "Entry Notes"
+
+#: Controller/class-student-account.php:284 View/teams/team.php:152
+msgid "人"
+msgstr " People"
+
+#: Controller/class-student-account.php:285
+#: View/matchs-old/match-answer-log.php:147
+#: View/matchs-old/match-waitting.php:121 View/matchs-old/matchDetail.php:148
+#: View/matchs-old/matchDetail.php:186 View/matchs-old/matchList.php:242
+#: View/matchs-old/matching-fastCalculation.php:126
+#: View/matchs-old/matching-fastCalculation.php:550
+#: View/matchs-old/matching-fastReverse.php:215
+#: View/matchs-old/matching-fastScan.php:75
+#: View/matchs-old/matching-numberBattle.php:73
+#: View/matchs-old/matching-pokerRelay.php:87
+#: View/matchs-old/matching-reading.php:158
+#: View/matchs/match-answer-log.php:203 View/matchs/match-waitting.php:90
+#: View/matchs/matchDetail.php:162 View/matchs/matchDetail.php:200
+#: View/matchs/matchList.php:246 View/matchs/matching-fastCalculation.php:138
+#: View/matchs/matching-fastCalculation.php:575
+#: View/matchs/matching-fastReverse.php:225
+#: View/matchs/matching-fastScan.php:80
+#: View/matchs/matching-numberBattle.php:89
+#: View/matchs/matching-pokerRelay.php:101 View/matchs/matching-reading.php:176
+#: View/public/my-404.php:76 View/public/timer.php:49
+#: View/trains/matching-fastCalculation.php:133
+#: View/trains/matching-fastCalculation.php:557
+#: View/trains/matching-fastReverse.php:214
+#: View/trains/matching-fastScan.php:79
+#: View/trains/matching-numberBattle.php:80
+#: View/trains/matching-pokerRelay.php:98 View/trains/matching-reading.php:158
+msgid "天"
+msgstr " days "
+
+#: Controller/class-student-account.php:297
+msgid "是否确认设为默认地址"
+msgstr "Confirm Set as default address"
+
+#: Controller/class-student-account.php:298 View/account/addAddress.php:52
+msgid "设为默认"
+msgstr "set as Default"
+
+#: Controller/class-student-account.php:299
+msgid "默认地址"
+msgstr "default address"
+
+#: Controller/class-student-account.php:300 View/account/userCenter.php:295
+#: View/matchs-old/matching-fastCalculation.php:575
+#: View/matchs-old/matching-fastReverse.php:589
+#: View/matchs-old/matching-fastScan.php:468
+#: View/matchs-old/matching-numberBattle.php:359
+#: View/matchs-old/matching-pokerRelay.php:178
+#: View/matchs-old/matching-reading.php:187
+#: View/matchs/matching-fastCalculation.php:601
+#: View/matchs/matching-fastReverse.php:610
+#: View/matchs/matching-fastScan.php:485
+#: View/matchs/matching-numberBattle.php:387
+#: View/matchs/matching-pokerRelay.php:206 View/matchs/matching-reading.php:205
+#: View/teams/coachDetail.php:232 View/teams/teamDetail.php:243
+#: View/teams/teamDetail.php:286 View/trains/matching-fastCalculation.php:583
+#: View/trains/matching-fastReverse.php:602
+#: View/trains/matching-fastScan.php:502
+#: View/trains/matching-numberBattle.php:368
+#: View/trains/matching-pokerRelay.php:190 View/trains/matching-reading.php:187
+msgid "提示"
+msgstr "Tips"
+
+#: Controller/class-student-account.php:301 View/teams/coachDetail.php:236
+#: View/teams/coachList.php:176 View/teams/coachList.php:249
+#: View/teams/coachList.php:300 View/teams/coachList.php:397
+#: View/teams/coachList.php:468 View/teams/team.php:215
+#: View/teams/teamDetail.php:247 View/teams/teamDetail.php:290
+msgid "再想想"
+msgstr "Uncertain"
+
+#: Controller/class-student-account.php:302 View/account/userCenter.php:18
+#: View/supervisor/logs.php:51 View/teams/coachDetail.php:236
+#: View/teams/coachDetail.php:245 View/teams/coachList.php:176
+#: View/teams/coachList.php:249 View/teams/coachList.php:300
+#: View/teams/coachList.php:397 View/teams/coachList.php:468
+#: View/teams/team.php:215 View/teams/teamDetail.php:247
+#: View/teams/teamDetail.php:290
+msgid "确认"
+msgstr "Confirm"
+
+#: Controller/class-student-account.php:303
+msgid "是否确认删除地址"
+msgstr "Confirm Delete Address"
+
+#: Controller/class-student-ajax.php:34 Controller/class-student-ajax1.php:34
+msgid "参数不能为空"
+msgstr "Parameter cannot be empty"
+
+#: Controller/class-student-ajax.php:35 Controller/class-student-ajax1.php:35
+msgid "参数必须是数组"
+msgstr "Parameter must be an array"
+
+#: Controller/class-student-ajax.php:36 Controller/class-student-ajax.php:117
+#: Controller/class-student-ajax.php:276 Controller/class-student-ajax.php:356
+#: Controller/class-student-ajax.php:449 Controller/class-student-ajax.php:484
+#: Controller/class-student-ajax.php:631 Controller/class-student-ajax.php:846
+#: Controller/class-student-ajax.php:878 Controller/class-student-ajax.php:902
+#: Controller/class-student-ajax.php:1166
+#: Controller/class-student-ajax.php:1224
+#: Controller/class-student-ajax.php:1274
+#: Controller/class-student-ajax.php:2422
+#: Controller/class-student-ajax.php:2510
+#: Controller/class-student-ajax.php:2712
+#: Controller/class-student-ajax.php:2892
+#: Controller/class-student-ajax.php:2934
+#: Controller/class-student-ajax.php:2980
+#: Controller/class-student-ajax.php:3001
+#: Controller/class-student-ajax.php:3079
+#: Controller/class-student-ajax.php:3348
+#: Controller/class-student-ajax.php:3416
+#: Controller/class-student-ajax.php:3492
+#: Controller/class-student-ajax.php:3512
+#: Controller/class-student-ajax.php:3554
+#: Controller/class-student-ajax.php:3587
+#: Controller/class-student-ajax.php:3601
+#: Controller/class-student-ajax.php:3602 Controller/class-student-ajax1.php:36
+#: Controller/class-student-ajax1.php:117
+#: Controller/class-student-ajax1.php:285
+#: Controller/class-student-ajax1.php:449
+#: Controller/class-student-ajax1.php:508
+#: Controller/class-student-ajax1.php:655
+#: Controller/class-student-ajax1.php:870
+#: Controller/class-student-ajax1.php:902
+#: Controller/class-student-ajax1.php:926
+#: Controller/class-student-ajax1.php:1190
+#: Controller/class-student-ajax1.php:1248
+#: Controller/class-student-ajax1.php:1298
+#: Controller/class-student-ajax1.php:2429
+#: Controller/class-student-ajax1.php:2517
+#: Controller/class-student-ajax1.php:2719
+#: Controller/class-student-ajax1.php:2899
+#: Controller/class-student-ajax1.php:2941
+#: Controller/class-student-ajax1.php:2987
+#: Controller/class-student-ajax1.php:3008
+#: Controller/class-student-ajax1.php:3086
+#: Controller/class-student-ajax1.php:3355
+#: Controller/class-student-ajax1.php:3414
+#: Controller/class-student-ajax1.php:3488
+#: Controller/class-student-logins.php:53
+#: Controller/class-student-matchs-old.php:377
+#: Controller/class-student-matchs-old.php:385
+#: Controller/class-student-matchs-old.php:454
+#: Controller/class-student-matchs-old.php:570
+#: Controller/class-student-matchs-old.php:913
+#: Controller/class-student-matchs-old.php:1030
+#: Controller/class-student-matchs-old.php:1269
+#: Controller/class-student-matchs-old.php:1406
+#: Controller/class-student-matchs-old.php:1472
+#: Controller/class-student-matchs-old.php:1487
+#: Controller/class-student-matchs-old.php:1581
+#: Controller/class-student-matchs-old.php:1617
+#: Controller/class-student-matchs.php:165
+#: Controller/class-student-matchs.php:173
+#: Controller/class-student-matchs.php:226
+#: Controller/class-student-matchs.php:340
+#: Controller/class-student-matchs.php:537
+#: Controller/class-student-matchs.php:670
+#: Controller/class-student-matchs.php:992
+#: Controller/class-student-matchs.php:1126
+#: Controller/class-student-matchs.php:1205
+#: Controller/class-student-matchs.php:1242
+#: Controller/class-student-matchs.php:1334
+#: Controller/class-student-matchs.php:1603
+#: Controller/class-student-trains.php:50
+#: Controller/class-student-trains.php:95
+#: Controller/class-student-trains.php:117
+#: Controller/class-student-trains.php:244
+#: Controller/class-student-trains.php:332
+msgid "参数错误"
+msgstr "Parameter error"
+
+#: Controller/class-student-ajax.php:190 Controller/class-student-ajax.php:591
+#: Controller/class-student-ajax.php:736 Controller/class-student-ajax.php:798
+#: Controller/class-student-ajax.php:1037
+#: Controller/class-student-ajax.php:1313
+#: Controller/class-student-ajax.php:1373
+#: Controller/class-student-ajax.php:1482
+#: Controller/class-student-ajax.php:3158
+#: Controller/class-student-ajax1.php:190
+#: Controller/class-student-ajax1.php:615
+#: Controller/class-student-ajax1.php:760
+#: Controller/class-student-ajax1.php:822
+#: Controller/class-student-ajax1.php:1061
+#: Controller/class-student-ajax1.php:1337
+#: Controller/class-student-ajax1.php:1393
+#: Controller/class-student-ajax1.php:1505
+#: Controller/class-student-ajax1.php:3165
+msgid "已经到底了"
+msgstr "No more content"
+
+#: Controller/class-student-ajax.php:192 Controller/class-student-ajax.php:593
+#: Controller/class-student-ajax.php:737 Controller/class-student-ajax.php:1039
+#: Controller/class-student-ajax1.php:192
+#: Controller/class-student-ajax1.php:617
+#: Controller/class-student-ajax1.php:761
+#: Controller/class-student-ajax1.php:1063
+msgid "暂无列表信息"
+msgstr "No list information"
+
+#: Controller/class-student-ajax.php:289 Controller/class-student-ajax1.php:301
+#: Controller/class-student-matchs-old.php:783
+#: Controller/class-student-matchs-old.php:952
+msgid "答案已提交"
+msgstr "The answer has been submitted"
+
+#: Controller/class-student-ajax.php:434 Controller/class-student-ajax1.php:434
+msgid "提交完成"
+msgstr "Submit completed"
+
+#: Controller/class-student-ajax.php:436 Controller/class-student-ajax.php:561
+#: Controller/class-student-ajax.php:2634
+#: Controller/class-student-ajax.php:3482
+#: Controller/class-student-ajax1.php:436
+#: Controller/class-student-ajax1.php:585
+#: Controller/class-student-ajax1.php:2641
+#: Controller/class-student-ajax1.php:3478
+msgid "提交失败"
+msgstr "Submit failed"
+
+#: Controller/class-student-ajax.php:454 Controller/class-student-ajax1.php:454
+msgid "题目记忆失败,请联系管理员"
+msgstr "Memory failure, please contact the Administrator"
+
+#: Controller/class-student-ajax.php:468 Controller/class-student-ajax1.php:468
+msgid "即将跳转"
+msgstr "Going to jump"
+
+#: Controller/class-student-ajax.php:470 Controller/class-student-ajax1.php:470
+msgid "记忆失败"
+msgstr "Memory failure"
+
+#: Controller/class-student-ajax.php:488 Controller/class-student-ajax1.php:512
+msgid "请登录"
+msgstr "Please login"
+
+#: Controller/class-student-ajax.php:492 Controller/class-student-ajax1.php:516
+#: View/matchs-old/confirm.php:329 View/matchs/confirm.php:330
+msgid "请先实名认证"
+msgstr "Please ID Verification first"
+
+#: Controller/class-student-ajax.php:503 Controller/class-student-ajax1.php:527
+#: Controller/class-student-matchs.php:1133
+#: Controller/class-student-matchs.php:1213
+msgid "比赛信息错误"
+msgstr "Game Information Error"
+
+#: Controller/class-student-ajax.php:504 Controller/class-student-ajax1.php:528
+msgid "当前比赛已禁止报名"
+msgstr "Application has been terminated"
+
+#: Controller/class-student-ajax.php:509 Controller/class-student-ajax1.php:533
+msgid "已达到最大报名数,请联系管理员"
+msgstr ""
+"The maximum number of applications has been reached. Please contact the "
+"Administrator"
+
+#: Controller/class-student-ajax.php:517 Controller/class-student-ajax1.php:541
+msgid "你已报名该比赛"
+msgstr "You have applied for the competition"
+
+#: Controller/class-student-ajax.php:555 Controller/class-student-ajax1.php:579
+#: View/payment/paySuccess.php:19
+msgid "报名成功"
+msgstr "Registration successful"
+
+#: Controller/class-student-ajax.php:557 Controller/class-student-ajax1.php:581
+msgid "请选择支付方式"
+msgstr "Please select a payment method"
+
+#: Controller/class-student-ajax.php:611 Controller/class-student-ajax.php:754
+#: Controller/class-student-ajax1.php:635
+#: Controller/class-student-ajax1.php:778
+msgid "待定"
+msgstr "Pending"
+
+#: Controller/class-student-ajax.php:634 Controller/class-student-ajax.php:1164
+#: Controller/class-student-ajax.php:1228
+#: Controller/class-student-ajax.php:2895
+#: Controller/class-student-ajax.php:2937
+#: Controller/class-student-ajax1.php:658
+#: Controller/class-student-ajax1.php:1188
+#: Controller/class-student-ajax1.php:1252
+#: Controller/class-student-ajax1.php:2902
+#: Controller/class-student-ajax1.php:2944 View/account/userCenter.php:51
+msgid "未登录"
+msgstr "please sign in here"
+
+#: Controller/class-student-ajax.php:640 Controller/class-student-ajax1.php:664
+#: View/account/userCenter.php:69 View/matchs-old/confirm.php:120
+#: View/matchs/confirm.php:121 View/teams/teamDetail.php:111
+msgid "加入战队"
+msgstr "Join team "
+
+#: Controller/class-student-ajax.php:646 Controller/class-student-ajax1.php:670
+msgid "离队申请正在审核,暂时不能申请加入战队"
+msgstr ""
+"The departure request is currently under review and cannot be applied to the "
+"team."
+
+#: Controller/class-student-ajax.php:649 Controller/class-student-ajax1.php:673
+msgid "入队申请正在审核,暂时不能申请加入战队"
+msgstr ""
+"The application is under review and temporarily unable to apply to join the "
+"team"
+
+#: Controller/class-student-ajax.php:652 Controller/class-student-ajax1.php:676
+msgid "已有战队,暂时不能申请加入战队,请先申请离队"
+msgstr "You have joined the team and can not join other teams."
+
+#: Controller/class-student-ajax.php:667 Controller/class-student-ajax1.php:691
+#: View/teams/teamDetail.php:28
+msgid "退出战队"
+msgstr "Exit the team"
+
+#: Controller/class-student-ajax.php:673 Controller/class-student-ajax1.php:697
+msgid "你还没有加入任何战队"
+msgstr "You haven't joined any teams yet"
+
+#: Controller/class-student-ajax.php:701 Controller/class-student-ajax1.php:725
+msgid "操作成功,等待战队受理"
+msgstr "Operation successful, waiting for the team to accept"
+
+#: Controller/class-student-ajax.php:704 Controller/class-student-ajax.php:1259
+#: Controller/class-student-ajax.php:2725
+#: Controller/class-student-ajax1.php:728
+#: Controller/class-student-ajax1.php:1283
+#: Controller/class-student-ajax1.php:2732
+msgid "操作失败"
+msgstr "Operate Failed"
+
+#: Controller/class-student-ajax.php:800 Controller/class-student-ajax.php:3160
+#: Controller/class-student-ajax1.php:824
+#: Controller/class-student-ajax1.php:3167
+msgid "暂无战队"
+msgstr "No team"
+
+#: Controller/class-student-ajax.php:858 Controller/class-student-ajax1.php:882
+msgid "设置成功"
+msgstr "Successful setup"
+
+#: Controller/class-student-ajax.php:862 Controller/class-student-ajax.php:1807
+#: Controller/class-student-ajax1.php:886
+#: Controller/class-student-ajax1.php:1828
+msgid "设置失败"
+msgstr "Setup failed"
+
+#: Controller/class-student-ajax.php:906 Controller/class-student-ajax1.php:930
+msgid "删除成功"
+msgstr "Delete successful"
+
+#: Controller/class-student-ajax.php:908 Controller/class-student-ajax1.php:932
+msgid "删除失败"
+msgstr "Delete Failed"
+
+#: Controller/class-student-ajax.php:924 Controller/class-student-ajax1.php:948
+msgid "收件人长度为1-100个字符"
+msgstr "Recipient limit 1000 characters"
+
+#: Controller/class-student-ajax.php:925 Controller/class-student-ajax.php:2151
+#: Controller/class-student-ajax1.php:949
+#: Controller/class-student-ajax1.php:2166
+msgid "手机格式不正确"
+msgstr "Phone format is not correct"
+
+#: Controller/class-student-ajax.php:927 Controller/class-student-ajax1.php:951
+msgid "请确认地址信息的完整性"
+msgstr "Please confirm the address information"
+
+#: Controller/class-student-ajax.php:933 Controller/class-student-ajax1.php:957
+msgid "最多只能添加10个收货地址"
+msgstr "You can add up to 10 shipping addresses"
+
+#: Controller/class-student-ajax.php:971 Controller/class-student-ajax.php:1803
+#: Controller/class-student-ajax1.php:995
+#: Controller/class-student-ajax1.php:1824
+msgid "保存成功"
+msgstr "Save successful"
+
+#: Controller/class-student-ajax.php:976
+#: Controller/class-student-ajax1.php:1000
+msgid "保存失败"
+msgstr "Save failed"
+
+#: Controller/class-student-ajax.php:1084
+#: Controller/class-student-ajax1.php:1108
+msgid "速读类"
+msgstr "Speed Reading "
+
+#: Controller/class-student-ajax.php:1087
+#: Controller/class-student-ajax1.php:1111
+msgid "记忆类"
+msgstr "Memory "
+
+#: Controller/class-student-ajax.php:1090
+#: Controller/class-student-ajax1.php:1114
+msgid "心算类"
+msgstr "Mental arithmetic "
+
+#: Controller/class-student-ajax.php:1168
+#: Controller/class-student-ajax1.php:1192
+msgid "不能申请自己为教练"
+msgstr "You can't apply for your own coach"
+
+#: Controller/class-student-ajax.php:1210
+#: Controller/class-student-ajax1.php:1234
+msgid "申请成功,请等待教练同意"
+msgstr "Please wait for the coach to approve the application"
+
+#: Controller/class-student-ajax.php:1212
+#: Controller/class-student-ajax1.php:1236
+msgid "申请失败"
+msgstr "Application failed"
+
+#: Controller/class-student-ajax.php:1234
+#: Controller/class-student-ajax.php:2945
+#: Controller/class-student-ajax1.php:1258
+#: Controller/class-student-ajax1.php:2952
+msgid "该教练还不是你的教练"
+msgstr "The coach is not your coach yet"
+
+#: Controller/class-student-ajax.php:1256
+#: Controller/class-student-ajax1.php:1280
+msgid "操作成功"
+msgstr "Operate Success"
+
+#: Controller/class-student-ajax.php:1279
+#: Controller/class-student-ajax1.php:1303
+msgid "你已报名该比赛,禁止重复报名"
+msgstr ""
+"You have signed up for the competition. No duplicate entries are allowed"
+
+#: Controller/class-student-ajax.php:1314
+#: Controller/class-student-ajax1.php:1338
+msgid "暂无选手报名"
+msgstr "No enrolled User"
+
+#: Controller/class-student-ajax.php:1375
+#: Controller/class-student-ajax.php:1484
+#: Controller/class-student-ajax1.php:1395
+#: Controller/class-student-ajax1.php:1507
+msgid "暂无比赛"
+msgstr "No match information"
+
+#: Controller/class-student-ajax.php:1394
+#: Controller/class-student-ajax.php:1506
+#: Controller/class-student-ajax1.php:1414
+#: Controller/class-student-ajax1.php:1546
+#: View/matchs-old/match-waitting.php:46 View/matchs-old/matchDetail.php:115
+#: View/matchs-old/matchDetail.php:123 View/matchs/match-waitting.php:63
+#: View/matchs/matchDetail.php:129 View/matchs/matchDetail.php:137
+msgid "进入比赛"
+msgstr "Enter the game"
+
+#: Controller/class-student-ajax.php:1398
+#: Controller/class-student-ajax1.php:1418 View/matchs-old/matchList.php:168
+#: View/matchs/matchList.php:169
+msgid "已报名参赛"
+msgstr "Already entered"
+
+#: Controller/class-student-ajax.php:1405
+#: Controller/class-student-ajax1.php:1425 View/matchs-old/matchDetail.php:112
+#: View/matchs-old/matchDetail.php:120 View/matchs-old/matchList.php:159
+#: View/matchs/matchDetail.php:126 View/matchs/matchDetail.php:134
+#: View/matchs/matchList.php:160
+msgid "查看战绩"
+msgstr "View record"
+
+#: Controller/class-student-ajax.php:1410
+#: Controller/class-student-ajax.php:1528
+#: Controller/class-student-ajax.php:1529
+#: Controller/class-student-ajax1.php:1430
+#: Controller/class-student-ajax1.php:1568
+#: Controller/class-student-ajax1.php:1569
+#: Controller/class-student-matchs-old.php:393
+#: Controller/class-student-matchs.php:183
+#: Controller/class-student-matchs.php:369 Controller/languages.php:21
+msgid "等待开赛"
+msgstr "Waiting to start"
+
+#: Controller/class-student-ajax.php:1507
+#: Controller/class-student-ajax1.php:1547 Controller/languages.php:24
+#: View/matchs-old/matchList.php:16 View/matchs/matchList.php:16
+msgid "比赛中"
+msgstr "Match in progress"
+
+#: Controller/class-student-ajax.php:1512
+#: Controller/class-student-ajax1.php:1552
+msgid "参赛报名"
+msgstr "Entry Registration"
+
+#: Controller/class-student-ajax.php:1513
+#: Controller/class-student-ajax1.php:1553 Controller/languages.php:23
+#: View/matchs-old/matchList.php:15 View/matchs/matchList.php:15
+msgid "报名中"
+msgstr "Registering"
+
+#: Controller/class-student-ajax.php:1518
+#: Controller/class-student-ajax1.php:1558 Controller/languages.php:22
+msgid "未开始"
+msgstr "Not started"
+
+#: Controller/class-student-ajax.php:1523
+#: Controller/class-student-ajax1.php:1563 Controller/languages.php:20
+msgid "已结束"
+msgstr "End"
+
+#: Controller/class-student-ajax.php:1536
+#: Controller/class-student-ajax1.php:1576
+msgid "查看排名"
+msgstr "View Rank"
+
+#: Controller/class-student-ajax.php:1553
+#: Controller/class-student-ajax1.php:1593
+msgid "meta_key不能为空"
+msgstr "Meta_key cannot be empty"
+
+#: Controller/class-student-ajax.php:1573
+#: Controller/class-student-ajax1.php:1613
+msgid "该手机号已存在"
+msgstr "The phone number already exists"
+
+#: Controller/class-student-ajax.php:1584
+#: Controller/class-student-ajax1.php:1624
+msgid "该邮箱号已存在"
+msgstr "The mailbox number already exists"
+
+#: Controller/class-student-ajax.php:1590
+#: Controller/class-student-ajax.php:1941
+#: Controller/class-student-ajax1.php:1630
+#: Controller/class-student-ajax1.php:1962
+msgid "新密码不能为空"
+msgstr "The new password cannot be empty"
+
+#: Controller/class-student-ajax.php:1591
+#: Controller/class-student-ajax.php:1942
+#: Controller/class-student-ajax.php:2237
+#: Controller/class-student-ajax1.php:1631
+#: Controller/class-student-ajax1.php:1963
+#: Controller/class-student-ajax1.php:2245
+msgid "两次密码不一致"
+msgstr "Entered passwords differ"
+
+#: Controller/class-student-ajax.php:1595
+#: Controller/class-student-ajax.php:1946
+#: Controller/class-student-ajax.php:2131
+#: Controller/class-student-ajax.php:3034
+#: Controller/class-student-ajax1.php:1635
+#: Controller/class-student-ajax1.php:1967
+#: Controller/class-student-ajax1.php:2152
+#: Controller/class-student-ajax1.php:3041
+msgid "密码错误"
+msgstr "Password Error"
+
+#: Controller/class-student-ajax.php:1598
+#: Controller/class-student-ajax.php:1949
+#: Controller/class-student-ajax1.php:1638
+#: Controller/class-student-ajax1.php:1970
+msgid "新密码不能和老密码一致"
+msgstr "The new password cannot match the old password."
+
+#: Controller/class-student-ajax.php:1602
+#: Controller/class-student-ajax.php:1953
+#: Controller/class-student-ajax1.php:1642
+#: Controller/class-student-ajax1.php:1974
+msgid "6-16位字母+数字组合"
+msgstr "6-16-letter + number combination"
+
+#: Controller/class-student-ajax.php:1610
+#: Controller/class-student-ajax1.php:1650
+msgid "昵称不能超过24个字符"
+msgstr "Nickname cannot exceed 24 characters"
+
+#: Controller/class-student-ajax.php:1637
+#: Controller/class-student-ajax1.php:1677
+msgid "上传失败"
+msgstr "Upload failed"
+
+#: Controller/class-student-ajax.php:1643
+#: Controller/class-student-ajax1.php:1683
+msgid "国籍必选"
+msgstr "Please choose your nationality"
+
+#: Controller/class-student-ajax.php:1650
+#: Controller/class-student-ajax1.php:1689
+msgid "生日必选"
+msgstr "Birthday must be filled"
+
+#: Controller/class-student-ajax.php:1660
+#: Controller/class-student-ajax1.php:1699
+msgid "请选择证件类型"
+msgstr "Please select a document type"
+
+#: Controller/class-student-ajax.php:1663
+#: Controller/class-student-ajax.php:1912
+#: Controller/class-student-ajax1.php:1702
+#: Controller/class-student-ajax1.php:1933
+msgid "证件号格式不正确"
+msgstr "ID number format is incorrect"
+
+#: Controller/class-student-ajax.php:1776
+#: Controller/class-student-ajax1.php:1797
+msgid "昵称不能超过40个字符"
+msgstr "Nickname cannot exceed 40 characters"
+
+#: Controller/class-student-ajax.php:1824
+#: Controller/class-student-ajax1.php:1845
+msgid "新密码两次输入不一致"
+msgstr "Two times the input password is inconsistent"
+
+#: Controller/class-student-ajax.php:1828
+#: Controller/class-student-ajax1.php:1849
+msgid "新旧密码不能一致"
+msgstr "Old and new passwords cannot be consistent."
+
+#: Controller/class-student-ajax.php:1836
+#: Controller/class-student-ajax1.php:1857
+msgid "老密码不正确"
+msgstr "Old Password not correct"
+
+#: Controller/class-student-ajax.php:1841
+#: Controller/class-student-ajax.php:1981
+#: Controller/class-student-ajax1.php:1862
+#: Controller/class-student-ajax1.php:2002
+msgid "手机格式有误"
+msgstr "Phone format is wrong"
+
+#: Controller/class-student-ajax.php:1846
+#: Controller/class-student-ajax1.php:1867
+msgid "验证成功"
+msgstr "Validation successful"
+
+#: Controller/class-student-ajax.php:1851
+#: Controller/class-student-ajax1.php:1872
+msgid "该手机号已被占用"
+msgstr "The phone number is already occupied"
+
+#: Controller/class-student-ajax.php:1857
+#: Controller/class-student-ajax.php:2048
+#: Controller/class-student-ajax1.php:1878
+#: Controller/class-student-ajax1.php:2069
+msgid "邮箱格式有误"
+msgstr "Wrong email format"
+
+#: Controller/class-student-ajax.php:1860
+#: Controller/class-student-ajax1.php:1881
+msgid "该邮箱号已被占用"
+msgstr "The mailbox number is already occupied"
+
+#: Controller/class-student-ajax.php:1870
+#: Controller/class-student-ajax.php:1895
+#: Controller/class-student-ajax1.php:1891
+#: Controller/class-student-ajax1.php:1916
+msgid "未知的操作请求"
+msgstr "Unknown operation request"
+
+#: Controller/class-student-ajax.php:1875
+#: Controller/class-student-ajax1.php:1896
+msgid "更新成功"
+msgstr "Upgrade successful"
+
+#: Controller/class-student-ajax.php:1877
+#: Controller/class-student-ajax1.php:1898
+msgid "更新失败"
+msgstr "Update Failed"
+
+#: Controller/class-student-ajax.php:1899
+#: Controller/class-student-ajax1.php:1920
+msgid "解绑成功"
+msgstr "Unbind succeeded"
+
+#: Controller/class-student-ajax.php:1901
+#: Controller/class-student-ajax1.php:1922
+msgid "解绑失败"
+msgstr "Change failed"
+
+#: Controller/class-student-ajax.php:1910
+#: Controller/class-student-ajax1.php:1931
+msgid "证件号不能为空"
+msgstr "The certificate number can not be empty"
+
+#: Controller/class-student-ajax.php:1920
+#: Controller/class-student-ajax1.php:1941
+msgid "年龄不能低于1岁,请确认身份证信息"
+msgstr ""
+"Age cannot be less than 1 years old, please confirm ID card information"
+
+#: Controller/class-student-ajax.php:1923
+#: Controller/class-student-ajax1.php:1944
+msgid "年龄超过150岁,请确认身份证信息"
+msgstr "Older than 150, please confirm your ID card information"
+
+#: Controller/class-student-ajax.php:1960
+#: Controller/class-student-ajax.php:2251
+#: Controller/class-student-ajax1.php:1981
+#: Controller/class-student-ajax1.php:2259
+msgid "重置成功"
+msgstr "Reset successful"
+
+#: Controller/class-student-ajax.php:1962
+#: Controller/class-student-ajax.php:2253
+#: Controller/class-student-ajax1.php:1983
+#: Controller/class-student-ajax1.php:2261
+msgid "重置失败"
+msgstr "Reset failed"
+
+#: Controller/class-student-ajax.php:1980
+#: Controller/class-student-ajax1.php:2001
+msgid "手机号不能为空"
+msgstr "The phone number cannot be empty"
+
+#: Controller/class-student-ajax.php:1987
+#: Controller/class-student-ajax1.php:2008
+msgid "当前手机号与获取验证手机号不一致"
+msgstr ""
+"Current phone number is inconsistent with getting verified phone number"
+
+#: Controller/class-student-ajax.php:1990
+#: Controller/class-student-ajax.php:2003
+#: Controller/class-student-ajax.php:2057
+#: Controller/class-student-ajax.php:2070
+#: Controller/class-student-ajax1.php:2011
+#: Controller/class-student-ajax1.php:2024
+#: Controller/class-student-ajax1.php:2078
+#: Controller/class-student-ajax1.php:2091
+msgid "请先获取验证码"
+msgstr "Please get Verification Code first"
+
+#: Controller/class-student-ajax.php:1994
+#: Controller/class-student-ajax.php:2061
+#: Controller/class-student-ajax1.php:2015
+#: Controller/class-student-ajax1.php:2082
+msgid "验证码已过期,请重新获取"
+msgstr "The verification code has expired, Please regain"
+
+#: Controller/class-student-ajax.php:1998
+#: Controller/class-student-ajax.php:2065
+#: Controller/class-student-ajax1.php:2019
+#: Controller/class-student-ajax1.php:2086
+msgid "验证码错误"
+msgstr "Verification code error"
+
+#: Controller/class-student-ajax.php:2000
+#: Controller/class-student-ajax.php:2067
+#: Controller/class-student-ajax.php:2188
+#: Controller/class-student-ajax1.php:2021
+#: Controller/class-student-ajax1.php:2088
+#: Controller/class-student-ajax1.php:2196
+msgid "验证码不能为空"
+msgstr "Captcha can not be empty"
+
+#: Controller/class-student-ajax.php:2013
+#: Controller/class-student-ajax.php:2079
+#: Controller/class-student-ajax1.php:2034
+#: Controller/class-student-ajax1.php:2100
+msgid "您不是平台用户,请先进行注册"
+msgstr "Withdraw team reviewing"
+
+#: Controller/class-student-ajax.php:2028
+#: Controller/class-student-ajax.php:2093
+#: Controller/class-student-ajax1.php:2049
+#: Controller/class-student-ajax1.php:2114
+msgid "获取成功"
+msgstr " Get successful"
+
+#: Controller/class-student-ajax.php:2030
+#: Controller/class-student-ajax.php:2095
+#: Controller/class-student-ajax1.php:2051
+#: Controller/class-student-ajax1.php:2116
+msgid "获取失败,请稍后重试"
+msgstr "Get failed, please retry later"
+
+#: Controller/class-student-ajax.php:2047
+#: Controller/class-student-ajax1.php:2068
+msgid "邮箱号不能为空"
+msgstr "The mailbox number cannot be empty"
+
+#: Controller/class-student-ajax.php:2054
+#: Controller/class-student-ajax1.php:2075
+msgid "当前邮箱号与获取验证邮箱号不一致"
+msgstr ""
+"The current mailbox is inconsistent with getting the verification mailbox"
+
+#: Controller/class-student-ajax.php:2117
+#: Controller/class-student-ajax1.php:2138
+msgid "用户名不能为空"
+msgstr "User name cannot be empty"
+
+#: Controller/class-student-ajax.php:2118
+#: Controller/class-student-ajax.php:2189
+#: Controller/class-student-ajax.php:2236
+#: Controller/class-student-ajax1.php:2139
+#: Controller/class-student-ajax1.php:2197
+#: Controller/class-student-ajax1.php:2244
+msgid "密码不能为空"
+msgstr "The password can not be empty."
+
+#: Controller/class-student-ajax.php:2144
+#: Controller/class-student-ajax.php:2166
+#: Controller/class-student-ajax1.php:2159
+#: Controller/class-student-ajax1.php:2174
+msgid "登录成功"
+msgstr "Login successful"
+
+#: Controller/class-student-ajax.php:2168
+#: Controller/class-student-ajax1.php:2176
+msgid "登录失败"
+msgstr "Logon failure"
+
+#: Controller/class-student-ajax.php:2172
+#: Controller/class-student-ajax.php:2234
+#: Controller/class-student-ajax1.php:2180
+#: Controller/class-student-ajax1.php:2242
+msgid "不存在此用户,请先注册"
+msgstr "This user does not exist. Please register first"
+
+#: Controller/class-student-ajax.php:2187
+#: Controller/class-student-ajax.php:2228
+#: Controller/class-student-ajax1.php:2195
+#: Controller/class-student-ajax1.php:2236
+msgid "账号不能为空"
+msgstr "Account cannot be empty"
+
+#: Controller/class-student-ajax.php:2194
+#: Controller/class-student-ajax1.php:2202
+msgid "此用户已存在"
+msgstr "This user already exists"
+
+#: Controller/class-student-ajax.php:2212
+#: Controller/class-student-ajax1.php:2220
+msgid "注册成功"
+msgstr "Registration Successful"
+
+#: Controller/class-student-ajax.php:2214
+#: Controller/class-student-ajax1.php:2222
+msgid "注册失败"
+msgstr "Registration failed"
+
+#: Controller/class-student-ajax.php:2342
+#: Controller/class-student-ajax1.php:2349
+msgid "退出成功"
+msgstr "Exit successful"
+
+#: Controller/class-student-ajax.php:2351
+#: Controller/class-student-ajax1.php:2358
+msgid "您还没有登录"
+msgstr "You are not logged in"
+
+#: Controller/class-student-ajax.php:2363
+#: Controller/class-student-ajax1.php:2370
+msgid "没有更多了"
+msgstr "No more."
+
+#: Controller/class-student-ajax.php:2384
+#: Controller/class-student-ajax1.php:2391
+msgid "未找到数据"
+msgstr "No data found"
+
+#: Controller/class-student-ajax.php:2503
+#: Controller/class-student-ajax1.php:2510
+msgid "无订单"
+msgstr "No orders"
+
+#: Controller/class-student-ajax.php:2515
+#: Controller/class-student-ajax1.php:2522
+msgid "未找到订单"
+msgstr "No order found"
+
+#: Controller/class-student-ajax.php:2530
+#: Controller/class-student-ajax1.php:2537
+msgid "您暂未登录"
+msgstr "You are not logged in"
+
+#: Controller/class-student-ajax.php:2541
+#: Controller/class-student-ajax1.php:2548
+msgid "订单不存在"
+msgstr "The order does not exist"
+
+#: Controller/class-student-ajax.php:2542
+#: Controller/class-student-ajax1.php:2549
+msgid "此订单不是待支付订单"
+msgstr "This order is not a pending payment order"
+
+#: Controller/class-student-ajax.php:2551
+#: Controller/class-student-ajax1.php:2558 View/matchs-old/payError.php:14
+#: View/matchs/payError.php:14 View/payment/wxJsApiPay.php:15
+#: View/public/my-404.php:44
+msgid "国际脑力运动"
+msgstr "International Intellectual Sports"
+
+#: Controller/class-student-ajax.php:2590
+#: Controller/class-student-ajax1.php:2597
+msgid "发起支付失败"
+msgstr "Failed to initiate payment"
+
+#: Controller/class-student-ajax.php:2627
+#: Controller/class-student-ajax1.php:2634
+#, php-format
+msgid "提交完成, %s张图片上传成功"
+msgstr "Submit completed. %s picture uploaded successfully"
+
+#: Controller/class-student-ajax.php:2646
+#: Controller/class-student-ajax.php:2657
+#: Controller/class-student-ajax.php:2680
+#: Controller/class-student-ajax1.php:2653
+#: Controller/class-student-ajax1.php:2664
+#: Controller/class-student-ajax1.php:2687
+msgid "获取失败"
+msgstr "Get failed"
+
+#: Controller/class-student-ajax.php:2702
+#: Controller/class-student-ajax1.php:2709
+msgid "没有商品"
+msgstr "No goods"
+
+#: Controller/class-student-ajax.php:2715
+#: Controller/class-student-ajax1.php:2722
+msgid "未找到商品"
+msgstr "No items found"
+
+#: Controller/class-student-ajax.php:2716
+#: Controller/class-student-ajax1.php:2723
+msgid "商品库存不足"
+msgstr "Shortage of stock"
+
+#: Controller/class-student-ajax.php:2724
+#: Controller/class-student-ajax1.php:2731
+msgid "加入购物车成功"
+msgstr "Add to cart successful"
+
+#: Controller/class-student-ajax.php:2748
+#: Controller/class-student-ajax1.php:2755
+msgid "请选择商品"
+msgstr "Please select a product"
+
+#: Controller/class-student-ajax.php:2752
+#: Controller/class-student-ajax1.php:2759
+msgid "出错了, 找不到收货地址"
+msgstr "delivery address could not be found."
+
+#: Controller/class-student-ajax.php:2769
+#: Controller/class-student-ajax1.php:2776
+msgid "出错了, 找不到商品"
+msgstr "Something went wrong and I couldn't find the product."
+
+#: Controller/class-student-ajax.php:2774
+#: Controller/class-student-ajax1.php:2781
+#, php-format
+msgid "%s-已下架"
+msgstr "%s-has been off the shelf"
+
+#: Controller/class-student-ajax.php:2779
+#: Controller/class-student-ajax1.php:2786
+#, php-format
+msgid "%s-库存不足"
+msgstr "%s-out of stock"
+
+#: Controller/class-student-ajax.php:2784
+#: Controller/class-student-ajax1.php:2791
+msgid "出错了, 库存更新失败"
+msgstr "Error, inventory update failed."
+
+#: Controller/class-student-ajax.php:2789
+#: Controller/class-student-ajax1.php:2796
+msgid "出错了, 支付价格更新失败"
+msgstr "Error, Payment price update failed"
+
+#: Controller/class-student-ajax.php:2822
+#: Controller/class-student-ajax.php:2827
+#: Controller/class-student-ajax.php:2832
+#: Controller/class-student-ajax1.php:2829
+#: Controller/class-student-ajax1.php:2834
+#: Controller/class-student-ajax1.php:2839
+msgid "提交订单失败"
+msgstr "Failed to submit order"
+
+#: Controller/class-student-ajax.php:2835
+#: Controller/class-student-ajax1.php:2842
+msgid "系统繁忙,请稍后再试"
+msgstr "The system is busy, please try again later"
+
+#: Controller/class-student-ajax.php:2851
+#: Controller/class-student-ajax1.php:2858
+msgid "订单已确认收货"
+msgstr "Order confirmed receipt"
+
+#: Controller/class-student-ajax.php:2852
+#: Controller/class-student-ajax.php:2870
+#: Controller/class-student-ajax1.php:2859
+#: Controller/class-student-ajax1.php:2877
+msgid "操作失败,请稍后再试"
+msgstr "The operation failed, please try again later"
+
+#: Controller/class-student-ajax.php:2868
+#: Controller/class-student-ajax1.php:2875
+msgid "订单已取消"
+msgstr "The order has been canceled"
+
+#: Controller/class-student-ajax.php:2902
+#: Controller/class-student-ajax1.php:2909
+#, php-format
+msgid "该教练还不是你的%s教练"
+msgstr "The coach is not your%s coach yet."
+
+#: Controller/class-student-ajax.php:2911
+#: Controller/class-student-ajax.php:2921
+#: Controller/class-student-ajax1.php:2918
+#: Controller/class-student-ajax1.php:2928
+msgid "更换主训教练失败"
+msgstr "change main coach failed"
+
+#: Controller/class-student-ajax.php:2917
+#: Controller/class-student-ajax1.php:2924
+msgid "主训教练更换成功"
+msgstr "change main coach success"
+
+#: Controller/class-student-ajax.php:2963
+#: Controller/class-student-ajax1.php:2970
+msgid "解除教学关系成功"
+msgstr "Successfully terminate teaching relationship"
+
+#: Controller/class-student-ajax.php:2965
+#: Controller/class-student-ajax1.php:2972
+msgid "解除教学关系失败"
+msgstr "Failed to terminate the teaching relationship"
+
+#: Controller/class-student-ajax.php:2985
+#: Controller/class-student-ajax1.php:2992
+msgid "当前无主训教练"
+msgstr "no main coach"
+
+#: Controller/class-student-ajax.php:2987
+#: Controller/class-student-ajax1.php:2994
+msgid "当前已存在主训教练"
+msgstr "Existing main coach"
+
+#: Controller/class-student-ajax.php:3008
+#: Controller/class-student-ajax1.php:3015
+msgid "手机或邮箱格式不正确"
+msgstr "Phone or mailbox format is incorrect"
+
+#: Controller/class-student-ajax.php:3021
+#: Controller/class-student-ajax1.php:3028
+msgid "当前手机号码已绑定其它微信"
+msgstr "The current mobile phone number has been bound to other WeChat"
+
+#: Controller/class-student-ajax.php:3024
+#: Controller/class-student-ajax1.php:3031
+msgid "当前邮箱已绑定其它微信"
+msgstr " The current mailbox has been bound to other WeChat"
+
+#: Controller/class-student-ajax.php:3036
+#: Controller/class-student-ajax1.php:3043
+msgid "该用户不存在"
+msgstr "The user does not exist"
+
+#: Controller/class-student-ajax.php:3046
+#: Controller/class-student-ajax.php:3063
+#: Controller/class-student-ajax1.php:3053
+#: Controller/class-student-ajax1.php:3070
+msgid "账户绑定完成,即将跳转"
+msgstr "Account binding complete. Going to jump"
+
+#: Controller/class-student-ajax.php:3049
+#: Controller/class-student-ajax.php:3066
+#: Controller/class-student-ajax1.php:3056
+#: Controller/class-student-ajax1.php:3073
+msgid "绑定成功"
+msgstr "Bind succeeded"
+
+#: Controller/class-student-ajax.php:3070
+#: Controller/class-student-ajax1.php:3077
+msgid "绑定失败"
+msgstr "Link failed"
+
+#: Controller/class-student-ajax.php:3121
+#: Controller/class-student-ajax.php:3320
+#: Controller/class-student-ajax1.php:3128
+#: Controller/class-student-ajax1.php:3327
+msgid "没有数据"
+msgstr "No data"
+
+#: Controller/class-student-ajax.php:3190
+#: Controller/class-student-ajax1.php:3197
+msgid "比赛参数错误"
+msgstr "Wrong match parameters"
+
+#: Controller/class-student-ajax.php:3192
+#: Controller/class-student-ajax.php:3519
+#: Controller/class-student-ajax.php:3559
+#: Controller/class-student-ajax1.php:3199
+msgid "当前比赛未结束"
+msgstr "The current game is not over"
+
+#: Controller/class-student-ajax.php:3480
+#: Controller/class-student-ajax1.php:3476
+msgid "提交成功"
+msgstr "Submit successful"
+
+#: Controller/class-student-ajax.php:3496
+#: Controller/class-student-ajax.php:3610
+#: Controller/class-student-ajax1.php:3492
+msgid "修改失败"
+msgstr "Fail to modify"
+
+#: Controller/class-student-ajax.php:3499
+#: Controller/class-student-ajax.php:3611
+#: Controller/class-student-ajax1.php:3495
+msgid "修改成功"
+msgstr "Modified successfully"
+
+#: Controller/class-student-ajax.php:3523
+msgid "后台奖金核实中"
+msgstr "Bonus background review"
+
+#: Controller/class-student-ajax.php:3533
+msgid "无数据"
+msgstr "No data"
+
+#: Controller/class-student-ajax.php:3551
+#: Controller/class-student-ajax.php:3584
+#: Controller/class-student-ajax.php:3597
+msgid "权限不足"
+msgstr "Permission Denied"
+
+#: Controller/class-student-ajax.php:3564
+msgid "当前比赛奖金已生成"
+msgstr "Bonus details have been generated. "
+
+#: Controller/class-student-ajax.php:3569
+msgid "未找到奖金设置模板"
+msgstr "not found bonus template"
+
+#: Controller/class-student-ajax.php:3574
+msgid "生成成功"
+msgstr "Generation success"
+
+#: Controller/class-student-ajax.php:3575
+msgid "生成失败!"
+msgstr "Generation failure"
+
+#: Controller/class-student-ajax.php:3606
+msgid "当前比赛奖金未生成"
+msgstr "Bonuses not generated"
+
+#: Controller/class-student-ajax1.php:287
+msgid "答案请以数组格式提交"
+msgstr "Please submit the answer in an array format"
+
+#: Controller/class-student-ajax1.php:419
+msgid "未知错误"
+msgstr "Unknown error"
+
+#: Controller/class-student-ajax1.php:496
+#: Controller/class-student-matchs-old.php:487
+#: Controller/class-student-matchs.php:259
+msgid "最近暂无比赛"
+msgstr "No competitions recently"
+
+#: Controller/class-student-ajax1.php:1712
+msgid "该用户未成功匹配参数资格"
+msgstr "The user failed to match the qualification."
+
+#: Controller/class-student-ajax1.php:1712
+msgid "请确认该选手实名信息"
+msgstr "Please confirm the player's ID information"
+
+#: Controller/class-student-ajax1.php:1753
+#: Controller/class-student-ajax1.php:1815
+msgid "签到成功"
+msgstr "Sign-in successful"
+
+#: Controller/class-student-ajax1.php:1819
+msgid "签到失败,比赛订单创建失败"
+msgstr "Registration failed, match order creation failed"
+
+#: Controller/class-student-ajax1.php:1819
+msgid "请联系管理员"
+msgstr "Please contact the Administrator"
+
+#: Controller/class-student-home.php:63
+msgid "管理员"
+msgstr "Administrator"
+
+#: Controller/class-student-home.php:67
+msgid "监赛官"
+msgstr "Supervisor"
+
+#: Controller/class-student-home.php:71 View/teams/coachList.php:633
+msgid "教练"
+msgstr "Coach"
+
+#: Controller/class-student-home.php:75 View/teams/coachDetail.php:112
+msgid "学 员"
+msgstr "athlete"
+
+#: Controller/class-student-home.php:98 View/account/certification.php:122
+#: View/account/info.php:211
+msgid "身份证"
+msgstr "ID Card"
+
+#: Controller/class-student-home.php:101 View/account/certification.php:123
+#: View/account/info.php:212
+msgid "军官证"
+msgstr "Military Officer ID"
+
+#: Controller/class-student-home.php:104 View/account/certification.php:124
+#: View/account/info.php:213
+msgid "护照"
+msgstr "Passport"
+
+#: Controller/class-student-home.php:107 View/account/certification.php:125
+#: View/account/info.php:214
+msgid "台胞证"
+msgstr "Taiwan compatriots Card"
+
+#: Controller/class-student-home.php:110 View/account/certification.php:126
+#: View/account/info.php:215
+msgid "港澳证"
+msgstr "Hk/macau Card"
+
+#: Controller/class-student-logins.php:74
+#: Controller/class-student-logins.php:85 View/logins/bindPhone.php:46
+#: View/logins/login.php:45 View/logins/login.php:98 View/logins/login.php:136
+msgid "获取验证码"
+msgstr "Get the Captcha"
+
+#: Controller/class-student-logins.php:75
+#: Controller/class-student-logins.php:86 View/safety/safety-settings.php:139
+msgid "重新发送"
+msgstr "Resend"
+
+#: Controller/class-student-logins.php:76
+msgid "手机快速登录"
+msgstr "Quick Login"
+
+#: Controller/class-student-logins.php:77
+msgid "重置密码"
+msgstr "Reset Password"
+
+#: Controller/class-student-logins.php:78
+msgid "我同意以上协议"
+msgstr "I agree with the above agreement"
+
+#: Controller/class-student-matchs-old.php:174
+msgid "比赛项目错误"
+msgstr "Match Item Error"
+
+#: Controller/class-student-matchs-old.php:580
+#: Controller/class-student-matchs-old.php:923
+#: Controller/class-student-matchs-old.php:1047
+#: Controller/class-student-matchs.php:350
+#: Controller/class-student-matchs.php:547
+#: Controller/class-student-matchs.php:830
+msgid "你未报名"
+msgstr "You didn't sign up"
+
+#: Controller/class-student-matchs-old.php:584
+#: Controller/class-student-matchs-old.php:927
+#: Controller/class-student-matchs-old.php:1052
+#: Controller/class-student-matchs.php:354
+#: Controller/class-student-matchs.php:551
+#: Controller/class-student-matchs.php:835
+msgid "订单未付款"
+msgstr "Order not paid"
+
+#: Controller/class-student-matchs-old.php:597
+msgid "该轮比赛已结束"
+msgstr "The race is over."
+
+#: Controller/class-student-matchs-old.php:604
+msgid "该轮比赛未开始"
+msgstr "The current round has not yet started"
+
+#: Controller/class-student-matchs-old.php:684
+#: Controller/class-student-matchs.php:398
+msgid "暂无比赛题目,联系管理员录题"
+msgstr "The question bank has been used up. Please contact the administrator"
+
+#: Controller/class-student-matchs-old.php:1060
+#: Controller/class-student-matchs-old.php:1277
+#: Controller/class-student-matchs.php:845
+#: Controller/class-student-matchs.php:1000
+msgid "数据为空,请确认是否参加本轮答题"
+msgstr ""
+"The data is empty, please confirm whether to participate in this round answer"
+
+#: Controller/class-student-matchs-old.php:1064
+#: Controller/class-student-matchs-old.php:1281
+#: Controller/class-student-matchs.php:1004
+msgid "操作错误,你未进行答题"
+msgstr "Operation error, you did not answer the question"
+
+#: Controller/class-student-matchs-old.php:1724
+msgid "比賽信息错误"
+msgstr "Match Information Error"
+
+#: Controller/class-student-matchs-old.php:1748
+msgid "该比赛未绑定比赛项"
+msgstr "Match Item not bound"
+
+#: Controller/class-student-matchs-old.php:1854
+#: View/matchs-old/matching-fastCalculation.php:543
+#: View/matchs-old/matching-fastCalculation.php:560
+#: View/matchs-old/matching-fastScan.php:429
+#: View/matchs-old/matching-fastScan.php:449
+#: View/matchs-old/matching-numberBattle.php:66
+#: View/matchs-old/matching-numberBattle.php:83
+#: View/matchs-old/matching-pokerRelay.php:81
+#: View/matchs-old/matching-pokerRelay.php:97
+#: View/matchs-old/matching-reading.php:152
+#: View/matchs-old/matching-reading.php:168
+#: View/matchs-old/ready-numberBattle.php:170
+#: View/matchs-old/ready-numberBattle.php:186
+#: View/matchs-old/ready-pokerRelay.php:150
+#: View/matchs-old/ready-pokerRelay.php:166
+#: View/matchs-old/ready-reading.php:127 View/matchs-old/ready-reading.php:143
+#: View/matchs/matching-fastCalculation.php:567
+#: View/matchs/matching-fastCalculation.php:586
+#: View/matchs/matching-fastScan.php:446 View/matchs/matching-fastScan.php:466
+#: View/matchs/matching-numberBattle.php:82
+#: View/matchs/matching-numberBattle.php:99
+#: View/matchs/matching-pokerRelay.php:95
+#: View/matchs/matching-pokerRelay.php:111 View/matchs/matching-reading.php:170
+#: View/matchs/matching-reading.php:186 View/matchs/ready-numberBattle.php:145
+#: View/matchs/ready-numberBattle.php:161 View/matchs/ready-pokerRelay.php:236
+#: View/matchs/ready-pokerRelay.php:252 View/matchs/ready-reading.php:123
+#: View/matchs/ready-reading.php:139
+#: View/trains/matching-fastCalculation.php:552
+#: View/trains/matching-fastCalculation.php:568
+#: View/trains/matching-fastScan.php:483
+#: View/trains/matching-numberBattle.php:90
+#: View/trains/matching-pokerRelay.php:108 View/trains/matching-reading.php:168
+#: View/trains/ready-numberBattle.php:146 View/trains/ready-pokerRelay.php:227
+#: View/trains/ready-reading.php:121
+msgid "比赛结束"
+msgstr "Match finished"
+
+#: Controller/class-student-matchs-old.php:2033
+#: Controller/class-student-matchs.php:1626
+msgid "离开考试页面,自动提交本轮答题"
+msgstr ""
+"Because you leave the exam page, the system will automatically submit this "
+"round of questions"
+
+#: Controller/class-student-matchs.php:268
+msgid "未设置比赛项的轮数"
+msgstr "No rounds set for the competition"
+
+#: Controller/class-student-matchs.php:272
+msgid "比赛已结束"
+msgstr "The match is over"
+
+#: Controller/class-student-matchs.php:277
+msgid "比赛报名中,暂未开赛"
+msgstr "Registering,waiting to start"
+
+#: Controller/class-student-matchs.php:364
+#: Controller/class-student-matchs.php:560
+msgid "数据信息错误"
+msgstr "Data information Error"
+
+#: Controller/class-student-matchs.php:374
+msgid "该项目比赛结束"
+msgstr "Match finished"
+
+#: Controller/class-student-matchs.php:381
+msgid "答题记录已存在"
+msgstr "The answer record already exists"
+
+#: Controller/class-student-matchs.php:416
+msgid "题库暂未更新，联系管理员录题"
+msgstr "The question bank is not updated, contact the administrator record"
+
+#: Controller/class-student-matchs.php:1227
+msgid "您未报名该比赛,须比赛结束方可查看成绩"
+msgstr "No access is currently allowed"
+
+#: Controller/class-student-safety.php:74
+msgid "密码重置"
+msgstr "Password reset"
+
+#: Controller/class-student-safety.php:77
+msgid "手机绑定"
+msgstr "Mobile phone verification"
+
+#: Controller/class-student-safety.php:80
+msgid "邮箱绑定"
+msgstr "Email Authentication"
+
+#: Controller/class-student-safety.php:83
+msgid "微信绑定"
+msgstr "Wechat bound"
+
+#: Controller/class-student-safety.php:86
+msgid "QQ绑定"
+msgstr "QQ Binding"
+
+#: Controller/class-student-safety.php:89 View/account/userCenter.php:168
+#: View/public/leftMenu.php:76
+msgid "安全中心"
+msgstr "Security"
+
+#: Controller/class-student-signs.php:105
+msgid "请使用微信扫码进行签到"
+msgstr "Please use Wechat scan code to sign in"
+
+#: Controller/class-student-signs.php:192
+msgid "你是新用户或未进行手机绑定\\n即将跳转到绑定页"
+msgstr ""
+"You are a new user or do not have a phone bind\n"
+" will jump to the binding page"
+
+#: Controller/class-student-signs.php:213
+msgid "未检测到报名信息\\n请联系管理员核实"
+msgstr ""
+"No registration information detected \\ n Please contact the administrator "
+"to verify"
+
+#: Controller/class-student-signs.php:248
+msgid "签到失败,比赛订单创建失败\\n请联系管理员"
+msgstr ""
+"Registration failed, match order creation failed \\ n Please contact the "
+"Administrator"
+
+#: Controller/class-student-trains.php:135
+msgid "测试题库暂无文章,请联系管理员添加"
+msgstr ""
+"There are no articles for testing in the test bank, please contact the "
+"administrator to add"
+
+#: Controller/class-student-trains.php:153
+msgid ""
+"恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更"
+"新后欢迎您回来继续挑战！"
+msgstr ""
+"Congratulations, you have trained all the articles in the question bank. we "
+"recommend that you use other channels for speed reading training. When our "
+"question bank is updated, you are welcome to come back and continue to "
+"challenge!"
+
+#: Controller/class-student-trains.php:209
+#: Controller/class-student-trains.php:599
+msgid "没有该比赛项目"
+msgstr "No such competition item"
+
+#: Controller/class-student-weixin.php:103
+msgid "获取微用户授权失败.请退出后重试"
+msgstr "Failed to get wechat authorization. Please exit and try again"
+
+#: Controller/class-student-weixin.php:151
+msgid "获取微用户信息失败,请退出后重试"
+msgstr "Failed to get wechat user information, please exit and try again"
+
+#: Controller/class-student-weixin.php:168
+msgid "手机"
+msgstr "Mobile Phone"
+
+#: Controller/class-student-weixin.php:168
+msgid "邮箱"
+msgstr "E-mail"
+
+#: Controller/class-student-weixin.php:189
+#, php-format
+msgid "当前%s已绑定其它微信"
+msgstr "The current %s is bound to another WeChat"
+
+#: Controller/languages.php:8 View/matchs-old/match-Rule.php:490
+#: View/matchs/match-Rule.php:490 View/trains/answer-log.php:73
+#: View/trains/answer.php:8 View/trains/initial.php:10
+msgid "扑克接力"
+msgstr "Poker Relay"
+
+#: Controller/languages.php:9 View/matchs-old/match-Rule.php:496
+#: View/matchs/match-Rule.php:496 View/trains/answer-log.php:70
+#: View/trains/answer.php:4 View/trains/initial.php:6
+msgid "数字争霸"
+msgstr "Speed Number"
+
+#: Controller/languages.php:10 View/matchs-old/match-Rule.php:520
+#: View/matchs/match-Rule.php:520 View/trains/answer-log.php:79
+#: View/trains/answer.php:16 View/trains/initial.php:18
+msgid "快眼扫描"
+msgstr "Quick glance"
+
+#: Controller/languages.php:11 View/matchs-old/match-Rule.php:508
+#: View/matchs/match-Rule.php:508 View/trains/answer-log.php:76
+#: View/trains/answer.php:12 View/trains/initial.php:14
+msgid "文章速读"
+msgstr "Article Reading"
+
+#: Controller/languages.php:12 View/matchs-old/match-Rule.php:514
+#: View/matchs/match-Rule.php:514 View/trains/answer-log.php:82
+#: View/trains/initial.php:22
+msgid "正向速算"
+msgstr "Fast forward calculation"
+
+#: Controller/languages.php:13 View/trains/answer-log.php:85
+#: View/trains/initial.php:26
+msgid "逆向速算"
+msgstr "Fast reverse calculation"
+
+#: Controller/languages.php:14
+msgid "记忆类脑力健将"
+msgstr "Memory Brain athlete"
+
+#: Controller/languages.php:15
+msgid "心算类脑力健将"
+msgstr "Mental Arithmetic Brain athlete"
+
+#: Controller/languages.php:16
+msgid "速读类脑力健将"
+msgstr "Speed Reading Brain athlete"
+
+#: Controller/languages.php:17
+msgid "英国"
+msgstr "UK"
+
+#: Controller/languages.php:18 View/account/userCenter.php:95
+msgid "中国"
+msgstr "CHN"
+
+#: Controller/languages.php:19 View/account/userCenter.php:95
+msgid "国际"
+msgstr "INT"
+
+#: Controller/languages.php:25 View/account/certification.php:155
+#: View/account/info.php:244
+msgid "男"
+msgstr "Male"
+
+#: Controller/languages.php:26 View/account/certification.php:155
+#: View/account/info.php:244
+msgid "女"
+msgstr "Female"
+
+#: Controller/languages.php:27
+msgid "脑力世界杯专项训练"
+msgstr "Intellectual World Cup special training"
+
+#: Controller/languages.php:28
+msgid "脑力世界杯"
+msgstr "Intellectual World Cup"
+
+#: Controller/languages.php:29
+msgid "国学脑王大赛"
+msgstr "Chinese Sinology Brain King Competition"
+
+#: Controller/languages.php:30
+msgid "国学脑王专项训练"
+msgstr "Special training for Brain king of Chinese Sinology"
+
+#: Controller/languages.php:31
+msgid "国际脑力马拉松"
+msgstr "International Brain Marathon"
+
+#: Controller/languages.php:32
+msgid "国际脑力马拉松专项训练"
+msgstr "International Intellectual Marathon Special training"
+
+#: Controller/languages.php:33
+msgid "全球数字脑王大赛"
+msgstr "Global Digital Brain King Competition"
+
+#: Controller/languages.php:34
+msgid "全球数字脑王大赛专项训练"
+msgstr "Global Digital Brain King Competition special training"
+
+#: Controller/languages.php:35
+msgid "正在进行"
+msgstr "in progress"
+
+#: Controller/languages.php:36 View/matchs-old/match-waitting.php:14
+#: View/matchs/match-waitting.php:14
+msgid "即将进行"
+msgstr "Upcoming"
+
+#: Controller/languages.php:37
+msgid "距下一项开赛"
+msgstr "Next item"
+
+#: Controller/languages.php:38 View/matchs-old/match-answer-log.php:124
+msgid "距下一轮开赛"
+msgstr "Next Round"
+
+#: Controller/languages.php:40
+msgid "正向速算单项冠军"
+msgstr "Fast forward calculation champion"
+
+#: Controller/languages.php:41
+msgid "逆向速算单项冠军"
+msgstr "Fast reverse calculation champion"
+
+#: Controller/languages.php:42
+msgid "数字争霸单项冠军"
+msgstr "Speed number champion"
+
+#: Controller/languages.php:43
+msgid "扑克接力单项冠军"
+msgstr "Poker relay champion"
+
+#: Controller/languages.php:44
+msgid "文章速读单项冠军"
+msgstr "Article Reading Champion"
+
+#: Controller/languages.php:45
+msgid "快眼扫描单项冠军"
+msgstr "Quick glance champion"
+
+#: Controller/languages.php:47
+msgid "正向速算单项亚军"
+msgstr "Fast forward calculation runner-up"
+
+#: Controller/languages.php:48
+msgid "逆向速算单项亚军"
+msgstr "Fast reverse calculation runner-up"
+
+#: Controller/languages.php:49
+msgid "数字争霸单项亚军"
+msgstr "Speed number runner-up"
+
+#: Controller/languages.php:50
+msgid "扑克接力单项亚军"
+msgstr "Poker relay runner-up"
+
+#: Controller/languages.php:51
+msgid "文章速读单项亚军"
+msgstr "Article Reading runner-up"
+
+#: Controller/languages.php:52
+msgid "快眼扫描单项亚军"
+msgstr "Quick glance runner-up"
+
+#: Controller/languages.php:54
+msgid "正向速算单项季军"
+msgstr "Fast forward calculation second runner-up"
+
+#: Controller/languages.php:55
+msgid "逆向速算单项季军"
+msgstr "Fast reverse calculation second runner-up"
+
+#: Controller/languages.php:56
+msgid "数字争霸单项季军"
+msgstr "Speed number second runner-up"
+
+#: Controller/languages.php:57
+msgid "扑克接力单项季军"
+msgstr "Poker relay second runner-up"
+
+#: Controller/languages.php:58
+msgid "文章速读单项季军"
+msgstr "Article Reading runner-up"
+
+#: Controller/languages.php:59
+msgid "快眼扫描单项季军"
+msgstr "Quick glance second runner-up"
+
+#: Controller/languages.php:63
+msgid "心算总冠军"
+msgstr " Mental arithmetic Champion"
+
+#: Controller/languages.php:64
+msgid "记忆总冠军"
+msgstr "Memory Champion"
+
+#: Controller/languages.php:65
+msgid "速读总冠军"
+msgstr "Speed reading Champion"
+
+#: Controller/languages.php:67
+msgid "心算总亚军"
+msgstr "Mental arithmetic runner-up"
+
+#: Controller/languages.php:68
+msgid "记忆总亚军"
+msgstr "Memory runner-up"
+
+#: Controller/languages.php:69
+msgid "速读总亚军"
+msgstr "Speed reading runner-up"
+
+#: Controller/languages.php:71
+msgid "心算总季军"
+msgstr "Mental arithmetic third place"
+
+#: Controller/languages.php:72
+msgid "记忆总季军"
+msgstr "Memory third place"
+
+#: Controller/languages.php:73
+msgid "速读总季军"
+msgstr "Speed reading third place"
+
+#: Controller/languages.php:76
+msgid "心算类老年组冠军"
+msgstr "Mental arithmetic senior group champion"
+
+#: Controller/languages.php:77
+msgid "心算类成年组冠军"
+msgstr "Mental arithmetic adult group champion"
+
+#: Controller/languages.php:78
+msgid "心算类少年组冠军"
+msgstr "Mental arithmetic junior group champion"
+
+#: Controller/languages.php:79
+msgid "心算类儿童组冠军"
+msgstr "Mental arithmetic Children's group champion"
+
+#: Controller/languages.php:81
+msgid "心算类老年组亚军"
+msgstr "Mental arithmetic senior group runner-up"
+
+#: Controller/languages.php:82
+msgid "心算类成年组亚军"
+msgstr "Mental arithmetic adult group runner-up"
+
+#: Controller/languages.php:83
+msgid "心算类少年组亚军"
+msgstr "Mental arithmetic junior group runner-up"
+
+#: Controller/languages.php:84
+msgid "心算类儿童组亚军"
+msgstr "Mental arithmetic Children's group runner-up"
+
+#: Controller/languages.php:86
+msgid "心算类老年组季军"
+msgstr "Mental arithmetic senior group second runner-up"
+
+#: Controller/languages.php:87
+msgid "心算类成年组季军"
+msgstr "Mental arithmetic adult group second runner-up"
+
+#: Controller/languages.php:88
+msgid "心算类少年组季军"
+msgstr "Mental arithmetic junior group second runner-up"
+
+#: Controller/languages.php:89
+msgid "心算类儿童组季军"
+msgstr "Mental arithmetic Children's group second runner-up"
+
+#: Controller/languages.php:92
+msgid "记忆类老年组冠军"
+msgstr "Memory senior group champion"
+
+#: Controller/languages.php:93
+msgid "记忆类成年组冠军"
+msgstr "Memory adult group champion"
+
+#: Controller/languages.php:94
+msgid "记忆类少年组冠军"
+msgstr "Memory junior group champion"
+
+#: Controller/languages.php:95
+msgid "记忆类儿童组冠军"
+msgstr "Memory Children's group champion"
+
+#: Controller/languages.php:97
+msgid "记忆类老年组亚军"
+msgstr "Memory senior group runner-up"
+
+#: Controller/languages.php:98
+msgid "记忆类成年组亚军"
+msgstr "Memory adult group runner-up"
+
+#: Controller/languages.php:99
+msgid "记忆类少年组亚军"
+msgstr "Memory junior group runner-up"
+
+#: Controller/languages.php:100
+msgid "记忆类儿童组亚军"
+msgstr "Memory Children's group runner-up"
+
+#: Controller/languages.php:102
+msgid "记忆类老年组季军"
+msgstr "Memory senior group second runner-up"
+
+#: Controller/languages.php:103
+msgid "记忆类成年组季军"
+msgstr "Memory adult group second runner-up"
+
+#: Controller/languages.php:104
+msgid "记忆类少年组季军"
+msgstr "Memory junior group second runner-up"
+
+#: Controller/languages.php:105
+msgid "记忆类儿童组季军"
+msgstr "Memory Children's group second runner-up"
+
+#: Controller/languages.php:107
+msgid "速读类老年组冠军"
+msgstr "Speed reading senior group champion"
+
+#: Controller/languages.php:108
+msgid "速读类成年组冠军"
+msgstr "Speed reading adult group champion"
+
+#: Controller/languages.php:109
+msgid "速读类少年组冠军"
+msgstr "Speed reading junior group champion"
+
+#: Controller/languages.php:110
+msgid "速读类儿童组冠军"
+msgstr "Speed reading Children's group champion"
+
+#: Controller/languages.php:112
+msgid "速读类老年组亚军"
+msgstr "Speed reading senior group runner-up"
+
+#: Controller/languages.php:113
+msgid "速读类成年组亚军"
+msgstr "Speed reading adult group runner-up"
+
+#: Controller/languages.php:114
+msgid "速读类少年组亚军"
+msgstr "Speed reading junior group runner-up"
+
+#: Controller/languages.php:115
+msgid "速读类儿童组亚军"
+msgstr "Speed reading Children's group runner-up"
+
+#: Controller/languages.php:117
+msgid "速读类老年组季军"
+msgstr "Speed reading senior group second runner-up"
+
+#: Controller/languages.php:118
+msgid "速读类成年组季军"
+msgstr "Speed reading adult group second runner-up"
+
+#: Controller/languages.php:119
+msgid "速读类少年组季军"
+msgstr "Speed reading junior group second runner-up"
+
+#: Controller/languages.php:120
+msgid "速读类儿童组季军"
+msgstr "Speed reading Children's group second runner-up"
+
+#: Controller/languages.php:122
+msgid "速读类优秀选手"
+msgstr "Excellent speed reading athletes"
+
+#: Controller/languages.php:123
+msgid "心算类优秀选手"
+msgstr "Excellent mental arithmetic athletes"
+
+#: Controller/languages.php:124
+msgid "记忆类优秀选手"
+msgstr "Excellent memory athletes"
+
+#: View/Pay/openAndroid.php:18
+msgid "请点击屏幕左上角"
+msgstr "Please click on the upper left corner of the screen"
+
+#: View/Pay/openAndroid.php:19
+msgid "请用android浏览器打开"
+msgstr "Please open with Android browser"
+
+#: View/Pay/openAndroid.php:48 View/Pay/openIphone.php:52
+msgid "网络连接失败，请稍后重试"
+msgstr "Network connection failed, Please retry later"
+
+#: View/Pay/openIphone.php:18
+msgid "请点击屏幕右上角"
+msgstr "Please click on the upper right corner of the screen"
+
+#: View/Pay/openIphone.php:19
+msgid "请用safari浏览器打开"
+msgstr "Please open it in Safari browser"
+
+#: View/account/addAddress.php:21 View/account/address.php:20
+msgid "收件地址管理"
+msgstr "Address Management"
+
+#: View/account/addAddress.php:26 View/matchs/record.php:280
+msgid "姓名"
+msgstr "Name"
+
+#: View/account/addAddress.php:27
+msgid "请填写联系人姓名"
+msgstr "Please fill in the contact name"
+
+#: View/account/addAddress.php:33
+msgid "国家"
+msgstr "Country"
+
+#: View/account/addAddress.php:37 View/account/addAddress.php:38
+msgid "电话号码"
+msgstr "Telephone No."
+
+#: View/account/addAddress.php:41 View/account/addAddress.php:42
+msgid "所在地"
+msgstr "Location"
+
+#: View/account/addAddress.php:48 View/account/addAddress.php:49
+msgid "详细地址"
+msgstr "Detailed Address"
+
+#: View/account/addAddress.php:60
+msgid "保存更改"
+msgstr "Save Changes"
+
+#: View/account/address.php:45 View/account/secure.php:23
+#: View/account/secure.php:29 View/account/secure.php:39
+#: View/supervisor/logs.php:27
+msgid "修改"
+msgstr "Modify"
+
+#: View/account/address.php:46 View/matchs-old/matching-fastCalculation.php:53
+#: View/matchs-old/matching-fastReverse.php:48
+#: View/matchs-old/matching-numberBattle.php:47
+#: View/matchs/matching-fastCalculation.php:54
+#: View/matchs/matching-fastReverse.php:50
+#: View/matchs/matching-numberBattle.php:48 View/supervisor/logs.php:28
+#: View/trains/matching-fastCalculation.php:54
+#: View/trains/matching-fastReverse.php:48
+#: View/trains/matching-numberBattle.php:47
+msgid "删除"
+msgstr "Delete"
+
+#: View/account/address.php:50
+msgid "您未设置收件地址"
+msgstr "You did not set the pickup address"
+
+#: View/account/address.php:56
+msgid "新增收件地址"
+msgstr "New shipping address"
+
+#: View/account/certification.php:13 View/account/info.php:40
+#: View/matchs-old/confirm.php:104 View/matchs/confirm.php:105
+msgid "实名认证"
+msgstr "ID Verification"
+
+#: View/account/certification.php:21 View/directory/directory-player.php:37
+#: View/matchs-old/matchDetail.php:95
+msgid "国 籍"
+msgstr "Nationality"
+
+#: View/account/certification.php:22 View/account/info.php:65
+msgid "选择国籍"
+msgstr "Choose your Nationality"
+
+#: View/account/certification.php:29 View/account/certification.php:141
+#: View/account/info.php:73 View/account/info.php:230
+msgid "证件类型"
+msgstr "ID Type"
+
+#: View/account/certification.php:30 View/account/info.php:74
+msgid "选择证件类型"
+msgstr "Select Document Type"
+
+#: View/account/certification.php:37 View/account/info.php:81
+#: View/signs/success.php:34
+msgid "证件号码"
+msgstr "ID No."
+
+#: View/account/certification.php:38 View/account/info.php:82
+msgid "输入证件上的真实证件号"
+msgstr "ID number on the document"
+
+#: View/account/certification.php:41 View/account/info.php:85
+#: View/matchs-old/matchDetail.php:92 View/matchs/matchDetail.php:99
+msgid "姓 名"
+msgstr "Name"
+
+#: View/account/certification.php:42 View/account/info.php:86
+msgid "输入证件上的真实姓名"
+msgstr "Real name on the document"
+
+#: View/account/certification.php:45 View/account/info.php:89
+#: View/directory/directory-player.php:33 View/matchs-old/matchDetail.php:93
+#: View/matchs/matchDetail.php:102
+msgid "性 别"
+msgstr "Gender"
+
+#: View/account/certification.php:46 View/account/info.php:90
+msgid "请选择您的性别"
+msgstr "Please select your gender"
+
+#: View/account/certification.php:49 View/account/info.php:93
+msgid "生 日"
+msgstr "Birthday"
+
+#: View/account/certification.php:50 View/account/info.php:94
+msgid "选择生日"
+msgstr "Choose your Birthday"
+
+#: View/account/certification.php:53 View/account/info.php:97
+#: View/matchs-old/matchDetail.php:94 View/matchs/matchDetail.php:105
+msgid "年 龄"
+msgstr "Age"
+
+#: View/account/certification.php:54 View/account/info.php:98
+#: View/signs/success.php:38
+msgid "年龄"
+msgstr "Age"
+
+#: View/account/certification.php:57 View/account/certification.php:58
+#: View/account/info.php:101 View/account/info.php:102
+msgid "所在城市"
+msgstr "City"
+
+#: View/account/certification.php:64 View/account/info.php:131
+msgid "上传身份证"
+msgstr "Upload ID photo"
+
+#: View/account/certification.php:85 View/account/info.php:153
+msgid "更新实名认证"
+msgstr "Update Authentication"
+
+#: View/account/certification.php:167 View/account/info.php:256
+#: View/directory/directory-calculation.php:33
+#: View/directory/directory-coach.php:32 View/directory/directory-coach.php:45
+#: View/directory/directory-coach.php:58 View/directory/directory-coach.php:71
+#: View/directory/directory-read.php:33
+#: View/directory/directory-remember.php:33 View/signs/success.php:38
+msgid "性别"
+msgstr "Sex"
+
+#: View/account/certification.php:203 View/account/info.php:292
+msgid "地址"
+msgstr "address"
+
+#: View/account/certification.php:241 View/account/info.php:330
+msgid "生日"
+msgstr "Birthday"
+
+#: View/account/certification.php:275 View/account/info.php:365
+msgid "国籍"
+msgstr "Nationality"
+
+#: View/account/course.php:22 View/account/userCenter.php:133
+#: View/public/leftMenu.php:41
+msgid "我的课程"
+msgstr "Courses"
+
+#: View/account/course.php:29
+msgid "您暂未报名任何课程"
+msgstr "You have not enrolled in any courses"
+
+#: View/account/course.php:30
+msgid "浏览可报名课程"
+msgstr "Browse Available Courses"
+
+#: View/account/info.php:15
+msgid "个人资料"
+msgstr "User Profile"
+
+#: View/account/info.php:21
+msgid "为了保证您考级及比赛的真实有效性，请您确保个人资料准确无误"
+msgstr ""
+"In order to ensure the true validity of your grading and competition, please "
+"ensure that your personal data is Accurate."
+
+#: View/account/info.php:24
+msgid "用户账号"
+msgstr "Account"
+
+#: View/account/info.php:32 View/account/info.php:33
+msgid "账户昵称"
+msgstr "Nickname"
+
+#: View/account/info.php:37
+msgid "更新"
+msgstr "Update"
+
+#: View/account/info.php:41
+msgid "修改实名认证"
+msgstr "Modify"
+
+#: View/account/info.php:45
+msgid "收件地址"
+msgstr "Address"
+
+#: View/account/info.php:52
+msgid "暂无地址"
+msgstr "No address"
+
+#: View/account/info.php:56
+msgid "修改收件地址"
+msgstr "Modify address"
+
+#: View/account/info.php:64 View/matchs/matchDetail.php:108
+msgid "区 域"
+msgstr "Region"
+
+#: View/account/info.php:108
+msgid "上传收款账户（不设金额的个人收款微信二维码）"
+msgstr "Upload Account (WeChat Receive money QR code)"
+
+#: View/account/messageDetail.php:14
+msgid "消息详情"
+msgstr "Message Details"
+
+#: View/account/messagesList.php:16 View/account/messagesList.php:30
+msgid "我的消息"
+msgstr "Messages"
+
+#: View/account/messagesList.php:37
+msgid "暂无任何站内消息"
+msgstr "No available messages"
+
+#: View/account/recentMatch.php:16 View/account/recentMatch.php:36
+#: View/account/userCenter.php:119 View/public/leftMenu.php:27
+msgid "我的比赛"
+msgstr "Matches"
+
+#: View/account/recentMatch.php:43
+msgid "您暂未参加任何比赛"
+msgstr "You have not participated in any competition yet"
+
+#: View/account/recentMatch.php:44
+msgid "看看最近比赛"
+msgstr "View recent matches"
+
+#: View/account/secure.php:14
+msgid "安全设置"
+msgstr "Security Settings"
+
+#: View/account/secure.php:21
+msgid "登陆密码"
+msgstr "Password"
+
+#: View/account/secure.php:26
+msgid "绑定手机"
+msgstr "Phone"
+
+#: View/account/secure.php:32 View/account/secure.php:42
+#: View/matchs-old/confirm.php:82 View/matchs/confirm.php:83
+msgid "去设置"
+msgstr "To set"
+
+#: View/account/secure.php:36
+msgid "绑定邮箱"
+msgstr "E-mail"
+
+#: View/account/secure.php:47
+msgid "绑定微信"
+msgstr "WeChat"
+
+#: View/account/secure.php:49 View/account/secure.php:56
+msgid "解绑"
+msgstr "Unbound"
+
+#: View/account/secure.php:54
+msgid "绑定QQ"
+msgstr "QQ"
+
+#: View/account/train.php:15 View/account/userCenter.php:126
+#: View/public/leftMenu.php:34
+msgid "我的训练"
+msgstr "Training"
+
+#: View/account/train.php:22 View/trains/history.php:38
+msgid "您暂无训练记录"
+msgstr "You have no training record"
+
+#: View/account/train.php:23
+msgid "现在去训练"
+msgstr "Training immediately"
+
+#: View/account/userCenter.php:17 View/matchs-old/confirm.php:195
+#: View/matchs/confirm.php:196
+msgid "取消"
+msgstr "Cancel"
+
+#: View/account/userCenter.php:28
+msgid "消息"
+msgstr "Message"
+
+#: View/account/userCenter.php:95
+msgid "脑力健将"
+msgstr "Intellect master"
+
+#: View/account/userCenter.php:97
+msgid "记忆"
+msgstr "Memory "
+
+#: View/account/userCenter.php:97 View/account/userCenter.php:98
+#: View/account/userCenter.php:99
+msgid "级"
+msgstr " "
+
+#: View/account/userCenter.php:98
+msgid "速读"
+msgstr "Speed reading "
+
+#: View/account/userCenter.php:99
+msgid "心算"
+msgstr "Mental arithmetic "
+
+#: View/account/userCenter.php:104
+msgid "登录后可查看认证脑力等级"
+msgstr "Log in to view certified brain levels"
+
+#: View/account/userCenter.php:140 View/public/leftMenu.php:48
+#: View/teams/coachList.php:36
+msgid "我的教练"
+msgstr "My coach"
+
+#: View/account/userCenter.php:147 View/public/leftMenu.php:55
+msgid "我的订单"
+msgstr "Order"
+
+#: View/account/userCenter.php:154 View/public/leftMenu.php:62
+msgid "我的考级"
+msgstr "Grading"
+
+#: View/account/userCenter.php:161 View/public/leftMenu.php:69
+msgid "我的推广"
+msgstr "Affiliate"
+
+#: View/account/userCenter.php:175 View/public/leftMenu.php:83
+msgid "其他设置"
+msgstr "Settings"
+
+#: View/account/userCenter.php:182 View/public/leftMenu.php:90
+#: View/wallet/myWallet.php:22
+msgid "我的钱包"
+msgstr "Wallet"
+
+#: View/account/userCenter.php:189 View/public/leftMenu.php:97
+msgid "基本信息"
+msgstr "Profile"
+
+#: View/account/userCenter.php:197
+msgid "监赛中心"
+msgstr "Supervision Center"
+
+#: View/account/userCenter.php:243
+msgid "个人中心"
+msgstr "User center"
+
+#: View/account/userCenter.php:298
+msgid "是否立即进行实名认证？"
+msgstr "Start certification immediately?"
+
+#: View/account/userCenter.php:299
+msgid "稍后认证"
+msgstr "Certification later"
+
+#: View/account/userCenter.php:299
+msgid "立即认证"
+msgstr "Certify now"
+
+#: View/account/userCenter.php:322
+msgid "您当前有一个未结束的比赛"
+msgstr "You have an unfinished match"
+
+#: View/account/userCenter.php:325
+msgid "是否继续进入比赛？"
+msgstr "Do you want to continue entering the game?"
+
+#: View/account/userCenter.php:326
+msgid "不进入"
+msgstr "Do not enter"
+
+#: View/account/userCenter.php:326
+msgid "进入"
+msgstr "Enter"
+
+#: View/directory/directory-calculation.php:18 View/directory/directory.php:123
+msgid "心算水平认证名录"
+msgstr "Mental Arithmetic Certification Directory"
+
+#: View/directory/directory-calculation.php:30
+#: View/directory/directory-coach.php:29 View/directory/directory-player.php:30
+#: View/directory/directory-read.php:30
+#: View/directory/directory-remember.php:30 View/teams/coachDetail.php:119
+#: View/teams/teamDetail.php:71 View/teams/teamDetail.php:91
+msgid "头像"
+msgstr "Avatar"
+
+#: View/directory/directory-calculation.php:31
+#: View/directory/directory-player.php:31 View/directory/directory-read.php:31
+#: View/directory/directory-remember.php:31 View/matchs-old/record.php:61
+#: View/matchs-old/record.php:94 View/matchs-old/record.php:138
+#: View/matchs-old/record.php:262 View/matchs-old/singleRecord.php:33
+#: View/matchs/record.php:61 View/matchs/record.php:94
+#: View/matchs/record.php:146 View/matchs/record.php:273
+#: View/matchs/singleRecord.php:33 View/teams/coachDetail.php:120
+#: View/teams/teamDetail.php:72 View/teams/teamDetail.php:92
+msgid "学员姓名"
+msgstr "Name"
+
+#: View/directory/directory-calculation.php:32
+#: View/directory/directory-coach.php:31 View/directory/directory-coach.php:44
+#: View/directory/directory-coach.php:57 View/directory/directory-coach.php:70
+#: View/directory/directory-player.php:32 View/directory/directory-read.php:32
+#: View/directory/directory-remember.php:32 View/matchs-old/record.php:62
+#: View/matchs-old/record.php:95 View/matchs-old/record.php:139
+#: View/matchs-old/record.php:258 View/matchs-old/record.php:263
+#: View/matchs-old/singleRecord.php:34 View/matchs/record.php:62
+#: View/matchs/record.php:95 View/matchs/record.php:147
+#: View/matchs/record.php:269 View/matchs/record.php:274
+#: View/matchs/record.php:281 View/matchs/singleRecord.php:34
+#: View/teams/coachDetail.php:30
+msgid "ID"
+msgstr "ID"
+
+#: View/directory/directory-calculation.php:34
+#: View/directory/directory-coach.php:33 View/directory/directory-coach.php:46
+#: View/directory/directory-coach.php:59 View/directory/directory-coach.php:72
+msgid "心算级别"
+msgstr "Mental arithmetic level"
+
+#: View/directory/directory-calculation.php:35
+#: View/directory/directory-player.php:36 View/directory/directory-read.php:35
+#: View/directory/directory-remember.php:35 View/matchs-old/confirm.php:77
+#: View/matchs/confirm.php:78 View/teams/coachList.php:165
+#: View/teams/coachList.php:248
+msgid "主训教练"
+msgstr "Main coach"
+
+#: View/directory/directory-coach.php:18 View/directory/directory.php:33
+msgid "认证教练名录"
+msgstr "Certified Instructor Directory"
+
+#: View/directory/directory-coach.php:30 View/directory/directory-coach.php:43
+#: View/directory/directory-coach.php:56 View/directory/directory-coach.php:69
+msgid "教练姓名"
+msgstr "Coach Name"
+
+#: View/directory/directory-coach.php:34 View/directory/directory-coach.php:47
+#: View/directory/directory-coach.php:60 View/directory/directory-coach.php:73
+#: View/directory/directory-read.php:34
+msgid "速读级别"
+msgstr "Speed reading level"
+
+#: View/directory/directory-coach.php:35 View/directory/directory-coach.php:48
+#: View/directory/directory-coach.php:61 View/directory/directory-coach.php:74
+#: View/directory/directory-remember.php:34
+msgid "记忆级别"
+msgstr "Memory level"
+
+#: View/directory/directory-player.php:18 View/directory/directory.php:51
+msgid "脑力健将名录"
+msgstr "Brain Athlete Directory"
+
+#: View/directory/directory-player.php:34
+msgid "类&nbsp;&nbsp;&nbsp;&nbsp;别"
+msgstr "Categories"
+
+#: View/directory/directory-player.php:35
+msgid "级 别"
+msgstr "Level"
+
+#: View/directory/directory-read.php:18 View/directory/directory.php:105
+msgid "速读水平认证名录"
+msgstr "Speed Reading Certification Directory"
+
+#: View/directory/directory-remember.php:18 View/directory/directory.php:87
+msgid "记忆水平认证名录"
+msgstr "Memory Certification Directory"
+
+#: View/directory/directory-team.php:18 View/directory/directory.php:69
+msgid "脑力战队名录"
+msgstr "Brain Team Directory"
+
+#: View/directory/directory-team.php:30 View/matchs-old/record.php:257
+#: View/matchs/record.php:268
+msgid "战队名称"
+msgstr "Team name"
+
+#: View/directory/directory-team.php:31 View/teams/team.php:143
+#: View/teams/teamDetail.php:37
+msgid "战队负责人"
+msgstr "Team Leader"
+
+#: View/directory/directory-team.php:32 View/teams/team.php:147
+#: View/teams/teamDetail.php:41
+msgid "战队口号"
+msgstr "Battle Team slogan"
+
+#: View/directory/directory-team.php:33 View/teams/team.php:151
+#: View/teams/teamDetail.php:45
+msgid "战队成员"
+msgstr "Team member"
+
+#: View/directory/directory.php:8 View/student/index.php:39
+msgid "搜索名录/课程/教练等"
+msgstr "Search directory/courses/coaches, etc"
+
+#: View/directory/directory.php:15 View/student/index.php:46
+msgid "首 页"
+msgstr "Home"
+
+#: View/directory/directory.php:16 View/student/index.php:47
+msgid "名 录"
+msgstr "Directory"
+
+#: View/directory/directory.php:17 View/student/index.php:48
+msgid "课 程"
+msgstr "Course"
+
+#: View/directory/directory.php:18 View/student/index.php:49
+msgid "商 城"
+msgstr "Mall"
+
+#: View/directory/directory.php:19 View/student/index.php:50
+msgid "公 益"
+msgstr "Public welfare"
+
+#: View/logins/bindPhone.php:18 View/logins/bindPhone.php:25
+msgid "验证码绑定"
+msgstr "Verification Code Binding"
+
+#: View/logins/bindPhone.php:21
+msgid "用户登录"
+msgstr "User login"
+
+#: View/logins/bindPhone.php:30
+msgid "首次登录请绑定手机号或邮箱"
+msgstr "First sign-in please bind your phone number or email"
+
+#: View/logins/bindPhone.php:39 View/logins/bindPhone.php:72
+#: View/logins/login.php:66 View/logins/login.php:92 View/logins/login.php:130
+msgid "手机号/邮箱"
+msgstr "phone/email"
+
+#: View/logins/bindPhone.php:45 View/logins/login.php:44
+#: View/logins/login.php:97 View/logins/login.php:135
+msgid "输入验证码"
+msgstr "input Verification code"
+
+#: View/logins/bindPhone.php:57
+msgid "确认绑定"
+msgstr "Confirm Binding"
+
+#: View/logins/bindPhone.php:64
+msgid "请使用已有账号密码登录"
+msgstr "login with an existing account password"
+
+#: View/logins/bindPhone.php:78 View/logins/login.php:71
+msgid "输入密码"
+msgstr "Input Password"
+
+#: View/logins/bindPhone.php:89
+msgid "登 录"
+msgstr "Login"
+
+#: View/logins/login.php:18 View/logins/login.php:25
+msgid "手机快速登陆"
+msgstr "Quick Login"
+
+#: View/logins/login.php:21
+msgid "注册"
+msgstr "Register"
+
+#: View/logins/login.php:39
+msgid "手机号"
+msgstr "Phone Number"
+
+#: View/logins/login.php:49
+msgid "使用帐号密码登录"
+msgstr "login with exist account"
+
+#: View/logins/login.php:53 View/logins/login.php:80
+msgid "登 陆"
+msgstr "Login"
+
+#: View/logins/login.php:75 View/logins/login.php:146
+msgid "使用手机验证码快速登录"
+msgstr "Quick Login"
+
+#: View/logins/login.php:76
+msgid "忘记密码"
+msgstr "Reset Password"
+
+#: View/logins/login.php:103
+msgid "输入新密码"
+msgstr "Enter a new password"
+
+#: View/logins/login.php:108
+msgid "确认新密码"
+msgstr "Confirm New Password"
+
+#: View/logins/login.php:112
+msgid "返回登陆"
+msgstr "Back to Login"
+
+#: View/logins/login.php:116
+msgid "确认重置"
+msgstr "Confirm Reset"
+
+#: View/logins/login.php:141
+msgid "设置密码,6位以上含字母及数字"
+msgstr "more than 6 characters with letters"
+
+#: View/logins/login.php:150
+msgid "注 册"
+msgstr "Register"
+
+#: View/logins/login.php:156
+msgid "登录或注册即同意"
+msgstr "Sign in or register to agree"
+
+#: View/logins/login.php:156
+msgid "【脑力中国用户协议】"
+msgstr " IISC User Agreement"
+
+#: View/logins/login.php:163
+msgid "微信登录"
+msgstr "WeChat login"
+
+#: View/logins/login.php:171
+msgid "QQ登录"
+msgstr "QQ Login"
+
+#: View/matchs-old/confirm.php:21 View/matchs/confirm.php:22
+msgid "报名信息确认"
+msgstr "Registration Information Confirmation"
+
+#: View/matchs-old/confirm.php:39 View/matchs-old/matchDetail.php:44
+#: View/matchs/confirm.php:40 View/matchs/matchDetail.php:44
+msgid "开赛地点"
+msgstr "Venue"
+
+#: View/matchs-old/confirm.php:58 View/matchs/confirm.php:59
+msgid "参赛项目"
+msgstr "Competition"
+
+#: View/matchs-old/confirm.php:93 View/matchs/confirm.php:94
+msgid "选手信息"
+msgstr "Player Information"
+
+#: View/matchs-old/confirm.php:97 View/matchs/confirm.php:98
+#: View/signs/success.php:34 View/supervisor/index.php:22
+msgid "选手姓名"
+msgstr "Player"
+
+#: View/matchs-old/confirm.php:109 View/matchs/confirm.php:110
+#: View/matchs/matchBonusDetail.php:40
+msgid "所属战队"
+msgstr "Own team"
+
+#: View/matchs-old/confirm.php:126 View/matchs/confirm.php:127
+msgid "选手ID"
+msgstr "Player ID"
+
+#: View/matchs-old/confirm.php:175 View/matchs-old/confirm.php:179
+#: View/matchs/confirm.php:176 View/matchs/confirm.php:180
+msgid "去支付"
+msgstr "Go to payment"
+
+#: View/matchs-old/confirm.php:177 View/matchs/confirm.php:178
+msgid "已报名"
+msgstr "Already enrolled"
+
+#: View/matchs-old/confirm.php:192 View/matchs-old/confirm.php:259
+#: View/matchs/confirm.php:193 View/matchs/confirm.php:260
+msgid "微信"
+msgstr "Wechat"
+
+#: View/matchs-old/confirm.php:193 View/matchs-old/confirm.php:260
+#: View/matchs/confirm.php:194 View/matchs/confirm.php:261
+msgid "支付宝"
+msgstr "Alipay"
+
+#: View/matchs-old/confirm.php:194 View/matchs/confirm.php:195
+msgid "银联支付"
+msgstr "UnionPay payment"
+
+#: View/matchs-old/confirm.php:258 View/matchs/confirm.php:259
+msgid "本次共需支付"
+msgstr "Total Payment Required"
+
+#: View/matchs-old/confirm.php:265 View/matchs/confirm.php:266
+msgid "选择支付方式"
+msgstr "Choose your payment method"
+
+#: View/matchs-old/confirm.php:269 View/matchs/confirm.php:270
+msgid "取消支付"
+msgstr "Cancel Payment"
+
+#: View/matchs-old/confirm.php:269 View/matchs/confirm.php:270
+msgid "确认支付"
+msgstr "Confirm Payment"
+
+#: View/matchs-old/match-Rule.php:5 View/matchs/match-Rule.php:5
+msgid "比赛规则"
+msgstr "Rules"
+
+#: View/matchs-old/match-Rule.php:273 View/matchs/match-Rule.php:273
+msgid "比赛总则"
+msgstr "General rules"
+
+#: View/matchs-old/match-Rule.php:321 View/matchs/match-Rule.php:321
+msgid "每个比赛项目共三轮，每轮设置相应间隔时间。"
+msgstr ""
+"There are three rounds for each competition, and the corresponding interval "
+"is set for each round."
+
+#: View/matchs-old/match-Rule.php:322 View/matchs/match-Rule.php:322
+msgid ""
+"选手成绩按分数排名，分数相同按比赛时间排名，用时少排名优先，分数及排名相同按"
+"正确率排名，三项排名标准相同则并次排名，每个项目计分规则请查看项目详情。"
+msgstr ""
+"Players are ranked by score, the same score is ranked by race time, less "
+"time is ranked first, the same score and ranking are ranked by correct rate, "
+"the same three ranking criteria are ranked next to each other, please see "
+"the details of each event scoring rules."
+
+#: View/matchs-old/match-Rule.php:329 View/matchs/match-Rule.php:329
+msgid "比赛流程"
+msgstr "Process"
+
+#: View/matchs-old/match-Rule.php:377 View/matchs/match-Rule.php:377
+msgid ""
+"比赛共6个项目，每个项目比赛3轮，每个项目及每轮比赛由比赛平台设置相应间隔时"
+"间。"
+msgstr ""
+"The competition consists of six item, Each item consists of three rounds. "
+"The platform sets corresponding intervals for each item and each round."
+
+#: View/matchs-old/match-Rule.php:384 View/matchs/match-Rule.php:384
+msgid "比赛成绩"
+msgstr "Results"
+
+#: View/matchs-old/match-Rule.php:432 View/matchs/match-Rule.php:432
+msgid ""
+"比赛选手答题结束后，可查看得分情况（答题数，分数，用时，正确率）全部选手提交"
+"后，可查看详细排名。"
+msgstr ""
+"After the answer of the contestant, you can view the score (answer number, "
+"score, time, correct Rate) after all the contestants have submitted, can see "
+"the detailed rankings."
+
+#: View/matchs-old/match-Rule.php:439 View/matchs/match-Rule.php:439
+msgid "比赛细则"
+msgstr "Rules"
+
+#: View/matchs-old/match-Rule.php:490 View/matchs/match-Rule.php:490
+msgid ""
+"即在比赛时系统给出52张扑克牌随机数字，选手记忆后按正确的顺序复位扑克牌面。"
+msgstr ""
+" The system gives 52 random numbers of playing cards during the game, and "
+"the players reset the playing cards in the correct order after remembering."
+
+#: View/matchs-old/match-Rule.php:491 View/matchs/match-Rule.php:491
+msgid "正确复位1张牌"
+msgstr "Correctly reset 1 card"
+
+#: View/matchs-old/match-Rule.php:491 View/matchs-old/match-Rule.php:497
+#: View/matchs-old/match-Rule.php:509 View/matchs-old/match-Rule.php:514
+#: View/matchs-old/match-Rule.php:520 View/matchs-old/match-answer-log.php:40
+#: View/matchs/match-Rule.php:491 View/matchs/match-Rule.php:497
+#: View/matchs/match-Rule.php:509 View/matchs/match-Rule.php:514
+#: View/matchs/match-Rule.php:520 View/matchs/match-answer-log.php:97
+msgid "分"
+msgstr " "
+
+#: View/matchs-old/match-Rule.php:491 View/matchs/match-Rule.php:491
+msgid "若选手所复位扑克牌全部正确，剩余1秒多"
+msgstr "If the player resets all the cards correctly,each remaining 1 second"
+
+#: View/matchs-old/match-Rule.php:491 View/matchs/match-Rule.php:491
+msgid "若复位扑克牌有错误，则时间分不计入成绩。"
+msgstr ""
+"If there is a mistake in resetting poker, the time will not count towards "
+"the Score."
+
+#: View/matchs-old/match-Rule.php:496 View/matchs/match-Rule.php:496
+msgid "即在比赛时系统给出100位随即数字，选手记忆后按正确的顺序复位数字。"
+msgstr ""
+" In the game, the system gives 100 random numbers., then the player "
+"memorizes them and resets them in the correct order."
+
+#: View/matchs-old/match-Rule.php:497 View/matchs/match-Rule.php:497
+msgid "正确复位1位数字"
+msgstr "Correct reset 1 number"
+
+#: View/matchs-old/match-Rule.php:497 View/matchs/match-Rule.php:497
+msgid "若选手所复位数字全部正确，剩余1秒多"
+msgstr ""
+"If the player reset numbers are all correct. the remaining per seconds will "
+"get "
+
+#: View/matchs-old/match-Rule.php:497 View/matchs-old/match-Rule.php:509
+#: View/matchs/match-Rule.php:497 View/matchs/match-Rule.php:509
+msgid "若复位数字有错误，则时间分不计入成绩。"
+msgstr ""
+"If the reset number has errors, the time is not counted into the Score."
+
+#: View/matchs-old/match-Rule.php:502 View/matchs/match-Rule.php:502
+msgid "逆向运算"
+msgstr "Fast reverse calculation"
+
+#: View/matchs-old/match-Rule.php:502 View/matchs/match-Rule.php:502
+msgid ""
+"即在比赛中，选手运用给出的运算符号，用完给出一组（4个）字符，使其运算结果等于"
+"24。"
+msgstr ""
+" In the competition, the player uses the given symbols and gives a set of "
+"(4) characters to make the result equal to 24."
+
+#: View/matchs-old/match-Rule.php:503 View/matchs/match-Rule.php:503
+msgid "跳过不作答直接扣掉两秒时间，在规定时间内，答对题数越多，分数越高。"
+msgstr ""
+"If you skip answering, you will be deducted two seconds from the game. The "
+"more questions you answer correctly, the higher your score."
+
+#: View/matchs-old/match-Rule.php:508 View/matchs/match-Rule.php:508
+msgid ""
+"即在比赛时选手快速阅读一篇2000字左右的文章，阅读完成，根据记忆信息回答10道选"
+"择题，本项目在比赛结束前可返回修改答案。"
+msgstr ""
+" In the competition, the player reads a 2000-word article quickly. After "
+"reading, the player answers 10 choice questions according to the memory "
+"information. The item can return to revise the answer before the end of the "
+"game."
+
+#: View/matchs-old/match-Rule.php:509 View/matchs/match-Rule.php:509
+msgid "正确一题"
+msgstr " Correctly answer one question"
+
+#: View/matchs-old/match-Rule.php:509 View/matchs/match-Rule.php:509
+msgid "若选手所回答题目全部正确，剩余1秒多"
+msgstr ""
+"If the player answers all the questions correctly, the remaining per seconds "
+"will get"
+
+#: View/matchs-old/match-Rule.php:514 View/matchs/match-Rule.php:514
+msgid ""
+"即在比赛时选手依次进行“连加运算” “加减混合运算” “乘除运算”三类题型的比赛,每类"
+"题型3分钟,答对一题"
+msgstr ""
+" During the competition, the contestants successively perform the three "
+"types of questions, namely, continuous addition, mixed addition and "
+"subtraction operation, multiplication and division operation. Each type of "
+"questions lasts three minutes,For each correct answer will "
+
+#: View/matchs-old/match-Rule.php:514 View/matchs/match-Rule.php:514
+msgid "每道题选手给出确认答案后选择下一题，即刻显示答案是否正确。"
+msgstr ""
+"The player chooses the next question after giving the confirmation answer, "
+"and the system immediately shows the correct answer."
+
+#: View/matchs-old/match-Rule.php:515 View/matchs/match-Rule.php:515
+msgid ""
+"答题数量多且正确数多，则分数越高，未给出答题直接下一题，视为未作答，本项目"
+msgstr ""
+"If the number of answers is large and the correct number is large, the "
+"higher the score will be. If the answer is not given, the question will be "
+"considered as unanswered.this item "
+
+#: View/matchs-old/match-Rule.php:515 View/matchs-old/match-Rule.php:521
+#: View/matchs/match-Rule.php:515 View/matchs/match-Rule.php:521
+msgid "无时间分"
+msgstr "no time points"
+
+#: View/matchs-old/match-Rule.php:520 View/matchs/match-Rule.php:520
+msgid ""
+"即在比赛时系统快速闪现一组字符0.8秒的时间，选手在5秒内从选项中选择正确答案，"
+"答案即判断是否正确，答对一题"
+msgstr ""
+" The system flashes a set of characters for 0.8 seconds in a race. The "
+"player chooses the correct answer from the options within 5 seconds. The "
+"system will determine whether the answer is correct or not. For each correct "
+"answer will "
+
+#: View/matchs-old/match-Rule.php:521 View/matchs/match-Rule.php:521
+msgid "在比赛时间内先错误10题，选手本轮比赛即结束，本轮比赛"
+msgstr ""
+"If the player has more than 10 errors in the competition, the match will be "
+"concluded. this round "
+
+#: View/matchs-old/match-answer-log.php:12 View/matchs/match-answer-log.php:69
+msgid "比赛项目未绑定"
+msgstr "Match Item not bound"
+
+#: View/matchs-old/match-answer-log.php:33 View/matchs/match-answer-log.php:90
+#: View/trains/answer-log.php:109
+msgid "答题记录"
+msgstr "Answer record"
+
+#: View/matchs-old/match-answer-log.php:39
+#: View/matchs-old/matching-fastCalculation.php:12
+#: View/matchs-old/matching-fastReverse.php:13
+#: View/matchs-old/matching-fastScan.php:13
+#: View/matchs-old/matching-numberBattle.php:11
+#: View/matchs-old/matching-pokerRelay.php:12
+#: View/matchs-old/matching-reading.php:13
+#: View/matchs-old/ready-numberBattle.php:13
+#: View/matchs-old/ready-pokerRelay.php:12 View/matchs-old/ready-reading.php:14
+#: View/trains/matching-reading.php:13
+msgid "第"
+msgstr "Round"
+
+#: View/matchs-old/match-answer-log.php:39
+msgid "轮"
+msgstr " "
+
+#: View/matchs-old/match-answer-log.php:40 View/matchs/match-answer-log.php:97
+msgid "您的得分"
+msgstr "Score:"
+
+#: View/matchs-old/match-answer-log.php:42 View/matchs/match-answer-log.php:99
+msgid "全部排名"
+msgstr "All rank"
+
+#: View/matchs-old/match-answer-log.php:47 View/matchs/match-answer-log.php:104
+#: View/trains/answer-log.php:120
+msgid "答题数量"
+msgstr "Questions"
+
+#: View/matchs-old/match-answer-log.php:50 View/matchs/match-answer-log.php:107
+#: View/trains/answer-log.php:123
+msgid "正确数量"
+msgstr "Correct"
+
+#: View/matchs-old/match-answer-log.php:55 View/matchs/match-answer-log.php:112
+#: View/trains/answer-log.php:128
+msgid "答题用时"
+msgstr "Cost time"
+
+#: View/matchs-old/match-answer-log.php:58 View/matchs/match-answer-log.php:115
+#: View/trains/answer-log.php:131
+msgid "剩余时间"
+msgstr "Remaining"
+
+#: View/matchs-old/match-answer-log.php:63 View/matchs/match-answer-log.php:120
+#: View/trains/answer-log.php:136
+msgid "正确率"
+msgstr "Correct rate"
+
+#: View/matchs-old/match-answer-log.php:67 View/trains/answer-log.php:140
+msgid "本轮排名"
+msgstr "Ranking"
+
+#: View/matchs-old/match-answer-log.php:76 View/matchs/match-answer-log.php:133
+msgid "由于比赛过程中错误达上限，该轮答案由系统强制提交"
+msgstr ""
+"Due to the upper limit of the error during the game, the round of answers is "
+"mandatory by the system"
+
+#: View/matchs-old/match-answer-log.php:78 View/matchs/match-answer-log.php:135
+msgid "由于比赛倒计时结束，该轮比赛答题由系统自动提交"
+msgstr ""
+"The game answer is automatically submitted by the system due to the end of "
+"the game Countdown"
+
+#: View/matchs-old/match-answer-log.php:80 View/matchs/match-answer-log.php:137
+msgid "由于比赛过程中有切出系统行为，该轮答案由系统强制提交"
+msgstr ""
+"Due to the switching page behavior during the game, the round of answers is "
+"mandatory by the system"
+
+#: View/matchs-old/match-answer-log.php:90 View/matchs/match-answer-log.php:147
+msgid "切出页面时间"
+msgstr "Cut out page time"
+
+#: View/matchs-old/match-answer-log.php:127
+msgid "距下一项目开赛"
+msgstr "Next item start time"
+
+#: View/matchs-old/match-answer-log.php:130
+msgid "下一项已开赛,进入比赛"
+msgstr "The competition has started,enter the competition"
+
+#: View/matchs-old/match-answer-log.php:133
+#: View/matchs/match-answer-log.php:187
+msgid "所有答题结束,查看详情"
+msgstr "All completed, view details"
+
+#: View/matchs-old/match-waitting.php:14
+#: View/matchs-old/matching-fastCalculation.php:11
+#: View/matchs-old/matching-fastReverse.php:12
+#: View/matchs-old/matching-fastScan.php:12
+#: View/matchs-old/matching-numberBattle.php:10
+#: View/matchs-old/matching-pokerRelay.php:11
+#: View/matchs-old/matching-reading.php:12
+#: View/matchs-old/ready-numberBattle.php:12
+#: View/matchs-old/ready-pokerRelay.php:11 View/matchs-old/ready-reading.php:13
+#: View/matchs/match-answer-log.php:96 View/matchs/match-waitting.php:14
+#: View/matchs/matching-fastCalculation.php:11
+#: View/matchs/matching-fastReverse.php:12 View/matchs/matching-fastScan.php:12
+#: View/matchs/matching-numberBattle.php:10
+#: View/matchs/matching-pokerRelay.php:11 View/matchs/matching-reading.php:12
+#: View/matchs/ready-numberBattle.php:12 View/matchs/ready-pokerRelay.php:11
+#: View/matchs/ready-reading.php:13 View/matchs/singleRecord.php:24
+#: View/trains/matching-fastCalculation.php:11
+#: View/trains/matching-fastReverse.php:12 View/trains/matching-fastScan.php:12
+#: View/trains/matching-numberBattle.php:10
+#: View/trains/matching-pokerRelay.php:11 View/trains/matching-reading.php:12
+#: View/trains/ready-numberBattle.php:12 View/trains/ready-pokerRelay.php:11
+#: View/trains/ready-reading.php:13
+#, php-format
+msgid "第%s轮"
+msgstr "Round %s"
+
+#: View/matchs-old/match-waitting.php:20 View/matchs/match-waitting.php:32
+msgid "您本轮比赛已经提交，本轮比赛完成后可继续参与下一轮比赛"
+msgstr ""
+"Your current competition has been submitted and you can continue to play in "
+"the next round after this round of competition."
+
+#: View/matchs-old/match-waitting.php:26 View/matchs/match-waitting.php:39
+msgid "本轮结束后查看答题详情"
+msgstr "View the answer details after the end of the round"
+
+#: View/matchs-old/match-waitting.php:28 View/matchs/match-waitting.php:41
+msgid "下一轮开赛"
+msgstr "upcoming match"
+
+#: View/matchs-old/match-waitting.php:32 View/matchs/match-waitting.php:46
+#, php-format
+msgid "第%s轮已开赛，禁止进入比赛，您可等待"
+msgstr "round %s has started, no entry is allowed, you can wait "
+
+#: View/matchs-old/match-waitting.php:38 View/matchs/match-waitting.php:55
+msgid "倒计时"
+msgstr "Countdown"
+
+#: View/matchs-old/match-waitting.php:39
+#: View/matchs-old/matching-fastCalculation.php:15
+#: View/matchs-old/matching-fastCalculation.php:24
+#: View/matchs-old/matching-fastCalculation.php:161
+#: View/matchs-old/matching-fastReverse.php:16
+#: View/matchs/match-waitting.php:56
+#: View/matchs/matching-fastCalculation.php:16
+#: View/matchs/matching-fastCalculation.php:25
+#: View/matchs/matching-fastCalculation.php:173
+#: View/matchs/matching-fastReverse.php:17 View/public/my-404.php:52
+#: View/trains/matching-fastCalculation.php:16
+#: View/trains/matching-fastCalculation.php:25
+#: View/trains/matching-fastCalculation.php:168
+#: View/trains/matching-fastReverse.php:17
+msgid "初始中"
+msgstr "Initialization..."
+
+#: View/matchs-old/match-waitting.php:50 View/matchs/match-waitting.php:67
+msgid ""
+"比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作"
+"行为。"
+msgstr ""
+"Before the match, please close all irrelevant background applications, We "
+"will record your current system operating environment and all of your "
+"operational behavior."
+
+#: View/matchs-old/match-waitting.php:51 View/matchs/match-waitting.php:68
+msgid "比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。"
+msgstr ""
+"It is forbidden to cut out the page during the race, otherwise the system "
+"will force automatic submission of your current match Item."
+
+#: View/matchs-old/matchDetail.php:14 View/matchs/matchDetail.php:14
+#: View/payment/paySuccess.php:23
+msgid "比赛详情"
+msgstr "Competition details"
+
+#: View/matchs-old/matchDetail.php:38 View/matchs/matchDetail.php:38
+msgid "结束时间"
+msgstr "End Time"
+
+#: View/matchs-old/matchDetail.php:54 View/matchs/matchDetail.php:54
+msgid "已截止"
+msgstr "Has ended"
+
+#: View/matchs-old/matchDetail.php:63 View/matchs/matchDetail.php:63
+msgid "比赛项目"
+msgstr "Competition items"
+
+#: View/matchs-old/matchDetail.php:72 View/matchs/matchDetail.php:75
+msgid "规则"
+msgstr "Rules"
+
+#: View/matchs-old/matchDetail.php:83 View/matchs/matchDetail.php:87
+msgid "报名列表"
+msgstr "Register list"
+
+#: View/matchs-old/matchDetail.php:84 View/matchs/matchDetail.php:88
+#, php-format
+msgid "%s位选手已报名"
+msgstr "%s Enrolled User"
+
+#: View/matchs-old/matchDetail.php:91 View/matchs/matchDetail.php:96
+msgid "头 像"
+msgstr "Avatar"
+
+#: View/matchs-old/matchDetail.php:107 View/matchs/matchDetail.php:121
+msgid "报名参赛"
+msgstr "Entry registration"
+
+#: View/matchs-old/matchDetail.php:222 View/matchs-old/matchList.php:258
+#: View/matchs-old/record.php:386 View/matchs-old/singleRecord.php:167
+#: View/matchs/matchDetail.php:236 View/matchs/matchList.php:262
+#: View/matchs/record.php:471 View/matchs/singleRecord.php:168
+#: View/teams/team.php:170 View/teams/teamDetail.php:179
+#: View/teams/teamDetail.php:231 nlyd-student.php:288
+msgid "网络质量差,请重试"
+msgstr "Network quality is poor, please try again"
+
+#: View/matchs-old/matchList.php:17 View/matchs/matchList.php:17
+msgid "往期比赛"
+msgstr "Past matches"
+
+#: View/matchs-old/matchList.php:18 View/matchs/matchList.php:18
+msgid "近期比赛"
+msgstr "Recent competitions"
+
+#: View/matchs-old/matchList.php:29 View/matchs/matchList.php:29
+msgid "最新比赛倒计时"
+msgstr "Recent match countdown"
+
+#: View/matchs-old/matchList.php:61 View/matchs/matchList.php:61
+msgid "无比赛信息"
+msgstr "No match information"
+
+#: View/matchs-old/matching-fastCalculation.php:12
+#: View/matchs-old/matching-fastReverse.php:13
+#: View/matchs-old/matching-fastScan.php:13
+#: View/matchs-old/matching-fastScan.php:270
+#: View/matchs-old/matching-numberBattle.php:11
+#: View/matchs-old/matching-pokerRelay.php:12
+#: View/matchs-old/matching-reading.php:13
+#: View/matchs-old/ready-numberBattle.php:13
+#: View/matchs-old/ready-pokerRelay.php:12 View/matchs-old/ready-reading.php:14
+#: View/matchs/matching-fastScan.php:275 View/trains/matching-fastScan.php:305
+#: View/trains/matching-reading.php:13
+msgid "题"
+msgstr "Question"
+
+#: View/matchs-old/matching-fastCalculation.php:18
+#: View/matchs-old/matching-fastCalculation.php:579
+#: View/matchs-old/matching-fastReverse.php:18
+#: View/matchs-old/matching-fastReverse.php:593
+#: View/matchs-old/matching-fastScan.php:18
+#: View/matchs-old/matching-fastScan.php:472
+#: View/matchs-old/matching-numberBattle.php:16
+#: View/matchs-old/matching-numberBattle.php:363
+#: View/matchs-old/matching-pokerRelay.php:17
+#: View/matchs-old/matching-pokerRelay.php:182
+#: View/matchs-old/matching-reading.php:18
+#: View/matchs-old/matching-reading.php:191
+#: View/matchs/matching-fastCalculation.php:19
+#: View/matchs/matching-fastCalculation.php:605
+#: View/matchs/matching-fastReverse.php:20
+#: View/matchs/matching-fastReverse.php:614
+#: View/matchs/matching-fastScan.php:20 View/matchs/matching-fastScan.php:489
+#: View/matchs/matching-numberBattle.php:18
+#: View/matchs/matching-numberBattle.php:391
+#: View/matchs/matching-pokerRelay.php:19
+#: View/matchs/matching-pokerRelay.php:210 View/matchs/matching-reading.php:21
+#: View/matchs/matching-reading.php:209 View/supervisor/index.php:60
+#: View/trains/matching-fastCalculation.php:19
+#: View/trains/matching-fastCalculation.php:587
+#: View/trains/matching-fastReverse.php:20
+#: View/trains/matching-fastReverse.php:606
+#: View/trains/matching-fastScan.php:20 View/trains/matching-fastScan.php:506
+#: View/trains/matching-numberBattle.php:18
+#: View/trains/matching-numberBattle.php:372
+#: View/trains/matching-pokerRelay.php:19
+#: View/trains/matching-pokerRelay.php:194 View/trains/matching-reading.php:20
+#: View/trains/matching-reading.php:191
+msgid "提交"
+msgstr "Submit"
+
+#: View/matchs-old/matching-fastCalculation.php:56
+#: View/matchs-old/matching-fastReverse.php:50
+#: View/matchs-old/matching-reading.php:56
+#: View/matchs/matching-fastCalculation.php:57
+#: View/matchs/matching-fastReverse.php:52 View/matchs/matching-reading.php:59
+#: View/trains/matching-fastCalculation.php:57
+#: View/trains/matching-fastReverse.php:50 View/trains/matching-reading.php:55
+msgid "下一题"
+msgstr "Next"
+
+#: View/matchs-old/matching-fastCalculation.php:94
+#: View/matchs-old/matching-fastCalculation.php:137
+#: View/matchs-old/matching-fastCalculation.php:239
+#: View/matchs-old/matching-fastCalculation.php:347
+#: View/matchs/matching-fastCalculation.php:106
+#: View/matchs/matching-fastCalculation.php:149
+#: View/matchs/matching-fastCalculation.php:251
+#: View/matchs/matching-fastCalculation.php:359
+#: View/trains/matching-fastCalculation.php:100
+#: View/trains/matching-fastCalculation.php:144
+#: View/trains/matching-fastCalculation.php:246
+#: View/trains/matching-fastCalculation.php:354
+msgid "连加运算"
+msgstr "Continuous addition operation"
+
+#: View/matchs-old/matching-fastCalculation.php:97
+#: View/matchs-old/matching-fastCalculation.php:141
+#: View/matchs-old/matching-fastCalculation.php:241
+#: View/matchs-old/matching-fastCalculation.php:349
+#: View/matchs/matching-fastCalculation.php:109
+#: View/matchs/matching-fastCalculation.php:153
+#: View/matchs/matching-fastCalculation.php:253
+#: View/matchs/matching-fastCalculation.php:361
+#: View/trains/matching-fastCalculation.php:103
+#: View/trains/matching-fastCalculation.php:148
+#: View/trains/matching-fastCalculation.php:248
+#: View/trains/matching-fastCalculation.php:356
+msgid "加减运算"
+msgstr "Addition and subtraction"
+
+#: View/matchs-old/matching-fastCalculation.php:100
+#: View/matchs-old/matching-fastCalculation.php:145
+#: View/matchs-old/matching-fastCalculation.php:351
+#: View/matchs-old/matching-fastCalculation.php:426
+#: View/matchs/matching-fastCalculation.php:112
+#: View/matchs/matching-fastCalculation.php:157
+#: View/matchs/matching-fastCalculation.php:363
+#: View/matchs/matching-fastCalculation.php:438
+#: View/trains/matching-fastCalculation.php:106
+#: View/trains/matching-fastCalculation.php:152
+#: View/trains/matching-fastCalculation.php:358
+#: View/trains/matching-fastCalculation.php:434
+msgid "乘除运算"
+msgstr "Multiplication and division"
+
+#: View/matchs-old/matching-fastCalculation.php:539
+#: View/matchs-old/matching-fastReverse.php:204
+#: View/matchs-old/matching-fastScan.php:425
+#: View/matchs-old/matching-numberBattle.php:148
+#: View/matchs-old/matching-pokerRelay.php:164
+#: View/matchs-old/matching-reading.php:148
+#: View/matchs/matching-fastCalculation.php:563
+#: View/matchs/matching-fastReverse.php:214
+#: View/matchs/matching-fastScan.php:442
+#: View/matchs/matching-numberBattle.php:176
+#: View/matchs/matching-pokerRelay.php:192 View/matchs/matching-reading.php:166
+#: View/trains/matching-fastCalculation.php:548
+#: View/trains/matching-fastReverse.php:203
+#: View/trains/matching-fastScan.php:459
+#: View/trains/matching-numberBattle.php:156
+#: View/trains/matching-pokerRelay.php:176 View/trains/matching-reading.php:148
+msgid "正在提交答案"
+msgstr "Submitting an Answer"
+
+#: View/matchs-old/matching-fastCalculation.php:558
+#: View/matchs-old/matching-fastScan.php:447
+#: View/matchs-old/matching-numberBattle.php:81
+#: View/matchs-old/matching-pokerRelay.php:95
+#: View/matchs-old/matching-reading.php:166
+#: View/matchs-old/ready-numberBattle.php:184
+#: View/matchs-old/ready-pokerRelay.php:164
+#: View/matchs-old/ready-reading.php:141
+#: View/matchs/matching-fastCalculation.php:584
+#: View/matchs/matching-fastScan.php:464
+#: View/matchs/matching-numberBattle.php:97
+#: View/matchs/matching-pokerRelay.php:109 View/matchs/matching-reading.php:184
+#: View/matchs/ready-numberBattle.php:159 View/matchs/ready-pokerRelay.php:250
+#: View/matchs/ready-reading.php:137
+#: View/trains/matching-fastCalculation.php:566
+#: View/trains/matching-fastScan.php:481
+#: View/trains/matching-numberBattle.php:88
+#: View/trains/matching-pokerRelay.php:106 View/trains/matching-reading.php:166
+#: View/trains/ready-numberBattle.php:144 View/trains/ready-pokerRelay.php:225
+#: View/trains/ready-reading.php:119
+msgid "倒计时结束，即将提交答案"
+msgstr "The countdown is over and the answer will be submitted"
+
+#: View/matchs-old/matching-fastCalculation.php:578
+#: View/matchs-old/matching-fastReverse.php:592
+#: View/matchs-old/matching-fastScan.php:471
+#: View/matchs-old/matching-numberBattle.php:362
+#: View/matchs-old/matching-pokerRelay.php:181
+#: View/matchs-old/matching-reading.php:190
+#: View/matchs/matching-fastCalculation.php:604
+#: View/matchs/matching-fastReverse.php:613
+#: View/matchs/matching-fastScan.php:488
+#: View/matchs/matching-numberBattle.php:390
+#: View/matchs/matching-pokerRelay.php:209 View/matchs/matching-reading.php:208
+#: View/trains/matching-fastCalculation.php:586
+#: View/trains/matching-fastReverse.php:605
+#: View/trains/matching-fastScan.php:505
+#: View/trains/matching-numberBattle.php:371
+#: View/trains/matching-pokerRelay.php:193 View/trains/matching-reading.php:190
+msgid "是否立即提交"
+msgstr "submitted immediately?"
+
+#: View/matchs-old/matching-fastCalculation.php:579
+#: View/matchs-old/matching-fastReverse.php:593
+#: View/matchs-old/matching-fastScan.php:472
+#: View/matchs-old/matching-numberBattle.php:363
+#: View/matchs-old/matching-pokerRelay.php:182
+#: View/matchs-old/matching-reading.php:191
+#: View/matchs/matching-fastCalculation.php:605
+#: View/matchs/matching-fastReverse.php:614
+#: View/matchs/matching-fastScan.php:489
+#: View/matchs/matching-numberBattle.php:391
+#: View/matchs/matching-pokerRelay.php:210 View/matchs/matching-reading.php:209
+#: View/trains/matching-fastCalculation.php:587
+#: View/trains/matching-fastReverse.php:606
+#: View/trains/matching-fastScan.php:506
+#: View/trains/matching-numberBattle.php:372
+#: View/trains/matching-pokerRelay.php:194 View/trains/matching-reading.php:191
+msgid "按错了"
+msgstr "No"
+
+#: View/matchs-old/matching-fastReverse.php:21
+#: View/matchs/matching-fastReverse.php:23
+#: View/trains/matching-fastReverse.php:23
+msgid "请用完给出的4个数字，并利用运算符号使运算结果等于24！"
+msgstr ""
+"Please use up the 4 numbers given and use the arithmetic symbols to make the "
+"result equal to 24!"
+
+#: View/matchs-old/matching-fastReverse.php:23
+#: View/matchs/matching-fastReverse.php:25
+#: View/trains/matching-fastReverse.php:25
+msgid "若您跳过此题不作答，则扣掉2秒时间"
+msgstr "Skipping this question will be deducted for 2 seconds"
+
+#: View/matchs-old/matching-fastReverse.php:49
+#: View/matchs-old/subject-fastReverse.php:10
+#: View/matchs/matching-fastReverse.php:51
+#: View/matchs/subject-fastReverse.php:10
+#: View/trains/matching-fastReverse.php:49
+#: View/trains/subject-fastReverse.php:10
+msgid "本题无解"
+msgstr "Unsolvable"
+
+#: View/matchs-old/matching-fastScan.php:9 View/matchs/matching-fastScan.php:9
+#: View/trains/matching-fastScan.php:9
+msgid "开始答题"
+msgstr "Start answering"
+
+#: View/matchs-old/matching-fastScan.php:270
+#: View/matchs/matching-fastScan.php:275 View/trains/matching-fastScan.php:305
+msgid "错误"
+msgstr "Error"
+
+#: View/matchs-old/matching-numberBattle.php:19
+#: View/matchs-old/matching-pokerRelay.php:21
+#: View/matchs/matching-numberBattle.php:21
+#: View/matchs/matching-pokerRelay.php:23
+#: View/trains/matching-numberBattle.php:21
+#: View/trains/matching-pokerRelay.php:22
+msgid "辅助操作"
+msgstr "auxiliary tool"
+
+#: View/matchs-old/matching-numberBattle.php:21
+#: View/matchs/matching-numberBattle.php:23
+#: View/trains/matching-numberBattle.php:23
+msgid "前插一位"
+msgstr "Insert forward"
+
+#: View/matchs-old/matching-numberBattle.php:22
+#: View/matchs/matching-numberBattle.php:24
+#: View/trains/matching-numberBattle.php:24
+msgid "后插一位"
+msgstr "Insert backward"
+
+#: View/matchs-old/matching-pokerRelay.php:23
+#: View/matchs/matching-pokerRelay.php:25
+#: View/trains/matching-pokerRelay.php:24
+msgid "前移1位"
+msgstr "Move forward"
+
+#: View/matchs-old/matching-pokerRelay.php:24
+#: View/matchs/matching-pokerRelay.php:26
+#: View/trains/matching-pokerRelay.php:25
+msgid "后移1位"
+msgstr "Move back"
+
+#: View/matchs-old/matching-pokerRelay.php:25
+#: View/matchs/matching-pokerRelay.php:27
+#: View/trains/matching-pokerRelay.php:26
+msgid "删 除"
+msgstr "Delete"
+
+#: View/matchs-old/matching-reading.php:55 View/matchs/matching-reading.php:58
+#: View/trains/matching-reading.php:54
+msgid "上一题"
+msgstr "Previous"
+
+#: View/matchs-old/payError.php:17 View/matchs/payError.php:17
+msgid "订单信息缺失"
+msgstr "Missing order information"
+
+#: View/matchs-old/ready-numberBattle.php:20
+#: View/matchs/ready-numberBattle.php:22 View/trains/ready-numberBattle.php:22
+msgid "划辅助线"
+msgstr "auxiliary line"
+
+#: View/matchs-old/ready-numberBattle.php:22
+#: View/matchs/ready-numberBattle.php:24 View/trains/ready-numberBattle.php:24
+msgid "不划"
+msgstr "none"
+
+#: View/matchs-old/ready-numberBattle.php:34
+#: View/matchs-old/ready-pokerRelay.php:45
+#: View/matchs/ready-numberBattle.php:36 View/matchs/ready-pokerRelay.php:47
+#: View/trains/ready-numberBattle.php:36 View/trains/ready-pokerRelay.php:47
+msgid "记忆完成"
+msgstr "Memory complete"
+
+#: View/matchs-old/ready-pokerRelay.php:19 View/matchs/ready-pokerRelay.php:21
+#: View/trains/ready-pokerRelay.php:21
+msgid "显示张数"
+msgstr "Display quantity"
+
+#: View/matchs-old/ready-pokerRelay.php:21 View/matchs-old/record.php:100
+#: View/matchs-old/record.php:102 View/matchs/ready-pokerRelay.php:23
+#: View/matchs/record.php:100 View/matchs/record.php:102
+#: View/trains/ready-pokerRelay.php:23
+msgid "全部"
+msgstr "All"
+
+#: View/matchs-old/ready-pokerRelay.php:43 View/matchs/ready-pokerRelay.php:45
+#: View/trains/ready-pokerRelay.php:45
+msgid "当前记忆"
+msgstr "Current memory"
+
+#: View/matchs-old/ready-pokerRelay.php:43 View/matchs/ready-pokerRelay.php:45
+#: View/trains/ready-pokerRelay.php:45
+msgid "张"
+msgstr "cards"
+
+#: View/matchs-old/ready-reading.php:27 View/matchs/ready-reading.php:29
+#: View/trains/ready-reading.php:30
+msgid "阅读完成"
+msgstr "Read complete"
+
+#: View/matchs-old/record.php:21 View/matchs/record.php:21
+msgid "成绩"
+msgstr "Results"
+
+#: View/matchs-old/record.php:28 View/matchs-old/singleRecord.php:19
+#: View/matchs/record.php:28 View/matchs/singleRecord.php:19
+msgid "分享战绩"
+msgstr "Share the Record"
+
+#: View/matchs-old/record.php:34 View/matchs-old/record.php:37
+#: View/matchs/record.php:34 View/matchs/record.php:37
+msgid "单项排名"
+msgstr "Single rank"
+
+#: View/matchs-old/record.php:35 View/matchs/record.php:35
+msgid "分类排名"
+msgstr "Category rank"
+
+#: View/matchs-old/record.php:36 View/matchs/record.php:36
+msgid "总排名"
+msgstr "Total rank"
+
+#: View/matchs-old/record.php:60 View/matchs-old/record.php:93
+#: View/matchs-old/record.php:137 View/matchs-old/record.php:256
+#: View/matchs-old/record.php:261 View/matchs-old/singleRecord.php:32
+#: View/matchs/record.php:60 View/matchs/record.php:93
+#: View/matchs/record.php:145 View/matchs/record.php:267
+#: View/matchs/record.php:272 View/matchs/singleRecord.php:32
+msgid "名次"
+msgstr "Rank"
+
+#: View/matchs-old/record.php:63 View/matchs-old/record.php:96
+#: View/matchs-old/record.php:140 View/matchs-old/record.php:264
+#: View/matchs-old/singleRecord.php:35 View/matchs/record.php:63
+#: View/matchs/record.php:96 View/matchs/record.php:148
+#: View/matchs/record.php:275 View/matchs/singleRecord.php:35
+msgid "城市"
+msgstr "City"
+
+#: View/matchs-old/record.php:64 View/matchs-old/record.php:97
+#: View/matchs-old/record.php:141 View/matchs-old/record.php:265
+#: View/matchs-old/singleRecord.php:36 View/matchs/record.php:64
+#: View/matchs/record.php:97 View/matchs/record.php:149
+#: View/matchs/record.php:276 View/matchs/singleRecord.php:36
+msgid "项目总分"
+msgstr "Score"
+
+#: View/matchs-old/record.php:65 View/matchs-old/record.php:142
+#: View/matchs/record.php:65 View/matchs/record.php:150
+msgid "组别"
+msgstr "Group"
+
+#: View/matchs-old/record.php:76 View/matchs/record.php:76
+msgid "查看本项目比赛详情"
+msgstr "View details"
+
+#: View/matchs-old/record.php:127 View/matchs/record.php:127
+msgid "个人排名"
+msgstr "Personal"
+
+#: View/matchs-old/record.php:130 View/matchs/record.php:130
+msgid "战队排名"
+msgstr "Team"
+
+#: View/matchs-old/record.php:170 View/matchs-old/singleRecord.php:66
+#: View/matchs/record.php:178 View/matchs/singleRecord.php:66
+msgid "微信好友"
+msgstr "WeChat friends"
+
+#: View/matchs-old/record.php:178 View/matchs-old/singleRecord.php:72
+#: View/matchs/record.php:186 View/matchs/singleRecord.php:72
+msgid "朋友圈"
+msgstr "Circle of Friends"
+
+#: View/matchs-old/record.php:259 View/matchs/record.php:270
+msgid "总成绩"
+msgstr "Total score"
+
+#: View/matchs-old/record.php:266 View/matchs-old/singleRecord.php:37
+#: View/matchs/record.php:277 View/matchs/singleRecord.php:37
+msgid "组&nbsp;&nbsp;&nbsp;&nbsp;别"
+msgstr "Group"
+
+#: View/matchs-old/singleRecord.php:15 View/matchs/singleRecord.php:15
+msgid "单项成绩排名"
+msgstr "Individual score ranking"
+
+#: View/matchs-old/singleRecord.php:51 View/matchs/singleRecord.php:51
+msgid "查看本轮我的答题记录"
+msgstr "View my answer record"
+
+#: View/matchs-old/subject-fastCalculation.php:3
+#: View/matchs-old/subject-fastReverse.php:3
+#: View/matchs-old/subject-fastScan.php:3 View/matchs-old/subject-reading.php:3
+#: View/matchs/subject-fastCalculation.php:3
+#: View/matchs/subject-fastReverse.php:3 View/matchs/subject-fastScan.php:3
+#: View/matchs/subject-reading.php:3 View/trains/subject-fastCalculation.php:3
+#: View/trains/subject-fastReverse.php:3 View/trains/subject-fastScan.php:3
+#: View/trains/subject-reading.php:3
+msgid "答案对比"
+msgstr "Check answer"
+
+#: View/matchs-old/subject-fastCalculation.php:9
+#: View/matchs-old/subject-fastReverse.php:9
+#: View/matchs-old/subject-fastScan.php:9
+#: View/matchs-old/subject-numberBattle.php:3
+#: View/matchs-old/subject-pokerRelay.php:5
+#: View/matchs-old/subject-reading.php:35
+#: View/matchs/subject-fastCalculation.php:9
+#: View/matchs/subject-fastReverse.php:9 View/matchs/subject-fastScan.php:9
+#: View/matchs/subject-numberBattle.php:3 View/matchs/subject-pokerRelay.php:5
+#: View/matchs/subject-reading.php:31 View/trains/subject-fastCalculation.php:9
+#: View/trains/subject-fastReverse.php:9 View/trains/subject-fastScan.php:9
+#: View/trains/subject-numberBattle.php:3 View/trains/subject-pokerRelay.php:5
+#: View/trains/subject-reading.php:35
+msgid "你的答案"
+msgstr "Your answer"
+
+#: View/matchs-old/subject-fastCalculation.php:9
+#: View/matchs-old/subject-fastReverse.php:9
+#: View/matchs-old/subject-fastScan.php:9
+#: View/matchs-old/subject-reading.php:16
+#: View/matchs-old/subject-reading.php:24
+#: View/matchs-old/subject-reading.php:35
+#: View/matchs-old/subject-reading.php:36
+#: View/matchs/subject-fastCalculation.php:9
+#: View/matchs/subject-fastReverse.php:9 View/matchs/subject-fastScan.php:9
+#: View/matchs/subject-reading.php:16 View/matchs/subject-reading.php:24
+#: View/matchs/subject-reading.php:31 View/matchs/subject-reading.php:32
+#: View/trains/subject-fastCalculation.php:9
+#: View/trains/subject-fastReverse.php:9 View/trains/subject-fastScan.php:9
+#: View/trains/subject-reading.php:16 View/trains/subject-reading.php:24
+#: View/trains/subject-reading.php:35
+msgid "未作答"
+msgstr "Not answered"
+
+#: View/matchs-old/subject-fastCalculation.php:10
+#: View/matchs-old/subject-fastScan.php:10
+#: View/matchs-old/subject-numberBattle.php:11
+#: View/matchs-old/subject-pokerRelay.php:81
+#: View/matchs-old/subject-reading.php:36
+#: View/matchs/subject-fastCalculation.php:10
+#: View/matchs/subject-fastScan.php:10 View/matchs/subject-numberBattle.php:11
+#: View/matchs/subject-pokerRelay.php:81 View/matchs/subject-reading.php:32
+#: View/trains/subject-fastCalculation.php:10
+#: View/trains/subject-fastScan.php:10 View/trains/subject-numberBattle.php:11
+#: View/trains/subject-pokerRelay.php:81 View/trains/subject-reading.php:36
+msgid "正确答案"
+msgstr "Correct answer"
+
+#: View/matchs-old/subject-fastReverse.php:8
+#: View/matchs/subject-fastReverse.php:8 View/trains/subject-fastReverse.php:8
+msgid "运算数字"
+msgstr "Arithmetic numbers"
+
+#: View/matchs-old/subject-fastReverse.php:10
+#: View/matchs/subject-fastReverse.php:10
+#: View/trains/subject-fastReverse.php:10
+msgid "正确示例"
+msgstr "Correct example"
+
+#: View/matchs/match-answer-log.php:26 View/trains/answer-log.php:27
+msgid "秒"
+msgstr "s"
+
+#: View/matchs/match-answer-log.php:26 View/trains/answer-log.php:27
+msgid "之后跳转"
+msgstr "Then jump"
+
+#: View/matchs/match-answer-log.php:55 View/trains/answer-log.php:57
+msgid "网络延迟"
+msgstr "Network timeout"
+
+#: View/matchs/match-answer-log.php:184
+msgid "距下一"
+msgstr "From the next"
+
+#: View/matchs/match-waitting.php:25
+msgid "中场休息"
+msgstr "Half-time"
+
+#: View/matchs/matchBonusDetail.php:13 View/matchs/record.php:133
+#: View/matchs/record.php:283
+msgid "奖金明细"
+msgstr "Income Detail"
+
+#: View/matchs/matchBonusDetail.php:21
+msgid "获奖选手"
+msgstr "Winners"
+
+#: View/matchs/matchBonusDetail.php:29
+msgid "奖金状态"
+msgstr "Bonus status"
+
+#: View/matchs/matchBonusDetail.php:33
+msgid "已发放"
+msgstr "Has been issued"
+
+#: View/matchs/matchBonusDetail.php:33
+msgid "等待发放"
+msgstr "Waiting"
+
+#: View/matchs/matchBonusDetail.php:48
+msgid "收款途径"
+msgstr "Collection method"
+
+#: View/matchs/matchBonusDetail.php:51
+msgid "银行卡收款"
+msgstr "Bank card Collection"
+
+#: View/matchs/matchBonusDetail.php:51
+msgid "二维码收款"
+msgstr "WeChat QR Code"
+
+#: View/matchs/matchBonusDetail.php:56
+msgid "奖项与奖金"
+msgstr "Awards&bonuses"
+
+#: View/matchs/matchBonusDetail.php:75
+msgid "奖金总额"
+msgstr "Total Bonus"
+
+#: View/matchs/matchBonusDetail.php:80
+msgid "扣税金额(20%)"
+msgstr "Tax(20%)"
+
+#: View/matchs/matchBonusDetail.php:85
+msgid "实发金额"
+msgstr "Actual Amount"
+
+#: View/matchs/matching-fastCalculation.php:12
+#: View/matchs/matching-fastReverse.php:13 View/matchs/matching-fastScan.php:13
+#: View/trains/matching-fastCalculation.php:12
+#: View/trains/matching-fastReverse.php:13 View/trains/matching-fastScan.php:13
+msgid "第<span id=\"total\">0</span>题"
+msgstr "question <span id=\"total\">0</span>"
+
+#: View/matchs/matching-numberBattle.php:11
+#: View/matchs/matching-pokerRelay.php:12 View/matchs/ready-numberBattle.php:13
+#: View/matchs/ready-pokerRelay.php:12 View/matchs/ready-reading.php:14
+#: View/trains/matching-numberBattle.php:11
+#: View/trains/matching-pokerRelay.php:12 View/trains/ready-numberBattle.php:13
+#: View/trains/ready-pokerRelay.php:12 View/trains/ready-reading.php:14
+msgid "第1/1题"
+msgstr "Questions 1"
+
+#: View/matchs/matching-reading.php:14
+#, php-format
+msgid "第<span id=\"number\">1</span>/%s题"
+msgstr "question<span id= \"number\" >1 </span>/%s"
+
+#: View/matchs/record.php:137
+msgid "生成明细表"
+msgstr "Generating schedule"
+
+#: View/matchs/record.php:138 View/matchs/record.php:412
+#: View/matchs/record.php:456 View/matchs/record.php:568
+msgid "允许选手查看"
+msgstr "allow to view"
+
+#: View/matchs/record.php:139
+msgid "下载表格"
+msgstr "Download form"
+
+#: View/matchs/record.php:279
+msgid "序号"
+msgstr "No."
+
+#: View/matchs/record.php:282
+msgid "状态"
+msgstr "Status"
+
+#: View/matchs/record.php:412 View/matchs/record.php:456
+#: View/matchs/record.php:565
+msgid "禁止选手查看"
+msgstr "Prohibit viewing"
+
+#: View/matchs/record.php:439
+msgid "查看"
+msgstr "View"
+
+#: View/matchs/record.php:536 View/matchs/record.php:577
+#: View/matchs/record.php:608
+msgid "网络超时"
+msgstr "Network timeout"
+
+#: View/matchs/record.php:541 View/matchs/record.php:582
+#: View/matchs/record.php:613
+msgid "正在处理您的操作"
+msgstr "Working on your actions"
+
+#: View/news/news-detail.php:9
+msgid "新闻详情"
+msgstr "News Details"
+
+#: View/news/news-detail.php:16
+msgid "上一篇"
+msgstr "Previous"
+
+#: View/news/news-detail.php:18
+msgid "无上篇"
+msgstr "No previous article"
+
+#: View/news/news-detail.php:22
+msgid "下一篇"
+msgstr "Next"
+
+#: View/news/news-detail.php:24
+msgid "无下篇"
+msgstr "No next article"
+
+#: View/news/news-detail.php:29
+msgid "发布日期"
+msgstr "Release date"
+
+#: View/news/news-detail.php:30
+msgid "浏览数量"
+msgstr "Number of views"
+
+#: View/news/news-detail.php:32
+msgid "分享"
+msgstr "Share"
+
+#: View/news/news-list.php:9
+msgid "行业新闻"
+msgstr "Industry News"
+
+#: View/payment/paySuccess.php:15
+msgid "支付成功"
+msgstr "Payment success"
+
+#: View/payment/paySuccess.php:21
+msgid "您已成功报名"
+msgstr "You have successfully enrolled"
+
+#: View/payment/wxJsApiPay.php:21
+msgid "返回重新支付"
+msgstr "Return to pay again"
+
+#: View/public/my-404.php:56
+msgid "返回比赛详情"
+msgstr "Return to match details"
+
+#: View/public/my-404.php:59
+msgid "返回比赛等待"
+msgstr "Return to match waiting page"
+
+#: View/public/my-404.php:62
+msgid "返回上一页"
+msgstr "Back to"
+
+#: View/public/student-footer-menu.php:16
+msgid "首页"
+msgstr "Home"
+
+#: View/public/student-footer-menu.php:22
+msgid "训练"
+msgstr "Training"
+
+#: View/public/student-footer-menu.php:28
+msgid "比赛"
+msgstr "Match"
+
+#: View/public/student-footer-menu.php:34
+msgid "考级"
+msgstr "Grading"
+
+#: View/public/student-footer-menu.php:40
+msgid "我的"
+msgstr "Mine"
+
+#: View/public/timer.php:28
+msgid "定时器"
+msgstr "Timer"
+
+#: View/public/timer.php:34
+msgid "自定义定时器默认页面(无实际意义页面)"
+msgstr "Custom Timer default page (no meaningful Page)"
+
+#: View/safety/privacyAgreement.php:15 View/safety/setting.php:26
+msgid "隐私协议"
+msgstr "Privacy Agreement"
+
+#: View/safety/privacyAgreement.php:20
+msgid "关于脑力中国网络平台的隐私政策"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:22
+msgid ""
+"一、您好，我们是脑力（中国）运动开发有限公司。如果您是脑力中国平台用户或我们"
+"网站的访问者，请仔细阅读我们如何处理您的个人信息的隐私政策。我们本文的隐私政"
+"策适用于脑力中国训练平台，考级系统，比赛系统，脑力中国官方微信公众号，微信小"
+"程序等（“ 平台或网站 ”） ，同时也适用于我们的关联公司。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:23
+msgid "二、我们的平台地址是: https://www.gjnlyd.com"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:24
+msgid ""
+"三、当本文表述'我'，'我们'或'脑力中国'时，都指代脑力（中国）运动开发有限公"
+"司。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:25
+msgid ""
+"四、如果本文表述'政策'，在没有另行单独说明的情况下仅指隐私政策。如果本文表"
+"述“用户条款”，则具体指使用每个网站的规则。规则因产品而异，每种产品均可单独提"
+"供，并征求他们对政策的单独同意。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:27
+msgid "我们收集的个人信息类型"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:29
+msgid "五、我们收集有关我们网站的访问者和用户的某些个人信息。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:30
+msgid ""
+"六、我们收集的最常见的信息类型包括：用户名，会员名称，电子邮件地址，IP地址，"
+"其他联系方式，调查回复，博客，照片，付款信息，如付款代理详细信息，交易详情，"
+"税务信息，支持查询，论坛评论（如果适用），您指示我们在我们的网站上提供的内容"
+"（例如项目描述），您在我们网站上的操作（包括任何选择或项目输入）和网站分析数"
+"据等。我们还将从工作申请中收集个人信息（例如，您的简历，申请表本身，求职信和"
+"面试笔记等）。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:32
+msgid "我们如何收集个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:34
+msgid ""
+"七、当您向我们提供个人信息时，我们会在您浏览网站时自动收集个人信息，或者在您"
+"使用与网站相关联的服务时通过其他人收集个人信息。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:35
+msgid ""
+"八、当您在我们完成会员注册并在我们的网站上购买或提供项目或服务，订阅实时通"
+"讯，电子邮件列表，提交反馈，参加竞赛，填写调查或发送给我们时，我们会在您向我"
+"们提供您的个人信息时进行收集。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:37
+msgid "我们从他人那里收集的有关您的个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:39
+msgid ""
+"九、虽然我们通常直接从您那里收集个人信息，但有时我们还会从其他来源收集您的某"
+"些类别的个人信息。尤其是"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:40
+msgid "1.来自中国，境外的支付提供商的财务和/或交易详情，以便处理交易;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:41
+msgid ""
+"2.位于中国或境外的第三方服务提供商（如Google，Facebook），当您与第三方提供商"
+"建立链接，连接或登录帐户时，可能会向您提供有关您的信息，并向您发送注册信息等"
+"信息，和该服务的配置文件，只有在使用脑力中国服务平台时才会出现这种情况。信息"
+"因服务提供商的不同而有所控制，或由您通过该服务提供商的隐私设置授权;；"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:42
+msgid ""
+"3.来自中国或境外的其他第三方来源/和/或合作伙伴，我们会收到有关您的其他信息"
+"（在适用法律允许的范围内），例如人口统计数据或欺诈检测信息，并将其与我们拥有"
+"的有关您的信息相结合。例如，来自服务提供商的欺诈警告，例如身份验证服务。我们"
+"还会通过合作伙伴关系，或通过我们的合作伙伴广告网络提供您的体验和互动，从而获"
+"得有关您和您在脑力中国平台内外的活动的信息。我们还从第三方作者那里收到有关您"
+"作为权利持有人的信息。例如，当您的图像用于我们网站上提供的项目时，以模型形式"
+"发布的信息。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:44
+msgid "我们如何使用个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:46
+msgid "十、我们将使用您的个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:47
+msgid ""
+"1.履行合同，或采取与合同相关的步骤：特别是在协助和处理在网站上发生的交易，例"
+"如从我们的市场购买商品或服务。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:48
+msgid "2.如果这对于我们或第三方的合法利益是必要的。这些利益包括"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:49
+msgid "1)经营网站;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:50
+msgid "2)为您提供网站上描述的服务;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:51
+msgid "3)在您登录我们的任何网站时验证您的身份;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:52
+msgid "4)响应支持工单，并帮助解决任何争议;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:53
+msgid ""
+"5)向您提供有关我们网站和服务的业务新闻和信息，例如通知您有关我们网站的更改，"
+"网站中断或安全更新;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:54
+msgid "6)进行技术分析以确定如何改进我们提供的网站和服务;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:55
+msgid ""
+"7)监控网站上的活动，例如识别潜在的欺诈活动并确保遵守适用于网站的用户条款;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:56
+msgid ""
+"8)管理我们与您的关系，例如回复您在网站上提交给我们的评论或疑问，或询问您的反"
+"馈或您是否想参与调查;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:57
+msgid "9)管理我们的法律和运营事务（包括管理与内容和欺诈事宜相关的风险）;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:58
+msgid "10)培训脑力中国员工如何最好地服务于我们的用户;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:59
+msgid "11)改善我们的产品和服务;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:60
+msgid "12)提供一般行政和履行职能和活动;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:61
+msgid "13)处理您到脑力中国的工作申请；"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:62
+msgid "14)其他合法利益。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:63
+msgid "3.征询您同意的地方"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:64
+msgid "1)为您提供我们认为您可能感兴趣的产品和服务的营销信息;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:65
+msgid ""
+"2)定制我们的服务和网站，例如网站上出现的广告 - 这涉及使用cookie或类似技术 - "
+"以提供更个性化的体验。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:66
+msgid "4.出于法律要求的目的。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:67
+msgid "5.为了回应政府，法院或执法机关，行政机关进行调查的请求。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:69
+msgid "我们披露您的个人信息的情况"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:71
+msgid "十一、我们会向以下收件人披露个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:72
+msgid "1.位于中国四川省成都市的脑力中国总公司;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:73
+msgid ""
+"2.如果适用，您提供的任何项目或服务的作者，他们可以协助支持和许可证验证，他们"
+"可能位于我们的产品可用的任何地区或国家;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:74
+msgid ""
+"3.分包商和服务提供商协助我们处理我们使用个人信息的方式（如上所述），特别是："
+"位于中国与境外的网站托管服务提供商; 技术和客户支持服务； 招聘机构; 营销和分析"
+"服务; 安全和防欺诈服务; 订阅管理服务; 支付处理服务；身份验证服务; 运营工具服"
+"务。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:75
+msgid "4.我们的专业顾问（律师，会计师，财务顾问等）;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:76
+msgid "5.与我们的合规程序和义务有关的监管机构和政府机关;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:77
+msgid "6.与购买有关的全部或部分资产或业务的购买者或潜在购买者及其专业顾问;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:78
+msgid "7.回应第三方有关刑事调查或涉嫌或涉嫌非法活动的请求;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:79
+msgid "8.第三方，以加强或保护我们的权利，或解决财务或声誉风险；"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:80
+msgid "9.与侵犯知识产权或任何其他侵权行为有关的权利持有人等;"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:81
+msgid "10.其他被法律授权或要求的收件人。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:83
+msgid "我们转移和/或存储您的个人信息的情况"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:85
+msgid ""
+"十二、我们的总部设在中国四川成都，因此您的数据将在中国进行处理。我们在上文第"
+"10节中描述的一些收件人，以及我们向其披露您的个人信息的收件人，都位于中国境"
+"内。我们是在您同意本政策的基础上这样做的。为了保护您的信息，我们会尽可能与我"
+"们认为保持可接受的数据安全合规标准的分包商和服务提供商合作。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:87
+msgid "我们如何保护您的个人信息安全"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:89
+msgid ""
+"十三、我们将个人信息存储在由我们和我们的服务提供商管理的安全服务器上，偶尔也"
+"会存储在三方CND，安全的离线硬拷贝文件。我们存储或传输的个人信息受安全和访问控"
+"制的保护，包括用户名和密码身份验证，双重身份验证以及适当的数据加密。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:91 View/safety/privacyAgreement.php:128
+msgid "如何访问您的个人信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:93
+msgid ""
+"十四、您可以登录自己的帐户访问我们收集的有关您的一些个人信息。您还有权请求访"
+"问我们持有的有关您的其他个人信息，并要求更正该数据中的任何错误。您也可以随时"
+"关闭我们任何网站的帐户。要提出访问或更正请求，请使用本政策末尾的联系方式联系"
+"我们的隐私权保护者。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:95
+msgid "关于您的个人信息的营销选择"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:97
+msgid ""
+"十五、如果您同意这样做（例如，如果您已订阅我们的电子邮件列表或表示您有兴趣接"
+"收我们的优惠或信息），我们会通过电子邮件向您发送有关产品和服务的营销信息。我"
+"们觉得你可能会感兴趣。如果您希望以后通过使用通信本身提供的“取消订阅”功能不再"
+"接收此类通信，则可以“选择退出”此类通信。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:98
+msgid ""
+"十六、您还可以选择Cookie，如下所述。通过修改浏览器首选项，您可以选择接受所有"
+"cookie，在设置cookie时收到通知，或拒绝所有cookie。如果您选择拒绝cookie，我们"
+"网站的某些部分可能无法正常运行。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:100
+msgid "Cookies（不是你吃的曲奇饼）和网站分析"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:102
+msgid ""
+"十七、有关如何使用Cookie的更多信息，Web信标和类似的技术在这里查看 Cookie策"
+"略，并了解Cookie的更多一般信息，请参见HTTP://www. AlabutCookix.Org。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:103
+msgid ""
+"十八、当您访问我们的网站时，会记录某些信息，这些信息通常是匿名信息，不会透露"
+"您的身份。如果您已登录自己的帐户，则可能会将某些信息与您的帐户相关联。我们正"
+"在讨论以下类型的细节"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:104
+msgid ""
+"十九、有时，我们会根据之前访问过的网站，使用第三方广告公司来投放广告。例如，"
+"如果您访问我们的网站，您可能会在访问其他网站时看到我们的产品和服务的添加。在"
+"我们的Cookie政策中详细了解您的选项。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:106
+msgid "有关儿童的信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:108
+msgid ""
+"二十、我们的网站不建议16岁以下的儿童独立访问，因此如果您未满16岁，我们会要求"
+"您不要使用我们的网站或向我们提供您的个人信息（如果有必要，您可以请指示您最近"
+"的负责任的成年人为您使用网站！）。如果您的年龄为16至18岁，您可以浏览网站，但"
+"您需要父母或监护人的监督才能成为注册用户。父母或监护人有责任监督孩子对我们网"
+"站的使用。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:110
+msgid "您公开或提供给他人的信息"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:112
+msgid ""
+"二十一、如果您向其他人提供您的个人信息，我们无法控制或承担他们使用或管理该数"
+"据的方式的责任。您可以通过多种方式向其他人提供信息，例如当您在论坛帖子上发布"
+"公共消息，通过社交媒体分享信息或与其他用户（例如第三方作者）联系时，无论是否"
+"通过我们的网站或直接通过电子邮件，在公开您的信息或将您的信息提供给其他人之"
+"前，请仔细考虑。如果通过我们的网站向其他用户提供信息，请询问他们如何处理您的"
+"信息。如果您通过其他网站共享信息，请查看该网站的隐私政策，以了解其信息管理政"
+"策，因为此隐私政策不适用此种情景。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:114
+msgid "我们保留您的个人信息多久"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:116
+msgid ""
+"二十二、只要为您和他人提供服务以及遵守我们的法律义务，我们会保留您的个人信"
+"息。如果您不再希望我们使用您的个人信息或向您提供服务，您可以要求我们删除您的"
+"个人信息并关闭您的平台帐户。请注意，如果您要求删除您的个人信息，我们将根据我"
+"们的合法商业利益保留已删除帐户中的信息，遵守法律，防止欺诈，收取费用，解决纠"
+"纷，解决问题，协助调查，执行服务条款并采取法律允许的其他行动。我们保留的信息"
+"将根据本隐私政策处理。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:118
+msgid "当我们需要更新此政策时"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:120
+msgid ""
+"二十三、我们将不时更改此政策，以确保其与最新的法律要求及我们的隐私管理实践的"
+"任何更改保持同步。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:121
+msgid ""
+"二十四、当我们更改政策时，我们会确保在需要时通知您有关此类更改的信息。此页面"
+"上将始终提供此政策的最新版本的副本。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:123
+msgid "您如何联系我们"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:125
+msgid ""
+"二十五、如果您对我们的隐私惯例或我们管理您的个人信息的方式有任何疑问，请通过"
+"中国四川省成都市武侯区新希望路7号丰德万瑞中心A座25层或privacy@gjnlyd.com与我"
+"们的隐私保护联系人联系。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:126
+msgid ""
+"二十六、我们真的很高兴您完成隐私政策的查阅，因为了解这些内容是了解您的个人信"
+"息使用方式以及如何最好地管理它的最佳方式！"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:130
+msgid ""
+"1.您也有权要求我们将您的个人信息（即以结构化、通用和机器可读格式传送给您），"
+"清除或限制其处理。你也有权反对一些基于我们的合法利益的处理，比如我们为了直接"
+"营销的目的而进行的分析，以及我们请求你同意处理你的数据，如下面更全面地描述的"
+"那样撤销这一同意。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:131
+msgid ""
+"2.在某些情况下，这些权利受到限制 - 例如，我们可以证明我们有法律要求来处理您的"
+"个人信息。在某些情况下，这意味着即使您撤销同意，我们也可能会保留一些数据。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:132
+msgid ""
+"3.如果我们要求您的个人信息遵守法律或合同义务，则必须提供此类数据：如果未提供"
+"此类数据，我们将无法管理与您的合同关系，或履行我们的义务。在所有其他情况下，"
+"提供所请求的个人信息是可选的。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:133
+msgid ""
+"4.如果您有未解决的问题，您也有权向数据保护机构投诉。相关数据保护机构将是该国"
+"的数据保护机构：（i）您的经常居住地; （ii）您的工作地点; （iii）您认为涉嫌侵"
+"权的发生地。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:135
+msgid "个人信息和个人数据在本隐私政策的上下文中具有相同的含义。"
+msgstr ""
+
+#: View/safety/privacyAgreement.php:137
+msgid "脑力中国互联网平台隐私政策v1，生效日期2018年7月18日"
+msgstr ""
+
+#: View/safety/safety-settings.php:25 View/safety/safety-settings.php:26
+msgid "旧密码"
+msgstr "old password"
+
+#: View/safety/safety-settings.php:29 View/safety/safety-settings.php:30
+msgid "新密码"
+msgstr "New password"
+
+#: View/safety/safety-settings.php:33 View/safety/safety-settings.php:34
+msgid "再次输入"
+msgstr "Re-enter"
+
+#: View/safety/safety-settings.php:42
+#, php-format
+msgid "更换后可使用新手机号登陆，当前手机号%s"
+msgstr "New phone number can be used to login. Current phone number:%s"
+
+#: View/safety/safety-settings.php:44 View/safety/safety-settings.php:59
+#: View/safety/safety-settings.php:60
+msgid "手机号码"
+msgstr "Phone Number"
+
+#: View/safety/safety-settings.php:47 View/safety/safety-settings.php:61
+#: View/safety/safety-settings.php:75
+msgid "发送验证码"
+msgstr "Send Code"
+
+#: View/safety/safety-settings.php:50 View/safety/safety-settings.php:51
+#: View/safety/safety-settings.php:64 View/safety/safety-settings.php:65
+#: View/safety/safety-settings.php:78 View/safety/safety-settings.php:79
+msgid "验证码"
+msgstr "Verification code"
+
+#: View/safety/safety-settings.php:57
+msgid "绑定后可使用手机号登陆"
+msgstr "Use mobile phone number to login after binding"
+
+#: View/safety/safety-settings.php:73 View/safety/safety-settings.php:74
+#: View/system/concatUS.php:32
+msgid "邮箱地址"
+msgstr "E-mail"
+
+#: View/safety/safety-settings.php:83
+msgid "下一步"
+msgstr "Next Step"
+
+#: View/safety/safety-settings.php:85
+msgid "更 新"
+msgstr "Update"
+
+#: View/safety/safety-settings.php:135
+msgid "获取短信验证码"
+msgstr "Get SMS Verification Code"
+
+#: View/safety/setting.php:14
+msgid "设置"
+msgstr "Settings"
+
+#: View/safety/setting.php:21 View/safety/userAgreement.php:15
+msgid "用户协议"
+msgstr "User Agreement"
+
+#: View/safety/setting.php:31 View/safety/suggest.php:14
+msgid "意见反馈"
+msgstr "Feedback"
+
+#: View/safety/setting.php:36
+msgid "版本号"
+msgstr "Version No."
+
+#: View/safety/setting.php:41
+msgid "清除缓存"
+msgstr "Clear Cache"
+
+#: View/safety/setting.php:43
+msgid "退出登录"
+msgstr "Log out"
+
+#: View/safety/suggest.php:22
+msgid "您的联系方式"
+msgstr "Your contact information"
+
+#: View/safety/suggest.php:27
+msgid "您对我们的平台有什么建议或反馈？请告诉我们"
+msgstr ""
+"Do you have any suggestions or feedback for our platform? Please let us know!"
+
+#: View/safety/suggest.php:32
+msgid "上传照片(最多四张)"
+msgstr "Upload a photo (up to four PHOTOS)"
+
+#: View/safety/suggest.php:42
+msgid "提交意见反馈"
+msgstr "Submit feedback"
+
+#: View/safety/userAgreement.php:19
+msgid "特别提示"
+msgstr ""
+
+#: View/safety/userAgreement.php:20
+msgid ""
+"脑力(中国)运动开发有限公司（以下简称“脑力中国”）在此特别提醒您（用户）在注册"
+"成为用户之前，请您认真阅读本《用户协议》（以下简称“协议”）并审慎选择接受或不"
+"接受本协议内容。同时，脑力中国特别提醒用户注意本协议中免除脑力中国责任和限制"
+"用户权利的条款。未成年人应在法定监护人的陪同下阅读本协议。您的注册、登录、使"
+"用等行为将视为对本协议的全部接受，并同意接受本协议全部条款的约束。"
+msgstr ""
+
+#: View/safety/userAgreement.php:21
+msgid ""
+"本协议约定脑力中国与用户之间关于“脑力中国”互联网平台服务（以下简称“服务”）的"
+"权利义务。“用户”是指注册、登录、使用本服务的主体。本协议内容将由脑力中国进行"
+"随时更新，更新后的协议条款一经公布即代替原来的协议条款，而不再另行单独通知，"
+"用户可在本网站查阅最新版协议条款。在协议条款更新后，如果用户不接受更新后的条"
+"款，请立即停止使用脑力中国提供的服务，用户继续使用脑力中国提供的服务将被视为"
+"接受更新后的全部协议内容。"
+msgstr ""
+
+#: View/safety/userAgreement.php:23
+msgid "一、账号注册"
+msgstr ""
+
+#: View/safety/userAgreement.php:24
+msgid ""
+"1、用户在使用本服务前需要注册一个“脑力中国”平台帐号。“脑力中国”帐号应当使用手"
+"机号码绑定注册，请用户使用尚未与“脑力中国”帐号绑定的手机号码，以及未被脑力中"
+"国根据本协议封禁的手机号码注册“脑力中国”帐号。脑力中国可以根据用户需求或产品"
+"需要对帐号注册和绑定的方式进行变更，而无须事先通知用户。"
+msgstr ""
+
+#: View/safety/userAgreement.php:25
+msgid ""
+"2、“脑力中国”包含基于地理位置的功能与服务，用户注册时应当授权脑力中国公开及使"
+"用其地理位置信息方可成功注册“脑力中国”帐号。故用户完成注册即表明用户同意脑力"
+"中国提取、公开及使用用户的地理位置信息。如用户需要终止向其他用户公开其地理位"
+"置信息，可自行设置为隐身状态。"
+msgstr ""
+
+#: View/safety/userAgreement.php:26
+msgid ""
+"3、鉴于“脑力中国”帐号的绑定注册方式，您同意脑力中国在注册时将使用您提供的手机"
+"号码及/或自动提取您的手机号码及自动提取您的手机设备识别码等信息用于注册。"
+msgstr ""
+
+#: View/safety/userAgreement.php:27
+msgid ""
+"4、在用户注册及使用本服务时，脑力中国需要搜集能识别用户身份的个人信息以便脑力"
+"中国可以在必要时联系用户，或为用户提供更好的使用体验。脑力中国搜集的信息包括"
+"但不限于用户的姓名、性别、年龄、出生日期、身份证号、地址、学校情况、公司情"
+"况、所属行业、兴趣爱好、常出没的地方、个人说明；脑力中国同意对这些信息的使用"
+"将受限于第三条用户个人隐私信息保护的约束。"
+msgstr ""
+
+#: View/safety/userAgreement.php:29
+msgid "二、服务内容"
+msgstr ""
+
+#: View/safety/userAgreement.php:30
+msgid ""
+"1、本服务的具体内容由脑力中国根据实际情况提供，包括但不限于授权用户通过其帐号"
+"进行即时通讯、添加好友、加入群组、关注他人、发布留言、参加评测、脑力赛事等。"
+"脑力中国可以对其提供的服务予以变更，且脑力中国提供的服务内容可能随时变更；用"
+"户将会收到脑力中国关于服务变更的通知。"
+msgstr ""
+
+#: View/safety/userAgreement.php:31
+msgid ""
+"2、脑力中国提供的服务包含免费服务与收费服务。用户可以通过付费方式购买收费服"
+"务，具体方式为：用户通过网上银行、支付宝或其他“脑力中国”平台提供的付费途径支"
+"付一定数额的人民币购买“脑力中国”平台的虚拟货币——脑币，然后根据脑力中国公布的"
+"资费标准以脑币购买用户欲使用的收费服务，从而获得收费服务使用权限。对于收费服"
+"务，脑力中国会在用户使用之前给予用户明确的提示，只有用户根据提示确认其同意按"
+"照前述支付方式支付费用并完成了支付行为，用户才能使用该等收费服务。支付行为的"
+"完成以银行或第三方支付平台生成“支付已完成”的确认通知为准。"
+msgstr ""
+
+#: View/safety/userAgreement.php:33
+msgid "三、用户个人信息保护"
+msgstr ""
+
+#: View/safety/userAgreement.php:34
+msgid ""
+"1、用户在注册帐号或使用本服务的过程中，可能需要填写或提交一些必要的个人信息，"
+"如法律法规、规章规范性文件（以下称“法律法规”）规定的需要填写的身份信息。如用"
+"户提交的信息不完整或不符合法律法规的规定，则用户可能无法使用本服务或在使用本"
+"服务的过程中受到限制。"
+msgstr ""
+
+#: View/safety/userAgreement.php:35
+msgid ""
+"2、用户个人信息包括：1）用户自行提供的用户个人信息（如注册时填写的手机号码，"
+"电子邮件等个人信息，使用服务时提供的共享信息等）；2）其他方分享的用户个人信"
+"息；3）脑力中国为提供服务而合法收集的用户必要个人信息（如使用服务时系统自动采"
+"集的设备或软件信息，浏览历史信息，通讯时间信息等技术信息，用户开启定位功能并"
+"使用服务时的地理位置信息等）。"
+msgstr ""
+
+#: View/safety/userAgreement.php:36
+msgid ""
+"其中个人隐私信息是指涉及用户个人身份或个人隐私的信息，比如，用户真实姓名、身"
+"份证号、手机号码、手机设备识别码、IP地址、用户聊天记录。非个人隐私信息是指用"
+"户对本服务的操作状态以及使用习惯等明确且客观反映在脑力中国服务器端的基本记录"
+"信息、个人隐私信息范围外的其它普通信息，以及用户同意公开的上述隐私信息。脑力"
+"中国保证在取得用户书面同意的情况下收集、使用或公开用户的个人隐私信息，用户同"
+"意脑力中国无需获得用户的另行确认与授权即可收集、使用或公开用户的非个人隐私信"
+"息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:37
+msgid ""
+"3、尊重用户个人信息的私有性是脑力中国的一贯制度，脑力中国将采取技术措施和其他"
+"必要措施，确保用户个人信息安全，防止在本服务中收集的用户个人信息泄露、毁损或"
+"丢失。在发生前述情形或者脑力中国发现存在发生前述情形的可能时，脑力中国将及时"
+"采取补救措施并告知用户，用户如发现存在前述情形亦需立即与脑力中国联系。"
+msgstr ""
+
+#: View/safety/userAgreement.php:38
+msgid ""
+"4、脑力中国未经用户同意不向任何第三方公开、 透露用户个人隐私信息。但以下特定"
+"情形除外"
+msgstr ""
+
+#: View/safety/userAgreement.php:39
+msgid "(1) 脑力中国根据法律法规规定或有权机关的指示提供用户的个人隐私信息；"
+msgstr ""
+
+#: View/safety/userAgreement.php:40
+msgid ""
+"(2) 由于用户将其用户密码告知他人或与他人共享注册帐户与密码，由此导致的任何个"
+"人信息的泄漏，或其他非因脑力中国原因导致的个人隐私信息的泄露；"
+msgstr ""
+
+#: View/safety/userAgreement.php:41
+msgid "(3) 用户自行向第三方公开其个人隐私信息；"
+msgstr ""
+
+#: View/safety/userAgreement.php:42
+msgid ""
+"(4) 用户与脑力中国及合作单位之间就用户个人隐私信息的使用公开达成约定，脑力中"
+"国因此向合作单位公开用户个人隐私信息；"
+msgstr ""
+
+#: View/safety/userAgreement.php:43
+msgid ""
+"(5) 任何由于黑客攻击、电脑病毒侵入及其他不可抗力事件导致用户个人隐私信息的泄"
+"露；"
+msgstr ""
+
+#: View/safety/userAgreement.php:44
+msgid "(6) 用户个人信息已经经过处理无法识别特定个人且不能复原。"
+msgstr ""
+
+#: View/safety/userAgreement.php:45
+msgid "5、用户同意脑力中国可在以下事项中使用用户的个人隐私信息"
+msgstr ""
+
+#: View/safety/userAgreement.php:46
+msgid "(1) 脑力中国向用户及时发送重要通知，如软件更新、本协议条款的变更；"
+msgstr ""
+
+#: View/safety/userAgreement.php:47
+msgid ""
+"(2) 脑力中国内部进行审计、数据分析和研究等，以改进脑力中国的产品、服务和与用"
+"户之间的沟通；"
+msgstr ""
+
+#: View/safety/userAgreement.php:48
+msgid "(3) 依本协议约定，脑力中国管理、审查用户信息及进行处理措施；"
+msgstr ""
+
+#: View/safety/userAgreement.php:49
+msgid "(4) 适用法律法规规定的其他事项。"
+msgstr ""
+
+#: View/safety/userAgreement.php:50
+msgid ""
+"除上述事项外，如未取得用户事先同意，脑力中国不会将用户个人隐私信息使用于任何"
+"其他用途。"
+msgstr ""
+
+#: View/safety/userAgreement.php:51
+msgid ""
+"6、脑力中国重视对未成年人个人信息的保护。脑力中国将依赖用户提供的个人信息判断"
+"用户是否为未成年人。任何18岁以下的未成年人注册帐号或使用本服务应事先取得家长"
+"或其法定监护人（以下简称\"监护人\"）的书面同意。除根据法律法规的规定及有权机"
+"关的指示披露外，脑力中国不会使用或向任何第三方透露未成年人的聊天记录及其他个"
+"人信息。除本协议约定的例外情形外，未经监护人事先同意，脑力中国不会使用或向任"
+"何第三方透露未成年人的个人信息。任何18岁以下的用户不得下载和使用脑力中国通过"
+"脑力中国软件提供的网络游戏。"
+msgstr ""
+
+#: View/safety/userAgreement.php:52
+msgid ""
+"7、因脑力中国提供的部分服务系基于地理位置提供的赛事或训练，用户确认，其地理位"
+"置信息为非个人隐私信息，用户成功注册“脑力中国”帐号视为确认授权脑力中国提取、"
+"公开及使用用户的地理位置信息。用户地理位置信息将作为用户公开资料之一，由脑力"
+"中国向其他用户公开以便脑力中国向用户提供基于地理位置的相关服务。如用户需要终"
+"止向其他用户公开其地理位置信息，可随时自行设置为隐身状态。"
+msgstr ""
+
+#: View/safety/userAgreement.php:53
+msgid ""
+"8、为了改善脑力中国的技术和服务，向用户提供更好的服务体验，脑力中国或可会自行"
+"收集使用或向第三方提供用户的非个人隐私信息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:54
+msgid ""
+"9、脑力中国保证在合法、正当与必要的原则下收集、使用或者公开用户个人信息且不会"
+"收集与提供的服务无关的用户个人信息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:55
+msgid ""
+"10、脑力中国十分注重保护用户的个人隐私，并制定了《脑力中国隐私权政策》（点击"
+"查看），用户亦可以通过“设置”页面里的“帮助”来进行具体查看，用户确认并同意使用"
+"脑力中国提供的服务将被视为接受《脑力中国隐私权政策》。"
+msgstr ""
+
+#: View/safety/userAgreement.php:57
+msgid "四、内容规范"
+msgstr ""
+
+#: View/safety/userAgreement.php:58
+msgid ""
+"1、本条所述内容是指用户使用本服务过程中所制作、上载、复制、发布、传播的任何内"
+"容，包括但不限于帐号头像、名称、用户说明等注册信息及认证资料，或文字、语音、"
+"图片、视频、图文等发送、回复或自动回复消息和相关链接页面，以及其他使用帐号或"
+"本服务所产生的内容。"
+msgstr ""
+
+#: View/safety/userAgreement.php:59
+msgid ""
+"2、用户不得利用“脑力中国”帐号或本服务制作、上载、复制、发布、传播如下法律、法"
+"规和政策禁止的内容"
+msgstr ""
+
+#: View/safety/userAgreement.php:60
+msgid "(1) 反对宪法所确定的基本原则的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:61
+msgid "(2) 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:62
+msgid "(3) 损害国家荣誉和利益的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:63
+msgid "(4) 煽动民族仇恨、民族歧视，破坏民族团结的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:64
+msgid "(5) 破坏国家宗教政策，宣扬邪教和封建迷信的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:65
+msgid "(6) 散布谣言，扰乱社会秩序，破坏社会稳定的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:66
+msgid "(7) 散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:67
+msgid "(8) 侮辱或者诽谤他人，侵害他人合法权益的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:68
+msgid ""
+"(9) 不遵守法律法规底线、社会主义制度底线、国家利益底线、公民合法权益底线、社"
+"会公共秩序底线、道德风尚底线和信息真实性底线的“七条底线”要求的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:69
+msgid "(10) 含有法律、行政法规禁止的其他内容的信息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:70
+msgid ""
+"3、用户不得利用“脑力中国”帐号或本服务制作、上载、复制、发布、传播如下干扰“脑"
+"力中国”正常运营，以及侵犯其他用户或第三方合法权益的内容"
+msgstr ""
+
+#: View/safety/userAgreement.php:71
+msgid "(1) 含有任何性或性暗示的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:72
+msgid "(2) 含有辱骂、恐吓、威胁内容的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:73
+msgid "(3) 含有骚扰、垃圾广告、恶意信息、诱骗信息的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:74
+msgid "(4) 涉及他人隐私、个人信息或资料的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:75
+msgid "(5) 侵害他人名誉权、肖像权、知识产权、商业秘密等合法权利的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:76
+msgid ""
+"(6) 含有其他干扰本服务正常运营和侵犯其他用户或第三方合法权益内容的信息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:78
+msgid "五、使用规则"
+msgstr ""
+
+#: View/safety/userAgreement.php:79
+msgid ""
+"1、用户在本服务中或通过本服务所传送、发布的任何内容并不反映或代表，也不得被视"
+"为反映或代表脑力中国的观点、立场或政策，脑力中国对此不承担任何责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:80
+msgid "2、用户不得利用“脑力中国”帐号或本服务进行如下行为"
+msgstr ""
+
+#: View/safety/userAgreement.php:81
+msgid "(1) 提交、发布虚假信息，或盗用他人头像或资料，冒充、利用他人名义的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:82
+msgid "(2) 强制、诱导其他用户关注、点击链接页面或分享信息的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:83
+msgid "(3) 虚构事实、隐瞒真相以误导、欺骗他人的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:84
+msgid "(4) 利用技术手段批量建立虚假帐号的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:85
+msgid "(5) 利用“脑力中国”帐号或本服务从事任何违法犯罪活动的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:86
+msgid ""
+"(6) 制作、发布与以上行为相关的方法、工具，或对此类方法、工具进行运营或传播，"
+"无论这些行为是否为商业目的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:87
+msgid ""
+"(7) 其他违反法律法规规定、侵犯其他用户合法权益、干扰“脑力中国”正常运营或脑力"
+"中国未明示授权的行为。"
+msgstr ""
+
+#: View/safety/userAgreement.php:88
+msgid ""
+"3、用户须对利用“脑力中国”帐号或本服务传送信息的真实性、合法性、无害性、准确"
+"性、有效性等全权负责，与用户所传播的信息相关的任何法律责任由用户自行承担，与"
+"脑力中国无关。如因此给脑力中国或第三方造成损害的，用户应当依法予以赔偿。"
+msgstr ""
+
+#: View/safety/userAgreement.php:89
+msgid ""
+"4、脑力中国提供的服务中可能包括广告，用户同意在使用过程中显示脑力中国和第三方"
+"供应商、合作伙伴提供的广告。除法律法规明确规定外，用户应自行对依该广告信息进"
+"行的交易负责，对用户因依该广告信息进行的交易或前述广告商提供的内容而遭受的损"
+"失或损害，脑力中国不承担任何责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:90
+msgid "5、除非脑力中国书面许可，用户不得从事下列任一行为"
+msgstr ""
+
+#: View/safety/userAgreement.php:91
+msgid "(1) 删除软件及其副本上关于著作权的信息；"
+msgstr ""
+
+#: View/safety/userAgreement.php:92
+msgid ""
+"(2) 对软件进行反向工程、反向汇编、反向编译，或者以其他方式尝试发现软件的源代"
+"码；"
+msgstr ""
+
+#: View/safety/userAgreement.php:93
+msgid ""
+"(3) 对脑力中国拥有知识产权的内容进行使用、出租、出借、复制、修改、链接、转"
+"载、汇编、发表、出版、建立镜像站点等；"
+msgstr ""
+
+#: View/safety/userAgreement.php:94
+msgid ""
+"(4) 对软件或者软件运行过程中释放到任何终端内存中的数据、软件运行过程中客户端"
+"与服务器端的交互数据，以及软件运行所必需的系统数据，进行复制、修改、增加、删"
+"除、挂接运行或创作任何衍生作品，形式包括但不限于使用插件、外挂或非经脑力中国"
+"授权的第三方工具/服务接入软件和相关系统；"
+msgstr ""
+
+#: View/safety/userAgreement.php:95
+msgid ""
+"(5) 通过修改或伪造软件运行中的指令、数据，增加、删减、变动软件的功能或运行效"
+"果，或者将用于上述用途的软件、方法进行运营或向公众传播，无论这些行为是否为商"
+"业目的；"
+msgstr ""
+
+#: View/safety/userAgreement.php:96
+msgid ""
+"(6) 通过非脑力中国开发、授权的第三方软件、插件、外挂、系统，登录或使用脑力中"
+"国软件及服务，或制作、发布、传播非脑力中国开发、授权的第三方软件、插件、外"
+"挂、系统。"
+msgstr ""
+
+#: View/safety/userAgreement.php:98
+msgid "六、虚拟货币"
+msgstr ""
+
+#: View/safety/userAgreement.php:99
+msgid ""
+"1、脑币是“脑力中国”平台内的虚拟货币。脑币可用于购买“脑力中国”平台的增值服务，"
+"包括但不限于在线课程、培训、考级、比赛及会员服务，除此外，不得用于其他任何用"
+"途。该等增值服务的价格均以脑币为单位，具体价格信息将由脑力中国自行决定并在相"
+"关服务页面上显示。"
+msgstr ""
+
+#: View/safety/userAgreement.php:100
+msgid ""
+"2、脑币和人民币的兑换比例依用户购买渠道的不同而有不同的兑换比例，具体兑换比例"
+"以用户购买脑币相关渠道服务页面显示为准。脑力中国有权根据运营情况随时变更上述"
+"兑换比例，并将在用户购买脑币相关渠道服务页面显示。"
+msgstr ""
+
+#: View/safety/userAgreement.php:101
+msgid ""
+"3、用户默认已开通脑力中国币账户，可进行脑币购买（下称“充值”）和消费。用户可在"
+"设置页面查询到脑币余额、购买记录和消费记录。脑币相关信息将不作为公开信息。"
+msgstr ""
+
+#: View/safety/userAgreement.php:102
+msgid ""
+"4、用户可以通过网上银行、支付宝或其他“脑力中国”平台提供的充值途径为脑力中国账"
+"户进行充值。用户使用脑币购买相关收费服务后，可将相关收费服务赠与其他用户。用"
+"户确认不会以非法方式或者使用非平台所指定的充值途径进行充值,如果用户违规使用非"
+"脑力中国认可的充值途径非法充值/购买脑币，则脑力中国不保证充值顺利或正确完成，"
+"若因此造成用户权益受损，脑力中国将不会作出任何补偿或赔偿，脑力中国同时保留随"
+"时终止用户脑力中国账号资格及使用各项充值服务的权利，并进行相应惩罚。"
+msgstr ""
+
+#: View/safety/userAgreement.php:103
+msgid ""
+"5、用户确认在进行充值前已经仔细确认过自己的账号并仔细选择了相关操作选项，若因"
+"用户自身输入账号错误、操作不当或不了解充值计费方式等因素造成充错账号、错选充"
+"值种类等情形而损害自身权益的，脑力中国将不会作出任何补偿或赔偿。"
+msgstr ""
+
+#: View/safety/userAgreement.php:104
+msgid ""
+"6、用户确认，脑币一经充值成功，除法律法规明确规定外，在任何情况下不能兑换为法"
+"定货币，不能转让他人。除法律法规明确规定外，脑币账户充值完成后，脑力中国不予"
+"退款。"
+msgstr ""
+
+#: View/safety/userAgreement.php:105
+msgid ""
+"7、用户确认，脑币只能用于购买“脑力中国”平台上的各类增值服务，任何情况下不得与"
+"脑力中国以外的第三方进行脑币交易，亦不得在除“脑力中国”平台以外的第三方平台"
+"（如淘宝）上进行交易；如违反前述约定，造成用户或第三方任何损失，脑力中国不负"
+"任何责任，且如脑力中国有理由怀疑用户的脑力中国账户或使用情况有作弊或异常状"
+"况，脑力中国将拒绝该用户使用脑币进行支付，直至按本协议约定采取相关封禁措施。"
+msgstr ""
+
+#: View/safety/userAgreement.php:106
+msgid ""
+"8、脑力中国有权基于交易安全等方面的考虑不时设定或修改涉及交易的相关事项，包括"
+"但不限于交易限额、交易次数等。用户了解并确认脑力中国的前述设定或修改可能对用"
+"户的交易产生一定的不便，用户对此没有异议。"
+msgstr ""
+
+#: View/safety/userAgreement.php:107
+msgid ""
+"9、用户确认，除法律法规明确规定或本协议另有约定外，用户已购买的任何收费服务不"
+"能以任何理由退购（即退换成脑币或法定货币）或调换成其他服务。"
+msgstr ""
+
+#: View/safety/userAgreement.php:108
+msgid ""
+"10、脑力中国不鼓励未成年人使用虚拟货币服务，未成年人应请监护人操作或在监护人"
+"明示同意下操作，否则不得使用本服务。"
+msgstr ""
+
+#: View/safety/userAgreement.php:109
+msgid ""
+"11、因用户自身的原因导致脑力中国无法提供脑币购买服务或提供脑币购买服务时发生"
+"任何错误而产生的任何损失或责任，由用户自行负责，脑力中国不承担责任，包括但不"
+"限于"
+msgstr ""
+
+#: View/safety/userAgreement.php:110
+msgid "(1)因用户的脑力中国账号丢失、被封禁或冻结；"
+msgstr ""
+
+#: View/safety/userAgreement.php:111
+msgid "(2)用户将密码告知他人导致的财产损失；"
+msgstr ""
+
+#: View/safety/userAgreement.php:112
+msgid "(3)因用户绑定的第三方支付机构账户的原因导致的任何损失或责任；"
+msgstr ""
+
+#: View/safety/userAgreement.php:113
+msgid "(4)其他用户故意或者重大过失或者违反法律法规导致的财产损失。"
+msgstr ""
+
+#: View/safety/userAgreement.php:114
+msgid ""
+"12、用户在使用脑力中国提供的服务时，如出现违反国家法律法规、本协议约定或其他"
+"本平台对用户的管理规定的情形，脑力中国有权暂时或永久封禁用户的账号。账号封禁"
+"后至解禁（如有）前，用户账户上的剩余脑力中国币将被暂时冻结或全部扣除，不可继"
+"续用于购买平台上的虚拟产品或服务，同时不予返还用户购买脑力中国币时的现金价"
+"值。"
+msgstr ""
+
+#: View/safety/userAgreement.php:115
+msgid ""
+"13、用户确认并同意如用户主动注销账号，则用户已充值到账的脑力中国币，购买的虚"
+"拟礼物，游戏币以及会员权益等视为自动放弃，脑力中国不予返还相应的现金价值，也"
+"不会作出任何补偿。"
+msgstr ""
+
+#: View/safety/userAgreement.php:117
+msgid "七、账户管理"
+msgstr ""
+
+#: View/safety/userAgreement.php:118
+msgid ""
+"1、 “脑力中国”帐号的所有权归脑力中国所有，用户完成申请注册手续后，获得“脑力中"
+"国”帐号的使用权，该使用权仅属于初始申请注册人，禁止赠与、借用、租用、转让或售"
+"卖。脑力中国因经营需要，有权回收用户的“脑力中国”帐号。"
+msgstr ""
+
+#: View/safety/userAgreement.php:119
+msgid ""
+"2、用户可以通过1）查看与编辑个人资料页，2）“设置”页面里的“账号与安全”页面来查"
+"询、更改、删除、注销“脑力中国”帐户上的个人资料、注册信息及传送内容等，但需注"
+"意，删除有关信息的同时也会删除用户储存在系统中的文字和图片。用户需承担该风"
+"险。"
+msgstr ""
+
+#: View/safety/userAgreement.php:120
+msgid ""
+"3、用户有责任妥善保管注册帐号信息及帐号密码的安全，因用户保管不善可能导致遭受"
+"盗号或密码失窃，责任由用户自行承担。用户需要对注册帐号以及密码下的行为承担法"
+"律责任。用户同意在任何情况下不使用其他用户的帐号或密码。在用户怀疑他人使用其"
+"帐号或密码时，用户同意立即通知脑力中国。"
+msgstr ""
+
+#: View/safety/userAgreement.php:121
+msgid ""
+"4、用户应遵守本协议的各项条款，正确、适当地使用本服务，如因用户违反本协议中的"
+"任何条款，脑力中国在通知用户后有权依据协议中断或终止对违约用户“脑力中国”帐号"
+"提供服务。同时，脑力中国保留在任何时候收回“脑力中国”帐号、用户名的权利。"
+msgstr ""
+
+#: View/safety/userAgreement.php:122
+msgid ""
+"5、如用户注册“脑力中国”帐号后一年不登录，通知用户后，脑力中国可以收回该帐号，"
+"以免造成资源浪费，由此造成的不利后果由用户自行承担。"
+msgstr ""
+
+#: View/safety/userAgreement.php:123
+msgid ""
+"6、用户可以通过“设置”页面里的“账号与安全”页面来进行账号注销服务，用户确认注销"
+"账号是不可恢复的操作，用户应自行备份与脑力中国账号相关的信息和数据，用户确认"
+"操作之前与脑力中国账号相关的所有服务均已进行妥善处理。用户确认并同意注销账号"
+"后并不代表本脑力中国账号注销前的账号行为和相关责任得到豁免或减轻，如在注销期"
+"间，用户的账号被他人投诉、被国家机关调查或者正处于诉讼、仲裁程序中，脑力中国"
+"有限自行终止用户的账号注销并无需另行得到用户的同意。"
+msgstr ""
+
+#: View/safety/userAgreement.php:125
+msgid "八、数据储存"
+msgstr ""
+
+#: View/safety/userAgreement.php:126
+msgid "1、脑力中国不对用户在本服务中相关数据的删除或储存失败负责。"
+msgstr ""
+
+#: View/safety/userAgreement.php:127
+msgid ""
+"2、脑力中国可以根据实际情况自行决定用户在本服务中数据的最长储存期限，并在服务"
+"器上为其分配数据最大存储空间等。用户可根据自己的需要自行备份本服务中的相关数"
+"据。"
+msgstr ""
+
+#: View/safety/userAgreement.php:128
+msgid ""
+"3、如用户停止使用本服务或本服务终止，脑力中国可以从服务器上永久地删除用户的数"
+"据。本服务停止、终止后，脑力中国没有义务向用户返还任何数据。"
+msgstr ""
+
+#: View/safety/userAgreement.php:129
+msgid "九、风险承担"
+msgstr ""
+
+#: View/safety/userAgreement.php:130
+msgid ""
+"1、用户理解并同意，“脑力中国”仅为用户提供信息分享、传送及获取的平台，用户必须"
+"为自己注册帐号下的一切行为负责，包括用户所传送的任何内容以及由此产生的任何后"
+"果。用户应对“脑力中国”及本服务中的内容自行加以判断，并承担因使用内容而引起的"
+"所有风险，包括因对内容的正确性、完整性或实用性的依赖而产生的风险。脑力中国无"
+"法且不会对因用户行为而导致的任何损失或损害承担责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:131
+msgid ""
+"如果用户发现任何人违反本协议约定或以其他不当的方式使用本服务，请立即向脑力中"
+"国举报或投诉，脑力中国将依本协议约定进行处理。"
+msgstr ""
+
+#: View/safety/userAgreement.php:132
+msgid ""
+"2、用户理解并同意，因业务发展需要，脑力中国保留单方面对本服务的全部或部分服务"
+"内容变更、暂停、终止或撤销的权利，用户需承担此风险。"
+msgstr ""
+
+#: View/safety/userAgreement.php:134
+msgid "十、知识产权声明"
+msgstr ""
+
+#: View/safety/userAgreement.php:135
+msgid ""
+"1、除本服务中涉及广告的知识产权由相应广告商享有外，脑力中国在本服务中提供的内"
+"容（包括但不限于网页、文字、图片、音频、视频、图表等）的知识产权均归脑力中国"
+"所有，但用户在使用本服务前对自己发布的内容已合法取得知识产权的除外。"
+msgstr ""
+
+#: View/safety/userAgreement.php:136
+msgid ""
+"2、除另有特别声明外，脑力中国提供本服务时所依托软件的著作权、专利权及其他知识"
+"产权均归脑力中国所有。"
+msgstr ""
+
+#: View/safety/userAgreement.php:137
+msgid ""
+"3、脑力中国在本服务中所涉及的图形、文字或其组成，以及其他脑力中国标志及产品、"
+"服务名称（以下统称“脑力中国标识”），其著作权或商标权归脑力中国所有。未经脑力"
+"中国事先书面同意，用户不得将脑力中国标识以任何方式展示或使用或作其他处理，也"
+"不得向他人表明用户有权展示、使用、或其他有权处理脑力中国标识的行为。"
+msgstr ""
+
+#: View/safety/userAgreement.php:138
+msgid ""
+"4、上述及其他任何脑力中国或相关广告商依法拥有的知识产权均受到法律保护，未经脑"
+"力中国或相关广告商书面许可，用户不得以任何形式进行使用或创造相关衍生作品。"
+msgstr ""
+
+#: View/safety/userAgreement.php:140
+msgid "十一、法律责任"
+msgstr ""
+
+#: View/safety/userAgreement.php:141
+msgid ""
+"1、如果脑力中国发现或收到他人举报或投诉用户违反本协议约定的，脑力中国有权不经"
+"通知随时对相关内容，包括但不限于用户资料、聊天记录进行审查、删除，并视情节轻"
+"重对违规帐号处以包括但不限于警告、帐号封禁 、设备封禁 、功能封禁 的处罚，且通"
+"知用户处理结果。"
+msgstr ""
+
+#: View/safety/userAgreement.php:142
+msgid ""
+"2、因违反用户协议被封禁的用户，可以自行到 脑力中国官方平台 查询封禁期限，并在"
+"封禁期限届满后自助解封。其中，被实施功能封禁的用户会在封禁期届满后自动恢复被"
+"封禁功能。被封禁用户可向脑力中国网站相关页面提交申诉，脑力中国将对申诉进行审"
+"查，并自行合理判断决定是否变更处罚措施。"
+msgstr ""
+
+#: View/safety/userAgreement.php:143
+msgid ""
+"3、用户理解并同意，脑力中国有权依合理判断对违反有关法律法规或本协议规定的行为"
+"进行处罚，对违法违规的任何用户采取适当的法律行动，并依据法律法规保存有关信息"
+"向有关部门报告等，用户应承担由此而产生的一切法律责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:144
+msgid ""
+"4、用户理解并同意，因用户违反本协议约定，导致或产生的任何第三方主张的任何索"
+"赔、要求或损失，包括合理的律师费，用户应当赔偿脑力中国与合作公司、关联公司，"
+"并使之免受损害。"
+msgstr ""
+
+#: View/safety/userAgreement.php:146
+msgid "十二、不可抗力及其他免责事由"
+msgstr ""
+
+#: View/safety/userAgreement.php:147
+msgid ""
+"1、用户理解并确认，在使用本服务的过程中，可能会遇到不可抗力等风险因素，使本服"
+"务发生中断。不可抗力是指不能预见、不能克服并不能避免且对一方或双方造成重大影"
+"响的客观事件，包括但不限于自然灾害如洪水、地震、瘟疫流行和风暴等以及社会事件"
+"如战争、动乱、政府行为等。出现上述情况时，脑力中国将努力在第一时间与相关单位"
+"配合，及时进行修复，但是由此给用户或第三方造成的损失，脑力中国及合作单位在法"
+"律允许的范围内免责。"
+msgstr ""
+
+#: View/safety/userAgreement.php:148
+msgid ""
+"2、本服务同大多数互联网服务一样，受包括但不限于用户原因、网络服务质量、社会环"
+"境等因素的差异影响，可能受到各种安全问题的侵扰，如他人利用用户的资料，造成现"
+"实生活中的骚扰；用户下载安装的其它软件或访问的其他网站中含有“特洛伊木马”等病"
+"毒，威胁到用户的计算机信息和数据的安全，继而影响本服务的正常使用等等。用户应"
+"加强信息安全及使用者资料的保护意识，要注意加强密码保护，以免遭致损失和骚扰。"
+msgstr ""
+
+#: View/safety/userAgreement.php:149
+msgid ""
+"3、用户理解并确认，本服务存在因不可抗力、计算机病毒或黑客攻击、系统不稳定、用"
+"户所在位置、用户关机以及其他任何技术、互联网络、通信线路原因等造成的服务中断"
+"或不能满足用户要求的风险，因此导致的用户或第三方任何损失，脑力中国不承担任何"
+"责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:150
+msgid ""
+"4、用户理解并确认，在使用本服务过程中存在来自任何他人的包括误导性的、欺骗性"
+"的、威胁性的、诽谤性的、令人反感的或非法的信息，或侵犯他人权利的匿名或冒名的"
+"信息，以及伴随该等信息的行为，因此导致的用户或第三方的任何损失，脑力中国不承"
+"担任何责任。"
+msgstr ""
+
+#: View/safety/userAgreement.php:151
+msgid ""
+"5、用户理解并确认，脑力中国需要定期或不定期地对“脑力中国”平台或相关的设备进行"
+"检修或者维护，如因此类情况而造成服务在合理时间内的中断，脑力中国无需为此承担"
+"任何责任，但脑力中国应事先进行通告。"
+msgstr ""
+
+#: View/safety/userAgreement.php:152
+msgid ""
+"6、脑力中国依据法律法规、本协议约定获得处理违法违规或违约内容的权利，该权利不"
+"构成脑力中国的义务或承诺，脑力中国不能保证及时发现违法违规或违约行为或进行相"
+"应处理。"
+msgstr ""
+
+#: View/safety/userAgreement.php:153
+msgid ""
+"7、用户理解并确认，对于脑力中国向用户提供的下列产品或者服务的质量缺陷及其引发"
+"的任何损失，脑力中国无需承担任何责任"
+msgstr ""
+
+#: View/safety/userAgreement.php:154
+msgid "(1) 脑力中国向用户免费提供的服务；"
+msgstr ""
+
+#: View/safety/userAgreement.php:155
+msgid "(2) 脑力中国向用户赠送的任何产品或者服务。"
+msgstr ""
+
+#: View/safety/userAgreement.php:156
+msgid ""
+"8、在任何情况下，脑力中国均不对任何间接性、后果性、惩罚性、偶然性、特殊性或刑"
+"罚性的损害，包括因用户使用“脑力中国”或本服务而遭受的利润损失，承担责任（即使"
+"脑力中国已被告知该等损失的可能性亦然）。尽管本协议中可能含有相悖的规定，脑力"
+"中国对用户承担的全部责任，无论因何原因或何种行为方式，始终不超过用户因使用脑"
+"力中国提供的服务而支付给脑力中国的费用(如有)。"
+msgstr ""
+
+#: View/safety/userAgreement.php:158
+msgid "十三、服务的变更、中断、终止"
+msgstr ""
+
+#: View/safety/userAgreement.php:159
+msgid ""
+"1、鉴于网络服务的特殊性，用户同意脑力中国有权随时变更、中断或终止部分或全部的"
+"服务（包括收费服务）。脑力中国变更、中断或终止的服务，脑力中国应当在变更、中"
+"断或终止之前通知用户，并应向受影响的用户提供等值的替代性的服务；如用户不愿意"
+"接受替代性的服务，如果该用户已经向脑力中国支付的脑力中国币，脑力中国应当按照"
+"该用户实际使用服务的情况扣除相应脑力中国币之后将剩余的脑力中国币退还用户的脑"
+"力中国币账户中。"
+msgstr ""
+
+#: View/safety/userAgreement.php:160
+msgid ""
+"2、如发生下列任何一种情形，脑力中国有权变更、中断或终止向用户提供的免费服务或"
+"收费服务，而无需对用户或任何第三方承担任何责任"
+msgstr ""
+
+#: View/safety/userAgreement.php:161
+msgid ""
+"(1) 根据法律规定用户应提交真实信息，而用户提供的个人资料不真实、或与注册时信"
+"息不一致又未能提供合理证明；"
+msgstr ""
+
+#: View/safety/userAgreement.php:162
+msgid "(2) 用户违反相关法律法规或本协议的约定；"
+msgstr ""
+
+#: View/safety/userAgreement.php:163
+msgid "(3) 按照法律规定或有权机关的要求；"
+msgstr ""
+
+#: View/safety/userAgreement.php:164
+msgid "(4) 出于安全的原因或其他必要的情形。"
+msgstr ""
+
+#: View/safety/userAgreement.php:166
+msgid "十四、其他"
+msgstr ""
+
+#: View/safety/userAgreement.php:167
+msgid ""
+"1、脑力中国郑重提醒用户注意本协议中免除脑力中国责任和限制用户权利的条款，请用"
+"户仔细阅读，自主考虑风险。未成年人应在法定监护人的陪同下阅读本协议。"
+msgstr ""
+
+#: View/safety/userAgreement.php:168
+msgid ""
+"2、本协议的效力、解释及纠纷的解决，适用于中华人民共和国法律。若用户和脑力中国"
+"之间发生任何纠纷或争议，首先应友好协商解决，协商不成的，用户同意将纠纷或争议"
+"提交脑力中国住所地有管辖权的人民法院管辖。"
+msgstr ""
+
+#: View/safety/userAgreement.php:169
+msgid ""
+"3、本协议的任何条款无论因何种原因无效或不具可执行性，其余条款仍有效，对双方具"
+"有约束力。"
+msgstr ""
+
+#: View/safety/userAgreement.php:170
+msgid ""
+"4、由于互联网高速发展，您与脑力中国签署的本协议列明的条款可能并不能完整罗列并"
+"覆盖您与脑力中国所有权利与义务，现有的约定也不能保证完全符合未来发展的需求。"
+"因此，脑力中国隐私权政策、脑力中国平台行为规范等均为本协议的补充协议，与本协"
+"议不可分割且具有同等法律效力。如您使用脑力中国平台服务，视为您同意上述补充协"
+"议。"
+msgstr ""
+
+#: View/signs/success.php:24
+msgid "恭喜您，签到成功"
+msgstr "Congratulations, sign in successfully"
+
+#: View/signs/success.php:26
+msgid "参赛座位号"
+msgstr "Seat No."
+
+#: View/signs/success.php:27
+#, php-format
+msgid "第%s号"
+msgstr "Number %s"
+
+#: View/signs/success.php:30
+msgid "选手国籍"
+msgstr "Nationality"
+
+#: View/signs/success.php:41
+msgid "去赛事中心"
+msgstr "Go to the match center"
+
+#: View/signs/success.php:47
+msgid "脑力世界杯组委会"
+msgstr "International Intellectual Sports Committee"
+
+#: View/student/index.php:87
+msgid "关于我们"
+msgstr "about us"
+
+#: View/student/index.php:95 View/system/system.php:9
+msgid "体系标准"
+msgstr "System Standard"
+
+#: View/student/index.php:103 View/system/concatUS.php:10
+msgid "合作联系"
+msgstr "Cooperation contact"
+
+#: View/student/index.php:116 View/student/index.php:117
+msgid "推荐课程"
+msgstr "featured courses"
+
+#: View/student/index.php:125
+msgid "课程名称"
+msgstr "Course Name"
+
+#: View/student/index.php:126
+msgid "抢占名额中"
+msgstr ""
+
+#: View/student/index.php:127
+msgid "这里是课程介绍摘要，截取课程简要介绍，不超过30个字符"
+msgstr ""
+
+#: View/supervisor/index.php:15
+msgid "赛场信息记录"
+msgstr "Record of the game information"
+
+#: View/supervisor/index.php:26
+msgid "选手座位号"
+msgstr "Player seat number"
+
+#: View/supervisor/index.php:35
+msgid "拍照佐证（点击拍照或上传）"
+msgstr "Photo Support (Click to take photos or upload)"
+
+#: View/supervisor/index.php:57
+msgid "备注说明"
+msgstr "Note"
+
+#: View/supervisor/logs.php:12
+msgid "监赛记录"
+msgstr "Supervisory record"
+
+#: View/supervisor/logs.php:32
+msgid "暂未上传任何监赛记录"
+msgstr "No record has been uploaded"
+
+#: View/supervisor/logs.php:34
+msgid "新增监赛记录"
+msgstr "New record"
+
+#: View/supervisor/logs.php:50
+msgid "是否删除"
+msgstr "Confirm deletion?"
+
+#: View/supervisor/logs.php:51
+msgid "点错了"
+msgstr "No"
+
+#: View/system/concatUS.php:18
+msgid "秘书处电话"
+msgstr ""
+
+#: View/system/concatUS.php:22
+msgid "商务部电话"
+msgstr ""
+
+#: View/system/concatUS.php:26
+msgid "赛事部电话"
+msgstr ""
+
+#: View/system/concatUS.php:36
+msgid "通讯地址"
+msgstr ""
+
+#: View/system/concatUS.php:37 View/system/concatUS.php:124
+msgid "成都市新希望路7号丰徳万瑞中心A 座25楼"
+msgstr ""
+
+#: View/system/concatUS.php:40
+msgid "官网地址"
+msgstr "Official Website"
+
+#: View/system/concatUS.php:50
+msgid "官方微信号"
+msgstr ""
+
+#: View/system/concatUS.php:53
+msgid "国际脑力运动(gjnlyd)"
+msgstr ""
+
+#: View/system/concatUS.php:122
+msgid "丰德万瑞中心"
+msgstr ""
+
+#: View/system/system-course.php:18
+msgid "国际脑力运动课程体系"
+msgstr ""
+
+#: View/system/system-course.php:26 View/system/system-match.php:26
+#: View/system/system-test.php:26
+msgid ""
+"国际脑力运动训练体系是《脑力运动学》学术体系的实践应用，是根据人类有史以来的"
+"感知运动、心算运动、速读运动、记忆运动、棋牌运动、魔方运动、健脑运动、创新运"
+"动等对训练脑力素质的实践经验，结合神经生理学、信息学、记忆和助记学理论、感知"
+"理论、创造性思维理论、普通科学理论、大脑健康与保健理论、多元智能理论等现代理"
+"论，总结出来的一套科学的脑力运动训练体系，是人类智慧的结晶，将全面指导人们科"
+"学提升注意力、感知力、理解力、记忆力、创造力五大脑力素质，让人类大脑的各个生"
+"理方面、物理方面与智力技巧彼此协同工作，开启大脑智慧，增强创新能力，推动科"
+"技、文化、教育、体育、卫生、经济等社会事业健康发展。"
+msgstr ""
+
+#: View/system/system-course.php:27 View/system/system-match.php:27
+#: View/system/system-test.php:27
+msgid ""
+"任何被誉为“脑力健将”“心算神童”“最强大脑”“记忆大师”“棋王”“脑王”等脑力精英，都"
+"不是天生英才，而是经过科学训练成就的“人造天才”。"
+msgstr ""
+
+#: View/system/system-course.php:28 View/system/system-match.php:28
+#: View/system/system-test.php:28
+msgid ""
+"随着国际脑力运动事业的发展，人类脑力极限每年都被突破，新的世界纪录不断刷新，"
+"充分体现了人类大脑的巨大潜能。 随着众多活跃在《Super Brain》、《最强大脑》、"
+"《挑战不可能》、《跨时代战书》等脑力真人秀节目中的脑力明星快速更替，曾今“碾压"
+"公众智商”的“天才”大量分布在普通的工作岗位上，成为以一当十的顶梁柱，预示着脑力"
+"运动的春天已经来临，脑力训练的社会需求随即引爆。"
+msgstr ""
+
+#: View/system/system-match.php:18
+msgid "国际脑力运动赛事体系"
+msgstr ""
+
+#: View/system/system-teacher.php:19
+msgid "国际脑力运动师资体系"
+msgstr ""
+
+#: View/system/system-teacher.php:25 View/system/system-teacher.php:28
+#: View/teams/teamDetail.php:60
+msgid "认证教练"
+msgstr "Coaches"
+
+#: View/system/system-teacher.php:26
+msgid "基地教练"
+msgstr "Base coach"
+
+#: View/system/system-teacher.php:27
+msgid "认证记忆导师"
+msgstr "Certified Memory Mentor"
+
+#: View/system/system-teacher.php:46 View/teams/coachDetail.php:34
+#: View/teams/coachList.php:605
+msgid "国际脑力运动委员会"
+msgstr "International Intellectual Sports Committee"
+
+#: View/system/system-teacher.php:49
+msgid "高级教练"
+msgstr "Senior Instructor"
+
+#: View/system/system-test.php:18
+msgid "国际脑力运动测评体系"
+msgstr ""
+
+#: View/system/system.php:20
+msgid "课程体系"
+msgstr ""
+
+#: View/system/system.php:37
+msgid "师资体系"
+msgstr ""
+
+#: View/system/system.php:54
+msgid "赛事体系"
+msgstr ""
+
+#: View/system/system.php:71
+msgid "测评体系"
+msgstr ""
+
+#: View/teams/coachDetail.php:14
+msgid "教练详情"
+msgstr "Coach details"
+
+#: View/teams/coachDetail.php:31
+msgid "查看教练证书"
+msgstr "View Certificate"
+
+#: View/teams/coachDetail.php:42 View/teams/coachList.php:209
+#: View/teams/coachList.php:567
+msgid "审核中"
+msgstr "Review pending"
+
+#: View/teams/coachDetail.php:58 View/teams/teamDetail.php:52
+msgid "简 介"
+msgstr "Introduction"
+
+#: View/teams/coachDetail.php:113
+#, php-format
+msgid "%1$s名学员【%2$s位主训】"
+msgstr "%1$s students【%2$s main training】"
+
+#: View/teams/coachDetail.php:114 View/teams/teamDetail.php:63
+msgid "M、R、A分别代表记忆、速读、心算"
+msgstr "M, R, A represent memory, speed reading, mental arithmetic"
+
+#: View/teams/coachDetail.php:121 View/teams/teamDetail.php:73
+#: View/teams/teamDetail.php:93
+msgid "学员ID"
+msgstr "Student ID"
+
+#: View/teams/coachDetail.php:122 View/teams/teamDetail.php:74
+#: View/teams/teamDetail.php:94
+msgid "M级别"
+msgstr "M"
+
+#: View/teams/coachDetail.php:123 View/teams/teamDetail.php:75
+#: View/teams/teamDetail.php:95
+msgid "R级别"
+msgstr "R"
+
+#: View/teams/coachDetail.php:124 View/teams/teamDetail.php:76
+#: View/teams/teamDetail.php:96
+msgid "A级别"
+msgstr "A"
+
+#: View/teams/coachDetail.php:125 View/teams/teamDetail.php:77
+#: View/teams/teamDetail.php:97
+msgid "脑力健将级别"
+msgstr "Brain Athlete level"
+
+#: View/teams/coachDetail.php:162
+msgid "教练证书"
+msgstr "Coach Certificate"
+
+#: View/teams/coachDetail.php:175
+msgid "当前教练未上传证书"
+msgstr "Current coach does not upload certificate"
+
+#: View/teams/coachDetail.php:235
+msgid "是否请TA当教练"
+msgstr "Do you want him/her as coach?"
+
+#: View/teams/coachList.php:36
+msgid "教练列表"
+msgstr "List of coaches"
+
+#: View/teams/coachList.php:95
+msgid "您还未设置任何教练"
+msgstr "You have not set any coaches"
+
+#: View/teams/coachList.php:100
+msgid "去设置我的教练"
+msgstr "Go and set up my coach"
+
+#: View/teams/coachList.php:102
+msgid "无教练信息"
+msgstr "No coaching information"
+
+#: View/teams/coachList.php:164 View/teams/coachList.php:167
+msgid "是否确认向"
+msgstr "Confirm to"
+
+#: View/teams/coachList.php:164 View/teams/coachList.php:167
+msgid "发送教练申请"
+msgstr "Initiate a coach application"
+
+#: View/teams/coachList.php:165
+msgid "同时设为"
+msgstr "Also set to"
+
+#: View/teams/coachList.php:172
+msgid "教练申请"
+msgstr "Coach Application"
+
+#: View/teams/coachList.php:204 View/teams/coachList.php:575
+msgid "教练审核中"
+msgstr "Coach application review"
+
+#: View/teams/coachList.php:244
+msgid "设置主训教练"
+msgstr "Set up the main coach"
+
+#: View/teams/coachList.php:248
+msgid "是否确认设置"
+msgstr "Confirm Set"
+
+#: View/teams/coachList.php:278 View/teams/coachList.php:341
+#: View/teams/coachList.php:579
+msgid "解除主训关系"
+msgstr "Release"
+
+#: View/teams/coachList.php:296
+msgid "更换主训教练"
+msgstr "change main coach"
+
+#: View/teams/coachList.php:299
+msgid "你已设置"
+msgstr "You have set"
+
+#: View/teams/coachList.php:299
+msgid "主训教练是否确认更换"
+msgstr "Does the main training coach confirm the replacement?"
+
+#: View/teams/coachList.php:332 View/teams/coachList.php:423
+#: View/teams/coachList.php:581
+msgid "设为主训教练"
+msgstr "Set main coach"
+
+#: View/teams/coachList.php:335 View/teams/coachList.php:424
+#: View/teams/coachList.php:464 View/teams/coachList.php:582
+msgid "解除教学关系"
+msgstr "Release"
+
+#: View/teams/coachList.php:393
+msgid "解除主训教学关系"
+msgstr "Release"
+
+#: View/teams/coachList.php:396 View/teams/coachList.php:467
+msgid "您是否确认解除与"
+msgstr "Are you sure you want to cancel"
+
+#: View/teams/coachList.php:396
+msgid "的主训关系"
+msgstr "The main training relationship"
+
+#: View/teams/coachList.php:467
+msgid "的教学关系"
+msgstr "teaching relationship"
+
+#: View/teams/coachList.php:492 View/teams/coachList.php:585
+#: View/teams/coachList.php:589
+msgid "请TA当教练"
+msgstr "Ask him to be a coach"
+
+#: View/teams/coachList.php:633
+msgid "设置我的"
+msgstr "Set my"
+
+#: View/teams/team.php:22
+msgid "战队列表"
+msgstr "Team list"
+
+#: View/teams/team.php:42
+msgid "每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入"
+msgstr ""
+"Each student can only join 1 team. To join the new team, you need to "
+"withdraw from the old team and apply to join."
+
+#: View/teams/team.php:45
+msgid "搜 索"
+msgstr "Search"
+
+#: View/teams/team.php:46
+msgid "搜索战队"
+msgstr "Search teams"
+
+#: View/teams/team.php:57
+msgid "暂无任何战队相关"
+msgstr "No available team"
+
+#: View/teams/team.php:121
+msgid "退队申请审核中"
+msgstr "Withdraw team is under review"
+
+#: View/teams/team.php:132 View/teams/team.php:236
+#: View/teams/teamDetail.php:268
+msgid "入队申请审核中"
+msgstr "Enrollment application reviewing"
+
+#: View/teams/team.php:214
+msgid "是否确认加入"
+msgstr "Confirm joining "
+
+#: View/teams/teamDetail.php:30
+msgid "战队申请审核中"
+msgstr "Team application reviewing"
+
+#: View/teams/teamDetail.php:32 View/teams/teamDetail.php:310
+msgid "离队申请审核中"
+msgstr "Leaving application reviewing"
+
+#: View/teams/teamDetail.php:59 View/teams/teamDetail.php:61
+msgid "普通队员"
+msgstr "Members"
+
+#: View/teams/teamDetail.php:246
+#, php-format
+msgid "是否确认加入%s"
+msgstr "Are you sure you want to join %s"
+
+#: View/teams/teamDetail.php:289
+#, php-format
+msgid "是否确认退出%s"
+msgstr "Confirm exit %s"
+
+#: View/trains/answer-log.php:116
+#, php-format
+msgid "您的得分%s分"
+msgstr "Score: %s"
+
+#: View/trains/answer-log.php:178
+msgid "再来一局"
+msgstr "Restart"
+
+#: View/trains/answer-log.php:179
+msgid "返回列表"
+msgstr "Return to list"
+
+#: View/trains/history.php:12
+msgid "我的训练记录"
+msgstr "Training record"
+
+#: View/trains/history.php:19
+msgid "温馨提示:训练记录最多保存100条"
+msgstr "Tips: Training records can be saved up to 100"
+
+#: View/trains/history.php:25
+msgid "详情"
+msgstr "Details"
+
+#: View/trains/history.php:28 View/trains/history.php:39
+msgid "马上去训练"
+msgstr "Training now"
+
+#: View/trains/index.php:15
+msgid "训练类型"
+msgstr "Training type"
+
+#: View/trains/index.php:26
+msgid "暂无专项比賽训练"
+msgstr "No special competition training"
+
+#: View/trains/index.php:43
+msgid "暂未开放"
+msgstr "Function is not yet open"
+
+#: View/trains/lists.php:21
+msgid "暂无专项训练"
+msgstr "No special training"
+
+#: View/trains/matching-numberBattle.php:76
+#: View/trains/matching-pokerRelay.php:94
+msgid "触发防作弊系统"
+msgstr "Trigger Anti-cheat system"
+
+#: View/trains/ready-kysmSetting.php:9
+msgid "快眼训练设置"
+msgstr "Quick glance training settings"
+
+#: View/trains/ready-kysmSetting.php:11
+msgid "闪现时间"
+msgstr "Flash time"
+
+#: View/trains/ready-kysmSetting.php:11
+msgid "毫秒"
+msgstr "ms"
+
+#: View/trains/ready-kysmSetting.php:15 View/trains/ready.php:279
+msgid "开始训练"
+msgstr "Start training"
+
+#: View/trains/ready.php:33 View/trains/ready.php:75 View/trains/ready.php:117
+#: View/trains/ready.php:155 View/trains/ready.php:197
+#: View/trains/ready.php:235
+msgid "项目意义"
+msgstr "Project significance"
+
+#: View/trains/ready.php:37 View/trains/ready.php:79 View/trains/ready.php:121
+#: View/trains/ready.php:159 View/trains/ready.php:201
+#: View/trains/ready.php:239
+msgid "比赛规程"
+msgstr "Competition rules"
+
+#: View/trains/ready.php:47 View/trains/ready.php:89 View/trains/ready.php:131
+#: View/trains/ready.php:169 View/trains/ready.php:211
+#: View/trains/ready.php:249
+msgid "评判标准"
+msgstr "Judging criteria"
+
+#: View/wallet/balanceWater.php:13
+msgid "余额收支记录"
+msgstr "Balance income and expenditure record"
+
+#: View/wallet/bindCard.php:15
+msgid "收款账户管理"
+msgstr "Collection Account Management"
+
+#: View/wallet/bindCard.php:21 View/wallet/bindCard.php:22
+msgid "开户姓名"
+msgstr "Account name"
+
+#: View/wallet/bindCard.php:25 View/wallet/bindCard.php:26
+msgid "开户行"
+msgstr "Opening Bank"
+
+#: View/wallet/bindCard.php:29 View/wallet/bindCard.php:30
+msgid "开户账号"
+msgstr "Account Opening"
+
+#: View/wallet/bindCard.php:33
+msgid "银行预留手机号"
+msgstr "Bank reserved Cell phone number"
+
+#: View/wallet/bindCard.php:34
+msgid "预留手机号"
+msgstr "Bank reserved Cell phone number"
+
+#: View/wallet/bindCard.php:37 View/wallet/makeCash.php:32
+msgid "保存"
+msgstr "Save"
+
+#: View/wallet/coinWaterList.php:15
+msgid "脑币收支记录"
+msgstr "Brain currency income and expenditure record"
+
+#: View/wallet/makeCash.php:15
+msgid "提现"
+msgstr "Withdraw"
+
+#: View/wallet/makeCashType.php:15
+msgid "提现方式"
+msgstr "Withdrawal method"
+
+#: conf/functions.php:6 conf/functions.php:27
+msgid "儿童组"
+msgstr "Children"
+
+#: conf/functions.php:6 conf/functions.php:24
+msgid "少年组"
+msgstr "Junior"
+
+#: conf/functions.php:6 conf/functions.php:21
+msgid "成年组"
+msgstr "Adult"
+
+#: conf/functions.php:6 conf/functions.php:18
+msgid "老年组"
+msgstr "Senior"
+
+#: nlyd-student.php:260
+msgid "已加载全部数据"
+msgstr "No more content"
+
+#: nlyd-student.php:261
+msgid "加载更多"
+msgstr "Load more"
+
+#: nlyd-student.php:268
+msgid "必填项不能为空"
+msgstr "Required field cannot be empty"
+
+#: nlyd-student.php:269
+msgid "手机号格式不正确"
+msgstr "Phone number is incorrect"
+
+#: nlyd-student.php:270
+msgid "邮箱格式不正确"
+msgstr "Mailbox format is incorrect"
+
+#: nlyd-student.php:271
+msgid "链接格式不正确"
+msgstr "Incorrect link format"
+
+#: nlyd-student.php:272
+msgid "只能填写数字"
+msgstr "Only numbers can be filled"
+
+#: nlyd-student.php:273
+msgid "日期格式不正确"
+msgstr "Date format is incorrect"
+
+#: nlyd-student.php:274
+msgid "请输入正确的身份证号"
+msgstr "Please enter the correct ID number"
+
+#: nlyd-student.php:275
+msgid "手机号或邮箱格式不正确"
+msgstr "Phone number or mailbox format is incorrect"
+
+#: nlyd-student.php:276
+msgid "密码必须是6位以上含字母及数字"
+msgstr "The password must be more than 6 characters with letters and numbers"
+
+#: nlyd-student.php:277
+msgid "两次输入密码不一致"
+msgstr "Two times the input password is inconsistent"
+
+#: nlyd-student.php:278
+msgid "姓名格式不正确"
+msgstr "Name format is incorrect"
+
+#: nlyd-student.php:279
+msgid "含有非法字符"
+msgstr "Contains illegal characters"
+
+#: nlyd-student.php:285
+msgid "当前功能暂未开放，敬请期待"
+msgstr "The current function is not yet open. Stay tuned"
+
+#: nlyd-student.php:286
+msgid "请使用浏览器自带分享功能"
+msgstr "Please use the browser's own sharing function"
+
+#: nlyd-student.php:287
+msgid "点击右上角分享给好友或朋友圈"
+msgstr "Click on the top right corner to share to friends or friend Circle"
+
+#: nlyd-student.php:330
+msgid "请使用微信或Safari浏览器打开"
+msgstr "Please use WeChat or Safari browser to open"
+
+#: nlyd-student.php:352
+msgid "请使用微信或谷歌浏览器打开"
+msgstr "Please use WeChat or Google Chrome to open"
+
+#: nlyd-student.php:384
+msgid "账号异地登录,即将退出"
+msgstr "The account is logged in from another place and will be logged out."
+
+#: nlyd-student.php:384
+msgid "请及时修改密码"
+msgstr "Please change your password in time"
+
+#. Plugin Name of the plugin/theme
+msgid "Application Student 项目学生端"
+msgstr "Project Student-side"
+
+#. Plugin URI of the plugin/theme
+msgid "http://localhost/wordpress/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "学生端功能集合"
+msgstr "Student-side Feature Set"
+
+#. Author of the plugin/theme
+msgid "leo"
+msgstr "leo"
+
+#. Author URI of the plugin/theme
+msgid "--"
+msgstr ""
+
+#~ msgid "城市信息"
+#~ msgstr "City Information"
+
+#~ msgid "未检测到题目信息"
+#~ msgstr "No questions content detected"
+
+#~ msgid "座位号"
+#~ msgstr "Seat No."
+
+#~ msgid "获奖学员"
+#~ msgstr "Winners"
+
+#~ msgid "你未进行实名认证\\n即将跳转到实名认证页"
+#~ msgstr ""
+#~ "You do not have ID authentication\\n will jump to the Certification page"
+
+#~ msgid "该用户未成功匹配参赛资格\\n请确认该选手实名信息"
+#~ msgstr ""
+#~ "The user failed to match the qualification \\n. Please confirm the ID "
+#~ "information."
+
+#~ msgid "进行"
+#~ msgstr "Upcoming"
+
+#~ msgid "本题无解S"
+#~ msgstr "Unsolvable"
+
+#~ msgid "本题无解a"
+#~ msgstr "Unsolvable"
+
+#~ msgid "比赛等待"
+#~ msgstr "Competition waiting"
+
+#~ msgid "第1个项目"
+#~ msgstr "1st Item"
+
+#~ msgid "第1轮"
+#~ msgstr "1st Round"
+
+#~ msgid "报名日期"
+#~ msgstr "Date"
+
+#~ msgid "第一轮"
+#~ msgstr "First round"
+
+#~ msgid "第%轮"
+#~ msgstr "%sth Round"
+
+#~ msgid "你好"
+#~ msgstr "hello"

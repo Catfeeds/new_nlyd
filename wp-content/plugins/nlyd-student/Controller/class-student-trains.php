@@ -584,7 +584,7 @@ class Student_Trains extends Student_Home
                 $count_down = 1200;
                 break;
             case 'kysm':
-                $count_down = 600;
+                $count_down = 900;
                 break;
             case 'pkjl':
                 $count_down = 900;

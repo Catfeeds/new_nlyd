@@ -61,7 +61,7 @@
                         <form class="layui-form nl-page-form width-margin-pc have-bottom">
                             <div class="form-inputs"> -->
                                 <div class="form-input-row">
-                                    <div class="form-input-label"><div><?=__('区 域', 'nlyd-student')?></div></div>
+                                    <div class="form-input-label"><div><?=__('国家&地区', 'nlyd-student')?></div></div>
                                     <input class="nl-input" name="nationality" value='<?=empty($user_info['user_nationality']) ? '中华人民共和国' : $user_info['user_nationality'];?>' readonly  id="trigger4" placeholder="<?=__('选择国籍', 'nlyd-student')?>">
                                     <input type="hidden" name="nationality_pic" value='<?=empty($user_info['user_nationality_pic']) ? 'cn' : $user_info['user_nationality_pic']?>'  id="src">
                                     <input type="hidden" name="nationality_short" value='<?=empty($user_info['user_nationality_short']) ? 'CHN' : $user_info['user_nationality_short']?>'  id="short">

@@ -1611,6 +1611,118 @@ class Match_Ajax
             return false;
         }
     }
+
+    /**
+     * 考级相关文件上传
+     */
+    public function grading_content_upload(){
+
+        if(empty($_FILES['file']['tmp_name'])) wp_send_json_error();
+
+        switch ($_POST['memory_type']){
+            case 'vocabulary':
+                $file_path = leo_match_path.'/upload/vocabulary';
+                if(!file_exists($file_path)){
+                    mkdir($file_path,0755,true);
+                }
+                $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/string.txt');
+                if($result){
+
+                    $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/string.txt'));
+                    $json = json_encode(str2arr($str,' '));
+
+                    if($_POST['handle'] == 1 && file_exists($file_path.'/vocabulary.json')){
+
+                        $array = json_decode(file_get_contents($file_path.'/vocabulary.json'),true);
+                        $new_ = array_unique(array_merge(str2arr($str,' '),$array));
+                        $a = file_put_contents($file_path.'/vocabulary.json',$new_);
+                    }else{
+                        $a = file_put_contents($file_path.'/vocabulary.json',$json);
+                    }
+                    //print_r($a);die;
+                }
+                break;
+            case 'book':
+                if(empty($_POST['memory_grade'])) wp_send_json_error('请选择记忆等级');
+                $file_path = leo_match_path.'/upload/book';
+                if(!file_exists($file_path)){
+                    mkdir($file_path,0755,true);
+                }
+                if($_POST['handle'] == 1){
+                    $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/memory.txt');
+                    if($result){
+                        $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/memory.txt'));
+                        $a = file_put_contents($file_path.'/memory'.$_POST['memory_grade'].'.txt',$str,FILE_APPEND);
+                        //print_r($a);die;
+                    }
+                }else{
+
+                    $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/memory'.$_POST['memory_grade'].'.txt');
+                }
+
+                break;
+            case 'people':
+                $file_path = leo_match_path.'/upload/people';
+                if(!file_exists($file_path)){
+                    mkdir($file_path,0755,true);
+                }
+                if($_POST['handle'] == 2 && file_exists($file_path)){
+                    //刪除目录及文件
+                    $this->removeDir($file_path);
+
+                    mkdir($file_path,0755,true);
+
+                }
+
+                $success = 0;
+                foreach ($_FILES['file']['tmp_name'] as $k => $v){
+
+                    if(move_uploaded_file($v, $file_path.'/'.$_FILES['file']['name'][$k])){
+                        $success ++;
+                    }else{
+                        $error = $success+1;
+                    }
+                }
+
+                if($success == count($_FILES['file']['tmp_name'])){
+                    $a = true;
+                }else{
+                    wp_send_json_error('第'.$error.'张未上传成功');
+                }
+                break;
+            default:
+                wp_send_json_error('请选择类别');
+                break;
+        }
+
+        die;
+    }
+
+    /**
+     * 删除非空目录的解决方案
+     * @param $dirName
+     * @return bool
+     */
+    public function removeDir($dirName)
+    {
+        if(! is_dir($dirName))
+        {
+            return false;
+        }
+        $handle = @opendir($dirName);
+        while(($file = @readdir($handle)) !== false)
+        {
+            if($file != '.' && $file != '..')
+            {
+                $dir = $dirName . '/' . $file;
+                is_dir($dir) ? removeDir($dir) : @unlink($dir);
+            }
+        }
+        closedir($handle);
+
+        return rmdir($dirName) ;
+    }
+
 }
 
 new Match_Ajax();
