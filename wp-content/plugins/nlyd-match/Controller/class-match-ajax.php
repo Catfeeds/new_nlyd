@@ -1679,6 +1679,9 @@ class Match_Ajax
 
                 break;
             case 'people':
+                if(count($_FILES['file']['name']) > 20){
+                    wp_send_json_error('每次上传不能超过20张照片');
+                }
                 $file_path = leo_match_path.'/upload/people';
                 if(!file_exists($file_path)){
                     mkdir($file_path,0755,true);
