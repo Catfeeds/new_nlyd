@@ -1653,7 +1653,6 @@ class Match_Ajax
                 if($result){
 
                     $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/temporary.txt'));
-                    //print_r($memory);die;
 
                     if(file_exists($file_path.'/memory.json')){
                         $array = json_decode(file_get_contents($file_path.'/memory.json'),true);
