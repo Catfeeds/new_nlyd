@@ -71,8 +71,8 @@
                 processData : false,
                 cache : false,
                 success: function(res, textStatus, jqXHR){
-
-                    alert(res.data.info);
+                    //return false;
+                    alert(res.data);
                     if(res.success){
                         history.go(0)
                     }

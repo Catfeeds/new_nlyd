@@ -110,7 +110,10 @@ class Student_Timer
         $switch = get_option('default_setting')['default_timer'];
         if($switch == 1){
             $timer = new Timer();
+            //比赛
             $timer->wpjam_daily_function();
+            //考级
+            $timer->wpjam_daily_grading();
         }
         $view = student_view_path.'/public/timer.php';
         load_view_template($view);

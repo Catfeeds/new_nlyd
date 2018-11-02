@@ -533,7 +533,7 @@ class Student_Trains extends Student_Home
             'my_score'=>!empty($row['my_score']) ? $row['my_score'] : $my_score,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'recur_url'=>home_url('/trains/initial/genre_id/'.$genre_id.'/type/'.$this->project_type.'/match_more/'.$match_more), //再来一局
-            'revert_url'=>$_SERVER['SERVER_ADDR'] == 'ydbeta.gjnlyd.com' ? home_url('/trains/lists/id/52692/') : home_url('trains'),//返回项目列表,
+            'revert_url'=>$_SERVER['HTTP_HOST'] == 'ydbeta.gjnlyd.com' ? home_url('/trains/lists/id/52692/') : home_url('trains'),//返回项目列表,
             'match_more'=>isset($_GET['match_more']) ? $_GET['match_more'] : 1,
         );
 

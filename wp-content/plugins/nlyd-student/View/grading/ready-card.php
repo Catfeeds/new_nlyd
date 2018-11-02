@@ -9,7 +9,7 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row">
-                        <div class="c_black match_info_font"><div><?=__('随机中文词语记忆', 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('人脉信息记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <!-- <i class="iconfont">&#xe685;</i> -->
@@ -39,7 +39,7 @@ jQuery(function($) {
     var _project_id=2;
     var _match_more=3;
     var questions_answer=['','','']
-    var matching_question=$.GetSession('matching_question','true');
+    // var matching_question=$.GetSession('matching_question','true');
     // if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
     //     questions_answer=matching_question['questions_answer']
     // }else{
@@ -74,8 +74,10 @@ jQuery(function($) {
                     +'<div class="img-box card_img">'
                         +'<img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">'
                     +'</div>'
-                    +'<div class="card_name c_black">名字</div>'
-                    +'<div class="card_phone c_black">18140022053</div>'
+                    +'<div class="card_detail">'
+                        +'<div class="card_name c_black">名字</div>'
+                        +'<div class="card_phone c_black">18140022053</div>'
+                    +'</div>'
                 +'</div>'
         $('.matching-number-zoo').append(dom)
     })

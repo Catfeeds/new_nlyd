@@ -63,6 +63,10 @@ class Timer
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
             //var_dump($rows);
+            //获取训练题库
+            $cats = $wpdb->get_results("select term_id,slug from {$wpdb->prefix}terms where slug in('en-test-question','cn-test-question')" ,ARRAY_A);
+            $test = array_column($cats,'slug','term_id');
+
             $new_time = get_time('mysql');
             foreach ($rows as $v){
 
@@ -82,6 +86,28 @@ class Timer
                     }else{
                         //已结束
                         $save['match_status'] = -3;
+
+                        //将比赛题库清空
+                        $sql = "select a.post_id,c.slug
+                                from {$wpdb->prefix}match_questions a 
+                                left join {$wpdb->prefix}term_relationships b on a.post_id = b.object_id
+                                left join {$wpdb->prefix}terms c on b.term_taxonomy_id = c.term_id
+                                where a.match_id = {$v['match_id']} AND a.post_id != ''
+                                ";
+                        $results = $wpdb->get_results($sql,ARRAY_A);
+                        if(!empty($results)){
+                            foreach ($results as $x){
+                                if($x['slug'] == 'cn-match-question'){
+                                    $cat_id['term_taxonomy_id'] = array_search('cn-test-question',$test);
+                                }elseif ($x['slug'] == 'en-match-question'){
+                                    $cat_id['term_taxonomy_id'] = array_search('en-test-question',$test);
+                                }
+                                //print_r($cat_id);
+                                $b = $wpdb->update($wpdb->prefix.'term_relationships',$cat_id,array('object_id'=>$x['post_id']));
+                                /*die;
+                                print_r($b);*/
+                            }
+                        }
                     }
                     //var_dump($v['match_id']);
                     //var_dump($save);
@@ -118,6 +144,106 @@ class Timer
         //$myfile = file_put_contents(wp_upload_dir()['basedir'].'/timer-log/timer-log.txt', get_time('mysql')."  This is a timer ".$type." \r\n", FILE_APPEND);
 
     }
+
+
+    //考级自动更改状态
+    public function wpjam_daily_grading(){
+
+        global $wpdb;
+        $map = array();
+        $map[] = ' a.post_type = "grading" ';
+        $map[] = ' a.post_status = "publish" ';
+        $map[] = ' c.meta_value="ON" ';
+        $where = join(' and ',$map);
+        $filed = 'a.post_title,b.id,b.grading_id,b.start_time,b.end_time,b.entry_end_time,c.meta_value as match_switch';
+        $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
+                RIGHT JOIN {$wpdb->prefix}grading_meta b ON a.ID = b.grading_id
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
+                WHERE {$where}
+                ORDER BY b.start_time DESC
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+            //var_dump($rows);
+            //获取训练题库
+            $cats = $wpdb->get_results("select term_id,slug from {$wpdb->prefix}terms where slug in('cn-grading-test-question','en-grading-test-question')" ,ARRAY_A);
+            $test = array_column($cats,'slug','term_id');
+
+            $new_time = get_time('mysql');
+            foreach ($rows as $v){
+
+                if($v['match_switch'] == 'ON'){
+
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['status'] = 1;
+                    }
+                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                        //等待开赛
+                        $save['status'] = -2;
+                    }
+                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                        //进行中
+                        $save['status'] = 2;
+                    }else{
+                        //已结束
+                        $save['status'] = -3;
+
+                        //将比赛题库清空
+                        $sql = "select a.post_id,c.slug
+                                from {$wpdb->prefix}match_questions a 
+                                left join {$wpdb->prefix}term_relationships b on a.post_id = b.object_id
+                                left join {$wpdb->prefix}terms c on b.term_taxonomy_id = c.term_id
+                                where a.match_id = {$v['grading_id']} AND a.post_id != ''
+                                ";
+                        $results = $wpdb->get_results($sql,ARRAY_A);
+                        if(!empty($results)){
+                            foreach ($results as $x){
+                                if($x['slug'] == 'cn-grading-question'){
+                                    $cat_id['term_taxonomy_id'] = array_search('cn-grading-test-question',$test);
+                                }elseif ($x['slug'] == 'en-grading-question'){
+                                    $cat_id['term_taxonomy_id'] = array_search('en-grading-test-question',$test);
+                                }
+                                //print_r($cat_id);
+                                $b = $wpdb->update($wpdb->prefix.'term_relationships',$cat_id,array('object_id'=>$x['post_id']));
+                                /*die;
+                                print_r($b);*/
+                            }
+                        }
+                    }
+                    //var_dump($v['match_id']);
+                    //var_dump($save);
+                    //改变比赛状态
+                    $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
+                    //var_dump($a);
+                    //改变比赛项目状态
+                    /*$sql1 = "select id,match_id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$v['match_id']} ";
+                    $project_rows = $wpdb->get_results($sql1,ARRAY_A);
+                    if(!empty($project_rows)){
+                        foreach ($project_rows as $val){
+
+                            if($new_time < $val['start_time']){
+                                //未开始
+                                $status['status'] = 1;
+                            }elseif ($val['start_time'] <= $new_time && $new_time <= $val['end_time']){
+                                //进行中
+                                $status['status'] = 2;
+                            }else{
+                                //进行中
+                                $status['status'] = -1;
+                            }
+
+                            //改变比赛项目状态
+                            $b = $wpdb->update($wpdb->prefix.'match_project_more',$status,array('id'=>$val['id'],'match_id'=>$val['match_id']));
+                        }
+                    }*/
+                    //print_r($project_rows);
+                }
+            }
+        }
+    }
+
 
     public function wpjam_more_reccurences() {
 

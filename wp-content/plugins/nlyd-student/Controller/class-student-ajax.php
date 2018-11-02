@@ -396,6 +396,7 @@ class Student_Ajax
             'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
             'created_time'=>get_time('mysql'),
             'created_microtime'=>str2arr(microtime(),' ')[0],
+            'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
         );
 
          /*print_r($insert);
@@ -3720,6 +3721,113 @@ class Student_Ajax
         }else{
             wp_send_json_error(array('info'=>'删除失败'));
         }
+    }
+
+    /**
+     * 获取考级
+     */
+    public function get_grading_logs(){
+        global $wpdb,$current_user;
+        $map = array();
+        $map[] = " a.post_status = 'publish' ";
+        $map[] = " a.post_type = 'grading' ";
+        //判断往期/近期
+        if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
+            $map[] = " b.status = -3 ";     //历史
+            $match_type = 'history';
+            $order = ' b.start_time desc ';
+
+        }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
+            $map[] = " b.status = 1 ";     //报名中
+            $match_type = 'signUp';
+            $order = ' b.entry_end_time asc ';
+        }
+        else{
+            $map[] = " (b.status = -2  or b.status = 2) ";    //比赛
+            $match_type = 'recent';
+            $order = ' b.start_time asc ';
+        }
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $where = join(' and ',$map);
+
+        $sql = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,
+                a.post_content,b.grading_notice_url,
+                DATE_FORMAT(b.start_time,'%Y-%m-%d %H:%i') start_time,
+                if(b.address = '','--',b.address) address,
+                b.cost,b.entry_end_time,b.status ,c.user_id
+                from {$wpdb->prefix}posts a
+                left join {$wpdb->prefix}grading_meta b on a.ID = b.grading_id
+                left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
+                where {$where} order by {$order} limit $start,$pageSize;
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无考级', 'nlyd-student')));
+        foreach ($rows as $k => $val){
+
+            //获取参赛须知
+            $rows[$k]['match_notice_url'] = !empty($val['match_notice_url']) ? $val['match_notice_url'] : '';
+
+            //获取报名人数
+            $sql_ = "select count(a.id) total 
+                      from {$wpdb->prefix}order a 
+                      right join {$wpdb->prefix}users b on a.user_id = b.ID
+                      where match_id = {$val['ID']} and pay_status in(2,3,4) and order_type=1";
+
+            //print_r($sql_);
+            $row = $wpdb->get_row($sql_,ARRAY_A);
+            $rows[$k]['entry_total'] = !empty($row['total']) ? $row['total'] : 0;
+            //两个链接
+            if($val['status'] == 2){
+                //比赛中
+                $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                $button_title = __('进入考级', 'nlyd-student');
+                $rows[$k]['status_cn'] = __('考级中', 'nlyd-student');
+            }
+            else if ($val['status'] == 1){
+                //报名中
+                $url = home_url('matchs/confirm/match_id/'.$val['ID']);
+                $button_title = __('参赛报名', 'nlyd-student');
+                $rows[$k]['match_status_cn'] = __('报名中', 'nlyd-student');
+            }
+            else if ($val['status'] == -1){
+                //未开始
+                $url = '';
+                $rows[$k]['match_status_cn'] = __('未开始', 'nlyd-student');
+            }
+            else if($val['status'] == -3){
+                //已结束
+                $url = '';
+                $rows[$k]['match_status_cn'] = __('已结束', 'nlyd-student');
+            }
+            else{
+                //等待开赛
+                $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                $button_title = __('等待开赛', 'nlyd-student');
+                $rows[$k]['match_status_cn'] = __('等待开赛', 'nlyd-student');
+            }
+            $rows[$k]['match_status'] = $val['status'];
+            $rows[$k]['button_title'] = $button_title;
+            $rows[$k]['right_url'] = $url;
+            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
+
+            if($_POST['match_type'] =='history'){
+                $button_title = __('查看排名', 'nlyd-student');
+                $rows[$k]['right_url'] = home_url('matchs/record/match_id/'.$val['ID']);
+            }
+        }
+
+        wp_send_json_success(array('info'=>$rows));
     }
 
 }

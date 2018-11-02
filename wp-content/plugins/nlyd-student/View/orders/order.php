@@ -105,7 +105,7 @@
                                 </div> 
                                 <!-- 待支付 -->
                                 <div class="layui-tab-item flow-default" id="apply">
-                                    <div class="order-row layui-row">
+                                    <!-- <div class="order-row layui-row">
                                         <div class="order-title layui-row width-padding width-padding-pc">
                                             <span class="pull-left">创建时间：2017-07-24 13:20</span>
                                             <span class="pull-right orange">待支付</span>
@@ -161,7 +161,7 @@
                                             <a href="" class="order-right-btn blue">支付订单</a>
                                             <div class="order-left-btn">取消订单</div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div> 
                                 <!-- 代发货 -->
                                 <div class="layui-tab-item flow-default" id="send">
@@ -290,7 +290,14 @@ layui.use(['element','flow'], function(){
                             isClick[data_id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                    
+
+                                    if(v.pay_status=="1"){//1待支付
+
+                                    }else if(v.pay_status=="2"){//2待发货
+
+                                    }else if(v.pay_status=="3"){//3待收货
+
+                                    }
                                     var dom='<div class="order-row layui-row">'
                                                 +'<div class="order-title layui-row width-padding width-padding-pc">'
                                                     +'<span class="pull-left">发货时间：2017-07-24 13:20</span>'

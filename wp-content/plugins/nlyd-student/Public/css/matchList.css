@@ -171,6 +171,10 @@ p.long-name{
         text-align: center;
         cursor: pointer;
     }
+    .layui-tab-title.w2 li{
+        width: -webkit-calc(100% / 2);
+        width: calc(100% / 2);
+    }
     .layui-tab-brief>.layui-tab-title .layui-this{
         color: #262626;
         border:none;
@@ -205,6 +209,10 @@ p.long-name{
         text-align: center;
         cursor: pointer;
     }
+    .layui-tab-title.w2 li{
+        width: -webkit-calc(100% / 2);
+        width: calc(100% / 2);
+    }
     .layui-tab-brief>.layui-tab-title .layui-this{
         color: #2484FE;
         border:none;
@@ -217,6 +225,10 @@ p.long-name{
         width: -webkit-calc(100% / 3);
         width: calc(100% / 3);
         background: #2484FE;
+    }
+     .w2 .nl-transform{
+        width: -webkit-calc(100% / 2);
+        width: calc(100% / 2);
     }
     .layui-tab-brief>.layui-tab-more li:after, .layui-tab-brief>.layui-tab-title li:after{
         position: absolute;

@@ -35,25 +35,40 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var matching_question= $.GetSession('matching_question','1');
-    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-        questions_answer=matching_question['questions_answer'];
+    // var matching_question= $.GetSession('matching_question','1');
+    // if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
+    //     questions_answer=matching_question['questions_answer'];
 
-        $.each(questions_answer,function(i,v){
-        var dom='<div class="matching-card">'
-                    +'<div class="img-box card_img">'
-                        +'<img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">'
-                    +'</div>'
-                    +'<div class="card_name c_black"><input class="matching-number-input" type="text"></div>'
-                    +'<div class="card_phone c_black"><input class="matching-number-input" type="text"></div>'
-                +'</div>'
-        $('.matching-number-zoo').append(dom)
-    })
-    }else{//未获取到比赛题目
+    //     $.each(questions_answer,function(i,v){
+    //         var dom='<div class="matching-card">'
+    //                     +'<div class="img-box card_img">'
+    //                         +'<img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">'
+    //                     +'</div>'
+    //                     +'<div class="card_detail">'
+    //                         +'<div class="card_name c_black"><input class="matching-number-input" type="text"></div>'
+    //                         +'<div class="card_phone c_black"><input class="matching-number-input" type="text"></div>'
+    //                     +'</div>'
+    //                 +'</div>'
+    //         $('.matching-number-zoo').append(dom)
+    //     })
+    // }else{//未获取到比赛题目
 
-        $.alerts('触发防作弊系统')
+    //     $.alerts('触发防作弊系统')
         
-    }
+    // }
+    var questions_answer=['','','','']
+    $.each(questions_answer,function(i,v){
+            var dom='<div class="matching-card">'
+                        +'<div class="img-box card_img">'
+                            +'<img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">'
+                        +'</div>'
+                        +'<div class="card_detail layui-bg-white">'
+                            +'<div class="card_name c_black pd_"><input class="matching-number-input" type="text"></div>'
+                            +'<div class="card_phone c_black pd_"><input class="matching-number-input" type="text"></div>'
+                        +'</div>'
+                    +'</div>'
+            $('.matching-number-zoo').append(dom)
+        })
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
     //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
     //         submit(0,3)

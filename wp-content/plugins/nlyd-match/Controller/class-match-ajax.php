@@ -138,7 +138,7 @@ class Match_Ajax
         if(!empty($category)){
             foreach ($category as $k => $v){
 
-                if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question','en-grading-question','cn-grading-question','en-grading-test-question','cn-grading-test-question'))){
                     $new_category[] = array(
                         'id'=>$v->term_id,
                         'text'=>$v->name,
@@ -1616,7 +1616,7 @@ class Match_Ajax
      * 考级相关文件上传
      */
     public function grading_content_upload(){
-        print_r($_SERVER['SERVER_ADDR']);die;
+
         if(empty($_FILES['file']['tmp_name'])) wp_send_json_error();
 
         switch ($_POST['memory_type']){
@@ -1648,20 +1648,39 @@ class Match_Ajax
                 if(!file_exists($file_path)){
                     mkdir($file_path,0755,true);
                 }
-                if($_POST['handle'] == 1){
-                    $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/memory.txt');
-                    if($result){
-                        $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/memory.txt'));
-                        $a = file_put_contents($file_path.'/memory'.$_POST['memory_grade'].'.txt',$str,FILE_APPEND);
-                        //print_r($a);die;
-                    }
-                }else{
+                //中转文件
+                $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/temporary.txt');
+                if($result){
 
-                    $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/memory'.$_POST['memory_grade'].'.txt');
+                    $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/temporary.txt'));
+
+                    if(file_exists($file_path.'/memory.json')){
+                        $array = json_decode(file_get_contents($file_path.'/memory.json'),true);
+                    }else{
+                        $array = array();
+                    }
+                    //leo_dump($array);
+                    if($_POST['handle'] == 1 && isset($array[$_POST['memory_grade']])){
+
+                        //leo_dump($array);
+                        $array[$_POST['memory_grade']] .= $str;
+                        //leo_dump($array);die;
+                    }else{
+
+                        $array[$_POST['memory_grade']] = $str;
+                    }
+                    ksort($array);
+                    /*leo_dump($array);
+                    die;*/
+                    $a = file_put_contents($file_path.'/memory.json',json_encode($array));
+                    //print_r($a);die;
                 }
 
                 break;
             case 'people':
+                if(count($_FILES['file']['name']) > 20){
+                    wp_send_json_error('每次上传不能超过20张照片');
+                }
                 $file_path = leo_match_path.'/upload/people';
                 if(!file_exists($file_path)){
                     mkdir($file_path,0755,true);
@@ -1695,7 +1714,11 @@ class Match_Ajax
                 break;
         }
 
-        die;
+        if($a){
+            wp_send_json_success('上传成功');
+        }else{
+            wp_send_json_error('上传失败');
+        }
     }
 
     /**
