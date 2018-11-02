@@ -1616,7 +1616,7 @@ class Match_Ajax
      * 考级相关文件上传
      */
     public function grading_content_upload(){
-
+        print_r($_SERVER['SERVER_ADDR']);die;
         if(empty($_FILES['file']['tmp_name'])) wp_send_json_error();
 
         switch ($_POST['memory_type']){
