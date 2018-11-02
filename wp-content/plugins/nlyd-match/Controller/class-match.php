@@ -522,6 +522,50 @@ class Match
 
 
     /**
+     * 绑定题目类别
+     */
+    public function set_question_genre($post){
+
+        //tax_input[question_genre][]
+        //查询题目类型
+        $args = array(
+            'taxonomy' => 'question_genre', //自定义分类法
+            'pad_counts' => false,
+            'hide_empty' => false,
+        );
+        $category = get_categories($args);
+        $questionTypeArr = array();
+
+        if(!empty($category)){
+            foreach ($category as $k => $v){
+                if ($post->post_type == 'question' && in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question','en-grading-question','cn-grading-question','en-grading-test-question','cn-grading-test-question'))){
+                    $questionTypeArr[] = array(
+                        'term_id'=>$v->term_id,
+                        'name'=>$v->name,
+                    );
+                }
+            }
+        }
+
+        //获取文章分类
+        global $wpdb;
+        $category_id = $wpdb->get_var("select term_taxonomy_id from {$wpdb->prefix}term_relationships where object_id = {$post->ID} ");
+
+        ?>
+        <?php if(!empty($questionTypeArr)){
+        ?>
+        <select name="tax_input[question_genre][]" id="">
+            <?php foreach ($questionTypeArr as $question){ ?>
+                <option value="<?=$question['term_id']?>" <?=$question['term_id']==$category_id ? 'selected' : ''?> ><?=$question['name']?></option>
+            <?php } ?>
+        </select>
+        <?php }else{?>
+        <p><a href="<?=admin_url('/edit-tags.php?taxonomy=question_genre&post_type=question')?>">新增题库类型 Go</a></p>
+        <?php }?>
+    <?php }
+
+
+    /**
      * 题目绑定设置box
      */
     public function question_meta_box($post){
