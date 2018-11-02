@@ -120,8 +120,7 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_match_list',
-                        _wpnonce:$('#inputMatch').val(),
+                        action:'get_grading_logs',
                         page:match_page,
                         match_type:'',
                     }
@@ -148,7 +147,7 @@ jQuery(function($) {
                                     // 进行中2
                                     var isMe='';//标签
                                     var match_status='c_blue';//比赛中高亮
-                                    var rightBtn='';  
+                                    var rightBtn='';
                                     var endTime="";//报名截止
                                     var domTime=v.entry_end_time.replace(/-/g,'/');
                                     var end_time = new Date(domTime).getTime();//月份是实际月份-1
@@ -161,7 +160,7 @@ jQuery(function($) {
                                     }
                                     if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
                                         if(v.match_status==2){
-                                            match_status='c_orange';  
+                                            match_status='c_orange';
                                         }
                                         if(v.user_id==null){//未报名（未登录）
                                             rightBtn=""
@@ -182,7 +181,7 @@ jQuery(function($) {
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                     +'<button type="button" href="'+v.right_url+'"><?=__('考级结果', 'nlyd-student')?></button>'
-                                                +'</div>';   
+                                                +'</div>';
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button flex1 last-btn">'
@@ -192,7 +191,7 @@ jQuery(function($) {
                                                 rightBtn='<div class="nl-match-button flex1 last-btn">'
                                                             +'<button type="button" class="bg_gradient_grey"><?=__('您已报名', 'nlyd-student')?></button>'
                                                         +'</div>'
-                                                
+
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
@@ -221,20 +220,20 @@ jQuery(function($) {
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.match_start_time+'</span>'
+                                                                +'<span class="c_black">'+v.start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('考级地点', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.match_address+'</span>'
+                                                                +'<span class="c_black">'+v.address+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('报名费用', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                                +'<span class="c_black">¥'+v.cost+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime

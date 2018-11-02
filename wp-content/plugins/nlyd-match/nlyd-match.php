@@ -899,7 +899,12 @@ if(!class_exists('MatchController')){
                 }
             }elseif ($post_data->post_type == 'grading'){
                 if(!empty($_POST['grading'])){
+                    if(!empty($_POST['match_switch']) && $_POST['match_switch'] == 'ON'){
 
+                        update_post_meta($post_ID,'default_match_switch',$_POST['match_switch']);
+                    }else{
+                        update_post_meta($post_ID,'default_match_switch','OFF');
+                    }
                     $insert = $_POST['grading'];
                     $insert['grading_id'] = $post_ID;
                     $insert['created_time'] = get_time('mysql');
@@ -1113,12 +1118,14 @@ if(!class_exists('MatchController')){
                         array($this->match,'grading_type_box'),
                         $this->post_type, 'normal', 'low'
                     );
+                    add_meta_box( 'switch_meta_box',
+                        '自定义开赛开关',
+                        array($this->match,'match_switch_meta_box'),
+                        $this->post_type, 'side'
+                    );
 
                     break;
             }
-
-
-
         }
 
 

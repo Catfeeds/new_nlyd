@@ -138,7 +138,7 @@ class Match_Ajax
         if(!empty($category)){
             foreach ($category as $k => $v){
 
-                if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
+                if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question','en-grading-question','cn-grading-question','en-grading-test-question','cn-grading-test-question'))){
                     $new_category[] = array(
                         'id'=>$v->term_id,
                         'text'=>$v->name,

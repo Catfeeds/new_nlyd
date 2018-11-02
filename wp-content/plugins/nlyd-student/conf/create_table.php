@@ -45,6 +45,7 @@ function the_table_install () {
           `address` varchar(255) DEFAULT NULL COMMENT '考级地址',
           `cost` decimal(10,2) DEFAULT NULL COMMENT '考级费用',
           `status` tinyint(2) DEFAULT NULL COMMENT '考级状态 -3:已结束 -2等待开赛 1:报名中 2:进行中',
+          `grading_notice_url` varchar(255) DEFAULT NULL COMMENT '考级须知',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";

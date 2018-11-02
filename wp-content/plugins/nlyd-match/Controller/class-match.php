@@ -1207,6 +1207,12 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">参赛须知</label>
+            <div class="layui-input-block">
+                <input placeholder="https://" class="layui-input" value="<?=$this->grading['grading_notice_url'];?>" type="text" name="grading[grading_notice_url]">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛状态</label>
 
             <div class="layui-input-block">
