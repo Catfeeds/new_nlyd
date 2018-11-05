@@ -20,12 +20,16 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选择比赛', 'nlyd-student')?></div></div>
-                            <input type="text" value="<?=$list['match_name']?>" lay-verify="required"  class="nl-input nl-foucs" readonly id="trigger1">
-                            <input type="hidden" name="match_id" value="<?=$list['match_id']?>" lay-verify="required"  class="nl-input nl-foucs" id="trigger2">
+                            <input type="text" value="" lay-verify="required"  class="nl-input nl-foucs" readonly id="trigger1">
+                            <input type="hidden" name="match_id" value="" lay-verify="required"  class="nl-input nl-foucs" id="trigger2">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手座位号', 'nlyd-student')?></div></div>
                             <input type="text" name="seat_number" value="<?=$list['seat_number']?>" lay-verify="required"  class="nl-input nl-foucs">
+                        </div>
+                        <div class="form-input-row">
+                            <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
+                            <input type="text" name="student_name" value="<?=$list['student_name']?>"  class="nl-input nl-foucs" disabled placeholder="<?=__('填写座位号自动获取姓名', 'nlyd-student')?>">
                         </div>
                         <!--<div class="form-input-row">
                             <div class="form-input-label"><div><?/*=__('比赛项目/场次', 'nlyd-student')*/?></div></div>
@@ -58,10 +62,6 @@
                             <div class="form-input-label"><div><?=__('备注说明', 'nlyd-student')?></div></div>
                             <input type="text" name="describe" value="<?=$list['describe']?>"  class="nl-input nl-foucs">
                         </div> 
-                        <div class="form-input-row">
-                            <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
-                            <input type="text" name="student_name" value="<?=$list['student_name']?>"  class="nl-input nl-foucs" disabled placeholder="<?=__('填写座位号自动获取姓名', 'nlyd-student')?>">
-                        </div>      
                         <a class="a-btn a-btn-table" lay-filter="sub" lay-submit=""><div><?=__('提交', 'nlyd-student')?></div></a>
                     </div>
                     <input type="hidden" name="id" value="<?=$list['id']?>">
@@ -77,6 +77,7 @@ jQuery(document).ready(function($) {
             var value=$(this).val();
             var datas={
                 seat_number:value,
+                match_id: $("input[name='match_id']").val(),
                 action:'get_student_name',
             }
             $.ajax({
@@ -92,13 +93,7 @@ jQuery(document).ready(function($) {
             });
         })
         //模拟手机下拉列表，选择比赛
-            var SelectData= [
-            {id:'1',value:'<?=__('比赛1', 'nlyd-student')?>'},
-            {id:'2',value:'<?=__('比赛2', 'nlyd-student')?>'},
-            {id:'3',value:'<?=__('比赛3', 'nlyd-student')?>'},
-            {id:'4',value:'<?=__('比赛4', 'nlyd-student')?>'},
-            {id:'5',value:'<?=__('比赛5', 'nlyd-student')?>'},
-        ];
+            var SelectData= <?=$match_list?>;
         var posiotion=[0]
         if(typeof($('#trigger1').val())!='undefined'){
             if($('#trigger1').val().length>0){

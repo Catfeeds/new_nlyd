@@ -28,6 +28,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
 
     <script>
         jQuery(function($) {
+            var data = $.GetSession('match_data', '1');
+            if(data == null){
+                $.alerts("<?=__('未检测到答题记录', 'nlyd-student')?>");
+                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
+                return false;
+            }
             //console.log(data);return false;
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
@@ -37,7 +43,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
             $('.count_down_').countdown(function (S, d) {
                 $('.count_down_').text(S).attr('data-seconds',S)
                 if (S <= 0) {//取消遮擋
-                    var data = $.GetSession('match_data', '1')
+
+                    //var data = $.GetSession('match_data', '1')
                     $.ajax({
                         data: data,
                         success: function (res, ajaxStatu, xhr) {
