@@ -183,9 +183,11 @@ jQuery(document).ready(function($) {
         //         return false;
         //     });
         // });
-        $("input[name='meta_val[real_ID]']").focusout(function(){//身份证号码输入框失焦事件
-            if($('#trigger4').val()=="中华人民共和国"){
-                var value=$(this).val();
+        $("input[name='meta_val[real_ID]']").keyup(function(){//身份证号码输入框失焦事件
+            var _this=$(this)
+            var value=_this.val();
+            var exg=$.validationLayui.allRules.identity[0]
+            if($('#trigger4').val()=="中华人民共和国" && exg.test(value)){
                 var datas={
                     real_ID:value,
                     action:'reckon_age',
@@ -201,6 +203,8 @@ jQuery(document).ready(function($) {
                         return false;
                     }
                 });
+            }else{
+                $("input[name='meta_val[real_age]']").val('');
             }
         })
         // $('.certificationFormBtn').click(function(){
@@ -529,7 +533,6 @@ jQuery(document).ready(function($) {
                     var name=$(this).attr('name')
                     fd.append(name,$(this).val());
                 })
-
                 $.ajax({
                     data: fd,
                     contentType : false,

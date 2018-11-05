@@ -37,8 +37,8 @@ Alert.prototype={
 		}).html(this.msg)
 			.stop(true)
 			.fadeIn(300)
-			.delay(500)
-			.fadeOut(1000);
+			.delay(800)
+			.fadeOut(1300);
 	}
 };
 (function($){
