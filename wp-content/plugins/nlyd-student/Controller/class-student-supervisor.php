@@ -46,7 +46,10 @@ class Student_Supervisor extends Student_Home
 
         if(isset($_GET['id'])){
 
-            $sql = "select id,student_name,seat_number,evidence,`describe` from {$wpdb->prefix}prison_match_log where id={$_GET['id']} and supervisor_id = {$current_user->ID} ";
+            $sql = "select a.id,a.student_name,a.seat_number,a.evidence,a.`describe`,b.post_title match_title 
+                    from {$wpdb->prefix}prison_match_log a
+                    left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                    where a.id={$_GET['id']} and a.supervisor_id = {$current_user->ID} ";
             //print_r($sql);
             $row = $wpdb->get_row($sql,ARRAY_A);
 
@@ -73,11 +76,12 @@ class Student_Supervisor extends Student_Home
     public function logs(){
 
         global $wpdb,$current_user;
-        $sql = "select a.id,a.created_time,a.student_name,a.match_more,a.seat_number,a,describe,b.post_title match_title,c.post_title project_title
+        $sql = "select a.id,a.created_time,a.student_name,a.match_more,a.seat_number,a.describe,b.post_title match_title,c.post_title project_title
                 from {$wpdb->prefix}prison_match_log a
                  left join {$wpdb->prefix}posts b on a.match_id = b.ID
                  left join {$wpdb->prefix}posts c on a.project_id = c.ID
                  where supervisor_id = {$current_user->ID}";
+        //print_r($sql);
         $data['lists'] = $wpdb->get_results($sql,ARRAY_A);
         //print_r($data['lists']);
         $view = student_view_path.CONTROLLER.'/logs.php';
