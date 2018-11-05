@@ -4,17 +4,19 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($match_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
+                    <!-- <div class="matching-row layui-row">
+                        <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
+                    </div> -->
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__($title, 'nlyd-student')?> <?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></div></div>
+                        <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
                         <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <!-- <i class="iconfont">&#xe685;</i> -->
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?></span>
+                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -27,6 +29,8 @@
                     <div class="matching-fast">
                         <div class="item-wrapper">
                             <div class="fast-item answer" date-number="1"><div></div></div>
+                            <!-- <div class="fast-item error-fast">4A@#$%</div>
+                            <div class="fast-item right-fast">4A@#$%</div> -->
                         </div>
                     </div>
                     <div class="matching-keyboard">
@@ -57,23 +61,30 @@
 </div>
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
-jQuery(function($) {   
-    history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
+jQuery(function($) {
     var isSubmit=false;//是否正在提交
+    leaveMatchPage(function(){//窗口失焦提交
+        $('#next').addClass('disabled')
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        var answer_Text=$('.answer div').text();
+        var answer_dateNumber=$('.answer').attr('date-number');
+        if(answer_dateNumber=="本题无解"){
+            isRights(answer_dateNumber)
+        }else{
+            isRights(answer_Text)
+        }
+        submit(time,4);
+    })
+    var _match_id=1;
+    var _project_id=1;
+    var _match_more=1;
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
-    var sys_second=<?=$count_down?>;//倒计时的时间
-    var end_time=0;
-    var matchSession=$.GetSession('_match_train','true');
+    var sys_second=111;//倒计时的时间
+    var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['genre_id']==$.Request('genre_id') && matchSession['type']=='nxss'){
+    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
-        end_time=matchSession['end_time'];
-        sys_second=$.GetSecond(end_time);
-        $('.count_down').attr('data-seconds',sys_second)
     }
     if(!isMatching){
         initQuestion();//初始化数据
@@ -96,7 +107,6 @@ jQuery(function($) {
         // if(valid(select)=="本题无解"){
         //     initQuestion()
         // }else{
-            // console.log(valid(select))
             var _flag=false;//重复题目是true
             var _flag1=false;//前面的4题连续无解是true
             $.each(ajaxData,function(index,value){
@@ -109,7 +119,7 @@ jQuery(function($) {
             var _len=ajaxData.length;
             var examples=valid(select)
             var _rights='本题无解'
-            
+            // var _rights=valid(select);
             if(examples.length>0){//有解
                 _rights=examples[0]
             }
@@ -125,28 +135,21 @@ jQuery(function($) {
             }else{
                 var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
                 ajaxData.push(thisRow) 
-                end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
-                var sessionData={
-                    ajaxData:ajaxData,
-                    genre_id:$.Request('genre_id'),
-                    type:'nxss',
-                    end_time:end_time
-                }
-                $.SetSession('_match_train',sessionData)
+                var sessionData={ajaxData:ajaxData,match_id:_match_id,project_id:_project_id,match_more:_match_more}
+                $.SetSession('match',sessionData)
             }
-        // }
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
         var text=$('.answer div').text();
         $('.rand').each(function(i){
             var text= ajaxData[ajaxData.length-1]['question'][i]
-             $(this).attr('date-number',text).children('div').text(text)
+            $(this).attr('date-number',text).children('div').text(text)
         }).removeClass('disabled')
-        $('.answer div').text('');
+        $('.answer div').text('')
         $('.answer').removeClass('error-fast').removeClass('right-fast');
     }
-    function submit(time){//提交答案
+    function submit(time,submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -154,17 +157,25 @@ jQuery(function($) {
             //     'visibility': 'visible',
             // })
             // isSubmit=true;
-            var match_more=$.Request('match_more') ? $.Request('match_more') : '1';
             var data={
-                action:'trains_submit',
-                genre_id:$.Request('genre_id'),
-                project_type:'nxss',
+                action:'answer_submit',
+                _wpnonce:$('#inputSubmit').val(),
+                match_id:_match_id,
+                project_id:_project_id,
+                match_more:_match_more,
+                project_alias:'nxss',
+                project_more_id:$.Request('project_more_id'),
+
                 my_answer:ajaxData,
                 surplus_time:time,
-                match_more:match_more,
+                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            // console.log(ajaxData)
-            // return false
+            var leavePage= $.GetSession('leavePage','1');
+            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+                if(leavePage.Time){
+                    data['leave_page_time']=leavePage.Time;
+                }
+            }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -176,6 +187,8 @@ jQuery(function($) {
                     })
                 },
                 success:function(res,ajaxStatu,xhr){    
+                    // $.DelSession('match')
+                    // $.DelSession('leavePage')
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -191,10 +204,10 @@ jQuery(function($) {
                         isSubmit=false;
                     }
                 },
-                complete: function(XMLHttpRequest, textStatus){
+                complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
-                        $.SetSession('train_data',data);
-                        var href="<?=home_url('trains/logs/type/'.$_GET['type'].'/match_more/'.$_GET['match_more'])?>";
+                        $.SetSession('match_data',data);
+                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
                         window.location.href=href;
             　　　　}
                 }
@@ -228,7 +241,7 @@ jQuery(function($) {
                 }else{
                     isRights(answer_Text)
                 }
-                submit(0)
+                submit(0,3)
             }
 
         }, 1000);
@@ -486,7 +499,6 @@ new AlloyFinger($('#next')[0], {
                                             return false;
                                         }
                                     })
-                                    
                                     if(__flag){//相同浮点数
                                         $('.answer').addClass('right-fast')
                                         ajaxData[ajaxData.length-1]['isRight']=true;
@@ -502,10 +514,9 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    if(sys_second>=0){
+                    if(sys_second>0){
                         _this.removeClass('disabled')
                     }
-                    
                 }, 300);
             }else{
                 ajaxData[ajaxData.length-1].yours=answer_Text;
@@ -516,7 +527,7 @@ new AlloyFinger($('#next')[0], {
                 setTimeout(function() {
                     initQuestion()
                     nextQuestion()
-                    if(sys_second>=0){
+                    if(sys_second>0){
                         _this.removeClass('disabled')
                     }
                 }, 300);
@@ -526,7 +537,6 @@ new AlloyFinger($('#next')[0], {
         }
     }
 });
-
 
 function isRights(text) {
     var flag=false;
@@ -599,7 +609,7 @@ function isRights(text) {
             layer.open({
                     type: 1
                     ,maxWidth:300
-                    ,title: '<?=__('提示', 'nlyhd-student')?>' //不显示标题栏
+                    ,title: '<?=__('提示', 'nlyd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certification' //防止重复弹出
                     ,content: '<div class="box-conent-wrapper"><?=__('是否立即提交', 'nlyd-student')?>？</div>'
@@ -611,7 +621,6 @@ function isRights(text) {
                     }
                     ,btn2: function(index, layero){
                         layer.closeAll();
-                        // var text=$('.answer div').text()
                         var answer_Text=$('.answer div').text();
                         var answer_dateNumber=$('.answer').attr('date-number');
                         if(answer_dateNumber=="本题无解"){
@@ -619,8 +628,7 @@ function isRights(text) {
                         }else{
                             isRights(answer_Text)
                         }
-                        
-                        submit(time);  
+                        submit(time,1);  
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中

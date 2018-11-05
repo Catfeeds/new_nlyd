@@ -224,16 +224,6 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                 }
             }
         });
-        // if($('.count_down').length>0){
-        //     new AlloyFinger($('body')[0], {
-        //         touchEnd: function () {
-        //             var nowTime=new Date().getTime()
-        //             if(nowTime-now_Time>=getTime){
-        //                 window.location.href=$('.count_down').parents('.a-btn').attr('href');
-        //             }
-        //         },
-        //     })
-        // }
         <?php endif;?>
         <?php if($next_count_down > 0):
                     if($next_project == 'y'){
