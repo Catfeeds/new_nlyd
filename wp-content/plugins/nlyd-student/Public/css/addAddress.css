@@ -1,6 +1,7 @@
 
 .layui-input-block{
     margin-left: 0;
-    padding-left: 97px;
+    padding-left: 0;
     text-align: left;
+    display: inline-block;
 }
