@@ -20,14 +20,14 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选择比赛', 'nlyd-student')?></div></div>
-                            <input type="text" value="" lay-verify="required"  class="nl-input nl-foucs" readonly id="trigger1">
-                            <input type="hidden" name="match_id" value="" lay-verify="required"  class="nl-input nl-foucs" id="trigger2">
+                            <input type="text" value="<?=$list['match_title']?>" lay-verify="required"  class="nl-input nl-foucs" readonly id="trigger1">
+                            <input type="hidden" name="match_id" value="<?=$list['match_id']?> lay-verify="required"  class="nl-input nl-foucs" id="trigger2">
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label"><div><?=__('选手座位号', 'nlyd-student')?></div></div>
                             <input type="text" name="seat_number" value="<?=$list['seat_number']?>" lay-verify="required"  class="nl-input nl-foucs">
                         </div>
-                        <div class="form-input-row">
+                        <div class="form-input-row student_name" style="display: none">
                             <div class="form-input-label"><div><?=__('选手姓名', 'nlyd-student')?></div></div>
                             <input type="text" name="student_name" value="<?=$list['student_name']?>"  class="nl-input nl-foucs" disabled placeholder="<?=__('填写座位号自动获取姓名', 'nlyd-student')?>">
                         </div>
@@ -84,6 +84,7 @@ jQuery(document).ready(function($) {
                 data: datas,
                 success: function(data, textStatus, jqXHR){
                     if(data.success){
+                        $('.student_name').show();
                         $("input[name='student_name']").val(data.data.info);
                     }else{
                         $.alerts(data.data.info);
@@ -159,7 +160,7 @@ jQuery(document).ready(function($) {
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            var max_size = 5*1024;// 5M
+            var max_size = 10*1024;// 5M
             var size = file.size;
             if (size > max_size * 1024) {
                 alert("<?=__('图片大小不能超过5M', 'nlyd-student')?>");
@@ -232,12 +233,15 @@ jQuery(document).ready(function($) {
                 var fd = new FormData();
                 fd.append('student_name',data.field.student_name);
                 fd.append('seat_number',data.field.seat_number);
+                fd.append('match_id',data.field.match_id);
                 fd.append('describe',data.field.describe);
                 fd.append('action','upload_match_evidence');
                 fd.append('id',data.field.id);
                 // $.each(imgs, function (i, v) {
                 //     fd.append('images[]',v);
                 // })
+                console.log(imgs1);
+                // return false;
                 $.each(imgs1, function (i, v) {
                     fd.append('evidence[]',v);
                 })
@@ -257,16 +261,16 @@ jQuery(document).ready(function($) {
                             }
                             if(res.data.url){
                                 setTimeout(function() {
-                                    window.location.href=res.data.url
+                                     window.location.href=res.data.url
                                 }, 300);
-                                
+
                             }
                             return false;
-                           
+
                         }else{
                             $.alerts(res.data.info)
                         }
-                        
+
                     }
                 })
                 return false;

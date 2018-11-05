@@ -221,7 +221,7 @@ class Download
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id AND mt.status=2 
         LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
-        WHERE o.order_type=1 AND o.pay_status IN(2,3,4)  AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.created_time DESC', ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4)  AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.id ASC', ARRAY_A);
 
 
 

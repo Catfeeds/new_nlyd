@@ -3618,12 +3618,13 @@ class Student_Ajax
      */
     public function upload_match_evidence(){
         global $current_user,$wpdb;
-
+        
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>'比赛必填'));
         if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
         if(isset($_POST['id']) && !empty($_POST['id'])){
             if(empty($_POST['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
-        }else{
+        }
+        else{
             if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
             //获取当前比赛项目
             $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$_POST['match_id']}";
@@ -3638,21 +3639,15 @@ class Student_Ajax
                 }
             }
             if(empty($match)) wp_send_json_error(array('info'=>'当前时间段无比赛'));
-            //获取所有报名信息
-            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$match['match_id']} and pay_status in(2,3,4) order by id desc";
-            $results = $wpdb->get_results($sql,ARRAY_A);
-            $index = $_POST['seat_number']-1;
-            $user_id = $results[$index]['user_id'];
-            if(empty($user_id)) wp_send_json_error(array('info'=>'座位信息错误'));
-        }
 
-
-        if(empty($_POST['student_name'])){
+            //根据签到座位获取用户id
+            $sql_ = "select user_id from {$wpdb->prefix}match_sign where match_id = {$_POST['match_id']} and seat_number = {$_POST['seat_number']}";
+            $user_id = $wpdb->get_var($sql_);
             $user_real_name = get_user_meta($user_id,'user_real_name')[0];
             $real_name = $user_real_name['real_name'];
-        }else{
-            $real_name = $_POST['student_name'];
+
         }
+
         if(isset($_FILES['evidence'])){
             $upload_dir = wp_upload_dir();
             $dir = '/evidence/';
@@ -3697,7 +3692,7 @@ class Student_Ajax
 
         }
         if($result){
-            wp_send_json_success(array('info'=>'上传成功'));
+            wp_send_json_success(array('info'=>'上传成功','url'=>home_url('supervisor/logs/')));
         }else{
             wp_send_json_error(array('info'=>'上传失败'));
         }
