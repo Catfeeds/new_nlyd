@@ -33,8 +33,11 @@ class Student_Supervisor extends Student_Home
      */
     public function index(){
         $data = array();
+        global $wpdb,$current_user;
+        //获取当前时段所有比赛
+        //$sql_ = "select from {$wpdb->prefix}match_project_more ";
         if(isset($_GET['id'])){
-            global $wpdb,$current_user;
+
             $sql = "select id,student_name,seat_number,evidence,`describe` from {$wpdb->prefix}prison_match_log where id={$_GET['id']} and supervisor_id = {$current_user->ID} ";
             //print_r($sql);
             $row = $wpdb->get_row($sql,ARRAY_A);
@@ -48,6 +51,8 @@ class Student_Supervisor extends Student_Home
             }
 
         }
+
+
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);

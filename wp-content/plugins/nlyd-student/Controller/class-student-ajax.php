@@ -3830,6 +3830,15 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
+    /**
+     * 根据座位号获取用户
+     */
+    public function get_student_name(){
+        global $wpdb;
+        if(empty($_POST['seat_number'])) wp_send_json_error(array('座位号不能为空'));
+
+    }
+
 }
 
 new Student_Ajax();
