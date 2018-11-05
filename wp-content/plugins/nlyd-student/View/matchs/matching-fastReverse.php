@@ -8,9 +8,9 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <!-- <div class="matching-row layui-row">
+                    <div class="matching-row layui-row">
                         <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
-                    </div> -->
+                    </div>
                     <div class="matching-row layui-row have-submit" style="margin-top:0;">
                         <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
                         <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
