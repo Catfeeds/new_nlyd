@@ -254,8 +254,8 @@ class Student_Signs
             $user_real_name = get_user_meta($users_id,'user_real_name');
             if(empty($user_real_name) || empty($user_real_name['real_name'])){ ?>
                 <script type="text/javascript">
-                    //$.alerts('即将跳转到实名认证页');
-                    window.location.href='<?=home_url('/account/info/id/'.$_GET['match_id'])?>';
+                    alert('即将跳转到实名认证页');
+                    window.location.href="<?=home_url('/account/info/type/sign/sign_match/'.$_GET['match_id'].'/order_index/'.$index)?>";
                 </script>
             <?php
                 die;
