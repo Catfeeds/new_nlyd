@@ -37,7 +37,7 @@ if(!class_exists('Trains')){
             $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS utl.user_id,utl.id,utl.genre_id,utl.project_type,utl.surplus_time,utl.my_score,utl.created_time,um.meta_value AS user_real_name,um2.meta_value AS userID 
                            FROM `{$wpdb->prefix}user_train_logs` AS utl 
                            LEFT JOIN `{$wpdb->usermeta}` AS um2 ON um2.user_id=utl.user_id AND um2.meta_key='user_ID' 
-                           LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=utl.user_id AND um.meta_key='user_real_name'{$searchWhere} LIMIT {$start},{$pageSize}",ARRAY_A);
+                           LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=utl.user_id AND um.meta_key='user_real_name' ORDER BY utl.created_time DESC {$searchWhere} LIMIT {$start},{$pageSize}",ARRAY_A);
 
             $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
             $pageAll = ceil($count['count']/$pageSize);
@@ -112,7 +112,7 @@ if(!class_exists('Trains')){
                                         $row['post_title'] = '扑克接力';
                                         break;
                                     case 'kysm':
-                                        $row['post_title'] = '快演扫描';
+                                        $row['post_title'] = '快眼扫描';
                                         break;
                                 }
                             ?>
