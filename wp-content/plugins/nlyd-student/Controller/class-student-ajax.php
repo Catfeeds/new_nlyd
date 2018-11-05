@@ -3618,8 +3618,7 @@ class Student_Ajax
      */
     public function upload_match_evidence(){
         global $current_user,$wpdb;
-        ini_set('post_max_size','20M');
-        print_r($_FILES);die;
+        
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>'比赛必填'));
         if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
         if(isset($_POST['id']) && !empty($_POST['id'])){

@@ -160,7 +160,7 @@ jQuery(document).ready(function($) {
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            var max_size = 5*1024;// 5M
+            var max_size = 10*1024;// 5M
             var size = file.size;
             if (size > max_size * 1024) {
                 alert("<?=__('图片大小不能超过5M', 'nlyd-student')?>");

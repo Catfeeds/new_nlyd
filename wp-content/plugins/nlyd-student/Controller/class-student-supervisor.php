@@ -32,19 +32,21 @@ class Student_Supervisor extends Student_Home
      * 首页
      */
     public function index(){
+
         $data = array();
         global $wpdb,$current_user;
-        //获取当前时段所有比赛
-        $sql_ = "select a.match_id id,b.post_title value from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}posts b on a.match_id = b.ID where a.match_status = 2";
-        //print_r($sql_);
-        $rows = $wpdb->get_results($sql_,ARRAY_A);
-        if(empty($rows)){
-            $this->get_404(array('message'=>'当前暂无比赛','match_url'=>home_url('matchs/info/')));
-            return;
-        }
-        $data['match_list'] = json_encode($rows);
 
         if(isset($_GET['id'])){
+
+            //获取当前时段所有比赛
+            $sql_ = "select a.match_id id,b.post_title value from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}posts b on a.match_id = b.ID order by id desc limit 0,15";
+            //print_r($sql_);
+            $rows = $wpdb->get_results($sql_,ARRAY_A);
+            if(empty($rows)){
+                $this->get_404(array('message'=>'当前暂无比赛','match_url'=>home_url('matchs/info/')));
+                return;
+            }
+            $data['match_list'] = json_encode($rows);
 
             $sql = "select a.id,a.student_name,a.seat_number,a.evidence,a.`describe`,b.post_title match_title 
                     from {$wpdb->prefix}prison_match_log a
@@ -61,6 +63,17 @@ class Student_Supervisor extends Student_Home
                 $data['list'] = $row;
             }
 
+        }else{
+
+            //获取当前时段所有比赛
+            $sql_ = "select a.match_id id,b.post_title value from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}posts b on a.match_id = b.ID where a.match_status = 2";
+            //print_r($sql_);
+            $rows = $wpdb->get_results($sql_,ARRAY_A);
+            if(empty($rows)){
+                $this->get_404(array('message'=>'当前暂无比赛','match_url'=>home_url('matchs/info/')));
+                return;
+            }
+            $data['match_list'] = json_encode($rows);
         }
 
 
