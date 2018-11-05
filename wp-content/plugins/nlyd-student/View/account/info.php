@@ -186,7 +186,8 @@ jQuery(document).ready(function($) {
         $("input[name='meta_val[real_ID]']").keyup(function(){//身份证号码输入框失焦事件
             var _this=$(this)
             var value=_this.val();
-            if($('#trigger4').val()=="中华人民共和国" && value.length==18){
+            var exg=$.validationLayui.allRules.identity[0]
+            if($('#trigger4').val()=="中华人民共和国" && exg.test(value)){
                 var datas={
                     real_ID:value,
                     action:'reckon_age',
