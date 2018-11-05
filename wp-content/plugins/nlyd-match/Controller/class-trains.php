@@ -198,7 +198,7 @@ if(!class_exists('Trains')){
                     $row['post_title'] = '扑克接力';
                     break;
                 case 'kysm':
-                    $row['post_title'] = '快演扫描';
+                    $row['post_title'] = '快眼扫描';
                     break;
             }
 //            leo_dump($row);
