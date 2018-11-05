@@ -35,7 +35,15 @@ class Student_Supervisor extends Student_Home
         $data = array();
         global $wpdb,$current_user;
         //获取当前时段所有比赛
-        //$sql_ = "select from {$wpdb->prefix}match_project_more ";
+        $sql_ = "select a.match_id id,b.post_title value from {$wpdb->prefix}match_meta_new a left join {$wpdb->prefix}posts b on a.match_id = b.ID where a.match_status = 2";
+        //print_r($sql_);
+        $rows = $wpdb->get_results($sql_,ARRAY_A);
+        if(empty($rows)){
+            $this->get_404(array('message'=>'当前暂无比赛','match_url'=>home_url('matchs/info/')));
+            return;
+        }
+        $data['match_list'] = json_encode($rows);
+
         if(isset($_GET['id'])){
 
             $sql = "select id,student_name,seat_number,evidence,`describe` from {$wpdb->prefix}prison_match_log where id={$_GET['id']} and supervisor_id = {$current_user->ID} ";

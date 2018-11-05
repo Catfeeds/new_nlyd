@@ -3619,14 +3619,14 @@ class Student_Ajax
     public function upload_match_evidence(){
         global $current_user,$wpdb;
 
-
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>'比赛必填'));
         if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
         if(isset($_POST['id']) && !empty($_POST['id'])){
             if(empty($_POST['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
         }else{
             if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
             //获取当前比赛项目
-            $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more ";
+            $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$_POST['match_id']}";
             $rows = $wpdb->get_results($sql,ARRAY_A);
             if(!empty($rows)){
                 $new_time = get_time('mysql');
@@ -3835,7 +3835,16 @@ class Student_Ajax
      */
     public function get_student_name(){
         global $wpdb;
-        if(empty($_POST['seat_number'])) wp_send_json_error(array('座位号不能为空'));
+        if(empty($_POST['match_id']) || empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'比赛/座位号不能为空'));
+        $sql = "select user_id from {$wpdb->prefix}match_sign where match_id = {$_POST['match_id']} and seat_number = {$_POST['seat_number']}";
+        $user_id = $wpdb->get_var($sql);
+
+        if(empty($user_id)) wp_send_json_error(array('info'=>'未检测到当前座位号用户'));
+        $user_real_name = get_user_meta($user_id,'user_real_name')[0];
+        //print_r($user_real_name);
+        if(empty($user_real_name['real_name'])) wp_send_json_error(array('info'=>'真实姓名获取失败'));
+
+        wp_send_json_success(array('info'=>$user_real_name['real_name']));
 
     }
 
