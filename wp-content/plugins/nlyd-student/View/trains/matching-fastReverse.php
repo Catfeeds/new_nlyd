@@ -23,6 +23,8 @@
                         <span class="c_black"><?=__('请用完给出的4个数字，并利用运算符号使运算结果等于24！', 'nlyd-student')?></span>
                         <br>
                         <span>*<?=__('若您跳过此题不作答，则扣掉2秒时间', 'nlyd-student')?></span>
+                        <br>
+                        <span>*<?=__('连续作答“本题无解”不可超过6次，否则系统将强制提交本轮成绩', 'nlyd-student')?></span>
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
@@ -113,9 +115,9 @@ jQuery(function($) {
             if(examples.length>0){//有解
                 _rights=examples[0]
             }
-            if(_len>=4){//前面的4题连续无解
+            if(_len>=2){//前面的2题连续无解
                 if(_rights=='本题无解'){//本题也无解
-                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解' && ajaxData[_len-3]['rights']=='本题无解' && ajaxData[_len-4]['rights']=='本题无解'){
+                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解'){
                         _flag1=true;
                     }
                 }
@@ -429,6 +431,7 @@ new AlloyFinger($('#next')[0], {
         if(!_this.hasClass('disabled')){
             _this.addClass('disabled')
             var flag=false;
+            var _len=ajaxData.length;
             // var text=$('.answer div').text()
             var answer_Text=$('.answer div').text();
             var answer_dateNumber=$('.answer').attr('date-number');
@@ -443,16 +446,26 @@ new AlloyFinger($('#next')[0], {
             })
             if(answer_Text.length!=0){
                 if(answer_dateNumber=='本题无解'){
-                     if(ajaxData[ajaxData.length-1].rights=='本题无解'){
+                     if(ajaxData[_len-1].rights=='本题无解'){
                         $('.answer').addClass('right-fast')
-                        ajaxData[ajaxData.length-1]['isRight']=true;
+                        ajaxData[_len-1]['isRight']=true;
                      }else{
                         $('.answer').addClass('error-fast')
-                        ajaxData[ajaxData.length-1]['isRight']=false;
+                        ajaxData[_len-1]['isRight']=false;
                      }
-                     ajaxData[ajaxData.length-1].yours=answer_dateNumber;
+                     ajaxData[_len-1].yours=answer_dateNumber;
+                    if(_len>=6){
+                        if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解' && ajaxData[_len-6]['yours']=='本题无解'){
+                            $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
+                            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                            delete ajaxData[_len-1].examples;
+                            submit(time)
+                            return false;
+                        }
+                    }
+
                 }else{
-                    ajaxData[ajaxData.length-1].yours=answer_Text;
+                    ajaxData[_len-1].yours=answer_Text;
                     if(flag){
                         _this.removeClass('disabled')
                         return false;
@@ -460,18 +473,18 @@ new AlloyFinger($('#next')[0], {
                         var _result=calculateResult(new_text)
                         if(_result==24){
                             $('.answer').addClass('right-fast')
-                            ajaxData[ajaxData.length-1]['isRight']=true;
+                            ajaxData[_len-1]['isRight']=true;
                         }else{
                             if(_result=='error'){//符号错误
                                 $('.answer').addClass('error-fast')
-                                ajaxData[ajaxData.length-1]['isRight']=false;
+                                ajaxData[_len-1]['isRight']=false;
                             }else{
                                 if(_result%1==0){//整数
                                     $('.answer').addClass('error-fast')
-                                    ajaxData[ajaxData.length-1]['isRight']=false;
+                                    ajaxData[_len-1]['isRight']=false;
                                 }else{//浮点数
                                     var __flag=false;
-                                    $.each(ajaxData[ajaxData.length-1]['examples'],function(i,v){
+                                    $.each(ajaxData[_len-1]['examples'],function(i,v){
                                         var _item=v;
                                         var AA='';
                                         try {
@@ -489,10 +502,10 @@ new AlloyFinger($('#next')[0], {
                                     
                                     if(__flag){//相同浮点数
                                         $('.answer').addClass('right-fast')
-                                        ajaxData[ajaxData.length-1]['isRight']=true;
+                                        ajaxData[_len-1]['isRight']=true;
                                     }else{
                                         $('.answer').addClass('error-fast')
-                                        ajaxData[ajaxData.length-1]['isRight']=false;
+                                        ajaxData[_len-1]['isRight']=false;
                                     }
                                 }
                             }
@@ -508,10 +521,10 @@ new AlloyFinger($('#next')[0], {
                     
                 }, 300);
             }else{
-                ajaxData[ajaxData.length-1].yours=answer_Text;
+                ajaxData[_len-1].yours=answer_Text;
                 //跳过2s
                 $('.answer').addClass('error-fast')
-                ajaxData[ajaxData.length-1]['isRight']=false;
+                ajaxData[_len-1]['isRight']=false;
                 sys_second-=1
                 setTimeout(function() {
                     initQuestion()
@@ -522,7 +535,7 @@ new AlloyFinger($('#next')[0], {
                 }, 300);
             }
             $('.answer').attr('date-number',"1");
-            delete ajaxData[ajaxData.length-1].examples;
+            delete ajaxData[_len-1].examples;
         }
     }
 });

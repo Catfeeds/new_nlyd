@@ -527,8 +527,6 @@ jQuery(document).ready(function($) {
                     var name=$(this).attr('name')
                     fd.append(name,$(this).val());
                 })
-                console.log(imgs)
-                return false
                 $.ajax({
                     data: fd,
                     contentType : false,
