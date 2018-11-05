@@ -160,39 +160,45 @@ jQuery(document).ready(function($) {
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
-            array.unshift(file)
-            var reader = new FileReader();
-            var src='';
-            //读取File对象的数据
-            reader.onload = function(evt){
-                //data:img base64 编码数据显示
-                var dom='<div class="post-img no-dash">'
-                        +'<div class="img-zoo img-box">'
-                            +'<img src="'+evt.target.result+'"/>'
+            var max_size = 5*1024;// 5M
+            var size = file.size;
+            if (size > max_size * 1024) {
+                alert("<?=__('图片大小不能超过5M', 'nlyd-student')?>");
+            }else{
+                array.unshift(file)
+                var reader = new FileReader();
+                var src='';
+                //读取File对象的数据
+                reader.onload = function(evt){
+                    //data:img base64 编码数据显示
+                    var dom='<div class="post-img no-dash">'
+                            +'<div class="img-zoo img-box">'
+                                +'<img src="'+evt.target.result+'"/>'
+                            +'</div>'
+                            +'<div class="del">'
+                                +'<i class="iconfont">&#xe633;</i>'
+                            +'</div>'
                         +'</div>'
-                        +'<div class="del">'
-                            +'<i class="iconfont">&#xe633;</i>'
-                        +'</div>'
-                    +'</div>'
-                var className=_this.attr('data-this')
-                $('.'+className+' p').after(dom)
-                layer.photos({//图片预览
-                    photos: '.img-zoos',
-                    anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
-                })
-                // if(className=="img-zoos0"){
-                //     if($('.'+className+' .post-img.no-dash').length>=3){
-                //         $('.'+className+' .post-img.dash').css('display','none')
-                //     }
-                // }else 
-                if(className=="img-zoos1"){
-                    if($('.'+className+' .post-img.no-dash').length>=3){
-                        $('.'+className+' .post-img.dash').css('display','none')
+                    var className=_this.attr('data-this')
+                    $('.'+className+' p').after(dom)
+                    layer.photos({//图片预览
+                        photos: '.img-zoos',
+                        anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                    })
+                    // if(className=="img-zoos0"){
+                    //     if($('.'+className+' .post-img.no-dash').length>=3){
+                    //         $('.'+className+' .post-img.dash').css('display','none')
+                    //     }
+                    // }else 
+                    if(className=="img-zoos1"){
+                        if($('.'+className+' .post-img.no-dash').length>=3){
+                            $('.'+className+' .post-img.dash').css('display','none')
+                        }
                     }
                 }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
-            $(e.target).val('')
+                $(e.target).val('')
         }
 
         // $("#img-zoos0").change(function(e) {

@@ -350,7 +350,6 @@ jQuery(document).ready(function($) {
         }
         //模拟手机下拉列表，选择国籍
         var contrySelectData=$.validationLayui.contry;
-        console.log(contrySelectData.length)
         var posiotioncontry=[0];//初始化位置，高亮展示
         if($('#trigger4').val().length>0 && $('#trigger4').val()){
             $.each(contrySelectData,function(index,value){
@@ -528,6 +527,8 @@ jQuery(document).ready(function($) {
                     var name=$(this).attr('name')
                     fd.append(name,$(this).val());
                 })
+                console.log(imgs)
+                return false
                 $.ajax({
                     data: fd,
                     contentType : false,
