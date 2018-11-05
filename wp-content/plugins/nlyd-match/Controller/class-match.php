@@ -1123,11 +1123,11 @@ class Match
                             <ul>
                                 <?php foreach ($rows as $row){ ?>
                                 <li>
-                                    <span class="match_more">第<?=$row['more']?>轮</span>
-                                    <span>时长<span class="use_time"><?=$row['use_time']?></span>分钟</span>
-                                    <span class="status"><?=$row['status_cn']?></span>
-                                    <span class="start_time"><?=$row['start_time_format']?></span>
-                                    <span class="end_time"><?=$row['end_time_format']?></span>
+                                    <i class="match_more">第<?=$row['more']?>轮</i>
+                                    <i>时长<i class="use_time"><?=$row['use_time']?></i>分钟</i>
+                                    <i class="status"><?=$row['status_cn']?></i>
+                                    <i class="start_time"><?=$row['start_time_format']?></i>
+                                    <i class="end_time"><?=$row['end_time_format']?></i>
                                     <a style="color:#4394F9" class="update_more" data-project="<?=$row['project_id']?>" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">编辑</a>
                                     <a style="color:#4394F9" class="remove_more" data-name="<?=$val?>" data-id="<?=$row['id']?>" href="">删除</a>
                                 </li>
