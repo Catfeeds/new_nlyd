@@ -82,20 +82,31 @@
         <?php if($match_status == 2 || $count_down <= 120): ?>
         matchWaitting()
         <?php endif;?>
+
+        var endTimes=0;
+        var counts_down=$('.count_down').attr('data-seconds')
+        endTimes=$.GetEndTime(counts_down)
         if($('.count_down').attr('data-seconds')<=0){
             $.DelSession('leavePageWaitting')
             window.location.href="<?=$match_url?>"
         }
         $('.count_down').countdown(function(S, d){//倒计时
-            var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-            var h=d.hour<10 ? '0'+d.hour : d.hour;
-            var m=d.minute<10 ? '0'+d.minute : d.minute;
-            var s=d.second<10 ? '0'+d.second : d.second;
-            var time=D+h+':'+m+':'+s;
-            $(this).attr('data-seconds',S).text(time);
-            if(S<=0){//
-                $.DelSession('leavePageWaitting')
-                window.location.href="<?=$match_url?>"
+            var count_down=S
+            var new_count=$.GetSecond(endTimes);
+            // console.log(count_down,new_count)
+            if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                window.location.reload()
+            }else{
+                var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+                var h=d.hour<10 ? '0'+d.hour : d.hour;
+                var m=d.minute<10 ? '0'+d.minute : d.minute;
+                var s=d.second<10 ? '0'+d.second : d.second;
+                var time=D+h+':'+m+':'+s;
+                $(this).attr('data-seconds',S).text(time);
+                if(S<=0){//
+                    $.DelSession('leavePageWaitting')
+                    window.location.href="<?=$match_url?>"
+                }
             }
         });
         var height= $('.count-wrapper').height();
@@ -111,25 +122,25 @@
             })
         }
         // console.log(endTimes)
-        var endTimes=0;
-        new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
-            touchStart: function () {
-                var counts_down=$('.count_down').attr('data-seconds')
-                endTimes=$.GetEndTime(counts_down)
-            },
-            touchMove: function () {
-                // console.log(2)
-            },
-            touchEnd: function () {
-                var count_down=$('.count_down').attr('data-seconds')
-                var new_count=$.GetSecond(endTimes);
-                console.log(count_down,new_count)
-                if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-                    window.location.reload()
-                }
-            },
-            touchCancel: function () {
-            }
-        })
+        // var endTimes=0;
+        // new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
+        //     touchStart: function () {
+        //         var counts_down=$('.count_down').attr('data-seconds')
+        //         endTimes=$.GetEndTime(counts_down)
+        //     },
+        //     touchMove: function () {
+        //         // console.log(2)
+        //     },
+        //     touchEnd: function () {
+        //         var count_down=$('.count_down').attr('data-seconds')
+        //         var new_count=$.GetSecond(endTimes);
+        //         console.log(count_down,new_count)
+        //         if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+        //             window.location.reload()
+        //         }
+        //     },
+        //     touchCancel: function () {
+        //     }
+        // })
     })
 </script>

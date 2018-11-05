@@ -80,7 +80,23 @@ class Student_Grading extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-silent.php';
         load_view_template($view);
     }
-    
+
+    public function matching_wzsd(){//文章速读比赛页
+        $view = student_view_path.CONTROLLER.'/matching-reading.php';
+        load_view_template($view);
+    }
+    public function ready_wzsd(){//文章速读准备页
+        $view = student_view_path.CONTROLLER.'/matching-ready.php';
+        load_view_template($view);
+    }
+    public function matching_zxss(){//正向速算比赛页
+        $view = student_view_path.CONTROLLER.'/matching-fastCalculation.php';
+        load_view_template($view);
+    }
+    public function matching_nxss(){//逆向速算比赛页
+        $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */
@@ -94,11 +110,11 @@ class Student_Grading extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
         wp_enqueue_style( 'my-public' );
-        if(ACTION == 'index'){
+        if(ACTION == 'index'){//考级列表
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
         }
-        if(ACTION == 'info'){
+        if(ACTION == 'info'){//考级详情
             wp_register_style( 'my-student-matchDetail', student_css_url.'matchDetail.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchDetail' );
         }
@@ -143,6 +159,28 @@ class Student_Grading extends Student_Home
         if(ACTION == 'matching_silent'){//国学经典默写
             wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-silent' );
+        }
+
+        if(ACTION == 'matching_wzsd'){//文章速读比赛页
+            wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
+            wp_enqueue_style( 'my-student-reading' );
+        }
+        if(ACTION == 'ready_wzsd'){//文章速读准备页
+            wp_register_style( 'my-student-ready-reading', student_css_url.'ready-reading.css',array('my-student') );
+            wp_enqueue_style( 'my-student-ready-reading' );
+        }
+        if(ACTION == 'matching_zxss' ){//正向速算比赛页
+            wp_register_style( 'my-student-fastCalculation', student_css_url.'matching-fastCalculation.css',array('my-student') );
+            wp_enqueue_style( 'my-student-fastCalculation' );
+        }
+
+        if(ACTION == 'matching_nxss'){//逆向速算比赛页
+            wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-check24_answer' );
+            wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+            wp_enqueue_style( 'my-student-fastReverse' );
+            wp_register_style( 'my-student-matching-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matching-fastReverse' );
         }
     }
 }

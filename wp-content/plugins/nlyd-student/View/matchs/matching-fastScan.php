@@ -90,7 +90,7 @@ jQuery(function($) {
                     itemLen++
                 }
                 
-                if(ajaxData.length%nanduLen==0){
+                if(ajaxData.length%nanduLen==0 && itemLen<=breakRow){
                     nandu++
                 }
                 initBuild(itemLen,items,nandu,false)
@@ -359,7 +359,7 @@ $('#selectWrapper .fastScan-item').each(function(){
                 if(ajaxData.length%itemAdd==0){
                     itemLen++
                 }
-                if(ajaxData.length%nanduLen==0){
+                if(ajaxData.length%nanduLen==0 && itemLen<=breakRow){
                     nandu++
                 }
                 initBuild(itemLen,items,nandu,isFalse)

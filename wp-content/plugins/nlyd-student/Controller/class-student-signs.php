@@ -56,6 +56,14 @@ class Student_Signs
 
         if(is_user_logged_in()){
             global $wpdb,$current_user;
+
+            //获取比赛信息
+            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status = -2",ARRAY_A);
+            if(empty($row)){
+                $this->get_404(array('message'=>'签到结束','match_url'=>home_url('matchs/info/match_id/'.$_GET['id'])));
+                return;
+            }
+
             $rows = $wpdb->get_results("SELECT * FROM {$wpdb->usermeta} WHERE user_id = {$current_user->ID} and meta_key in('user_nationality','user_nationality_pic','user_nationality_short','user_birthday','nickname','user_head','user_address','user_real_name','real_ID','user_ID_Card','user_ID','user_gender') ",ARRAY_A);
             $user_info = array_column($rows,'meta_value','meta_key');
             $user_address = isset($user_info['user_address']) ? unserialize($user_info['user_address']) : '';
@@ -72,7 +80,7 @@ class Student_Signs
             $match_title = $match->post_title;
 
             //获取所有报名信息
-            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4) order by id desc";
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4) order by id asc";
             $results = $wpdb->get_results($sql,ARRAY_A);
             $index = array_search($current_user->ID,array_column($results,'user_id')) + 1;
             //print_r($index);
@@ -107,6 +115,22 @@ class Student_Signs
             //alert('请使用微信扫码进行签到');
         </script>
         <?php
+        /*global $wpdb;
+        //获取所有报名信息
+        $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and pay_status in(2,3,4) order by id asc";
+        $results = $wpdb->get_results($sql,ARRAY_A);
+        $index = array_search(3,array_column($results,'user_id')) + 1;
+
+        $b = $wpdb->insert(
+            $wpdb->prefix.'match_sign',
+            array(
+                'user_id'=>3,
+                'match_id'=>$_GET['match_id'],
+                'seat_number'=>$index,
+                'created_time' => get_time('mysql')
+            )
+        );
+        var_dump($b);*/
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
     }
@@ -220,11 +244,29 @@ class Student_Signs
             <?php
             exit;
         }else{
+
+            //获取所有报名信息
+            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and pay_status in(2,3,4) order by id asc";
+            $results = $wpdb->get_results($sql,ARRAY_A);
+            $index = array_search($users->ID,array_column($results,'user_id')) + 1;
+
+            //判断是否实名认证
+            $user_real_name = get_user_meta($users_id,'user_real_name');
+            if(empty($user_real_name) || empty($user_real_name['real_name'])){ ?>
+                <script type="text/javascript">
+                    //$.alerts('即将跳转到实名认证页');
+                    window.location.href='<?=home_url('/account/info/id/'.$_GET['match_id'])?>';
+                </script>
+            <?php
+                die;
+            }
+
             $b = $wpdb->insert(
                 $wpdb->prefix.'match_sign',
                 array(
                     'user_id'=>$users->ID,
-                    'match_id'=>56522,
+                    'match_id'=>$_GET['match_id'],
+                    'seat_number'=>$index,
                     'created_time' => get_time('mysql')
                 )
             );
