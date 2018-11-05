@@ -76,7 +76,6 @@ class Student_Supervisor extends Student_Home
      */
     public function scripts_default(){
 
-
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
 
@@ -84,6 +83,15 @@ class Student_Supervisor extends Student_Home
             wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
             wp_enqueue_style( 'my-student-address' );
         }
-
+        if(ACTION == 'index'){
+            wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'student-mobileSelect' );
+            wp_localize_script('student-mobileSelect','_mobileSelect',[
+                'sure'=>__('确认','nlyd-student'),
+                'cancel'=>__('取消','nlyd-student')
+            ]);
+            wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
+            wp_enqueue_style( 'my-student-mobileSelect' );
+        }
     }
 }

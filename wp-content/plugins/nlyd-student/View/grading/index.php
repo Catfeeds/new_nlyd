@@ -27,6 +27,10 @@
                                 <a href="<?=home_url('grading/ready_card/')?>">人脉信息记忆</a><br>
                                 <a href="<?=home_url('grading/ready_voice/')?>">语音听记数字记忆</a><br>
                                 <a href="<?=home_url('grading/matching_silent/')?>">国学经典默写</a><br>
+
+                                <a href="<?=home_url('grading/matching_zxss/')?>">正向速算</a><br>
+                                <a href="<?=home_url('grading/matching_nxss/')?>">逆向速算</a><br>
+                                <a href="<?=home_url('grading/ready_wzsd/')?>">文章速读</a><br>
                                 </ul>
                             </div>
                             <!-- 往期比赛 -->
