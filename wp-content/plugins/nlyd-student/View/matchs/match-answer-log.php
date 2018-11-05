@@ -204,26 +204,36 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
         $.DelSession('matching_question');//准备页面题目参数
         $.DelSession('match_data')
         <?php if(isset($_GET['project_more_id'])): ?>
-          leavePageLoad('<?=$wait_url?>');
-        $('.count_down').countdown(function(S, d){//倒计时
-            var _this=$(this);
-            var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-            var h=d.hour<10 ? '0'+d.hour : d.hour;
-            var m=d.minute<10 ? '0'+d.minute : d.minute;
-            var s=d.second<10 ? '0'+d.second : d.second;
-            var time=D+h+':'+m+':'+s;
-            $(this).attr('data-seconds',S).text(time)
-
-            if(S==0){
-                var href=_this.parents('.a-btn').attr('href');
-                $.DelSession('leavePageWaits')
-                if(href){
-                    window.location.href=href
+            leavePageLoad('<?=$wait_url?>');
+            var endTimes=0;
+            var counts_down=$('.count_down').attr('data-seconds')
+            endTimes=$.GetEndTime(counts_down)
+            $('.count_down').countdown(function(S, d){//倒计时
+                var count_down=S
+                var new_count=$.GetSecond(endTimes);
+                // console.log(count_down,new_count)
+                if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                    window.location.reload()
                 }else{
-                    window.location.reload();
+                    var _this=$(this);
+                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+                    var h=d.hour<10 ? '0'+d.hour : d.hour;
+                    var m=d.minute<10 ? '0'+d.minute : d.minute;
+                    var s=d.second<10 ? '0'+d.second : d.second;
+                    var time=D+h+':'+m+':'+s;
+                    $(this).attr('data-seconds',S).text(time)
+
+                    if(S==0){
+                        var href=_this.parents('.a-btn').attr('href');
+                        $.DelSession('leavePageWaits')
+                        if(href){
+                            window.location.href=href
+                        }else{
+                            window.location.reload();
+                        }
+                    }
                 }
-            }
-        });
+            });
         <?php endif;?>
         <?php if($next_count_down > 0):
                     if($next_project == 'y'){
@@ -232,26 +242,26 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                         $title = '轮';
                     }
                 ?>
-        var endTimes=0;
-        new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
-            touchStart: function () {
-                var counts_down=$('.count_down').attr('data-seconds')
-                endTimes=$.GetEndTime(counts_down)
-            },
-            touchMove: function () {
-                // console.log(2)
-            },
-            touchEnd: function () {
-                var count_down=$('.count_down').attr('data-seconds')
-                var new_count=$.GetSecond(endTimes);
-                console.log(count_down,new_count)
-                if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-                    window.location.reload()
-                }
-            },
-            touchCancel: function () {
-            }
-        })
+        // var endTimes=0;
+        // new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
+        //     touchStart: function () {
+        //         var counts_down=$('.count_down').attr('data-seconds')
+        //         endTimes=$.GetEndTime(counts_down)
+        //     },
+        //     touchMove: function () {
+        //         // console.log(2)
+        //     },
+        //     touchEnd: function () {
+        //         var count_down=$('.count_down').attr('data-seconds')
+        //         var new_count=$.GetSecond(endTimes);
+        //         console.log(count_down,new_count)
+        //         if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+        //             window.location.reload()
+        //         }
+        //     },
+        //     touchCancel: function () {
+        //     }
+        // })
         <?php endif;?>
          <?php if($project_alias == 'pkjl'): ?>
             initWidth=function() {
