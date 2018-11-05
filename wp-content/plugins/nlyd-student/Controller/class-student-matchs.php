@@ -413,7 +413,7 @@ class Student_Matchs extends Student_Home
 
                     $result = array_diff($posts_arr,$post_arr);
                     if(empty($result)){
-                        $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student')));
+                        $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
                         return;
                     }
                     //print_r($result);
