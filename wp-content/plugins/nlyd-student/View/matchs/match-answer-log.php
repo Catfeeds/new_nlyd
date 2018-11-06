@@ -31,7 +31,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
             var data = $.GetSession('match_data', '1');
             if(data == null){
                 $.alerts("<?=__('未检测到答题记录', 'nlyd-student')?>");
-                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
+                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/".$_GET['match_id'])?>';
                 return false;
             }
             //console.log(data);return false;
@@ -153,7 +153,11 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                     <?php if(!empty($end_time)): ?>
                         <div><?=__('切出页面时间', 'nlyd-student')?>:<span class="c_blue"><?=$end_time?></span></div>
                     <?php endif;?>
-
+                    <?php
+                    if($match_row['is_true'] == 2){
+                        echo '<div style="color:#CF1818;">由于你本轮未进入赛场,本轮分数不参与排名</div>';
+                    }
+                    ?>
 
                     <?php
                     switch ($project_alias){

@@ -381,6 +381,9 @@ class Student_Ajax
                 break;
         }
 
+        //判断当前答题是否有效
+        $prison_log_id = $wpdb->get_var("select id from {$wpdb->prefix}prison_match_log where match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']} ");
+
         $insert = array(
             'user_id'=>$current_user->ID,
             'match_id'=>$_POST['match_id'],
@@ -397,6 +400,7 @@ class Student_Ajax
             'created_time'=>get_time('mysql'),
             'created_microtime'=>str2arr(microtime(),' ')[0],
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
+            'is_true'=>!empty($prison_log_id) ? 2 : 1,
         );
 
          /*print_r($insert);
@@ -405,7 +409,6 @@ class Student_Ajax
 
         if($result){
             $log_id = $wpdb->insert_id;
-
             if(!empty($_POST['post_id']) && $_POST['project_alias'] == 'wzsd'){
 
                 /*//获取该文章原始分类
@@ -1665,57 +1668,18 @@ class Student_Ajax
                     //if(!preg_match("/^[\x{4e00}-\x{9fa5}]+[·•]?[\x{4e00}-\x{9fa5}]+$/u", $_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>'名字格式不正确,请输入你的中文名'));
 
                     //判断是否报名
-                    /*if(isset($_POST['type']) && $_POST['type'] == 'sign'){
+                    if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
-                        $sql = "SELECT a.id,a.zhifu FROM sckm_match_orders a LEFT JOIN sckm_members  b ON a.member_id = b.id WHERE a.match_id = 234 and a.status = 1 and b.truename = '{$_POST['meta_val']['real_name']}' ";
-
-                        $row = $wpdb->get_row($sql,ARRAY_A);
-                         //var_dump($row);die;
-                        if(empty($row)) wp_send_json_error(array('info'=>__('该用户未成功匹配参数资格', 'nlyd-student').'<br/>'.__('请确认该选手实名信息', 'nlyd-student')));
-                        if($row){
-
-                            $order_id = $wpdb->get_var("select id order_id from {$wpdb->prefix}order where match_id = 56522 and user_id = {$current_user->ID} ");
-                            if(empty($order_id)){
-                                
-                                $wpdb->startTrans();
-                                //在平台创建订单
-                                $orde_data = array(
-                                            'user_id' => $current_user->ID,
-                                            'match_id' => 56522, //等待比赛创建后修改match_id
-                                            'order_type' =>1,
-                                            'pay_type' => 'wx',
-                                            'cost' => 0,
-                                            'pay_status' => 4,
-                                            'created_time' => get_time('mysql')
-                                        );
-                                $a = $wpdb->insert($wpdb->prefix.'order',$orde_data);
-                                $orders_id = $wpdb->insert_id;
-                                $b = $wpdb->insert(
-                                                $wpdb->prefix.'match_sign',
-                                                array(
-                                                    'user_id'=>$current_user->ID,
-                                                    'match_id'=>56522,
-                                                    'created_time' => get_time('mysql')
-                                                )
-                                        );
-                                $c = $wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($current_user->ID,$orders_id)], ['id' => $orders_id]);
-                                //wp_send_json_error(array('info'=>$orders_id.'====='.$a.'----'.$b.'==='.$c));
-                                
-                                //var_dump($a.'----'.$b);die;
-                                if($a && $b){
-
-                                    $wpdb->commit();
-                                    wp_send_json_success(array('info'=>'签到成功','url'=>home_url('matchs')));
-                                }else{
-
-                                    $wpdb->rollback();
-                                    wp_send_json_error(array('info'=>'签到失败,比赛订单创建失败<br/>请联系管理员'));
-                                }
-                            }else{
-                                wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/')));
-                            }
-                        }
-                    }*/
+                        $b = $wpdb->insert(
+                            $wpdb->prefix.'match_sign',
+                            array(
+                                'user_id'=>$current_user->ID,
+                                'match_id'=>$_GET['match_id'],
+                                'seat_number'=>$_GET['order_index'],
+                                'created_time' => get_time('mysql')
+                            )
+                        );
+                    }
 
                     if(!empty($_POST['user_gender'])){
                         update_user_meta($current_user->ID,'user_gender',$_POST['user_gender']) && $user_gender_update = true;
@@ -1789,15 +1753,13 @@ class Student_Ajax
 
             if(isset($_POST['type']) && $_POST['type'] == 'sign'){
 
-                /*if($a && $b && $c){
+                if( $b){
 
-                    $wpdb->commit();
                     wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/')));
                 }else{
 
-                    $wpdb->rollback();
                     wp_send_json_error(array('info'=>__('签到失败,比赛订单创建失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
-                }*/
+                }
             }
 
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
@@ -3618,7 +3580,7 @@ class Student_Ajax
      */
     public function upload_match_evidence(){
         global $current_user,$wpdb;
-        
+
         if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>'比赛必填'));
         if(empty($_POST['seat_number'])) wp_send_json_error(array('info'=>'座位号必填'));
         if(isset($_POST['id']) && !empty($_POST['id'])){
@@ -3626,6 +3588,7 @@ class Student_Ajax
         }
         else{
             if(empty($_FILES['evidence'])) wp_send_json_error(array('info'=>'佐证照不能为空'));
+
             //获取当前比赛项目
             $sql = "select match_id,project_id,more,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$_POST['match_id']}";
             $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -3646,6 +3609,10 @@ class Student_Ajax
             $user_real_name = get_user_meta($user_id,'user_real_name')[0];
             $real_name = $user_real_name['real_name'];
 
+            //获取是否已上传监赛
+            $log_id = $wpdb->get_var("select id from {$wpdb->prefix}prison_match_log where match_id = {$match['match_id']} and project_id = {$match['project_id']} and match_more = {$match['more']} and user_id = {$user_id} ");
+
+            if(!empty($log_id)) wp_send_json_error(array('info'=>'本轮比赛已提交过监赛记录'));
         }
 
         if(isset($_FILES['evidence'])){
@@ -3664,6 +3631,7 @@ class Student_Ajax
 
         if(isset($_POST['id']) && !empty($_POST['id'])){
             $update = array(
+                'match_id'=>$_POST['match_id'],
                 'supervisor_id'=>$current_user->ID,
                 'student_name'=>$real_name,
                 'seat_number'=>$_POST['seat_number'],

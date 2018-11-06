@@ -244,8 +244,8 @@
 　　1. Athlete register  Intellectual World Cup on the "International Intellectual Sports" online platform and select this discipline.
 　　2、所有选手在“国际脑力运动”线上平台上点击进入本项目比赛倒计时页面，倒计时归零后立即开始比赛。
 　　2. All athletes clicked into the countdown page on the "International Intellectual Sports" online platform, and the competition began immediately after the countdown returned to zero.
-　　3、比赛分三轮进行，每两轮比赛之间开展中场活动。系统逐一出题，每题给出1～13之中的4个数据，选手使用加、减、乘、除运算符号和括号把它们连成一个算式，使其运算结果等于24。每轮比赛10分钟，不限题目数量，不答而直接点击“下一题”则减少剩余答题时间2秒，答对题数越多分数越高。
-　　3. The game is carried out in three rounds, and midfield activities are carried out between the two rounds.The system comes out one by one. Each question is given 4 digit from 1to13. Athlete use add, subtract, multiply, divide and brackets to connect them into one formula equal to 24. Each round is 10 minutes, the quantity of questions is no-limit, the remaining time is reduced by 2 seconds for not answer directly click "next question", more answer questions wins.
+　　3、比赛分三轮进行，每两轮比赛之间开展中场活动。系统逐一出题，每题给出1～13之中的4个数据，选手使用加、减、乘、除运算符号和括号把它们连成一个算式，使其运算结果等于24。每轮比赛10分钟，不限题目数量，不答而直接点击“下一题”则减少剩余答题时间2秒，连续作答“本题无解”不可超过6次，否则系统将强制提交本轮成绩，答对题数越多分数越高。
+　　3. The game is carried out in three rounds, and midfield activities are carried out between the two rounds.The system comes out one by one. Each question is given 4 digit from 1to13. Athlete use add, subtract, multiply, divide and brackets to connect them into one formula equal to 24. Each round is 10 minutes, the quantity of questions is no-limit, the remaining time is reduced by 2 seconds for not answer directly click "next question",continuous answer "unsolvable" can not be more than 6 times, otherwise the system will be mandatory to submit the results of this round, more answer questions wins.
 　　4、待所有选手答题结束后，系统自动统计并公布本项目所有选手和战队的成绩。
 　　4. After the end of this discipline, the system automatically calculates and releases the result.
 

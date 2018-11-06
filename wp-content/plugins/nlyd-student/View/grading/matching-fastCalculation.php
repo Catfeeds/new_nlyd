@@ -248,12 +248,26 @@ jQuery(function($) {
             firstNumber+=oneNumber;
         }
         answer=parseInt(firstNumber);
+        var arr=['+','-'];
         for (var index = 0; index < L; index++) {
             var symbol=''
             if(type=='<?=__('连加运算', 'nlyd-student')?>'){
                 symbol='+';
             }else if(type=='<?=__('加减运算', 'nlyd-student')?>'){
-                symbol=randJJ()
+                // symbol=randJJ()
+                if(L==1){//一个符号
+                    symbol="-"
+                }else{//多个符号，前两个为加减
+                    if(index==0){
+                        var pos = Math.round(Math.random() * (arr.length - 1));
+                        symbol=arr[pos]
+                        arr.splice(pos, 1);
+                    }else if (index==1) {
+                        symbol=arr[0]
+                    }else{
+                        symbol=randJJ()
+                    }
+                }
             }
             var number=''
             for (var i = 0; i < N; i++) {

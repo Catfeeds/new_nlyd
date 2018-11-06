@@ -93,7 +93,10 @@ class Student_Supervisor extends Student_Home
                 from {$wpdb->prefix}prison_match_log a
                  left join {$wpdb->prefix}posts b on a.match_id = b.ID
                  left join {$wpdb->prefix}posts c on a.project_id = c.ID
-                 where supervisor_id = {$current_user->ID}";
+                 where supervisor_id = {$current_user->ID}
+                 order by a.id desc 
+                 ";
+        //where supervisor_id = {$current_user->ID}
         //print_r($sql);
         $data['lists'] = $wpdb->get_results($sql,ARRAY_A);
         //print_r($data['lists']);
