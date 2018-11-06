@@ -1004,21 +1004,25 @@ class Match
  */
     public function project_review_meta_box($posts)
     {
-
+        global $wpdb;
         //获取所有项目
-        $args = array(
-            'post_type' => array('project'),
-            'post_status' => array('publish'),
-            'order' => 'asc',
-            'orderby' => 'menu_order',
-        );
-        $the_query = new WP_Query($args);
-        $match_project = $the_query->posts;
+        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'project' and post_status = 'publish' order by menu_order asc ";
+        $match_project = $wpdb->get_results($sql,ARRAY_A);
+        if(empty($match_project)){
 
+            $args = array(
+                'post_type' => array('project'),
+                'post_status' => array('publish'),
+                'orderby' => 'menu_order',
+                'order' => 'DESC',
+            );
+            $the_query = new WP_Query($args);
+            $match_project = $the_query->posts;
+
+        }
         if(!empty($match_project)){
             $default_project = array_column($match_project,'post_title','ID');
         }
-
 
         //获取已经保存的比赛项目
         $match_project_id = $this->meta['match_project_id'];

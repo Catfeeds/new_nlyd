@@ -219,7 +219,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-footer flex-h">'
                                                         +'<div class="nl-match-button flex1">'
-                                                            +'<button type="button" class="'+onBtn+'" href="<?=home_url('grading/info/')?>"><?=__('查看详情', 'nlyd-student')?></button>'
+                                                            +'<button type="button" class="'+onBtn+'" href="'+v.left_url+'"><?=__('查看详情', 'nlyd-student')?></button>'
                                                         +'</div>'
                                                         +rightBtn
                                                     +'</div>'

@@ -293,14 +293,14 @@ class Student_Ajax
         switch ($_POST['project_alias']){
             case 'szzb':
             case 'pkjl':
-
+                //print_r($_POST);die;
                 if(!empty($_POST['my_answer'])){
 
                     $len = count($_POST['questions_answer']);
 
                     $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
 
-                    $score = $_POST['project_type'] == 'szzb' ? 12 : 18;
+                    $score = $_POST['project_alias'] == 'szzb' ? 12 : 18;
 
                     $my_score = ($len-$error_len)*$score;
 
@@ -382,7 +382,7 @@ class Student_Ajax
         }
 
         //判断当前答题是否有效
-        $prison_log_id = $wpdb->get_var("select id from {$wpdb->prefix}prison_match_log where match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']} ");
+        $prison_log_id = $wpdb->get_var("select id from {$wpdb->prefix}prison_match_log where user_id = {$current_user->ID} and match_id = {$_POST['match_id']} and project_id = {$_POST['project_id']} and match_more = {$_POST['match_more']} ");
 
         $insert = array(
             'user_id'=>$current_user->ID,
@@ -1674,8 +1674,8 @@ class Student_Ajax
                             $wpdb->prefix.'match_sign',
                             array(
                                 'user_id'=>$current_user->ID,
-                                'match_id'=>$_GET['match_id'],
-                                'seat_number'=>$_GET['order_index'],
+                                'match_id'=>$_POST['sign_match'],
+                                'seat_number'=>$_POST['order_index'],
                                 'created_time' => get_time('mysql')
                             )
                         );
@@ -1755,10 +1755,10 @@ class Student_Ajax
 
                 if( $b){
 
-                    wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/')));
+                    wp_send_json_success(array('info'=>__('签到成功', 'nlyd-student'),'url'=>home_url('signs/success/id/'.$_POST['sign_match'])));
                 }else{
 
-                    wp_send_json_error(array('info'=>__('签到失败,比赛订单创建失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
+                    wp_send_json_error(array('info'=>__('签到失败', 'nlyd-student').'<br/>'.__('请联系管理员', 'nlyd-student')));
                 }
             }
 
@@ -3753,13 +3753,13 @@ class Student_Ajax
             //两个链接
             if($val['status'] == 2){
                 //比赛中
-                $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                $url = home_url('grading/matchWaitting/grad_id/'.$val['ID']);
                 $button_title = __('进入考级', 'nlyd-student');
                 $rows[$k]['status_cn'] = __('考级中', 'nlyd-student');
             }
             else if ($val['status'] == 1){
                 //报名中
-                $url = home_url('matchs/confirm/match_id/'.$val['ID']);
+                $url = home_url('grading/confirm/grad_id/'.$val['ID']);
                 $button_title = __('参赛报名', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('报名中', 'nlyd-student');
             }
@@ -3775,21 +3775,21 @@ class Student_Ajax
             }
             else{
                 //等待开赛
-                $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                $url = home_url('grading/matchWaitting/grad_id/'.$val['ID']);
                 $button_title = __('等待开赛', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('等待开赛', 'nlyd-student');
             }
             $rows[$k]['match_status'] = $val['status'];
             $rows[$k]['button_title'] = $button_title;
             $rows[$k]['right_url'] = $url;
-            $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
+            $rows[$k]['left_url'] = home_url('grading/info/grad_id/'.$val['ID']);
 
             if($_POST['match_type'] =='history'){
                 $button_title = __('查看排名', 'nlyd-student');
-                $rows[$k]['right_url'] = home_url('matchs/record/match_id/'.$val['ID']);
+                $rows[$k]['right_url'] = home_url('grading/record/grad_id/'.$val['ID']);
             }
         }
-
+        //print_r($rows);
         wp_send_json_success(array('info'=>$rows));
     }
 

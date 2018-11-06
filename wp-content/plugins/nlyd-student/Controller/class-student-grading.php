@@ -28,10 +28,29 @@ class Student_Grading extends Student_Home
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
     }
-    public function info(){//详情页
+
+    /**
+     * 考级详情页
+     */
+    public function info(){
+
+        global $wpdb;
+        $match = $this->get_grading($_GET['grad_id']);
+        if(empty($match)){
+            $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
+            return;
+        }
+        //print_r($match);
+        $data['match'] = $match;
+
+        //获取报名人数
+        $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['grad_id']} and order_type = 2 and pay_status in (2,3,4)");
+        $data['total'] = $total > 0 ? $total : 0;
+
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
+
     public function confirm(){//报名页
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view);
@@ -97,6 +116,40 @@ class Student_Grading extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
         load_view_template($view);
     }
+
+    /**
+     * 获取考级信息
+     * $grad_id 考试比赛id
+     */
+    public function get_grading($grad_id){
+        global $wpdb;
+        $sql = "select a.*,b.post_title grading_title,b.post_content,
+                c.post_title grading_type,if(d.id>0,'y','') is_me,
+                DATE_FORMAT(a.start_time,'%Y-%m-%d %H:%i') start_time,
+                case a.status
+                when -2 then '等待开赛'
+                when 1 then '报名中'
+                when 2 then '进行中'
+                else '已结束'
+                end status_cn,
+                case e.meta_value
+                when 'memory' then '记忆'
+                when 'arithmetic' then '速算'
+                when 'reading' then '速读'
+                end project_alias_cn,
+                e.meta_value project_alias
+                from wp_grading_meta a 
+                left join wp_posts b on a.grading_id = b.ID 
+                left join wp_posts c on a.category_id = c.ID 
+                left join wp_order d on a.grading_id = d.match_id
+                left join wp_postmeta e ON a.category_id = e.post_id AND meta_key = 'project_alias'
+                where a.grading_id = {$grad_id}
+                ";
+        //print_r($sql);
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        return $row;
+    }
+
     /**
      * 默认公用js/css引入
      */
