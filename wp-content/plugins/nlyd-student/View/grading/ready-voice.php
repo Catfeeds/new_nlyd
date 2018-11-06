@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=$match_title?></div></h1>
+            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -18,12 +18,16 @@
                     </div>
                     <div class="matching-number-zoo layui-row">
                         <div class="ta_c c_black voice_title">正在播放语音中...</div>
-                        <div class="img-box voice_img">
-                            <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
-                        </div>
-
-                        <div class="layui-progress layui-progress-big" lay-showPercent="true">
-                            <div class="layui-progress-bar layui-bg-blue" lay-percent="80%"></div>
+                        <!-- <div class="wait">
+                            <div class="inner">
+                                <p><?=__('倒计时', 'nlyd-student')?></p>
+                                <p class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</p>
+                            </div>
+                        </div> -->
+                        <div class="wait">
+                            <div class="voice_img">
+                                <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -171,20 +175,5 @@ jQuery(function($) {
             // }, 1000);
         }
     });
-    var time=questions_answer.length;
-    showTime=function(){
-        time--
-        if(time>0){
-            var percent=(questions_answer.length-time)/questions_answer.length*100;
-            $('.layui-progress').html('<div class="layui-progress-bar layui-bg-blue" lay-percent="'+percent+'%"></div>')
-            $('.layui-progress-bar').css('width',percent+'%')
-            timer=setTimeout("showTime()",1000);
-        }else{
-            clearTimeout(timer)
-            //跳转
-        }
-
-    }  
-    showTime()
 })
 </script>

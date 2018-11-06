@@ -9,7 +9,7 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row layui-row have-submit">
-                            <div class="c_black match_info_font"><div><?=__($title, 'nlyd-student')?><span class="blue-font"><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span></div></div>
+                            <div class="c_black match_info_font"><div><span class="blue-font"><?=sprintf(__('第%s轮', 'nlyd-student'),$match_more)?></span></div></div>
                             <?php $question_num = !empty($match_questions) ? count($match_questions) : 1; ?>
                             <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$question_num)?></div></div>
                             <div class="c_blue match_info_font">

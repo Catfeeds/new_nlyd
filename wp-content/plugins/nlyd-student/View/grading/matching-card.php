@@ -2,7 +2,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=$match_title?></div></h1>
+            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
