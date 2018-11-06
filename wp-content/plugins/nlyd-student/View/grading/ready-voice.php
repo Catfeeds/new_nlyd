@@ -19,7 +19,7 @@
                     <div class="matching-number-zoo layui-row">
                         <div class="ta_c c_black voice_title">正在播放语音中...</div>
                         <div class="img-box voice_img">
-                            <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
+                            <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
                         </div>
 
                         <div class="layui-progress layui-progress-big" lay-showPercent="true">

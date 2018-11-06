@@ -217,7 +217,7 @@ class Order {
                         <th scope="col" id="real_name" class="manage-column column-real_name">真实姓名</th>
                         <th scope="col" id="funllname" class="manage-column column-funllname">收件人</th>
                         <th scope="col" id="telephone" class="manage-column column-telephone">联系电话</th>
-                        <th scope="col" id="address" class="manage-column column-address">收获地址</th>
+                        <th scope="col" id="address" class="manage-column column-address">收货地址</th>
                         <th scope="col" id="order_type" class="manage-column column-order_type">订单类型</th>
                         <th scope="col" id="express_number" class="manage-column column-express_number">快递单号</th>
                         <th scope="col" id="express_company" class="manage-column column-express_company">快递公司</th>

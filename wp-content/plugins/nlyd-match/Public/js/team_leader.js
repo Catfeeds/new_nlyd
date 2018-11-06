@@ -117,17 +117,17 @@ jQuery(document).ready(function($) {
         var status=_this.parent('li').find('.status').text();//比赛状态
         showForm(title)
         //表单数据
-        $('#match_more_id').val($(this).attr('data-id'))
+        $('._more_id').val($(this).attr('data-id'))
         $('.show_form .layui-unselect').each(function(){
             if($(this).find('div').text()==status){
                 $(this).click()
                 return false;
             }
         })
-        $('input[name=project_id]').val(project_id)
-        $('input[name=start_time]').val(start_time)
-        $('input[name=end_time]').val(end_time)
-        $('input[name=use_time]').val(_time)
+        $('._project_id').val(project_id)
+        $('._start_time').val(start_time)
+        $('._end_time').val(end_time)
+        $('._use_time').val(_time)
  
         return false;
     });
@@ -136,11 +136,11 @@ jQuery(document).ready(function($) {
         var project_id=_this.attr('data-project');
         var project_name=_this.attr('data-name');
         //表单数据清空
-        $('#match_more_id').val('')
-        $('input[name=project_id]').val(project_id)
-        $('input[name=start_time]').val('')
-        $('input[name=end_time]').val('')
-        $('input[name=use_time]').val('')
+        $('._more_id').val('')
+        $('._project_id').val(project_id)
+        $('._start_time').val('')
+        $('._end_time').val('')
+        $('._use_time').val('')
         showForm(project_name+'新增轮数')
         return false;
     })
@@ -165,14 +165,15 @@ jQuery(document).ready(function($) {
                 // var query = $('.add_more_form').serialize();
                 var query={
                     action:'match_more_add',
-                    post_id:$('input[name=post_id]').val(),
-                    project_id:$('input[name=project_id]').val(),
-                    more_id:$('#match_more_id').val(),
-                    start_time:$('input[name=start_time]').val(),
-                    end_time:$('input[name=end_time]').val(),
-                    use_time:$('input[name=use_time]').val(),
-                    status:$('input[name=status]:checked').val()
+                    post_id:$('._post_id').val(),
+                    project_id:$('._project_id').val(),
+                    more_id:$('._more_id').val(),
+                    start_time:$('._start_time').val(),
+                    end_time:$('._end_time').val(),
+                    use_time:$('._use_time').val(),
+                    status:$('._status:checked').val()
                 }
+
                 $.post(ajaxurl,query,function (data) {
                     alert(data.data);
                     if(data.success == true){

@@ -1059,34 +1059,34 @@ class Match
 </style>
         
            <!--轮数新增/修改form-->
-            <div class="show_form" style="display: none" >
-                    <input type="hidden" name="post_id" value="<?=$_GET['post']?>"/>
-                    <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
-                    <input id="match_more_id" type="hidden" name="more_id" value=""/>
+           <div class="show_form" style="display: none" >
+                    <input type="hidden" name="post_id" class="_post_id" value="<?=$_GET['post']?>"/>
+                    <input type="hidden" name="project_id" class="_project_id" value=""/>
+                    <input type="hidden" name="_more_id" class="_more_id" value=""/>
                     <div class="layui-form-item">
                         <label class="layui-form-label">开始时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value="" name="start_time" id="start_time" class="layui-input date-picker"/>
+                            <input type="text" value="" name="start_time" class="layui-input date-picker _start_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">结束时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value="" name="end_time" id="end_time" class="layui-input date-picker"/>
+                            <input type="text" value="" name="end_time" class="layui-input date-picker _end_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">比赛时长</label>
                         <div class="layui-input-block">
-                            <input type="text" value="" name="use_time" class="layui-input"/>
+                            <input type="text" value="" name="use_time" class="layui-input _use_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">比赛状态</label>
                         <div class="layui-input-block">
-                            <input type="radio" name="status" value="-1" title="已结束">
-                            <input type="radio" name="status" value="1" title="未开始">
-                            <input type="radio" name="status" value="2" title="进行中">
+                            <input type="radio" class="._status" name="status" value="-1" title="已结束">
+                            <input type="radio" class="._status" name="status" value="1" title="未开始">
+                            <input type="radio" class="._status" name="status" value="2" title="进行中">
                         </div>
                     </div>
             </div>
