@@ -59,7 +59,7 @@ if(!class_exists('Trains')){
 
                 <hr class="wp-header-end">
 
-                <form method="get">
+
 
 
                     <p class="search-box">
@@ -156,7 +156,7 @@ if(!class_exists('Trains')){
                         </div>
                         <br class="clear">
                     </div>
-                </form>
+
 
                 <br class="clear">
             </div>
@@ -209,7 +209,7 @@ if(!class_exists('Trains')){
 
 
                 <hr class="wp-header-end">
-                <form method="get">
+
 
                     <h2 class="screen-reader-text">用户列表</h2><table class="wp-list-table widefat fixed striped users">
                         <thead>
@@ -286,7 +286,7 @@ if(!class_exists('Trains')){
                         </div>
                         <br class="clear">
                     </div>
-                </form>
+
 
                 <br class="clear">
             </div>

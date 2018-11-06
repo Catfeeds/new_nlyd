@@ -234,11 +234,7 @@ class Student_Weixin
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;
 
-
-        if(get_user_meta($user_id, 'locale', true)) {
-            setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24*30*12,'/');
-        }
-
+        if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24,'/');
         if($type == false) {
             
             if($_SESSION['user_openid']) wp_redirect(home_url('account/certification/type/sign'));

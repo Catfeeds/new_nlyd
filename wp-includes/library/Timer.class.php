@@ -95,7 +95,7 @@ class Timer
                                 where a.match_id = {$v['match_id']} AND a.post_id != ''
                                 ";
                         $results = $wpdb->get_results($sql,ARRAY_A);
-                        print_r($results);
+                        //print_r($results);
                         if(!empty($results)){
                             foreach ($results as $x){
                                 if($x['slug'] == 'cn-match-question'){
