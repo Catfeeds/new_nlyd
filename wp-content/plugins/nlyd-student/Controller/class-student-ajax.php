@@ -3249,7 +3249,7 @@ class Student_Ajax
              $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
                   (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
                   LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
-                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) AND mq.is_true = 1 
                   GROUP BY mq.project_id,mq.user_id) AS child  
                   GROUP BY user_id 
                   ORDER BY my_score DESC limit 0,5
@@ -3311,7 +3311,7 @@ class Student_Ajax
 //                }
 //            }
             $data = $totalRanking;
-            $redis->setex('team_ranking_'.$match_id, 3600*24*7,json_encode($data));
+            $redis->setex('team_ranking_'.$match_id, 300,json_encode($data));
         }
         else{
             $data = json_decode($data, true);
