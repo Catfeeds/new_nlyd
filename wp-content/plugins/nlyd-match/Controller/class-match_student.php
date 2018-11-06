@@ -1127,7 +1127,7 @@ class Match_student {
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
                         FROM `{$wpdb->prefix}order` a 
-                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr})                 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr}) and c.is_true = 1                 
                         WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
                         GROUP BY user_id,project_id
                     ) x
@@ -1221,12 +1221,12 @@ class Match_student {
                 $trv['projectScore'] = []; //项目分数数组
                 foreach ($projectArr as $paks => $pavs) {
                     $res = $wpdb->get_results('SELECT my_score,match_more,surplus_time,project_id,created_microtime FROM '.$wpdb->prefix.'match_questions 
-                        WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'], ARRAY_A);
+                        WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'].' AND is_true = 1', ARRAY_A);
                     $scoreArr = [];//项目所有分数数组
                     $surplus_timeArr = [];//项目所有剩余时间数组
                     $created_microtimeArrr = [];//项目所提交毫秒数组
                     $moreArr = []; //每一轮分数数组
-                    $match_more_all = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match['match_id'].' AND user_id='.$trv['user_id'].' AND project_id='.$pavs['match_project_id'].' GROUP BY project_id,user_id');
+                    $match_more_all = $wpdb->get_var('SELECT count(id) FROM '.$wpdb->prefix.'match_project_more WHERE match_id='.$match['match_id'].' AND project_id='.$pavs['match_project_id']);
 
 //                    $match_more_all = $pavs['match_more'] > 0 ? $pavs['match_more'] : $match['match_more'];
                     for($mi = 1; $mi <= $match_more_all; ++$mi){
@@ -1290,16 +1290,15 @@ class Match_student {
             $totalRanking = [];
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
-            
-             
+
              $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
                   (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
                   LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
-                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) 
+                  WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) AND mq.is_true = 1 
                   GROUP BY mq.project_id,mq.user_id) AS child  
                   GROUP BY user_id 
                   ORDER BY my_score DESC limit 0,5
-               ";        
+               ";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
                 // leo_dump($wpdb->last_query);
 				$tuV2['my_score'] = 0;

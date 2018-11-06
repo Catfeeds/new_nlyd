@@ -21,6 +21,7 @@
                                 <span class="accept-name c_blue"><?=$v['student_name']?>(第<?=$v['seat_number']?>座位号)</span>
                                 <span class="phone-number ff_num"><?=$v['created_time']?></span>
                             </div>
+                            <p class="address-detail c_black"><?=$v['match_title'].$v['project_title'].'第'.$v['match_more'].'轮'?></p>
                             <p class="address-detail c_black"><?=$v['describe']?></p>
                         </div>
                         <div  class="address-right">

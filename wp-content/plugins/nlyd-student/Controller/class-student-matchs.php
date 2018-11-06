@@ -670,7 +670,8 @@ class Student_Matchs extends Student_Home
                 $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
             }
-        }else{
+        }
+        else{
 
             if(isset($_SESSION['match_data'])){
 
@@ -973,8 +974,7 @@ class Student_Matchs extends Student_Home
             'next_project_url'=>$next_project_url,
             'wait_url' =>home_url('matchs/matchWaitting/match_id/'.$match_more['match_id']),
             'record_url'=>home_url('matchs/record/match_id/'.$match_more['match_id'].'/last/answerLog'),
-            'match_row'=>$row
-        ,
+            'match_row'=>$row,
         );
         //print_r($data);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
@@ -1096,6 +1096,7 @@ class Student_Matchs extends Student_Home
             'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
+            'match_row'=>$row,
             'answer_array'=>$answer_array,
             'my_score'=>$row['my_score'],
             'project_title'=>$row['project_title'],
@@ -1555,7 +1556,7 @@ class Student_Matchs extends Student_Home
             $str = '';
         }
 
-        $sql = "select a.match_id,a.project_id,a.more,b.user_id,a.use_time,b.match_questions,b.questions_answer,b.my_answer,b.my_score,b.surplus_time,b.answer_status,c.post_title match_title,d.post_title project_title 
+        $sql = "select a.match_id,a.project_id,a.more,b.user_id,a.use_time,b.match_questions,b.questions_answer,b.is_true,b.my_answer,b.my_score,b.surplus_time,b.answer_status,c.post_title match_title,d.post_title project_title 
                 from {$wpdb->prefix}match_project_more a 
                 left join {$wpdb->prefix}match_questions b on a.match_id = b.match_id and a.project_id = b.project_id and a.more = b.match_more
                 left join {$wpdb->prefix}posts c on a.match_id = c.ID 
@@ -1580,7 +1581,7 @@ class Student_Matchs extends Student_Home
     public function get_match_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title,c.meta_value project_alias
+        $sql = "select a.answer_status,a.submit_type,a.leave_page_time,a.created_microtime,a.match_questions,a.questions_answer,a.my_answer,a.is_true,a.surplus_time,if(a.my_score>0,a.my_score,0) as my_score,b.post_title,c.meta_value project_alias
                     from {$wpdb->prefix}match_questions a 
                     left join {$wpdb->prefix}posts b on a.project_id = b.ID
                     LEFT JOIN {$wpdb->prefix}postmeta c ON a.project_id = c.post_id AND meta_key = 'project_alias'

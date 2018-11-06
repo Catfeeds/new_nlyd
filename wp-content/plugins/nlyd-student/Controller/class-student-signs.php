@@ -58,7 +58,7 @@ class Student_Signs
             global $wpdb,$current_user;
 
             //获取比赛信息
-            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status = -2",ARRAY_A);
+            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status in(2,-2)",ARRAY_A);
             if(empty($row)){
                 $this->get_404(array('message'=>'签到结束','match_url'=>home_url('matchs/info/match_id/'.$_GET['id'])));
                 return;
@@ -252,10 +252,10 @@ class Student_Signs
 
             //判断是否实名认证
             $user_real_name = get_user_meta($users_id,'user_real_name');
-            if(empty($user_real_name) || empty($user_real_name['real_name'])){ ?>
+            if(empty($user_real_name[0]['real_name'])){ ?>
                 <script type="text/javascript">
-                    //$.alerts('即将跳转到实名认证页');
-                    window.location.href='<?=home_url('/account/info/id/'.$_GET['match_id'])?>';
+                    alert('即将跳转到实名认证页');
+                    window.location.href="<?=home_url('/account/info/type/sign/sign_match/'.$_GET['match_id'].'/order_index/'.$index)?>";
                 </script>
             <?php
                 die;

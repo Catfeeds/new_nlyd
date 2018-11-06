@@ -1773,6 +1773,7 @@ class WP_Query {
 		if ( '' !== $q['menu_order'] ) {
 			$where .= " AND {$wpdb->posts}.menu_order = " . $q['menu_order'];
 		}
+
 		// The "m" parameter is meant for months but accepts datetimes of varying specificity
 		if ( $q['m'] ) {
 			$where .= " AND YEAR({$wpdb->posts}.post_date)=" . substr($q['m'], 0, 4);
@@ -2150,6 +2151,7 @@ class WP_Query {
 			$orderby = "FIELD( {$wpdb->posts}.post_name, $post_name__in )";
 		} else {
 			$orderby_array = array();
+
 			if ( is_array( $q['orderby'] ) ) {
 				foreach ( $q['orderby'] as $_orderby => $order ) {
 					$orderby = addslashes_gpc( urldecode( $_orderby ) );
@@ -2359,7 +2361,6 @@ class WP_Query {
 
 			$where .= ')';
 		}
-
 		/*
 		 * Apply filters on where and join prior to paging so that any
 		 * manipulations to them are reflected in the paging by day queries.
@@ -2505,7 +2506,6 @@ class WP_Query {
 			 * @param WP_Query $this The WP_Query instance (passed by reference).
 			 */
 			$where = apply_filters_ref_array( 'posts_where_paged', array( $where, &$this ) );
-
 			/**
 			 * Filters the GROUP BY clause of the query.
 			 *
@@ -2536,8 +2536,8 @@ class WP_Query {
 			 * @param string   $orderby The ORDER BY clause of the query.
 			 * @param WP_Query $this    The WP_Query instance (passed by reference).
 			 */
-			$orderby = apply_filters_ref_array( 'posts_orderby', array( $orderby, &$this ) );
 
+            $orderby = apply_filters_ref_array( 'posts_orderby', array( $orderby, &$this ) );
 			/**
 			 * Filters the DISTINCT clause of the query.
 			 *
@@ -2589,7 +2589,6 @@ class WP_Query {
 			$fields = isset( $clauses[ 'fields' ] ) ? $clauses[ 'fields' ] : '';
 			$limits = isset( $clauses[ 'limits' ] ) ? $clauses[ 'limits' ] : '';
 		}
-
 		/**
 		 * Fires to announce the query's current selection parameters.
 		 *
@@ -3226,7 +3225,9 @@ class WP_Query {
 	 */
 	public function query( $query ) {
 		$this->init();
+
 		$this->query = $this->query_vars = wp_parse_args( $query );
+
 		return $this->get_posts();
 	}
 
