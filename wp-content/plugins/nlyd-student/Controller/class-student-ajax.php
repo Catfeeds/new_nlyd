@@ -2988,7 +2988,8 @@ class Student_Ajax
                 if($bindType == 'code') $this->get_smtp_code($_POST['mobile'],17,true,$_POST['send_code']);
             }
             $user_id = $_POST['user_id'];
-        }else{
+        }
+        else{
             $user = $wpdb->get_row('SELECT ID,user_pass,weChat_openid FROM '.$wpdb->users.' WHERE (user_mobile="'.$_POST['mobile'].'" OR user_login="'.$_POST['mobile'].'" OR user_email="'.$_POST['mobile'].'")');
             //账号绑定
             //判断用户是否存在
@@ -3023,7 +3024,12 @@ class Student_Ajax
 
         if($res){
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
-                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign')));
+                //获取所有报名信息
+                $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_POST['match_id']} and pay_status in(2,3,4) order by id asc";
+                $results = $wpdb->get_results($sql,ARRAY_A);
+                $index = array_search($user_id,array_column($results,'user_id')) + 1;
+
+                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('/account/info/type/sign/sign_match/'.$_POST['match_id'].'/order_index/'.$index)));
             }else{
 
                 wp_send_json_success(array('info'=>__('绑定成功', 'nlyd-student'), 'url' => home_url('account')));
