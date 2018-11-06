@@ -470,7 +470,7 @@ class Student_Trains extends Student_Home
 
                         }else{
 
-                            $len = count($match_questions);
+                            $len = !empty($match_questions) ? count($match_questions) : 0;
 
                             $error_len = count(array_diff_assoc($questions_answer,$my_answer));
                             $my_score = ($len-$error_len)*10;

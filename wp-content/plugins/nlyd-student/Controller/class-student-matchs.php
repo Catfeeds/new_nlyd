@@ -316,8 +316,6 @@ class Student_Matchs extends Student_Home
         /*print_r($this->current_project);
         print_r($project_more);*/
 
-
-
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$data);
     }

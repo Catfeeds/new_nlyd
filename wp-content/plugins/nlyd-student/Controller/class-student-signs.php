@@ -58,7 +58,7 @@ class Student_Signs
             global $wpdb,$current_user;
 
             //获取比赛信息
-            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status in(2,-2)",ARRAY_A);
+            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status = -3",ARRAY_A);
             if(empty($row)){
                 $this->get_404(array('message'=>'签到结束','match_url'=>home_url('matchs/info/match_id/'.$_GET['id'])));
                 return;

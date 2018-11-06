@@ -2,14 +2,14 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=$match_title?></div></h1>
+            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row layui-row">
+                    <!-- <div class="matching-row layui-row">
                         <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
-                    </div>
-                    <div class="matching-row layui-row have-submit" style="margin-top:0;">
+                    </div> -->
+                    <div class="matching-row layui-row have-submit">
                         <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
                         <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
