@@ -9,9 +9,11 @@
                     <div class="count-wrapper">
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
-                            <?php $hint = !empty($current_project) ? '正在' : '即将';?>
+                            <?php
+                                $hint = $end_project == 'y' ? '正在' : '即将';
+                            ?>
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__($project_title,'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
+                                <span class="c_blue"><?=__($hint.'进行', 'nlyd-student')?>: </span><?=__($project_title,'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
                             </p>
                         </div>
 
