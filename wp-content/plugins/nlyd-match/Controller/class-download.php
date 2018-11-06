@@ -961,6 +961,7 @@ class Download
             $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(50);
             $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
             $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(35);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
 
 
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title.'(战队排名)');
@@ -973,10 +974,10 @@ class Download
             $objPHPExcel->getActiveSheet()->getStyle( 'D2')->getFont()->setBold(true);
 
 
-            $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getBorders()->getAllBorders()->setBorderStyle('thin');
-            $objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
-            $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
-            for ($b = 'A'; $b <= 'D'; ++$b){
+            $objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getBorders()->getAllBorders()->setBorderStyle('thin');
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
+            $objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
+            for ($b = 'A'; $b <= 'E'; ++$b){
                 $objPHPExcel->getActiveSheet()->getStyle( $b.'2')->getFill()->setFillType('solid')->getStartColor()->setARGB('00FCE4D6');
                 $objPHPExcel->getActiveSheet()->getStyle($b.'2')->getBorders()->getAllBorders()->setBorderStyle('thin');
             }
@@ -986,16 +987,20 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', '战队');
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', 'ID');
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '总成绩');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '贡献成员');
 
 
 
             $k = 0;
             foreach ($data as $raV){
+                //自动换行
+                $objPHPExcel->getActiveSheet()->getStyle('E'.($k+3))->getAlignment()->setWrapText(true);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$raV['ranking']);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$raV['team_name']);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.$raV['team_id']);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$raV['my_score']);
-                for ($b = 'A'; $b <= 'D'; ++$b){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$raV['userScore']);
+                for ($b = 'A'; $b <= 'E'; ++$b){
                     $objPHPExcel->getActiveSheet()->getStyle($b.($k+3))->getBorders()->getAllBorders()->setBorderStyle('thin');
                 }
                 ++$k;
@@ -1168,7 +1173,7 @@ class Download
                     FROM(
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
                         FROM `{$wpdb->prefix}order` a 
-                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr} and c.is_true = 1)                 
+                        LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr}) and c.is_true = 1                 
                         WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
                         GROUP BY user_id,project_id
                     ) x
@@ -1332,7 +1337,7 @@ class Download
                 //每个战队的分数
 
 
-                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+                $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime,user_id FROM 
                   (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
                   LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                   WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) AND mq.is_true = 1 
@@ -1345,11 +1350,16 @@ class Download
                 $tuV2['my_score'] = 0;
                 $tuV2['surplus_time'] = 0;
                 $tuV2['created_microtime'] = 0;
+                $userScore = [];
                 foreach ($rows as $key => $value) {
+                    $user_real_name = get_user_meta($value['user_id'],'user_real_name', true);
+                    $real_name = $user_real_name ? $user_real_name['real_name'] : '-';
+                    $userScore[] = $real_name.': '.$value['my_score'];
                     $tuV2['my_score'] += $value['my_score'];
                     $tuV2['surplus_time'] += $value['surplus_time'];
                     $tuV2['created_microtime'] += $value['created_microtime'];
                 }
+                $tuV2['userScore'] = join("\r\n", $userScore);
                 $totalRanking[] = $tuV2;
             }
         }
