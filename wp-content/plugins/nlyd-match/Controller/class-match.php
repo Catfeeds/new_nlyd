@@ -1057,7 +1057,7 @@ class Match
            <!--轮数新增/修改form-->
             <div class="show_form" style="display: none" >
                     <input type="hidden" name="post_id" value="<?=$_GET['post']?>"/>
-                    <input type="hidden" name="project_id" value="<?=$_GET['project_id']?>"/>
+                    <input type="hidden" name="project_id" value=""/>
                     <input id="match_more_id" type="hidden" name="more_id" value=""/>
                     <div class="layui-form-item">
                         <label class="layui-form-label">开始时间</label>
