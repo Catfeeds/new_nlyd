@@ -1096,6 +1096,7 @@ class Student_Matchs extends Student_Home
             'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
+            'match_row'=>$row,
             'answer_array'=>$answer_array,
             'my_score'=>$row['my_score'],
             'project_title'=>$row['project_title'],
@@ -1555,7 +1556,7 @@ class Student_Matchs extends Student_Home
             $str = '';
         }
 
-        $sql = "select a.match_id,a.project_id,a.more,b.user_id,a.use_time,b.match_questions,b.questions_answer,b.my_answer,b.my_score,b.surplus_time,b.answer_status,c.post_title match_title,d.post_title project_title 
+        $sql = "select a.match_id,a.project_id,a.more,b.user_id,a.use_time,b.match_questions,b.questions_answer,b.is_true,b.my_answer,b.my_score,b.surplus_time,b.answer_status,c.post_title match_title,d.post_title project_title 
                 from {$wpdb->prefix}match_project_more a 
                 left join {$wpdb->prefix}match_questions b on a.match_id = b.match_id and a.project_id = b.project_id and a.more = b.match_more
                 left join {$wpdb->prefix}posts c on a.match_id = c.ID 
