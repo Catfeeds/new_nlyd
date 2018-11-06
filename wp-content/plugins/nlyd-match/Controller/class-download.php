@@ -77,7 +77,7 @@ class Download
         IFNULL(o.express_company,"-") AS express_company,
         CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "商品订单" ELSE "-" END AS order_type,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
-        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "支付完成" ELSE "-" END AS pay_title,
+        CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
         p.post_title,
         o.pay_status,
@@ -113,7 +113,7 @@ class Download
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(35);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(40);
@@ -147,7 +147,7 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '比赛');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '收件人');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '联系电话');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '收获地址');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '收货地址');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '订单类型');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '快递单号');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '快递公司');

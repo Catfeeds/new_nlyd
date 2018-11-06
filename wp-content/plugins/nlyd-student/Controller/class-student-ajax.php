@@ -2289,7 +2289,7 @@ class Student_Ajax
         wp_set_current_user($user_id);
         wp_set_auth_cookie($user_id);
         $_SESSION['login_time'] = get_time()+15;
-        if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24*30*12,'/');
+        if(get_user_meta($user_id, 'locale', true)) setcookie('user_language', get_user_meta($user_id, 'locale', true), time()+3600*24,'/');
         //update_user_meta($user_id,'last_login_time',get_time());
     }
 
@@ -3001,15 +3001,13 @@ class Student_Ajax
 
         //if($user->weChat_openid) wp_send_json_error(array('info'=>'该用户已绑定其它微信'));
             $user_id = $user->ID;
-            update_user_meta($user_id,'user_session_id',session_id());
-            wp_set_current_user($user_id);
-            wp_set_auth_cookie($user_id);
+            $this->setUserCookie($user_id);
             //wp_send_json_success(['info' => '登录成功', 'url' => home_url('account')]);
             if(isset($_POST['loginType']) && $_POST['loginType'] == 'sign'){
-                wp_send_json_success(array('info'=>__('账户绑定完成,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
+                wp_send_json_success(array('info'=>__('登录成功,即将跳转', 'nlyd-student'), 'url' => home_url('account/certification/type/sign/sign_match_id/'.$_POST['match_id'])));
             }else{
 
-                wp_send_json_success(array('info'=>__('绑定成功', 'nlyd-student'), 'url' => home_url('account')));
+                wp_send_json_success(array('info'=>__('登录成功', 'nlyd-student'), 'url' => home_url('account')));
             }
         }
 
@@ -3455,7 +3453,7 @@ class Student_Ajax
         if(!$lang) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         global $current_user;
 
-        $cookieBool = setcookie('user_language', $lang, time()+3600*24*30*12,'/');
+        $cookieBool = setcookie('user_language', $lang, time()+3600*24,'/');
         if(!$cookieBool) wp_send_json_error(array('info'=>__('修改失败', 'nlyd-student')));
 //        print_r($_COOKIE);
         $current_user->ID > 0 && update_user_meta($current_user->ID, 'locale', $lang);
