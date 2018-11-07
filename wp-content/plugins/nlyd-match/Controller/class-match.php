@@ -1066,13 +1066,13 @@ class Match
                     <div class="layui-form-item">
                         <label class="layui-form-label">开始时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value="" name="start_time" class="layui-input date-picker _start_time"/>
+                            <input type="text" value="" id="start_time" name="start_time" class="layui-input date-picker _start_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">结束时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value="" name="end_time" class="layui-input date-picker _end_time"/>
+                            <input type="text" value="" id="end_time" name="end_time" class="layui-input date-picker _end_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">

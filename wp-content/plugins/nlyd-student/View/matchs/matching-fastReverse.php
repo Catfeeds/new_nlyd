@@ -26,7 +26,7 @@
                         <br>
                         <span>*<?=__('若您跳过此题不作答，则扣掉2秒时间', 'nlyd-student')?></span>
                         <br>
-                        <span>*<?=__('连续作答“本题无解”不可超过6次，否则系统将强制提交本轮成绩', 'nlyd-student')?></span>
+                        <span>*<?=__('连续作答“本题无解”不可超过5次，否则系统将强制提交本轮成绩', 'nlyd-student')?></span>
                     </p>
                     <div class="matching-fast">
                         <div class="item-wrapper">
@@ -84,6 +84,7 @@ jQuery(function($) {
     var sys_second=<?=$count_down?>;//倒计时的时间
     var matchSession=$.GetSession('match','true');
     var isMatching=false;//判断用户是否刷新页面
+    var no_answer=50;//每隔多少题出现一次无解
     if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
         isMatching=true;
         ajaxData=matchSession['ajaxData'];
@@ -111,6 +112,7 @@ jQuery(function($) {
         // }else{
             var _flag=false;//重复题目是true
             var _flag1=false;//前面的4题连续无解是true
+            var _flag2=false;//每50题出现一个无解题
             $.each(ajaxData,function(index,value){
                 var _select=value.question;
                 if(_select[0]==select[0] && _select[1]==select[1] && _select[2]==select[2] && _select[3]==select[3]){//重复题目
@@ -121,22 +123,38 @@ jQuery(function($) {
             var _len=ajaxData.length;
             var examples=valid(select)
             var _rights='本题无解'
+            var have_noanswer=_len==0 ? false : ajaxData[_len-1]['have_noanswer'];
             // var _rights=valid(select);
             if(examples.length>0){//有解
                 _rights=examples[0]
             }
-            if(_len>=2){//前面的4题连续无解
-                if(_rights=='本题无解'){//本题也无解
-                    if(ajaxData[_len-1]['rights']=='本题无解' && ajaxData[_len-2]['rights']=='本题无解'){
-                        _flag1=true;
+            if(_len>=0){
+                if(_len%no_answer!=0){//每50道题出现一次本题无解
+                    if(_rights=='本题无解'){//本题也无解
+                        if(have_noanswer){
+                            _flag2=true
+                        }
+                        have_noanswer=true;
                     }
+                }else{
+                    have_noanswer=false;
                 }
             }
-            if(_flag || _flag1){//重复题目，连续无解
+            // if(_len>=1){//前面的1题连续无解
+            //     if(_rights=='本题无解'){//本题也无解
+            //         if(ajaxData[_len-1]['rights']=='本题无解'){
+            //             _flag1=true;
+            //         }
+            //     }
+            // }
+            if(_flag || _flag2){//重复题目，连续无解
                 initQuestion()
             }else{
-                var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples}
+                var thisRow={question:select,yours:'',isRight:false,rights:_rights,examples:examples,have_noanswer:have_noanswer}
                 ajaxData.push(thisRow) 
+                if(_len>=1){
+                   delete ajaxData[_len-1]['have_noanswer']
+                }
                 var sessionData={
                     ajaxData:ajaxData,
                     match_id:_match_id,
@@ -164,6 +182,9 @@ jQuery(function($) {
             //     'visibility': 'visible',
             // })
             // isSubmit=true;
+            var _len=ajaxData.length;
+            delete ajaxData[_len-1]['examples'];
+            delete ajaxData[_len-1]['have_noanswer'];
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
@@ -199,7 +220,9 @@ jQuery(function($) {
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
-                            window.location.href=res.data.url
+                            setTimeout(function(){
+                                window.location.href=res.data.url
+                            }, 600);
                         }
                     }else{
                         $('#load').css({
@@ -472,12 +495,11 @@ new AlloyFinger($('#next')[0], {
                         ajaxData[_len-1]['isRight']=false;
                      }
                      ajaxData[_len-1].yours=answer_dateNumber;
-                     if(_len>=6){
-                        if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解' && ajaxData[_len-6]['yours']=='本题无解'){
+                     if(_len>=5){
+                        if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解'){
                             $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
                             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                            delete ajaxData[_len-1].examples;
-                            submit(time,4)
+                            submit(time,5)
                         }
                     }
                 }else{
