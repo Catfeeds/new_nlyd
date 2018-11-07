@@ -201,12 +201,13 @@ if(!class_exists('MatchController')){
                 if(!empty($category)){
                     foreach ($category as $k => $v){
                         if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
-                            $num = $wpdb->get_var("SELECT COUNT(term_taxonomy_id) FROM {$wpdb->term_relationships} WHERE term_taxonomy_id='{$v->term_id}'");
+                            $num = $wpdb->get_var("SELECT COUNT(tr.object_id) FROM {$wpdb->term_relationships} AS tr  
+                            LEFT JOIN {$wpdb->posts} AS p ON p.ID=tr.object_id 
+                            WHERE tr.term_taxonomy_id='{$v->term_id}' AND p.post_status!='trash'");
                             ?>
                             <script type="text/javascript">
                                 jQuery(document).ready(function($) {
-                                    var _html = ' | <li class="question-<?=$v->term_id?>"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
-
+                                    var _html = ' | <li class="question---><?=$v->term_id?>//"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
                                     $('.wrap').find('.subsubsub').append(_html);
                                     $('.question-<?=$questions_status?>').find('a').addClass('current');
                                 })
@@ -232,7 +233,7 @@ if(!class_exists('MatchController')){
                 global $wpdb;
                 $join .= " LEFT JOIN {$wpdb->prefix}match_meta_new AS mm ON mm.match_id={$wpdb->posts}.ID";
             }
-            if($this->post_type == 'question'){
+            if($this->post_type == 'question' && isset($_GET['questions_status'])){
                 global $wpdb;
                 $join .= " LEFT JOIN {$wpdb->term_relationships} AS tr ON tr.object_id={$wpdb->posts}.ID";
             }
@@ -249,7 +250,7 @@ if(!class_exists('MatchController')){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 if($match_status != '') $where .= " AND mm.match_status={$match_status}";
             }
-            if($this->post_type == 'question'){
+            if($this->post_type == 'question' && isset($_GET['questions_status'])){
                 $questions_status = isset($_GET['questions_status']) ? $_GET['questions_status'] : '';
                 if($questions_status != '') $where .= " AND tr.term_taxonomy_id={$questions_status}";
             }
