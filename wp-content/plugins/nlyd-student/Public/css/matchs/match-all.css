@@ -1,0 +1,97 @@
+/* bonusDetail */
+.match-title{
+    font-size: 0.16rem;
+    padding: 10px 0;
+}
+.money_row{
+      padding: 8px 0;
+      font-size:0.12rem;
+}
+div .money_row:first-child{
+    background: #F6FAFF;
+}
+.money_right{
+    text-indent: 0;
+}
+/* bonusDetail */
+
+/* confirm */
+
+.nl-match{
+    float: left;
+    width:100%;
+    padding: 17px 0;
+    position: relative;
+    background: #fff;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.15);
+}
+ul .nl-match:last-child{
+    border-bottom: none;
+}
+input[type=text].c_black{
+    border:none;
+    background: #fff;
+    padding: 0;
+    margin-bottom: 0;
+    color: #262626;
+    font-size: 0.14rem;
+}
+.nl-match-people{
+    position: absolute;
+    top: 0;
+    right: 2px;
+}
+input[type="text"], input[type="tel"], input[type="url"], input[type="email"], input[type="number"], input[type="date"], input[type="range"], input[type="password"], select, textarea{
+    height: auto!important;
+}
+.nl-match-header{
+    position: relative;
+}
+.rz span{
+    display: inline-block;
+}
+.nl-match-rz{
+    width: 35px;
+    display: inline-block!important;
+    margin-left: 10px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+.coachCheckbox{
+    display: none;
+}
+a.nl-see-link{
+    color: #2484FE;
+}
+/* #page{
+    padding-bottom: 45px;
+} */
+.a-btn.go{
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-radius: 0;
+    margin-left: 0;
+}
+.layui-form-checkbox[lay-skin=primary] i{
+    width: 25px;
+    height: 25px;
+}
+.layui-icon-ok:before {
+    top: 4px;
+    position: absolute;
+    left: 7px;
+}
+/* .nl-match-label{
+    float: left;
+    width: 85px;
+} */
+/* .nl-match-info{
+    float: left;
+    width: -webkit-calc(100% - 85px);
+    width: calc(100% - 85px);
+    text-align: left;
+} */
+/* confirm */
+
