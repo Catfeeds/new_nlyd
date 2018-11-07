@@ -499,7 +499,7 @@ new AlloyFinger($('#next')[0], {
                         if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解'){
                             $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
                             var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                            submit(time,4)
+                            submit(time,5)
                         }
                     }
                 }else{
