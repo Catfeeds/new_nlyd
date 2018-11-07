@@ -826,6 +826,9 @@ class Match_student {
 
                             color: #ffffff;
                         }
+                        .abcde td,.abcde th{
+                            vertical-align: middle!important;
+                        }
                     </style>
                     <div id="oprion-box">
                         <div id="option1">
@@ -908,11 +911,13 @@ class Match_student {
                                 <th scope="col" id="real_name" class="manage-column column-real_name">战队</th>
                                 <th scope="col" id="sex" class="manage-column column-sex">ID</th>
                                 <th scope="col" id="birthday" class="manage-column column-birthday">总成绩</th>
+                                <th scope="col" id="member" class="manage-column column-member">贡献成员</th>
+
                             </tr>
                             </thead>
                             <tbody id="the-list" data-wp-lists="list:user">
                             <?php foreach ($data as $raV){ ?>
-                                <tr id="user-13">
+                                <tr class="abcde">
                                     <th scope="row" class="check-column">
                                         <label class="screen-reader-text" for="user_13"></label>
                                         <input type="checkbox" name="users[]" id="" class="subscriber" value="">
@@ -924,6 +929,7 @@ class Match_student {
                                     <td class="name column-real_name" data-colname="战队"><span aria-hidden="true"><?=$raV['team_name']?></span><span class="screen-reader-text"></span></td>
                                     <td class="name column-sex" data-colname="ID"><span aria-hidden="true"><?=$raV['team_id']?></span><span class="screen-reader-text">-</span></td>
                                     <td class="name column-birthday" data-colname="总成绩"><span aria-hidden="true"><?=$raV['my_score']?></span><span class="screen-reader-text">-</span></td>
+                                    <td class="name column-member" data-colname="贡献成员"><?=$raV['userScore']?></td>
                                 </tr>
                             <?php } ?>
                             </tbody>
@@ -938,6 +944,7 @@ class Match_student {
                                 <th scope="col" class="manage-column column-real_name">战队</th>
                                 <th scope="col" class="manage-column column-sex">ID</th>
                                 <th scope="col" class="manage-column column-birthday">总成绩</th>
+                                <th scope="col" class="manage-column column-member">贡献成员</th>
                             </tr>
                             </tfoot>
 
@@ -1291,7 +1298,7 @@ class Match_student {
             foreach ($teamsUsers as $tuV2){
                 //每个战队的分数
 
-             $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime FROM 
+             $sql = "SELECT SUM(my_score) AS my_score,SUM(surplus_time) AS surplus_time,SUM(created_microtime) AS created_microtime,user_id FROM 
                   (SELECT MAX(my_score) AS my_score,MAX(surplus_time) AS surplus_time,if(MAX(created_microtime) > 0, MAX(created_microtime) ,0) AS created_microtime,mq.user_id FROM `{$wpdb->prefix}match_questions` AS mq 
                   LEFT JOIN `{$wpdb->prefix}match_team` AS mt ON mt.user_id=mq.user_id AND mt.status=2 AND mt.team_id={$tuV2['team_id']}
                   WHERE mq.match_id={$match['match_id']} AND mt.team_id={$tuV2['team_id']} AND mq.user_id IN({$tuV2['user_ids']}) AND mq.is_true = 1 
@@ -1300,15 +1307,21 @@ class Match_student {
                   ORDER BY my_score DESC limit 0,5
                ";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
-                // leo_dump($wpdb->last_query);
+
+
 				$tuV2['my_score'] = 0;
 				$tuV2['surplus_time'] = 0;
 				$tuV2['created_microtime'] = 0;
+                $userScore = [];
                 foreach ($rows as $key => $value) {
+                    $user_real_name = get_user_meta($value['user_id'],'user_real_name', true);
+                    $real_name = $user_real_name ? $user_real_name['real_name'] : '-';
+                    $userScore[] = $real_name.': '.$value['my_score'];
                 	$tuV2['my_score'] += $value['my_score'];
-				$tuV2['surplus_time'] += $value['surplus_time'];
-				$tuV2['created_microtime'] += $value['created_microtime'];
+                    $tuV2['surplus_time'] += $value['surplus_time'];
+                    $tuV2['created_microtime'] += $value['created_microtime'];
                 }
+                $tuV2['userScore'] = join('<br />', $userScore);
                 $totalRanking[] = $tuV2;
             }
         }
