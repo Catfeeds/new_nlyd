@@ -148,7 +148,7 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
                                 //print_r($end_time);
                             }
                         }elseif ($match_row['submit_type'] == 5){
-                            $error=__('连续作答“本题无解”超过5次，该轮答案由系统强制提交', 'nlyd-student');
+                            $error=__('连续作答“本题无解”超过5次，该轮答案由系统强制提交');
                         }
                     ?>
                     <div style="color:#CF1818;"><?=$error?></div>
