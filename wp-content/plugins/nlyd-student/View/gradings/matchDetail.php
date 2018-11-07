@@ -174,7 +174,7 @@ jQuery(function($) {
                     action:'get_entry_list',
                     _wpnonce:$('#inputPlayer').val(),
                     page:match_page,
-                    match_id:<?=$_GET['match_id']?>,
+                    grad_id:<?=$_GET['grad_id']?>,
                     match_end_date:new Date().getTime()
                 }
                 var lis = [];

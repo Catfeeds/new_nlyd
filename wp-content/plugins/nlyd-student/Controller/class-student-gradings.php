@@ -7,7 +7,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Grading extends Student_Home
+class Student_Gradings extends Student_Home
 {
     private $ajaxControll;
     public function __construct($action)
@@ -25,6 +25,7 @@ class Student_Grading extends Student_Home
     }
 
     public function index(){
+
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view);
     }
@@ -51,9 +52,42 @@ class Student_Grading extends Student_Home
         load_view_template($view,$data);
     }
 
-    public function confirm(){//报名页
+
+    /**
+     * 考级报名页
+     */
+    public function confirm(){
+
+        global $wpdb,$current_user;
+        $match = $this->get_grading($_GET['grad_id']);
+        if(empty($match)){
+            $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
+            return;
+        }
+        //print_r($match);
+        $data['match'] = $match;
+
+        //主训教练
+        $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$match['category_id']} and major = 1");
+        if($coach_id > 0){
+            $data['coach_real_name'] = get_user_meta($coach_id,'user_real_name')[0];
+        }else{
+            $data['coach_real_name'] = '';
+        }
+
+        //实名认证
+        $data['user_real_name'] = get_user_meta($current_user->ID,'user_real_name')[0];
+
+        //战队
+        $data['team_title'] = $wpdb->get_var("select b.post_title team_title 
+                                            from {$wpdb->prefix}match_team a  
+                                            left join {$wpdb->prefix}posts b on a.team_id = b.ID
+                                            where user_id = {$current_user->ID} and status = 2 and user_type = 1");
+        //选手ID
+        $data['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
+
         $view = student_view_path.CONTROLLER.'/confirm.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     
     public function ready_szzb(){//数字争霸准备页
@@ -126,6 +160,7 @@ class Student_Grading extends Student_Home
         $sql = "select a.*,b.post_title grading_title,b.post_content,
                 c.post_title grading_type,if(d.id>0,'y','') is_me,
                 DATE_FORMAT(a.start_time,'%Y-%m-%d %H:%i') start_time,
+                DATE_FORMAT(a.end_time,'%Y-%m-%d %H:%i') end_time,
                 case a.status
                 when -2 then '等待开赛'
                 when 1 then '报名中'

@@ -485,7 +485,7 @@ class Student_Ajax
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
 
-        if(empty($_POST['match_id']) || empty($_POST['project_id'])  || !isset($_POST['cost'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        if(empty($_POST['match_id']) || !isset($_POST['cost'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
 
         global $wpdb,$current_user;
         if($current_user->ID < 1 || !$current_user->ID){
@@ -501,16 +501,25 @@ class Student_Ajax
         //if(empty($_POST['fullname'])) wp_send_json_error(array('info'=>'收件人姓名不能为空'));
         //if(empty($_POST['telephone'])) wp_send_json_error(array('info'=>'联系电话不能为空'));
         //if(empty($_POST['address'])) wp_send_json_error(array('info'=>'收货地址不能为空'));
+        if($_POST['order_type'] == 2){  //考级
 
-        $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
-        $match_meta = $wpdb->get_row($sql,ARRAY_A);
-        if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
-        if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
-        $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
-        if($match_meta['match_max_number'] > 0){
+            $sql = "select grading_id,status from {$wpdb->prefix}grading_meta where grading_id = {$_POST['match_id']} ";
+            $match_meta = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
+            if($match_meta['status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
 
-            if(!empty($total)){
-                if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>__('已达到最大报名数,请联系管理员', 'nlyd-student')));
+        }else{
+
+            $sql = "select match_id,match_status,match_max_number from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ";
+            $match_meta = $wpdb->get_row($sql,ARRAY_A);
+            if(empty($match_meta)) wp_send_json_error(array('info'=>__('比赛信息错误', 'nlyd-student')));
+            if($match_meta['match_status'] != 1) wp_send_json_error(array('info'=>__('当前比赛已禁止报名', 'nlyd-student')));
+            $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}order where match_id = {$_POST['match_id']} ");
+            if($match_meta['match_max_number'] > 0){
+
+                if(!empty($total)){
+                    if($total >= $match_meta['match_max_number']) wp_send_json_error(array('info'=>__('已达到最大报名数,请联系管理员', 'nlyd-student')));
+                }
             }
         }
 
@@ -524,6 +533,7 @@ class Student_Ajax
                 $wpdb->delete($wpdb->prefix.'order', ['id' => $row->id]);
             }
         }
+
         $data = array(
             'user_id'=>$current_user->ID,
             'match_id'=>$_POST['match_id'],
@@ -532,7 +542,7 @@ class Student_Ajax
             'fullname'=>!empty($_POST['fullname']) ? $_POST['fullname'] : '' ,
             'telephone'=>!empty($_POST['telephone']) ? $_POST['telephone'] : '',
             'address'=>!empty($_POST['address']) ? $_POST['address'] : '',
-            'order_type'=>1,
+            'order_type'=>isset($_POST['order_type']) ? $_POST['order_type'] : 1,
             'pay_status'=>1,
             'created_time'=>get_time('mysql'),
         );
@@ -543,7 +553,7 @@ class Student_Ajax
             $data['pay_status'] = 4;
         }
 
-        //print_r($data);die;
+        print_r($data);die;
         //开启事务
         $wpdb->startTrans();
         $a = $wpdb->insert($wpdb->prefix.'order',$data);
@@ -1254,7 +1264,10 @@ class Student_Ajax
 
             if(!empty($_POST['match_id'])){
                 $url = home_url('matchs/confirm/match_id/'.$_POST['match_id']);
-            }else{
+            }elseif (!empty($_POST['grad_id'])){
+                $url = home_url('gradings/confirm/grad_id/'.$_POST['grad_id']);
+            }
+            else{
                 $url = '';
             }
             wp_send_json_success(array('info'=>__('操作成功', 'nlyd-student'),'url'=>$url));
@@ -1645,6 +1658,12 @@ class Student_Ajax
 
                     //验证格式
                     if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>__('国籍必选', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能玩为空', 'nlyd-student')));
+                    $user_id = $wpdb->get_var("select user_id from {$wpdb->prefix}usermeta where meta_value like '%{$_POST['meta_val']['real_ID']}%'");
+                    if($user_id > 0 && $user_id != $current_user->ID){
+                        wp_send_json_error(array('info'=>__('该证件号已被使用', 'nlyd-student')));
+                    }
 
                     update_user_meta($current_user->ID,'user_nationality',$_POST['nationality']);
                     update_user_meta($current_user->ID,'user_nationality_pic',$_POST['nationality_pic']);
@@ -1763,6 +1782,7 @@ class Student_Ajax
             }
 
             $url = !empty($_POST['match_id']) ? home_url('/matchs/confirm/match_id/'.$_POST['match_id']) : home_url('account/info');
+            $url = !empty($_POST['grad_id']) ? home_url('/gradings/confirm/grad_id/'.$_POST['grad_id']) : home_url('account/info');
             $success['info'] = __('保存成功', 'nlyd-student');
             $success['url'] = $url;
             wp_send_json_success($success);
@@ -3757,13 +3777,13 @@ class Student_Ajax
             //两个链接
             if($val['status'] == 2){
                 //比赛中
-                $url = home_url('grading/matchWaitting/grad_id/'.$val['ID']);
+                $url = home_url('gradings/matchWaitting/grad_id/'.$val['ID']);
                 $button_title = __('进入考级', 'nlyd-student');
                 $rows[$k]['status_cn'] = __('考级中', 'nlyd-student');
             }
             else if ($val['status'] == 1){
                 //报名中
-                $url = home_url('grading/confirm/grad_id/'.$val['ID']);
+                $url = home_url('gradings/confirm/grad_id/'.$val['ID']);
                 $button_title = __('参赛报名', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('报名中', 'nlyd-student');
             }
@@ -3779,18 +3799,18 @@ class Student_Ajax
             }
             else{
                 //等待开赛
-                $url = home_url('grading/matchWaitting/grad_id/'.$val['ID']);
+                $url = home_url('gradings/matchWaitting/grad_id/'.$val['ID']);
                 $button_title = __('等待开赛', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('等待开赛', 'nlyd-student');
             }
             $rows[$k]['match_status'] = $val['status'];
             $rows[$k]['button_title'] = $button_title;
             $rows[$k]['right_url'] = $url;
-            $rows[$k]['left_url'] = home_url('grading/info/grad_id/'.$val['ID']);
+            $rows[$k]['left_url'] = home_url('gradings/info/grad_id/'.$val['ID']);
 
             if($_POST['match_type'] =='history'){
                 $button_title = __('查看排名', 'nlyd-student');
-                $rows[$k]['right_url'] = home_url('grading/record/grad_id/'.$val['ID']);
+                $rows[$k]['right_url'] = home_url('gradings/record/grad_id/'.$val['ID']);
             }
         }
         //print_r($rows);
