@@ -8,13 +8,14 @@
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
-                    <div class="matching-row layui-row">
+                    <div class="matching-row layui-row have-submit">
                         <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
                             </div>
                         </div>
+                        <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
