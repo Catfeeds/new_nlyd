@@ -164,10 +164,10 @@ class Student_Gradings extends Student_Home
         $row['count_down'] = strtotime($row['start_time']) - get_time();
         $row['redirect_url'] = home_url('gradings/initialMatch/grad_id/'.$row['grading_id'].'/grad_type/'.$row['project_alias']);
         if($row['memory_lv'] > 0){
-            $row['redirect_url'] .= '/memory_lv/'.$row['memory_lv'];
+            $row['redirect_url'] .= '/type/sz/memory_lv/'.$row['memory_lv'];
             $_SESSION['memory_lv'] = $row['memory_lv'];
         }
-        //print_r($row);
+        print_r($row);
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$row);
     }
@@ -266,6 +266,9 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
     }
+
+
+
 
     public function ready_szzb(){//数字争霸准备页
         $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';

@@ -10,7 +10,30 @@
 <?php
 switch ($project_alias){
     case 'memory':    //速记
-        require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+        switch ($type){
+            case 'sz': //数字记忆
+                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                break;
+            case 'cy': //词语记忆
+                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                break;
+            case 'yzl': //圆周率记忆
+                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                break;
+            case 'wz': //文章记忆
+                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                break;
+            case 'tl': //听力记忆
+                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                break;
+        }
+        if($type){
+
+        }else{
+
+            require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+        }
+
         break;
     case 'reading':    //速读
 
