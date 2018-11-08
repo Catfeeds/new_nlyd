@@ -137,6 +137,26 @@ class Student_Gradings extends Student_Home
     }
 
 
+    /**
+     * 考级等待页
+     */
+    public function matchWaitting(){
+
+        //获取数据
+        $row = $this->get_grading($_GET['grad_id']);
+        if(empty($row)){
+            $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        if($row['status'] == -3){
+            $this->get_404(array('message'=>__('比赛已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+
+
+        $view = student_view_path.CONTROLLER.'/match-waitting.php';
+        load_view_template($view);
+    }
 
     public function ready_szzb(){//数字争霸准备页
         $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';
@@ -202,10 +222,9 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
-    public function matchWaitting(){//考级等待页
-        $view = student_view_path.CONTROLLER.'/match-waitting.php';
-        load_view_template($view);
-    }
+
+
+
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
