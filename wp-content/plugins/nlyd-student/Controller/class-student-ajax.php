@@ -1452,6 +1452,7 @@ class Student_Ajax
         $map = array();
         $map[] = " a.post_status = 'publish' ";
         $map[] = " a.post_type = 'match' ";
+
         //判断往期/近期
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.match_status = -3 ";     //历史
@@ -1495,6 +1496,7 @@ class Student_Ajax
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -3721,21 +3723,26 @@ class Student_Ajax
         $map = array();
         $map[] = " a.post_status = 'publish' ";
         $map[] = " a.post_type = 'grading' ";
+
         //判断往期/近期
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.status = -3 ";     //历史
-            $match_type = 'history';
             $order = ' b.start_time desc ';
 
-        }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
-            $map[] = " b.status = 1 ";     //报名中
-            $match_type = 'signUp';
-            $order = ' b.entry_end_time asc ';
         }
         else{
-            $map[] = " (b.status = -2  or b.status = 2) ";    //比赛
-            $match_type = 'recent';
+            $map[] = " b.status != -3  ";    //比赛
             $order = ' b.start_time asc ';
+        }
+
+        //获取最新比赛倒计时
+        $sql1 = "select match_start_time from {$wpdb->prefix}match_meta_new where match_status = -2 order by match_start_time desc ";
+
+        $row = $wpdb->get_row($sql1);
+        if(!empty($row)){
+            $start_time = $row->match_start_time;
+            $new_match['new_match_arr'] = str2arr(time_format(strtotime($start_time),'Y-m-d-H-i-s'),'-');
+            $new_match['match_type'] = $match_type;
         }
 
         //判断是否有分页
