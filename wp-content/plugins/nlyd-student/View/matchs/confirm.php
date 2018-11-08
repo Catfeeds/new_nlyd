@@ -102,7 +102,7 @@
                                         <span class="c_black"><?=$player['real_name']?></span>
                                         <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
                                         <?php }else{?>
-                                            <a href="<?=home_url('account/certification/match_id/'.$_GET['match_id'])?>" class="nl-see-link"><?=__('实名认证', 'nlyd-student')?></a>
+                                            <a href="<?=home_url('account/info/match_id/'.$_GET['match_id'])?>" class="nl-see-link"><?=__('实名认证', 'nlyd-student')?></a>
                                         <?php }?>
                                     </div>
                                 </div>
@@ -179,8 +179,6 @@
                         <?php }elseif($orderStatus['status'] == 0){ ?>
                             <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
                         <?php } ?>
-
-
                 </form>
             </div>
         </div>           
@@ -329,7 +327,7 @@ jQuery(function($) {
                             // if(res.data.info=="请先实名认证"){
                             if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                                 setTimeout(function(){
-                                    window.location.href=window.home_url+'/account/certification/match_id/'+$.Request('match_id');
+                                    window.location.href=window.home_url+'/account/info/match_id/'+$.Request('match_id');
                                 }, 1000);
                             }else{
                                 $.alerts(res.data.info)

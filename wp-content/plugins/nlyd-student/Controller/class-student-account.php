@@ -224,14 +224,14 @@ class Student_Account extends Student_Home
     /**
      * 实名认证
      */
-     public function certification(){
+     /*public function certification(){
         global $user_info;
 
         $data = array('user_info'=>$user_info);
 
         $view = student_view_path.CONTROLLER.'/certification.php';
         load_view_template($view,$data);
-    }
+    }*/
     /**
      * 默认公用js/css引入
      */

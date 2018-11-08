@@ -258,11 +258,13 @@ layui.use(['element','flow','layer','form'], function(){
                 }
                 ,btn2: function(index, layero){
                     var match_id = <?=!empty($_GET['match_id']) ? $_GET['match_id'] : "''"?>;
+                    var grad_id = <?=!empty($_GET['grad_id']) ? $_GET['grad_id'] : "''"?>;
                     var postData={
                         action:'set_major_coach',
                         _wpnonce:$('#setMain').val(),
                         coach_id:coach_id,
                         match_id:match_id,
+                        grad_id:grad_id,
                         category_id:category_id,
                     }
                     $.ajax({
