@@ -26,8 +26,43 @@ class Student_Gradings extends Student_Home
 
     public function index(){
 
+        global $wpdb;
+        $sql = "select a.id,a.grading_id,a.status,a.start_time,a.end_time,a.entry_end_time,c.meta_value match_switch
+                from {$wpdb->prefix}grading_meta a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.grading_id = c.post_id and meta_key = 'default_match_switch'
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        if(!empty($rows)){
+            $new_time = get_time('mysql');
+            foreach ($rows as $v){
+
+                if($v['match_switch'] == 'ON') {
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['status'] = 1;
+                    }
+                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                        //等待开赛
+                        $save['status'] = -2;
+                    }
+                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                        //进行中
+                        $save['status'] = 2;
+                    }else{
+                        //已结束
+                        $save['status'] = -3;
+                    }
+                }
+                $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
+            }
+        }
+
+        //获取最近一场考级
+        $data['new_grading'] = $wpdb->get_row("select grading_id,start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
+
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     /**
