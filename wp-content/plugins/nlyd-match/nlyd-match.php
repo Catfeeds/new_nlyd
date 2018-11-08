@@ -672,7 +672,7 @@ if(!class_exists('MatchController')){
                 $columns['students'] = '报名人数';
                 $columns['match_ranking'] = '比赛排名';
                 $columns['match_brainpower'] = '脑力健将';
-                $columns['slogan'] = '口号';
+                $columns['sign_url'] = '签到链接';
                 $columns['times'] = '比赛时间';
 //                $columns['time_slot'] = '报名结束时间';
                 $columns['time_slot'] = '报名时间段';
@@ -711,8 +711,8 @@ if(!class_exists('MatchController')){
                 case 'match_status':
                     echo $row['match_status_cn'];
                     break;
-                case 'slogan':
-                    echo $row['match_slogan'];
+                case 'sign_url':
+                    echo '<span style="cursor: pointer;" onclick="copyUrl('."'".home_url('signs/index/match_id/'.$id)."'".');">复制链接</span>';
                     break;
                 case 'times':
 
