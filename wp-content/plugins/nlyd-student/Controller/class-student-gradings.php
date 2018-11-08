@@ -202,6 +202,10 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
+    public function matchWaitting(){//考级等待页
+        $view = student_view_path.CONTROLLER.'/match-waitting.php';
+        load_view_template($view);
+    }
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
@@ -268,6 +272,10 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-confirm', student_css_url.'confirm.css',array('my-student') );
             wp_enqueue_style( 'my-student-confirm' );
+        }
+        if(ACTION=='matchWaitting'){//考级等待倒计时页面
+            wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matchWaitting' );
         }
         if(ACTION == 'match_szzb' || ACTION == 'matching_PI'){//进入数字争霸比赛页面
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
