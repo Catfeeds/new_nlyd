@@ -769,6 +769,7 @@ if(!class_exists('MatchController')){
 
                     break;
                 case 'options':
+
                     //删除比赛必须要先关闭比赛
                     $str = '<a href="post.php?post='.$id.'&action=edit">查看详情</a>';
                     $post = get_post($id);
@@ -777,7 +778,9 @@ if(!class_exists('MatchController')){
                     }else{
                         $str .= ' | <a href="javascript:;" class="closeMatch" data-status="'.$row['match_status'].'" data-id="'.$id.'">关闭比赛</a>';
                     }
-
+                    if($row['match_status'] == -2){
+                        $str .= ' | <a href="javascript:;" class="seating" data-status="'.$row['match_status'].'" data-id="'.$id.'">生成座位</a>';
+                    }
                     echo $str;
                     break;
                 case 'team_student':

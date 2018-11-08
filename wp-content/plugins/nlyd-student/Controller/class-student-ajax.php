@@ -3783,7 +3783,7 @@ class Student_Ajax
                 //比赛中
                 $url = home_url('gradings/matchWaitting/grad_id/'.$val['ID']);
                 $button_title = __('进入考级', 'nlyd-student');
-                $rows[$k]['status_cn'] = __('考级中', 'nlyd-student');
+                $rows[$k]['match_status_cn'] = __('考级中', 'nlyd-student');
             }
             else if ($val['status'] == 1){
                 //报名中

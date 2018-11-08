@@ -24,7 +24,7 @@
                                 <a href="<?=home_url('gradings/ready_szzb/type/1')?>">随机数字记忆</a><br>
                                 <a href="<?=home_url('gradings/ready_szzb/type/2')?>">随机字母记忆</a><br>
                                 <a href="<?=home_url('gradings/ready_word/')?>">随机中文词语记忆</a><br>
-                                <a href="<?=home_url('gradings/matching_PI/')?>">圆周率默写</a><br>
+                                <a href="<?=home_url('gradings/match_szzb/')?>">圆周率默写</a><br>
                                 <a href="<?=home_url('gradings/ready_card/')?>">人脉信息记忆</a><br>
                                 <a href="<?=home_url('gradings/ready_voice/')?>">语音听记数字记忆</a><br>
                                 <a href="<?=home_url('gradings/matching_silent/')?>">国学经典默写</a><br>
@@ -36,9 +36,9 @@
                             </div>
                             <!-- 考级中 -->
                             <div class="layui-tab-item">
-                                <?php if(!empty($new_grading)): ?>
+                                <?php if(!empty($new_grading_time)): ?>
                                     <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新考级倒计时', 'nlyd-student')?>
-                                        <span class="getTime count_down" data-seconds="<?=$new_grading['start_time']?>"><?=__('初始中', 'nlyd-student')?>...</span>        
+                                        <span class="getTime count_down" data-seconds="<?=$new_grading_time?>"><?=__('初始中', 'nlyd-student')?>...</span>
                                     </div>
                                 <?php endif;?>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
