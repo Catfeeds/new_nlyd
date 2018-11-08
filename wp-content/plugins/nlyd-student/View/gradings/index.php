@@ -36,9 +36,9 @@
                             </div>
                             <!-- 考级中 -->
                             <div class="layui-tab-item">
-                                <?php if(!empty($new_grading)): ?>
-                                    <div><?=$new_grading['start_time']?></div>
-                                <?php endif;?>
+                                <?php /*if(!empty($new_grading)): */?><!--
+                                    <div><?/*=$new_grading['start_time']*/?></div>
+                                --><?php /*endif;*/?>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
 
                                 </ul>

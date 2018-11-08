@@ -24,6 +24,10 @@ class Student_Gradings extends Student_Home
         add_shortcode('grading-home',array($this,$action));
     }
 
+
+    /**
+     * 考级列表页
+     */
     public function index(){
 
         global $wpdb;
@@ -131,7 +135,9 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
     }
-    
+
+
+
     public function ready_szzb(){//数字争霸准备页
         $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';
         load_view_template($view);
