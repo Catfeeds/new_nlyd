@@ -1746,6 +1746,22 @@ class Match_Ajax
         return rmdir($dirName) ;
     }
 
+    /**
+     * 删除订单
+     */
+    public function closeOrder(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        if($id < 1) wp_send_json_error(['info' => '参数错误!']);
+
+        global $wpdb;
+        $var = $wpdb->get_var("SELECT id FROM `{$wpdb->prefix}order` WHERE id='{$id}'");
+        if(!$var) wp_send_json_error(['info' => '订单已删除']);
+
+        $bool = $wpdb->delete($wpdb->prefix.'order',['id'=>$id]);
+        if($bool)  wp_send_json_success(['info' => '删除成功']);
+        else wp_send_json_error(['info' => '删除失败']);
+    }
+
 }
 
 new Match_Ajax();

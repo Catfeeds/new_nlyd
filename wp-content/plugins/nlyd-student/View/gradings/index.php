@@ -11,8 +11,9 @@
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
-                        <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title w2">
+                        <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
                             <li class="layui-this" data-id="1"><?=__('近期考级测评', 'nlyd-student')?></li>
+                            <li data-id="2"><?=__('考级中', 'nlyd-student')?></li>
                             <li data-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"></div>
                         </ul>
@@ -20,7 +21,7 @@
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                <a href="<?=home_url('grading/ready_szzb/type/1')?>">随机数字记忆</a><br>
+                                <!-- <a href="<?=home_url('grading/ready_szzb/type/1')?>">随机数字记忆</a><br>
                                 <a href="<?=home_url('grading/ready_szzb/type/2')?>">随机字母记忆</a><br>
                                 <a href="<?=home_url('grading/ready_word/')?>">随机中文词语记忆</a><br>
                                 <a href="<?=home_url('grading/matching_PI/')?>">圆周率默写</a><br>
@@ -30,10 +31,16 @@
 
                                 <a href="<?=home_url('grading/matching_zxss/')?>">正向速算</a><br>
                                 <a href="<?=home_url('grading/matching_nxss/')?>">逆向速算</a><br>
-                                <a href="<?=home_url('grading/ready_wzsd/')?>">文章速读</a><br>
+                                <a href="<?=home_url('grading/ready_wzsd/')?>">文章速读</a><br> -->
                                 </ul>
                             </div>
-                            <!-- 往期比赛 -->
+                            <!-- 考级中 -->
+                            <div class="layui-tab-item">
+                                <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
+
+                                </ul>
+                            </div>
+                            <!-- 往期考级测评 -->
                             <div class="layui-tab-item">
                                 <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
 
