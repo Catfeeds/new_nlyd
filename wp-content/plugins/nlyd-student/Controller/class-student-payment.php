@@ -526,7 +526,7 @@ class Student_Payment {
     public function zfb_returnUrl(){
         file_put_contents('aaa.txt', '执行支付宝回调');
         global $wpdb,$current_user;
-        $row = $wpdb->get_row("select id,match_id from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
+        $row = $wpdb->get_row("select id,match_id,order_type from {$wpdb->prefix}order where serialnumber = {$_GET['serialnumber']} and user_id = {$current_user->ID}");
         wp_register_style( 'userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'userCenter' );
         wp_register_style( 'paySuccess', student_css_url.'paySuccess.css',array('my-student') );

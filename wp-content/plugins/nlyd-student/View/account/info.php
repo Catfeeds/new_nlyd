@@ -498,6 +498,7 @@ jQuery(document).ready(function($) {
             });
             form.on('submit(certificationFormBtn)', function(data){//实名认证提交
                 var match_id=$.Request('match_id')
+                var grad_id=$.Request('grad_id')
                 var fd = new FormData();
                 fd.append('action',data.field.action);
                 fd.append('_wpnonce',data.field._wpnonce);
@@ -523,6 +524,11 @@ jQuery(document).ready(function($) {
                 }else{
                     fd.append('match_id','');
                 }
+                if(grad_id!=null){
+                    fd.append('grad_id',grad_id);
+                }else{
+                    fd.append('grad_id','');
+                }
                 $.each(imgs, function (i, v) {
                     fd.append('images[]',v);
                 })
@@ -539,22 +545,13 @@ jQuery(document).ready(function($) {
                     processData : false,
                     cache : false,
                     success: function(res, textStatus, jqXHR){
-                        if(res.success){
-                            if(res.data.info){
-                                $.alerts(res.data.info)
-                            }
-                            if(res.data.url){
-                                setTimeout(function() {
-                                    window.location.href=res.data.url
-                                }, 300);
-                                
-                            }
-                            return false;
-                           
-                        }else{
-                            $.alerts(res.data.info)
+                        $.alerts(res.data.info)
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+
                         }
-                        
                     }
                 })
                 return false;

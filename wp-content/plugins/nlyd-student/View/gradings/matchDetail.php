@@ -8,7 +8,7 @@
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback static" href="<?= home_url('grading') ?>">
+                <a class="mui-pull-left nl-goback static" href="<?= home_url('gradings') ?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?= __('考级详情', 'nlyd-student') ?></div></h1>
@@ -65,9 +65,9 @@
                                     <div class="nl-match-body">
                                         国际<?=$match['project_alias_cn']?>水平考级认证
                                         <a class="c_orange" href="<?=$match['grading_notice_url']?>" ><?= __('考级须知', 'nlyd-student') ?></a>
-                                        <?php /*if(!empty($match['grading_notice_url'])): */?><!--
-                                            <a class="c_orange" style="float:right" href="<?/*=$match['grading_notice_url']*/?>"><?/*= __('考级须知', 'nlyd-student') */?></a>
-                                        --><?php /*endif;*/?>
+                                        <?php if($match['project_alias'] == 'memory'): ?>
+                                            <p class="c_orange"><?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student');?></p>
+                                        <?php endif;?>
                                     </div>
                                 </li>
                             <?php endif; ?>
@@ -174,7 +174,8 @@ jQuery(function($) {
                     action:'get_entry_list',
                     _wpnonce:$('#inputPlayer').val(),
                     page:match_page,
-                    match_id:<?=$_GET['match_id']?>,
+                    match_id:<?=$_GET['grad_id']?>,
+                    order_type:2,
                     match_end_date:new Date().getTime()
                 }
                 var lis = [];

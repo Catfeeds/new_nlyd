@@ -10,8 +10,8 @@
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
 
-        <?php if(isset($_GET['match_id'])){ ?>
-            <a class="mui-pull-left nl-goback static" href="<?=home_url('matchs/info/match_id/'.$_GET['match_id'])?>">
+        <?php if(isset($_GET['grad_id'])){ ?>
+            <a class="mui-pull-left nl-goback static" href="<?=home_url('gradings/info/grad_id/'.$_GET['grad_id'])?>">
         <?php }else{ ?>
                 <a class="mui-pull-left nl-goback">
         <?php } ?>
@@ -23,6 +23,7 @@
         </header>
             <div class="layui-row nl-border nl-content">
                 <form id="pay-form" class="layui-form width-margin width-margin-pc" action="" >
+                    <input type="hidden" value="2" name="order_type"/>
                     <ul style="margin:0">
                         <li class="nl-match">
                             <div class="nl-match-header ">
@@ -33,62 +34,58 @@
                                 <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('考级日期', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
-                                        <span class="c_black"><?=$match['match_start_time']?></span>
+                                        <span class="c_black"><?=$match['start_time']?></span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('结束日期', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
-                                        <span class="c_black"><?=$match['match_end_time']?></span>
+                                        <span class="c_black"><?=$match['end_time']?></span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
-                                        <span class="c_black"><?=$match['match_address']?></span>
+                                        <span class="c_black"><?=$match['address']?></span>
                                     </div>
                                 </div>
                                 <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('考级费用', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
-                                        <input class="c_black" type="text" readonly name="cost" value="<?=$match['match_cost']?>">
+                                        <input class="c_black" type="text" readonly name="cost" value="<?=$match['cost']?>">
                                     <div>
                                 </div>
                             </div>
                         </li>
                         <!-- 比赛项目 -->
-                        <?php if(!empty($match_project)): ?>
+                        <?php if (!empty($match['category_id'])): ?>
                         <li class="nl-match">
-                            <div class="nl-match-header ">
-                                <span class="fs_16 c_blue"><?=__('考级类型', 'nlyd-student')?></span>
+                            <div class="nl-match-header noMargin">
+                                <span class="nl-match-name fs_16 <?= $match['match_status'] != -3 ? 'c_blue' : ''; ?> "><?= __('考级类型', 'nlyd-student') ?></span>
                             </div>
-                            <div class="nl-match-body ">
-                                <?php foreach ($match_project as $k => $val ){ ?>
-                                <div class="nl-match-detail layui-row">
-                                    <div class="nl-match-label"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
-                                    <!-- <span ><?=__($val['parent_title'], 'nlyd-student')?>:</span> -->
-                                    <div class="nl-match-info">
-                                        <input type="hidden" name="project_id[]" value="<?=$k?>"/>
-                                        <span class="c_black">
-                                            <?php
-                                                $str = '';
-                                                foreach ($val['project'] as $v) {
-                                                    $str .= __($v['post_title'], 'nlyd-student').'/';
-                                                }
-                                                echo rtrim($str,'/');
-                                            ?>
-                                            &nbsp;&nbsp;&nbsp;
-                                        </span>
-                                        <span class="nl-see-link"><?=__('主训教练', 'nlyd-student')?>:</span>
-                                        <?php if(isset($val['major_coach']) && isset($val['coach_id'])){ ?>
-                                        <input type="hidden" name="major_coach[]" value="<?=$val['coach_id']?>"/>
-                                        <?=$val['major_coach']?>
-                                        <?php }else{ ?>
-                                            <a href="<?=home_url('/teams/myCoach/match_id/'.$_GET['match_id']).'/category_id/'.$k;?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
-                                        <?php } ?>
-                                        </div>
+                            <div class="nl-match-body">
+                                国际<?=$match['project_alias_cn']?>水平考级认证
+                                <a class="c_orange" href="<?=$match['grading_notice_url']?>" ><?= __('考级须知', 'nlyd-student') ?></a>
+                            </div>
+                            <!-- 如果是记忆类 -->
+                            <?php if($match['project_alias'] == 'memory'):?>
+                            <div class="nl-match-detail layui-row">
+                                <div class="nl-match-label"><?=__('记忆级别', 'nlyd-student')?>:</div>
+                                <div class="nl-match-info">
+                                    <div class="c_orange" id="trigger3"><?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student') ?></div>
+                                    <input type="hidden" id="trigger4" name="memory_lv" value="<?=$memory_lv?>">
                                 </div>
-                                <?php } ?>
+                            </div>
+                            <?php endif;?>
+                            <div>
+                                <div class="nl-match-label"><?=__('主训教练', 'nlyd-student')?>:</div>
+                                <div class="nl-match-info">
+                                    <?php if(!empty($coach_real_name)){ ?>
+                                        <?=$coach_real_name['real_name']?>
+                                    <?php }else{ ?>
+                                        <a href="<?=home_url('/teams/myCoach/grad_id/'.$_GET['grad_id']).'/category_id/'.$match['category_id'];?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </li>
                         <?php endif;?>
@@ -102,11 +99,11 @@
                                     <div class="nl-match-label"><?=__('选手姓名', 'nlyd-student')?>:</div>
                                     <!-- <span >选手姓名:</span> -->
                                     <div class="nl-match-info">
-                                        <?php if(!empty($player['real_name'])){?>
-                                        <span class="c_black"><?=$player['real_name']?></span>
+                                        <?php if(!empty($user_real_name['real_name'])){?>
+                                        <span class="c_black"><?=$user_real_name['real_name']?></span>
                                         <div class="nl-match-rz img-box"><img src="<?=student_css_url.'image/confirm/rz.png'?>"></div>
                                         <?php }else{?>
-                                            <a href="<?=home_url('account/certification/match_id/'.$_GET['match_id'])?>" class="nl-see-link"><?=__('实名认证', 'nlyd-student')?></a>
+                                            <a href="<?=home_url('account/info/grad_id/'.$_GET['grad_id'])?>" class="nl-see-link"><?=__('实名认证', 'nlyd-student')?></a>
                                         <?php }?>
                                     </div>
                                 </div>
@@ -115,38 +112,38 @@
                                     <!-- <span >所属战队:</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black">
-                                            <?php if(!empty($player['team_id'])){ ?>
-                                            <input type="hidden" name="team_id" value="<?=$player['team_id']?>"/>
-                                            <?=$player['user_team']?>
+                                            <?php if(!empty($team_title)){ ?>
+                                            <?=$team_title?>
                                             <?php }else{
                                                 $url = home_url('teams/index');
-                                                if(!empty($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                                             ?>
                                                 <a href="<?=$url?>" class="nl-see-link"><?=__('加入战队', 'nlyd-student')?></a>
                                             <?php }?>
                                         </span>
                                     </div>
                                 </div>
+                                <?php if(!empty($user_ID)): ?>
                                 <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('选手ID', 'nlyd-student')?>:</div>
                                     <!-- <span >选手ID:</span> -->
                                     <div class="nl-match-info">
-                                        <span class="c_black"><?=$player['user_ID']?></span>
+                                        <span class="c_black"><?=$user_ID?></span>
                                     </div>
                                 </div>
+                                <?php endif;?>
                             </div>
                         </li>
-                        <li class="nl-match">
+                        <!--<li class="nl-match">
                             <div class="nl-match-header ">
                                 <span class="fs_16 c_blue">记忆级别</span>
                             </div>
                             <div class="nl-match-detail layui-row">
-                                <div class="nl-match-label"><?=__('记忆级别', 'nlyd-student')?>:</div>
+                                <div class="nl-match-label"><?/*=__('记忆级别', 'nlyd-student')*/?>:</div>
                                 <div class="nl-match-info">
                                     <input class="c_black" id="trigger3"  type="text" readonly name="cost" value="请选择记忆级别">
-                                <div>
+                                </div>
                             </div>
-                        </li>
+                        </li>-->
                         <!-- 邮寄地址 -->
                         <!-- <li class="nl-match">
                             <div class="nl-match-header ">
@@ -184,15 +181,15 @@
                     </ul>
                     <input type="hidden" name="action" value="entry_pay">
                     <input type="hidden" name="_wpnonce" id="payForm" value="<?=wp_create_nonce('student_go_pay_code_nonce');?>">
-                    <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
+                    <input type="hidden" name="match_id" value="<?=$_GET['grad_id']?>">
 
-                        <?php if($orderStatus['status'] == 1){ ?>
-                            <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付报名费', 'nlyd-student')?>￥800.00</div></a>
-                        <?php }elseif($orderStatus['status'] == 2){ ?>
-                            <a class="a-btn a-btn-table go"><div><?=__('已报名', 'nlyd-student')?></div></a>
-                        <?php }elseif($orderStatus['status'] == 0){ ?>
-                            <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付报名费', 'nlyd-student')?>￥800.00</div></a>
-                        <?php } ?>
+                    <?php if($orderStatus['status'] == 1){ ?>
+                        <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
+                    <?php }elseif($orderStatus['status'] == 2){ ?>
+                        <a class="a-btn a-btn-table go"><div><?=__('已报名', 'nlyd-student')?></div></a>
+                    <?php }elseif($orderStatus['status'] == 0){ ?>
+                        <a class="a-btn a-btn-table go" id="goPay" lay-filter="pay-formbtn" lay-submit=""><div><?=__('去支付', 'nlyd-student')?></div></a>
+                    <?php } ?>
 
 
                 </form>
@@ -232,7 +229,7 @@ jQuery(function($) {
             prams,
             function(res){
                 if(res.err_msg=='get_brand_wcpay_request:ok'){
-                    window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
+                    window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
                 }
             }
         );
@@ -267,8 +264,7 @@ jQuery(function($) {
                                 return false;
                             }
                             serialnumber=res.data.serialnumber;//获取订单号
-                            // var total=<?=$match['match_cost']?>;
-                            total=1
+                             var total=<?=$match['cost']?>;
                             if(total>0){
                                 // $('.selectBottom').addClass('selectBottom-show')
                                 var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
@@ -308,7 +304,7 @@ jQuery(function($) {
                                             pay_type:pay_type,
                                             _wpnonce:$('#inputPay').val(),
                                             serialnumber:serialnumber,
-                                            match_id:$.Request('match_id')
+                                            match_id:$.Request('grad_id')
                                         }
                                         // alert(pay_type)
                                         if(pay_type){
@@ -344,7 +340,7 @@ jQuery(function($) {
                             // if(res.data.info=="请先实名认证"){
                             if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                                 setTimeout(function(){
-                                    window.location.href=window.home_url+'/account/certification/match_id/'+$.Request('match_id');
+                                    window.location.href=window.home_url+'/account/info/match_id/'+$.Request('match_id');
                                 }, 1000);
                             }else{
                                 $.alerts(res.data.info)
@@ -383,7 +379,8 @@ jQuery(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
-            $('#trigger3').val(data[0]['value']).attr('data-value',data[0]['id'])
+            // $('#trigger3').val(data[0]['value'])
+            $('#trigger4').val(data[0]['id'])
         }
     });
 
