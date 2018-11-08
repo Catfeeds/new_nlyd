@@ -69,8 +69,12 @@ function copyUrl(str)
         e.preventDefault();//阻止默认行为
     }
     document.addEventListener('copy',save);
-    document.execCommand("copy");//使文档处于可编辑状态，否则无效
-
+    var _bool = document.execCommand("copy");//使文档处于可编辑状态，否则无效
+    if(_bool){
+        alert('复制成功');
+    }else{
+        alert('复制失败');
+    }
 }
 
 
