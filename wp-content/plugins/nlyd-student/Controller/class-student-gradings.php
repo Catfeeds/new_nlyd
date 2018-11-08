@@ -337,7 +337,7 @@ class Student_Gradings extends Student_Home
     }
 
 
-
+    
     /**
      * 获取考级信息
      * $grad_id 考试比赛id

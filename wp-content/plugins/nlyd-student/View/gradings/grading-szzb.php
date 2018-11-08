@@ -12,7 +12,7 @@
                         <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -128,7 +128,12 @@ jQuery(function($) {
     var _match_id=1;
     var _project_id=2;
     var _match_more=3;
-    init_question(100,_show,question_type)
+    var ready_time=900;//记忆时间
+    var sys_second=ready_time;
+    var answer_time=300;//记忆时间
+    var endTime=$.GetEndTime(ready_time);//结束时间
+    var que_len=100;//多少个字符
+    init_question(que_len,_show,question_type)
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -138,20 +143,23 @@ jQuery(function($) {
         $('.ready_zoo').append(dom)
     })
     $.each(questions_answer,function(i,v){
-            var dom=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
-            $('.match_zoo').append(dom)
-        })
+        var dom=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
+        $('.match_zoo').append(dom)
+    })
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
         $('.complete_zoo').hide();
-        _this.hide()
         $('#'+href).show()
+        _show=2
+        sys_second=answer_time
+        var endTime=$.GetEndTime(answer_time);//结束时间
         var sessionData={
             match_id:_match_id,
             project_id:_project_id,
             match_more:_match_more,
             question_type:question_type,
+            endTime:endTime,
             _show:2,
             questions_answer:questions_answer
         }
@@ -175,12 +183,55 @@ jQuery(function($) {
             }
         })
     })
+    count_down()
+    function count_down(){
+        // sys_second=answer_time
+        var timer = setInterval(function(){
+            if (sys_second > 0) {
+                sys_second -= 1;
+                var day = Math.floor((sys_second / 3600) / 24);
+                var hour = Math.floor((sys_second / 3600) % 24);
+                var minute = Math.floor((sys_second / 60) % 60);
+                var second = Math.floor(sys_second % 60);
+                day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
+                hour= hour<10?"0"+hour:hour;//计算小时
+                minute= minute<10?"0"+minute:minute;//计算分钟
+                second= second<10?"0"+second:second;//计算秒
+                var text=day+hour+':'+minute+':'+second;
+                $('.count_down').text(text).attr('data-seconds',sys_second)
+            } else {//倒计时结束
+                if(_show==1){//记忆页面
+                    $('.complete_zoo').hide();
+                    $('#match_zoo').show()
+                    _show=2
+                    sys_second=answer_time
+                    var endTime=$.GetEndTime(answer_time);//结束时间
+                    var sessionData={
+                        match_id:_match_id,
+                        project_id:_project_id,
+                        match_more:_match_more,
+                        question_type:question_type,
+                        endTime:endTime,
+                        _show:2,
+                        questions_answer:questions_answer
+                    }
+                    $.SetSession('matching_question',sessionData)
+                }else if(_show==2){//答题页面
+                    clearInterval(timer)
+                    submit(0，3)
+                }
+            }
+
+        }, 1000);
+    } 
     function init_question(question_leng,_show,question_type) {//初始化题目
         var matching_question=$.GetSession('matching_question','true');
         if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
             questions_answer=matching_question['questions_answer'];
             question_type=matching_question['question_type']
             _show=matching_question['_show']
+            endTime=matching_question['endTime'];
+            sys_second=$.GetSecond(endTime);
         }else{
             for(var i=0;i<question_leng;i++){
                 if(question_type==1){
@@ -196,6 +247,7 @@ jQuery(function($) {
                 match_more:_match_more,
                 question_type:question_type,
                 _show:_show,
+                endTime:endTime,
                 questions_answer:questions_answer
             }
             $.SetSession('matching_question',sessionData)
@@ -281,31 +333,6 @@ jQuery(function($) {
                 }
         })
     } 
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-    //         submit(0,3)
-    // }
-    $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-        $(this).attr('data-seconds',S).text(time)
-        if(S<=0){//本轮比赛结束
-            if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
-            }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
-            }
-            // setTimeout(function() {
-                submit(0,3)
-            // }, 1000);
-        }
-    });
-
-
-
     // 比赛事件
     $('.matching-number-match').each(function(){//填充区域
         var _this=$(this);
@@ -387,7 +414,6 @@ $('._del').each(function(){//数字键盘
                 $('.match_zoo').append(dom)
                 var len=$('.matching-number-match').length;
                 var newDom=$('.matching-number-match').eq(len-1)
-                // console.log($('.matching-number-match').eq(len-1))
                 new AlloyFinger(newDom[0], {
                     touchStart: function () {
                         newDom.addClass("opacity");
@@ -414,7 +440,6 @@ $('._del').each(function(){//数字键盘
     })
 })
     //前插tap事件
-    // mTouch('body').on('tap','#prev',function(e){
     new AlloyFinger($('#prev')[0], {
         touchStart: function () {
             $('#prev').addClass("opacity");
@@ -461,7 +486,6 @@ $('._del').each(function(){//数字键盘
         }
     });
     //后插tap事件
-    // mTouch('body').on('tap','#next',function(e){
     new AlloyFinger($('#next')[0], {
         touchStart: function () {
             $('#next').addClass("opacity");
@@ -509,7 +533,6 @@ $('._del').each(function(){//数字键盘
         }
     });
     layui.use('layer', function(){
-        // mTouch('body').on('tap','#sumbit',function(e){
         new AlloyFinger($('#sumbit')[0], {
             tap:function(){
                 var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
