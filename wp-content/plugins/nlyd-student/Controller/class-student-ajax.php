@@ -546,6 +546,10 @@ class Student_Ajax
             'pay_status'=>1,
             'created_time'=>get_time('mysql'),
         );
+        if($_POST['order_type'] == 2){
+            $data['memory_lv'] = $_POST['memory_lv'];
+        }
+        //print_r($data);die;
         //TODO 测试时 订单价格为0
 //        $_POST['cost'] = 0;
         //如果报名金额为0, 直接支付成功状态
@@ -553,7 +557,6 @@ class Student_Ajax
             $data['pay_status'] = 4;
         }
 
-        print_r($data);die;
         //开启事务
         $wpdb->startTrans();
         $a = $wpdb->insert($wpdb->prefix.'order',$data);
@@ -1313,11 +1316,11 @@ class Student_Ajax
         $page = isset($_POST['page'])?$_POST['page']:1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-
+        $order_type = isset($_POST['order_type']) ? $_POST['order_type'] : 1;
         $sql2 = "select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.created_time 
                   from {$wpdb->prefix}order a
                   right join {$wpdb->prefix}users b on a.user_id = b.ID
-                  where a.match_id = {$_POST['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4)
+                  where a.match_id = {$_POST['match_id']} and (a.pay_status=2 or a.pay_status=3 or a.pay_status=4) and order_type = {$order_type}
                   order by a.id desc limit {$start},{$pageSize} ";
         $orders = $wpdb->get_results($sql2,ARRAY_A);
         /*if($current_user->ID == 66){
@@ -3769,7 +3772,7 @@ class Student_Ajax
             $sql_ = "select count(a.id) total 
                       from {$wpdb->prefix}order a 
                       right join {$wpdb->prefix}users b on a.user_id = b.ID
-                      where match_id = {$val['ID']} and pay_status in(2,3,4) and order_type=1";
+                      where match_id = {$val['ID']} and pay_status in(2,3,4) and order_type=2";
 
             //print_r($sql_);
             $row = $wpdb->get_row($sql_,ARRAY_A);

@@ -70,18 +70,22 @@
                             <!-- 如果是记忆类 -->
                             <?php if($match['project_alias'] == 'memory'):?>
                             <div class="nl-match-detail layui-row">
+                                <div class="nl-match-label"><?=__('记忆级别', 'nlyd-student')?>:</div>
                                 <div class="nl-match-info">
-                                    <input class="c_black" id="trigger3"  type="text" readonly name="cost" value="请选择记忆级别">
+                                    <div class="c_orange" id="trigger3"><?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student') ?></div>
+                                    <input type="hidden" id="trigger4" name="memory_lv" value="<?=$memory_lv?>">
                                 </div>
                             </div>
                             <?php endif;?>
                             <div>
-                                主训教练：
-                            <?php if(!empty($coach_real_name)){ ?>
-                                <?=$coach_real_name['real_name']?>
-                            <?php }else{ ?>
-                                <a href="<?=home_url('/teams/myCoach/grad_id/'.$_GET['grad_id']).'/category_id/'.$match['category_id'];?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
-                            <?php } ?>
+                                <div class="nl-match-label"><?=__('主训教练', 'nlyd-student')?>:</div>
+                                <div class="nl-match-info">
+                                    <?php if(!empty($coach_real_name)){ ?>
+                                        <?=$coach_real_name['real_name']?>
+                                    <?php }else{ ?>
+                                        <a href="<?=home_url('/teams/myCoach/grad_id/'.$_GET['grad_id']).'/category_id/'.$match['category_id'];?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </li>
                         <?php endif;?>
@@ -260,8 +264,7 @@ jQuery(function($) {
                                 return false;
                             }
                             serialnumber=res.data.serialnumber;//获取订单号
-                            // var total=<?=$match['match_cost']?>;
-                            total=1
+                             var total=<?=$match['cost']?>;
                             if(total>0){
                                 // $('.selectBottom').addClass('selectBottom-show')
                                 var content='<div class="box-conent-wrapper"><?=__('本次共需支付', 'nlyd-student')?>￥'+total+'</div>'
@@ -376,7 +379,8 @@ jQuery(function($) {
             // console.log(data);
         },
         callback:function(indexArr, data){
-            $('#trigger3').val(data[0]['value']).attr('data-value',data[0]['id'])
+            // $('#trigger3').val(data[0]['value'])
+            $('#trigger4').val(data[0]['id'])
         }
     });
 

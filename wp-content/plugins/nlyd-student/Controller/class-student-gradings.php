@@ -35,7 +35,7 @@ class Student_Gradings extends Student_Home
      */
     public function info(){
 
-        global $wpdb;
+        global $wpdb,$current_user;
         $match = $this->get_grading($_GET['grad_id']);
         if(empty($match)){
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
@@ -45,8 +45,11 @@ class Student_Gradings extends Student_Home
         $data['match'] = $match;
 
         //获取报名人数
-        $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$_GET['grad_id']} and order_type = 2 and pay_status in (2,3,4)");
+        $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$match['grading_id']} and order_type = 2 and pay_status in (2,3,4)");
         $data['total'] = $total > 0 ? $total : 0;
+
+        //获取订单
+        $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID}");
 
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
@@ -86,6 +89,10 @@ class Student_Gradings extends Student_Home
         //选手ID
         $data['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
 
+        //获取当前比赛是否报名
+        $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']}",ARRAY_A);
+        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : 1;
+        //print_r($order);
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
     }
