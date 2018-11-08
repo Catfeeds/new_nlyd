@@ -36,9 +36,9 @@
                             </div>
                             <!-- 考级中 -->
                             <div class="layui-tab-item">
-                                <?php if(!empty($new_grading)): ?>
+                                <?php if(!empty($new_grading_time)): ?>
                                     <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新考级倒计时', 'nlyd-student')?>
-                                        <span class="getTime count_down" data-seconds="<?=$new_grading['start_time']?>"><?=__('初始中', 'nlyd-student')?>...</span>        
+                                        <span class="getTime count_down" data-seconds="<?=$new_grading_time?>"><?=__('初始中', 'nlyd-student')?>...</span>
                                     </div>
                                 <?php endif;?>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">

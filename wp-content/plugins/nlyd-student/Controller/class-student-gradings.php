@@ -24,6 +24,10 @@ class Student_Gradings extends Student_Home
         add_shortcode('grading-home',array($this,$action));
     }
 
+
+    /**
+     * 考级列表页
+     */
     public function index(){
 
         global $wpdb;
@@ -59,7 +63,11 @@ class Student_Gradings extends Student_Home
         }
 
         //获取最近一场考级
-        $data['new_grading'] = $wpdb->get_row("select grading_id,start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
+        $start_time = $wpdb->get_var("select start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
+
+        if(!empty($start_time)){
+            $data['new_grading_time'] = strtotime($start_time)-get_time();
+        }
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
@@ -131,7 +139,134 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
     }
-    
+
+
+    /**
+     * 考级等待页
+     */
+    public function matchWaitting(){
+
+        //获取数据
+        $row = $this->get_grading($_GET['grad_id']);
+        if(empty($row)){
+            $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        if($row['status'] == -3){
+            $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        //print_r($row);
+        global $wpdb,$current_user;
+        if($row['project_alias'] == 'memory'){ //如果是记忆 获取报名记忆等级
+            $row['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$row['grading_id']} and user_id = {$current_user->ID}");
+        }
+        $row['count_down'] = strtotime($row['start_time']) - get_time();
+        $row['redirect_url'] = home_url('gradings/initialMatch/grad_id/'.$row['grading_id'].'/grad_type/'.$row['project_alias']);
+        if($row['memory_lv'] > 0){
+            $row['redirect_url'] .= '/memory_lv/'.$row['memory_lv'];
+            $_SESSION['memory_lv'] = $row['memory_lv'];
+        }
+        //print_r($row);
+        $view = student_view_path.CONTROLLER.'/match-waitting.php';
+        load_view_template($view,$row);
+    }
+
+
+    /**
+     * 比赛初始页
+     */
+    public function initialMatch(){
+
+        //获取数据
+        $row = $this->get_grading($_GET['grad_id']);
+        if(empty($row)){
+            $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        if($row['status'] == -3){
+            $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        if($_GET['grad_type'] == 'memory'){
+            $memory_lv = $_SESSION['memory_lv'];
+            switch ($memory_lv){
+                case 1:
+                    $row['sz'] = 30;    //数字个数
+                    $row['cy'] = 30;    //词语个数
+                    $row['yzl'] = 100;  //圆周率长度
+                    break;
+                case 2:
+                    $row['sz'] = 40;
+                    $row['cy'] = 40;
+                    $row['yzl'] = 200;
+                    break;
+                case 3:
+                    $row['sz'] = 60;
+                    $row['cy'] = 50;
+                    $row['zm'] = 30;
+                    $row['wz'] = 3*100;    //文章字数  随机3段 ,每段100个字
+                    break;
+                case 4:
+                    $row['sz'] = 80;
+                    $row['cy'] = 40;
+                    $row['zm'] = 60;
+                    $row['wz'] = 3*100;
+                    break;
+                case 5:
+                    $row['sz'] = 120;
+                    $row['cy'] = 80;
+                    $row['zm'] = 50;
+                    $row['tl'] = 45;        //听力数字个数
+                    $row['wz'] = 3*100;
+                    break;
+                case 6:
+                    $row['sz'] = 160;
+                    $row['cy'] = 100;
+                    $row['zm'] = 60;
+                    $row['tl'] = 50;
+                    $row['wz'] = 3*100;
+                    break;
+                case 7:
+                    $row['sz'] = 200;
+                    $row['cy'] = 120;
+                    $row['tl'] = 60;
+                    $row['rm'] = 5;        //人脉记忆(头像 人名 电话)
+                    $row['wz'] = 3*100;
+                    break;
+                case 8:
+                    $row['sz'] = 240;
+                    $row['cy'] = 140;
+                    $row['tl'] = 70;
+                    $row['rm'] = 6;
+                    $row['wz'] = 3*100;
+                    break;
+                case 9:
+                    $row['sz'] = 280;
+                    $row['cy'] = 160;
+                    $row['tl'] = 80;
+                    $row['rm'] = 8;
+                    $row['wz'] = 3*100;
+                    break;
+                case 10:
+                    $row['sz'] = 320;
+                    $row['cy'] = 180;
+                    $row['tl'] = 100;
+                    $row['rm'] = 10;
+                    $row['wz'] = 3*100;
+                    break;
+                default:
+                    $this->get_404('请确认考级等级');
+                    break;
+
+            }
+        }
+
+        print_r($row);
+        $view = student_view_path.CONTROLLER.'/match-initial.php';
+        load_view_template($view,$row);
+    }
+
     public function ready_szzb(){//数字争霸准备页
         $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';
         load_view_template($view);
@@ -197,18 +332,9 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
-    public function matchWaitting(){//考级等待页
-        $view = student_view_path.CONTROLLER.'/match-waitting.php';
-        load_view_template($view);
-    }
-    public function matchRule(){//考级规则
-        $view = student_view_path.CONTROLLER.'/match-Rule.php';
-        load_view_template($view);
-    }
-    public function grading_szzb(){//考级
-        $view = student_view_path.CONTROLLER.'/grading-szzb.php';
-        load_view_template($view);
-    }
+
+
+
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
