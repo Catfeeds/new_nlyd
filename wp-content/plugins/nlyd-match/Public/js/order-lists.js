@@ -60,4 +60,27 @@ jQuery(document).ready(function($) {
             });
         })
     })
+
+    /**
+     * 删除订单
+     */
+    $('.order-tr').on('click','.close-order',function () {
+        var _id = $(this).closest('.order-tr').attr('data-id');
+        if(confirm('订单删除后将无法恢复,是否确定删除订单')){
+            $.ajax({
+                url:ajaxurl,
+                data : {'action':'closeOrder','id':_id},
+                dataType : 'json',
+                type : 'post',
+                success : function (response) {
+                    alert(response.data.info);
+                    if(response['success'] == true){
+                        window.location.reload();
+                    }
+                },error : function () {
+                    alert('请求失败');
+                }
+            });
+        }
+    })
 })

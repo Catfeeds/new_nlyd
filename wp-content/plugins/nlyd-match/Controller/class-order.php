@@ -231,7 +231,7 @@ class Order {
 
                     <tbody id="the-list" data-wp-lists="list:user">
                         <?php foreach($rows as $row){ ?>
-                            <tr id="user-5" data-id="<?=$row['id']?>">
+                            <tr class="order-tr" data-id="<?=$row['id']?>">
                                 <th scope="row" class="check-column">
                                     <label class="screen-reader-text" for="user_5"></label>
                                     <input type="checkbox" name="users[]" id='' class="subscriber" value="5">
@@ -261,10 +261,10 @@ class Order {
                                             //不是已退款,不是未支付,不是失效订单
                                             echo '<span class="delete"><a class="submitdelete" href="?page=order-refund&serial='.$row['serialnumber'].'">退款</a>  </span>';
                                         }
-                                        if($row['pay_status'] != 5){
+
                                             //不是已退款,不是未支付,不是失效订单
                                             echo '<span class="delete"><a class="close-order" href="javascript:;">删除订单(慎重)</a>  </span>';
-                                        }
+
 
                                         ?>
 
