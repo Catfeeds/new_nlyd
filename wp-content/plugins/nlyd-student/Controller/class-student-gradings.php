@@ -165,6 +165,14 @@ class Student_Gradings extends Student_Home
     public function match_szzb(){//数字争霸比赛页
         $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view);
+    }   
+    public function match_voice(){//语音听记数字记忆
+        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+        load_view_template($view);
+    }
+    public function matching_PI(){//圆周率默写
+        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+        load_view_template($view);
     }
     public function ready_word(){//随机中文词语记忆准备页
         $view = student_view_path.CONTROLLER.'/ready-word.php';
@@ -175,10 +183,6 @@ class Student_Gradings extends Student_Home
         load_view_template($view);
     }
 
-    public function matching_PI(){//圆周率默写
-        $view = student_view_path.CONTROLLER.'/matching-PI.php';
-        load_view_template($view);
-    }
 
     public function ready_card(){//人脉信息记忆准备页
         $view = student_view_path.CONTROLLER.'/ready-card.php';
@@ -193,10 +197,7 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/ready-voice.php';
         load_view_template($view);
     }
-    public function match_voice(){//语音听记数字记忆
-        $view = student_view_path.CONTROLLER.'/matching-voice.php';
-        load_view_template($view);
-    }
+
     public function matching_silent(){//国学经典默写
         $view = student_view_path.CONTROLLER.'/matching-silent.php';
         load_view_template($view);
