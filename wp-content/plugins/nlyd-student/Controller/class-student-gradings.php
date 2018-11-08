@@ -140,14 +140,14 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view);
     }   
-    public function match_voice(){//语音听记数字记忆
-        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
-        load_view_template($view);
-    }
-    public function matching_PI(){//圆周率默写
-        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
-        load_view_template($view);
-    }
+    // public function match_voice(){//语音听记数字记忆
+    //     $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+    //     load_view_template($view);
+    // }
+    // public function matching_PI(){//圆周率默写
+    //     $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+    //     load_view_template($view);
+    // }
     public function ready_word(){//随机中文词语记忆准备页
         $view = student_view_path.CONTROLLER.'/ready-word.php';
         load_view_template($view);
@@ -199,6 +199,14 @@ class Student_Gradings extends Student_Home
     }
     public function matchWaitting(){//考级等待页
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
+        load_view_template($view);
+    }
+    public function matchRule(){//考级规则
+        $view = student_view_path.CONTROLLER.'/match-Rule.php';
+        load_view_template($view);
+    }
+    public function grading_szzb(){//考级
+        $view = student_view_path.CONTROLLER.'/grading-szzb.php';
         load_view_template($view);
     }
     /**
@@ -272,7 +280,14 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
-        if(ACTION == 'match_szzb' || ACTION == 'matching_PI'){//进入数字争霸比赛页面
+        if(ACTION == 'grading_szzb'){//
+            wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
+            wp_enqueue_style( 'my-student-numberBattleReady' );
+            wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matching-numberBattle' );
+        }
+        
+        if(ACTION == 'match_szzb'){//进入数字争霸比赛页面
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
@@ -280,15 +295,18 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-voice', student_css_url.'grading/voice.css',array('my-student') );
             wp_enqueue_style( 'my-student-voice' );
         }
-        if(ACTION == 'match_voice'){
-            wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }
+        // if(ACTION == 'match_voice'){
+        //     wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-matching-numberBattle' );
+        // }
         if(ACTION == 'ready_szzb' ){//进入数字争霸准备页面
             wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-numberBattleReady' );
         }
-
+        if(ACTION == 'matchRule' ){//考级规则
+            wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matchRule' );
+        }
         if(ACTION == 'match_word' || ACTION == 'ready_word'){//随机中文词语记忆
             wp_register_style( 'my-student-matching-word', student_css_url.'grading/word.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-word' );
