@@ -12,8 +12,8 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1"><?=__('近期考级测评', 'nlyd-student')?></li>
-                            <li data-id="2"><?=__('考级中', 'nlyd-student')?></li>
+                            <li class="layui-this" data-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
+                            <li data-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
                             <li data-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"></div>
                         </ul>
