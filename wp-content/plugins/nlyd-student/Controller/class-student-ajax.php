@@ -1452,6 +1452,7 @@ class Student_Ajax
         $map = array();
         $map[] = " a.post_status = 'publish' ";
         $map[] = " a.post_type = 'match' ";
+
         //判断往期/近期
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.match_status = -3 ";     //历史
@@ -1495,6 +1496,7 @@ class Student_Ajax
                 left join {$wpdb->prefix}order c on a.ID = c.match_id and c.user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) 
                 where {$where} order by {$order} limit $start,$pageSize;
                 ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
 
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -3721,22 +3723,21 @@ class Student_Ajax
         $map = array();
         $map[] = " a.post_status = 'publish' ";
         $map[] = " a.post_type = 'grading' ";
+
         //判断往期/近期
         if( isset($_POST['match_type']) && $_POST['match_type'] =='history' ){
             $map[] = " b.status = -3 ";     //历史
-            $match_type = 'history';
             $order = ' b.start_time desc ';
 
         }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
             $map[] = " b.status = 1 ";     //报名中
-            $match_type = 'signUp';
             $order = ' b.entry_end_time asc ';
         }
         else{
             $map[] = " (b.status = -2  or b.status = 2) ";    //比赛
-            $match_type = 'recent';
             $order = ' b.start_time asc ';
         }
+
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
@@ -3787,7 +3788,7 @@ class Student_Ajax
             else if ($val['status'] == 1){
                 //报名中
                 $url = home_url('gradings/confirm/grad_id/'.$val['ID']);
-                $button_title = __('参赛报名', 'nlyd-student');
+                $button_title = __('考级报名', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('报名中', 'nlyd-student');
             }
             else if ($val['status'] == -1){
@@ -3803,8 +3804,8 @@ class Student_Ajax
             else{
                 //等待开赛
                 $url = home_url('gradings/matchWaitting/grad_id/'.$val['ID']);
-                $button_title = __('等待开赛', 'nlyd-student');
-                $rows[$k]['match_status_cn'] = __('等待开赛', 'nlyd-student');
+                $button_title = __('等待考级', 'nlyd-student');
+                $rows[$k]['match_status_cn'] = __('等待考级', 'nlyd-student');
             }
             $rows[$k]['match_status'] = $val['status'];
             $rows[$k]['button_title'] = $button_title;

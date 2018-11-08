@@ -2198,7 +2198,9 @@ class wpdb {
 		$conditions = implode( ' AND ', $conditions );
 
 		$sql = "UPDATE `$table` SET $fields WHERE $conditions";
-		//if($table == 'wp_term_relationships'){}
+		/*if($table == 'wp_grading_meta'){
+            print_r($this->prepare( $sql, $values ));
+        }*/
         //print_r($this->prepare( $sql, $values ));die;
 		$this->check_current_query = false;
 		return $this->query( $this->prepare( $sql, $values ) );

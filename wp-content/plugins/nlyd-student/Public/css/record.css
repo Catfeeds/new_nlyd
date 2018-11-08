@@ -93,9 +93,9 @@
     margin: auto;
     overflow: hidden;
 }
-.content .nl-table td,.content table.nl-table{
+/* .content .nl-table td,.content table.nl-table{
      border:none;
-}
+} */
 
 .content table.nl-table{
     border-collapse: separate;

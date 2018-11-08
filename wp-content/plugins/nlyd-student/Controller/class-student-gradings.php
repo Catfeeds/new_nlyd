@@ -26,8 +26,43 @@ class Student_Gradings extends Student_Home
 
     public function index(){
 
+        global $wpdb;
+        $sql = "select a.id,a.grading_id,a.status,a.start_time,a.end_time,a.entry_end_time,c.meta_value match_switch
+                from {$wpdb->prefix}grading_meta a  
+                LEFT JOIN {$wpdb->prefix}postmeta c ON a.grading_id = c.post_id and meta_key = 'default_match_switch'
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        if(!empty($rows)){
+            $new_time = get_time('mysql');
+            foreach ($rows as $v){
+
+                if($v['match_switch'] == 'ON') {
+                    if($new_time < $v['entry_end_time']){
+                        //报名中
+                        $save['status'] = 1;
+                    }
+                    elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
+                        //等待开赛
+                        $save['status'] = -2;
+                    }
+                    elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
+                        //进行中
+                        $save['status'] = 2;
+                    }else{
+                        //已结束
+                        $save['status'] = -3;
+                    }
+                }
+                $a = $wpdb->update($wpdb->prefix.'grading_meta',$save,array('id'=>$v['id'],'grading_id'=>$v['grading_id']));
+            }
+        }
+
+        //获取最近一场考级
+        $data['new_grading'] = $wpdb->get_row("select grading_id,start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
+
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     /**
@@ -104,6 +139,14 @@ class Student_Gradings extends Student_Home
     public function match_szzb(){//数字争霸比赛页
         $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
         load_view_template($view);
+    }   
+    public function match_voice(){//语音听记数字记忆
+        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+        load_view_template($view);
+    }
+    public function matching_PI(){//圆周率默写
+        $view = student_view_path.CONTROLLER.'/matching-numberBattle.php';
+        load_view_template($view);
     }
     public function ready_word(){//随机中文词语记忆准备页
         $view = student_view_path.CONTROLLER.'/ready-word.php';
@@ -114,10 +157,6 @@ class Student_Gradings extends Student_Home
         load_view_template($view);
     }
 
-    public function matching_PI(){//圆周率默写
-        $view = student_view_path.CONTROLLER.'/matching-PI.php';
-        load_view_template($view);
-    }
 
     public function ready_card(){//人脉信息记忆准备页
         $view = student_view_path.CONTROLLER.'/ready-card.php';
@@ -132,10 +171,7 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/ready-voice.php';
         load_view_template($view);
     }
-    public function match_voice(){//语音听记数字记忆
-        $view = student_view_path.CONTROLLER.'/matching-voice.php';
-        load_view_template($view);
-    }
+
     public function matching_silent(){//国学经典默写
         $view = student_view_path.CONTROLLER.'/matching-silent.php';
         load_view_template($view);
@@ -157,7 +193,14 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
         load_view_template($view);
     }
-
+    public function record(){//考级成绩
+        $view = student_view_path.CONTROLLER.'/record.php';
+        load_view_template($view);
+    }
+    public function matchWaitting(){//考级等待页
+        $view = student_view_path.CONTROLLER.'/match-waitting.php';
+        load_view_template($view);
+    }
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
@@ -224,6 +267,10 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-mobileSelect' );
             wp_register_style( 'my-student-confirm', student_css_url.'confirm.css',array('my-student') );
             wp_enqueue_style( 'my-student-confirm' );
+        }
+        if(ACTION=='matchWaitting'){//考级等待倒计时页面
+            wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
+            wp_enqueue_style( 'my-student-matchWaitting' );
         }
         if(ACTION == 'match_szzb' || ACTION == 'matching_PI'){//进入数字争霸比赛页面
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
