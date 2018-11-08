@@ -145,17 +145,10 @@ jQuery(function($) {
         var dom1=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
         $('.match_zoo').append(dom1)
     })
-<<<<<<< HEAD
     $.each(questions_answer,function(i,v){
         var dom=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
         $('.match_zoo').append(dom)
     })
-=======
-    /*$.each(questions_answer,function(i,v){
-            var dom=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
-            $('.match_zoo').append(dom)
-        })*/
->>>>>>> 3964de4c123480107ba3e3da848e73c854810b07
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
