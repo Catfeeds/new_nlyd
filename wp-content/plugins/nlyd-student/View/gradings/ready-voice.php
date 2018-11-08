@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('gradings/match_voice')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
+                <a class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="<?=home_url('gradings/match_szzb')?>"><div><?=__('记忆完成', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

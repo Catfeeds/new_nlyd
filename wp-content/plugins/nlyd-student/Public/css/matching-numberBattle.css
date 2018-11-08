@@ -18,7 +18,7 @@
     overflow: visible;
     margin-top: 25px;
 }
-.matching-number{
+.matching-number,.matching-number-match{
     width: -webkit-calc(5% - 2px);
     width: calc(5% - 2px);
     float: left;
@@ -30,7 +30,7 @@
     margin-right:2px;
     border-bottom: 1px solid #262626;
 }
-.matching-number.active{
+.matching-number.active,.matching-number-match.active{
     background: -webkit-linear-gradient(90deg,#4394F9,#68AAFE);
     background: -o-linear-gradient(90deg,#4394F9,#68AAFE);
     background: -moz-linear-gradient(90deg,#4394F9,#68AAFE);

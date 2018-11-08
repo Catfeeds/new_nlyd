@@ -18,7 +18,7 @@
     overflow: visible;
     margin-top: 35px;
 }
-.matching-number{
+.matching-number,.ready_zoo .matching-number-readys{
     width: -webkit-calc(5% - 1px);
     width: calc(5% - 1px);
     float: left;
@@ -31,9 +31,8 @@
     border-right:1px solid transparent;
     background: #fff;
 }
-
 .border-right{
-    border-right:1px solid #262626;
+    border-right:1px solid #262626!important;
 }
 .matching-row-list{
     width: -webkit-calc(100% - 74px);
