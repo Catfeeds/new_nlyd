@@ -21,23 +21,25 @@
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                <!-- <a href="<?=home_url('grading/ready_szzb/type/1')?>">随机数字记忆</a><br>
-                                <a href="<?=home_url('grading/ready_szzb/type/2')?>">随机字母记忆</a><br>
-                                <a href="<?=home_url('grading/ready_word/')?>">随机中文词语记忆</a><br>
-                                <a href="<?=home_url('grading/matching_PI/')?>">圆周率默写</a><br>
-                                <a href="<?=home_url('grading/ready_card/')?>">人脉信息记忆</a><br>
-                                <a href="<?=home_url('grading/ready_voice/')?>">语音听记数字记忆</a><br>
-                                <a href="<?=home_url('grading/matching_silent/')?>">国学经典默写</a><br>
+                                <a href="<?=home_url('gradings/ready_szzb/type/1')?>">随机数字记忆</a><br>
+                                <a href="<?=home_url('gradings/ready_szzb/type/2')?>">随机字母记忆</a><br>
+                                <a href="<?=home_url('gradings/ready_word/')?>">随机中文词语记忆</a><br>
+                                <a href="<?=home_url('gradings/matching_PI/')?>">圆周率默写</a><br>
+                                <a href="<?=home_url('gradings/ready_card/')?>">人脉信息记忆</a><br>
+                                <a href="<?=home_url('gradings/ready_voice/')?>">语音听记数字记忆</a><br>
+                                <a href="<?=home_url('gradings/matching_silent/')?>">国学经典默写</a><br>
 
-                                <a href="<?=home_url('grading/matching_zxss/')?>">正向速算</a><br>
-                                <a href="<?=home_url('grading/matching_nxss/')?>">逆向速算</a><br>
-                                <a href="<?=home_url('grading/ready_wzsd/')?>">文章速读</a><br> -->
+                                <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>
+                                <a href="<?=home_url('gradings/matching_nxss/')?>">逆向速算</a><br>
+                                <a href="<?=home_url('gradings/ready_wzsd/')?>">文章速读</a><br>
                                 </ul>
                             </div>
                             <!-- 考级中 -->
                             <div class="layui-tab-item">
                                 <?php if(!empty($new_grading)): ?>
-                                    <div><?=$new_grading['start_time']?></div>
+                                    <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新考级倒计时', 'nlyd-student')?>
+                                        <span class="getTime count_down" data-seconds="<?=$new_grading['start_time']?>"><?=__('初始中', 'nlyd-student')?>...</span>        
+                                    </div>
                                 <?php endif;?>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
 
@@ -92,6 +94,17 @@ jQuery(function($) {
             window.location.href=href;
         }
     })
+    $('.count_down').countdown(function(S, d){//倒计时
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+        var h=d.hour<10 ? '0'+d.hour : d.hour;
+        var m=d.minute<10 ? '0'+d.minute : d.minute;
+        var s=d.second<10 ? '0'+d.second : d.second;
+        var time=D+h+':'+m+':'+s;
+        $(this).attr('data-second',S).text(time)
+        if(S<=0){//本轮比赛结束
+            window.location.reload()
+        }
+    });
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
