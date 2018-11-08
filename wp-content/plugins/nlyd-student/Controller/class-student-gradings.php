@@ -336,7 +336,6 @@ class Student_Gradings extends Student_Home
         load_view_template($view);
     }
 
-
     
     /**
      * 获取考级信息

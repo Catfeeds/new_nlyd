@@ -136,7 +136,8 @@ jQuery(function($) {
     var que_len=100;//多少个字符
     init_question(que_len,_show,question_type)
     leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+        var countTime=parseInt($('.count_down').attr('data-seconds'));
+        var time=_show==1?countTime+answer_time:countTime;
         submit(time,4);
     })
     $.each(questions_answer,function(i,v){
@@ -221,7 +222,7 @@ jQuery(function($) {
                     $.SetSession('matching_question',sessionData)
                 }else if(_show==2){//答题页面
                     clearInterval(timer)
-                    submit(0，3)
+                    submit(0,3)
                 }
             }
 
@@ -538,7 +539,8 @@ $('._del').each(function(){//数字键盘
     layui.use('layer', function(){
         new AlloyFinger($('#sumbit')[0], {
             tap:function(){
-                var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
+                var countTime=parseInt($('.count_down').attr('data-seconds'));
+                var time=_show==1?countTime+answer_time:countTime;
                 layer.open({
                         type: 1
                         ,maxWidth:300
