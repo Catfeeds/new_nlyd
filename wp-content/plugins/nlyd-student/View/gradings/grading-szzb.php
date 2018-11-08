@@ -122,8 +122,9 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
-    var question_type=2;//1，数字.2,字母
+    //var question_type="<?//=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>//";//1，数字.2,字母
     var questions_answer=[];//题目
+    var question_type=1;
     var _match_id=1;
     var _project_id=2;
     var _match_more=3;
@@ -135,11 +136,13 @@ jQuery(function($) {
     $.each(questions_answer,function(i,v){
         var dom='<div class="matching-number-readys">'+v+'</div>';
         $('.ready_zoo').append(dom)
+        var dom1=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
+        $('.match_zoo').append(dom1)
     })
-    $.each(questions_answer,function(i,v){
+    /*$.each(questions_answer,function(i,v){
             var dom=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
             $('.match_zoo').append(dom)
-        })
+        })*/
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');

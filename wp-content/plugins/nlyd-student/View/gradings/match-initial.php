@@ -10,9 +10,10 @@
 <?php
 switch ($project_alias){
     case 'memory':    //速记
-        switch ($type){
+        switch ($_GET['type']){
             case 'sz': //数字记忆
-                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+            case 'zm': //数字记忆
+                require_once student_view_path.CONTROLLER.'/grading-szzb.php';
                 break;
             case 'cy': //词语记忆
                 require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
@@ -27,13 +28,6 @@ switch ($project_alias){
                 require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
                 break;
         }
-        if($type){
-
-        }else{
-
-            require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
-        }
-
         break;
     case 'reading':    //速读
 

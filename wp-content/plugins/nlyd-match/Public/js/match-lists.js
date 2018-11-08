@@ -2,6 +2,22 @@
 
 jQuery(document).ready(function($) {
     /**
+     * 座位生成
+     */
+    $('.seating').on('click', function () {
+        var id = $(this).attr('data-id');
+        var match_status = $(this).attr('data-status');
+        if(match_status != -2){
+            alert('未在报名截止状态,禁止生成座位');
+        }
+
+        var notice = '确定生成座位号?';
+        if(confirm(notice)){
+            ajaxRequest('seating', id);
+        }
+    });
+
+    /**
      * 关闭比赛
       */
     $('.closeMatch').on('click', function () {

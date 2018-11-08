@@ -262,7 +262,6 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        print_r($row);
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
     }
@@ -270,8 +269,9 @@ class Student_Gradings extends Student_Home
 
 
 
-    public function ready_szzb(){//数字争霸准备页
-        $view = student_view_path.CONTROLLER.'/ready-numberBattle.php';
+
+    public function grading_szzb(){//数字争霸准备页
+        $view = student_view_path.CONTROLLER.'/grading-szzb.php';
         load_view_template($view);
     }
     public function match_szzb(){//数字争霸比赛页
@@ -409,7 +409,7 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
-        if(ACTION == 'grading_szzb'){//
+        if(ACTION == 'initialMatch'){//
             wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-numberBattleReady' );
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );

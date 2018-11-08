@@ -27,6 +27,18 @@ class Match_Ajax
     }
 
     /**
+     * 生成座位号
+     */
+    public function seating(){
+        global $wpdb;
+        $match_status = $wpdb->get_var(" select match_status from {$wpdb->prefix}match_meta_new where match_id = {$_POST['id']} ");
+        if($match_status != -2) wp_send_json_error(array('info'=>'只有报名截止状态下才能生成座位'));
+        //获取报名数据
+        $rows = $wpdb->get_results("select user_id from {$wpdb->prefix}order where match_id = {$_POST['id']} and pay_status in (2,3,4)",ARRAY_A);
+        print_r($rows);die;
+    }
+
+    /**
      * 清除历史操作
      */
     public function clear_history(){
