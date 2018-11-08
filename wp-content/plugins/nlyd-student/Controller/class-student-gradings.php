@@ -58,8 +58,11 @@ class Student_Gradings extends Student_Home
             }
         }
 
+        //获取最近一场考级
+        $data['new_grading'] = $wpdb->get_row("select grading_id,start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
+
         $view = student_view_path.CONTROLLER.'/index.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
 
     /**

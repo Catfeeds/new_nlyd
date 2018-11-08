@@ -3729,21 +3729,15 @@ class Student_Ajax
             $map[] = " b.status = -3 ";     //历史
             $order = ' b.start_time desc ';
 
+        }elseif (isset($_POST['match_type']) && $_POST['match_type'] =='signUp'){
+            $map[] = " b.status = 1 ";     //报名中
+            $order = ' b.entry_end_time asc ';
         }
         else{
-            $map[] = " b.status != -3  ";    //比赛
+            $map[] = " (b.status = -2  or b.status = 2) ";    //比赛
             $order = ' b.start_time asc ';
         }
 
-        //获取最新比赛倒计时
-        $sql1 = "select match_start_time from {$wpdb->prefix}match_meta_new where match_status = -2 order by match_start_time desc ";
-
-        $row = $wpdb->get_row($sql1);
-        if(!empty($row)){
-            $start_time = $row->match_start_time;
-            $new_match['new_match_arr'] = str2arr(time_format(strtotime($start_time),'Y-m-d-H-i-s'),'-');
-            $new_match['match_type'] = $match_type;
-        }
 
         //判断是否有分页
         $page = isset($_POST['page'])?$_POST['page']:1;
@@ -3794,7 +3788,7 @@ class Student_Ajax
             else if ($val['status'] == 1){
                 //报名中
                 $url = home_url('gradings/confirm/grad_id/'.$val['ID']);
-                $button_title = __('参赛报名', 'nlyd-student');
+                $button_title = __('考级报名', 'nlyd-student');
                 $rows[$k]['match_status_cn'] = __('报名中', 'nlyd-student');
             }
             else if ($val['status'] == -1){
@@ -3810,8 +3804,8 @@ class Student_Ajax
             else{
                 //等待开赛
                 $url = home_url('gradings/matchWaitting/grad_id/'.$val['ID']);
-                $button_title = __('等待开赛', 'nlyd-student');
-                $rows[$k]['match_status_cn'] = __('等待开赛', 'nlyd-student');
+                $button_title = __('等待考级', 'nlyd-student');
+                $rows[$k]['match_status_cn'] = __('等待考级', 'nlyd-student');
             }
             $rows[$k]['match_status'] = $val['status'];
             $rows[$k]['button_title'] = $button_title;
