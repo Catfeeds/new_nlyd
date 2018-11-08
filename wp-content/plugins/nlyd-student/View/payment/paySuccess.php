@@ -2,8 +2,13 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_public_view.'leftMenu.php';
-            
+            require_once leo_student_public_view.'leftMenu.php';
+
+            if($row->order_type == 2){
+                $url = home_url('gradings/info/grad_id/'.$row->match_id);
+            }else{
+                $url = home_url('matchs/info/match_id/'.$row->match_id);
+            }
         ?>
 
 
@@ -20,7 +25,7 @@
                     <?php if(!empty($match_title)): ?>
                         <div class="order-info"><?=__('您已成功报名', 'nlyd-student')?><span>“<?=$match_title?>”</span></div>
                     <?php endif;?>
-                    <a class='top' href="<?=home_url('matchs/info/match_id/'.$row->match_id);?>"><?=__('比赛详情', 'nlyd-student')?></a>
+                    <a class='top' href="<?=$url;?>"><?=__('比赛详情', 'nlyd-student')?></a>
                     <!--<a class='bottom' href="javascript:;">订单详情</a>-->
                 </div>
             </div>
