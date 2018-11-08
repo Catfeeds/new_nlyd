@@ -763,6 +763,7 @@ p.share-font{
 }
 .content table.nl-table{
     position: relative;
+    border-color:transparent;
 }
 .nl-table-wapper{
     overflow-x: scroll;
@@ -773,6 +774,7 @@ p.share-font{
     background-color: rgba(246, 250, 255, 1);
 }
 .content .nl-table td{
+    border-color:transparent;
     text-align: center;
     font-size:0.13rem;
     white-space: nowrap;

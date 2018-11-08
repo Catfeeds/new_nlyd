@@ -157,7 +157,10 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
         load_view_template($view);
     }
-
+    public function record(){//考级成绩
+        $view = student_view_path.CONTROLLER.'/record.php';
+        load_view_template($view);
+    }
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
