@@ -983,7 +983,9 @@ if(is_admin()){
 
     function extra_user_profile_fields( $user ) {
         $user_real_name = get_user_meta($user->ID, 'user_real_name', true);
-        $user_address = get_user_meta($user->ID, 'user_address', true);
+        $real_name = isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '';
+        $real_age = isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '';
+
 //        leo_dump(get_user_meta($user->ID));
         $str = file_get_contents(leo_student_path."conf/nationality_array.json");
         $nationalityArr = json_decode($str, true);
@@ -994,7 +996,7 @@ if(is_admin()){
             <tr>
                 <th><label for="real_name"><?php _e('真实姓名'); ?></label></th>
                 <td>
-                    <input type="text" name="real_name" id="real_name" value="<?php echo $user_real_name['real_name'] ; ?>" class="regular-text" /><br />
+                    <input type="text" name="real_name" id="real_name" value="<?php echo $real_name; ?>" class="regular-text" /><br />
 
                 </td>
             </tr>
@@ -1008,7 +1010,7 @@ if(is_admin()){
             <tr>
                 <th><label for="age"><?php _e("年龄"); ?></label></th>
                 <td>
-                    <input type="text" name="age" id="age" value="<?php echo $user_real_name['real_age'] ?>" class="regular-text" /><br />
+                    <input type="text" name="age" id="age" value="<?php echo $real_age ?>" class="regular-text" /><br />
 
                 </td>
             </tr>
@@ -1031,9 +1033,9 @@ if(is_admin()){
     add_action( 'edit_user_profile_update', 'save_extra_user_profile_fields' );
 
     function save_extra_user_profile_fields( $user_id ) {
-
         if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
         $user_real_name = get_user_meta($user_id, 'user_real_name', true);
+        if(!$user_real_name) $user_real_name = [];
         $user_real_name['real_name'] = $_POST['real_name'];
         $user_real_name['real_age'] = $_POST['age'];
         $nationalityArr = explode(',', $_POST['nationality']);
