@@ -173,7 +173,8 @@ class Match_student {
                                 <div class="row-actions">
                                     <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
                                     <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
-                                    <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $match->ID . '&student_id='.$row['ID'])?>" aria-label="">答题记录</a></span>
+                                    <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $match->ID . '&student_id='.$row['ID'])?>" aria-label="">答题记录</a> | </span>
+                                    <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$row['ID'])?>" aria-label="">编辑</a></span>
                                 </div>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
                             </td>
