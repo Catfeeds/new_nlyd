@@ -89,15 +89,15 @@ jQuery(function($) {
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
-    var matchSession=$.GetSession('matching_question','true');
+    var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
+    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
         isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-        level=matchSession['level'];
-        n_type=matchSession['n_type'];
-        nextBtn_click=matchSession['nextBtn_click'];
-        end_time=matchSession['end_time'];
+        ajaxData=grade_question['ajaxData'];
+        level=grade_question['level'];
+        n_type=grade_question['n_type'];
+        nextBtn_click=grade_question['nextBtn_click'];
+        end_time=grade_question['end_time'];
         sys_second=$.GetSecond(end_time);
         $('.count_down').attr('data-seconds',sys_second)
     }
@@ -388,7 +388,7 @@ jQuery(function($) {
             nextBtn_click:nextBtn_click,
             end_time:end_time
         }
-        $.SetSession('matching_question',sessionData)
+        $.SetSession('grade_question',sessionData)
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)

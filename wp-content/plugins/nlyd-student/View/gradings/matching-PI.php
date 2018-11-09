@@ -104,9 +104,9 @@ jQuery(function($) {
         }, 1000);
     } 
     function init_question(question_leng) {//初始化题目
-        var matching_question=$.GetSession('matching_question','true');
-        if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
-            endTime=matching_question['endTime'];
+        var grade_question=$.GetSession('grade_question','true');
+        if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+            endTime=grade_question['endTime'];
             sys_second=$.GetSecond(endTime);
         }else{
             var sessionData={
@@ -115,7 +115,7 @@ jQuery(function($) {
                 match_more:_match_more,
                 endTime:endTime
             }
-            $.SetSession('matching_question',sessionData)
+            $.SetSession('grade_question',sessionData)
         }
         for (let index = 0; index < question_leng; index++) {
             var dom=index==0?'<div class="matching-number active"></div>' : '<div class="matching-number"></div>';

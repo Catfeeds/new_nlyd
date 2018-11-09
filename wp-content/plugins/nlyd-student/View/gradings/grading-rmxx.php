@@ -81,7 +81,7 @@ jQuery(function($) {
             _show:2,
             questions_answer:questions_answer
         }
-        $.SetSession('matching_question',sessionData)
+        $.SetSession('grade_question',sessionData)
     })
     count_down()
     function count_down(){
@@ -116,7 +116,7 @@ jQuery(function($) {
                         _show:2,
                         questions_answer:questions_answer
                     }
-                    $.SetSession('matching_question',sessionData)
+                    $.SetSession('grade_question',sessionData)
                 }else if(_show==2){//答题页面
                     clearInterval(timer)
                     submit(0,3)
@@ -126,14 +126,14 @@ jQuery(function($) {
         }, 1000);
     } 
     function init_question(_show) {//初始化题目
-        var matching_question=$.GetSession('matching_question','true');
-        if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
-            questions_answer=matching_question['questions_answer'];
-            _show=matching_question['_show']
-            endTime=matching_question['endTime'];
+        var grade_question=$.GetSession('grade_question','true');
+        if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+            questions_answer=grade_question['questions_answer'];
+            _show=grade_question['_show']
+            endTime=grade_question['endTime'];
             sys_second=$.GetSecond(endTime);
             if(_show==2){
-                remember_time=matching_question['remember_time'];
+                remember_time=grade_question['remember_time'];
             }
         }else{
     //     // $.getJSON("js/userinfo.json", function (data){
@@ -148,7 +148,7 @@ jQuery(function($) {
                 endTime:endTime,
                 questions_answer:questions_answer
             }
-            $.SetSession('matching_question',sessionData)
+            $.SetSession('grade_question',sessionData)
         }
         $.each(questions_answer,function(i,v){
             var dom='<div class="matching-card">'

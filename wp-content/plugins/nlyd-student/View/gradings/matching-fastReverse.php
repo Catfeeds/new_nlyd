@@ -83,13 +83,13 @@ jQuery(function($) {
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
     var sys_second=540;//倒计时的时间
     var end_time=0;
-    var matchSession=$.GetSession('matching_question','true');
+    var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
     var no_answer=50;//每隔多少题出现一次无解
-    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
+    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
         isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-        end_time=matchSession['end_time'];
+        ajaxData=grade_question['ajaxData'];
+        end_time=grade_question['end_time'];
         sys_second=$.GetSecond(end_time);
         $('.count_down').attr('data-seconds',sys_second)
     }
@@ -167,7 +167,7 @@ jQuery(function($) {
                     match_more:_match_more,
                     end_time:end_time
                 }
-                $.SetSession('matching_question',sessionData)
+                $.SetSession('grade_question',sessionData)
             }
     }
     function nextQuestion() {
