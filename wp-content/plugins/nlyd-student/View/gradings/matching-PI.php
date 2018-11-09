@@ -9,10 +9,10 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__('圆周率默写', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('圆周率', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="900"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -70,7 +70,7 @@ jQuery(function($) {
     var _project_id=2;
     var _match_more=3;
    
-    var answer_time=300;//记忆时间
+    var answer_time=900;//记忆时间
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
     var que_len=100;//多少个字符

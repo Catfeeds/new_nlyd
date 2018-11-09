@@ -63,7 +63,7 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         $('#next').addClass('disabled')
-        var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+        var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
         ajaxData[ajaxData.length-1]['yours']=yours;
         if(yours==ajaxData[ajaxData.length-1]['rights']){
             ajaxData[ajaxData.length-1]['isRight']=true;
@@ -624,7 +624,7 @@ layui.use('layer', function(){
                     layer.closeAll();
                 }
                 ,btn2: function(index, layero){
-                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+                    var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
                     ajaxData[ajaxData.length-1]['yours']=yours;
                     if(yours==ajaxData[ajaxData.length-1]['rights']){
                         ajaxData[ajaxData.length-1]['isRight']=true;

@@ -76,7 +76,7 @@ jQuery(function($) {
     var wax_and_wane_time = 180; //乘除
     var level={number:2,symbol:1};//题目难度
     var sys_second=<?=$count_down?>;
-    var end_time=0;//结束时间
+    var end_time=0,//结束时间
     n_type=0,
     type='',//当前子相运算类型
     ajaxData=[],//提交的数据
@@ -153,7 +153,7 @@ jQuery(function($) {
                     sys_second=wax_and_wane_time -1 ;
                     nextBtn_click=0;
                 }else{
-                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+                    var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
                     ajaxData[ajaxData.length-1]['yours']=yours;
                     if(yours==ajaxData[ajaxData.length-1]['rights']){
                         ajaxData[ajaxData.length-1]['isRight']=true;
@@ -614,7 +614,7 @@ layui.use('layer', function(){
                 }
                 ,btn2: function(index, layero){
                     var thisAjaxRow=ajaxData[ajaxData.length-1]
-                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+                    var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
                     thisAjaxRow['yours']=yours;
                     if(yours==thisAjaxRow['rights']){
                         thisAjaxRow['isRight']=true;

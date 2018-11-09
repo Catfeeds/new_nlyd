@@ -9,7 +9,7 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('人脉信息', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
                                 <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
@@ -269,7 +269,7 @@ jQuery(function($) {
                         }
                         ,btn2: function(index, layero){
                             layer.closeAll();
-                            submit(time,1);  
+                            submit(time,1);
                         }
                         ,closeBtn:2
                         ,btnAagn: 'c' //按钮居中

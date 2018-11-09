@@ -9,10 +9,10 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__('随机数字记忆', 'nlyd-student')?><?=__('随机字母记忆', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('随机词汇', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="900"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit" style="display:none"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -49,7 +49,7 @@ jQuery(function($) {
     var _match_more=3;
     var ready_time=900;//记忆时间
     var sys_second=ready_time;
-    var answer_time=300;//记忆时间
+    var answer_time=1800;//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len=100;//多少个字符
     var remember_time=ready_time;
