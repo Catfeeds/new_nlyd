@@ -21,8 +21,8 @@
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                <a href="<?=home_url('gradings/ready_szzb/type/1')?>">随机数字记忆</a><br>
-                                <a href="<?=home_url('gradings/ready_szzb/type/2')?>">随机字母记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_szzb/type/1')?>">随机数字记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_szzb/type/2')?>">随机字母记忆</a><br>
                                 <a href="<?=home_url('gradings/ready_word/')?>">随机中文词语记忆</a><br>
                                 <a href="<?=home_url('gradings/match_szzb/')?>">圆周率默写</a><br>
                                 <a href="<?=home_url('gradings/ready_card/')?>">人脉信息记忆</a><br>

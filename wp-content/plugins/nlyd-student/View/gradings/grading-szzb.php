@@ -15,7 +15,7 @@
                                 <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
-                        <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
+                        <div class="matching-sumbit" id="sumbit" style="display:none"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
@@ -134,6 +134,7 @@ jQuery(function($) {
     var answer_time=300;//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len=100;//多少个字符
+    var have_time1=ready_time;
     init_question(que_len,_show,question_type)
     leaveMatchPage(function(){//窗口失焦提交
         var countTime=parseInt($('.count_down').attr('data-seconds'));
@@ -155,6 +156,7 @@ jQuery(function($) {
         var href=_this.attr('href');
         $('.complete_zoo').hide();
         $('#'+href).show()
+        $('.matching-sumbit').show();
         _show=2
         sys_second=answer_time
         var endTime=$.GetEndTime(answer_time);//结束时间
@@ -164,6 +166,7 @@ jQuery(function($) {
             match_more:_match_more,
             question_type:question_type,
             endTime:endTime,
+            have_time1:$('.count_down').attr('data-seconds'),
             _show:2,
             questions_answer:questions_answer
         }
@@ -207,6 +210,7 @@ jQuery(function($) {
                 if(_show==1){//记忆页面
                     $('.complete_zoo').hide();
                     $('#match_zoo').show()
+                    $('.matching-sumbit').show();
                     _show=2
                     sys_second=answer_time
                     var endTime=$.GetEndTime(answer_time);//结束时间
@@ -216,6 +220,7 @@ jQuery(function($) {
                         match_more:_match_more,
                         question_type:question_type,
                         endTime:endTime,
+                        have_time1:0,
                         _show:2,
                         questions_answer:questions_answer
                     }
@@ -236,6 +241,9 @@ jQuery(function($) {
             _show=matching_question['_show']
             endTime=matching_question['endTime'];
             sys_second=$.GetSecond(endTime);
+            if(_show==2){
+                have_time1=matching_question['have_time1'];
+            }
         }else{
             for(var i=0;i<question_leng;i++){
                 if(question_type==1){
@@ -250,6 +258,7 @@ jQuery(function($) {
                 project_id:_project_id,
                 match_more:_match_more,
                 question_type:question_type,
+                have_time1:ready_time,//剩余记忆时间
                 _show:_show,
                 endTime:endTime,
                 questions_answer:questions_answer
