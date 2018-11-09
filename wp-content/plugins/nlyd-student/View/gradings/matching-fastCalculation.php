@@ -8,11 +8,11 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('正向运算', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="1111"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="540"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -21,10 +21,6 @@
                         <p class="count_p c_black">
                             <span id="type"></span>
                             <span class="count_downs" data-seconds="10"><?=__('初始中', 'nlyd-student')?>...</span>
-                            <!-- <span><?=!empty($child_type_down) ? $child_type_down : ''?></span> -->
-                            <input type="hidden"id="even_add_time" value="<?=$child_count_down['even_add'] ?>">
-                            <input type="hidden"id="add_and_subtract_time" value="<?=$child_count_down['add_and_subtract'] ?>">
-                            <input type="hidden"id="wax_and_wane_time" value="<?=$child_count_down['wax_and_wane'] ?>">
                         </p>
                         <div class="item-wrapper">
                             <div class="fast-item" id="question"><div></div></div>
@@ -67,7 +63,7 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         $('#next').addClass('disabled')
-        var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+        var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
         ajaxData[ajaxData.length-1]['yours']=yours;
         if(yours==ajaxData[ajaxData.length-1]['rights']){
             ajaxData[ajaxData.length-1]['isRight']=true;
@@ -80,36 +76,40 @@ jQuery(function($) {
     var _match_id=1;
     var _project_id=1;
     var _match_more=1;
-    var even_add_time = parseInt($('#even_add_time').val()); //连加
-    var add_and_subtract_time = parseInt($('#add_and_subtract_time').val()); //加减
-    var wax_and_wane_time = parseInt($('#wax_and_wane_time').val()); //乘除
-    var level={number:2,symbol:1},//题目难度
-    _count_down=11,
-    n_type=<?=$child_type > 0 ? $child_type : 0?>,
-    type='',//当前子相运算类型
+    var even_add_time = 180; //连加
+    var add_and_subtract_time = 180; //加减
+    var wax_and_wane_time = 180; //乘除
+    var level={number:2,symbol:1};//题目难度
+    var sys_second=540;
+    var end_time=0,//结束时间
+    n_type=0,
+    type="<?=__('连加运算', 'nlyd-student')?>",//当前子相运算类型
     ajaxData=[],//提交的数据
     nextBtn_click=0,//下一题点击次数，控制难度
     add_interval_times=3,//加减法每隔多少题增加一个难度
     cx_interval_times=6;//乘除法每隔多少题增加一个难度
 
-    var matchSession=$.GetSession('match','true');
+    var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
+    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
         isMatching=true;
-        ajaxData=matchSession['ajaxData'];
-        level=matchSession['level'];
-        n_type=matchSession['n_type'];
-        nextBtn_click=matchSession['nextBtn_click'];
+        ajaxData=grade_question['ajaxData'];
+        level=grade_question['level'];
+        n_type=grade_question['n_type'];
+        nextBtn_click=grade_question['nextBtn_click'];
+        end_time=grade_question['end_time'];
+        sys_second=$.GetSecond(end_time);
+        $('.count_down').attr('data-seconds',sys_second)
     }
     if(n_type==0){
         type="<?=__('连加运算', 'nlyd-student')?>"
-        even_add_time=_count_down-add_and_subtract_time-wax_and_wane_time
+        even_add_time=sys_second-add_and_subtract_time-wax_and_wane_time
     }else if(n_type==1){
         type="<?=__('加减运算', 'nlyd-student')?>"
-        add_and_subtract_time=_count_down-wax_and_wane_time
+        add_and_subtract_time=sys_second-wax_and_wane_time
     }else{
         type='<?=__('乘除运算', 'nlyd-student')?>'
-        wax_and_wane_time=_count_down
+        wax_and_wane_time=sys_second
     }
     $('#type').text(type)
     if(!isMatching){
@@ -377,6 +377,7 @@ jQuery(function($) {
             row=CX(levels);
         }
         ajaxData.push(row)
+        end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
         var sessionData={
             ajaxData:ajaxData,
             match_id:_match_id,
@@ -384,9 +385,10 @@ jQuery(function($) {
             match_more:_match_more,
             level:level,
             n_type:n_type,
-            nextBtn_click:nextBtn_click
+            nextBtn_click:nextBtn_click,
+            end_time:end_time
         }
-        $.SetSession('match',sessionData)
+        $.SetSession('grade_question',sessionData)
     }
     function nextQuestion() {
         $('#total').text(ajaxData.length)
@@ -576,7 +578,7 @@ jQuery(function($) {
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
-    if(_count_down<=0){//进入页面判断时间是否结束
+    if(sys_second<=0){//进入页面判断时间是否结束
         // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         $('#next').addClass('disabled')
         // setTimeout(function() {
@@ -622,7 +624,7 @@ layui.use('layer', function(){
                     layer.closeAll();
                 }
                 ,btn2: function(index, layero){
-                    var yours=$('#answer div').text().length==0 ? '' : parseInt($('#answer div').text());
+                    var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
                     ajaxData[ajaxData.length-1]['yours']=yours;
                     if(yours==ajaxData[ajaxData.length-1]['rights']){
                         ajaxData[ajaxData.length-1]['isRight']=true;

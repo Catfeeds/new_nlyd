@@ -23,10 +23,10 @@
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
                                 <a href="<?=home_url('gradings/grading_szzb/type/1')?>">随机数字记忆</a><br>
                                 <a href="<?=home_url('gradings/grading_szzb/type/2')?>">随机字母记忆</a><br>
-                                <a href="<?=home_url('gradings/ready_word/')?>">随机中文词语记忆</a><br>
-                                <a href="<?=home_url('gradings/match_szzb/')?>">圆周率默写</a><br>
-                                <a href="<?=home_url('gradings/ready_card/')?>">人脉信息记忆</a><br>
-                                <a href="<?=home_url('gradings/ready_voice/')?>">语音听记数字记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_zwcy/')?>">随机中文词语记忆</a><br>
+                                <a href="<?=home_url('gradings/matching_PI/')?>">圆周率默写</a><br>
+                                <a href="<?=home_url('gradings/grading_rmxx/')?>">人脉信息记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_voice/')?>">语音听记数字记忆</a><br>
                                 <a href="<?=home_url('gradings/matching_silent/')?>">国学经典默写</a><br>
 
                                 <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>

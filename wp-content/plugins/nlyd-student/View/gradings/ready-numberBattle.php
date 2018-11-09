@@ -50,9 +50,9 @@ jQuery(function($) {
     var _project_id=2;
     var _match_more=3;
     var questions_answer=[]
-    var matching_question=$.GetSession('matching_question','true');
-    if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){
-        questions_answer=matching_question['questions_answer']
+    var grade_question=$.GetSession('grade_question','true');
+    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+        questions_answer=grade_question['questions_answer']
     }else{
         for(var i=0;i<question_leng;i++){
             if(question_type=='1'){
@@ -69,7 +69,7 @@ jQuery(function($) {
             question_type:question_type,
             questions_answer:questions_answer
         }
-        $.SetSession('matching_question',sessionData)
+        $.SetSession('grade_question',sessionData)
     }
     function randZF() {//生成随即字符
         var arr=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]

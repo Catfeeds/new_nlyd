@@ -58,9 +58,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    // var matching_question= $.GetSession('matching_question','1');
-    // if(matching_question && matching_question['match_id']===_match_id && matching_question['project_id']===_project_id && matching_question['match_more']===_match_more){//从Session获取比赛题目,
-    //     questions_answer=matching_question['questions_answer'];
+    // var grade_question= $.GetSession('grade_question','1');
+    // if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){//从Session获取比赛题目,
+    //     questions_answer=grade_question['questions_answer'];
     //     $.each(questions_answer,function(i,v){
     //         var dom='<div class="matching-number"><input class="matching-number-input nl-foucs" type="text"></div>'
     //         $('.matching-number-zoo').append(dom)
