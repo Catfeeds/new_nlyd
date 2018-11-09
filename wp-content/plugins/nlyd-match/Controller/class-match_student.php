@@ -52,12 +52,12 @@ class Match_student {
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.id order_id,o.created_time,o.address,o.telephone,o.seat_number,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id AND mt.status=2 
         LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
         '.$joinSql.'
-        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.id ASC LIMIT '.$start.','.$pageSize, ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.seat_number asc,o.id ASC LIMIT '.$start.','.$pageSize, ARRAY_A);
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -141,6 +141,7 @@ class Match_student {
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
                         <th scope="col" id="card" class="manage-column column-card">证件号码</th>
                         <th scope="col" id="card_image" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" id="user_coin_code" class="manage-column column-user_coin_code">收款二维码</th>
@@ -178,8 +179,14 @@ class Match_student {
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
                             </td>
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
-
                             <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
+                            <td class="role column-ID" data-colname="座位号">
+                                <?php if ($row['seat_number'] > 0 ){ ?>
+                                    <input style="width: 70px;" class="save_seat" order-id='<?=$row['order_id']?>' value="<?=$row['seat_number'];?>" />
+                                <?php }else{ ?>
+                                    --
+                                <?php } ?>
+                            </td>
                             <td class="name column-card" data-colname="证件号码">
                                 <span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span>
                                 <span class="screen-reader-text">未知</span>&ensp;
@@ -216,6 +223,7 @@ class Match_student {
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
                         <th scope="col" class="manage-column column-card">证件号码</th>
                         <th scope="col" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" class="manage-column column-user_coin_code">收款二维码</th>
@@ -234,6 +242,32 @@ class Match_student {
                 </table>
                 <script type="text/javascript">
                     jQuery(document).ready(function($) {
+
+                        //修改座位
+                        jQuery('.save_seat').change(function(){
+                            var seat_number = $(this).val();
+                            var notice = '确定与'+seat_number+'号互换座位?';
+                            var orderid = $(this).attr('order-id');
+                            if(confirm(notice)){
+                                $.ajax({
+                                    url : ajaxurl,
+                                    data : {'action' : 'save_seating', 'orderid' : orderid,'new_seat_number' : seat_number},
+                                    dataType : 'json',
+                                    type : 'post',
+                                    success : function (response) {
+                                        alert(response['data']);
+                                        if(response.success){
+                                            window.location.reload();
+                                        }
+                                    },error : function () {
+
+                                    }
+                                });
+                                return false;
+                            }
+
+                        })
+
                         layui.use('layer', function(){
                             var layer = layui.layer;
                             <?php foreach ($rows as $row){ ?>
