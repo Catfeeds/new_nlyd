@@ -414,6 +414,9 @@ class Order {
     public function refundOrder(){
         global $wpdb;
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+        $searchWhere = '';
+        if($searchStr!='') $searchWhere = 'WHERE um.meta_value LIKE "%'.$searchStr.'%"';
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS 
@@ -425,6 +428,10 @@ class Order {
         u.user_login, 
         r.refund_cost, 
         o.telephone,
+        p.post_title,
+        r.created_time AS refund_time,
+        u.user_mobile,
+        um.meta_value AS user_real_name,
         CASE o.pay_type 
         WHEN "zfb" THEN "支付宝" 
         WHEN "wx" THEN "微信" 
@@ -435,11 +442,19 @@ class Order {
         WHEN -1 THEN "待退款" 
         WHEN 1 THEN "待支付" 
         WHEN 2 THEN "支付完成" 
+        WHEN 3 THEN "待收货" 
+        WHEN 4 THEN "已完成" 
+        WHEN 5 THEN "已失效"
         END AS pay_status,
-        CASE o.order_type WHEN 1 THEN "报名订单" END AS order_type  
+        CASE o.order_type WHEN 1 THEN "报名订单" WHEN 2 THEN "商品订单" END AS order_type  
         FROM '.$wpdb->prefix.'order_refund AS r 
         LEFT JOIN '.$wpdb->prefix.'order AS o ON o.id=r.order_id 
-        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id LIMIT '.$start.','.$pageSize, ARRAY_A);
+        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=o.match_id 
+        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
+        LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_Id=o.user_id AND um.meta_key="user_real_name" 
+        '.$searchWhere.'
+        ORDER BY r.created_time DESC 
+        LIMIT '.$start.','.$pageSize, ARRAY_A);
 //        var_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -457,7 +472,11 @@ class Order {
             <h1 class="wp-heading-inline">退款单</h1>
 
             <div class="tablenav top">
-
+                <p class="search-box">
+                    <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                    <input type="search" id="search_val" name="search_val" placeholder="姓名" value="<?=$searchStr?>">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=order-refundOrder&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                </p>
 <!--                <div class="alignleft actions bulkactions">-->
 <!--                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
 <!--                        <option value="-1">批量操作</option>-->
@@ -495,12 +514,15 @@ class Order {
                         </a>
                     </th>
                     <th scope="col" id="username" class="manage-column column-username">用户名</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
+                    <th scope="col" id="match" class="manage-column column-match">比赛</th>
                     <th scope="col" id="telephone" class="manage-column column-telephone">联系电话</th>
                     <th scope="col" id="order_type" class="manage-column column-order_type">订单类型</th>
                     <th scope="col" id="pay_type" class="manage-column column-pay_type">支付类型</th>
                     <th scope="col" id="cost" class="manage-column column-cost">订单总价</th>
                     <th scope="col" id="refund_cost" class="manage-column column-refund_cost">退款金额</th>
                     <th scope="col" id="pay_status" class="manage-column column-pay_status">支付状态</th>
+                    <th scope="col" id="refund_time" class="manage-column column-refund_time">退款时间</th>
 
                 </tr>
                 </thead>
@@ -520,12 +542,16 @@ class Order {
 <!--                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>-->
                         </td>
                         <td class="name column-username" data-colname="用户名"><span aria-hidden="true"><?=$row['user_login']?></span><span class="screen-reader-text"></span></td>
-                        <td class="posts column-telephone" data-colname="联系电话"><?=$row['telephone']?></td>
-                        <td class="posts column-order_type" data-colname="订单类型"><?=$row['order_type']?></td>
-                        <td class="posts column-pay_type" data-colname="支付类型"><?=$row['pay_type']?></td>
-                        <td class="posts column-cost" data-colname="订单总价"><?=$row['cost']?></td>
-                        <td class="posts column-refund_cost" data-colname="退款金额"><?=$row['refund_cost']?></td>
-                        <td class="posts column-pay_status" data-colname="支付状态"><?=$row['pay_status']?></td>
+                        <td class="real_name column-real_name" data-colname="姓名"><?=isset(unserialize($row['user_real_name'])['real_name'])?unserialize($row['user_real_name'])['real_name']:''?></td>
+                        <td class="match column-match" data-colname="比赛"><?=$row['post_title']?></td>
+
+                        <td class="telephone column-telephone" data-colname="联系电话"><?=$row['user_mobile']?></td>
+                        <td class="order_type column-order_type" data-colname="订单类型"><?=$row['order_type']?></td>
+                        <td class="pay_type column-pay_type" data-colname="支付类型"><?=$row['pay_type']?></td>
+                        <td class="cost column-cost" data-colname="订单总价"><?=$row['cost']?></td>
+                        <td class="refund_cost column-refund_cost" data-colname="退款金额"><?=$row['refund_cost']?></td>
+                        <td class="pay_status column-pay_status" data-colname="支付状态"><?=$row['pay_status']?></td>
+                        <td class="refund_time column-refund_time" data-colname="退款时间"><?=$row['refund_time']?></td>
 
                     </tr>
                 <?php } ?>
@@ -542,12 +568,15 @@ class Order {
                                 <a href="javascript:;"><span>订单流水</span><span class="sorting-indicator"></span></a>
                             </th>
                             <th scope="col" class="manage-column column-username">用户名</th>
+                            <th scope="col" class="manage-column column-real_name">姓名</th>
+                            <th scope="col" class="manage-column column-match">比赛</th>
                             <th scope="col" class="manage-column column-telephone">联系电话</th>
                             <th scope="col" class="manage-column column-order_type">订单类型</th>
                             <th scope="col" class="manage-column column-pay_type">支付类型</th>
                             <th scope="col" class="manage-column column-cost">订单总价</th>
                             <th scope="col" class="manage-column column-refund_cost">退款金额</th>
                             <th scope="col" class="manage-column column-pay_status">支付状态</th>
+                            <th scope="col" class="manage-column column-refund_time">退款时间</th>
 
                         </tr>
                 </tfoot>
