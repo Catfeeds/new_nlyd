@@ -143,7 +143,6 @@
 
 <script>
 jQuery(function($) { 
-    window.onbeforeunload = function(){ alert(1); }
     matchDetail()
     if($('.count_down').attr('data-seconds')<=120){
         $.DelSession('waitting')

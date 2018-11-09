@@ -62,3 +62,94 @@
     width: calc(200% / 7 - 120px / 7 + 10px);
 }
 
+/* 中文词语记忆 */
+.matching-number-match-word{
+    width: 20%;
+    float: left;
+    overflow: visible;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    color: #262626;
+    text-align: center;
+}
+input[type=text].matching-number-input{
+    width: 90%;
+    margin: auto;
+    height: 35px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #707070;
+    color: #262626;
+    padding: 0;
+    text-align: center;
+}
+input[type=text].matching-number-input:focus{
+    background: rgba(67, 148, 249, 0.3);
+    color: #4394F9!important;
+}
+/* 语音 */
+.voice_img{
+    position: relative;
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    top: 10px;
+    margin:0 auto;
+}
+.voice_img img{ 
+    width: 100%;
+}
+.voice_title{
+    margin-top: 80px;
+}
+.voice_wait{
+    display: block;
+    margin:38px auto;
+    width: 102px;
+    height: 102px;
+    background: rgba(104, 170, 254, 0.2);
+    border-radius: 50%;
+    animation: 'GrowQuare' 1s linear infinite alternate;
+    -moz-animation:'GrowQuare' 1s linear infinite alternate;
+    -webkit-animation: 'GrowQuare' 1s linear infinite alternate;
+    -o-animation: 'GrowQuare' 1s linear infinite alternate;
+}
+@keyframes GrowQuare {
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+@-moz-keyframes myfirst
+{
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+
+@-webkit-keyframes myfirst /* Safari 和 Chrome */
+{
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+    from {
+        background: rgba(104, 170, 254, 0.2);
+    }
+    to {
+        background: #fff;
+    }
+}

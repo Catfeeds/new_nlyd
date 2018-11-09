@@ -12,11 +12,11 @@
                         <div class="c_black match_info_font"><div><?=__($project_title, 'nlyd-student')?></div></div>
                     </div> -->
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('逆向运算', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font"><div><?=__('第<span id="total">0</span>题', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="540"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -77,17 +77,21 @@ jQuery(function($) {
         }
         submit(time,4);
     })
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
+    var _match_id=1;
+    var _project_id=1;
+    var _match_more=1;
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
-    var sys_second=<?=$count_down?>;//倒计时的时间
-    var matchSession=$.GetSession('match','true');
+    var sys_second=540;//倒计时的时间
+    var end_time=0;
+    var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
     var no_answer=50;//每隔多少题出现一次无解
-    if(matchSession && matchSession['match_id']===_match_id && matchSession['project_id']===_project_id && matchSession['match_more']===_match_more){
+    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
         isMatching=true;
-        ajaxData=matchSession['ajaxData'];
+        ajaxData=grade_question['ajaxData'];
+        end_time=grade_question['end_time'];
+        sys_second=$.GetSecond(end_time);
+        $('.count_down').attr('data-seconds',sys_second)
     }
     if(!isMatching){
         initQuestion();//初始化数据
@@ -155,13 +159,15 @@ jQuery(function($) {
                 if(_len>=1){
                    delete ajaxData[_len-1]['have_noanswer']
                 }
+                end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
                 var sessionData={
                     ajaxData:ajaxData,
                     match_id:_match_id,
                     project_id:_project_id,
                     match_more:_match_more,
+                    end_time:end_time
                 }
-                $.SetSession('match',sessionData)
+                $.SetSession('grade_question',sessionData)
             }
     }
     function nextQuestion() {

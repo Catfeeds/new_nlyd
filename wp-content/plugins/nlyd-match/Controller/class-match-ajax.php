@@ -1503,7 +1503,7 @@ class Match_Ajax
         $where = '';
         if($team_id > 0) $where = ' AND ID NOT IN('.$team_id.')';
         global $wpdb;
-        $result = $wpdb->get_results("SELECT ID,post_title FROM {$wpdb->posts} WHERE post_title LIKE '%{$val}%' AND post_parent=0{$where}");
+        $result = $wpdb->get_results("SELECT ID,post_title FROM {$wpdb->posts} WHERE post_title LIKE '%{$val}%' AND post_parent=0 AND post_type='team' AND post_status!='trash'{$where}");
         if($result){
             wp_send_json_success(['info' => $result]);
         }else{
