@@ -34,8 +34,8 @@ if(!class_exists('MatchController')){
         public function Yct_Row_actions( $actions, $post )
         {
 //            unset($actions['inline hide-if-no-js']);
-            if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem')) ){
-                if($this->post_type == 'match') {
+            if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem','grading')) ){
+                if($this->post_type == 'match' || $this->post_type == 'grading') {
                     unset($actions['trash']);
                     unset($actions['delete']);
                 }
