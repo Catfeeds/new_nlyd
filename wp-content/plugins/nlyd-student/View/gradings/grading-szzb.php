@@ -3,16 +3,16 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__('随机数字', 'nlyd-student')?><?=__('随机字母', 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__($type_title, 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="300"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="<?=$memory_type['memory_time']?>"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit" style="display:none"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -123,17 +123,17 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
-    //var question_type="<?//=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>//";//1，数字.2,字母
     var questions_answer=[];//题目
-    var question_type=1;
+    //var question_type=1;
+    var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
     var _match_id=1;
     var _project_id=2;
     var _match_more=3;
-    var ready_time=300;//记忆时间
+    var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
     var sys_second=ready_time;
-    var answer_time=900;//记忆时间
+    var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
-    var que_len=100;//多少个字符
+    var que_len="<?=$memory_type['length']?>";//多少个字符
     var remember_time=ready_time;
     init_question(que_len,_show,question_type)
     leaveMatchPage(function(){//窗口失焦提交

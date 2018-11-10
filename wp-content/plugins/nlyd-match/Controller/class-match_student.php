@@ -52,12 +52,12 @@ class Match_student {
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.id order_id,o.created_time,o.address,o.telephone,o.seat_number,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id AND mt.status=2 
         LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
         '.$joinSql.'
-        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.id ASC LIMIT '.$start.','.$pageSize, ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4) '.$searchWhere.' AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.seat_number asc,o.id ASC LIMIT '.$start.','.$pageSize, ARRAY_A);
 
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
@@ -77,14 +77,6 @@ class Match_student {
             <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
 
             <hr class="wp-header-end">
-
-            <!--            <h2 class="screen-reader-text">过滤用户列表</h2>-->
-            <!--            <ul class="subsubsub">-->
-            <!--                <li class="all"><a href="users.php" class="current" aria-current="page">全部<span class="count">（28）</span></a> |</li>-->
-            <!--                <li class="administrator"><a href="users.php?role=administrator">管理员<span class="count">（1）</span></a> |</li>-->
-            <!--                <li class="editor"><a href="users.php?role=editor">教练<span class="count">（20）</span></a> |</li>-->
-            <!--                <li class="subscriber"><a href="users.php?role=subscriber">学生<span class="count">（7）</span></a></li>-->
-            <!--            </ul>-->
             <style type="text/css">
                 .cardImg,.codeImg{
                     height: 35px;
@@ -92,7 +84,6 @@ class Match_student {
                 }
             </style>
             <form method="get">
-
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                     <input type="search" id="search_val" name="search_val" placeholder="姓名/手机/邮箱/ID/战队" value="<?=$searchStr?>">
@@ -102,26 +93,6 @@ class Match_student {
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
                 <div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
-                    <!--                    <div class="alignleft actions bulkactions">-->
-                    <!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
-                    <!--                            <option value="-1">批量操作</option>-->
-                    <!--                            <option value="delete">删除</option>-->
-                    <!--                        </select>-->
-                    <!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
-                    <!--                    </div>-->
-                    <!--                    <div class="alignleft actions">-->
-                    <!--                        <label class="screen-reader-text" for="new_role">将角色变更为…</label>-->
-                    <!--                        <select name="new_role" id="new_role">-->
-                    <!--                            <option value="">将角色变更为…</option>-->
-                    <!---->
-                    <!--                            <option value="subscriber">学生</option>-->
-                    <!--                            <option value="contributor">投稿者</option>-->
-                    <!--                            <option value="author">作者</option>-->
-                    <!--                            <option value="editor">教练</option>-->
-                    <!--                            <option value="administrator">管理员</option>		</select>-->
-                    <!--                        <input type="submit" name="changeit" id="changeit" class="button" value="更改">-->
-                    <!--                    </div>-->
-                    <!--                    <h2 class="screen-reader-text">用户列表导航</h2>-->
                     <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
                     </div>
@@ -141,6 +112,7 @@ class Match_student {
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
                         <th scope="col" id="card" class="manage-column column-card">证件号码</th>
                         <th scope="col" id="card_image" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" id="user_coin_code" class="manage-column column-user_coin_code">收款二维码</th>
@@ -179,8 +151,14 @@ class Match_student {
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
                             </td>
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
-
-                            <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></span><span class="screen-reader-text">未知</span></td>
+                            <td class="name column-name" data-colname="姓名"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></td>
+                            <td class="role column-ID" data-colname="座位号">
+                                <?php if ($row['seat_number'] > 0 ){ ?>
+                                    <input style="width: 70px;" class="save_seat" order-id='<?=$row['order_id']?>' value="<?=$row['seat_number'];?>" />
+                                <?php }else{ ?>
+                                    --
+                                <?php } ?>
+                            </td>
                             <td class="name column-card" data-colname="证件号码">
                                 <span aria-hidden="true"><?=unserialize($usermeta['user_real_name'][0])['real_ID']?></span>
                                 <span class="screen-reader-text">未知</span>&ensp;
@@ -207,7 +185,6 @@ class Match_student {
                     <tfoot>
                     <tr>
 
-
                         <td class="manage-column column-cb check-column">
                             <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                             <input id="cb-select-all-2" type="checkbox">
@@ -217,6 +194,7 @@ class Match_student {
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
+                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
                         <th scope="col" class="manage-column column-card">证件号码</th>
                         <th scope="col" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" class="manage-column column-user_coin_code">收款二维码</th>
@@ -235,45 +213,60 @@ class Match_student {
                 </table>
                 <script type="text/javascript">
                     jQuery(document).ready(function($) {
+
+                        //修改座位
+                        jQuery('.save_seat').change(function(){
+                            var seat_number = $(this).val();
+                            var notice = '确定与'+seat_number+'号互换座位?';
+                            var orderid = $(this).attr('order-id');
+                            if(confirm(notice)){
+                                $.ajax({
+                                    url : ajaxurl,
+                                    data : {'action' : 'save_seating', 'orderid' : orderid,'new_seat_number' : seat_number},
+                                    dataType : 'json',
+                                    type : 'post',
+                                    success : function (response) {
+                                        alert(response['data']);
+                                        if(response.success){
+                                            window.location.reload();
+                                        }
+                                    },error : function () {
+
+                                    }
+                                });
+                                return false;
+                            }
+
+                        })
+
                         layui.use('layer', function(){
                             var layer = layui.layer;
-                            <?php foreach ($rows as $row){ ?>
+                            var _title = '';
+                            <?php
+                            foreach ($rows as $row){
+                                $real_name = get_user_meta($row['ID'], 'user_real_name', true);
+                                $real_name = isset($real_name['real_name']) ? $real_name['real_name'] :'';
+                            ?>
+                            _title = '<?=$real_name?>'
                             layer.photos({//图片预览
                                 photos: '#cardImg-<?=$row['ID']?>',
                                 move : false,
+                                title : _title+'-证件照片',
                                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                             })
                             layer.photos({//图片预览
                                 photos: '#codeImg-<?=$row['ID']?>',
                                 move : false,
+                                title : _title+'-收款二维码',
                                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                             })
                             <?php } ?>
-
                         });
+
                     })
 
                 </script>
                 <div class="tablenav bottom">
-
-                    <!--                    <div class="alignleft actions bulkactions">-->
-                    <!--                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">-->
-                    <!--                            <option value="-1">批量操作</option>-->
-                    <!--                            <option value="delete">删除</option>-->
-                    <!--                        </select>-->
-                    <!--                        <input type="submit" id="doaction2" class="button action" value="应用">-->
-                    <!--                    </div>-->
-                    <!--                    <div class="alignleft actions">-->
-                    <!--                        <label class="screen-reader-text" for="new_role2">将角色变更为…</label>-->
-                    <!--                        <select name="new_role2" id="new_role2">-->
-                    <!--                            <option value="">将角色变更为…</option>-->
-                    <!---->
-                    <!--                            <option value="subscriber">学生</option>-->
-                    <!--                            <option value="contributor">投稿者</option>-->
-                    <!--                            <option value="author">作者</option>-->
-                    <!--                            <option value="editor">教练</option>-->
-                    <!--                            <option value="administrator">管理员</option>		</select>-->
-                    <!--                        <input type="submit" name="changeit2" id="changeit2" class="button" value="更改">		</div>-->
                     <div class="tablenav-pages">
                         <span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>

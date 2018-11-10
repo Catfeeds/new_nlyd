@@ -184,87 +184,34 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
+        //print_r($row);
         if($row['status'] == -3){
             $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
         if($_GET['grad_type'] == 'memory'){
-            $memory_lv = $_SESSION['memory_lv'];
-            switch ($memory_lv){
-                case 1:
-                    $row['sz'] = 30;    //数字个数
-                    $row['cy'] = 30;    //词语个数
-                    $row['yzl'] = 100;  //圆周率长度
-                    break;
-                case 2:
-                    $row['sz'] = 40;
-                    $row['cy'] = 40;
-                    $row['yzl'] = 200;
-                    break;
-                case 3:
-                    $row['sz'] = 60;
-                    $row['cy'] = 50;
-                    $row['zm'] = 30;
-                    $row['wz'] = 3*100;    //文章字数  随机3段 ,每段100个字
-                    break;
-                case 4:
-                    $row['sz'] = 80;
-                    $row['cy'] = 40;
-                    $row['zm'] = 60;
-                    $row['wz'] = 3*100;
-                    break;
-                case 5:
-                    $row['sz'] = 120;
-                    $row['cy'] = 80;
-                    $row['zm'] = 50;
-                    $row['tl'] = 45;        //听力数字个数
-                    $row['wz'] = 3*100;
-                    break;
-                case 6:
-                    $row['sz'] = 160;
-                    $row['cy'] = 100;
-                    $row['zm'] = 60;
-                    $row['tl'] = 50;
-                    $row['wz'] = 3*100;
-                    break;
-                case 7:
-                    $row['sz'] = 200;
-                    $row['cy'] = 120;
-                    $row['tl'] = 60;
-                    $row['rm'] = 5;        //人脉记忆(头像 人名 电话)
-                    $row['wz'] = 3*100;
-                    break;
-                case 8:
-                    $row['sz'] = 240;
-                    $row['cy'] = 140;
-                    $row['tl'] = 70;
-                    $row['rm'] = 6;
-                    $row['wz'] = 3*100;
-                    break;
-                case 9:
-                    $row['sz'] = 280;
-                    $row['cy'] = 160;
-                    $row['tl'] = 80;
-                    $row['rm'] = 8;
-                    $row['wz'] = 3*100;
-                    break;
-                case 10:
-                    $row['sz'] = 320;
-                    $row['cy'] = 180;
-                    $row['tl'] = 100;
-                    $row['rm'] = 10;
-                    $row['wz'] = 3*100;
-                    break;
-                default:
-                    $this->get_404('请确认考级等级');
-                    break;
-
+            $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
+            $project = $this->get_grading_parameter($memory_lv);
+            if(empty($project)){
+                $this->get_404(array('message'=>__('考请确认考级等级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                return;
             }
+            $row['project'] = $project;
         }
+
+        $memory_type = $project[$_GET['type']];
+        if(empty($memory_type)){
+            $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+        //print_r($memory_type);
+        $row['memory_type'] = $memory_type;
+        $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
     }
+
 
     public function grading_voice(){//人脉信息记忆页
         $view = student_view_path.CONTROLLER.'/grading-voice.php';
@@ -311,7 +258,141 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
-    
+
+
+    /**
+     * 根据记忆等级获取参数
+     * @param $memory_lv 记忆等级
+     * @return array
+     */
+    public function get_grading_parameter($memory_lv){
+        switch ($memory_lv){
+            case 1:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>30,'answer_time'=>900),    //数字 记忆时间 个数  答题时间
+                    'cy'=>array('time'=>900,'length'=>30,'answer_time'=>1800),    //词语 记忆时间 个数  答题时间
+                    'yzl'=>array('time'=>900,'length'=>100),  //圆周率长度
+                );
+                break;
+            case 2:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>40,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>40,'answer_time'=>1800),
+                    'yzl'=>array('time'=>900,'length'=>200),
+                );
+                break;
+            case 3:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>60,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>50,'answer_time'=>1800),
+                    'zm'=>array('time'=>300,'length'=>30,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>3),
+                );
+                break;
+            case 4:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>80,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>60,'answer_time'=>1800),
+                    'zm'=>array('time'=>300,'length'=>40,'answer_time'=>900),
+                    'tl'=>array('time'=>40,'length'=>40,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 5:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>120,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>80,'answer_time'=>1800),
+                    'zm'=>array('time'=>300,'length'=>50,'answer_time'=>900),
+                    'tl'=>array('time'=>45,'length'=>45,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 6:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>160,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>100,'answer_time'=>1800),
+                    'zm'=>array('time'=>300,'length'=>60,'answer_time'=>900),
+                    'tl'=>array('time'=>50,'length'=>50,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 7:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>200,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>120,'answer_time'=>1800),
+                    'tl'=>array('time'=>60,'length'=>60,'answer_time'=>900),
+                    'rm'=>array('time'=>600,'length'=>5,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 8:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>240,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>140,'answer_time'=>1800),
+                    'tl'=>array('time'=>70,'length'=>70,'answer_time'=>900),
+                    'rm'=>array('time'=>600,'length'=>6,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 9:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>280,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>160,'answer_time'=>1800),
+                    'tl'=>array('time'=>80,'length'=>80,'answer_time'=>900),
+                    'rm'=>array('time'=>600,'length'=>8,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            case 10:
+                $project = array(
+                    'sz'=>array('memory_time'=>300,'length'=>320,'answer_time'=>900),
+                    'cy'=>array('time'=>900,'length'=>180,'answer_time'=>1800),
+                    'tl'=>array('time'=>100,'length'=>100,'answer_time'=>900),
+                    'rm'=>array('time'=>600,'length'=>10,'answer_time'=>900),
+                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                );
+                break;
+            default:
+                $project = '';
+                break;
+        }
+        return $project;
+    }
+
+    /**
+     * 根据考题标题
+     * @param $type
+     */
+    public function get_memory_type_title($type){
+        switch ($type){
+            case 'sz':
+                $title = '随机数字';
+                break;
+            case 'cy':
+                $title = '随机词汇';
+            case 'zm':
+                $title = '随机字母';
+                break;
+            case 'yzl':
+                $title = '圆周率';
+                break;
+                break;
+            case 'tl':
+                $title = '听记数字';
+                break;
+            case 'rm':
+                $title = '人脉信息';
+                break;
+            case 'wz':
+                $title = '国学经典';
+                break;
+            default:
+                $title = '';
+                break;
+        }
+        return $title;
+    }
+
     /**
      * 获取考级信息
      * $grad_id 考试比赛id
@@ -383,11 +464,16 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
-        if(ACTION == 'grading_szzb'){//
-            wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-numberBattleReady' );
-            wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-numberBattle' );
+        if(ACTION == 'initialMatch'){//
+            if($_GET['type'] == 'sz'){
+
+                wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
+                wp_enqueue_style( 'my-student-numberBattleReady' );
+                wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-numberBattle' );
+            }elseif($_GET['type'] == 'cy'){
+
+            }
         }
         if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );

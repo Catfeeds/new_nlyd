@@ -22,7 +22,7 @@ class Student_Signs
             $sql = "select match_status from {$wpdb->prefix}match_meta_new where match_id = {$_GET['match_id']} ";
             $match_status = $wpdb->get_var($sql);
             if(empty($match_status) || $match_status == -3){
-                echo '<h3>'.__('签到结束','nlyd-student').'</h3>';
+                echo '<h3>签到结束</h3>';
                 die;
             }
         }
@@ -58,9 +58,11 @@ class Student_Signs
             global $wpdb,$current_user;
 
             //获取比赛信息
-            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} and match_status = -3",ARRAY_A);
-            if(empty($row)){
-                $this->get_404(array('message'=>__('签到结束','nlyd-student'),'match_url'=>home_url('matchs/info/match_id/'.$_GET['id'])));
+            $sql = "select match_status from {$wpdb->prefix}match_meta_new where match_id = {$_GET['id']} ";
+
+            $match_status = $wpdb->get_var($sql);
+            if(empty($match_status) || $match_status == -3){
+                $this->get_404(array('message'=>'签到结束','match_url'=>home_url('matchs/info/match_id/'.$_GET['id'])));
                 return;
             }
 
@@ -79,27 +81,30 @@ class Student_Signs
 
             $match_title = $match->post_title;
 
-            //获取所有报名信息
-            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['id']} and pay_status in(2,3,4) order by id asc";
-            $results = $wpdb->get_results($sql,ARRAY_A);
-            $index = array_search($current_user->ID,array_column($results,'user_id')) + 1;
+            //获取座位号
+            $sql = "select seat_number from {$wpdb->prefix}order where match_id = {$_GET['id']} and user_id = $current_user->ID and pay_status in(2,3,4) order by id asc";
+            $seat_number = $wpdb->get_var($sql);
             //print_r($index);
             //print_r(array_column($results,'user_id'));
         }
+        else{
+            $this->get_404('未登录');
+            return;
+        }
         $data = array(
-                'index'=>$index,
-                'match_title'=>$match_title,
-                'match_content'=>$match->post_content,
-                'real_ID'=>$real_ID,
-                'real_name'=>$real_name,
-                'user_gender'=>$user_gender,
-                'user_birthday'=>$user_birthday,
-                'user_nationality'=>$user_info['user_nationality'],
-                'user_nationality_pic'=>$user_info['user_nationality_pic'],
-                'user_nationality_short'=>$user_info['user_nationality_short'],
-                'age_type'=>$age_type,
-                'address'=>$user_address['province'].$user_address['city'].$user_address['area']
-            );
+            'index'=>$seat_number,
+            'match_title'=>$match_title,
+            'match_content'=>$match->post_content,
+            'real_ID'=>$real_ID,
+            'real_name'=>$real_name,
+            'user_gender'=>$user_gender,
+            'user_birthday'=>$user_birthday,
+            'user_nationality'=>$user_info['user_nationality'],
+            'user_nationality_pic'=>$user_info['user_nationality_pic'],
+            'user_nationality_short'=>$user_info['user_nationality_short'],
+            'age_type'=>$age_type,
+            'address'=>$user_address['province'].$user_address['city'].$user_address['area']
+        );
         $view = student_view_path.CONTROLLER.'/success.php';
         load_view_template($view,$data);
     }
@@ -229,14 +234,15 @@ class Student_Signs
         wp_set_auth_cookie($users->ID);
 
         //获取报名列表
-        $sql = "select id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and user_id = $users->ID and pay_status in (2,3,4) order by id desc ";
-        $order_id = $wpdb->get_var($sql);
-        if(empty($order_id)){ ?>
+        $sql = "select id,seat_number from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and user_id = $users->ID and pay_status in (2,3,4) order by id desc ";
+        $order = $wpdb->get_row($sql);
+
+        if(empty($order)){ ?>
             <script type="text/javascript">
                 //$.alerts('即将跳转到实名认证页');
                 alert('<?=__('未检测到报名信息\\n请联系管理员核实', 'nlyd-student')?>');
                 setTimeout(function(){
-                    window.location.href='<?=home_url("matchs/info/match_id/".$_GET['match_id'])?>';
+                    window.location.href='<?=home_url("matchs/info/match_id/".$_GET['match_id'].'/order_index/'.$order->seat_number)?>';
                     return false;
                 },50)
             </script>
@@ -245,19 +251,14 @@ class Student_Signs
             exit;
         }else{
 
-            //获取所有报名信息
-            $sql = "select user_id from {$wpdb->prefix}order where match_id = {$_GET['match_id']} and pay_status in(2,3,4) order by id asc";
-            $results = $wpdb->get_results($sql,ARRAY_A);
-            $index = array_search($users->ID,array_column($results,'user_id')) + 1;
-
             //判断是否实名认证
             $user_real_name = get_user_meta($users_id,'user_real_name');
             if(empty($user_real_name[0]['real_name'])){ ?>
                 <script type="text/javascript">
                     alert('即将跳转到实名认证页');
-                    window.location.href="<?=home_url('/account/info/type/sign/sign_match/'.$_GET['match_id'].'/order_index/'.$index)?>";
+                    window.location.href="<?=home_url('/account/info/type/sign/sign_match/'.$_GET['match_id'].'/order_index/'.$order->seat_number)?>";
                 </script>
-            <?php
+                <?php
                 die;
             }
 
@@ -266,7 +267,7 @@ class Student_Signs
                 array(
                     'user_id'=>$users->ID,
                     'match_id'=>$_GET['match_id'],
-                    'seat_number'=>$index,
+                    'seat_number'=>$order->seat_number,
                     'created_time' => get_time('mysql')
                 )
             );

@@ -31,6 +31,31 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "grading_questions";  //考級成绩表  储存考级成绩记录
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) DEFAULT NULL,
+          `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
+          `grading_type` varchar(50) DEFAULT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
+          `questions_type` varchar(50) DEFAULT NULL COMMENT '考题类型',
+          `grading_questions` longtext COMMENT '考试题',
+          `questions_answer` longtext COMMENT '考题答案',
+          `my_answer` longtext COMMENT '我的答案',
+          `memory_time` smallint(20) DEFAULT NULL COMMENT '记忆耗时',
+          `answer_time` smallint(20) DEFAULT NULL COMMENT '回答耗时',
+          `submit_type` tinyint(2) DEFAULT NULL COMMENT '提交方式 1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切换,系统提交',
+          `leave_page_time` text COMMENT '记录每次离开页面的时间',
+          `created_time` datetime DEFAULT NULL,
+          `is_true` tinyint(2) DEFAULT '1' COMMENT '成绩真实性 1 真实 2 虚假',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
 
     $table_name = $wpdb->prefix . "grading_meta";  //考級   储存考级meta信息
 

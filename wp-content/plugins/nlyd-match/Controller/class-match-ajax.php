@@ -26,6 +26,41 @@ class Match_Ajax
         add_action( 'wp_ajax_nopriv_'.$action,  array($this,$action) );
     }
 
+
+    /**
+     * 手动换座位
+     *
+     */
+    public function save_seating(){
+        global $wpdb;
+
+        $order = $wpdb->get_row("select  * from {$wpdb->prefix}order where id = {$_POST['orderid']}");
+        if(empty($order)) wp_send_json_error('未匹配到订单信息');
+
+        //获取总人数
+        $total = $wpdb->get_var("select  count(*) from {$wpdb->prefix}order where match_id = {$order->match_id} and pay_status in (2,3,4) ");
+
+        if($_POST['new_seat_number'] > $total || $_POST['new_seat_number'] < 1) wp_send_json_error('座位号范围:1~'.$total);
+        $old_seat_number = $order->seat_number;
+
+        $wpdb->startTrans();
+
+        $b = $wpdb->update($wpdb->prefix.'order',array('seat_number'=>$order->seat_number),array('match_id'=>$order->match_id,'seat_number'=>$_POST['new_seat_number']));
+        $a = $wpdb->update($wpdb->prefix.'order',array('seat_number'=>$_POST['new_seat_number']),array('id'=>$_POST['orderid']));
+
+        //print_r($a .'&&'. $b);die;
+        if($a && $b){
+            $wpdb->commit();
+            wp_send_json_success('换座成功');
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error('换座失败');
+        }
+
+        die;
+
+    }
+
     /**
      * 生成座位号
      */
@@ -34,8 +69,56 @@ class Match_Ajax
         $match_status = $wpdb->get_var(" select match_status from {$wpdb->prefix}match_meta_new where match_id = {$_POST['id']} ");
         if($match_status != -2) wp_send_json_error(array('info'=>'只有报名截止状态下才能生成座位'));
         //获取报名数据
-        $rows = $wpdb->get_results("select user_id from {$wpdb->prefix}order where match_id = {$_POST['id']} and pay_status in (2,3,4)",ARRAY_A);
-        print_r($rows);die;
+        $rows = $wpdb->get_results("select id,user_id,match_id from {$wpdb->prefix}order where match_id = {$_POST['id']} and pay_status in (2,3,4) order by id asc",ARRAY_A);
+
+        if(!empty($rows)){
+            $new_arr = array();
+            $a = 0;
+            foreach ($rows as $k => $v) {
+                //获取选手真实姓名
+                /*$user_real_name = get_user_meta($v['user_id'],'user_real_name')[0];
+                if(!empty($user_real_name)){
+                    $v['real_name'] = $user_real_name['real_name'];
+                    if (preg_match("/[\x7f-\xff]/", $user_real_name['real_name'])) {
+
+                        array_push($new_arr,$v);
+                    }else{
+
+                        array_unshift($new_arr,$v);
+                    }
+                    ++$a;
+                }*/
+                //获取选手国籍
+                $nationality_short = get_user_meta($v['user_id'],'user_nationality_short')[0];
+                //print_r($v['user_id'].'**'.$nationality_short.'</br>');
+                if(!empty($nationality_short)){
+
+                    $v['nationality_short'] = $nationality_short;
+                    if(in_array($nationality_short,array('CHN','TWN','HKG','MAC'))){
+                        array_push($new_arr,$v);
+                    }else{
+                        array_unshift($new_arr,$v);
+                    }
+                    ++$a;
+                }
+            }
+            // print_r($new_arr);
+            //die;
+            //開始分配座位號
+            $c = 0;
+            foreach ($new_arr as $key => $val) {
+                $index = $key+1;
+                $b = $wpdb->update($wpdb->prefix.'order',array('seat_number'=>$index),array('id'=>$val['id'],'user_id'=>$val['user_id']));
+                if($b){
+                    ++$c;
+                }
+            }
+            //print_r($a.'==='.$c);
+            wp_send_json_success(array('info'=>'生成成功'));
+
+        }
+        wp_send_json_error(array('info'=>'生成失败'));
+
     }
 
     /**
@@ -1660,11 +1743,35 @@ class Match_Ajax
                 if(!file_exists($file_path)){
                     mkdir($file_path,0755,true);
                 }
+                /*$a = json_decode(file_get_contents($file_path.'/memory1.json'),true);
+                print_r($a);die;*/
                 //中转文件
                 $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/temporary.txt');
-                if($result){
+                /*$str = file_get_contents($file_path.'/temporary.txt');
 
-                    $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/temporary.txt'));
+                $str = preg_replace('# #','',mb_convert_encoding(file_get_contents($file_path.'/temporary.txt'), "UTF-8", "GBK"));
+                $arr[10] = $str;
+                $a = file_put_contents($file_path.'/memory1.json',json_encode($arr));
+                print_r($str);
+                //preg_replace('# #','',$goodid)
+                die;*/
+                if($result){
+                    $str = preg_replace('# #','',mb_convert_encoding(file_get_contents($file_path.'/temporary.txt'), "UTF-8", "GBK"));
+                    //$str = file_get_contents($file_path.'/temporary.txt');
+                    //print_r($str);
+                    $array = array();
+                    if($_POST['handle'] == 1 && isset($array[$_POST['memory_grade']])){
+
+                        //leo_dump($array);
+                        $array[$_POST['memory_grade']] .= $str;
+                        //leo_dump($array);die;
+                    }else{
+
+                        $array[$_POST['memory_grade']] = $str;
+                    }
+                    ksort($array);
+                    /*leo_dump($array);
+                    die;*/
 
                     if(file_exists($file_path.'/memory.json')){
                         $array = json_decode(file_get_contents($file_path.'/memory.json'),true);
