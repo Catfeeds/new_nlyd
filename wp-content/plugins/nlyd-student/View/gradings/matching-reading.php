@@ -9,7 +9,7 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row layui-row have-submit">
-                            <div class="c_black match_info_font"><div><span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></span></div></div>
+                            <div class="c_black match_info_font"><div><span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $type_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
                             <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
                             <div class="c_blue match_info_font">
@@ -68,9 +68,9 @@
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
-    var _match_id=<?=$_GET['match_id']?>;
-    var _project_id=<?=$project_id?>;
-    var _match_more=<?=$match_more;?>;
+    var _grad_id=$.Request('grad_id');
+    var _grad_type=$.Request('grad_type');
+    var _type=$.Request('type');
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -107,9 +107,9 @@ jQuery(function($) {
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
+                grad_id:_grad_id,
+                grad_type:_grad_type,
+                type:_type,
                 project_alias:'wzsd',
                 project_more_id:$.Request('project_more_id'),
                 post_id:$.Request('post_id'),
@@ -121,7 +121,7 @@ jQuery(function($) {
             }
             
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -156,7 +156,7 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
+                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }

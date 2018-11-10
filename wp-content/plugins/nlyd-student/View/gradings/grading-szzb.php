@@ -126,20 +126,17 @@ jQuery(function($) {
     var questions_answer=[];//题目
     //var question_type=1;
     var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
-    var _match_id=1;
-    var _project_id=2;
-    var _match_more=3;
+    var _grad_id=$.Request('grad_id');
+    var _grad_type=$.Request('grad_type');
+    var _type=$.Request('type');
     var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
     var sys_second=ready_time;
     var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len="<?=$memory_type['length']?>";//多少个字符
-    var remember_time=ready_time;
     init_question(que_len,_show,question_type)
     leaveMatchPage(function(){//窗口失焦提交
-        var countTime=parseInt($('.count_down').attr('data-seconds'));
-        var time=_show==1?countTime+answer_time:countTime;
-        submit(time,4);
+        submit(4);
     })
     $.each(questions_answer,function(i,v){
         var dom='<div class="matching-number-readys">'+v+'</div>';
@@ -154,15 +151,14 @@ jQuery(function($) {
         $('#'+href).show()
         $('.matching-sumbit').show();
         _show=2
-        sys_second=answer_time
+        sys_second=answer_time;
         var endTime=$.GetEndTime(answer_time);//结束时间
         var sessionData={
-            match_id:_match_id,
-            project_id:_project_id,
-            match_more:_match_more,
+            grad_id:_grad_id,
+            grad_type:_grad_type,
+            type:_type,
             question_type:question_type,
             endTime:endTime,
-            remember_time:$('.count_down').attr('data-seconds'),
             _show:2,
             questions_answer:questions_answer
         }
@@ -211,19 +207,18 @@ jQuery(function($) {
                     sys_second=answer_time
                     var endTime=$.GetEndTime(answer_time);//结束时间
                     var sessionData={
-                        match_id:_match_id,
-                        project_id:_project_id,
-                        match_more:_match_more,
+                        grad_id:_grad_id,
+                        grad_type:_grad_type,
+                        type:_type,
                         question_type:question_type,
                         endTime:endTime,
-                        remember_time:0,
                         _show:2,
                         questions_answer:questions_answer
                     }
                     $.SetSession('grade_question',sessionData)
                 }else if(_show==2){//答题页面
                     clearInterval(timer)
-                    submit(0,3)
+                    submit(3)
                 }
             }
 
@@ -231,15 +226,12 @@ jQuery(function($) {
     } 
     function init_question(question_leng,_show,question_type) {//初始化题目
         var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             questions_answer=grade_question['questions_answer'];
             question_type=grade_question['question_type']
             _show=grade_question['_show']
             endTime=grade_question['endTime'];
-            sys_second=$.GetSecond(endTime);
-            if(_show==2){
-                remember_time=grade_question['remember_time'];
-            }
+            sys_second=$.GetSecond(endTime)
         }else{
             for(var i=0;i<question_leng;i++){
                 if(question_type==1){
@@ -250,11 +242,10 @@ jQuery(function($) {
                 questions_answer.push(num)
             }
             var sessionData={
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
+                grad_id:_grad_id,
+                grad_type:_grad_type,
+                type:_type,
                 question_type:question_type,
-                remember_time:ready_time,//剩余记忆时间
                 _show:_show,
                 endTime:endTime,
                 questions_answer:questions_answer
@@ -276,36 +267,32 @@ jQuery(function($) {
         var pos = Math.round(Math.random() * (arr.length - 1));
         return arr[pos];
     }
-    function submit(time,submit_type){//提交答案
+    function submit(submit_type){//提交答案
         // $('#load').css({
         //         'display':'block',
         //         'opacity': '1',
         //         'visibility': 'visible',
         //     })
         var my_answer=[];
-        $('.matching-number-zoo .matching-number').each(function(){
+        $('.match_zoo .matching-number-match').each(function(){
             var answer=$(this).text();
             my_answer.push(answer)
         })
         var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-                project_alias:'szzb',
-                match_questions:questions_answer,
+                grading_id:_grad_id,
+                grading_type:_grad_type,
+                questions_type:_type,
+                grading_questions:questions_answer,
                 questions_answer:questions_answer,
-                project_more_id:$.Request('project_more_id'),
-
+                action:'grading_answer_submit',
                 my_answer:my_answer,
-                surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
         }
-
+        /*console.log(data)
+        return false*/
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -340,7 +327,7 @@ jQuery(function($) {
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
+                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }
@@ -548,8 +535,6 @@ $('._del').each(function(){//数字键盘
     layui.use('layer', function(){
         new AlloyFinger($('#sumbit')[0], {
             tap:function(){
-                var countTime=parseInt($('.count_down').attr('data-seconds'));
-                var time=_show==1?countTime+answer_time:countTime;
                 layer.open({
                         type: 1
                         ,maxWidth:300
@@ -565,7 +550,7 @@ $('._del').each(function(){//数字键盘
                         }
                         ,btn2: function(index, layero){
                             layer.closeAll();
-                            submit(time,1);  
+                            submit(1);
                         }
                         ,closeBtn:2
                         ,btnAagn: 'c' //按钮居中
