@@ -1,7 +1,3 @@
-/* .train_img_wrapper{
-    width: 30%;
-    float: left;
-} */
 .train_row{
     display: block;
     overflow: hidden;
@@ -44,6 +40,95 @@
     color: rgba(38, 38, 38, 0.4);
     font-size: 0.12rem;
     margin-right: 15px;
+}
+
+.his_tips{
+    margin-top: 12px;
+}
+
+.his_row{
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(139, 139, 139, 0.16);
+    margin-top: 10px;
+    padding: 15px 11px; 
+}
+.his_first{
+    width: 80px;
+    text-align: left;
+}
+.his_second{
+    width: 60px;
+    text-align: left;
+}
+
+.lists_lists{
+    margin-top: 10px;
+}
+.lists_row{
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(139, 139, 139, 0.16);
+    /* margin-bottom: 70px; */
+    margin-top: 10px;
+    padding-top: 15px; 
+}
+.lists_item_row{
+    overflow: hidden;
+    width: 100%;
+}
+.lists_item_row>div:first-child{
+    margin-bottom: 5px;
+}
+.lists_item_row .lists_row{
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+.item_row{
+    display: block;
+    overflow: hidden;
+    float: left;
+    position: relative;
+    padding: 15px 14px; 
+    width: -webkit-calc(50% - 40px);
+    width: calc(50% - 40px);
+}
+.lists_item_row .item_row{
+    margin-left: 24px;
+}
+.lists_item_row .item_row:nth-child(even){
+    margin-left: 0;
+}
+.item_img{
+    float: left;
+    display: table;
+    width: 13px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+.item_img img{
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+.name_wrapper{
+    width: -webkit-calc(100% - 23px);
+    width: calc(100% - 23px);
+    float: left;
+}
+.arrow_box{
+    position: absolute;
+    top:50%;
+    right: 10px;
+    margin-top: 0; 
+    width: 9px;
+    margin-top: -14px;
+}
+.arrow_box img{
+    width: 100%;
+    height: auto;
 }
 @media screen and (max-width: 1199px){
     #content{

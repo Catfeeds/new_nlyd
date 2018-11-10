@@ -1,19 +1,4 @@
 
-.content ul.flow-default{
-    width: 100%;
-    margin: auto;
-    overflow: hidden;
-}
-.blue-font{
-    color: rgba(67, 148, 249, 1);
-}
-.fs-14{
-    font-size: 0.14rem;
-}
-.fs-16{
-    font-size: 0.16rem;
-}
-
 .border-right{
     border-right:1px solid rgba(112, 112, 112, 1);
 }

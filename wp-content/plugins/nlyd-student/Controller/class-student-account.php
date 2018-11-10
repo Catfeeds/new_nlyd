@@ -271,8 +271,8 @@ class Student_Account extends Student_Home
         }
 
         if(ACTION == 'messageDetail'){
-            wp_register_style( 'my-student-messageDetail', student_css_url.'messageDetail.css',array('my-student') );
-            wp_enqueue_style( 'my-student-messageDetail' );
+            wp_register_style( 'my-student-messagesList', student_css_url.'messagesList.css',array('my-student') );
+            wp_enqueue_style( 'my-student-messagesList' );
 
         }
 
@@ -325,8 +325,8 @@ class Student_Account extends Student_Home
             wp_enqueue_script( 'student-addAddress' );
             wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
             wp_enqueue_style( 'my-student-mobileSelect' );
-            wp_register_style( 'my-student-addAddress', student_css_url.'addAddress.css',array('my-student') );
-            wp_enqueue_style( 'my-student-addAddress' );
+            wp_register_style( 'my-student-address', student_css_url.'address.css',array('my-student') );
+            wp_enqueue_style( 'my-student-address' );
         }
 
         if(ACTION == 'train'){//我的训练

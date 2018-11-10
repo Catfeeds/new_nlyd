@@ -19,13 +19,13 @@
                     <div class="form-inputs">
                         <div class="form-input-row">
                             <div class="form-input-label">提现至</div>
-                            <div class="show-value">民生银行 尾号2630 储蓄卡</div>
+                            <div class="nl-input">民生银行 尾号2630 储蓄卡</div>
                             <a href="<?=home_url('wallet/makeCashType');?>" class="form-input-right c_blue">更 换</a>
                         </div>
                         <div class="form-input-row">
                             <div class="form-input-label">提现金额</div>
                             <i class="iconfont nl-icon">&#xe61e;</i>
-                            <input type="tel" name="country" autocomplete="off" class="show-value nl-foucs" placeholder="本次最多提现900.00">
+                            <input type="tel" name="country" autocomplete="off" class="nl-input nl-foucs" placeholder="本次最多提现900.00">
                             
                         </div>
                     </div>

@@ -81,6 +81,12 @@ p.address-detail{
     margin-top: 20px;
     text-align: center;
 }
+.layui-input-block{
+    margin-left: 0;
+    padding-left: 0;
+    text-align: left;
+    display: inline-block;
+}
 @media screen and (max-width: 1199px){
     .nl-content{
         padding-bottom: 80px;
