@@ -103,16 +103,7 @@ class Student_Safety extends Student_Home
      * 默认公用js/css引入
      */
     public function scripts_default(){
-
-        if(ACTION=='setting'){//设置
-            wp_register_style( 'my-student-setting', student_css_url.'setting.css',array('my-student') );
-            wp_enqueue_style( 'my-student-setting' );
-        }
-        if(ACTION=='userAgreement' || ACTION=='privacyAgreement'){//协议
-            wp_register_style( 'my-student-agreement', student_css_url.'agreement.css',array('my-student') );
-            wp_enqueue_style( 'my-student-agreement' );
-        }
-        if(ACTION=='suggest'){//协议
+        if(ACTION=='suggest'){
             wp_register_style( 'my-student-suggest', student_css_url.'suggest.css',array('my-student') );
             wp_enqueue_style( 'my-student-suggest' );
         }

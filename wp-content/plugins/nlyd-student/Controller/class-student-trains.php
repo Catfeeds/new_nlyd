@@ -612,18 +612,11 @@ class Student_Trains extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-leavePage' );
-        if(ACTION == 'index'){
+        if(in_array(ACTION,array('index','lists','history'))){
             wp_register_style( 'my-trains-index', student_css_url.'trains/index.css',array('my-student') );
             wp_enqueue_style( 'my-trains-index' );
         }
-        if(ACTION == 'lists'){
-            wp_register_style( 'my-trains-lists', student_css_url.'trains/lists.css',array('my-student') );
-            wp_enqueue_style( 'my-trains-lists' );
-        }
-        if(ACTION == 'history'){
-            wp_register_style( 'my-trains-history', student_css_url.'trains/history.css',array('my-student') );
-            wp_enqueue_style( 'my-trains-history' );
-        }
+    
         //比赛初始页面
         if(ACTION == 'initial'){
 

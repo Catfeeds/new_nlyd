@@ -45,9 +45,7 @@ p.long-name{
     border-top:1px solid #EEEEEE;
     text-align: center;
     color: #2484FE;
-    /* float: left; */
     cursor: pointer;
-    /* flex: 1; */
     padding: 10px 0;
 }
 .nl-match-button button{
@@ -105,30 +103,16 @@ p.long-name{
     color: #fff;
     border-radius: 50%;
 }
-/* .nl-match-detail{
-    height: 40px;
-} */
 .nl-match-label{
-    /* height: 100%;
-    display: table;
-    float: left; */
     width: 75px;
     display: inline-block;
     vertical-align: middle;
-    /* padding: 2px 0; */
     line-height: 20px;
 }
 .nl-match-label div{
-    /* height: 100%;
-    display: table-cell;
-    vertical-align: middle;
-    line-height: 20px; */
     display: inline;
 }
 .nl-match-info{
-    /* height: 100%;
-    display: table;
-    float: left; */
     width: -webkit-calc(100% - 85px);
     width: calc(100% - 85px);
     padding-left: 10px;
@@ -138,10 +122,6 @@ p.long-name{
     line-height: 20px;
 }
 .nl-match-info div,.nl-match-info a,.nl-match-info span{
-    /* height: 100%;
-    display: table-cell;
-    vertical-align: middle;
-    line-height: 20px; */
     display: inline;
 }
 @media screen and (min-width: 1200px){
