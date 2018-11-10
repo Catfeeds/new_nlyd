@@ -97,7 +97,6 @@ if(!class_exists('MatchController')){
             //查询语句orderby
             add_action('posts_orderby',array($this, 'filter_request_orderby'));
 
-
             if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student','question' ) ) ){
 
                 //为文章管理页面添加列
@@ -136,7 +135,7 @@ if(!class_exists('MatchController')){
             include_once(match_controller_path.'class-brainpower.php');
 
             //添加导入数据菜单
-            include_once(match_controller_path.'class-import.php');
+//            include_once(match_controller_path.'class-import.php');
 
             //添加训练记录菜单
             include_once(match_controller_path.'class-trains.php');
@@ -731,7 +730,7 @@ if(!class_exists('MatchController')){
                 case 'students':
                     $student_num = $wpdb->get_var('SELECT count(o.id) AS num FROM '.$wpdb->prefix.'order AS o 
                     RIGHT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id WHERE o.match_id='.$id.' AND o.pay_status IN(2,3,4) AND o.order_type=1');
-                    echo '<a href="?page=match_student&match_id='.$id.'" class="">'.$student_num.'人</a>';
+                    echo '<a href="?post_type=match&page=match_student&match_id='.$id.'" class="">'.$student_num.'人</a>';
 //                    if($row['match_status'] == -3){
 //                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
 //                    }else{
@@ -1601,6 +1600,28 @@ if(!class_exists('MatchController')){
                 wp_register_script( 'match-lists',match_js_url.'match-lists.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'match-lists' );
             }
+
+            wp_register_script( 'public-js',match_js_url.'public.js',array('jquery'), leo_student_version  );
+            wp_enqueue_script( 'public-js' );
+            wp_localize_script('public-js','_array',[
+                'data'=>[
+                    admin_url('admin.php?page=teacher-student'),
+                    admin_url('admin.php?page=order-send'),
+                    admin_url('admin.php?page=order-refund'),
+                    admin_url('admin.php?page=brainpower-join_directory'),
+                    admin_url('admin.php?page=brainpower-edit_brainpower'),
+                    admin_url('admin.php?page=feedback-intro'),
+                    admin_url('admin.php?page=teacher-datum'),
+                    admin_url('edit.php?post_type=team&page=team-student'),
+                    admin_url('edit.php?post_type=team&page=team-student-move'),
+                    admin_url('edit.php?post_type=match&page=match_trains_question'),
+                    admin_url('edit.php?post_type=match&page=match_student'),
+                    admin_url('edit.php?post_type=match&page=match_student-score'),
+                    admin_url('edit.php?post_type=match&page=match_student-add_student'),
+                    admin_url('edit.php?post_type=match&page=match_student-bonus'),
+                    admin_url('edit.php?post_type=match&page=match_student-ranking'),
+                ],
+            ]);
         }
 
 

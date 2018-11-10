@@ -17,9 +17,17 @@ if(!class_exists('Team')){
         }
 
         public function add_submenu(){
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'team' ) ) {
+                global $wp_roles;
 
-            add_submenu_page( 'edit.php?post_type=team', '战队成员', '战队成员', 'manage_options', 'team-student', array($this,'student') );
-            add_submenu_page( 'edit.php?post_type=team', '移动成员', '移动成员', 'manage_options', 'team-student-move', array($this,'moveStudent') );
+                $role = 'team_student';//权限名
+                $wp_roles->add_cap('administrator', $role);
+
+                $role = 'team_student_move';//权限名
+                $wp_roles->add_cap('administrator', $role);
+            }
+            add_submenu_page( 'edit.php?post_type=team', '战队成员', '战队成员', 'team_student', 'team-student', array($this,'student') );
+            add_submenu_page( 'edit.php?post_type=team', '移动成员', '移动成员', 'team_student_move', 'team-student-move', array($this,'moveStudent') );
 
         }
 
