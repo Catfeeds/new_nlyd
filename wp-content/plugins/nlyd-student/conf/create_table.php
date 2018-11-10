@@ -63,6 +63,7 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
           `category_id` int(20) NOT NULL COMMENT '考级类别',
           `entry_end_time` datetime NOT NULL COMMENT '报名截止时间',
           `start_time` datetime NOT NULL COMMENT '开始时间',
@@ -305,6 +306,9 @@ function the_table_install () {
           `pay_status` tinyint(2) DEFAULT NULL COMMENT '支付状态 -2:已退款 -1:待退款 1:待支付 2:待发货 3:待收货 4:完成 5:订单失效',
           `pay_lowdown` text COMMENT '支付反馈信息',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+          `memory_lv` tinyint(2) DEFAULT NULL COMMENT '记忆考级等级',
+          
+          `seat_number` smallint(10) DEFAULT NULL COMMENT '座位号',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

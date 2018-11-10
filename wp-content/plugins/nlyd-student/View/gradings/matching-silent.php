@@ -15,28 +15,6 @@
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <!-- <div class="layui-row">
-                        <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
-                    </div> -->
-                        <div class="matching-reading layui-row active" data-index="0">
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>
-                        </div>
-                        <div class="matching-reading layui-row" data-index="1">
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>
-                            <div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>
-                        </div>
                 </div> 
             </div>
         </div>           
@@ -55,17 +33,31 @@ jQuery(function($) {
     var _project_id=2;
     var _match_more=3;
     var file_url="<?=leo_match_url.'/upload/book/memory.json'?>";
-    var questions_answer={};
+    var questions_answer=[];
     var sys_second=1800;
     var endTime=$.GetEndTime(sys_second);
-    var grade_level=3;//考级等级
-    var how_ques=1;//多少道题目
+    var grade_level=4;//考级等级
+    var how_ques=6;//多少道题目
     init_question()
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
     count_down()
+    $('body').on('focusout','.answer_q',function(e){
+        var _this=$(this);
+        var val=_this.val();
+        var _len=val.length;
+        var parent=_this.parents('.matching-reading')
+        var dom_index=parseInt(_this.attr('data-index'))
+        if(_len>1){
+            for (var index = 0; index < _len; index++) {
+                var v=val.charAt(index)
+                parent.find('.answer_q').eq(dom_index+index).val(v)
+            }
+        }
+        
+    })
     function count_down(){
         // sys_second=answer_time
         var timer = setInterval(function(){
@@ -89,11 +81,43 @@ jQuery(function($) {
         }, 1000);
     } 
     function init_question(question_leng) {//初始化题目
-        // var grade_question=$.GetSession('grade_question','true');
-        // if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
-        //     endTime=grade_question['endTime'];
-        //     sys_second=$.GetSecond(endTime);
-        // }else{
+        var grade_question=$.GetSession('grade_question','true');
+        //标点符号
+        var reg = /[\u00b7|\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/;
+        if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+            endTime=grade_question['endTime'];
+            sys_second=$.GetSecond(endTime);
+            questions_answer=grade_question['questions_answer'];
+           
+            $.each(questions_answer,function(index,value){
+                var str_dom=""
+                var question=""
+                var rights=value.rights;
+                var _n=0;
+                for (var i = 0; i < rights.length; i++) {
+                    var v=rights.charAt(i)
+                    if(i<50 || i>=150){
+                    var dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                    str_dom+=dom;
+                    question+=v;
+                    }else{
+                    var dom=''
+                    if(reg.test(v) || !isNaN(parseInt(v))){
+                        dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                        question+=v
+                    }else{
+                        dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-index="'+_n+'"></div>';
+                        _n++;
+                        question+="#"
+                    }
+                    str_dom+=dom 
+                    }
+                }
+                var active=index==0 ? "active" : "";
+                var ques_dom='<div class="matching-reading layui-row '+active+'" data-index="'+index+'">'+str_dom+'</div>'
+                $('.remember').append(ques_dom)
+            })
+        }else{
             $.getJSON(file_url, function (data){
                 var question_bank=data;
                 var _question=""
@@ -103,33 +127,54 @@ jQuery(function($) {
                 }
                 var pos_arr=[];
                 for (var index = 0; index < how_ques; index++) {
-                  _slice_ques(pos_arr,_question);
-                  var start_index=pos_arr[index];//截取的所有字符串的起始坐标
-                  var end_index=start_index+200;//截取的所有字符串的结束坐标
-                  var start_ques=start_index+50;//截取的所有字符串的答题区起始坐标
-                  var end_ques=start_index+150;//截取的所有字符串答题区结束坐标
-                  var str=_question.substring(start_index,end_index);//题目
-                  var str1=_question.substring(start_index,start_ques);//答题前面区域
-                  var str2=_question.substring(start_ques,end_ques); //答题区域
-                  var str3=_question.substring(end_ques,end_index); //答题后面区域
-                  console.log(str,str.length)
-                  console.log(str1,str1.length)
-                  console.log(str2,str2.length)
-                  console.log(str3,str3.length)
+                    _slice_ques(pos_arr,_question);
+                    var start_index=pos_arr[index];//截取的所有字符串的起始坐标
+                    var end_index=start_index+200;//截取的所有字符串的结束坐标
+                    var start_ques=start_index+50;//截取的所有字符串的答题区起始坐标
+                    var end_ques=start_index+150;//截取的所有字符串答题区结束坐标
+                    var rights=_question.substring(start_index,end_index);//题目
+                    //   var str1=_question.substring(start_index,start_ques);//答题前面区域
+                    //   var str2=_question.substring(start_ques,end_ques); //答题区域
+                    //   var str3=_question.substring(end_ques,end_index); //答题后面区域
+                    var question=""
+                    var str_dom=""
+                    var _n=0;
+                    for (var i = 0; i < rights.length; i++) {
+                        var v=rights.charAt(i)
+                        if(i<50 || i>=150){
+                        var dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                        str_dom+=dom;
+                        question+=v;
+                        }else{
+                        var dom=''
+                        if(reg.test(v) || !isNaN(parseInt(v))){
+                            dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                            question+=v
+                        }else{
+                            dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-index="'+_n+'"></div>';
+                            _n++;
+                            question+="#"
+                        }
+                        str_dom+=dom 
+                        }
+                    }
+                    var item={rights:rights,question:question}
+                    questions_answer.push(item)
+
+                    var active=index==0 ? "active" : "";
+                    var ques_dom='<div class="matching-reading layui-row '+active+'" data-index="'+index+'">'+str_dom+'</div>'
+                    $('.remember').append(ques_dom)
                 }
-                var str='·•'
-                console.log(str.charCodeAt(1))
-                // console.log(pos_arr)
-                // var sessionData={
-                //     match_id:_match_id,
-                //     project_id:_project_id,
-                //     match_more:_match_more,
-                //     endTime:endTime,
-                //     questions_answer:questions_answer
-                // }
-                // $.SetSession('grade_question',sessionData) 
+                var sessionData={
+                    match_id:_match_id,
+                    project_id:_project_id,
+                    match_more:_match_more,
+                    endTime:endTime,
+                    questions_answer:questions_answer
+                }
+                $.SetSession('grade_question',sessionData) 
             })
-        // }
+        }
     }
     function _slice_ques(pos_arr,_question){//截取题目
         var _question_len=_question.length;
@@ -157,11 +202,22 @@ jQuery(function($) {
             //     'visibility': 'visible',
             // })
             // isSubmit=true;
-            var my_answer=[];
-            $('.matching-number-zoo .matching-number').each(function(){
-                var answer=$(this).text();
-                my_answer.push(answer)
+            // var my_answer=[];
+            // $('.matching-number-zoo .matching-number').each(function(){
+            //     var answer=$(this).text();
+            //     my_answer.push(answer)
+            // })
+            $('.matching-reading').each(function(i){
+                var _this=$(this);
+                var _answer=""
+                _this.find('.matching-number-input').each(function(){
+                    var x=$(this).val()=="" ? "#":$(this).val();
+                    _answer+=x;
+                })
+                questions_answer[i]['yours']=_answer
             })
+            console.log(questions_answer)
+            // return false;
             var data={
                 action:'answer_submit',
                 _wpnonce:$('#inputSubmit').val(),
@@ -257,7 +313,7 @@ layui.use('layer', function(){
 
 
     var n=0;
-    if($('.matching-reading').length<=1){
+    if(how_ques<=1){
         $('.a-two.right').addClass('disabled')
     }
     // mTouch('body').on('tap','.a-two.left',function(e){//上一题
