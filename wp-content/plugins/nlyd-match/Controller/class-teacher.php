@@ -499,10 +499,10 @@ class Teacher
             'total' => $pageAll,
             'current' => $page
         ));
-
+        $real_name = isset(get_user_meta($coach_id, 'user_real_name',true)['real_name']) ? get_user_meta($coach_id, 'user_real_name',true)['real_name'].'-' : '';
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">学员</h1>
+            <h1 class="wp-heading-inline"><?=$real_name?>学员</h1>
             <ul id="tab">
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>

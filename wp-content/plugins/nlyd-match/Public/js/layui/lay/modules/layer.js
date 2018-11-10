@@ -1154,7 +1154,7 @@
         dict.bigimg.hover(function(){
           dict.imgsee.show();
         }, function(){
-          dict.imgsee.hide();
+          dict.imgsee.show();
         });
         
         dict.bigimg.find('.layui-layer-imgprev').on('click', function(event){
@@ -1166,6 +1166,43 @@
           event.preventDefault();
           dict.imgnext();
         });
+
+        //自定义======
+          var rotateNum = 0;
+          dict.bigimg.find('.rotate').on('click', function(event){
+              event.preventDefault();
+              if(rotateNum >= 360) rotateNum = 0;
+              rotateNum += 45;
+              dict.bigimg.find('.find-img').css('transform','rotate('+rotateNum+'deg)');
+          });
+
+          dict.bigimg.find('.find-img').on('mousewheel', function(event){
+              event.preventDefault();
+              var delta = (event.originalEvent.wheelDelta && (event.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome & ie
+                  (event.originalEvent.detail && (event.originalEvent.detail > 0 ? -1 : 1));              // firefox
+              var _this = $(this);
+              var width = _this.width();
+              var parentHeight = $(this).parent().parent().height();
+
+              if(width < 150 && delta < 1) return false;
+              if(width > 2000 && delta > 0) return false;
+              if (delta > 0) {
+                  // 向上滚
+                  _this.css('width',(width+20)+'px');
+              } else if (delta < 0) {
+                  // 向下滚
+                  _this.css('width',(width-20)+'px');
+              }
+              var height = _this.height();
+              var _top = (parentHeight-height)/2;
+              if(_top > 0) _this.css('margin-top',_top+'px');
+              return false;
+          });
+
+
+
+        //自定义======
+
         
         $(document).on('keyup', dict.keyup);
       };
@@ -1226,10 +1263,12 @@
           isOutAnim: false,
           skin: 'layui-layer-photos' + skin('photos'),
           content: '<div class="layui-layer-phimg">'
-            +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
+            +'<img class="find-img" src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
+            // +'<img src="'+ data[start].src +'" alt="'+ (data[start].alt||'') +'" layer-pid="'+ data[start].pid +'">'
             +'<div class="layui-layer-imgsee">'
-              +(data.length > 1 ? '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>' : '')
-              +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>'
+            +(data.length > 1 ? '<span class="layui-layer-imguide"><a href="javascript:;" class="layui-layer-iconext layui-layer-imgprev"></a><a href="javascript:;" class="layui-layer-iconext layui-layer-imgnext"></a></span>' : '')
+           // +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em>'+ dict.imgIndex +'/'+ data.length +'</em></span></div>'
+           +'<div class="layui-layer-imgbar" style="display:'+ (key ? 'block' : '') +'"><span class="layui-layer-imgtit"><a href="javascript:;">'+ (data[start].alt||'') +'</a><em><div><span style="cursor: pointer" class="rotate">旋转</span></div></em></span></div>'
             +'</div>'
           +'</div>',
           success: function(layero, index){
