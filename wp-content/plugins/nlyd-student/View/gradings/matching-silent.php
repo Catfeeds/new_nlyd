@@ -24,7 +24,6 @@
     <div class="a-two left disabled"><div><?=__('上一题', 'nlyd-student')?></div></div>
     <div class="a-two right"><div><?=__('下一题', 'nlyd-student')?></div></div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 
 <script>
 jQuery(function($) { 

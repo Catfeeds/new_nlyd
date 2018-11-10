@@ -56,7 +56,6 @@
         </div>           
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 
 <script>
 jQuery(function($) {
