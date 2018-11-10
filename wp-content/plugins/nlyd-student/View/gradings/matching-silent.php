@@ -54,50 +54,101 @@ jQuery(function($) {
     var _match_id=1;
     var _project_id=2;
     var _match_more=3;
+    var file_url="<?=leo_match_url.'/upload/book/memory.json'?>";
+    var questions_answer={};
+    var sys_second=1800;
+    var endTime=$.GetEndTime(sys_second);
+    var grade_level=3;//考级等级
+    var how_ques=1;//多少道题目
+    init_question()
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    // var grade_question= $.GetSession('grade_question','1');
-    // if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){//从Session获取比赛题目,
-    //     questions_answer=grade_question['questions_answer'];
-    //     $.each(questions_answer,function(i,v){
-    //         var dom='<div class="matching-number"><input class="matching-number-input nl-foucs" type="text"></div>'
-    //         $('.matching-number-zoo').append(dom)
-    //     })
-    // }else{//未获取到比赛题目
-
-    //     $.alerts('触发防作弊系统')
-    //     window.location.href = '<?=home_url("/matchs/initialMatch/project_alias/szzb/match_id/")?>'+_match_id+'/project_more_id/'+$.Request('project_more_id');
-    // }
-    var questions_answer=['','','','','','','','','','','','',]
-        $.each(questions_answer,function(i,v){
-            var dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" type="text"></div>'
-            +'<div class="matching-number input"><input class="matching-number-input nl-foucs" value="1" disabled type="text"></div>'
-            $('.matching-number-zoo').append(dom)
-        })
-    // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
-    //         submit(0,3)
-    // }
-    $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-        $(this).attr('data-seconds',S).text(time)
-        if(S<=0){//本轮比赛结束
-            if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
-            }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
-            }
-            // setTimeout(function() {
+    count_down()
+    function count_down(){
+        // sys_second=answer_time
+        var timer = setInterval(function(){
+            if (sys_second > 0) {
+                sys_second -= 1;
+                var day = Math.floor((sys_second / 3600) / 24);
+                var hour = Math.floor((sys_second / 3600) % 24);
+                var minute = Math.floor((sys_second / 60) % 60);
+                var second = Math.floor(sys_second % 60);
+                day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
+                hour= hour<10?"0"+hour:hour;//计算小时
+                minute= minute<10?"0"+minute:minute;//计算分钟
+                second= second<10?"0"+second:second;//计算秒
+                var text=day+hour+':'+minute+':'+second;
+                $('.count_down').text(text).attr('data-seconds',sys_second)
+            } else {//倒计时结束
+                clearInterval(timer)
                 submit(0,3)
-            // }, 1000);
-        }
-    });
+            }
+
+        }, 1000);
+    } 
+    function init_question(question_leng) {//初始化题目
+        // var grade_question=$.GetSession('grade_question','true');
+        // if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+        //     endTime=grade_question['endTime'];
+        //     sys_second=$.GetSecond(endTime);
+        // }else{
+            $.getJSON(file_url, function (data){
+                var question_bank=data;
+                var _question=""
+                for (var index = 3; index < grade_level+1; index++) {
+                   var item=question_bank[index];
+                   _question+=item
+                }
+                var pos_arr=[];
+                for (var index = 0; index < how_ques; index++) {
+                  _slice_ques(pos_arr,_question);
+                  var start_index=pos_arr[index];//截取的所有字符串的起始坐标
+                  var end_index=start_index+200;//截取的所有字符串的结束坐标
+                  var start_ques=start_index+50;//截取的所有字符串的答题区起始坐标
+                  var end_ques=start_index+150;//截取的所有字符串答题区结束坐标
+                  var str=_question.substring(start_index,end_index);//题目
+                  var str1=_question.substring(start_index,start_ques);//答题前面区域
+                  var str2=_question.substring(start_ques,end_ques); //答题区域
+                  var str3=_question.substring(end_ques,end_index); //答题后面区域
+                  console.log(str,str.length)
+                  console.log(str1,str1.length)
+                  console.log(str2,str2.length)
+                  console.log(str3,str3.length)
+                }
+                var str='·•'
+                console.log(str.charCodeAt(1))
+                // console.log(pos_arr)
+                // var sessionData={
+                //     match_id:_match_id,
+                //     project_id:_project_id,
+                //     match_more:_match_more,
+                //     endTime:endTime,
+                //     questions_answer:questions_answer
+                // }
+                // $.SetSession('grade_question',sessionData) 
+            })
+        // }
+    }
+    function _slice_ques(pos_arr,_question){//截取题目
+        var _question_len=_question.length;
+        var repeat=false;
+        var pos = Math.floor(Math.random()*(_question_len-200));
+        $.each(pos_arr,function(i,v){
+            if(v-pos<=200 && v-pos>=-200){//重复题目
+                repeat=true;
+                return false;    
+            }
+        })
+        if(!repeat){
+            pos_arr.push(pos)
+        }else{
+            // console.log(1)
+            _slice_ques(pos_arr,_question)
+        } 
+    }
+
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
