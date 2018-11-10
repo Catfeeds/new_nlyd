@@ -207,7 +207,7 @@ Alert.prototype={
 			var arr=url.split('/');
 			var flag=false;
 			for(var i=0;i<arr.length;i++){
-				if(arr[i]==m && !isNaN(parseInt(arr[i+1]))){
+				if(arr[i]==m){//&& !isNaN(parseInt(arr[i+1]))
 					return arr[i+1]
 					flag=true;
 					break;

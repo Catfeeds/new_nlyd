@@ -48,7 +48,7 @@ class Order {
         IFNULL(o.address,"-") AS address,
         IFNULL(o.express_number,"-") AS express_number,
         IFNULL(o.express_company,"-") AS express_company,
-        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "商品订单" ELSE "-" END AS order_type_title,
+        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "考级订单" WHEN 3 THEN "商品订单" ELSE "-" END AS order_type_title,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
         CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,
@@ -107,6 +107,9 @@ class Order {
                 break;
             case 3:
                 $orderTypeWhere = ' AND order_type=2';
+                break;
+            case 4:
+                $orderTypeWhere = ' AND order_type=3';
         }
         $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS '.$this->getSelectField().' FROM '.$wpdb->prefix.'order AS o
         LEFT JOIN '.$wpdb->prefix.'users AS u ON u.ID=o.user_id 
@@ -142,7 +145,8 @@ class Order {
                 <ul id="tab">
                     <li class="<?php if($orderType == 1) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=1'">全部</li>
                     <li class="<?php if($orderType == 2) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=2'">比赛订单</li>
-                    <li class="<?php if($orderType == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=3'">商品订单</li>
+                    <li class="<?php if($orderType == 3) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=3'">考级订单</li>
+                    <li class="<?php if($orderType == 4) echo 'active'?>" onclick="window.location.href='?page=order&type=<?=$type?>&orderType=4'">商品订单</li>
                 </ul>
             </div>
             <br class="clear">
@@ -187,7 +191,8 @@ class Order {
                             <select name="order_type" id="" style="height: 28px;">
                                 <option value="1">全部</option>
                                 <option value="2">比赛订单</option>
-                                <option value="3">商品订单</option>
+                                <option value="3">考级订单</option>
+                                <option value="4">商品订单</option>
                             </select>
                             <input type="submit" name="changeit" id="changeit" class="button" value="导出">
                         </form>
@@ -446,7 +451,7 @@ class Order {
         WHEN 4 THEN "已完成" 
         WHEN 5 THEN "已失效"
         END AS pay_status,
-        CASE o.order_type WHEN 1 THEN "报名订单" WHEN 2 THEN "商品订单" END AS order_type  
+        CASE o.order_type WHEN 1 THEN "报名订单" WHEN 2 THEN "考级订单" WHEN 2 THEN "商品订单" END AS order_type  
         FROM '.$wpdb->prefix.'order_refund AS r 
         LEFT JOIN '.$wpdb->prefix.'order AS o ON o.id=r.order_id 
         LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=o.match_id 
@@ -631,7 +636,7 @@ class Order {
         }
         //查询包含的商品名称
         $goodsTitleStr = '';
-        if($row['order_type'] == 2){
+        if($row['order_type'] == 3){
             //商品订单
             $goodsRows = $wpdb->get_results('SELECT g.goods_title FROM '.$wpdb->prefix.'order_goods AS od 
             LEFT JOIN '.$wpdb->prefix.'goods AS g 
@@ -640,8 +645,8 @@ class Order {
                 $goodsTitleStr .= $goodsRow->goods_title.',';
             }
             $goodsTitleStr = substr($goodsTitleStr, 0, strlen($goodsTitleStr)-1);
-        }else{
-            //比赛订单
+        }elseif($row['order_type'] == 1){
+            //比赛订单,考级订单
             $goodsTitleStr = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$row['match_id'])->post_title;
         }
         ?>

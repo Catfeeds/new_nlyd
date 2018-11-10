@@ -8,7 +8,7 @@ class Match_student {
 
     public function register_order_menu_page(){
 
-        if ( current_user_can( 'administrator' ) && !current_user_can( 'team' ) ) {
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'edit.php?post_type=match' ) ) {
             global $wp_roles;
 
             $role = 'match_student';//权限名
@@ -28,11 +28,12 @@ class Match_student {
 
         }
 
-        add_menu_page('报名学员', '报名学员', 'match_student', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
-        add_submenu_page('match_student','个人成绩','个人成绩','match_student_score','match_student-score',array($this,'studentScore'));
-        add_submenu_page('match_student','比赛排名','比赛排名','match_student_ranking','match_student-ranking',array($this,'matchRanking'));
-        add_submenu_page('match_student','新增报名学员','新增报名学员','match_student_add_student','match_student-add_student',array($this,'addStudent'));
-        add_submenu_page('match_student','奖金明细','奖金明细','match_student_bonus','match_student-bonus',array($this,'match_bonus'));
+//        add_menu_page('报名学员', '报名学员', 'match_student', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
+        add_submenu_page('edit.php?post_type=match','报名学员','报名学员','match_student','match_student',array($this,'studentLists'));
+        add_submenu_page('edit.php?post_type=match','个人成绩','个人成绩','match_student_score','match_student-score',array($this,'studentScore'));
+        add_submenu_page('edit.php?post_type=match','比赛排名','比赛排名','match_student_ranking','match_student-ranking',array($this,'matchRanking'));
+        add_submenu_page('edit.php?post_type=match','新增报名学员','新增报名学员','match_student_add_student','match_student-add_student',array($this,'addStudent'));
+        add_submenu_page('edit.php?post_type=match','奖金明细','奖金明细','match_student_bonus','match_student-bonus',array($this,'match_bonus'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
 
@@ -87,7 +88,7 @@ class Match_student {
                 <p class="search-box">
                     <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                     <input type="search" id="search_val" name="search_val" placeholder="姓名/手机/邮箱/ID/战队" value="<?=$searchStr?>">
-                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                    <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('edit.php?post_type=match&page=match_student&match_id='.$match->ID.'&search=')?>'+document.getElementById('search_val').value" value="搜索用户">
                 </p>
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
