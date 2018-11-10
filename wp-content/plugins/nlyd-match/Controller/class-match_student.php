@@ -94,7 +94,8 @@ class Match_student {
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
                 <div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
-                    <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
                     </div>
 

@@ -7,6 +7,7 @@ jQuery(document).ready(function($) {
         $('#toplevel_page_feedback'),
         $('#menu-posts-team'),
         $('#menu-posts-match'),
+        $('#menu-posts-grading'),
     ];
     $.each(parentArray,function (pi,pv) {
         $.each($(pv).find('a'), function (i,v) {
