@@ -1723,7 +1723,7 @@ class Match_Ajax
                 $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/string.txt');
                 if($result){
 
-                    $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/string.txt'));
+                    $str = mb_convert_encoding(file_get_contents($file_path.'/string.txt'), "UTF-8", "GBK");
                     $json = json_encode(str2arr($str,' '));
 
                     if($_POST['handle'] == 1 && file_exists($file_path.'/vocabulary.json')){
