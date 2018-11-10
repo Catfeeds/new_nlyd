@@ -97,7 +97,7 @@ if(!class_exists('MatchController')){
             //查询语句orderby
             add_action('posts_orderby',array($this, 'filter_request_orderby'));
 
-            if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student','question' ) ) ){
+            if( in_array( $this->post_type,array( 'match','genre','project','match-category','team','student','question','grading' ) ) ){
 
                 //为文章管理页面添加列
                 add_filter("manage_{$this->post_type}_posts_columns", array($this,'add_new_match_columns'));
@@ -139,6 +139,11 @@ if(!class_exists('MatchController')){
 
             //添加训练记录菜单
             include_once(match_controller_path.'class-trains.php');
+
+            if($this->post_type == 'grading'){
+                include_once(match_controller_path.'class-grading.php');
+                new Grading();
+            }
 
 
             //引入ajax操作文件
@@ -682,8 +687,23 @@ if(!class_exists('MatchController')){
                 $columns['options'] = '操作';
             }elseif ($this->post_type == 'question'){
                 $columns['question_type'] = '类型';
+            }elseif ($this->post_type == 'grading'){
+                unset( $columns['date'] );
+                $columns['grading_status'] = '状态';
+                $columns['grading_author'] = '发布人';
+                $columns['grading_students'] = '报名人数';
+                $columns['grading_ranking'] = '比赛排名';
+                $columns['grading_brainpower'] = '脑力健将';
+                $columns['grading_sign_url'] = '签到链接';
+                $columns['grading_times'] = '比赛时间';
+//                $columns['time_slot'] = '报名结束时间';
+                $columns['grading_time_slot'] = '报名时间段';
+                $columns['grading_address'] = '考级地点';
+                $columns['grading_cost'] = '报名费用';
+                $columns['grading_type'] = '考级类型';
+                $columns['grading_date'] = '创建日期';
+                $columns['grading_options'] = '操作';
             }
-
             return $columns;
 
         }
@@ -692,7 +712,18 @@ if(!class_exists('MatchController')){
          */
         public function manage_match_columns($column_name, $id){
             global $wpdb;
-            $sql = "select 
+            $matchArr = [
+                'match_status',
+                'times',
+                'time_slot',
+                'match_address',
+                'cost',
+                'match_type',
+                'match_brainpower',
+                'options',
+            ];
+            if(in_array($column_name,$matchArr)){
+                $sql = "select 
                             match_slogan,match_genre,match_start_time,match_end_time,entry_end_time,match_address,match_cost,match_status,created_time,
                             case match_status 
                             when -3 then '已结束' 
@@ -703,7 +734,12 @@ if(!class_exists('MatchController')){
                             end match_status_cn  
                             from {$wpdb->prefix}match_meta_new   where match_id = {$id} 
                             ";
-            $row = $wpdb->get_row($sql,ARRAY_A);
+                $row = $wpdb->get_row($sql,ARRAY_A);
+            }
+            if($this->post_type == 'grading'){
+                $gradingSql = "SELECT * FROM `{$wpdb->prefix}grading_meta` WHERE `grading_id`={$id}";
+                $gradingRow = $wpdb->get_row($gradingSql,ARRAY_A);
+            }
             //print_r($sql);die;
 
             switch ($column_name){
@@ -731,11 +767,6 @@ if(!class_exists('MatchController')){
                     $student_num = $wpdb->get_var('SELECT count(o.id) AS num FROM '.$wpdb->prefix.'order AS o 
                     RIGHT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id WHERE o.match_id='.$id.' AND o.pay_status IN(2,3,4) AND o.order_type=1');
                     echo '<a href="?post_type=match&page=match_student&match_id='.$id.'" class="">'.$student_num.'人</a>';
-//                    if($row['match_status'] == -3){
-//                        echo '<a href="?page=match_student&match_id='.$id.'" class="">报名学员</a>';
-//                    }else{
-//                        echo '比赛未结束';
-//                    }
                     break;
                 case 'match_type':
                     $args = array(
@@ -752,12 +783,6 @@ if(!class_exists('MatchController')){
                     break;
                 case 'match_ranking':
                     echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
-//                    if($row['match_status'] == -3){
-//                        echo '<a href="admin.php?page=match_student-ranking&match_id='.$id.'">查看排名</a>';
-//                    }else{
-//                        echo '比赛未结束';
-//                    }
-
                     break;
                 case 'match_brainpower':
                     if($row['match_status'] == -3){
@@ -765,7 +790,6 @@ if(!class_exists('MatchController')){
                     }else{
                         echo '比赛未结束';
                     }
-
                     break;
                 case 'options':
 
