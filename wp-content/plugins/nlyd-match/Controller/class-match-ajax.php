@@ -1743,11 +1743,35 @@ class Match_Ajax
                 if(!file_exists($file_path)){
                     mkdir($file_path,0755,true);
                 }
+                /*$a = json_decode(file_get_contents($file_path.'/memory1.json'),true);
+                print_r($a);die;*/
                 //中转文件
                 $result = move_uploaded_file($_FILES['file']['tmp_name'][0],$file_path.'/temporary.txt');
-                if($result){
+                /*$str = file_get_contents($file_path.'/temporary.txt');
 
-                    $str = iconv("gb2312", "utf-8//IGNORE",file_get_contents($file_path.'/temporary.txt'));
+                $str = preg_replace('# #','',mb_convert_encoding(file_get_contents($file_path.'/temporary.txt'), "UTF-8", "GBK"));
+                $arr[10] = $str;
+                $a = file_put_contents($file_path.'/memory1.json',json_encode($arr));
+                print_r($str);
+                //preg_replace('# #','',$goodid)
+                die;*/
+                if($result){
+                    $str = preg_replace('# #','',mb_convert_encoding(file_get_contents($file_path.'/temporary.txt'), "UTF-8", "GBK"));
+                    //$str = file_get_contents($file_path.'/temporary.txt');
+                    //print_r($str);
+                    $array = array();
+                    if($_POST['handle'] == 1 && isset($array[$_POST['memory_grade']])){
+
+                        //leo_dump($array);
+                        $array[$_POST['memory_grade']] .= $str;
+                        //leo_dump($array);die;
+                    }else{
+
+                        $array[$_POST['memory_grade']] = $str;
+                    }
+                    ksort($array);
+                    /*leo_dump($array);
+                    die;*/
 
                     if(file_exists($file_path.'/memory.json')){
                         $array = json_decode(file_get_contents($file_path.'/memory.json'),true);
