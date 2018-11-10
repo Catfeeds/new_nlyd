@@ -297,7 +297,7 @@ function the_table_install () {
           `fullname` varchar(255) NOT NULL,
           `telephone` varchar(50) NOT NULL COMMENT '联系电话',
           `address` text NOT NULL COMMENT '收货地址',
-          `order_type` tinyint(2) NOT NULL COMMENT '订单类型 1:报名订单',
+          `order_type` tinyint(2) NOT NULL COMMENT '订单类型 1:报名订单,2考级订单,3商品订单',
           `express_number` varchar(30) DEFAULT NULL COMMENT '快递单号',
           `express_company` text COMMENT '快递公司',
           `pay_type` varchar(255) DEFAULT NULL COMMENT '支付类型 支付宝:zfb 微信:wx 银联卡:ylk 其他:线下',

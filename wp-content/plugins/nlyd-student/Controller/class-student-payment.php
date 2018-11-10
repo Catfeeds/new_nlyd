@@ -283,10 +283,13 @@ class Student_Payment {
 //            file_put_contents('aax.txt',json_encode($queryRes['order']));
             $pay_status = 2;
             switch ($queryRes['order']['order_type']){
-                case '1' or 1://比赛订单
+                case 1://比赛订单
                     $pay_status = 4;
                     break;
-                case '2' or 2://s商品订单
+                case 2://考级订单
+                    $pay_status = 4;
+                    break;
+                case 3://s商品订单
                     $pay_status = 2;
                     break;
             }
@@ -504,7 +507,10 @@ class Student_Payment {
                     case 1://比赛订单
                         $pay_status = 4;
                         break;
-                    case 2://商品订单
+                    case 2://考级订单
+                        $pay_status = 4;
+                        break;
+                    case 3://商品订单
                         $pay_status = 2;
                         break;
                 }

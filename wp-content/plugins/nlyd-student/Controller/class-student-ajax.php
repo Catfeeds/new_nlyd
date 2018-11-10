@@ -2422,7 +2422,8 @@ class Student_Ajax
         IFNULL(address, "-") AS address,
         CASE order_type 
         WHEN 1 THEN "报名订单" 
-        WHEN 2 THEN "商品订单" 
+        WHEN 2 THEN "考级订单" 
+        WHEN 3 THEN "商品订单" 
         END AS order_type_title,
         IFNULL(express_number, "-") AS express_number,
         IFNULL(express_company, "-") AS express_company,
@@ -2463,7 +2464,7 @@ class Student_Ajax
                     ];
                     $allPrice = $order['cost'];
                     break;
-                case 2://商品订单
+                case 3://商品订单
                     $goodsRows = $wpdb->get_results('SELECT od.goods_num,od.pay_price,od.pay_brain,g.goods_title FROM 
                     '.$wpdb->prefix.'order_goods AS od 
                     LEFT JOIN '.$wpdb->prefix.'goods AS g ON od.goods_id=g.id');
@@ -2789,7 +2790,7 @@ class Student_Ajax
                 'fullname' => $address['fullname'],
                 'telephone' => $address['telephone'],
                 'address' => $address['country'].$address['province'].$address['city'].$address['area'].$address['address'],
-                'order_type' => 2,
+                'order_type' => 3,
                 'express_number' => '',
                 'express_company' => '',
                 'cost' => $allPrice,

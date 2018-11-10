@@ -43,7 +43,7 @@ class Teacher
 
         add_menu_page('教练', '教练', 'teacher', 'teacher',array($this,'teacher'),'dashicons-businessman',99);
         add_submenu_page('teacher','新增教练','新增教练','teacher_add','teacher-add',array($this,'newTeacher'));
-        add_submenu_page('teacher','个人资料','个人资料','teacher_datum','teacher-datum',array($this,'datum'));
+        add_submenu_page('teacher','教练资料','教练资料','teacher_datum','teacher-datum',array($this,'datum'));
         add_submenu_page('teacher','我的学员','我的学员','teacher_student','teacher-student',array($this,'student'));
         add_submenu_page('teacher','我的课程','我的课程','teacher_course','teacher-course',array($this,'course'));
     }
