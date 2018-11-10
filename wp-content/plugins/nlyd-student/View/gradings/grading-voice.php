@@ -25,7 +25,7 @@
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
                             </div>
                         </div>
-                        <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
+                        <!-- <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div> -->
                     </div>
 
                     <!-- 比赛 -->
@@ -69,21 +69,8 @@
         </div>
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
+<audio id="audio" autoplay="autoplay" preload type="audio/mpeg"></audio>
 <script>
-    function doTTS(ttsText) {
-      var ttsDiv = document.getElementById('bdtts_div_id');
-      // 文字转语音
-      var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
-      var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=1&spd=1&text=' + ttsText + '" type="audio/mpeg">';
-      var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
-      var au2 = '</audio>';
-      ttsDiv.innerHTML = au1 + sss + eee + au2;
-
-      ttsAudio = document.getElementById('tts_autio_id');
-
-      ttsAudio.play();
-    }
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
@@ -96,11 +83,13 @@ jQuery(function($) {
     var answer_time=300;//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len=100;//多少个字符
-    var remember_time=ready_time;
+    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    var _index=0;
     init_question(que_len,_show)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
+
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
@@ -115,7 +104,6 @@ jQuery(function($) {
             grad_type:_grad_type,
             type:_type,
             endTime:endTime,
-            remember_time:$('.count_down').attr('data-seconds'),
             _show:2,
             questions_answer:questions_answer
         }
@@ -150,7 +138,6 @@ jQuery(function($) {
                         grad_type:_grad_type,
                         type:_type,
                         endTime:endTime,
-                        remember_time:0,
                         _show:2,
                         questions_answer:questions_answer
                     }
@@ -167,12 +154,9 @@ jQuery(function($) {
         var grade_question=$.GetSession('grade_question','true');
         if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             questions_answer=grade_question['questions_answer'];
-            _show=grade_question['_show']
+            _show=2
             endTime=grade_question['endTime'];
             sys_second=$.GetSecond(endTime);
-            if(_show==2){
-                remember_time=grade_question['remember_time'];
-            }
         }else{
             for(var i=0;i<question_leng;i++){
                 var num=Math.floor(Math.random()*10);//生成0-9的随机数
@@ -182,7 +166,6 @@ jQuery(function($) {
                 grad_id:_grad_id,
                 grad_type:_grad_type,
                 type:_type,
-                remember_time:ready_time,//剩余记忆时间
                 _show:_show,
                 endTime:endTime,
                 questions_answer:questions_answer
@@ -197,6 +180,32 @@ jQuery(function($) {
         $('.complete_zoo').eq(_show-1).show();
        if(_show==2){
          $('.matching-sumbit').show();
+       }else{//准备页面播放语音
+            var audio=document.getElementById('audio');
+            $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
+            audio.loop = false;
+            audio.addEventListener('ended', function () {  
+                _index++
+                if(_index<=que_len-1){
+                    $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
+                }else{
+                    $('.complete_zoo').hide();
+                    $('#match_zoo').show()
+                    $('.matching-sumbit').show();
+                    _show=2
+                    sys_second=answer_time
+                    var endTime=$.GetEndTime(answer_time);//结束时间
+                    var sessionData={
+                        grad_id:_grad_id,
+                        grad_type:_grad_type,
+                        type:_type,
+                        endTime:endTime,
+                        _show:2,
+                        questions_answer:questions_answer
+                    }
+                    $.SetSession('grade_question',sessionData)
+                }  
+            }, false);
        }
     }
     function submit(submit_type){//提交答案
