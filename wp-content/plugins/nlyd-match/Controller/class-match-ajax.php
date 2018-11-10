@@ -1881,6 +1881,52 @@ class Match_Ajax
         else wp_send_json_error(['info' => '删除失败']);
     }
 
+    /**
+     * 加入考级选手
+     */
+    public function joinGradingMember(){
+        $grading_id = isset($_POST['grading_id']) ? intval($_POST['grading_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        if($grading_id < 1 || $user_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        //是否已存在订单
+        $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}order WHERE match_id='{$grading_id}' AND user_id='{$user_id}' AND order_type=2 AND pay_status IN(2,3,4)");
+        if($id) wp_send_json_error(['info' => '该用户已存在考级,请勿重复加入!']);
+
+        $orderInsertData = [
+            'user_id' => $user_id,
+            'match_id'=>$grading_id,
+            'cost'=> 0,
+//            'fullname'=>$addressRes['fullname'],
+//            'telephone'=>$addressRes['telephone'],
+//            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
+            'order_type'=>2,
+            'pay_status'=>4,
+            'created_time'=>get_time('mysql'),
+        ];
+
+
+        //开启事务
+        $wpdb->startTrans();
+        $insertRes = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
+
+        if(!$insertRes){
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '加入失败!']);
+            return;
+        }
+        //生成流水号
+        $serialnumber = createNumber($user_id,$wpdb->insert_id);
+        $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
+        if($updateRes){
+            $wpdb->commit();
+            wp_send_json_success(['info' => '加入成功!']);
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '加入失败!']);
+        }
+    }
+
 }
 
 new Match_Ajax();
