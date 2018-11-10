@@ -3859,7 +3859,7 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
         if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
-
+        print_r($_POST);die;
         switch ($_POST['grading_type']){
 
         }

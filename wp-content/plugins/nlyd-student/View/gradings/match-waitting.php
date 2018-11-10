@@ -24,13 +24,7 @@
                                     <p class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</p>
                                 </div>
                             </div>
-                        <?php }
-                        if($buffer_time && empty($answer_status)){
-                        ?>
-                            <a class="a-btn a-btn-table back" href="<?=$buffer_url?>">
-                                <div><?=__('进入比赛', 'nlyd-student')?></div>
-                            </a>
-                        <?php }?>
+                        <?php } ?>
                         <div class="match_tips">
                             <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。', 'nlyd-student')?></p>
                             <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。', 'nlyd-student')?></p>
@@ -56,7 +50,7 @@
         endTimes=$.GetEndTime(counts_down)
         if($('.count_down').attr('data-seconds')<=0){
             $.DelSession('leavePageWaitting')
-            window.location.href="<?=$match_url?>"
+            window.location.href="<?=$redirect_url?>"
         }
         $('.count_down').countdown(function(S, d){//倒计时
             var count_down=S
@@ -73,7 +67,7 @@
                 $(this).attr('data-seconds',S).text(time);
                 if(S<=0){//
                     $.DelSession('leavePageWaitting')
-                    window.location.href="<?=$match_url?>"
+                    window.location.href="<?=$redirect_url?>"
                 }
             }
         });
