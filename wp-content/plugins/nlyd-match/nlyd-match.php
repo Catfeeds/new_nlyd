@@ -690,12 +690,11 @@ if(!class_exists('MatchController')){
             }elseif ($this->post_type == 'grading'){
                 unset( $columns['date'] );
                 $columns['grading_status'] = '状态';
-                $columns['grading_author'] = '发布人';
+                $columns['author'] = '发布人';
                 $columns['grading_students'] = '报名人数';
                 $columns['grading_ranking'] = '比赛排名';
                 $columns['grading_brainpower'] = '脑力健将';
-                $columns['grading_sign_url'] = '签到链接';
-                $columns['grading_times'] = '比赛时间';
+                $columns['grading_times'] = '考级时间';
 //                $columns['time_slot'] = '报名结束时间';
                 $columns['grading_time_slot'] = '报名时间段';
                 $columns['grading_address'] = '考级地点';
@@ -737,7 +736,14 @@ if(!class_exists('MatchController')){
                 $row = $wpdb->get_row($sql,ARRAY_A);
             }
             if($this->post_type == 'grading'){
-                $gradingSql = "SELECT * FROM `{$wpdb->prefix}grading_meta` WHERE `grading_id`={$id}";
+                $gradingSql = "SELECT category_id,entry_end_time,start_time,end_time,address,cost,grading_notice_url,created_time,status,
+                CASE status 
+                WHEN -3 THEN '已结束' 
+                WHEN -2 THEN '等待开赛' 
+                WHEN 1 THEN '报名中' 
+                WHEN 2 THEN '进行中' 
+                END AS status_name 
+                FROM `{$wpdb->prefix}grading_meta` WHERE `grading_id`={$id}";
                 $gradingRow = $wpdb->get_row($gradingSql,ARRAY_A);
             }
             //print_r($sql);die;
@@ -764,8 +770,7 @@ if(!class_exists('MatchController')){
                     echo $row['match_cost'];
                     break;
                 case 'students':
-                    $student_num = $wpdb->get_var('SELECT count(o.id) AS num FROM '.$wpdb->prefix.'order AS o 
-                    RIGHT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id WHERE o.match_id='.$id.' AND o.pay_status IN(2,3,4) AND o.order_type=1');
+                    $student_num = $wpdb->get_var('SELECT count(id) AS num FROM '.$wpdb->prefix.'order WHERE match_id='.$id.' AND pay_status IN(2,3,4) AND order_type=1');
                     echo '<a href="?post_type=match&page=match_student&match_id='.$id.'" class="">'.$student_num.'人</a>';
                     break;
                 case 'match_type':
@@ -836,6 +841,60 @@ if(!class_exists('MatchController')){
                     $question_name =   $termRes = $wpdb->get_var("SELECT t.name FROM {$wpdb->prefix}term_relationships AS r 
                                           LEFT JOIN {$wpdb->terms} AS t ON t.term_id=r.term_taxonomy_id WHERE r. object_id={$id}");
                     echo $question_name;
+                    break;
+                case 'grading_status':
+                    //考级状态
+                    echo $gradingRow['status_name'];
+                    break;
+                case 'grading_students':
+                    //报名人数
+                    $student_num = $wpdb->get_var('SELECT count(id) AS num FROM '.$wpdb->prefix.'order WHERE match_id='.$id.' AND pay_status IN(2,3,4) AND order_type=2');
+                    echo '<a href="?post_type=grading&page=grading_student&grading_id='.$id.'" class="">'.$student_num.'人</a>';
+                    break;
+                case 'grading_ranking':
+                    echo '<a href="admin.php?page=grading_student-ranking&grading_id='.$id.'">查看排名</a>';
+                    break;
+                case 'grading_brainpower':
+                    if($gradingRow['match_status'] == -3){
+                        echo '<a href="admin.php?page=brainpower-join_directory&grading_id='.$id.'">查看名录</a>';
+                    }else{
+                        echo '考级未结束';
+                    }
+                    break;
+                case 'grading_times':
+                    //考级时间
+                    echo $gradingRow['start_time'].'<br/>'.$gradingRow['end_time'];
+                    break;
+                case 'grading_time_slot':
+                    //考级报名时间段
+                    echo $gradingRow['created_time'].'<br/>'.$gradingRow['entry_end_time'];
+                    break;
+                case 'grading_address':
+                    //考级地点
+                    echo $gradingRow['address'];
+                    break;
+                case 'grading_cost':
+                    //考级费用
+                    echo $gradingRow['cost'];
+                    break;
+                case 'grading_type':
+                    //考级类别
+                    echo $gradingRow['category_id'];
+                    break;
+                case 'grading_date':
+                    //考级创建日期
+                    echo $gradingRow['created_time'];
+                    break;
+                case 'grading_options':
+                    //考级操作选项
+                    $post = get_post($id);
+                    if($post->post_status == 'trash'){
+                        $str = '<a href="javascript:;" data-id="'.$id.'" data-status="'.$row['match_status'].'" class="delGrading">删除考级</a>';
+                    }else{
+                        $str = '<a href="javascript:;" class="closeGrading" data-status="'.$row['match_status'].'" data-id="'.$id.'">关闭考级</a>';
+                    }
+
+                    echo $str;
                     break;
                 default:
                     break;
