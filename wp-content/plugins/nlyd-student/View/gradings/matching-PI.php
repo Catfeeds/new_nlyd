@@ -117,7 +117,7 @@ jQuery(function($) {
             }
             $.SetSession('grade_question',sessionData)
         }
-        for (let index = 0; index < question_leng; index++) {
+        for (var index = 0; index < question_leng; index++) {
             var dom=index==0?'<div class="matching-number active"></div>' : '<div class="matching-number"></div>';
             $('.match_zoo').append(dom)
         }

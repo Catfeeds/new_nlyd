@@ -3839,6 +3839,32 @@ class Student_Ajax
 
     }
 
+    /**
+     * 考级答案提交
+     */
+    public function grading_answer_submit(){
+        unset($_SESSION['count_down']);
+        unset($_SESSION['match_post_id']);
+        if(empty($_POST['grading_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
+            wp_send_json_error(array('所提交数据信息不完全'));
+        }
+        ini_set('post_max_size','20M');
+
+        global $wpdb,$current_user;
+        $sql = "select id,answer_status,questions_answer
+                from {$wpdb->prefix}grading_questions
+                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = {$_POST['grading_type']} and questions_type = {$_POST['questions_type']}
+                ";
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($sql);
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
+
+        switch ($_POST['grading_type']){
+
+        }
+    }
+
+
 }
 
 new Student_Ajax();

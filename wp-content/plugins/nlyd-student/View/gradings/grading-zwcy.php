@@ -51,19 +51,14 @@ jQuery(function($) {
     var sys_second=ready_time;
     var answer_time=1800;//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
-    var que_len=100;//多少个字符
+    var que_len=10;//多少个字符
     var remember_time=ready_time;
+    var file_url="<?=leo_match_url.'/upload/vocabulary/vocabulary.json'?>";
     init_question(que_len,_show)
     leaveMatchPage(function(){//窗口失焦提交
         var countTime=parseInt($('.count_down').attr('data-seconds'));
         var time=_show==1?countTime+answer_time:countTime;
         submit(time,4);
-    })
-    $.each(questions_answer,function(i,v){
-        var dom='<div class="matching-number-match-word">'+v+'</div>';
-        $('.ready_zoo').append(dom)
-        var dom1='<div class="matching-number-match-word"><input class="matching-number-input" type="text"></div>';
-        $('.match_zoo').append(dom1)
     })
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
@@ -126,7 +121,7 @@ jQuery(function($) {
             }
 
         }, 1000);
-    } 
+    }  
     function init_question(question_leng,_show) {//初始化题目
         var grade_question=$.GetSession('grade_question','true');
         if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
@@ -137,27 +132,47 @@ jQuery(function($) {
             if(_show==2){
                 remember_time=grade_question['remember_time'];
             }
+            $.each(questions_answer,function(i,v){
+                var dom='<div class="matching-number-match-word">'+v+'</div>';
+                $('.ready_zoo').append(dom)
+                var dom1='<div class="matching-number-match-word"><input class="matching-number-input" type="text"></div>';
+                $('.match_zoo').append(dom1)
+            })
+            $('.complete_zoo').hide();
+            $('.complete_zoo').eq(_show-1).show();
+            if(_show==2){
+                $('.matching-sumbit').show();
+            }  
         }else{
-            for(var i=0;i<question_leng;i++){
-                var num=Math.floor(Math.random()*10);//生成0-9的随机数
-                questions_answer.push(num)
-            }
-            var sessionData={
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-                remember_time:ready_time,//剩余记忆时间
-                _show:_show,
-                endTime:endTime,
-                questions_answer:questions_answer
-            }
-            $.SetSession('grade_question',sessionData)
+            $.getJSON(file_url, function (data){
+                var question_bank=data;
+                for (var index = 0; index < que_len; index++) {
+                    var _length=question_bank.length;
+                    var pos = Math.round(Math.random() * (_length - 1));
+                    questions_answer.push(question_bank[pos])
+                    var dom='<div class="matching-number-match-word">'+question_bank[pos]+'</div>';
+                    $('.ready_zoo').append(dom)
+                    var dom1='<div class="matching-number-match-word"><input class="matching-number-input" type="text"></div>';
+                    $('.match_zoo').append(dom1)
+                    question_bank.splice(pos,1)
+                }
+                var sessionData={
+                    match_id:_match_id,
+                    project_id:_project_id,
+                    match_more:_match_more,
+                    remember_time:ready_time,//剩余记忆时间
+                    _show:_show,
+                    endTime:endTime,
+                    questions_answer:questions_answer
+                }
+                $.SetSession('grade_question',sessionData) 
+                $('.complete_zoo').hide();
+                $('.complete_zoo').eq(_show-1).show();
+                if(_show==2){
+                    $('.matching-sumbit').show();
+                }  
+            })
         }
-        $('.complete_zoo').hide();
-        $('.complete_zoo').eq(_show-1).show();
-        if(_show==2){
-         $('.matching-sumbit').show();
-       }
     }
     function submit(time,submit_type){//提交答案
         // $('#load').css({
