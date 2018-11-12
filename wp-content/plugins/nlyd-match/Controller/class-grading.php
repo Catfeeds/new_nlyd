@@ -314,6 +314,12 @@ class Grading
      * 引入当前页面css/js
      */
     public function register_scripts(){
+        if(!isset($_GET['page'])){
+            wp_register_script('list-js', match_js_url . 'grading.js');
+            wp_enqueue_script('list-js');
+        }else{
+
+        }
 
     }
 }
