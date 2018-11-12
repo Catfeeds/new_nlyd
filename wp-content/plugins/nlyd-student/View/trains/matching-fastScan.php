@@ -14,7 +14,7 @@
                         <div class="c_blue match_info_font">
                             <div>
                                 <!-- <i class="iconfont">&#xe685;</i> -->
-                                <span class="count_down" data-seconds="900"></span>
+                                <span class="count_down" data-seconds="600"></span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
