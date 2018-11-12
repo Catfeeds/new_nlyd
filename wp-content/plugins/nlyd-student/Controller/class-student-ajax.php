@@ -3859,10 +3859,52 @@ class Student_Ajax
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
         if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
-        print_r($_POST);die;
-        switch ($_POST['grading_type']){
 
+        //数据处理
+
+        $correct_rate = 0;  //准确率
+        switch ($_POST['grading_type']){
+            case 'memory':
+                switch ($_POST['questions_type']){
+                    case 'sz':
+                        if(!empty($_POST['my_answer'])){
+
+                            $len = count($_POST['questions_answer']);
+                            $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
+                            $correct_rate = ($len-$error_len)/$len;
+                        }
+                        break;
+                }
+                break;
         }
+
+
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'grading_id'=>$_POST['grading_id'],
+            'grading_type'=>$_POST['grading_type'],
+            'questions_type'=>$_POST['questions_type'],
+            'grading_questions'=>json_encode($_POST['grading_questions']),
+            'questions_answer'=>json_encode($_POST['questions_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
+            'correct_rate'=>$correct_rate,
+            'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
+            'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
+            'created_time'=>get_time('mysql'),
+            'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
+            'is_true'=>!empty($prison_log_id) ? 2 : 1,
+        );
+        $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
+        /*print_r($result);
+        die;*/
+        if($result){
+            $log_id = $wpdb->insert_id;
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
+        }
+        else{
+            wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
+        }
+
     }
 
 
