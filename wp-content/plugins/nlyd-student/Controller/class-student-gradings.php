@@ -167,7 +167,7 @@ class Student_Gradings extends Student_Home
             $row['redirect_url'] .= '/type/sz/memory_lv/'.$row['memory_lv'];
             $_SESSION['memory_lv'] = $row['memory_lv'];
         }
-        print_r($row);
+        //print_r($row);
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$row);
     }
@@ -193,7 +193,7 @@ class Student_Gradings extends Student_Home
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
             $project = $this->get_grading_parameter($memory_lv);
             if(empty($project)){
-                $this->get_404(array('message'=>__('考请确认考级等级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('请确认考级等级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
                 return;
             }
             $row['project'] = $project;
@@ -211,6 +211,338 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
     }
+
+
+    /*
+     * 比赛项目答题结果页
+     */
+    public function answerLog(){
+
+        global $wpdb,$current_user;
+
+        if(isset($_GET['log_id'])){
+
+            if(empty($_GET['grad_id']) || empty($_GET['log_id']) || empty($_GET['grad_type']) || empty($_GET['type']) ){
+
+                $this->get_404(__('参数错误', 'nlyd-student'));
+                return;
+            }
+        }
+        else{
+
+            if(isset($_SESSION['match_data'])){
+
+                $match_data = $_SESSION['match_data'];
+                //print_r($match_data);
+
+                $sql1 = "select * from {$wpdb->prefix}match_questions where match_id = {$match_data['match_id']} and project_id = {$match_data['project_id']} and match_more = {$match_data['match_more']} and user_id = {$current_user->ID}";
+                $row = $wpdb->get_row($sql1,ARRAY_A);
+                //print_r($row);
+                if(empty($row)){
+
+                    //计算成绩
+                    switch ($match_data['project_alias']){
+                        case 'szzb':
+                        case 'pkjl':
+
+                            if(!empty($match_data['my_answer'])){
+
+                                $len = count($match_data['questions_answer']);
+
+                                $error_len = count(array_diff_assoc($match_data['questions_answer'],$match_data['my_answer']));
+
+                                $score = $match_data['project_type'] == 'szzb' ? 12 : 18;
+
+                                $my_score = ($len-$error_len)*$score;
+
+                                if ($error_len == 0 && !empty($match_data['my_answer'])){
+                                    $my_score += $match_data['surplus_time'] * 1;
+                                }
+                            }else{
+                                $my_score = 0;
+                            }
+
+                            break;
+                        case 'kysm':
+                        case 'zxss':
+                        case 'nxss':
+
+
+                            $data_arr = $match_data['my_answer'];
+                            //print_r($data_arr);die;
+                            if(!empty($data_arr)){
+                                $match_questions = array_column($data_arr,'question');
+                                $questions_answer = array_column($data_arr,'rights');
+                                $match_data['my_answer'] = array_column($data_arr,'yours');
+                            }
+
+                            if($_POST['project_alias'] == 'nxss'){
+                                $isRight = array_column($data_arr,'isRight');
+
+                                $success_len = 0;
+                                if(!empty($isRight)){
+                                    $count_value = array_count_values($isRight);
+                                    $success_len += $count_value['true'];
+                                }
+                                $answer['examples'] = $questions_answer;
+                                $answer['result'] = $isRight;
+                                $questions_answer = $answer;
+
+                                $my_score = $success_len * 10;
+
+                            }else{
+
+                                $len = count($match_questions);
+                                $error_len = count(array_diff_assoc($questions_answer,$match_data['my_answer']));
+                                $my_score = ($len-$error_len)*10;
+                            }
+
+
+                            $match_data['match_questions'] = $match_questions;
+                            $match_data['questions_answer'] = $questions_answer;
+
+                            break;
+                        case 'wzsd':
+                            //print_r($_POST);die;
+                            if(empty($match_data['post_id'])){
+                                $this->get_404('文章id不存在');
+                            }
+                            //print_r($_POST);die;
+                            $questions_answer = $match_data['questions_answer'];
+                            $len = count($questions_answer);
+                            $success_len = 0;
+
+                            foreach ($questions_answer as $k=>$val){
+                                $arr = array();
+                                foreach ($val['problem_answer'] as $key => $v){
+                                    if($v == 1){
+                                        $arr[] = $key;
+                                    }
+                                }
+
+                                if(isset($match_data['my_answer'][$k])){
+                                    if(arr2str($arr) == arr2str($match_data['my_answer'][$k])) ++$success_len;
+                                }
+                            }
+                            $my_score = $success_len * 23;
+                            if ($success_len == $len){
+                                $my_score += $match_data['surplus_time'] * 1;
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                    $insert = array(
+                        'user_id'=>$current_user->ID,
+                        'match_id'=>$match_data['match_id'],
+                        'project_id'=>$match_data['project_id'],
+                        'match_more'=>$match_data['match_more'],
+                        'match_questions'=>json_encode($match_data['match_questions']),
+                        'questions_answer'=>json_encode($match_data['questions_answer']),
+                        'my_answer'=>json_encode($match_data['my_answer']),
+                        'surplus_time'=>$match_data['surplus_time'],
+                        'my_score'=>$my_score,
+                        'answer_status'=>1,
+                        'submit_type'=>isset($match_data['submit_type']) ? $match_data['submit_type'] : 1,
+                        'leave_page_time'=>isset($match_data['leave_page_time']) ? json_encode($match_data['leave_page_time']) : '',
+                        'created_time'=>get_time('mysql'),
+                        'created_microtime'=>str2arr(microtime(),' ')[0],
+                    );
+
+                    /*print_r($insert);
+                    die;*/
+
+                    $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
+                    if($result){
+                        $_GET['log_id'] = $wpdb->insert_id;
+
+                        if(!empty($match_data['post_id']) && $match_data['project_alias'] == 'wzsd'){
+
+                            $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                            $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                            if($use_id){
+                                $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$match_data['post_id']},CONCAT_WS(',',post_id,{$match_data['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                                $a = $wpdb->query($sql2);
+                            }else{
+
+                                $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$match_data['post_id'],'type'=>1));
+                            }
+
+                        }
+                    }
+                }else{
+                    $_GET['log_id'] = $row['id'];
+                }
+
+            }
+
+        }
+
+        //清空倒计时
+        unset($_SESSION['count_down']);
+
+        $order = $this->get_match_order($current_user->ID,$_GET['grad_id']);
+        if(empty($order)){
+            $this->get_404(__('你未报名', 'nlyd-student'));
+            return;
+        }else{
+
+            if(!in_array($order->pay_status,array(2,3,4))){
+                $this->get_404(__('订单未付款', 'nlyd-student'));
+                return;
+            }
+        }
+
+        if(isset($_GET['log_id'])){
+
+            //获取答题记录
+            $row = $this->get_grading_questions($_GET['grad_id'],$_GET['log_id']);
+            if(empty($row)){
+                $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
+                return;
+            }
+        }
+
+        //获取当前项目
+        $project = $this->get_grading_parameter($order->memory_lv);
+        $keys = array_keys($project);
+        $index = array_search($row['questions_type'],$keys)+1;
+
+        //获取接下来进行项目
+
+        if(empty($match_more)){
+            $this->get_404(__('数据错误', 'nlyd-student'));
+            return;
+        }
+
+        $match_questions = json_decode($row['match_questions'],true);
+        $questions_answer = json_decode($row['questions_answer'],true);
+        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+        if($row['project_alias'] == 'wzsd'){
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
+
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
+                    }
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+            }
+
+        }
+        elseif ($row['project_alias'] == 'nxss'){
+
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
+
+        }
+        else{
+
+            if(!empty($questions_answer)){
+                $len = count($questions_answer);
+                if(!empty($my_answer)){
+
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                    $error_len = count($error_arr);
+                    $success_len = $len - $error_len;
+                }else{
+                    $success_len = 0;
+                }
+            }else{
+                $my_answer = array();
+                $error_arr = array();
+                $success_len = 0;
+                $len = 0;
+            }
+        }
+
+        //print_r($match_more);
+
+        //请求接下来的比赛项目
+        $next_project_more = $this->get_match_project_more($_GET['match_id']);
+
+        /*print_r($next_project_more);
+        print_r($match_more);*/
+        $ranking = '';
+        if(strtotime($match_more['end_time']) <= get_time() && $match_more['project_alias'] != $next_project_more['project_alias']){
+            //获取本轮排名
+            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$match_more['match_id']} and project_id = {$match_more['project_id']} and match_more = {$match_more['more']} group by my_score desc,surplus_time desc";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+
+            $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
+        }
+
+        if(!empty($next_project_more) && empty($this->end_project)){
+
+            if($next_project_more['project_alias'] != $match_more['project_alias']){
+                $next_project = 'y';
+            }else{
+                $next_project = 'n';
+            }
+
+            $next_project_url = home_url(CONTROLLER.'/initialMatch/match_id/'.$next_project_more['match_id'].'/project_alias/'.$next_project_more['project_alias'].'/project_more_id/'.$next_project_more['id']);
+        }
+        if($this->end_project == 'y'){
+
+            $next_project = '';
+            $next_project_url = home_url(CONTROLLER.'/record/match_id/'.$match_more['match_id']);
+        }
+
+        $data = array(
+            'next_count_down'=> !empty($next_project) ? strtotime($next_project_more['start_time'])-get_time() : 0,
+            'next_project'=>$next_project,
+            'project_alias'=>$row['project_alias'],
+            'str_len'=>$len,
+            'match_more_cn'=>$match_more['more'],
+            'match_more'=>$this->match_more,
+            'success_length'=>$success_len,
+            'use_time'=>$match_more['use_time']*60-$row['surplus_time'],
+            'surplus_time'=>$row['surplus_time'],
+            'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
+            'ranking'=>$ranking,
+            'match_questions'=>$match_questions,
+            'questions_answer'=>$questions_answer,
+            'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
+            'my_score'=>$row['my_score'],
+            'project_title'=>$match_more['project_title'],
+            'match_title'=>$this->match_title,
+            'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'next_project_url'=>$next_project_url,
+            'wait_url' =>home_url('matchs/matchWaitting/match_id/'.$match_more['match_id']),
+            'record_url'=>home_url('matchs/record/match_id/'.$match_more['match_id'].'/last/answerLog'),
+            'match_row'=>$row,
+        );
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/match-answer-log.php';
+        load_view_template($view,$data);
+    }
+
 
 
     public function grading_voice(){//人脉信息记忆页
@@ -370,6 +702,7 @@ class Student_Gradings extends Student_Home
                 break;
             case 'cy':
                 $title = '随机词汇';
+                break;
             case 'zm':
                 $title = '随机字母';
                 break;
@@ -427,6 +760,54 @@ class Student_Gradings extends Student_Home
         return $row;
     }
 
+
+    /**
+     * 判断是否报名
+     * @param $user_id  用户id
+     * @param $match_id 考级id
+     * @return array|null|object|void
+     */
+    public function get_match_order($user_id,$match_id){
+        global $wpdb;
+        $sql = "select id,pay_status,memory_lv from {$wpdb->prefix}order where user_id = {$user_id} and match_id = {$match_id} ";
+        //print_r($sql);
+        return $wpdb->get_row($sql);
+    }
+
+
+    /**
+     * 获取答题记录
+     * @param $match_id 比赛id
+     * @param $log_id   答题记录
+     * @return array|null|object|void
+     */
+    public function get_grading_questions($match_id,$log_id){
+
+        global $wpdb,$current_user;
+        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,correct_rate,is_true,
+                    case grading_type
+                    when 'reading' then '速读'
+                    when 'memory' then '记忆'
+                    when 'arithmetic' then '心算'
+                    end grading_type_cn,
+                    case questions_type
+                    when 'sz' then '随机数字'
+                    when 'cy' then '随机词汇'
+                    when 'zm' then '随机字母'
+                    when 'yzl' then '圆周率'
+                    when 'tl' then '听记数字'
+                    when 'rm' then '人脉信息'
+                    when 'wz' then '国学经典'
+                    end questions_type_cn
+                    from {$wpdb->prefix}grading_questions
+                    where user_id = {$current_user->ID} and grading_id = {$match_id} and id = {$log_id} 
+                    ";
+        //print_r($sql);
+        $row = $wpdb->get_row($sql,ARRAY_A);
+
+        return $row;
+    }
+
     /**
      * 默认公用js/css引入
      */
@@ -471,6 +852,16 @@ class Student_Gradings extends Student_Home
                 wp_enqueue_style( 'my-student-numberBattleReady' );
                 wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-numberBattle' );
+            }elseif($_GET['type'] == 'cy'){
+
+            }
+        }
+        if(ACTION == 'answerLog'){//
+            if($_GET['type'] == 'sz'){
+
+                wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
+                wp_enqueue_style( 'my-student-subject' );
+
             }elseif($_GET['type'] == 'cy'){
 
             }

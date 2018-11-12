@@ -44,12 +44,14 @@ function the_table_install () {
           `grading_questions` longtext COMMENT '考试题',
           `questions_answer` longtext COMMENT '考题答案',
           `my_answer` longtext COMMENT '我的答案',
+          `correct_rate` float(3,3) COMMENT '准确率',
           `memory_time` smallint(20) DEFAULT NULL COMMENT '记忆耗时',
           `answer_time` smallint(20) DEFAULT NULL COMMENT '回答耗时',
           `submit_type` tinyint(2) DEFAULT NULL COMMENT '提交方式 1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切换,系统提交',
           `leave_page_time` text COMMENT '记录每次离开页面的时间',
           `created_time` datetime DEFAULT NULL,
           `is_true` tinyint(2) DEFAULT '1' COMMENT '成绩真实性 1 真实 2 虚假',
+          `post_id` int(20) DEFAULT NULL COMMENT '文章id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
@@ -307,7 +309,6 @@ function the_table_install () {
           `pay_lowdown` text COMMENT '支付反馈信息',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           `memory_lv` tinyint(2) DEFAULT NULL COMMENT '记忆考级等级',
-          
           `seat_number` smallint(10) DEFAULT NULL COMMENT '座位号',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -470,6 +471,7 @@ function the_table_install () {
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           `created_microtime` float(8,5) DEFAULT NULL COMMENT '提交时间毫秒',
           `is_true` tinyint(2) DEFAULT '1' COMMENT '成绩真实性 1 真实 2 虚假',
+          `post_id` int(20) DEFAULT NULL COMMENT '文章id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
