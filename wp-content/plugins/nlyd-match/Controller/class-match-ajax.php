@@ -1927,6 +1927,60 @@ class Match_Ajax
         }
     }
 
+    /**
+     * 删除考级
+     */
+    public function deleteGrading(){
+        $id = intval($_POST['id']);
+        //删除订单 meta 分数
+
+
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        //判断是否是已关闭的比赛(回收站中的)
+        $post = get_post($id);
+        if($post->post_status == 'trash'){
+            global $wpdb;
+            $wpdb->startTrans();
+            //删除post
+            if(!wp_delete_post($id)){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '考级删除失败']);
+            }
+            //删除meta
+            $meta = $wpdb->get_row("SELECT grading_id FROM {$wpdb->prefix}grading_meta WHERE grading_id={$id}");
+            if($meta){
+                $metaBool = $wpdb->delete($wpdb->prefix.'grading_meta',['grading_id' => $id]);
+                if(!$metaBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '考级外键删除失败']);
+                }
+            }
+            //删除订单
+            $order = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}order WHERE match_id={$id} AND order_type=2");
+            if($order){
+                $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id, 'order_type' => 2]);
+                if(!$orderBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '订单删除失败']);
+                }
+            }
+            //删除答题记录
+            $question = $wpdb->get_row("SELECT grading_id FROM {$wpdb->prefix}grading_questions WHERE grading_id={$id}");
+            if($question){
+                $questionBool = $wpdb->delete($wpdb->prefix.'grading_questions', ['grading_id' => $id]);
+                if(!$questionBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '答题记录删除失败']);
+                }
+            }
+            $wpdb->commit();
+            wp_send_json_success(['info' => '考级已删除']);
+
+        }else{
+            wp_send_json_error(['info' => '请先关闭考级']);
+        }
+    }
+
 }
 
 new Match_Ajax();
