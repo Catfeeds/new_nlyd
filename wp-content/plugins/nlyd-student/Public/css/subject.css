@@ -87,6 +87,10 @@ a.disabled-a:hover{
     position: relative;
     width: 100%;
 }
+button.matching-btn:active{
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
 button.matching-btn {
     font: normal normal normal 0.14rem / 0.28rem "PingFang SC"!important;
     color: rgba(116, 116, 116, 1);
