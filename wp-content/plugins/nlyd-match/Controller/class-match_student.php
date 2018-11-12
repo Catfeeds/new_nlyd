@@ -29,10 +29,10 @@ class Match_student {
         }
 
 //        add_menu_page('报名学员', '报名学员', 'match_student', 'match_student',array($this,'studentLists'),'dashicons-businessman',99);
-        add_submenu_page('edit.php?post_type=match','报名学员','报名学员','match_student','match_student',array($this,'studentLists'));
+        add_submenu_page('edit.php?post_type=match','报名选手','报名选手','match_student','match_student',array($this,'studentLists'));
         add_submenu_page('edit.php?post_type=match','个人成绩','个人成绩','match_student_score','match_student-score',array($this,'studentScore'));
         add_submenu_page('edit.php?post_type=match','比赛排名','比赛排名','match_student_ranking','match_student-ranking',array($this,'matchRanking'));
-        add_submenu_page('edit.php?post_type=match','新增报名学员','新增报名学员','match_student_add_student','match_student-add_student',array($this,'addStudent'));
+        add_submenu_page('edit.php?post_type=match','新增报名选手','新增报名选手','match_student_add_student','match_student-add_student',array($this,'addStudent'));
         add_submenu_page('edit.php?post_type=match','奖金明细','奖金明细','match_student_bonus','match_student-bonus',array($this,'match_bonus'));
 //        add_submenu_page('match_student','脑力健将','脑力健将','administrator','match_student-brainpower',array($this,'brainpower'));
     }
@@ -463,7 +463,8 @@ class Match_student {
 
                 </p>
 
-                <input type="hidden" id="_wpnonce" name="_wpnonce" value="5ce30f05fd"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
+                <input type="hidden" id="_wpnonce" name="_wpnonce" value="5ce30f05fd"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+                <div class="top">
 
                     <style type="text/css">
                         #op1 a, #op2 a{
@@ -529,7 +530,7 @@ class Match_student {
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="match_questions" class="manage-column column-match_questions">比赛考题</th>
+                        <th scope="col" id="match_questions" class="manage-column column-match_questions column-primary">比赛考题</th>
                         <th scope="col" id="questions_answer" class="manage-column column-questions_answer">考题答案</th>
                         <th scope="col" id="my_answer" class="manage-column column-my_answer">我的答案</th>
                         <th scope="col" id="is_correct" class="manage-column column-is_correct">是否正确</th>
@@ -565,7 +566,10 @@ class Match_student {
 
                                 <th scope="row" class="check-column">
                                 </th>
-                                <td class="role column-match_questions" data-colname="比赛考题"><?=$match_question?></td>
+                                <td class="role column-match_questions column-primary" data-colname="比赛考题">
+                                    <?=$match_question?>
+                                    <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                                </td>
 
                                 <?php if($data['project_alias'] == 'wzsd'){ ?>
 
@@ -632,7 +636,7 @@ class Match_student {
                             <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-match_questions">比赛考题</th>
+                        <th scope="col" class="manage-column column-match_questions column-primary">比赛考题</th>
                         <th scope="col" class="manage-column column-questions_answer">考题答案</th>
                         <th scope="col" class="manage-column column-my_answer">我的答案</th>
                         <th scope="col" class="manage-column column-is_correct">是否正确</th>
@@ -2498,7 +2502,7 @@ class Match_student {
         }
         ?>
         <div class="wrap">
-            <h1 id="add-new-user"><?=$post->post_title?>-添加报名学员</h1>
+            <h1 id="add-new-user"><?=$post->post_title?>-添加报名选手</h1>
 
             <div id="ajax-response"></div>
 
@@ -2544,7 +2548,7 @@ class Match_student {
                         <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                         <input id="cb-select-all-1" type="checkbox">
                     </td>
-                    <th scope="col" id="pruser_loginoject" class="manage-column column-user_login">用户名</th>
+                    <th scope="col" id="pruser_loginoject" class="manage-column column-user_login column-primary">用户名</th>
                     <th scope="col" id="user_ID" class="manage-column column-user_ID">学员ID</th>
                     <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
                     <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
@@ -2563,7 +2567,10 @@ class Match_student {
 
                             <input type="checkbox" name="ids[]" class="subscriber" value="">
                         </th>
-                        <td class="role column-user_login" data-colname="用户名"><?=$row['user_login']?></td>
+                        <td class="role column-user_login column-primary" data-colname="用户名">
+                            <?=$row['user_login']?>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
 
                         <td class="role column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
                         <td class="role column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
@@ -2584,7 +2591,7 @@ class Match_student {
                         <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                         <input id="cb-select-all-2" type="checkbox">
                     </td>
-                    <th scope="col" class="manage-column column-user_login">用户名</th>
+                    <th scope="col" class="manage-column column-user_login column-primary">用户名</th>
                     <th scope="col" class="manage-column column-user_ID">学员ID</th>
                     <th scope="col" class="manage-column column-real_name">姓名</th>
                     <th scope="col" class="manage-column column-mobile">手机</th>
