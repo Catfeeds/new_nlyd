@@ -134,6 +134,7 @@ jQuery(function($) {
     var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len="<?=$memory_type['length']?>";//多少个字符
     init_question(que_len,_show,question_type)
+    console.log(questions_answer)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
@@ -288,8 +289,8 @@ jQuery(function($) {
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
         }
-        /*console.log(data)
-        return false*/
+        console.log(data)
+        /*return false*/
         var leavePage= $.GetSession('leavePage','1');
             if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
