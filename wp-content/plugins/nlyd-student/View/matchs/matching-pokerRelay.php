@@ -12,7 +12,7 @@
                     </div> -->
                     <div class="matching-row layui-row have-submit">
                         <div class="c_black match_info_font"><div><?php printf(__('第%s轮', 'nlyd-student'), $match_more_cn)?></div></div>
-                        <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div>
+                        <!-- <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div> -->
                         <div class="c_blue match_info_font">
                             <div>
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
