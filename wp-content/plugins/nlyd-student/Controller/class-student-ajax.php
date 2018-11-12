@@ -1664,7 +1664,7 @@ class Student_Ajax
                     //验证格式
                     if(empty($_POST['nationality']) || empty($_POST['nationality_pic'])) wp_send_json_error(array('info'=>__('国籍必选', 'nlyd-student')));
                     if(empty($_POST['meta_val']['real_name'])) wp_send_json_error(array('info'=>__('真实姓名不能为空', 'nlyd-student')));
-                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能玩为空', 'nlyd-student')));
+                    if(empty($_POST['meta_val']['real_ID'])) wp_send_json_error(array('info'=>__('证件号不能为空', 'nlyd-student')));
                     $user_id = $wpdb->get_var("select user_id from {$wpdb->prefix}usermeta where meta_value like '%{$_POST['meta_val']['real_ID']}%'");
                     if($user_id > 0 && $user_id != $current_user->ID){
                         wp_send_json_error(array('info'=>__('该证件号已被使用', 'nlyd-student')));
@@ -3877,7 +3877,7 @@ class Student_Ajax
                 }
                 break;
         }
-
+        //zlin_user_skill_rank 技能表
 
         $insert = array(
             'user_id'=>$current_user->ID,
