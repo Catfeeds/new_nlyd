@@ -356,6 +356,7 @@ jQuery(function($) {
     $('.selectBottom').on('click','.cancel',function(){
         $(this).parents('.selectBottom').removeClass('selectBottom-show');
     })
+    <?php if($match['project_alias'] == 'memory'):?>
     var sexSelectData= [
         {id:"1",value:'<?=__('记忆一级', 'nlyd-student')?>'},
         {id:"2",value:'<?=__('记忆二级', 'nlyd-student')?>'},
@@ -383,6 +384,6 @@ jQuery(function($) {
             $('#trigger4').val(data[0]['id'])
         }
     });
-
+    <?php endif;?>
 })
 </script>

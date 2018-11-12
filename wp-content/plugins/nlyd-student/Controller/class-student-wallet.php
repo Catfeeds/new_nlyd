@@ -76,41 +76,22 @@ class Student_Wallet extends Student_Home
      * 默认公用js/css引入
      */
     public function scripts_default(){
-
+        wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
+        wp_enqueue_style( 'my-student-userCenter' );
         if($this->action=='index'){//我的钱包
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-myWallet', student_css_url.'myWallet.css',array('my-student') );
+            wp_register_style( 'my-student-myWallet', student_css_url.'wallet/myWallet.css',array('my-student') );
             wp_enqueue_style( 'my-student-myWallet' );
         }
         if($this->action=='balanceWater'){//余额收支记录
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-balanceWater', student_css_url.'balanceWater.css',array('my-student') );
+            wp_register_style( 'my-student-balanceWater', student_css_url.'wallet/balanceWater.css',array('my-student') );
             wp_enqueue_style( 'my-student-balanceWater' );
         }
-        if($this->action=='makeCash'){//提现
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-makeCash', student_css_url.'makeCash.css',array('my-student') );
-            wp_enqueue_style( 'my-student-makeCash' );
-        }
         if($this->action=='coinWaterList'){//更多脑币记录
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-coinWaterList', student_css_url.'coinWaterList.css',array('my-student') );
+            wp_register_style( 'my-student-coinWaterList', student_css_url.'wallet/coinWaterList.css',array('my-student') );
             wp_enqueue_style( 'my-student-coinWaterList' );
         }
-        if($this->action=='bindCard'){//绑定银行卡
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-bindCard', student_css_url.'bindCard.css',array('my-student') );
-            wp_enqueue_style( 'my-student-bindCard' );
-        }
         if($this->action=='makeCashType'){//提现方式
-            wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
-            wp_enqueue_style( 'my-student-userCenter' );
-            wp_register_style( 'my-student-makeCashType', student_css_url.'makeCashType.css',array('my-student') );
+            wp_register_style( 'my-student-makeCashType', student_css_url.'wallet/makeCashType.css',array('my-student') );
             wp_enqueue_style( 'my-student-makeCashType' );
         }
     }

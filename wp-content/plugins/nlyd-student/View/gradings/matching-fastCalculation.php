@@ -56,7 +56,6 @@
         </div>           
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 
 <script>
 jQuery(function($) {
@@ -73,9 +72,9 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    var _match_id=1;
-    var _project_id=1;
-    var _match_more=1;
+    var _grad_id=$.Request('grad_id');
+    var _grad_type=$.Request('grad_type');
+    var _type=$.Request('type');
     var even_add_time = 180; //连加
     var add_and_subtract_time = 180; //加减
     var wax_and_wane_time = 180; //乘除
@@ -91,7 +90,7 @@ jQuery(function($) {
 
     var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
-    if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+    if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
         isMatching=true;
         ajaxData=grade_question['ajaxData'];
         level=grade_question['level'];
@@ -380,9 +379,9 @@ jQuery(function($) {
         end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
         var sessionData={
             ajaxData:ajaxData,
-            match_id:_match_id,
-            project_id:_project_id,
-            match_more:_match_more,
+            grad_id:_grad_id,
+            grad_type:_grad_type,
+            type:_type,
             level:level,
             n_type:n_type,
             nextBtn_click:nextBtn_click,
@@ -520,20 +519,15 @@ jQuery(function($) {
             // })
             // isSubmit=true;
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
-                project_alias:'zxss',
-                project_more_id:$.Request('project_more_id'),
-
-                my_answer:ajaxData,
-                surplus_time:time,
+                grading_id:_grad_id,
+                grading_type:_grad_type,
+                questions_type:_type,
+                action:'grading_answer_submit',
+                my_answer:my_answer,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -569,7 +563,7 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
+                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }

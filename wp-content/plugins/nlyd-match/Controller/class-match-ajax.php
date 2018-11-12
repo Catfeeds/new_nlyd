@@ -1881,6 +1881,106 @@ class Match_Ajax
         else wp_send_json_error(['info' => '删除失败']);
     }
 
+    /**
+     * 加入考级选手
+     */
+    public function joinGradingMember(){
+        $grading_id = isset($_POST['grading_id']) ? intval($_POST['grading_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        if($grading_id < 1 || $user_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        //是否已存在订单
+        $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}order WHERE match_id='{$grading_id}' AND user_id='{$user_id}' AND order_type=2 AND pay_status IN(2,3,4)");
+        if($id) wp_send_json_error(['info' => '该用户已存在考级,请勿重复加入!']);
+
+        $orderInsertData = [
+            'user_id' => $user_id,
+            'match_id'=>$grading_id,
+            'cost'=> 0,
+//            'fullname'=>$addressRes['fullname'],
+//            'telephone'=>$addressRes['telephone'],
+//            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
+            'order_type'=>2,
+            'pay_status'=>4,
+            'created_time'=>get_time('mysql'),
+        ];
+
+
+        //开启事务
+        $wpdb->startTrans();
+        $insertRes = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
+
+        if(!$insertRes){
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '加入失败!']);
+            return;
+        }
+        //生成流水号
+        $serialnumber = createNumber($user_id,$wpdb->insert_id);
+        $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
+        if($updateRes){
+            $wpdb->commit();
+            wp_send_json_success(['info' => '加入成功!']);
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '加入失败!']);
+        }
+    }
+
+    /**
+     * 删除考级
+     */
+    public function deleteGrading(){
+        $id = intval($_POST['id']);
+        //删除订单 meta 分数
+
+
+        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        //判断是否是已关闭的比赛(回收站中的)
+        $post = get_post($id);
+        if($post->post_status == 'trash'){
+            global $wpdb;
+            $wpdb->startTrans();
+            //删除post
+            if(!wp_delete_post($id)){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '考级删除失败']);
+            }
+            //删除meta
+            $meta = $wpdb->get_row("SELECT grading_id FROM {$wpdb->prefix}grading_meta WHERE grading_id={$id}");
+            if($meta){
+                $metaBool = $wpdb->delete($wpdb->prefix.'grading_meta',['grading_id' => $id]);
+                if(!$metaBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '考级外键删除失败']);
+                }
+            }
+            //删除订单
+            $order = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}order WHERE match_id={$id} AND order_type=2");
+            if($order){
+                $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id, 'order_type' => 2]);
+                if(!$orderBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '订单删除失败']);
+                }
+            }
+            //删除答题记录
+            $question = $wpdb->get_row("SELECT grading_id FROM {$wpdb->prefix}grading_questions WHERE grading_id={$id}");
+            if($question){
+                $questionBool = $wpdb->delete($wpdb->prefix.'grading_questions', ['grading_id' => $id]);
+                if(!$questionBool){
+                    $wpdb->rollback();
+                    wp_send_json_error(['info' => '答题记录删除失败']);
+                }
+            }
+            $wpdb->commit();
+            wp_send_json_success(['info' => '考级已删除']);
+
+        }else{
+            wp_send_json_error(['info' => '请先关闭考级']);
+        }
+    }
+
 }
 
 new Match_Ajax();

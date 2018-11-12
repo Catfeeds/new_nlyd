@@ -71,6 +71,10 @@ class Student_Home
                 $user_info['user_type'] = __('教练', 'nlyd-student');
                 $user_info['user_roles'] = 'editor';
                 break;
+            case 'gmanager':
+                $user_info['user_type'] = __('普通管理员', 'nlyd-student');
+                $user_info['user_roles'] = 'gmanager';
+                break;
             default:
                 $user_info['user_type'] = __('学 员', 'nlyd-student');
                 break;

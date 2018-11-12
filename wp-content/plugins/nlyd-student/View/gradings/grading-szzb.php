@@ -118,7 +118,6 @@
         </div>
     </div>
 </div>
-<input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
@@ -126,9 +125,9 @@ jQuery(function($) {
     var questions_answer=[];//题目
     //var question_type=1;
     var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
-    var _match_id=1;
-    var _project_id=2;
-    var _match_more=3;
+    var _grad_id=$.Request('grad_id');
+    var _grad_type=$.Request('grad_type');
+    var _type=$.Request('type');
     var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
     var sys_second=ready_time;
     var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
@@ -155,9 +154,9 @@ jQuery(function($) {
         sys_second=answer_time;
         var endTime=$.GetEndTime(answer_time);//结束时间
         var sessionData={
-            match_id:_match_id,
-            project_id:_project_id,
-            match_more:_match_more,
+            grad_id:_grad_id,
+            grad_type:_grad_type,
+            type:_type,
             question_type:question_type,
             endTime:endTime,
             _show:2,
@@ -208,9 +207,9 @@ jQuery(function($) {
                     sys_second=answer_time
                     var endTime=$.GetEndTime(answer_time);//结束时间
                     var sessionData={
-                        match_id:_match_id,
-                        project_id:_project_id,
-                        match_more:_match_more,
+                        grad_id:_grad_id,
+                        grad_type:_grad_type,
+                        type:_type,
                         question_type:question_type,
                         endTime:endTime,
                         _show:2,
@@ -227,7 +226,7 @@ jQuery(function($) {
     } 
     function init_question(question_leng,_show,question_type) {//初始化题目
         var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['match_id']===_match_id && grade_question['project_id']===_project_id && grade_question['match_more']===_match_more){
+        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             questions_answer=grade_question['questions_answer'];
             question_type=grade_question['question_type']
             _show=grade_question['_show']
@@ -243,9 +242,9 @@ jQuery(function($) {
                 questions_answer.push(num)
             }
             var sessionData={
-                match_id:_match_id,
-                project_id:_project_id,
-                match_more:_match_more,
+                grad_id:_grad_id,
+                grad_type:_grad_type,
+                type:_type,
                 question_type:question_type,
                 _show:_show,
                 endTime:endTime,
@@ -280,9 +279,9 @@ jQuery(function($) {
             my_answer.push(answer)
         })
         var data={
-                grading_id:$.Request('grad_id'),
-                grading_type:$.Request('grad_type'),
-                questions_type:$.Request('type'),
+                grading_id:_grad_id,
+                grading_type:_grad_type,
+                questions_type:_type,
                 grading_questions:questions_answer,
                 questions_answer:questions_answer,
                 action:'grading_answer_submit',
@@ -293,7 +292,7 @@ jQuery(function($) {
         console.log(data)
         /*return false*/
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['match_id']===_match_id && leavePage['project_id']===_project_id && leavePage['match_more']===_match_more){
+            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -328,7 +327,7 @@ jQuery(function($) {
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/match_id/'.$_GET['match_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/match_more/')?>"+_match_more;
+                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }

@@ -73,9 +73,9 @@ class Match_student {
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$match->post_title?>-学员列表</h1>
+            <h1 class="wp-heading-inline"><?=$match->post_title?>-选手列表</h1>
 
-            <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名学员</a>
+            <a href="admin.php?page=match_student-add_student&match_id=<?=$match->ID?>" class="page-title-action">添加报名选手</a>
 
             <hr class="wp-header-end">
             <style type="text/css">
@@ -94,7 +94,8 @@ class Match_student {
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="9783a8b758"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
                 <div class="tablenav top">
                     <a href="?page=download&action=matchStudent&match_id=<?=$match->ID?>"><div class="button" >导出成员</div></a>
-                    <div class="tablenav-pages"><span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <div class="tablenav-pages">
+                        <span class="displaying-num"><?=$count['count']?>个项目</span>
                         <?=$pageHtml?>
                     </div>
 

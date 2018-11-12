@@ -34,8 +34,8 @@ if(!class_exists('MatchController')){
         public function Yct_Row_actions( $actions, $post )
         {
 //            unset($actions['inline hide-if-no-js']);
-            if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem')) ){
-                if($this->post_type == 'match') {
+            if(in_array($this->post_type,array('match','genre','match-category','project','match','question','problem','grading')) ){
+                if($this->post_type == 'match' || $this->post_type == 'grading') {
                     unset($actions['trash']);
                     unset($actions['delete']);
                 }
@@ -109,10 +109,6 @@ if(!class_exists('MatchController')){
 
             }
 
-            if(isset($_GET['page']) && $_GET['page'] == 'download'){
-                include_once(match_controller_path.'class-download.php');
-            }
-
             include_once(match_controller_path.'class-match.php');
             $this->match = new Match();
 
@@ -142,7 +138,11 @@ if(!class_exists('MatchController')){
 
             if($this->post_type == 'grading'){
                 include_once(match_controller_path.'class-grading.php');
-                new Grading();
+            }
+
+            //导出
+            if(isset($_GET['page']) && $_GET['page'] == 'download'){
+                include_once(match_controller_path.'class-download.php');
             }
 
 
@@ -692,8 +692,8 @@ if(!class_exists('MatchController')){
                 $columns['grading_status'] = '状态';
                 $columns['author'] = '发布人';
                 $columns['grading_students'] = '报名人数';
-                $columns['grading_ranking'] = '比赛排名';
-                $columns['grading_brainpower'] = '脑力健将';
+//                $columns['grading_ranking'] = '比赛排名';
+//                $columns['grading_brainpower'] = '脑力健将';
                 $columns['grading_times'] = '考级时间';
 //                $columns['time_slot'] = '报名结束时间';
                 $columns['grading_time_slot'] = '报名时间段';
@@ -849,18 +849,18 @@ if(!class_exists('MatchController')){
                 case 'grading_students':
                     //报名人数
                     $student_num = $wpdb->get_var('SELECT count(id) AS num FROM '.$wpdb->prefix.'order WHERE match_id='.$id.' AND pay_status IN(2,3,4) AND order_type=2');
-                    echo '<a href="?post_type=grading&page=grading_student&grading_id='.$id.'" class="">'.$student_num.'人</a>';
+                    echo '<a href="?post_type=grading&page=grading-students&grading_id='.$id.'" class="">'.$student_num.'人</a>';
                     break;
-                case 'grading_ranking':
-                    echo '<a href="admin.php?page=grading_student-ranking&grading_id='.$id.'">查看排名</a>';
-                    break;
-                case 'grading_brainpower':
-                    if($gradingRow['match_status'] == -3){
-                        echo '<a href="admin.php?page=brainpower-join_directory&grading_id='.$id.'">查看名录</a>';
-                    }else{
-                        echo '考级未结束';
-                    }
-                    break;
+//                case 'grading_ranking':
+//                    echo '<a href="admin.php?page=grading_student-ranking&grading_id='.$id.'">查看排名</a>';
+//                    break;
+//                case 'grading_brainpower':
+//                    if($gradingRow['match_status'] == -3){
+//                        echo '<a href="admin.php?page=brainpower-join_directory&grading_id='.$id.'">查看名录</a>';
+//                    }else{
+//                        echo '考级未结束';
+//                    }
+//                    break;
                 case 'grading_times':
                     //考级时间
                     echo $gradingRow['start_time'].'<br/>'.$gradingRow['end_time'];
@@ -1703,6 +1703,8 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=match&page=match_student-add_student'),
                     admin_url('edit.php?post_type=match&page=match_student-bonus'),
                     admin_url('edit.php?post_type=match&page=match_student-ranking'),
+                    admin_url('edit.php?post_type=grading&page=grading-students'),
+                    admin_url('edit.php?post_type=grading&page=add-grading-students'),
                 ],
             ]);
         }

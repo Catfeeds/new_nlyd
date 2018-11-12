@@ -16,7 +16,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="message-row">
                     <div class="message-title">
-                        <span class="accept-name"><?=$row->title?></span>
+                        <span class="c_black"><?=$row->title?></span>
                         
                         <span class="message-time"><?=$row->message_time?></span>
                     </div>

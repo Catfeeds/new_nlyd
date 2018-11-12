@@ -1,43 +1,10 @@
 
-.blue-font{
-    color: rgba(67, 148, 249, 1);
-}
+
 .matching-fast{
     padding-top: 40px;
     width: 90%;
     margin: auto;
 }
-/* .fast-item{
-    width: 100%;
-    display: table;
-    height: 40px;
-    border: 1px solid rgba(67, 148, 249, 1);
-    border-radius: 5px; 
-    font-size: 0.16rem;
-    color: rgba(67, 148, 249, 1); 
-    text-align: center;
-    line-height: 20px;
-    margin-bottom: 10px;
-}
-.fast-item div{
-    height: 100%;
-    display: table-cell;
-    vertical-align: middle; 
-}
-.answer{
-    border: 1px solid #747474;
-    color: #747474;
-}
-.error-fast{
-    border: 1px solid #f9a9b8;
-    background: #f9a9b8;
-    color: #fa5f68;
-}
-.right-fast{
-    border: 1px solid #b7edd4;
-    background: #b7edd4;
-    color: #0a8406;
-} */
 .matching-keyboard-row:last-child .matching-key{
     width: -webkit-calc(100% / 3 - 8px);
     width: calc(100% / 3 - 8px);

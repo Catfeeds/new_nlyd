@@ -812,9 +812,9 @@ class Student_Gradings extends Student_Home
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
-        wp_enqueue_script( 'student-leavePage' );
-        wp_localize_script('student-leavePage','_leavePage',[
+        wp_register_script( 'student-grade_leavePage',student_js_url.'matchs/grade_leavePage.js',array('jquery'), leo_student_version  );
+        wp_enqueue_script( 'student-grade_leavePage' );
+        wp_localize_script('student-grade_leavePage','_leavePage',[
             'submit'=>__('离开考级页面,自动提交答题','nlyd-student'),
         ]);
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
