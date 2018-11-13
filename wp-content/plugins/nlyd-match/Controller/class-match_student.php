@@ -324,7 +324,7 @@ class Match_student {
         $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
 
         //查询成绩
-        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,
+        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,is_true,
               CASE answer_status 
               WHEN -1 THEN "记忆完成" 
               WHEN 1 THEN "提交" 
@@ -333,10 +333,10 @@ class Match_student {
               WHERE match_id='.$match_id.' AND project_id='.$proId.' AND user_id='.$user_id.' AND match_more='.$current_match_more, ARRAY_A);
         $is_view = true;
         if(!$row){
-            echo '本轮比赛无记录';
+            $msg =  '本轮比赛无记录';
             $is_view = false;
         }elseif ($row['answer_status'] != 1){
-            echo '本轮成绩未提交';
+            $msg =  '本轮成绩未提交';
             $is_view = false;
         }
 
@@ -520,9 +520,17 @@ class Match_student {
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
                 <div><span>成绩:</span> <span> <?=$data['my_score']?></span></div>
-                <div><span>本轮排名:</span> <span> <?=$data['ranking']?></span></div>
+
                 <!--                <div><span>使用时间:</span> <span> --><?//=$data['use_time']?><!--</span></div>-->
                 <div><span>剩余时间:</span> <span> <?=$data['surplus_time']?></span></div>
+                <?php if($row['is_true'] == '1'){ ?>
+                    <div><span>本轮排名:</span> <span> <?=$data['ranking']?></span></div>
+                <?php }elseif($row){ ?>
+                    <div style="color: #bf0000">本轮成绩无效</div>
+                <?php } ?>
+                <?php if(!$is_view){ ?>
+                    <div style="color: #bf0000"><?=$msg?></div>
+                <?php } ?>
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>
