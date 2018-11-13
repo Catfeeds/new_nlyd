@@ -590,6 +590,10 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
+    public function test(){//考级成绩
+        $view = student_view_path.CONTROLLER.'/test.php';
+        load_view_template($view);
+    }
 
 
     /**
@@ -855,6 +859,10 @@ class Student_Gradings extends Student_Home
             }elseif($_GET['type'] == 'cy'){
 
             }
+        }
+        if(ACTION == 'test'){
+            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
+            wp_enqueue_style( 'my-student-subject' );
         }
         if(ACTION == 'answerLog'){//
             if($_GET['type'] == 'sz'){

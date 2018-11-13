@@ -62,9 +62,7 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
-    //var question_type="<?//=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>//";//1，数字.2,字母
     var questions_answer=[];//题目
-    var question_type=1;
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
@@ -204,7 +202,7 @@ jQuery(function($) {
             }
         })
     })
-    $('.matching-keyboard').eq(question_type-1).find('.number').each(function(){//数字键盘
+    $('.matching-keyboard .number').each(function(){//数字键盘
         var _this=$(this);
         new AlloyFinger(_this[0], {
             touchStart: function () {
