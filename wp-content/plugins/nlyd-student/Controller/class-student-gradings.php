@@ -204,7 +204,7 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
-        //print_r($memory_type);
+        print_r($memory_type);
         $row['memory_type'] = $memory_type;
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
@@ -820,9 +820,23 @@ class Student_Gradings extends Student_Home
 
         if(ACTION == 'initialMatch'){//
 
-            if(in_array($_GET['type'],array('cy','yzl'))){//中文词语记忆
+            if(in_array($_GET['type'],array('sz','cy','yzl'))){//中文词语记忆
+
                 wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-numberBattle' );
+            }
+
+            if($_GET['type'] == 'sz' ){//进入数字争霸准备页面
+                wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
+                wp_enqueue_style( 'my-student-numberBattleReady' );
+            }
+            if($_GET['type'] == 'tl' ) {//进入听力
+                wp_register_style('my-student-matching-numberBattle', student_css_url . 'matching-numberBattle.css', array('my-student'));
+                wp_enqueue_style('my-student-matching-numberBattle');
+            }
+            if($_GET['type'] == 'rm' ) {//人脉信息
+                wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-card' );
             }
         }
 
@@ -841,14 +855,12 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
+
         if(ACTION == 'grading_voice'){
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
-        if(ACTION == 'ready_szzb' ){//进入数字争霸准备页面
-            wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-numberBattleReady' );
-        }
+
         if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );

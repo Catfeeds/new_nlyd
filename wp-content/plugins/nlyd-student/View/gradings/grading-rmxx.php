@@ -59,7 +59,7 @@ jQuery(function($) {
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
-
+    console.log(questions_answer)
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
@@ -142,13 +142,13 @@ jQuery(function($) {
                                 +'<div class="card_phone c_black">'+v.phone+'</div>'
                             +'</div>'
                         +'</div>'
-                var dom1='<div class="matching-card">'
+                var dom1='<div class="matching-card" data-img="'+v.picture+'" >'
                             +'<div class="img-box card_img">'
                                 +'<img class="_img" src="'+window.home_url+'/wp-content/plugins/nlyd-match/upload/people/'+v.picture+'.jpg">'
                             +'</div>'
                             +'<div class="card_detail layui-bg-white">'
                                 +'<div class="card_name c_black pd_"><input class="matching-number-input" type="text"></div>'
-                                +'<div class="card_phone c_black pd_"><input class="matching-number-input" type="text"></div>'
+                                +'<div class="card_phone c_black pd_"><input class="matching-number-input" type="tel"></div>'
                             +'</div>'
                         +'</div>'
                 
@@ -187,7 +187,7 @@ jQuery(function($) {
                             +'<div class="card_phone c_black">'+phone+'</div>'
                         +'</div>'
                     +'</div>'
-                var dom1='<div class="matching-card">'
+                var dom1='<div class="matching-card" data-img="'+picture+'" >'
                     +'<div class="img-box card_img">'
                         +'<img class="_img" src="'+window.home_url+'/wp-content/plugins/nlyd-match/upload/people/'+picture+'.jpg">'
                     +'</div>'
@@ -231,9 +231,13 @@ jQuery(function($) {
         //         'visibility': 'visible',
         //     })
         var my_answer=[];
-        $('.matching-number-zoo .matching-number').each(function(){
-            var answer=$(this).text();
-            my_answer.push(answer)
+        $('.match_zoo .matching-card').each(function(){
+            var _this=$(this);
+            var picture=_this.attr('data-img');
+            var name=_this.find('.card_name input').val();
+            var phone=_this.find('.card_phone input').val();
+            var item={name:name,picture:picture,phone:phone};
+            my_answer.push(item)
         })
         var data={
             grading_id:_grad_id,

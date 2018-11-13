@@ -27,6 +27,9 @@ switch ($project_alias){
             case 'tl': //听力记忆
                 require_once student_view_path.CONTROLLER.'/grading-voice.php';
                 break;
+            case 'rm': //人脉信息
+                require_once student_view_path.CONTROLLER.'/grading-rmxx.php';
+                break;
         }
         break;
     case 'reading':    //速读
