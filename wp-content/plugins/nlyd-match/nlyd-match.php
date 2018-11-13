@@ -456,8 +456,6 @@ if(!class_exists('MatchController')){
                         return false;
                     }
 
-
-
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
@@ -619,6 +617,10 @@ if(!class_exists('MatchController')){
                                         <?php foreach ($questionTypeArr as $question){ ?>
                                             <option value="<?=$question['term_id']?>"><?=$question['name']?></option>
                                         <?php } ?>
+                                    </select>
+                                    <select name="post_type" id="">
+                                        <option value="publish">发布</option>
+                                        <option value="draft">草稿</option>
                                     </select>
                                 </td>
                             </tr>
