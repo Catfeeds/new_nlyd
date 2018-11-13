@@ -3867,12 +3867,17 @@ class Student_Ajax
             case 'memory':
                 switch ($_POST['questions_type']){
                     case 'sz':
+                    case 'cy':
                         if(!empty($_POST['my_answer'])){
 
                             $len = count($_POST['questions_answer']);
                             $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
                             $correct_rate = ($len-$error_len)/$len;
                         }
+                        break;
+                    case 'yzl':
+                        print_r(pi());
+                        die;
                         break;
                 }
                 break;

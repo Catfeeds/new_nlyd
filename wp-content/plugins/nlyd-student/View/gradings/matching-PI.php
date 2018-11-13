@@ -133,6 +133,8 @@ jQuery(function($) {
             grading_type:_grad_type,
             questions_type:_type,
             action:'grading_answer_submit',
+            grading_questions:3.14,
+            questions_answer:3.14,
             my_answer:my_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 

@@ -75,7 +75,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 
 ?>
 <!--头部-->
-<?php if(isset($_GET['type'])): ?>
+<?php if(!isset($_GET['type'])): ?>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <?php endif;?>
 <div class="layui-fluid">
@@ -142,11 +142,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 
                     <?php
                     switch ($match_row['questions_type']){
-                        case 'sz':    //数字争霸
+                        case 'sz':    //随机数字
                             require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
                             break;
-                        case 'pkjl':    //扑克接力
-                            require_once student_view_path.CONTROLLER.'/subject-pokerRelay.php';
+                        case 'cy':    //随机词汇
+                            require_once student_view_path.CONTROLLER.'/subject-zwcy.php';
                             break;
                         case 'zxss':    //正向速算
                             require_once student_view_path.CONTROLLER.'/subject-fastCalculation.php';
@@ -169,7 +169,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <?php
                     if($next_count_down > 0):
                 ?>
-                    <div class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
+                    <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
                 <?php if(empty($next_project)){ ?>
                     <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>

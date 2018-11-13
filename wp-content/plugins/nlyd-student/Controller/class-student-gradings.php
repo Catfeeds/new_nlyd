@@ -817,31 +817,26 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
-        if(ACTION == 'initialMatch'){//
-            if($_GET['type'] == 'sz'){
 
-                wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
-                wp_enqueue_style( 'my-student-numberBattleReady' );
+        if(ACTION == 'initialMatch'){//
+
+            if(in_array($_GET['type'],array('cy','yzl'))){//中文词语记忆
                 wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-numberBattle' );
-            }elseif($_GET['type'] == 'cy'){
-
             }
         }
-        if(ACTION == 'test'){
+
+        if(ACTION == 'answerLog'){//
             wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
             wp_enqueue_style( 'my-student-subject' );
+
         }
-        if(ACTION == 'answerLog'){//
-            if($_GET['type'] == 'sz'){
 
-                wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
-                wp_enqueue_style( 'my-student-subject' );
+        /*if(ACTION == 'test'){
+            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
+            wp_enqueue_style( 'my-student-subject' );
+        }*/
 
-            }elseif($_GET['type'] == 'cy'){
-
-            }
-        }
         if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );

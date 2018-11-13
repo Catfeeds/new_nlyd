@@ -261,11 +261,20 @@ p.question{
     padding-bottom: 1px;
     color: #262626;
     text-align: center;
+    height: 30px;
 }
-.your-answer .matching-number-match-word.active{
+.matching-number-match-word span{
+    display: block;
+    width: 80%;
+    height: 30px;
+    margin: auto;
+}
+.your-answer .matching-number-match-word.active span{
+    border-bottom: 1px solid #CF1818;
     color: #CF1818;
 }
-.right-answer .matching-number-match-word.active{
+.right-answer .matching-number-match-word.active span{
+    border-bottom: 1px solid #0F940B;
     color: #0F940B;
 }
 /* 人脉信息记忆 */
