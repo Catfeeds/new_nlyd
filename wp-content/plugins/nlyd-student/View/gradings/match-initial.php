@@ -12,20 +12,20 @@ switch ($project_alias){
     case 'memory':    //速记
         switch ($_GET['type']){
             case 'sz': //数字记忆
-            case 'zm': //数字记忆
+            case 'zm': //字母记忆
                 require_once student_view_path.CONTROLLER.'/grading-szzb.php';
                 break;
             case 'cy': //词语记忆
-                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                require_once student_view_path.CONTROLLER.'/grading-zwcy.php';
                 break;
             case 'yzl': //圆周率记忆
-                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                require_once student_view_path.CONTROLLER.'/matching-PI.php';
                 break;
             case 'wz': //文章记忆
-                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                require_once student_view_path.CONTROLLER.'/ready-reading.php';
                 break;
             case 'tl': //听力记忆
-                require_once student_view_path.CONTROLLER.'/ready-numberBattle.php';
+                require_once student_view_path.CONTROLLER.'/grading-voice.php';
                 break;
         }
         break;

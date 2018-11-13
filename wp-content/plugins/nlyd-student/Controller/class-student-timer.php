@@ -97,6 +97,7 @@ class Student_Timer
         //var_dump($data);
     }
 
+
     /**
      * 比赛状态自动化
      */

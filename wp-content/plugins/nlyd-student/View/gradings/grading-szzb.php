@@ -123,7 +123,6 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var questions_answer=[];//题目
-    //var question_type=1;
     var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');

@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -41,7 +41,6 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
-    //var question_type="<?//=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>//";//1，数字.2,字母
     var questions_answer=[];//题目
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
@@ -178,8 +177,8 @@ jQuery(function($) {
         //         'visibility': 'visible',
         //     })
         var my_answer=[];
-        $('.matching-number-zoo .matching-number').each(function(){
-            var answer=$(this).text();
+        $('.matching-number-input').each(function(){
+            var answer=$(this).val();
             my_answer.push(answer)
         })
         var data={

@@ -405,18 +405,6 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        //获取当前项目
-        $project = $this->get_grading_parameter($order->memory_lv);
-        $keys = array_keys($project);
-        $index = array_search($row['questions_type'],$keys)+1;
-
-        //获取接下来进行项目
-
-        if(empty($match_more)){
-            $this->get_404(__('数据错误', 'nlyd-student'));
-            return;
-        }
-
         $match_questions = json_decode($row['match_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
@@ -484,58 +472,38 @@ class Student_Gradings extends Student_Home
         //print_r($match_more);
 
         //请求接下来的比赛项目
-        $next_project_more = $this->get_match_project_more($_GET['match_id']);
+        //获取当前项目
+        $project = $this->get_grading_parameter($order->memory_lv);
+        $keys = array_keys($project);
+        $index = array_search($row['questions_type'],$keys)+1;
+        $next_index = $keys[$index];
+        $next_project = $project[$next_index];
 
-        /*print_r($next_project_more);
-        print_r($match_more);*/
-        $ranking = '';
-        if(strtotime($match_more['end_time']) <= get_time() && $match_more['project_alias'] != $next_project_more['project_alias']){
-            //获取本轮排名
-            $sql = "select user_id from {$wpdb->prefix}match_questions where match_id = {$match_more['match_id']} and project_id = {$match_more['project_id']} and match_more = {$match_more['more']} group by my_score desc,surplus_time desc";
-            $rows = $wpdb->get_results($sql,ARRAY_A);
-
-            $ranking = array_search($current_user->ID,array_column($rows,'user_id'))+1;
-        }
-
-        if(!empty($next_project_more) && empty($this->end_project)){
-
-            if($next_project_more['project_alias'] != $match_more['project_alias']){
-                $next_project = 'y';
-            }else{
-                $next_project = 'n';
+        //如果为当前考级最后一项就计算考核结果
+        if(empty($next_project)){
+            //http://127.0.0.1/nlyd/gradings/initialMatch/grad_id/882/grad_type/memory/type/sz/memory_lv/1/
+            $next_project_url = home_url();
+        }else{
+            $next_project['title'] = $this->get_memory_type_title($next_index);
+            $next_project_url = home_url('gradings/initialMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/type/'.$next_index);
+            if($order->memory_lv > 0 ){
+                $next_project_url .= '/memory_lv/'.$order->memory_lv;
             }
-
-            $next_project_url = home_url(CONTROLLER.'/initialMatch/match_id/'.$next_project_more['match_id'].'/project_alias/'.$next_project_more['project_alias'].'/project_more_id/'.$next_project_more['id']);
         }
-        if($this->end_project == 'y'){
-
-            $next_project = '';
-            $next_project_url = home_url(CONTROLLER.'/record/match_id/'.$match_more['match_id']);
-        }
-
+        //print_r($next_project);
         $data = array(
-            'next_count_down'=> !empty($next_project) ? strtotime($next_project_more['start_time'])-get_time() : 0,
             'next_project'=>$next_project,
-            'project_alias'=>$row['project_alias'],
+            'next_count_down'=>300,
             'str_len'=>$len,
-            'match_more_cn'=>$match_more['more'],
             'match_more'=>$this->match_more,
             'success_length'=>$success_len,
-            'use_time'=>$match_more['use_time']*60-$row['surplus_time'],
-            'surplus_time'=>$row['surplus_time'],
-            'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
-            'ranking'=>$ranking,
+            'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
             'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
-            'my_score'=>$row['my_score'],
-            'project_title'=>$match_more['project_title'],
-            'match_title'=>$this->match_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
-            'wait_url' =>home_url('matchs/matchWaitting/match_id/'.$match_more['match_id']),
-            'record_url'=>home_url('matchs/record/match_id/'.$match_more['match_id'].'/last/answerLog'),
             'match_row'=>$row,
         );
         //print_r($data);
@@ -588,6 +556,10 @@ class Student_Gradings extends Student_Home
     }
     public function record(){//考级成绩
         $view = student_view_path.CONTROLLER.'/record.php';
+        load_view_template($view);
+    }
+    public function test(){//考级成绩
+        $view = student_view_path.CONTROLLER.'/test.php';
         load_view_template($view);
     }
 
@@ -784,7 +756,7 @@ class Student_Gradings extends Student_Home
     public function get_grading_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,correct_rate,is_true,
+        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,correct_rate,is_true,
                     case grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'
@@ -845,27 +817,26 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
-        if(ACTION == 'initialMatch'){//
-            if($_GET['type'] == 'sz'){
 
-                wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
-                wp_enqueue_style( 'my-student-numberBattleReady' );
+        if(ACTION == 'initialMatch'){//
+
+            if(in_array($_GET['type'],array('cy','yzl'))){//中文词语记忆
                 wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-numberBattle' );
-            }elseif($_GET['type'] == 'cy'){
-
             }
         }
+
         if(ACTION == 'answerLog'){//
-            if($_GET['type'] == 'sz'){
+            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
+            wp_enqueue_style( 'my-student-subject' );
 
-                wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
-                wp_enqueue_style( 'my-student-subject' );
-
-            }elseif($_GET['type'] == 'cy'){
-
-            }
         }
+
+        /*if(ACTION == 'test'){
+            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
+            wp_enqueue_style( 'my-student-subject' );
+        }*/
+
         if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
