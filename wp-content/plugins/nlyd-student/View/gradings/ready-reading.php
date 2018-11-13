@@ -44,7 +44,6 @@ jQuery(function($) {
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
     })
-    // mTouch('body').on('tap','#complete',function(){//记忆完成
     new AlloyFinger($('#complete')[0], {//阅读完成
         tap:function(){
             if(!$('#complete').hasClass('disabled')){
