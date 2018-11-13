@@ -62,7 +62,6 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
-    var questions_answer=[];//题目
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
@@ -71,6 +70,8 @@ jQuery(function($) {
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
     var que_len=100;//多少个字符
+    var que_PI="14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196"
+    var questions_answer=que_PI.substring(0,que_len)
     init_question(que_len)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
@@ -133,8 +134,8 @@ jQuery(function($) {
             grading_type:_grad_type,
             questions_type:_type,
             action:'grading_answer_submit',
-            grading_questions:3.14,
-            questions_answer:3.14,
+            grading_questions:questions_answer,
+            questions_answer:questions_answer,
             my_answer:my_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
