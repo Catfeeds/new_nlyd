@@ -389,7 +389,8 @@ class Student_Matchs extends Student_Home
                 //获取文章速读考题
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
-                        where a.slug = '{$locale}-match-question' ";
+                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
+                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' ";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
                 //print_r($sql);
                 if(empty($rows[0]['term_taxonomy_id'])){
@@ -1379,7 +1380,7 @@ class Student_Matchs extends Student_Home
     public function get_match_meta($match_id,$find='a.*,b.post_title'){
 
         global $wpdb;
-        $sql = " select {$find},a.match_notice_url,
+        $sql = " select {$find},a.match_notice_url,b.post_content,
                    DATE_FORMAT(a.match_start_time,'%Y-%m-%d %H:%i') match_start_time, 
                    DATE_FORMAT(a.match_end_time,'%Y-%m-%d %H:%i') match_end_time, 
                    DATE_FORMAT(a.entry_end_time,'%Y-%m-%d %H:%i') entry_end_time
