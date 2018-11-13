@@ -1715,6 +1715,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=match&page=match_student-ranking'),
                     admin_url('edit.php?post_type=grading&page=grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-students'),
+                    admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
                 ],
             ]);
         }
