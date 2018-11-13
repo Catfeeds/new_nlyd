@@ -117,7 +117,7 @@ class Grading
                             <strong><?=isset($use_real_name['real_name']) ? $use_real_name['real_name'] : ''?></strong>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId)?>">答题记录</a>  </span>
+                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'])?>">答题记录</a>  </span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
@@ -320,45 +320,44 @@ class Grading
     public function gradingStudentScore(){
 
         $gradingId = intval($_GET['grading_id']);
-        $user_id = intval($_GET['student_id']);
+        $user_id = intval($_GET['user_id']);
         global $wpdb;
 
         $grading = get_post($gradingId);
 //        $user = get_user_by('ID',$user_id);
         $usermeta = get_user_meta($user_id, '', true);
 
+        //当前考级外键
+        $gradingMeta = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}grading_meta WHERE grading_id='{$gradingId}'", ARRAY_A);
+        if(!$gradingMeta) exit('未查询到考级信息!');
 
-        $proId = $currentProject['match_project_id'];
+        $proId = $gradingMeta['category_id'];
 
         //获取当期项目总轮数
-        $match_moreAll = $wpdb->get_var('SELECT MAX(match_more) AS match_more FROM '.$wpdb->prefix.'match_questions WHERE match_id='.$match_id.' AND user_id='.$user_id.' AND project_id='.$proId.' GROUP BY project_id,user_id');
+        $gradingQuestion = $wpdb->get_row('SELECT * AS match_more FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id, ARRAY_A);
 
-        //获取当前项目当前轮数, 没有默认第一轮
-        $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
+        //项目
+        $sql = "SELECT p.post_title,pm.meta_value as project_alias,p.ID AS match_project_id FROM {$wpdb->posts} AS p 
+            LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.post_id AND pm.meta_key='project_alias' 
+            WHERE p.ID='{$gradingMeta['category_id']}'";
+        $category = $wpdb->get_row($sql, ARRAY_A);
 
-        //查询成绩
-        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,
-              CASE answer_status 
-              WHEN -1 THEN "记忆完成" 
-              WHEN 1 THEN "提交" 
-              END AS answer_status 
-              FROM '.$wpdb->prefix.'match_questions  
-              WHERE match_id='.$match_id.' AND project_id='.$proId.' AND user_id='.$user_id.' AND match_more='.$current_match_more, ARRAY_A);
-        $is_view = true;
-        if(!$row){
-            echo '本轮比赛无记录';
-            $is_view = false;
-        }elseif ($row['answer_status'] != 1){
-            echo '本轮成绩未提交';
-            $is_view = false;
+        $sql2 = "SELECT p.post_title,pm.meta_value as project_alias,p.ID AS match_project_id FROM {$wpdb->posts} AS p 
+            LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.post_id AND pm.meta_key='project_alias' 
+            WHERE p.post_parent='{$category['match_project_id']}'";
+        $project = $wpdb->get_results($sql2, ARRAY_A);
+
+        $projectArr = [];
+        foreach ($project as $pv){
+            $projectArr[] = $pv['project_alias'];
         }
-
         //生成答题记录数组
-        $match_questions = json_decode($row['match_questions'],true);
-        $questions_answer = json_decode($row['questions_answer'],true);
-        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
-
-        if(in_array($currentProject['project_alias'],array('wzsd'))){
+        $match_questions = json_decode($gradingQuestion['match_questions'],true);
+        $questions_answer = json_decode($gradingQuestion['questions_answer'],true);
+        $my_answer = !empty($gradingQuestion['my_answer']) ? json_decode($gradingQuestion['my_answer'],true) : array();
+        $categoryName = $category['post_title'];
+        if($gradingQuestion['grading_type'] == 'arithmetic'){
+            //心算
             if(empty($questions_answer)){
                 $len = 0;
             }else{
@@ -384,8 +383,8 @@ class Grading
             }
 
         }
-        elseif ($currentProject['project_alias'] == 'nxss'){
-
+        elseif ($gradingQuestion['grading_type'] == 'reading'){
+            //速读
             $answer = $questions_answer;
             $answer_array = $answer['result'];
             $questions_answer = $answer['examples'];
@@ -408,8 +407,8 @@ class Grading
                 $questions_answer = $arr;
             }*/
         }
-        else{
-
+        elseif ($gradingQuestion['grading_type'] == 'memory'){
+            //记忆
             if(!empty($questions_answer)){
                 $len = count($questions_answer);
                 $error_arr = array_diff_assoc($questions_answer,$my_answer);
@@ -430,20 +429,20 @@ class Grading
 
         $ranking = array_search($user_id,array_column($rows,'user_id'))+1;
         $data = array(
-            'project_alias'=>$currentProject['project_alias'],
+//            'project_alias'=>$currentProject['project_alias'],
             'str_len'=>$len,
             'match_more_cn'=>chinanum($_GET['match_more']),
             'success_length'=>$success_len,
-            'use_time'=>$currentProject['child_count_down']-$row['surplus_time'],
-            'surplus_time'=>$row['surplus_time'],
+//            'use_time'=>$currentProject['child_count_down']-$row['surplus_time'],
+//            'surplus_time'=>$row['surplus_time'],
             'accuracy'=>$success_len > 0 ? round($success_len/$len,2)*100 : 0,
             'ranking'=>$ranking,
             'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
-            'my_score'=>$row['my_score'],
-            'project_title'=>$currentProject['post_title'],
+            'my_score'=>$gradingQuestion['my_score'],
+//            'project_title'=>$currentProject['post_title'],
             'match_title'=>$grading->post_title,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
 //            'record_url'=>home_url('matchs/record/type/project/match_id/'.$this->match_id.'/project_id/'.$this->project_id.'/match_more/'.$this->current_more),
@@ -463,7 +462,7 @@ class Grading
 
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$grading->post_title?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-答题记录</h1>
+            <h1 class="wp-heading-inline"><?=$grading->post_title?>-<?=$categoryName?>-<?=unserialize($usermeta['user_real_name'][0])['real_name']?>-答题记录</h1>
 
             <!--            <a href="http://127.0.0.1/nlyd/wp-admin/user-new.php" class="page-title-action">添加用户</a>-->
 
@@ -509,26 +508,10 @@ class Grading
                             color: #ffffff;
                         }
                     </style>
-                    <div class="alignleft actions bulkactions" id="op1">
-                        <?php foreach ($projectArr as $pav){ ?>
-                            <span class="<?=$proId==$pav['match_project_id'] ? 'active' : ''; ?>"><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$pav['match_project_id'])?>"><?=$pav['post_title']?></a></span>
-                        <?php } ?>
 
-                        <!--                        <span><a href="">逆向速算</a></span>-->
-                        <!--                        <span><a href="">逆向速算</a></span>-->
-                        <!--                        <span><a href="">逆向速算</a></span>-->
-                    </div>
 
                     <br class="clear">
-                    <div class="alignleft actions" id="op2">
-                        <?php for($i = 1; $i <= $match_moreAll; ++$i){ ?>
-                            <span class="<?=$current_match_more==$i ? 'active' : ''; ?>"><a href="<?=admin_url('admin.php?page=match_student-score&match_id='.$match_id.'&student_id='.$user_id.'&proId='.$proId.'&more='.$i)?>">第<?=$i?>轮</a></span>
-                        <?php } ?>
-                        <!--                        <span><a href="">第一轮</a></span>-->
-                        <!--                        <span><a href="">第二轮</a></span>-->
-                        <!--                        <span><a href="">第三轮</a></span>-->
-                        <!--                        <span><a href="">第四轮</a></span>-->
-                    </div>
+
                 </div>
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
