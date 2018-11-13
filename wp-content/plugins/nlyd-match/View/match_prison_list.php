@@ -108,13 +108,13 @@
                         <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                         <input id="cb-select-all-2" type="checkbox">
                     </td>
-                    <th scope="col" id="name" class="manage-column column-name">比赛名</th>
-                    <th scope="col" id="name" class="manage-column column-name">比赛项目</th>
-                    <th scope="col" id="status" class="manage-column column-status status">比赛轮数</th>
-                    <th scope="col" id="status" class="manage-column column-status status">姓名</th>
-                    <th scope="col" id="status" class="manage-column column-status status">座位号</th>
-                    <th scope="col" id="mobile" class="manage-column column-mobile">时间</th>
-                    <th scope="col" id="age" class="manage-column column-age">操作</th>
+                    <th scope="col" id="name" class="manage-column column-name column-primary">比赛名</th>
+                    <th scope="col" id="project_name" class="manage-column column-project_name">比赛项目</th>
+                    <th scope="col" id="more_num" class="manage-column column-more_num more_num">比赛轮数</th>
+                    <th scope="col" id="real_name" class="manage-column column-real_name real_name">姓名</th>
+                    <th scope="col" id="num" class="manage-column column-num num">座位号</th>
+                    <th scope="col" id="dates" class="manage-column column-dates">时间</th>
+                    <th scope="col" id="options" class="manage-column column-options options">操作</th>
 
                 </tr>
                 </thead>
@@ -125,13 +125,18 @@
                         <th scope="row" class="check-column">
                             <input type="checkbox" name="id[]" value="<?=$v['id']?>">
                         </th>
-                        <td class="column-title"><?=$v['match_title']?></td>
-                        <td class="column-title"><?=$v['project_title']?></td>
-                        <td class="column-title">第<?=$v['match_more']?>轮</td>
-                        <td class="column-title"><?=$v['student_name']?></td>
-                        <td class="column-title"><?=$v['seat_number']?></td>
-                        <td class="column-title"><?=$v['created_time']?></td>
-                        <td class="column-title">
+                        <td class="column-title column-primary">
+                            <?=$v['match_title']?>
+                            <button type="button" class="toggle-row">
+                                <span class="screen-reader-text">显示详情</span>
+                            </button>
+                        </td>
+                        <td class="column-project_name"><?=$v['project_title']?></td>
+                        <td class="column-more_num">第<?=$v['match_more']?>轮</td>
+                        <td class="column-real_name"><?=$v['student_name']?></td>
+                        <td class="column-num"><?=$v['seat_number']?></td>
+                        <td class="column-dates"><?=$v['created_time']?></td>
+                        <td class="column-options">
                             <button type="button" class="update_more" data-id="<?=$v['id']?>">编辑</button>/
                             <button type="button" class="remove_more" data-id="<?=$v['id']?>">删除</button>
                         </td>
@@ -139,7 +144,7 @@
                     <?php }?>
                 <?php }else{ ?>
                     <tr>
-                        <td colspan="7" style="text-align: center">暂无列表</td>
+                        <th colspan="8" style="text-align: center">暂无列表</th>
                     </tr>
                 <?php } ?>
                 </tbody>
@@ -149,13 +154,13 @@
                         <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                         <input id="cb-select-all-2" type="checkbox">
                     </td>
-                    <th scope="col" id="name" class="manage-column column-name">比赛名</th>
-                    <th scope="col" id="name" class="manage-column column-name">比赛项目</th>
-                    <th scope="col" id="status" class="manage-column column-status status">比赛轮数</th>
-                    <th scope="col" id="status" class="manage-column column-status status">姓名</th>
-                    <th scope="col" id="status" class="manage-column column-status status">座位号</th>
-                    <th scope="col" id="mobile" class="manage-column column-mobile">时间</th>
-                    <th scope="col" id="age" class="manage-column column-age">操作</th>
+                    <th scope="col" class="manage-column column-project_name column-primary">比赛名</th>
+                    <th scope="col" class="manage-column column-name">比赛项目</th>
+                    <th scope="col" class="manage-column column-more_num more_num">比赛轮数</th>
+                    <th scope="col" class="manage-column column-real_name real_name">姓名</th>
+                    <th scope="col" class="manage-column column-num num">座位号</th>
+                    <th scope="col" class="manage-column column-dates">时间</th>
+                    <th scope="col" class="manage-column column-options">操作</th>
 
                 </tr>
                 </tfoot>

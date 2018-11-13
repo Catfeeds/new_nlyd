@@ -117,7 +117,7 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
+                        <th scope="col" id="username" class="manage-column column-username column-primary">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
@@ -157,9 +157,9 @@ class Teacher
 <!--                                    <span class="edit"><a href="--><?php //echo '?page=teacher-datum&id='.$row['id'] ?><!--">教练资料</a> | </span>-->
 <!--                                    <span class="view"><a href="--><?php //echo '?page=teacher-student&id='.$row['coach_id'] ?><!--" aria-label="">查看学员</a></span>-->
 <!--                                </div>-->
-<!--                                <button type="button" class="toggle-row">-->
-<!--                                    <span class="screen-reader-text">显示详情</span>-->
-<!--                                </button>-->
+                                <button type="button" class="toggle-row">
+                                    <span class="screen-reader-text">显示详情</span>
+                                </button>
                             </td>
                             <td class="name column-name" data-colname="姓名">
                                 <span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span>
@@ -199,7 +199,7 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-username column-primary sortable desc">
+                        <th scope="col" class="manage-column column-username column-primary">
                             <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
                         </th>
                         <th scope="col" class="manage-column column-datum">

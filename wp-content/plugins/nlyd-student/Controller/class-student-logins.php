@@ -17,7 +17,7 @@ class Student_Logins
         if($_SESSION['user_openid'] == false){
 
             if(is_user_logged_in()) wp_redirect(home_url('account'));    
-            if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+            if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out' && ($_SERVER['SERVER_NAME'] == 'ydbeta.gjnlyd.com')){
 
                 wp_redirect(home_url('weixin/webLogin'));
                 exit;

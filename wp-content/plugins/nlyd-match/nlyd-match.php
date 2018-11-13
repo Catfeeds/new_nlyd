@@ -327,9 +327,11 @@ if(!class_exists('MatchController')){
                 $wp_roles->add_cap('administrator', $role);
 
             }
-            add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'question_import', 'question_import', array($this,'questionImport') );
+            add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'administrator', 'question_import', array($this,'questionImport') );
             add_submenu_page( 'edit.php?post_type=grading', '速记上传', '速记上传', 'vocabulary_import', 'vocabulary_import', array($this,'vocabulary_import') );
-            add_submenu_page( 'edit.php?post_type=grading', '速读上传', '速读上传', 'question_import', 'question_import', array($this,'questionImport') );
+            add_submenu_page( 'edit.php?post_type=grading', '速读上传', '速读上传', 'administrator', 'grading_import', array($this,'questionImport') );
+            add_submenu_page( 'options-general.php', '速读上传', '速读上传', 'administrator', 'clear_history', array($this,'questionImport') );
+
         }
 
         /**
@@ -356,6 +358,7 @@ if(!class_exists('MatchController')){
          * 导入题库
          */
         public function questionImport(){
+
             global $wpdb;
             if(is_post()){
 
@@ -456,8 +459,6 @@ if(!class_exists('MatchController')){
                         return false;
                     }
 
-
-
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
@@ -474,7 +475,7 @@ if(!class_exists('MatchController')){
                         $id = wp_insert_post([
                             'post_title' => $data['title'],
                             'post_content' => $content,
-                            'post_status' => 'publish',
+                            'post_status' => $_POST['post_status'] == 'publish' ? $_POST['post_status'] : 'draft',
                             'post_type' => 'question',
                         ]);
 
@@ -566,6 +567,11 @@ if(!class_exists('MatchController')){
                             'term_id'=>$v->term_id,
                             'name'=>$v->name,
                         );
+                    }else{
+                        $questionTypeArr[] = array(
+                            'term_id'=>$v->term_id,
+                            'name'=>$v->name,
+                        );
                     }
                 }
             }
@@ -619,6 +625,10 @@ if(!class_exists('MatchController')){
                                         <?php foreach ($questionTypeArr as $question){ ?>
                                             <option value="<?=$question['term_id']?>"><?=$question['name']?></option>
                                         <?php } ?>
+                                    </select>
+                                    <select name="post_status" id="">
+                                        <option value="publish">发布</option>
+                                        <option value="draft">草稿</option>
                                     </select>
                                 </td>
                             </tr>
@@ -1350,7 +1360,7 @@ if(!class_exists('MatchController')){
             );
 
             register_post_type( 'match', $args );
-            if ( !current_user_can( 'match' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'match' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_match';//权限名
@@ -1401,7 +1411,7 @@ if(!class_exists('MatchController')){
 
             register_post_type( 'genre', $args );
 
-            if ( !current_user_can( 'genre' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'genre' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_genre';//权限名
@@ -1450,7 +1460,7 @@ if(!class_exists('MatchController')){
 
             register_post_type( 'match-category', $args );
 
-            if ( !current_user_can( 'match-category' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'match-category' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_match-category';//权限名
@@ -1501,7 +1511,7 @@ if(!class_exists('MatchController')){
             register_post_type( 'project', $args );
 
 
-            if ( !current_user_can( 'project' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'project' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_project';//权限名
@@ -1554,7 +1564,7 @@ if(!class_exists('MatchController')){
             //创建题库分类box
            // register_taxonomy('question_genre', 'question', array('labels' => array('name' => '题库类型', 'add_new_item' => '添加新的题库类型', 'new_item_name' => "新的题库类型"), 'show_ui' => true, 'show_tagcloud' => true, 'hierarchical' => true));
 
-            if ( !current_user_can( 'question' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'question' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_question';//权限名
@@ -1606,7 +1616,7 @@ if(!class_exists('MatchController')){
             register_post_type( 'problem', $args );
 
 
-            if ( !current_user_can( 'problem' ) ) {
+            if ( current_user_can( 'administrator' ) && !current_user_can( 'problem' ) ) {
                 global $wp_roles;
 
                 $role = 'edit_problem';//权限名
@@ -1684,7 +1694,7 @@ if(!class_exists('MatchController')){
                 wp_enqueue_script( 'match-lists' );
             }
 
-            wp_register_script( 'public-js',match_js_url.'public.js',array('jquery'), leo_student_version  );
+            wp_register_script( 'public-js',match_js_url.'public.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'public-js' );
             wp_localize_script('public-js','_array',[
                 'data'=>[
@@ -1705,6 +1715,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=match&page=match_student-ranking'),
                     admin_url('edit.php?post_type=grading&page=grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-students'),
+                    admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
                 ],
             ]);
         }

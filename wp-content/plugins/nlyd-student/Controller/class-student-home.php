@@ -22,7 +22,7 @@ class Student_Home
             //判断是否是管理员操作面板和是否登录
             if(!is_user_logged_in()){
 
-                if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out'){
+                if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out' && ($_SERVER['SERVER_NAME'] == 'ydbeta.gjnlyd.com')){
 
                     wp_redirect(home_url('weixin/webLogin'));
                     exit;
