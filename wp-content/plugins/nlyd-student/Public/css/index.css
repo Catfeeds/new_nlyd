@@ -210,6 +210,11 @@ a.a-btn:hover{
 .a-btn.two{
     background: transparent;
 }
+.a-two.disabled{
+    background:#fff; 
+    color:#d8d6d6;
+    border:1px solid #d8d6d6;
+}
 /* 上滑bottom下拉 */
 .selectBottom{
     position: relative;

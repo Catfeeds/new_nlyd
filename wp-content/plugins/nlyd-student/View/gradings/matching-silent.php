@@ -7,7 +7,7 @@
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__('国学经典默写', 'nlyd-student')?> <span id="number">1</span>/2</div></div>
+                        <div class="c_black match_info_font"><div><?=__('国学经典默写', 'nlyd-student')?> <span id="number">1</span>/<?=$memory_type['num']?></div></div>
                         <div class="c_blue match_info_font">
                            <div> 
                                 <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
@@ -33,10 +33,10 @@ jQuery(function($) {
     var _type=$.Request('type');
     var file_url="<?=leo_match_url.'/upload/book/memory.json'?>";
     var questions_answer=[];
-    var sys_second=1800;
+    var sys_second="<?=$memory_type['memory_time']?>";
     var endTime=$.GetEndTime(sys_second);
-    var grade_level=4;//考级等级
-    var how_ques=6;//多少道题目
+    var grade_level="<?=$memory_type['lv']?>";//考级等级
+    var how_ques="<?=$memory_type['num']?>";//多少道题目
     init_question()
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
@@ -173,6 +173,8 @@ jQuery(function($) {
                 $.SetSession('grade_question',sessionData) 
             })
         }
+
+        console.log(questions_answer)
     }
     function _slice_ques(pos_arr,_question){//截取题目
         var _question_len=_question.length;
@@ -215,13 +217,14 @@ jQuery(function($) {
                 questions_answer[i]['yours']=_answer
             })
             console.log(questions_answer)
-            // return false;
+             //return false;
             var data={
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 action:'grading_answer_submit',
-                my_answer:my_answer,
+                grading_questions:questions_answer,
+                questions_answer:questions_answer,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');

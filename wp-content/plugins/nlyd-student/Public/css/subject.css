@@ -325,7 +325,13 @@ p.question{
 .right-answer .card_name.active{
     color: #0F940B;
 }
-
+/* 默写 */
+.silent{
+    display: none;
+}
+.silent.active{
+    display: block;
+}
 @media screen and (max-width: 374px){
     /* iphone6以下 */
     .match_info_font{

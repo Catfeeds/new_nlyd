@@ -8,8 +8,8 @@
                         <img class="_img" src="<?=leo_match_url.'/upload/people/'.$v['picture'].'.jpg';?>">
                     </div>
                     <div class="card_detail">
-                        <div class="card_name c_black <?=$v['name'] == $questions_answer[$k]['name'] ? '' : 'active';?>" ><?=empty($v['name'] ? '-' : $v['name'])?></div>
-                        <div class="card_phone c_black <?=$v['phone'] == $questions_answer[$k]['phone'] ? '' : 'active';?>" ><?=empty($v['phone'] ? '-' : $v['phone'])?></div>
+                        <div class="card_name c_black <?=$v['name'] == $questions_answer[$k]['name'] ? '' : 'active';?>" ><?=empty($v['name']) ? '-' : $v['name']?></div>
+                        <div class="card_phone c_black <?=$v['phone'] == $questions_answer[$k]['phone'] ? '' : 'active';?>" ><?=empty($v['phone']) ? '-' : $v['phone']?></div>
                     </div>
                 </div>
             <?php } ?>
@@ -51,8 +51,8 @@
                         <img class="_img" src="<?=leo_match_url.'/upload/people/'.$val['picture'].'.jpg';?>">
                     </div>
                     <div class="card_detail">
-                        <div class="card_name c_black"><?=empty($val['name'] ? '-' : $val['name'])?></div>
-                        <div class="card_phone c_black"><?=empty($val['phone'] ? '-' : $val['phone'])?></div>
+                        <div class="card_name c_black"><?=empty($val['name']) ? '-' : $val['name']?></div>
+                        <div class="card_phone c_black"><?=empty($val['phone']) ? '-' : $val['phone']?></div>
                     </div>
                 </div>
             <?php } ?>
