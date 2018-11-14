@@ -90,7 +90,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <?php if(!isset($_GET['type'])){ ?>
                     <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
-                <h1 class="mui-title"><div><?=$match_title?><?=__('答题记录', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">

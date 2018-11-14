@@ -4,21 +4,20 @@
     <div class="c_blue right pull-right"><div><?=__('下一题', 'nlyd-student')?></div></div>
 </div>
 <?php foreach ($questions_answer as $key =>$val){
-    preg_match_all("/./u", $val, $answer_down);
-    if(!empty($my_answer[$key])){
-        preg_match_all("/./u", $val, $answer_top);
-    }
-    //print_r($answer[0]);
+
+    //print_r($val);
 ?>
 <div class="answer-zoo silent <?=$key == 0 ? 'active' : '';?>" data-index="<?=$key?>">
     <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
     <div class="your-answer layui-row">
-        <div class="matching-number grey active">v</div>
+        <?php foreach ($my_answer[$key] as $x => $y ){ ?>
+        <div class="matching-number grey <?= $y!=$val[$x] ? 'active' : '';?>"><?=$y?></div>
+        <?php } ?>
     </div>
     <button class="matching-btn active"><?=__('正确答案', 'nlyd-student')?></button>
     <div class="right-answer layui-row">
-        <?php foreach ($answer[0] as $k => $v ){ ?>
-        <div class="matching-number grey active"><?=$v?></div>
+        <?php foreach ($val as $k => $v ){ ?>
+        <div class="matching-number grey <?= $v!=$my_answer[$key][$k] ? 'active' : '';?>" ><?=$v?></div>
         <?php } ?>
     </div>
 </div>

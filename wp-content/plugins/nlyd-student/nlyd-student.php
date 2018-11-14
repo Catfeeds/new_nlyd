@@ -52,7 +52,8 @@ if(!class_exists('StudentController')){
 
             if ( !is_admin() ) {
                 global $current_user;
-                if($current_user->ID > 0){
+
+                if(!empty($current_user)){
                     return get_user_meta($current_user->ID,'locale',true);
                 }else{
                     if($_COOKIE['user_language']){

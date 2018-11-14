@@ -412,13 +412,12 @@ class Student_Gradings extends Student_Home
             $len = count($questions_answer);
             $success_len = 0;
             if(!empty($my_answer)){
-                /*print_r($questions_answer);
-                print_r($my_answer);*/
+                //print_r($questions_answer);
+                //print_r($my_answer);
 
                 foreach ($my_answer as $k => $v){
-                    preg_match_all("/./u", $v, $arr1);
-                    preg_match_all("/./u", $questions_answer[$k], $arr2);
-                    $result=array_diff_assoc($arr1[0],$arr2[0]);
+
+                    $result=array_diff_assoc($v,$questions_answer[$k]);
                     //var_dump($result);
                     if(empty($result)){
                         $success_len += 1;
@@ -467,6 +466,7 @@ class Student_Gradings extends Student_Home
                 $next_project_url .= '/memory_lv/'.$order->memory_lv;
             }
         }
+
         //print_r($next_project);
         $data = array(
             'next_project'=>$next_project,

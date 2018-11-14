@@ -2,7 +2,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
@@ -10,7 +10,7 @@
                         <div class="c_black match_info_font"><div><?=__('国学经典默写', 'nlyd-student')?> <span id="number">1</span>/<?=$memory_type['num']?></div></div>
                         <div class="c_blue match_info_font">
                            <div> 
-                                <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                                <span class="count_down" data-seconds="1800">00:00:00</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -227,23 +227,22 @@ jQuery(function($) {
                 var _this=$(this);
                 var rights=[];
                 var yours=[];
-                _this.find('.matching-number-input').each(function(){
+                _this.find('.matching-number-input.answer_q').each(function(){
                     var x=$(this).val();
                     var y=$(this).attr('data-value');
                     rights.push(y)
-                    yours.push(y)
+                    yours.push(x)
                 })
-                var item={rights:rights,yours:yours,question:question}
+                var item={rights:rights,yours:yours,question:rights}
                 ajax_question.push(item)
             })
-            console.log(ajax_question);
-             //return false;
+            // console.log(ajax_question);
+            //  return false;
             var data={
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 action:'grading_answer_submit',
-                grading_questions:ajax_question,
                 questions_answer:ajax_question,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
@@ -283,7 +282,7 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
+
                         window.location.href=href;
             　　　　}
                 }

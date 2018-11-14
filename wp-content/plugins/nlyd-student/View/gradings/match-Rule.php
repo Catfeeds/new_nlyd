@@ -30,7 +30,7 @@
             <pre class="width-margin width-margin-pc c_black ff_cn">
             <?php
             switch ($_GET['type']){
-                case 'jy':
+                case 'memory':
         ?>
 
 <div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> <div class="title_name"><?=__('考级规程', 'nlyd-student')?></div></div>
@@ -138,7 +138,7 @@
     （2）下级内容：从《弟子规》《千字文》《唐诗三百首》《声律启蒙》《大学》《中庸》《道德经》《四字鉴略》《孙子兵法》《宋词三百首》《论语》全文中随机截取3段默写，每段100字。
                 <?php
                         break;
-                case 'sd': ?>
+                case 'reading': ?>
 <div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> <div class="title_name"><?=__('考级规程', 'nlyd-student')?></div></div>
     国际速读水平测试（International Reading Ability Test，简称IRAT）是国际脑力运动委员会在总结多个国际版本的评级标准的基础上，加入更为科学的测评理念，摒除繁杂的计算方式和级别划分方式，从更公平合理、更易于操作、群众更易于接受和理解等多方面综合考虑，制定出了利于高效阅读运动全面普及的水平测试标准。
     受试者以最快速度阅读一篇文章，紧接着就该文章完成10道选择题，以考察理解率（答题正确率即为理解率）。系统自动统计阅读速度和理解率。
@@ -154,7 +154,7 @@
     以此类推，每级按1000字/分钟递增，水平越高则级数越大。
                 <?php
                     break;
-                case 'xs': ?>
+                case 'arithmetic': ?>
 <div class="bold ta_c c_blue fs_16"><div class="img-box ready_img"><img src="<?=student_css_url.'image/trains/xmyy.png'?>"></div> <div class="title_name"><?=__('考级规程', 'nlyd-student')?></div></div>
 　  国际心算水平测试（International Arithmetic Ability Test，简称IAAT）是国际脑力运动委员会为了全面普及快速心算运动而制定的水平测试标准。
     民间传统心算水平评级标准较多，但都限于正向速算，而且评级计算方式繁杂，限制了心算运动的推广和普及。为了让国际心算运动更具科学性、群众性和趣味性，国际脑力运动委员会从更公平合理、简便易行、群众更易于接受和理解等多方面，通过正向速算和逆向速算综合考察受试者的逻辑思维水平和数理空间思维能力。

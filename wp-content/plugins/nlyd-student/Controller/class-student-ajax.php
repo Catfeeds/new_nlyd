@@ -3846,15 +3846,20 @@ class Student_Ajax
     public function grading_answer_submit(){
         unset($_SESSION['count_down']);
         unset($_SESSION['match_post_id']);
-        if(empty($_POST['grading_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
-            wp_send_json_error(array('所提交数据信息不完全'));
+        if($_POST['questions_type'] == 'wz'){
+            if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
+        }else{
+
+            if(empty($_POST['grading_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
+                wp_send_json_error(array('所提交数据信息不完全'));
+            }
         }
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
-        $sql = "select id,answer_status,questions_answer
+        $sql = "select id,questions_answer
                 from {$wpdb->prefix}grading_questions
-                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = {$_POST['grading_type']} and questions_type = {$_POST['questions_type']}
+                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
@@ -3893,13 +3898,14 @@ class Student_Ajax
                         }
                         break;
                     case 'wz':
+
                         $questions_answer = $_POST['questions_answer'];
                         $len = count($questions_answer);
 
                         $success_len = 0;
                         foreach ($questions_answer as $k =>$v){
 
-                            $result = $this->diffStr($v['rights'],$v['yours']);
+                            $result =array_diff_assoc($v['rights'],$v['yours']);
                             if(empty($result)){
                                 $success_len += 1;
                             }
@@ -3921,7 +3927,7 @@ class Student_Ajax
             'questions_type'=>$_POST['questions_type'],
             'grading_questions'=>json_encode($_POST['grading_questions']),
             'questions_answer'=>json_encode($_POST['questions_answer']),
-            'my_answer'=>json_encode($_POST['questions_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
             'correct_rate'=>$correct_rate,
             'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
             'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
