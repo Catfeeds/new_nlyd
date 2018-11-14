@@ -514,10 +514,6 @@ class Grading
                                         <?=$my_answer[$k]?$my_answer[$k]:'-'?>
                                     </span>
                                 </td>
-
-
-
-                                </td>
                             </tr>
                             <?php
 
@@ -560,7 +556,6 @@ class Grading
      * 项目类型处理
      */
     public function getProject($types){
-        $name = '';
         switch ($types){
             case 'sz':
                 $name = '数字';
@@ -568,6 +563,14 @@ class Grading
             case 'cy':
                 $name = '词语';
                 break;
+            case 'zm':
+                $name = '字母';
+                break;
+            case 'tl':
+                $name = '听力';
+                break;
+            default:
+                $name = $types;
         }
         return $name;
     }
