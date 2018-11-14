@@ -66,7 +66,7 @@ jQuery(function($) {
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
    
-    var answer_time=<?=$memory_type['time']?>;//记忆时间
+    var answer_time=<?=$memory_type['memory_time']?>;//记忆时间
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
     var que_len="<?=$memory_type['length']?>";//多少个字符

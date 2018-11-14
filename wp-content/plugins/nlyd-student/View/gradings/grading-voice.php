@@ -78,7 +78,7 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
-    var ready_time="<?=$memory_type['time']?>";//记忆时间
+    var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
     var sys_second=ready_time;
     var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
