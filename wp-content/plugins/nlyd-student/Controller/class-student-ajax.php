@@ -3895,8 +3895,10 @@ class Student_Ajax
                     case 'wz':
                         $questions_answer = $_POST['questions_answer'];
                         $len = count($questions_answer);
+
                         $success_len = 0;
                         foreach ($questions_answer as $k =>$v){
+
                             $result = $this->diffStr($v['rights'],$v['yours']);
                             if(empty($result)){
                                 $success_len += 1;
@@ -3906,7 +3908,6 @@ class Student_Ajax
                         $_POST['grading_questions'] = array_column($questions_answer,'question');
                         $_POST['questions_answer'] = array_column($questions_answer,'rights');
                         $_POST['my_answer'] = array_column($questions_answer,'yours');
-                        die;
                         break;
                 }
                 break;
@@ -3920,7 +3921,7 @@ class Student_Ajax
             'questions_type'=>$_POST['questions_type'],
             'grading_questions'=>json_encode($_POST['grading_questions']),
             'questions_answer'=>json_encode($_POST['questions_answer']),
-            'my_answer'=>json_encode($_POST['my_answer']),
+            'my_answer'=>json_encode($_POST['questions_answer']),
             'correct_rate'=>$correct_rate,
             'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
             'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
@@ -3928,6 +3929,7 @@ class Student_Ajax
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
             'is_true'=>!empty($prison_log_id) ? 2 : 1,
         );
+        //print_r($insert);die;
         $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
         /*print_r($result);
         die;*/

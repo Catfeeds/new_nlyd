@@ -1,68 +1,63 @@
 
-<div class="layui-fluid">
-    <div class="layui-row">
-     
-        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
-            <header class="mui-bar mui-bar-nav">
-                    <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
-             
-                <h1 class="mui-title"><div><?=__('答题记录', 'nlyd-student')?></div></h1>
-            </header>
-            <div class="layui-row nl-border nl-content ">
-                <div class="width-margin">
-                    <div class="answer-zoo silent active" data-index="0">
-                        <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
-                        <div class="your-answer layui-row">
-                            <div class="matching-number grey active">v</div>
-                        </div>
-                        <button class="matching-btn active"><?=__('正确答案', 'nlyd-student')?></button>
-                        <div class="right-answer layui-row">
-                            <div class="matching-number grey active">爱</div>
-                        </div>
-                    </div>
-                    <div class="answer-zoo silent" data-index="1">
-                        <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
-                        <div class="your-answer layui-row">
-                            <div class="matching-number grey active">1</div>
-                        </div>
-                        <button class="matching-btn active"><?=__('正确答案', 'nlyd-student')?></button>
-                        <div class="right-answer layui-row">
-                            <div class="matching-number grey active">2</div>
-                        </div>
-                    </div>
-            </div>
-        </div>
+<div class="two layui-row">
+    <div class="c_blue left disabled pull-left"><div><?=__('上一题', 'nlyd-student')?></div></div>
+    <div class="c_blue right pull-right"><div><?=__('下一题', 'nlyd-student')?></div></div>
+</div>
+<?php foreach ($questions_answer as $key =>$val){
+    preg_match_all("/./u", $val, $answer_down);
+    if(!empty($my_answer[$key])){
+        preg_match_all("/./u", $val, $answer_top);
+    }
+    //print_r($answer[0]);
+?>
+<div class="answer-zoo silent <?=$key == 0 ? 'active' : '';?>" data-index="<?=$key?>">
+    <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
+    <div class="your-answer layui-row">
+        <div class="matching-number grey active">v</div>
+    </div>
+    <button class="matching-btn active"><?=__('正确答案', 'nlyd-student')?></button>
+    <div class="right-answer layui-row">
+        <?php foreach ($answer[0] as $k => $v ){ ?>
+        <div class="matching-number grey active"><?=$v?></div>
+        <?php } ?>
     </div>
 </div>
-<div class="a-btn two">
-    <div class="a-two left disabled"><div><?=__('上一题', 'nlyd-student')?></div></div>
-    <div class="a-two right"><div><?=__('下一题', 'nlyd-student')?></div></div>
-</div>
+<?php } ?>
+<!--<div class="answer-zoo silent" data-index="1">
+    <button class="matching-btn active"><?/*=__('你的答案', 'nlyd-student')*/?></button>
+    <div class="your-answer layui-row">
+        <div class="matching-number grey active">1</div>
+    </div>
+    <button class="matching-btn active"><?/*=__('正确答案', 'nlyd-student')*/?></button>
+    <div class="right-answer layui-row">
+        <div class="matching-number grey active">2</div>
+    </div>
+</div>-->
 <script>
     jQuery(function($) { 
     var how_ques=$('.answer-zoo').length;//多少道题目
     var n=0;
     if(how_ques<=1){
-        $('.a-two.right').addClass('disabled')
+        $('.right').addClass('disabled')
     }
-    new AlloyFinger($('.a-two.left')[0], {
+    new AlloyFinger($('.left')[0], {
         touchStart: function () {
-            var left=$('.a-two.left');
+            var left=$('.left');
             if(!left.hasClass('disabled')){
                 left.addClass("opacity");
             }
         },
         touchMove: function () {
-            $('.a-two.left').removeClass("opacity");
+            $('.left').removeClass("opacity");
         },
         touchEnd: function () {
-            $('.a-two.left').removeClass("opacity");
+            $('.left').removeClass("opacity");
         },
         touchCancel: function () {
-            $('.a-two.left').removeClass("opacity");
+            $('.left').removeClass("opacity");
         },
         tap:function(){
-            var left=$('.a-two.left');
+            var left=$('.left');
             var len=$('.answer-zoo').length-1;
             if(!left.hasClass('disabled')){
                 if(n>0){
@@ -71,7 +66,7 @@
                     if(n==0){
                         left.addClass('disabled')
                     }
-                    $('.a-two.right').removeClass('disabled')
+                    $('.right').removeClass('disabled')
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){
@@ -86,25 +81,25 @@
             }
         }
     });
-    // mTouch('body').on('tap','.a-two.right',function(e){//下一题
-    new AlloyFinger($('.a-two.right')[0], {
+    // mTouch('body').on('tap','.right',function(e){//下一题
+    new AlloyFinger($('.right')[0], {
         touchStart: function () {
-            var right=$('.a-two.right');
+            var right=$('.right');
             if(!right.hasClass('disabled')){
-                $('.a-two.right').addClass("opacity");
+                $('.right').addClass("opacity");
             }
         },
         touchMove: function () {
-            $('.a-two.right').removeClass("opacity");
+            $('.right').removeClass("opacity");
         },
         touchEnd: function () {
-            $('.a-two.right').removeClass("opacity");
+            $('.right').removeClass("opacity");
         },
         touchCancel: function () {
-            $('.a-two.right').removeClass("opacity");
+            $('.right').removeClass("opacity");
         },
         tap:function(){
-            var right=$('.a-two.right');
+            var right=$('.right');
             var len=$('.answer-zoo').length-1;
             if(!right.hasClass('disabled')){
                 if(n<len){
@@ -113,7 +108,7 @@
                     if(n==len){
                         right.addClass('disabled')  
                     }
-                    $('.a-two.left').removeClass('disabled')  
+                    $('.left').removeClass('disabled')  
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){

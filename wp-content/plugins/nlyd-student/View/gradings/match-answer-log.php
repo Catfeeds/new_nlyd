@@ -153,6 +153,9 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         case 'rm':    //正向速算
                             require_once student_view_path.CONTROLLER.'/subject-rmjy.php';
                             break;
+                        case 'wz':    //国学默写
+                            require_once student_view_path.CONTROLLER.'/subject-silent.php';
+                            break;
                         default:
                             require_once student_view_path.'public/my-404.php';
                             break;
