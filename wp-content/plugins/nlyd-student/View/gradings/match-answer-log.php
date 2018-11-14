@@ -184,8 +184,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
     jQuery(function($) {
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
-        $.DelSession('matching_question');//准备页面题目参数
-        $.DelSession('match_data')
+        $.DelSession('grade_question');//准备页面题目参数
+        $.DelSession('match_data');
         <?php if(isset($_GET['project_more_id'])): ?>
             leavePageLoad('<?=$wait_url?>');
             var endTimes=0;

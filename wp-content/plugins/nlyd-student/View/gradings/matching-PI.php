@@ -70,13 +70,13 @@ jQuery(function($) {
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
     var que_len=100;//多少个字符
-    var que_PI="14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196"
-    var questions_answer=que_PI.substring(0,que_len)
-    init_question(que_len)
+    var que_PI="14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196";
+    var questions_answer=que_PI.substring(0,que_len).split('');
+    init_question(que_len);
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
-    })
-    count_down()
+    });
+    count_down();
     function count_down(){
         // sys_second=answer_time
         var timer = setInterval(function(){
@@ -91,11 +91,11 @@ jQuery(function($) {
                 minute= minute<10?"0"+minute:minute;//计算分钟
                 second= second<10?"0"+second:second;//计算秒
                 var text=day+hour+':'+minute+':'+second;
-                $('.count_down').text(text).attr('data-seconds',sys_second)
+                $('.count_down').text(text).attr('data-seconds',sys_second);
             } else {//倒计时结束
-                clearInterval(timer)
-                submit(3)
-            }
+                clearInterval(timer);
+                submit(3);
+            };
 
         }, 1000);
     } 
