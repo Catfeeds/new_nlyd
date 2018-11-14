@@ -335,6 +335,7 @@ class Grading
             LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.post_id AND pm.meta_key='project_alias' 
             WHERE p.ID='{$gradingMeta['category_id']}'";
         $category = $wpdb->get_row($sql, ARRAY_A);
+
         //获取记录类型
         $gradingArr = $wpdb->get_results('SELECT questions_type FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id, ARRAY_A);
         if(!$gradingArr) exit('无答题记录');
@@ -343,10 +344,8 @@ class Grading
 
         //获取答案
         $gradingQuestion = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id.' AND questions_type="'.$g_type.'"', ARRAY_A);
-
-
-
-
+//        leo_dump();
+//        die;
 
         //项目处理
         $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
@@ -397,11 +396,85 @@ class Grading
                 <div class="top">
 
 
-
-
                     <br class="clear">
 
                 </div>
+                <style type="text/css">
+                    .intro-box{
+                        padding-top: 0.5em;
+                    }
+                    .intro-box .intro-key{
+                        font-weight: bold;
+                    }
+                </style>
+                <?php if($gradingQuestion['correct_rate']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">准确率: </span>
+                        <span class="intro-value"><?=$gradingQuestion['correct_rate']*100?>%</span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['memory_time']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">记忆耗时: </span>
+                        <span class="intro-value"><?=$gradingQuestion['memory_time']?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['answer_time']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">回答耗时: </span>
+                        <span class="intro-value"><?=$gradingQuestion['answer_time']?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['submit_type']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">提交方式: </span>
+                        <span class="intro-value">
+                            <?php
+                                switch ($gradingQuestion['submit_type']){
+                                    case 1:
+                                        echo '选手提交';
+                                        break;
+                                    case 2:
+                                        echo '错误达上限提交';
+                                        break;
+                                    case 3:
+                                        echo '时间到达提交';
+                                        break;
+                                    case 4:
+                                        echo '来回切换,系统提交';
+                                        break;
+                                }
+                            ?>
+                        </span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['leave_page_time']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">每次离开页面的时间: </span>
+                        <span class="intro-value"><?=$gradingQuestion['leave_page_time']?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['created_time']){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">提交时间: </span>
+                        <span class="intro-value"><?=$gradingQuestion['created_time']?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['post_id'] > 0){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">文章: </span>
+                        <span class="intro-value"><?=isset(get_posts(['ID'=>$gradingQuestion['post_id']])[0]) ? get_posts(['ID'=>$gradingQuestion['post_id']])[0]->post_title : ''?></span>
+                    </div>
+                <?php } ?>
+
+                    <div class="intro-box">
+                        <span class="intro-key">成绩性质: </span>
+                        <span class="intro-value <?=$gradingQuestion['is_true'] == '1' ? 'correct-color' : 'error-color'?>">
+                            <?=$gradingQuestion['is_true'] == '1' ? '真实' : '虚假'?>
+                        </span>
+                    </div>
+
+
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
 <!--                <div><span>剩余时间:</span> <span> --><?//=$data['surplus_time']?><!--</span></div>-->
