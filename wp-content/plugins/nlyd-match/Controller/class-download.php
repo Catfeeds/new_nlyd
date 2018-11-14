@@ -864,6 +864,7 @@ class Download
         $data = [];
         $match_student_class = new \Match_student();
         $fileRankingName = '';
+        $titleRankingName = '';
         if($op1 == 1){
             if($matchEnd == false){
                 $rankingView = ['status' => false, 'msg' => '当前比赛未结束!'];
@@ -871,18 +872,22 @@ class Download
                 $data = $match_student_class->getAllRankingData($match,$projectArr,$op5);
             }
             $fileRankingName .= ($op5 == 2 ? 'team' : 'personal');
+            $titleRankingName = ($op5 == 2 ? '战队排名' : '个人总排名');
         }elseif ($op1 == 2){
             //获取当前分类的id字符串
             $project_id_array = [];//项目id数组
             $project_alias_arr = [];// 分类下的项目数组
             switch ($op2){
                 case 'sdl':
+                    $titleRankingName = '速度类排名';
                     $project_alias_arr = ['option' => ['wzsd','kysm'], 'name' => 'read'];
                     break;
                 case 'ssl':
+                    $titleRankingName = '心算类排名';
                     $project_alias_arr = ['option' => ['zxss','nxss'], 'name' => 'count'];
                     break;
                 case 'sjl':
+                    $titleRankingName = '记忆类排名';
                     $project_alias_arr = ['option' => ['szzb','pkjl'], 'name' => 'remember'];
                     break;
                 default:
@@ -913,6 +918,7 @@ class Download
                         break;
                     }
                     $fileRankingName .= $pavGetIds['project_alias'];
+                    $titleRankingName = $pavGetIds['post_title'].'排名';
                 }
             }
 
@@ -969,7 +975,7 @@ class Download
             $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
 
 
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title.'(战队排名)');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title.'('.$titleRankingName.')');
 
             //加粗
             $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);
@@ -1020,7 +1026,7 @@ class Download
             $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
             $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(40);
             $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
             $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(20);
@@ -1034,7 +1040,7 @@ class Download
                 }
             }
 
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $post->post_title.'('.$titleRankingName.')');
 
             //加粗
             $objPHPExcel->getActiveSheet()->getStyle( 'A1')->getFont()->setSize(16)->setBold(true);

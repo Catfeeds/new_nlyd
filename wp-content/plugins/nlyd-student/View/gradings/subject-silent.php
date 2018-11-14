@@ -10,7 +10,7 @@
             </header>
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
-                    <div class="answer-zoo slient active" data-index="0">
+                    <div class="answer-zoo silent active" data-index="0">
                         <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
                         <div class="your-answer layui-row">
                             <div class="matching-number grey active">v</div>
@@ -20,7 +20,7 @@
                             <div class="matching-number grey active">爱</div>
                         </div>
                     </div>
-                    <div class="answer-zoo slient" data-index="1">
+                    <div class="answer-zoo silent" data-index="1">
                         <button class="matching-btn active"><?=__('你的答案', 'nlyd-student')?></button>
                         <div class="your-answer layui-row">
                             <div class="matching-number grey active">1</div>
