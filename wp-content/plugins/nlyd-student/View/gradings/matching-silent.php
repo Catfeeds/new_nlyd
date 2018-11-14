@@ -36,7 +36,7 @@ jQuery(function($) {
     var sys_second="<?=$memory_type['memory_time']?>";
     var endTime=$.GetEndTime(sys_second);
     var grade_level="<?=$memory_type['lv']?>";//考级等级
-    var how_ques="<?=$memory_type['num']?>";//多少道题目
+    var how_ques=grade_level>3 ? 6 : 3;//多少道题目
     init_question()
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
@@ -117,20 +117,33 @@ jQuery(function($) {
             })
         }else{
             $.getJSON(file_url, function (data){
+               
                 var question_bank=data;
-                var _question=""
-                for (var index = 3; index < grade_level+1; index++) {
-                   var item=question_bank[index];
-                   _question+=item
+                var _question="";//grade_level之前的题库
+                var now_question=question_bank[grade_level];//当前等级题库
+                if (grade_level>3) {
+                    for (var index = 3; index < grade_level; index++) {
+                        var item=question_bank[index];
+                        _question+=item
+                    }
+                }else{//三级
+                    _question=now_question;
                 }
-                var pos_arr=[];
+
+                var pos_arr=[];//储存grade_level之前的题库截取的下标
+                var pos_arr_now=[];//储存当前等级题库截取的下标
                 for (var index = 0; index < how_ques; index++) {
-                    _slice_ques(pos_arr,_question);
-                    var start_index=pos_arr[index];//截取的所有字符串的起始坐标
+                    if(index>=3){
+                        _slice_ques(pos_arr_now,now_question);
+                    }else{
+                        _slice_ques(pos_arr,_question);
+                    }
+                    // _slice_ques(pos_arr,_question);
+                    var start_index=index>=3 ? pos_arr_now[index-3] : pos_arr[index];//截取的所有字符串的起始坐标
                     var end_index=start_index+200;//截取的所有字符串的结束坐标
                     var start_ques=start_index+50;//截取的所有字符串的答题区起始坐标
                     var end_ques=start_index+150;//截取的所有字符串答题区结束坐标
-                    var rights=_question.substring(start_index,end_index);//题目
+                    var rights=index>=3 ? now_question.substring(start_index,end_index):_question.substring(start_index,end_index);//题目
                     //   var str1=_question.substring(start_index,start_ques);//答题前面区域
                     //   var str2=_question.substring(start_ques,end_ques); //答题区域
                     //   var str3=_question.substring(end_ques,end_index); //答题后面区域
