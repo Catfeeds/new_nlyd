@@ -10,10 +10,13 @@
                         <p class="match-name c_blue"><?=$match_title?></p>
                         <div class="match_tips">
                             <?php
-                                $hint = $end_project == 'y' ? '正在' : '即将';
+
+                            if(!empty($memory_lv)){
+                                $project_alias_cn .= chinanum($memory_lv);
+                            }
                             ?>
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__($hint.'进行', 'nlyd-student')?>: </span><?=__($project_title,'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $next_more_num)?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__('国际'.$project_alias_cn.'水平考级认证','nlyd-student')?>
                             </p>
                         </div>
 
@@ -39,7 +42,7 @@
     jQuery(function($) {
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
-        $.DelSession('matching_question');//准备页面题目参数
+        $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
         <?php if($match_status == 2 || $count_down <= 120): ?>
         matchWaitting()
