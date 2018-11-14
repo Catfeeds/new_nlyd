@@ -838,6 +838,11 @@ class Student_Gradings extends Student_Home
                 wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-card' );
             }
+
+            if($_GET['type'] == 'wz'){//国学经典默写
+                wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-silent' );
+            }
         }
 
         if(ACTION == 'answerLog'){//
@@ -870,10 +875,7 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
         }
-        if(ACTION == 'matching_silent'){//国学经典默写
-            wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-silent' );
-        }
+
 
         if(ACTION == 'matching_wzsd'){//文章速读比赛页
             wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );

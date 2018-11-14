@@ -3894,11 +3894,19 @@ class Student_Ajax
                         break;
                     case 'wz':
                         $questions_answer = $_POST['questions_answer'];
+                        $len = count($questions_answer);
+                        $success_len = 0;
                         foreach ($questions_answer as $k =>$v){
-                            print_r($this->diffStr($v['rights'],$v['yours']));
+                            $result = $this->diffStr($v['rights'],$v['yours']);
+                            if(empty($result)){
+                                $success_len += 1;
+                            }
                         }
+                        $correct_rate = $success_len/$len;
+                        $_POST['grading_questions'] = array_column($questions_answer,'question');
+                        $_POST['questions_answer'] = array_column($questions_answer,'rights');
+                        $_POST['my_answer'] = array_column($questions_answer,'yours');
                         die;
-                        print_r($_POST);die;
                         break;
                 }
                 break;
@@ -3944,8 +3952,11 @@ class Student_Ajax
         /*$arr1 = str2arr($str1);
         $arr2 = str2arr($str2);*/
         preg_match_all("/./u", $str1, $arr1);
-        print_r($arr1);die;
-        $result=array_diff($arr1,$arr2);
+        preg_match_all("/./u", $str2, $arr2);
+        /*print_r($arr1);
+        print_r($arr2);*/
+        $result=array_diff_assoc($arr1[0],$arr2[0]);
+        //print_r($result);die;
         return $result;
     }
 
