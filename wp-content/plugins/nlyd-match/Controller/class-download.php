@@ -862,7 +862,9 @@ class Download
         $downloadParam = "&op1={$op1}&op2={$op2}&op3={$op3}&op4={$op4}";
 //        leo_dump($op2);
         $data = [];
+
         $match_student_class = new \Match_student();
+
         $fileRankingName = '';
         $titleRankingName = '';
         if($op1 == 1){
@@ -879,15 +881,15 @@ class Download
             $project_alias_arr = [];// 分类下的项目数组
             switch ($op2){
                 case 'sdl':
-                    $titleRankingName = '速度类排名';
+                    $titleRankingName = '速度类';
                     $project_alias_arr = ['option' => ['wzsd','kysm'], 'name' => 'read'];
                     break;
                 case 'ssl':
-                    $titleRankingName = '心算类排名';
+                    $titleRankingName = '心算类';
                     $project_alias_arr = ['option' => ['zxss','nxss'], 'name' => 'count'];
                     break;
                 case 'sjl':
-                    $titleRankingName = '记忆类排名';
+                    $titleRankingName = '记忆类';
                     $project_alias_arr = ['option' => ['szzb','pkjl'], 'name' => 'remember'];
                     break;
                 default:
@@ -896,7 +898,8 @@ class Download
             $cateName = '';
             foreach ($projectArr as $pavGetIds){
                 if(in_array($pavGetIds['project_alias'],$project_alias_arr['option'])){
-                    if($currentDateTime < $pavGetIds['project_end_time']){
+//                    if($currentDateTime < $pavGetIds['project_end_time']){
+                    if(!$pavGetIds['is_end']){
                         $rankingView = ['status' => false, 'msg' => '当前分类未结束!'];
                         break;
                     }
@@ -905,6 +908,21 @@ class Download
                 };
             }
             $fileRankingName .= $cateName;
+            switch ($op4){
+                case 4://儿童组
+                    $titleRankingName .= '儿童组';
+                    break;
+                case 3://少年组
+                    $titleRankingName .= '少年组';
+                    break;
+                case 2://成年组
+                    $titleRankingName .= '成年组';
+                    break;
+                case 1://老年组
+                    $titleRankingName .= '老年组';
+                    break;
+            }
+            $titleRankingName .= '排名';
             if($rankingView['status'] == true){
                 $data = $match_student_class->getCategoryRankingData($match,join(',',$project_id_array),$op4);
             }
