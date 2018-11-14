@@ -104,7 +104,7 @@ jQuery(function($) {
                         dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
                         question+=v
                     }else{
-                        dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-index="'+_n+'"></div>';
+                        dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-value="'+v+'" data-index="'+_n+'"></div>';
                         _n++;
                         question+="#"
                     }
@@ -145,7 +145,7 @@ jQuery(function($) {
                     var end_ques=start_index+150;//截取的所有字符串答题区结束坐标
                     var rights=index>=3 ? now_question.substring(start_index,end_index):_question.substring(start_index,end_index);//题目
                     //   var str1=_question.substring(start_index,start_ques);//答题前面区域
-                    //   var str2=_question.substring(start_ques,end_ques); //答题区域
+                      var str2=_question.substring(start_ques,end_ques); //答题区域
                     //   var str3=_question.substring(end_ques,end_index); //答题后面区域
                     var question=""
                     var str_dom=""
@@ -153,20 +153,20 @@ jQuery(function($) {
                     for (var i = 0; i < rights.length; i++) {
                         var v=rights.charAt(i)
                         if(i<50 || i>=150){
-                        var dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
-                        str_dom+=dom;
-                        question+=v;
+                            var dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                            str_dom+=dom;
+                            question+=v;
                         }else{
-                        var dom=''
-                        if(reg.test(v) || !isNaN(parseInt(v))){
-                            dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
-                            question+=v
-                        }else{
-                            dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-index="'+_n+'"></div>';
-                            _n++;
-                            question+="#"
-                        }
-                        str_dom+=dom 
+                            var dom=''
+                            if(reg.test(v) || !isNaN(parseInt(v))){
+                                dom='<div class="matching-number input"><input class="matching-number-input nl-foucs" value="'+v+'" disabled type="text"></div>'
+                                question+=v
+                            }else{
+                                dom='<div class="matching-number input"><input class="matching-number-input nl-foucs answer_q" type="text" data-value="'+v+'" data-index="'+_n+'"></div>';
+                                _n++;
+                                question+="#"
+                            }
+                            str_dom+=dom 
                         }
                     }
                     var item={rights:rights,question:question}
@@ -220,24 +220,31 @@ jQuery(function($) {
             //     var answer=$(this).text();
             //     my_answer.push(answer)
             // })
+
+            // {rights:rights,question:question}
+            var ajax_question=[]
             $('.matching-reading').each(function(i){
                 var _this=$(this);
-                var _answer=""
+                var rights=[];
+                var yours=[];
                 _this.find('.matching-number-input').each(function(){
-                    var x=$(this).val()=="" ? "#":$(this).val();
-                    _answer+=x;
+                    var x=$(this).val();
+                    var y=$(this).attr('data-value');
+                    rights.push(y)
+                    yours.push(y)
                 })
-                questions_answer[i]['yours']=_answer
+                var item={rights:rights,yours:yours,question:question}
+                ajax_question.push(item)
             })
-            console.log(questions_answer)
+            console.log(ajax_question);
              //return false;
             var data={
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 action:'grading_answer_submit',
-                grading_questions:questions_answer,
-                questions_answer:questions_answer,
+                grading_questions:ajax_question,
+                questions_answer:ajax_question,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
