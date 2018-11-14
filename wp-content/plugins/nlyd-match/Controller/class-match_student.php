@@ -114,7 +114,7 @@ class Match_student {
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
+                        <th scope="col" id="z_num" class="manage-column column-z_num">座位号</th>
                         <th scope="col" id="card" class="manage-column column-card">证件号码</th>
                         <th scope="col" id="card_image" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" id="user_coin_code" class="manage-column column-user_coin_code">收款二维码</th>
@@ -154,7 +154,7 @@ class Match_student {
                             </td>
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
                             <td class="name column-name" data-colname="姓名"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></td>
-                            <td class="role column-ID" data-colname="座位号">
+                            <td class="z_num column-z_num" data-colname="座位号">
                                 <?php if ($row['seat_number'] > 0 ){ ?>
                                     <input style="width: 70px;" class="save_seat" order-id='<?=$row['order_id']?>' value="<?=$row['seat_number'];?>" />
                                 <?php }else{ ?>
@@ -196,7 +196,7 @@ class Match_student {
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
+                        <th scope="col" class="manage-column column-z_num">座位号</th>
                         <th scope="col" class="manage-column column-card">证件号码</th>
                         <th scope="col" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" class="manage-column column-user_coin_code">收款二维码</th>
@@ -324,7 +324,7 @@ class Match_student {
         $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
 
         //查询成绩
-        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,
+        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,is_true,
               CASE answer_status 
               WHEN -1 THEN "记忆完成" 
               WHEN 1 THEN "提交" 
@@ -333,10 +333,10 @@ class Match_student {
               WHERE match_id='.$match_id.' AND project_id='.$proId.' AND user_id='.$user_id.' AND match_more='.$current_match_more, ARRAY_A);
         $is_view = true;
         if(!$row){
-            echo '本轮比赛无记录';
+            $msg =  '本轮比赛无记录';
             $is_view = false;
         }elseif ($row['answer_status'] != 1){
-            echo '本轮成绩未提交';
+            $msg =  '本轮成绩未提交';
             $is_view = false;
         }
 
@@ -520,9 +520,17 @@ class Match_student {
                 <h2 class="screen-reader-text">答题记录</h2>
                 <br class="clear">
                 <div><span>成绩:</span> <span> <?=$data['my_score']?></span></div>
-                <div><span>本轮排名:</span> <span> <?=$data['ranking']?></span></div>
+
                 <!--                <div><span>使用时间:</span> <span> --><?//=$data['use_time']?><!--</span></div>-->
                 <div><span>剩余时间:</span> <span> <?=$data['surplus_time']?></span></div>
+                <?php if($row['is_true'] == '1'){ ?>
+                    <div><span>本轮排名:</span> <span> <?=$data['ranking']?></span></div>
+                <?php }elseif($row){ ?>
+                    <div style="color: #bf0000">本轮成绩无效</div>
+                <?php } ?>
+                <?php if(!$is_view){ ?>
+                    <div style="color: #bf0000"><?=$msg?></div>
+                <?php } ?>
                 <table class="wp-list-table widefat fixed striped users">
                     <thead>
                     <tr>

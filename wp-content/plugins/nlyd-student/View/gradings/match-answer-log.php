@@ -143,22 +143,15 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     <?php
                     switch ($match_row['questions_type']){
                         case 'sz':    //随机数字
+                        case 'yzl':    //圆周率
+                        case 'tl':    //听记数字
                             require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
                             break;
                         case 'cy':    //随机词汇
                             require_once student_view_path.CONTROLLER.'/subject-zwcy.php';
                             break;
-                        case 'zxss':    //正向速算
-                            require_once student_view_path.CONTROLLER.'/subject-fastCalculation.php';
-                            break;
-                        case 'nxss':    //逆向速算
-                            require_once student_view_path.CONTROLLER.'/subject-fastReverse.php';
-                            break;
-                        case 'wzsd':     //文章速读
-                            require_once student_view_path.CONTROLLER.'/subject-reading.php';
-                            break;
-                        case 'kysm':    //快眼扫描
-                            require_once student_view_path.CONTROLLER.'/subject-fastScan.php';
+                        case 'rm':    //正向速算
+                            require_once student_view_path.CONTROLLER.'/subject-rmjy.php';
                             break;
                         default:
                             require_once student_view_path.'public/my-404.php';
@@ -167,7 +160,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ?>
                 </div>
                 <?php
-                    if($next_count_down > 0):
+                    if($next_count_down > 0 && !empty($next_project)):
                 ?>
                     <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
@@ -185,8 +178,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
-        $.DelSession('match_data');
-        <?php if(isset($_GET['project_more_id'])): ?>
+        $.DelSession('match_data')
+        <?php if(isset($_GET['grad_id'])): ?>
             leavePageLoad('<?=$wait_url?>');
             var endTimes=0;
             var counts_down=$('.count_down').attr('data-seconds')

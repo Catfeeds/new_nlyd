@@ -204,7 +204,7 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
-        //print_r($memory_type);
+        print_r($memory_type);
         $row['memory_type'] = $memory_type;
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
@@ -574,86 +574,86 @@ class Student_Gradings extends Student_Home
             case 1:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>30,'answer_time'=>900),    //数字 记忆时间 个数  答题时间
-                    'cy'=>array('time'=>900,'length'=>30,'answer_time'=>1800),    //词语 记忆时间 个数  答题时间
-                    'yzl'=>array('time'=>900,'length'=>100),  //圆周率长度
+                    'cy'=>array('memory_time'=>900,'length'=>30,'answer_time'=>1800),    //词语 记忆时间 个数  答题时间
+                    'yzl'=>array('memory_time'=>900,'length'=>100),  //圆周率长度
                 );
                 break;
             case 2:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>40,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>40,'answer_time'=>1800),
-                    'yzl'=>array('time'=>900,'length'=>200),
+                    'cy'=>array('memory_time'=>900,'length'=>40,'answer_time'=>1800),
+                    'yzl'=>array('memory_time'=>900,'length'=>200),
                 );
                 break;
             case 3:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>60,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>50,'answer_time'=>1800),
-                    'zm'=>array('time'=>300,'length'=>30,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>3),
+                    'cy'=>array('memory_time'=>900,'length'=>50,'answer_time'=>1800),
+                    'zm'=>array('memory_time'=>300,'length'=>30,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>3),
                 );
                 break;
             case 4:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>80,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>60,'answer_time'=>1800),
-                    'zm'=>array('time'=>300,'length'=>40,'answer_time'=>900),
-                    'tl'=>array('time'=>40,'length'=>40,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>60,'answer_time'=>1800),
+                    'zm'=>array('memory_time'=>300,'length'=>40,'answer_time'=>900),
+                    'tl'=>array('memory_time'=>40,'length'=>40,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 5:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>120,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>80,'answer_time'=>1800),
-                    'zm'=>array('time'=>300,'length'=>50,'answer_time'=>900),
-                    'tl'=>array('time'=>45,'length'=>45,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>80,'answer_time'=>1800),
+                    'zm'=>array('memory_time'=>300,'length'=>50,'answer_time'=>900),
+                    'tl'=>array('memory_time'=>45,'length'=>45,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 6:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>160,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>100,'answer_time'=>1800),
-                    'zm'=>array('time'=>300,'length'=>60,'answer_time'=>900),
-                    'tl'=>array('time'=>50,'length'=>50,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>100,'answer_time'=>1800),
+                    'zm'=>array('memory_time'=>300,'length'=>60,'answer_time'=>900),
+                    'tl'=>array('memory_time'=>50,'length'=>50,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 7:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>200,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>120,'answer_time'=>1800),
-                    'tl'=>array('time'=>60,'length'=>60,'answer_time'=>900),
-                    'rm'=>array('time'=>600,'length'=>5,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>120,'answer_time'=>1800),
+                    'tl'=>array('memory_time'=>60,'length'=>60,'answer_time'=>900),
+                    'rm'=>array('memory_time'=>600,'length'=>5,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 8:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>240,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>140,'answer_time'=>1800),
-                    'tl'=>array('time'=>70,'length'=>70,'answer_time'=>900),
-                    'rm'=>array('time'=>600,'length'=>6,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>140,'answer_time'=>1800),
+                    'tl'=>array('memory_time'=>70,'length'=>70,'answer_time'=>900),
+                    'rm'=>array('memory_time'=>600,'length'=>6,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 9:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>280,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>160,'answer_time'=>1800),
-                    'tl'=>array('time'=>80,'length'=>80,'answer_time'=>900),
-                    'rm'=>array('time'=>600,'length'=>8,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>160,'answer_time'=>1800),
+                    'tl'=>array('memory_time'=>80,'length'=>80,'answer_time'=>900),
+                    'rm'=>array('memory_time'=>600,'length'=>8,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             case 10:
                 $project = array(
                     'sz'=>array('memory_time'=>300,'length'=>320,'answer_time'=>900),
-                    'cy'=>array('time'=>900,'length'=>180,'answer_time'=>1800),
-                    'tl'=>array('time'=>100,'length'=>100,'answer_time'=>900),
-                    'rm'=>array('time'=>600,'length'=>10,'answer_time'=>900),
-                    'wz'=>array('time'=>1800,'length'=>100,'num'=>6),
+                    'cy'=>array('memory_time'=>900,'length'=>180,'answer_time'=>1800),
+                    'tl'=>array('memory_time'=>100,'length'=>100,'answer_time'=>900),
+                    'rm'=>array('memory_time'=>600,'length'=>10,'answer_time'=>900),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
                 );
                 break;
             default:
@@ -820,9 +820,23 @@ class Student_Gradings extends Student_Home
 
         if(ACTION == 'initialMatch'){//
 
-            if(in_array($_GET['type'],array('cy','yzl'))){//中文词语记忆
+            if(in_array($_GET['type'],array('sz','cy','yzl'))){//中文词语记忆
+
                 wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-numberBattle' );
+            }
+
+            if($_GET['type'] == 'sz' ){//进入数字争霸准备页面
+                wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
+                wp_enqueue_style( 'my-student-numberBattleReady' );
+            }
+            if($_GET['type'] == 'tl' ) {//进入听力
+                wp_register_style('my-student-matching-numberBattle', student_css_url . 'matching-numberBattle.css', array('my-student'));
+                wp_enqueue_style('my-student-matching-numberBattle');
+            }
+            if($_GET['type'] == 'rm' ) {//人脉信息
+                wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-card' );
             }
         }
 
@@ -841,14 +855,12 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
+
         if(ACTION == 'grading_voice'){
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
-        if(ACTION == 'ready_szzb' ){//进入数字争霸准备页面
-            wp_register_style( 'my-student-numberBattleReady', student_css_url.'ready-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-numberBattleReady' );
-        }
+
         if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );

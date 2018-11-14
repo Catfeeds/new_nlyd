@@ -66,13 +66,13 @@ jQuery(function($) {
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
    
-    var answer_time=900;//记忆时间
+    var answer_time=<?=$memory_type['memory_time']?>;//记忆时间
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
-    var que_len=100;//多少个字符
-    var que_PI="14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196";
-    var questions_answer=que_PI.substring(0,que_len).split('');
-    init_question(que_len);
+    var que_len="<?=$memory_type['length']?>";//多少个字符
+    var que_PI="14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196"
+    var questions_answer=que_PI.substring(0,que_len).split('')
+    init_question(que_len)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     });

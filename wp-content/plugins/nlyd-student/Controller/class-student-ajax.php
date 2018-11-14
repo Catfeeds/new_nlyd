@@ -3868,6 +3868,8 @@ class Student_Ajax
                 switch ($_POST['questions_type']){
                     case 'sz':
                     case 'cy':
+                    case 'yzl':
+                    case 'tl':
                         if(!empty($_POST['my_answer'])){
 
                             $len = count($_POST['questions_answer']);
@@ -3875,9 +3877,23 @@ class Student_Ajax
                             $correct_rate = ($len-$error_len)/$len;
                         }
                         break;
-                    case 'yzl':
-                        print_r(pi());
-                        die;
+                    case 'rm':
+                        if(!empty($_POST['my_answer'])){
+
+                            $len = count($_POST['questions_answer']);
+                            $my_answer = $_POST['my_answer'];
+                            $questions_answer = $_POST['questions_answer'];
+                            $success_len = 0;
+                            foreach ($my_answer as $k => $v){
+                                if( ($my_answer[$k]['name'] == $questions_answer[$k]['name']) && ($my_answer[$k]['phone'] == $questions_answer[$k]['phone']) && ($my_answer[$k]['picture'] == $questions_answer[$k]['picture'])){
+                                    $success_len += 1;
+                                }
+                            }
+                            $correct_rate = $success_len/$len;
+                        }
+                        break;
+                    case 'wz':
+
                         break;
                 }
                 break;
