@@ -3893,7 +3893,12 @@ class Student_Ajax
                         }
                         break;
                     case 'wz':
-
+                        $questions_answer = $_POST['questions_answer'];
+                        foreach ($questions_answer as $k =>$v){
+                            print_r($this->diffStr($v['rights'],$v['yours']));
+                        }
+                        die;
+                        print_r($_POST);die;
                         break;
                 }
                 break;
@@ -3928,6 +3933,21 @@ class Student_Ajax
 
     }
 
+
+
+    /*
+    *比较字符串不同的字符
+    *@参数：$str1:第一个字符串，$str2:第二个字符串
+    *@返回值：不同字符串的数组，
+    */
+    public function diffStr($str1,$str2){
+        /*$arr1 = str2arr($str1);
+        $arr2 = str2arr($str2);*/
+        preg_match_all("/./u", $str1, $arr1);
+        print_r($arr1);die;
+        $result=array_diff($arr1,$arr2);
+        return $result;
+    }
 
 }
 

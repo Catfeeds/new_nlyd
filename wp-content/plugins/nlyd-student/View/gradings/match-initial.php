@@ -21,8 +21,8 @@ switch ($project_alias){
             case 'yzl': //圆周率记忆
                 require_once student_view_path.CONTROLLER.'/matching-PI.php';
                 break;
-            case 'wz': //文章记忆
-                require_once student_view_path.CONTROLLER.'/ready-reading.php';
+            case 'wz': //国学
+                require_once student_view_path.CONTROLLER.'/matching-silent.php';
                 break;
             case 'tl': //听力记忆
                 require_once student_view_path.CONTROLLER.'/grading-voice.php';

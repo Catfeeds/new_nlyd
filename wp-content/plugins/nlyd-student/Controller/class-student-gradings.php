@@ -590,7 +590,7 @@ class Student_Gradings extends Student_Home
                     'sz'=>array('memory_time'=>300,'length'=>60,'answer_time'=>900),
                     'cy'=>array('memory_time'=>900,'length'=>50,'answer_time'=>1800),
                     'zm'=>array('memory_time'=>300,'length'=>30,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>3),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>3,'lv'=>3),
                 );
                 break;
             case 4:
@@ -599,7 +599,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>60,'answer_time'=>1800),
                     'zm'=>array('memory_time'=>300,'length'=>40,'answer_time'=>900),
                     'tl'=>array('memory_time'=>40,'length'=>40,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>4),
                 );
                 break;
             case 5:
@@ -608,7 +608,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>80,'answer_time'=>1800),
                     'zm'=>array('memory_time'=>300,'length'=>50,'answer_time'=>900),
                     'tl'=>array('memory_time'=>45,'length'=>45,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>5),
                 );
                 break;
             case 6:
@@ -617,7 +617,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>100,'answer_time'=>1800),
                     'zm'=>array('memory_time'=>300,'length'=>60,'answer_time'=>900),
                     'tl'=>array('memory_time'=>50,'length'=>50,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>6),
                 );
                 break;
             case 7:
@@ -626,7 +626,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>120,'answer_time'=>1800),
                     'tl'=>array('memory_time'=>60,'length'=>60,'answer_time'=>900),
                     'rm'=>array('memory_time'=>600,'length'=>5,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>7),
                 );
                 break;
             case 8:
@@ -635,7 +635,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>140,'answer_time'=>1800),
                     'tl'=>array('memory_time'=>70,'length'=>70,'answer_time'=>900),
                     'rm'=>array('memory_time'=>600,'length'=>6,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>8),
                 );
                 break;
             case 9:
@@ -644,7 +644,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>160,'answer_time'=>1800),
                     'tl'=>array('memory_time'=>80,'length'=>80,'answer_time'=>900),
                     'rm'=>array('memory_time'=>600,'length'=>8,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>9),
                 );
                 break;
             case 10:
@@ -653,7 +653,7 @@ class Student_Gradings extends Student_Home
                     'cy'=>array('memory_time'=>900,'length'=>180,'answer_time'=>1800),
                     'tl'=>array('memory_time'=>100,'length'=>100,'answer_time'=>900),
                     'rm'=>array('memory_time'=>600,'length'=>10,'answer_time'=>900),
-                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6),
+                    'wz'=>array('memory_time'=>1800,'length'=>100,'num'=>6,'lv'=>10),
                 );
                 break;
             default:
@@ -838,6 +838,10 @@ class Student_Gradings extends Student_Home
                 wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-card' );
             }
+            if($_GET['type'] == 'wz' ) {//国学
+                wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-silent' );
+            }
         }
 
         if(ACTION == 'answerLog'){//
@@ -851,25 +855,25 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-subject' );
         }*/
 
-        if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
+        /*if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }
+        }*/
 
-        if(ACTION == 'grading_voice'){
+        /*if(ACTION == 'grading_voice'){
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }
+        }*/
 
-        if(ACTION == 'matchRule' ){//考级规则
+        /*if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );
-        }
+        }*/
 
-        if(ACTION == 'grading_rmxx'){//人脉信息记忆
+        /*if(ACTION == 'grading_rmxx'){//人脉信息记忆
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
-        }
+        }*/
         if(ACTION == 'matching_silent'){//国学经典默写
             wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-silent' );
