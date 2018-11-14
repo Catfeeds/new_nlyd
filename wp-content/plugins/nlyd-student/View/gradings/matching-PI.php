@@ -75,8 +75,8 @@ jQuery(function($) {
     init_question(que_len)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
-    })
-    count_down()
+    });
+    count_down();
     function count_down(){
         // sys_second=answer_time
         var timer = setInterval(function(){
@@ -91,11 +91,11 @@ jQuery(function($) {
                 minute= minute<10?"0"+minute:minute;//计算分钟
                 second= second<10?"0"+second:second;//计算秒
                 var text=day+hour+':'+minute+':'+second;
-                $('.count_down').text(text).attr('data-seconds',sys_second)
+                $('.count_down').text(text).attr('data-seconds',sys_second);
             } else {//倒计时结束
-                clearInterval(timer)
-                submit(3)
-            }
+                clearInterval(timer);
+                submit(3);
+            };
 
         }, 1000);
     } 

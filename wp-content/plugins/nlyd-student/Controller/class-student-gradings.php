@@ -558,8 +558,8 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
-    public function test(){//考级成绩
-        $view = student_view_path.CONTROLLER.'/test.php';
+    public function matchRule(){//规则
+        $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view);
     }
 
@@ -838,10 +838,6 @@ class Student_Gradings extends Student_Home
                 wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-card' );
             }
-            if($_GET['type'] == 'wz' ) {//国学
-                wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
-                wp_enqueue_style( 'my-student-matching-silent' );
-            }
         }
 
         if(ACTION == 'answerLog'){//
@@ -855,25 +851,25 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-subject' );
         }*/
 
-        /*if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
+        if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }*/
+        }
 
-        /*if(ACTION == 'grading_voice'){
+        if(ACTION == 'grading_voice'){
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }*/
+        }
 
-        /*if(ACTION == 'matchRule' ){//考级规则
+        if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );
-        }*/
+        }
 
-        /*if(ACTION == 'grading_rmxx'){//人脉信息记忆
+        if(ACTION == 'grading_rmxx'){//人脉信息记忆
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
-        }*/
+        }
         if(ACTION == 'matching_silent'){//国学经典默写
             wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-silent' );

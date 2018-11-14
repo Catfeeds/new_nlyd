@@ -42,7 +42,7 @@
     jQuery(function($) {
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
-        $.DelSession('matching_question');//准备页面题目参数
+        $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
         <?php if($match_status == 2 || $count_down <= 120): ?>
         matchWaitting()
