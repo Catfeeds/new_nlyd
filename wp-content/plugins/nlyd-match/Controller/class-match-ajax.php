@@ -1065,7 +1065,9 @@ class Match_Ajax
 //            wp_send_json_error(array('info'=>'当前学员未设置默认收货地址!'));
 //            return;
 //        }
-        $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id);
+//        $cost = $wpdb->get_var('SELECT match_cost FROM '.$wpdb->prefix.'match_meta_new WHERE match_id='.$match_id);
+        //获取座位号
+        $num = $wpdb->get_var("SELECT COUNT(`id`) FROM `{$wpdb->prefix}order` WHERE match_id='{$match_id}' AND order_type=1 AND pay_status IN(2,3,4)");
         //新增订单
         $orderInsertData = [
             'user_id' => $user_id,
@@ -1076,6 +1078,7 @@ class Match_Ajax
 //            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
             'order_type'=>1,
             'pay_status'=>4,
+            'seat_number'=>$num+1,
             'created_time'=>get_time('mysql'),
         ];
 

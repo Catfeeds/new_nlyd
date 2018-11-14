@@ -114,7 +114,7 @@ class Match_student {
                         </th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
+                        <th scope="col" id="z_num" class="manage-column column-z_num">座位号</th>
                         <th scope="col" id="card" class="manage-column column-card">证件号码</th>
                         <th scope="col" id="card_image" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" id="user_coin_code" class="manage-column column-user_coin_code">收款二维码</th>
@@ -154,7 +154,7 @@ class Match_student {
                             </td>
                             <td class="role column-ID" data-colname="ID"><?=$usermeta['user_ID'][0]?></td>
                             <td class="name column-name" data-colname="姓名"><?=unserialize($usermeta['user_real_name'][0])['real_name']?></td>
-                            <td class="role column-ID" data-colname="座位号">
+                            <td class="z_num column-z_num" data-colname="座位号">
                                 <?php if ($row['seat_number'] > 0 ){ ?>
                                     <input style="width: 70px;" class="save_seat" order-id='<?=$row['order_id']?>' value="<?=$row['seat_number'];?>" />
                                 <?php }else{ ?>
@@ -196,7 +196,7 @@ class Match_student {
                         </th>
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="name" class="manage-column column-name">座位号</th>
+                        <th scope="col" class="manage-column column-z_num">座位号</th>
                         <th scope="col" class="manage-column column-card">证件号码</th>
                         <th scope="col" class="manage-column column-card_image">证件照片</th>
                         <th scope="col" class="manage-column column-user_coin_code">收款二维码</th>
