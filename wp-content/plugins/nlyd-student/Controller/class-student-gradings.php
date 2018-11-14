@@ -854,12 +854,6 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
-
-        // if(ACTION == 'matchRule' ){//考级规则
-            // wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
-            // wp_enqueue_style( 'my-student-matchRule' );
-        // }
-
         if(ACTION == 'grading_rmxx'){//人脉信息记忆
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
