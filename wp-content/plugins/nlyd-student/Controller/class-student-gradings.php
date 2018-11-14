@@ -558,12 +558,10 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/record.php';
         load_view_template($view);
     }
-    public function test(){//考级成绩
-        $view = student_view_path.CONTROLLER.'/test.php';
+    public function matchRule(){//规则
+        $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view);
     }
-
-
     /**
      * 根据记忆等级获取参数
      * @param $memory_lv 记忆等级
@@ -846,10 +844,6 @@ class Student_Gradings extends Student_Home
 
         }
 
-        /*if(ACTION == 'test'){
-            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
-            wp_enqueue_style( 'my-student-subject' );
-        }*/
 
         if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
             wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
@@ -861,10 +855,10 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-matching-numberBattle' );
         }
 
-        if(ACTION == 'matchRule' ){//考级规则
-            wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matchRule' );
-        }
+        // if(ACTION == 'matchRule' ){//考级规则
+            // wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
+            // wp_enqueue_style( 'my-student-matchRule' );
+        // }
 
         if(ACTION == 'grading_rmxx'){//人脉信息记忆
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
