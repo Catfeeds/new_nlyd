@@ -217,11 +217,11 @@ class Download
 //        LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id
 //        WHERE o.order_type=1 AND o.pay_status IN (2,3,4) AND u.ID != "" AND o.match_id='.$match->ID, ARRAY_A);
 
-        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name FROM '.$wpdb->prefix.'order AS o 
+        $rows = $wpdb->get_results('SELECT SQL_CALC_FOUND_ROWS u.ID,u.user_login,u.display_name,u.user_mobile,u.user_email,o.created_time,o.address,o.telephone,u.user_mobile,p.post_title AS team_name,o.seat_number FROM '.$wpdb->prefix.'order AS o 
         LEFT JOIN '.$wpdb->users.' AS u ON u.ID=o.user_id 
         LEFT JOIN '.$wpdb->prefix.'match_team AS mt ON mt.user_id=o.user_id AND mt.status=2 
         LEFT JOIN '.$wpdb->posts.' p ON p.ID=mt.team_id AND p.ID!="" 
-        WHERE o.order_type=1 AND o.pay_status IN(2,3,4)  AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.id ASC', ARRAY_A);
+        WHERE o.order_type=1 AND o.pay_status IN(2,3,4)  AND o.match_id='.$match->ID.' AND u.ID!="" ORDER BY o.seat_number ASC', ARRAY_A);
 
 
 
@@ -242,16 +242,17 @@ class Download
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(25);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(25);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(45);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(25);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(45);
 //        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(45);
 
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1', $match->post_title.'(报名选手)');
@@ -269,6 +270,7 @@ class Download
         $objPHPExcel->getActiveSheet()->getStyle( 'J2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'K2')->getFont()->setBold(true);
         $objPHPExcel->getActiveSheet()->getStyle( 'L2')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle( 'M2')->getFont()->setBold(true);
 //        $objPHPExcel->getActiveSheet()->getStyle( 'M2')->getFont()->setBold(true);
 
 
@@ -277,16 +279,17 @@ class Download
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A2', '用户名');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B2', 'ID');
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C2', '真实姓名');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '证件号码');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '国籍');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '性别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '年龄');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '年龄组别');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '所在地区');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '电话');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D2', '座位号');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E2', '证件号码');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F2', '国籍');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G2', '性别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H2', '年龄');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I2', '年龄组别');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J2', '所在地区');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '电话');
 //        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '邮箱');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K2', '报名时间');
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '战队名称');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L2', '报名时间');
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', '战队名称');
         foreach ($rows as $k => $row){
             $usermeta = get_user_meta($row['ID'], '', true);
             $age = unserialize($usermeta['user_real_name'][0])['real_age'];
@@ -295,16 +298,17 @@ class Download
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($k+3),' '.$row['user_login']);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.($k+3),' '.$usermeta['user_ID'][0]);
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_name']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.$user_nationality);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$usermeta['user_gender'][0]);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$age);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$group);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.$row['user_mobile']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.($k+3),' '.$row['seat_number']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.($k+3),' '.unserialize($usermeta['user_real_name'][0])['real_ID'].' ('.unserialize($usermeta['user_real_name'][0])['real_type'].')');
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.($k+3),' '.$user_nationality);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.($k+3),' '.$usermeta['user_gender'][0]);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($k+3),' '.$age);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.($k+3),' '.$group);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.($k+3),' '.unserialize($usermeta['user_address'][0])['province'].unserialize($usermeta['user_address'][0])['city']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['user_mobile']);
 //            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['user_email']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.($k+3),' '.$row['created_time']);
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),' '.$row['team_name']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.($k+3),' '.$row['created_time']);
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.($k+3),' '.$row['team_name']);
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
