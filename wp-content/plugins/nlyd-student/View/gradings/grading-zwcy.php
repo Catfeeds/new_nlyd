@@ -45,11 +45,11 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
-    var ready_time=900;//记忆时间
+    var ready_time="<?=$memory_type['time']?>";//记忆时间
     var sys_second=ready_time;
-    var answer_time=1800;//记忆时间
+    var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
-    var que_len=10;//多少个字符
+    var que_len="<?=$memory_type['length']?>";//多少个字符
     var remember_time=ready_time;
     var file_url="<?=leo_match_url.'/upload/vocabulary/vocabulary.json'?>";
     init_question(que_len,_show)

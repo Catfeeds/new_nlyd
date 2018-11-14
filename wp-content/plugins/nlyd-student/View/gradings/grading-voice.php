@@ -25,7 +25,7 @@
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
                             </div>
                         </div>
-                        <!-- <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div> -->
+                         <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
                     </div>
 
                     <!-- 比赛 -->
@@ -78,11 +78,11 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
-    var ready_time=900;//记忆时间
+    var ready_time="<?=$memory_type['time']?>";//记忆时间
     var sys_second=ready_time;
-    var answer_time=300;//记忆时间
+    var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
     var endTime=$.GetEndTime(ready_time);//结束时间
-    var que_len=100;//多少个字符
+    var que_len=<?=$memory_type['length']?>;//多少个字符
     var file_url="<?=leo_match_url.'/upload/voice/'?>"
     var _index=0;
     init_question(que_len,_show)
@@ -215,7 +215,7 @@ jQuery(function($) {
         //         'visibility': 'visible',
         //     })
         var my_answer=[];
-        $('.matching-number-zoo .matching-number').each(function(){
+        $('.match_zoo .matching-number-match').each(function(){
             var answer=$(this).text();
             my_answer.push(answer)
         })
