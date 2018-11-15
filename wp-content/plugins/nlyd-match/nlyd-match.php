@@ -221,9 +221,22 @@ if(!class_exists('MatchController')){
                         }
                     }
                 }
-
                 ?>
-
+                <script type="text/javascript">
+                    jQuery(document).ready(function($) {
+                <?php
+                if(isset($_GET['post_status']) && $_GET['post_status'] == 'trash'){
+                ?>
+                    $('#bulk-action-selector-top').append('<option value="delete">永久删除</option>');
+                <?php
+                }else{
+                ?>
+                    $('#bulk-action-selector-top').append('<option value="trash" class="hide-if-no-js">移至回收站</option>');
+                <?php
+                }
+                ?>
+                    })
+                </script>
                 <?php
             }
 
@@ -376,7 +389,7 @@ if(!class_exists('MatchController')){
 
                 $questionTypeId = $questionType[0];
                 $is_indent = false;
-                if(preg_match('/中文/',$questionType[1])){
+                if(!preg_match('/英文/',$questionType[1])){
                     $is_indent = true;
                 }
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
