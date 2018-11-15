@@ -372,8 +372,13 @@ if(!class_exists('MatchController')){
                     return false;
 
                 }
+                $questionType = explode('_',$_POST['question_type']);
 
-                $questionTypeId = $_POST['question_type'];
+                $questionTypeId = $questionType[0];
+                $is_indent = false;
+                if(preg_match('/中文/',$questionType[1])){
+                    $is_indent = true;
+                }
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
                 $excelClass = new PHPExcel();
 
@@ -463,10 +468,12 @@ if(!class_exists('MatchController')){
                     $errNum = 0;
                     $successNum = 0;
                     $wpdb->startTrans();
+                    $indentStyle = $is_indent ? ' style="text-indent: 2em;"':'';
+
                     foreach ($dataArr as $k => $data){
                         $content = '';
                         foreach (explode("\n",$data['content']) as $contentChild){
-                            $content .= '<p style="text-indent: 2em;">'.$contentChild.'</p>';
+                            $content .= '<p'.$indentStyle.'>'.$contentChild.'</p>';
                         }
 
 //                        echo '<pre />';
@@ -623,7 +630,7 @@ if(!class_exists('MatchController')){
                                 <td>
                                     <select name="question_type" id="">
                                         <?php foreach ($questionTypeArr as $question){ ?>
-                                            <option value="<?=$question['term_id']?>"><?=$question['name']?></option>
+                                            <option value="<?=$question['term_id'].'_'.$question['name']?>"><?=$question['name']?></option>
                                         <?php } ?>
                                     </select>
                                     <select name="post_status" id="">

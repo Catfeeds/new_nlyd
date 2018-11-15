@@ -50,7 +50,17 @@
                         <?php if(!is_user_logged_in()){ ?>
                         <a class="userCenter-names c_black" href="<?=home_url('/logins')?>"><?=__('未登录', 'nlyd-student')?></a>
                         <?php }else{ ?>
-                        <div class="userCenter-names login"><?=$user_info['nickname']?></div>
+                        <div class="userCenter-names login"><?php
+                            if(isset($user_info['user_real_name']) && isset($user_info['user_real_name']['real_name']) && $user_info['user_real_name']['real_name']){
+                                echo $user_info['user_real_name']['real_name'];
+                            }elseif ($user_info['user_mobile']){
+                                echo $user_info['user_mobile'];
+                            }else{
+                                echo $user_info['user_email'];
+                            }
+
+                            ?>
+                        </div>
                         <?=$user_info['user_type'] ? '<div class="userCenter-type fs_12  layui-hide-lg">'.$user_info['user_type'].'</div>':'';?>
                         <?php } ?>
                     </div>
