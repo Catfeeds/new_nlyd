@@ -1609,12 +1609,12 @@ class Match_student {
                         $ranking_bonus = $bonusTmp['project1'];
                         break;
                     case 2:
-                        if($bonusTmp['project2'] == 0) continue;
+                        if($bonusTmp['project2'] == 0) continue 2;
                         $ranking_name.='单项亚军';
                         $ranking_bonus = $bonusTmp['project2'];
                         break;
                     case 3:
-                        if($bonusTmp['project3'] == 0) continue;
+                        if($bonusTmp['project3'] == 0) continue 2;
                         $ranking_name.='单项季军';
                         $ranking_bonus = $bonusTmp['project3'];
                         break;
@@ -1636,12 +1636,12 @@ class Match_student {
                             $ranking_bonus = $bonusTmp['category1'];
                             break;
                         case 2:
-                            if($bonusTmp['category2'] == 0) continue;
+                            if($bonusTmp['category2'] == 0) continue 2;
                             $ranking_name.='总亚军';
                             $ranking_bonus = $bonusTmp['category2'];
                             break;
                         case 3:
-                            if($bonusTmp['category3'] == 0) continue;
+                            if($bonusTmp['category3'] == 0) continue 2;
                             $ranking_name.='总季军';
                             $ranking_bonus = $bonusTmp['category3'];
                             break;
@@ -1665,11 +1665,11 @@ class Match_student {
                                     break;
                                 case 2:
                                     $ranking_name.='亚军';
-                                    if($bonusTmp['category2_age'] == 0) continue;
+                                    if($bonusTmp['category2_age'] == 0) continue 2;
                                     $ranking_bonus = $bonusTmp['category2_age'];
                                     break;
                                 case 3:
-                                    if($bonusTmp['category3_age'] == 0) continue;
+                                    if($bonusTmp['category3_age'] == 0) continue 2;
                                     $ranking_name.='季军';
                                     $ranking_bonus = $bonusTmp['category3_age'];
                                     break;

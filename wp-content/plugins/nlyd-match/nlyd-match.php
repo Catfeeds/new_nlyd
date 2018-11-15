@@ -151,7 +151,6 @@ if(!class_exists('MatchController')){
         }
 
         public function wpdx_add_custom_status_in_quick_edit(){
-
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
@@ -212,7 +211,7 @@ if(!class_exists('MatchController')){
                             ?>
                             <script type="text/javascript">
                                 jQuery(document).ready(function($) {
-                                    var _html = ' | <li class="question---><?=$v->term_id?>//"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
+                                    var _html = ' | <li class="question-<?=$v->term_id?>"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
                                     $('.wrap').find('.subsubsub').append(_html);
                                     $('.question-<?=$questions_status?>').find('a').addClass('current');
                                 })
@@ -222,9 +221,22 @@ if(!class_exists('MatchController')){
                         }
                     }
                 }
-
                 ?>
-
+                <script type="text/javascript">
+                    jQuery(document).ready(function($) {
+                <?php
+                if(isset($_GET['post_status']) && $_GET['post_status'] == 'trash'){
+                ?>
+                    $('#bulk-action-selector-top').append('<option value="delete">永久删除</option>');
+                <?php
+                }else{
+                ?>
+                    $('#bulk-action-selector-top').append('<option value="trash" class="hide-if-no-js">移至回收站</option>');
+                <?php
+                }
+                ?>
+                    })
+                </script>
                 <?php
             }
 
@@ -373,8 +385,13 @@ if(!class_exists('MatchController')){
                     return false;
 
                 }
+                $questionType = explode('_',$_POST['question_type']);
 
-                $questionTypeId = $_POST['question_type'];
+                $questionTypeId = $questionType[0];
+                $is_indent = false;
+                if(!preg_match('/英文/',$questionType[1])){
+                    $is_indent = true;
+                }
                 require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
                 $excelClass = new PHPExcel();
 
@@ -426,7 +443,6 @@ if(!class_exists('MatchController')){
                         //去除已存在的题目
                         if($wpdb->get_var('SELECT ID FROM '.$wpdb->posts.' WHERE post_title="'.$b.'" AND post_type="question"')){
                             $token = 1;
-                            $titleRepeat = "\\n{$b}: 已存在";
                             $titleRepeat .= "\\n{$b}: 已存在";
                             continue;
                         }
@@ -464,10 +480,11 @@ if(!class_exists('MatchController')){
                     $errNum = 0;
                     $successNum = 0;
                     $wpdb->startTrans();
+                    $indentStyle = $is_indent ? ' style="text-indent: 2em;"':'';
                     foreach ($dataArr as $k => $data){
                         $content = '';
                         foreach (explode("\n",$data['content']) as $contentChild){
-                            $content .= '<p style="text-indent: 2em;">'.$contentChild.'</p>';
+                            $content .= '<p'.$indentStyle.'>'.$contentChild.'</p>';
                         }
 
 //                        echo '<pre />';
@@ -542,7 +559,7 @@ if(!class_exists('MatchController')){
                         }
                     }
                     $wpdb->commit();
-                    echo "<script type='text/javascript'>alert('导入成功 {$titleRepeat}')</script>";
+                    echo "<script type='text/javascript'>alert(\"导入成功 {$titleRepeat}\")</script>";
                 }
             }
 
@@ -624,7 +641,7 @@ if(!class_exists('MatchController')){
                                 <td>
                                     <select name="question_type" id="">
                                         <?php foreach ($questionTypeArr as $question){ ?>
-                                            <option value="<?=$question['term_id']?>"><?=$question['name']?></option>
+                                            <option value="<?=$question['term_id'].'_'.$question['name']?>"><?=$question['name']?></option>
                                         <?php } ?>
                                     </select>
                                     <select name="post_status" id="">
