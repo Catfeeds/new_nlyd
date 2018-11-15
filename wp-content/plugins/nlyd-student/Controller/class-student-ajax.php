@@ -3846,15 +3846,20 @@ class Student_Ajax
     public function grading_answer_submit(){
         unset($_SESSION['count_down']);
         unset($_SESSION['match_post_id']);
-        if(empty($_POST['grading_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
-            wp_send_json_error(array('所提交数据信息不完全'));
+        if($_POST['questions_type'] == 'wz'){
+            if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
+        }else{
+
+            if(empty($_POST['grading_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
+                wp_send_json_error(array('所提交数据信息不完全'));
+            }
         }
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
-        $sql = "select id,answer_status,questions_answer
+        $sql = "select id,questions_answer
                 from {$wpdb->prefix}grading_questions
-                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = {$_POST['grading_type']} and questions_type = {$_POST['questions_type']}
+                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
                 ";
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
@@ -3893,12 +3898,22 @@ class Student_Ajax
                         }
                         break;
                     case 'wz':
+
                         $questions_answer = $_POST['questions_answer'];
+                        $len = count($questions_answer);
+
+                        $success_len = 0;
                         foreach ($questions_answer as $k =>$v){
-                            print_r($this->diffStr($v['rights'],$v['yours']));
+
+                            $result =array_diff_assoc($v['rights'],$v['yours']);
+                            if(empty($result)){
+                                $success_len += 1;
+                            }
                         }
-                        die;
-                        print_r($_POST);die;
+                        $correct_rate = $success_len/$len;
+                        $_POST['grading_questions'] = array_column($questions_answer,'question');
+                        $_POST['questions_answer'] = array_column($questions_answer,'rights');
+                        $_POST['my_answer'] = array_column($questions_answer,'yours');
                         break;
                 }
                 break;
@@ -3920,6 +3935,7 @@ class Student_Ajax
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
             'is_true'=>!empty($prison_log_id) ? 2 : 1,
         );
+        //print_r($insert);die;
         $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
         /*print_r($result);
         die;*/
@@ -3944,8 +3960,11 @@ class Student_Ajax
         /*$arr1 = str2arr($str1);
         $arr2 = str2arr($str2);*/
         preg_match_all("/./u", $str1, $arr1);
-        print_r($arr1);die;
-        $result=array_diff($arr1,$arr2);
+        preg_match_all("/./u", $str2, $arr2);
+        /*print_r($arr1);
+        print_r($arr2);*/
+        $result=array_diff_assoc($arr1[0],$arr2[0]);
+        //print_r($result);die;
         return $result;
     }
 

@@ -405,49 +405,25 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        $match_questions = json_decode($row['match_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
-        if($row['project_alias'] == 'wzsd'){
-            if(empty($questions_answer)){
-                $len = 0;
-            }else{
-
-                $len = count($questions_answer);
-            }
+        if($row['questions_type'] == 'wz'){
+            $len = count($questions_answer);
             $success_len = 0;
-            if(!empty($questions_answer)){
-                foreach ($questions_answer as $k=>$val){
-                    $arr = array();
-                    $answerArr = array();
-                    foreach ($val['problem_answer'] as $key => $v){
-                        if($v == 1){
-                            $arr[] = $key;
-                            $answerArr[] = $key;
-                        }
-                    }
-                    $questions_answer[$k]['problem_answer'] = $answerArr;
-                    if(isset($my_answer[$k])){
-                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+            if(!empty($my_answer)){
+                //print_r($questions_answer);
+                //print_r($my_answer);
+
+                foreach ($my_answer as $k => $v){
+
+                    $result=array_diff_assoc($v,$questions_answer[$k]);
+                    //var_dump($result);
+                    if(empty($result)){
+                        $success_len += 1;
                     }
                 }
             }
-
-        }
-        elseif ($row['project_alias'] == 'nxss'){
-
-            $answer = $questions_answer;
-            $answer_array = $answer['result'];
-            $questions_answer = $answer['examples'];
-            /*print_r($answer_array);
-            print_r($questions_answer);die;*/
-
-            $count_value = array_count_values($answer_array);
-            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
-
-            $len = count($questions_answer);
-
         }
         else{
 
@@ -490,18 +466,16 @@ class Student_Gradings extends Student_Home
                 $next_project_url .= '/memory_lv/'.$order->memory_lv;
             }
         }
+
         //print_r($next_project);
         $data = array(
             'next_project'=>$next_project,
             'next_count_down'=>300,
             'str_len'=>$len,
-            'match_more'=>$this->match_more,
             'success_length'=>$success_len,
             'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
-            'match_questions'=>$match_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
-            'answer_array'=>$answer_array,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
@@ -838,6 +812,11 @@ class Student_Gradings extends Student_Home
                 wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
                 wp_enqueue_style( 'my-student-matching-card' );
             }
+
+            if($_GET['type'] == 'wz'){//国学经典默写
+                wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
+                wp_enqueue_style( 'my-student-matching-silent' );
+            }
         }
 
         if(ACTION == 'answerLog'){//
@@ -870,10 +849,7 @@ class Student_Gradings extends Student_Home
             wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
             wp_enqueue_style( 'my-student-matching-card' );
         }
-        if(ACTION == 'matching_silent'){//国学经典默写
-            wp_register_style( 'my-student-matching-silent', student_css_url.'grading/silent.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-silent' );
-        }
+
 
         if(ACTION == 'matching_wzsd'){//文章速读比赛页
             wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
