@@ -129,7 +129,8 @@ class Match_Ajax
         if($_POST['type'] == 'category'){
             $args = array(
                 'taxonomy' => 'question_genre', //自定义分类法
-                'pad_counts' => false
+                'pad_counts' => false,
+                'hide_empty' => false,
             );
             $category = get_categories($args);
             //print_r($category);

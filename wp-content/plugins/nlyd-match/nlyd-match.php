@@ -443,7 +443,6 @@ if(!class_exists('MatchController')){
                         //去除已存在的题目
                         if($wpdb->get_var('SELECT ID FROM '.$wpdb->posts.' WHERE post_title="'.$b.'" AND post_type="question"')){
                             $token = 1;
-                            $titleRepeat = "\\n{$b}: 已存在";
                             $titleRepeat .= "\\n{$b}: 已存在";
                             continue;
                         }
@@ -482,7 +481,6 @@ if(!class_exists('MatchController')){
                     $successNum = 0;
                     $wpdb->startTrans();
                     $indentStyle = $is_indent ? ' style="text-indent: 2em;"':'';
-
                     foreach ($dataArr as $k => $data){
                         $content = '';
                         foreach (explode("\n",$data['content']) as $contentChild){
@@ -561,7 +559,7 @@ if(!class_exists('MatchController')){
                         }
                     }
                     $wpdb->commit();
-                    echo "<script type='text/javascript'>alert('导入成功 {$titleRepeat}')</script>";
+                    echo "<script type='text/javascript'>alert(\"导入成功 {$titleRepeat}\")</script>";
                 }
             }
 
