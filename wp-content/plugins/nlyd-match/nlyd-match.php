@@ -88,6 +88,9 @@ if(!class_exists('MatchController')){
             //加入admin_footer-edit.php执行
             add_action('admin_footer-edit.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
 
+            //加入admin_footer-post.php执行
+            add_action('admin_footer-post.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
+
             //查询语句join
             add_action('posts_join',array($this, 'filter_request_join'));
 
@@ -151,12 +154,6 @@ if(!class_exists('MatchController')){
         }
 
         public function wpdx_add_custom_status_in_quick_edit(){
-            ?>
-            <script>
-                alert(222);
-            </script>
-            <?php
-
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
