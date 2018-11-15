@@ -1004,7 +1004,7 @@ class Match_student {
                             <?php foreach ($data as $raV){
 
                                 ?>
-                                <tr id="user-13">
+                                <tr>
                                     <th scope="row" class="check-column">
                                         <label class="screen-reader-text" for="user_13"></label>
                                         <input type="checkbox" name="users[]" id="" class="subscriber" value="">
@@ -1014,6 +1014,7 @@ class Match_student {
                                         <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
 
                                         <div class="row-actions">
+                                            <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$raV['user_id'])?>" aria-label="">编辑用户</a></span>
                                             <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
                                             <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
                                             <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $post->ID . '&student_id='.$raV['user_id'])?>" aria-label="">答题记录</a></span>

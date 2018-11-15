@@ -118,6 +118,7 @@ class Grading
                             <br>
                             <div class="row-actions">
                                 <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'])?>">答题记录</a>  </span>
+                                <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$row['user_id'])?>" aria-label="">编辑用户</a></span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
