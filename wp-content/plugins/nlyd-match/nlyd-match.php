@@ -88,9 +88,6 @@ if(!class_exists('MatchController')){
             //加入admin_footer-edit.php执行
             add_action('admin_footer-edit.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
 
-            //加入admin_footer-post.php执行
-            add_action('admin_footer-post.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
-
             //查询语句join
             add_action('posts_join',array($this, 'filter_request_join'));
 
