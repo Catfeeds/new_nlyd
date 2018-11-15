@@ -83,7 +83,7 @@
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('姓 名', 'nlyd-student')?></div></div>
-                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|filterSqlStr|validate">
+                                    <input type="text" name="meta_val[real_name]" id="meta_val[real_name]" value="<?=!empty($user_info['user_real_name']) ? $user_info['user_real_name']['real_name'] : '';?>" placeholder="<?=__('输入证件上的真实姓名', 'nlyd-student')?>" class="nl-input nl-foucs" lay-verify="required|validate">
                                 </div>
                                 <div class="form-input-row">
                                     <div class="form-input-label"><div><?=__('性 别', 'nlyd-student')?></div></div>
