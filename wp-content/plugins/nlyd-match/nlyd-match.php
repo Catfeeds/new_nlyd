@@ -151,6 +151,12 @@ if(!class_exists('MatchController')){
         }
 
         public function wpdx_add_custom_status_in_quick_edit(){
+            ?>
+            <script>
+                alert(222);
+            </script>
+            <?php
+
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
@@ -211,7 +217,7 @@ if(!class_exists('MatchController')){
                             ?>
                             <script type="text/javascript">
                                 jQuery(document).ready(function($) {
-                                    var _html = ' | <li class="question---><?=$v->term_id?>//"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
+                                    var _html = ' | <li class="question-<?=$v->term_id?>"><a href="edit.php?post_type=question&questions_status=<?=$v->term_id?>"><?=$v->name?><span class="count">（<?=$num?>） </span></a></li>';
                                     $('.wrap').find('.subsubsub').append(_html);
                                     $('.question-<?=$questions_status?>').find('a').addClass('current');
                                 })
