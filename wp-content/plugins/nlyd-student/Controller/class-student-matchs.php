@@ -1604,7 +1604,7 @@ class Student_Matchs extends Student_Home
         }
         global $wpdb,$current_user;
 
-        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id,mb.userID,mb.real_name,mb.team FROM {$wpdb->prefix}match_bonus AS mb 
+        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id,mb.userID,mb.real_name,mb.team,mb.collect_name FROM {$wpdb->prefix}match_bonus AS mb 
                   LEFT JOIN {$wpdb->posts} AS p ON p.ID=mb.match_id 
                   WHERE mb.id={$id}", ARRAY_A);
         $row['bonus_list'] = unserialize($row['bonus_list']);

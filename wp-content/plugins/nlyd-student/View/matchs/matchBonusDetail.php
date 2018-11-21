@@ -56,7 +56,14 @@
                         </div>
                     </div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['match_id'] == 56522 || ($row['match_id'] == 56927 && in_array($row['user_id'],[389,165,726,740])) ? __('银行卡收款', 'nlyd-student') : __('二维码收款', 'nlyd-student')?></div>
+                        <div class="width-margin width-margin-pc c_black ti_28">
+                            <?php if($row['match_id'] == 56522 || $row['match_id'] == 56927){ ?>
+                                <?=$row['match_id'] == 56522 || ($row['match_id'] == 56927 && in_array($row['user_id'],[389,165,726,740])) ? __('银行卡收款', 'nlyd-student') : __('二维码收款', 'nlyd-student')?>
+                            <?php }else{ ?>
+                                <?=$row['collect_name']?>
+                            <?php } ?>
+
+                        </div>
                     </div>
                 </div>
                 <div>

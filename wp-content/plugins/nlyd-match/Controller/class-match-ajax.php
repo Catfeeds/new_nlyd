@@ -1985,6 +1985,22 @@ class Match_Ajax
         }
     }
 
+    /**
+     * 修改奖金发放类型
+     */
+    public function adminEditBonusSendType(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $val = isset($_POST['val']) ? trim($_POST['val']) : '';
+        $id < 1 && wp_send_json_error(['info' => '参数错误']);
+       global $wpdb;
+        //查询原数据
+        $row = $wpdb->get_row("SELECT id,collect_name FROM `{$wpdb->prefix}match_bonus` WHERE `id`='{$id}'",ARRAY_A);
+        if(!$row) wp_send_json_error(['info' => '参数错误']);
+        $bool = $wpdb->update($wpdb->prefix.'match_bonus',['collect_name' => $val], ['id'=>$id]);
+        if($bool) wp_send_json_success(['info'=>'修改成功']);
+        else wp_send_json_error(['info' => '修改失败', 'data' => $row['collect_name']]);
+    }
+
 }
 
 new Match_Ajax();

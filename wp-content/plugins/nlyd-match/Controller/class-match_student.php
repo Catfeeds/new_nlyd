@@ -1144,7 +1144,7 @@ class Match_student {
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
                         FROM `{$wpdb->prefix}order` a 
                         LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr}) and c.is_true = 1                 
-                        WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 
+                        WHERE a.match_id = {$match['match_id']} AND a.pay_status IN(2,3,4) and a.order_type = 1 
                         GROUP BY user_id,project_id
                     ) x
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 
@@ -1411,7 +1411,7 @@ class Match_student {
                         SELECT a.user_id,a.match_id,c.project_id,MAX(c.my_score) my_score ,a.telephone, MAX(c.surplus_time) surplus_time,if(MAX(c.created_microtime) > 0, MAX(c.created_microtime) ,0) created_microtime,a.created_time 
                         FROM `{$wpdb->prefix}order` a 
                         LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match_id}                 
-                        WHERE a.match_id = {$match_id} AND a.pay_status = 4 and a.order_type = 1 
+                        WHERE a.match_id = {$match_id} AND a.pay_status IN(2,3,4) and a.order_type = 1 
                         GROUP BY user_id,project_id
                     ) x
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 
@@ -1718,13 +1718,13 @@ class Match_student {
 
         //插入数据
         global $wpdb;
-        $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_path`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
+        $sql = "INSERT INTO {$wpdb->prefix}match_bonus (`match_id`,`user_id`,`all_bonus`,`tax_send_bonus`,`tax_all`,`bonus_list`,`is_send`,`real_name`,`userID`,`collect_name`,`card_num`,`cart_type`,`mobile`,`team`) VALUES";
         $insertValueArr = [];
         foreach ($orderAllData as $k => $odv){
             if($odv['tax_send_bonus'] > 0){
                 $bonus_list = serialize($odv['bonus_list']);
                 $insertValueArr[] = "('{$match_id}','{$odv['user_id']}','{$odv['all_bonus']}','{$odv['tax_send_bonus']}','{$odv['tax_all']}','{$bonus_list}','{$odv['is_send']}',
-                    '{$odv['real_name']}','{$odv['userID']}','','{$odv['card_num']}','{$odv['real_type']}','{$odv['mobile']}','{$odv['team']}')";
+                    '{$odv['real_name']}','{$odv['userID']}','二维码收款','{$odv['card_num']}','{$odv['real_type']}','{$odv['mobile']}','{$odv['team']}')";
             }else{
                 unset($orderAllData[$k]);
             }
@@ -1766,30 +1766,27 @@ class Match_student {
         if(!$orderAllData){
             $reCreated = false;
             if(is_post()){
-                $allDatas = $this->getBonusData($match_id,$bonusTmp);
-                $countData = $allDatas['countData'];
-                $orderAllData = $allDatas['orderAllData'];
+                $this->getBonusData($match_id,$bonusTmp);
+                $orderAllData = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}' ORDER BY all_bonus DESC", ARRAY_A);
             }else{
                 $orderAllData = [];
             }
 
         }else{
             $reCreated = true;
-            //汇总
-            $countData = [
-                'bonus_all' => 0,
-                'tax_all' => 0,
-                'tax_send_all' => 0,
-            ];
-            foreach ($orderAllData as &$v) {
-                $countData['bonus_all'] += $v['all_bonus'];
-                $countData['tax_all'] += $v['tax_all'];
-                $countData['tax_send_all'] += $v['tax_send_bonus'];
-                $v['bonus_list'] = unserialize($v['bonus_list']);
-            }
-
         }
-
+        //汇总
+        $countData = [
+            'bonus_all' => 0,
+            'tax_all' => 0,
+            'tax_send_all' => 0,
+        ];
+        foreach ($orderAllData as &$v) {
+            $countData['bonus_all'] += $v['all_bonus'];
+            $countData['tax_all'] += $v['tax_all'];
+            $countData['tax_send_all'] += $v['tax_send_bonus'];
+            $v['bonus_list'] = unserialize($v['bonus_list']);
+        }
 
         ?>
 
@@ -1873,6 +1870,9 @@ class Match_student {
                         .codeImg{
                             height: 35px;
                         }
+                        #the-list .collect_name_ipt{
+                            width: 100%;
+                        }
                     </style>
 
 
@@ -1955,6 +1955,7 @@ class Match_student {
                            <th scope="col" id="tax_all" class="manage-column column-tax_all">扣税总额</th>
                            <th scope="col" id="tax_send_bonus" class="manage-column column-tax_send_bonus">税后发放总额</th>
                            <th scope="col" id="bonus_path" class="manage-column column-bonus_path">收款路径</th>
+                           <th scope="col" id="collect_name" class="manage-column column-collect_name">收款方式</th>
                            <th scope="col" id="cards" class="manage-column column-cards">身份证号</th>
                            <th scope="col" id="mobile" class="manage-column column-mobile">电话号码</th>
                            <th scope="col" id="team" class="manage-column column-team">所属战队</th>
@@ -1993,6 +1994,7 @@ class Match_student {
                                <td class="tax_all column-tax_all line-c" data-colname="扣税总额"><?=$data['tax_all']?></td>
                                <td class="tax_send_bonus column-tax_send_bonus line-c" data-colname="税后发放总额"><?=$data['tax_send_bonus']?></td>
                                <td class="bonus_path column-bonus_path line-c" id="codeImg-<?=$data['user_id']?>" data-colname="收款路径"><img class="codeImg" src="<?=get_user_meta($data['user_id'],'user_coin_code',true)[0]?>" alt=""></td>
+                               <td class="collect_name column-collect_name line-c" data-colname="收款方式"><input disabled="disabled" class="collect_name_ipt" data-id="<?=$data['id']?>" type="text" value="<?=$data['collect_name']?>"></td>
                                <td class="cards column-cards line-c" data-colname="身份证号"><?=$data['card_num']?></td>
                                <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['mobile']?></td>
                                <td class="team column-team line-c" data-colname="所属战队"><?=$data['team'] ? $data['team'] : '-'?></td>
@@ -2017,6 +2019,7 @@ class Match_student {
                            <th scope="col" class="manage-column column-tax_all">扣税总额</th>
                            <th scope="col" class="manage-column column-tax_send_bonus">税后发放总额</th>
                            <th scope="col" class="manage-column column-bonus_path">收款路径</th>
+                           <th scope="col" class="manage-column column-collect_name">收款方式</th>
                            <th scope="col" class="manage-column column-cards">身份证号</th>
                            <th scope="col" class="manage-column column-mobile">电话号码</th>
                            <th scope="col" class="manage-column column-team">所属战队</th>
@@ -2169,6 +2172,30 @@ class Match_student {
                             <?php } ?>
 
                         });
+                        //奖金发放类型修改
+                        $('.collect_name').on('dblclick', function () {
+                            $(this).find('.collect_name_ipt').prop('disabled','');
+                            $(this).find('.collect_name_ipt'). focus();
+                        });
+                        $('.collect_name_ipt').on('blur', function () {
+                            $(this).prop('disabled','disabled');
+                        }).on('change', function () {
+                            var _this = $(this);
+                            var id = _this.attr('data-id');
+                            var val = _this.val();
+                            if(id == '' || id == undefined) return false;
+                            $.ajax({
+                                url : ajax_url,
+                                data : {'action':'adminEditBonusSendType','id':id,'val':val},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                },error : function () {
+                                    alert('请求失败!');
+                                }
+                            });
+                        });
                     })
                 </script>
 
@@ -2218,7 +2245,7 @@ class Match_student {
                         FROM `{$wpdb->prefix}order` a 
                         LEFT JOIN {$wpdb->prefix}match_questions c ON a.user_id = c.user_id  and c.match_id = {$match['match_id']} and c.project_id IN({$projectIdStr}) 
                         {$teamJoin}                 
-                        WHERE a.match_id = {$match['match_id']} AND a.pay_status = 4 and a.order_type = 1 {$teamWhere}
+                        WHERE a.match_id = {$match['match_id']} AND a.pay_status IN(2,3,4) and a.order_type = 1 {$teamWhere}
                         GROUP BY user_id,project_id
                     ) x
                     left join `{$wpdb->prefix}usermeta` y on x.user_id = y.user_id and y.meta_key='user_age' 

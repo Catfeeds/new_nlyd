@@ -549,7 +549,7 @@ function the_table_install () {
               `is_send` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1未发放,2=发放',
               `real_name` varchar(64) NOT NULL,
               `userID` varchar(32) NOT NULL,
-              `collect_path` varchar(255) DEFAULT NULL COMMENT '收款路径',
+              `collect_name` varchar(255) DEFAULT NULL COMMENT '收款类型名称',
               `card_num` varchar(255) NOT NULL COMMENT '证件号码',
               `cart_type` varchar(32) NOT NULL COMMENT '证件类型',
               `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
