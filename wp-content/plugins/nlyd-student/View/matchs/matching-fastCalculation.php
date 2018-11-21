@@ -581,7 +581,16 @@ jQuery(function($) {
     if(<?=$count_down?><=0){//进入页面判断时间是否结束
         // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         $('#next').addClass('disabled')
+        var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
+        ajaxData[ajaxData.length-1]['yours']=yours;
+        if(yours==ajaxData[ajaxData.length-1]['rights']){
+            ajaxData[ajaxData.length-1]['isRight']=true;
+        }else{
+            ajaxData[ajaxData.length-1]['isRight']=false;
+        }
+        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         // setTimeout(function() {
+
             submit(0,3)
         // }, 1000);
     }

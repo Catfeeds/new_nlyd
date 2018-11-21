@@ -87,6 +87,10 @@ define('PLUGINS_PATH', ABSPATH . 'wp-content/plugins/');
 //禁用自动保存
 define('AUTOSAVE_INTERVAL', false);
 
+define("FS_METHOD", "direct");
+define("FS_CHMOD_DIR", 0777);
+define("FS_CHMOD_FILE", 0777);
+
 /** 设置WordPress变量和包含文件。 */
 define('CONCATENATE_SCRIPTS', false );
 require_once(ABSPATH . 'wp-settings.php');
