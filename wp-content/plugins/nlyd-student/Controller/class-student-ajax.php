@@ -3841,6 +3841,38 @@ class Student_Ajax
     }
 
     /**
+     * 更改奖金发放状态
+     */
+    public function updateSendStatus(){
+        global $current_user,$wpdb;
+        if(empty($current_user->roles) || !in_array('administrator', $current_user->roles)) wp_send_json_error(['info' => __('权限不足', 'nlyd-student')]);
+
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
+        if($user_id < 1 || $match_id < 1) wp_send_json_error(['info' => '参数错误']);
+        //查看当前记录
+        $sql1 = "SELECT id,is_send FROM {$wpdb->prefix}match_bonus WHERE match_id='{$match_id}' AND user_id={$user_id}";
+        $row = $wpdb->get_row($sql1,ARRAY_A);
+        if(!$row) wp_send_json_error(['info' => '未找到数据,请刷新再试!']);
+        switch ($row['is_send']){
+            case 1:
+                $status = 2;
+                break;
+            case 2:
+                $status = 1;
+                break;
+            default:
+                wp_send_json_error(['info' => '未找到数据,请刷新再试!']);
+        }
+
+        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}' WHERE match_id='{$match_id}' AND user_id={$user_id}";
+//        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info'=>'修改成功']);
+        else wp_send_json_error(['info' => '修改失败']);
+    }
+
+    /**
      * 考级答案提交
      */
     public function grading_answer_submit(){

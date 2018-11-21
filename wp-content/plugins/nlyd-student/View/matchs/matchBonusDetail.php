@@ -2,8 +2,8 @@
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
-                require_once leo_student_public_view.'leftMenu.php';
-            
+        require_once leo_student_public_view.'leftMenu.php';
+
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
@@ -11,7 +11,7 @@
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('奖金明细', 'nlyd-student')?></div></h1>
-            </header>    
+            </header>
             <div class="layui-row nl-border nl-content have-footer">
                 <div class="width-margin width-margin-pc">
                     <div class="match-title c_black"><?=$row['post_title']?><br><?=$row['post_content']?></div>
@@ -26,7 +26,11 @@
                 </div>
                 <div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc"><?=__('奖金状态', 'nlyd-student')?>：</div>
+                        <div class="width-margin width-margin-pc"><?=__('奖金状态', 'nlyd-student')?>：
+                            <?php if($is_admin){ ?>
+                                <span class="c_blue pull-right" id="updateSendStatus"><?=__('更改发放状态', 'nlyd-student')?></span>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="money_row">
                         <div class="width-margin width-margin-pc c_black ti_28">
@@ -45,10 +49,14 @@
                 </div>
                 <div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc"><?=__('收款途径', 'nlyd-student')?>：</div>
+                        <div class="width-margin width-margin-pc"><?=__('收款途径', 'nlyd-student')?>：
+                            <?php if($qrCodeUrl != '' && $is_admin){ ?>
+                            <span class="c_blue see_code pull-right"><?=__('查看二维码', 'nlyd-student')?></span>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="money_row">
-                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['match_id'] == 56522 ? __('银行卡收款', 'nlyd-student') : __('二维码收款', 'nlyd-student')?></div>
+                        <div class="width-margin width-margin-pc c_black ti_28"><?=$row['match_id'] == 56522 || ($row['match_id'] == 56927 && in_array($row['user_id'],[389,165,726,740])) ? __('银行卡收款', 'nlyd-student') : __('二维码收款', 'nlyd-student')?></div>
                     </div>
                 </div>
                 <div>
@@ -60,15 +68,15 @@
                             <div class="width-margin width-margin-pc c_black ti_28"><?=__($bonus_list['bonus_name'],'nlyd-student')?><div class="pull-right money_right ">¥ <?=$bonus_list['bonus']?></div></div>
                         </div>
                     <?php } ?>
-<!--                    <div class="money_row">-->
-<!--                        <div class="width-margin width-margin-pc c_black ti_28">心算类总排名优秀选手<div class="pull-right money_right ">¥ 200.00</div></div>-->
-<!--                    </div>-->
-<!--                    <div class="money_row">-->
-<!--                        <div class="width-margin width-margin-pc c_black ti_28">心算类成年组季军<div class="pull-right money_right">¥ 200.00</div></div>-->
-<!--                    </div>-->
-<!--                    <div class="money_row">-->
-<!--                        <div class="width-margin width-margin-pc c_black ti_28">快眼扫描项目冠军<div class="pull-right money_right">¥ 200.00</div></div>-->
-<!--                    </div>-->
+                    <!--                    <div class="money_row">-->
+                    <!--                        <div class="width-margin width-margin-pc c_black ti_28">心算类总排名优秀选手<div class="pull-right money_right ">¥ 200.00</div></div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="money_row">-->
+                    <!--                        <div class="width-margin width-margin-pc c_black ti_28">心算类成年组季军<div class="pull-right money_right">¥ 200.00</div></div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="money_row">-->
+                    <!--                        <div class="width-margin width-margin-pc c_black ti_28">快眼扫描项目冠军<div class="pull-right money_right">¥ 200.00</div></div>-->
+                    <!--                    </div>-->
                 </div>
                 <div>
                     <div class="money_row">
@@ -86,6 +94,50 @@
                     </div>
                 </div>
             </div>
-        </div>           
+        </div>
     </div>
 </div>
+<script>
+    jQuery(document).ready(function($) {
+        layui.use('layer', function(){
+            var layer = layui.layer;
+        });
+        $('.see_code').click(function(){
+            var json={
+                "title": "二维码", //相册标题
+                "id": 123, //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": [   //相册包含的图片，数组格式
+                    {
+                        "alt": "二维码",
+                        "pid": 666, //图片id
+                        "src": "<?=$qrCodeUrl?>", //原图地址
+                        "thumb": "<?=$qrCodeUrl?>" //缩略图地址
+                    }
+                ]
+            }
+            layer.photos({
+                photos: json
+                ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            });
+        })
+        $('#updateSendStatus').on('click',function () {
+            var match_id = '<?=$row['match_id']?>';
+            var user_id = '<?=$row['user_id']?>';
+            $.ajax({
+                url:window.ajax_url,
+                data : {'match_id':match_id,'user_id':user_id,'action':'updateSendStatus'},
+                type : 'post',
+                dataType : 'json',
+                success : function (response) {
+                    $.alerts(response.data.info);
+                    if(response['success']){
+                        window.location.reload();
+                    }
+                },error : function () {
+                    $.alerts('网络错误!');
+                }
+            });
+        });
+    })
+</script>
