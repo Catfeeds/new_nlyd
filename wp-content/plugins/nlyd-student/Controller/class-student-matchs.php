@@ -1602,14 +1602,20 @@ class Student_Matchs extends Student_Home
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
-        global $wpdb;
-        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id,mb.userID,mb.real_name,mb.team FROM {$wpdb->prefix}match_bonus AS mb 
+        global $wpdb,$current_user;
+
+        $row = $wpdb->get_row("SELECT mb.all_bonus,mb.tax_send_bonus,mb.tax_all,mb.bonus_list,mb.id,mb.is_send,p.post_content,p.post_title,mb.user_id,mb.match_id,mb.userID,mb.real_name,mb.team,mb.collect_name FROM {$wpdb->prefix}match_bonus AS mb 
                   LEFT JOIN {$wpdb->posts} AS p ON p.ID=mb.match_id 
                   WHERE mb.id={$id}", ARRAY_A);
         $row['bonus_list'] = unserialize($row['bonus_list']);
-//       var_dump($row);
+        $qrCodeUrl = get_user_meta($row['user_id'],'user_coin_code',true) ? get_user_meta($row['user_id'],'user_coin_code',true)[0] : '';
+        if(!empty($current_user->roles) && in_array('administrator', $current_user->roles)){
+            $is_admin = true;
+        }else{
+            $is_admin = false;
+        }
         $view = student_view_path.CONTROLLER.'/matchBonusDetail.php';
-        load_view_template($view,array('row' => $row));
+        load_view_template($view,array('row' => $row,'qrCodeUrl'=>$qrCodeUrl,'is_admin'=>$is_admin));
     }
     
     /**
