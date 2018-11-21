@@ -348,10 +348,45 @@ class Grading
 //        leo_dump();
 //        die;
 
-        //项目处理
         $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
         $questions_answer = json_decode($gradingQuestion['questions_answer'],true);
         $my_answer = json_decode($gradingQuestion['my_answer'],true);
+        //项目处理
+        switch ($g_type){
+            case 'rm':
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join('<br>',$gqv);
+                }
+                foreach ($questions_answer as &$qav){
+                    $qav = join('<br>',$qav);
+                }
+                foreach ($my_answer as &$mav){
+                    $mav = join('<br>',$mav);
+                }
+                break;
+            case 'wz':
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join('',$gqv);
+                }
+                foreach ($questions_answer as $qak => &$qav){
+                    foreach ($qav as $qak2 => $qav2){
+                        if($qav2 == $my_answer[$qak][$qak2]){
+                            $my_answer[$qak][$qak2] = '<span class="correct-color">'.$my_answer[$qak][$qak2].'</span>';
+                        }else{
+                            $my_answer[$qak][$qak2] = $my_answer[$qak][$qak2] == '' ? '&ensp;': $my_answer[$qak][$qak2];
+                            $my_answer[$qak][$qak2] = '<span class="error-color">'.$my_answer[$qak][$qak2].'</span>';
+                        }
+
+                    }
+                    $qav = join('',$qav);
+                }
+
+                foreach ($my_answer as &$mav){
+                    $mav = join('',$mav);
+                }
+
+                break;
+        }
 
 
         ?>
@@ -372,8 +407,11 @@ class Grading
         </style>
             <ul class="subsubsub">
                 <?php
+
                 $counts = count($gradingArr);
+
                 foreach ($gradingArr as $k => $gav){
+
                        $p_name = $this->getProject($gav['questions_type']);
                        ?>
                     <li class="<?=$gav['questions_type']?>">
@@ -431,6 +469,7 @@ class Grading
                         <span class="intro-key">提交方式: </span>
                         <span class="intro-value">
                             <?php
+
                                 switch ($gradingQuestion['submit_type']){
                                     case 1:
                                         echo '选手提交';
@@ -495,6 +534,7 @@ class Grading
                     <tbody id="the-list" data-wp-lists="list:user">
                     <!--                        </tr>-->
                     <?php
+
                         foreach ($grading_questions as $k => $grading_questions_v){
 
                             ?>
@@ -569,6 +609,12 @@ class Grading
                 break;
             case 'tl':
                 $name = '听力';
+                break;
+            case 'rm':
+                $name = '人脉';
+                break;
+            case 'wz':
+                $name = '国学经典';
                 break;
             default:
                 $name = $types;

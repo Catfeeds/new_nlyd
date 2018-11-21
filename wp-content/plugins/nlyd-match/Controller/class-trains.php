@@ -241,7 +241,11 @@ if(!class_exists('Trains')){
                                             $color = $row['train_answer'][$k] == $row['my_answer'][$k] ? '#0a8406' : '#bf0000';
                                             break;
                                         case 'wzsd':
-
+                                            foreach ($row['train_answer'][$k]['problem_select'] as $proslk => &$prosev){
+                                                if($row['train_answer'][$k]['problem_answer'][$proslk] == 1){
+                                                    $prosev = '<span style="color: #0a8406">'.$prosev.'</span>';
+                                                }
+                                            }
                                             $str = join('<br />',$row['train_answer'][$k]['problem_select']);
                                             if($row['my_answer'][$k][0] == '-1'){
                                                 $row['my_answer'][$k] = '未作答';
