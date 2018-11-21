@@ -185,13 +185,25 @@ class Match_Ajax
                 break;
             case 'question':
 
+                //获取当前分类下所有文章
+                $rows = $wpdb->get_results("select object_id from {$wpdb->prefix}term_relationships where term_taxonomy_id in ({$ids})",ARRAY_A);
+                if(empty($rows)) wp_send_json_error('所选分类下没有文章');
+                $ids = $post_ids = arr2str(array_column($rows, 'object_id'),',');
+
                 $table = "`{$wpdb->prefix}posts`";
-                $sql = "select ID from {$wpdb->prefix}posts where post_parent in ({$ids})";
+
+                $sql = "select ID from {$wpdb->prefix}posts where post_parent in ({$post_ids})";
                 $problem_id = $wpdb->get_results($sql,ARRAY_A);
+                //print_r($problem_id);die;
+                $problem_ids = arr2str(array_column($problem_id,'ID'));
+
                 if(!empty($problem_id)){
-                    $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}posts` WHERE post_parent in({$ids})");
-                    $problem_ids = arr2str($problem_id);
-                    $wpdb->query("DELETE FROM `{$wpdb->prefix}problem_meta` WHERE post_parent in({$problem_ids})");
+
+                    $a = $wpdb->query("DELETE FROM `{$wpdb->prefix}posts` WHERE post_parent  in({$post_ids})");    //删除题目
+                    $problem_ids = arr2str(array_column($problem_id,'ID'));
+                    $wpdb->query("DELETE FROM `{$wpdb->prefix}problem_meta` WHERE problem_id  in({$problem_ids})"); //删除题目选项
+
+                    $wpdb->query("DELETE FROM `{$wpdb->prefix}term_relationships` WHERE term_taxonomy_id  in({$ids})");    //删除题型分类
                 }else{
                     $a = 1;
                 }
@@ -250,19 +262,33 @@ class Match_Ajax
      * 获取所有题目
      */
     public function get_question_list(){
-        global $wpdb;
-        $map = array();
-        $map[] = ' post_status = "publish" ';
-        $map[] = ' post_type = "question" ';
-        if(!empty($_GET['term'])){
-            $map[] = " post_title like '%{$_GET['term']}%' ";
+        if($_GET['team_type'] == 'problem'){
+            global $wpdb;
+            $map = array();
+            $map[] = ' post_status = "publish" ';
+            $map[] = ' post_type = "question" ';
+            if(!empty($_GET['term'])){
+                $map[] = " post_title like '%{$_GET['term']}%' ";
+            }
+            if(!empty($_GET['question_id'])){
+                $map[] = " ID = {$_GET['question_id']} ";
+            }
+            $where = join(' and ',$map);
+            $sql = "select ID as id,post_title as text from {$wpdb->prefix}posts where {$where} limit 0,10";
+            $rows = $wpdb->get_results($sql,ARRAY_A);
+        }else{
+
+            $args = array(
+                'taxonomy' => 'question_genre', //自定义分类法
+                'pad_counts' => false,
+                'hide_empty' => false,
+            );
+            $category = get_categories($args);
+            foreach ($category as $k => $v){
+                $rows[] = array('id'=>$v->term_id,'text'=>$v->cat_name);
+            }
         }
-        if(!empty($_GET['question_id'])){
-            $map[] = " ID = {$_GET['question_id']} ";
-        }
-        $where = join(' and ',$map);
-        $sql = "select ID as id,post_title as text from {$wpdb->prefix}posts where {$where} limit 0,10";
-        $rows = $wpdb->get_results($sql,ARRAY_A);
+
         wp_send_json_success($rows);
     }
 

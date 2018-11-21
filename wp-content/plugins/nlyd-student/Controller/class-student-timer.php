@@ -22,79 +22,12 @@ class Student_Timer
         add_shortcode('timer-index',array($this,$action));
     }
 
-     public function test(){
-
-     	$redis = new Redis();
-        $redis->connect('127.0.0.1',6379,1);
-        $redis->auth('leo626');
-     	global $wpdb;	
-
-        if(empty($redis->get('order'))){
-        	
-	        $sql = 'SELECT a.member_id,d.openid,d.mem_mobile,d.`truename`,b.team_id,c.title FROM sckm_match_orders a 
-					LEFT JOIN sckm_team_members b ON a.member_id = b.member_id 
-					LEFT JOIN sckm_teams c on b.team_id = c.id
-					LEFT JOIN sckm_members d ON a.member_id = d.id
-					WHERE a.match_id = 234 and a.`status` = 1';	
-			$data = $wpdb->get_results($sql,ARRAY_A);
-	        $redis->setex('order',600,json_encode($data));
-        }else{
-        	$data = json_decode($redis->get('order'),true);
-        }
-
-        $teams = array();
-        $old_user = array();
-        $new_user = array();
-
-        foreach ($data as $k => $v) {
-
-        	$sql = "SELECT ID FROM zlin_posts WHERE post_title = '{$v['title']}' ";
-        	//print_r($sql);
-        	$new_team_id = $wpdb->get_var($sql);
-        	$data[$k]['new_team_id'] = $new_team_id;
-
-        	$sql1 = "SELECT user_id FROM `zlin_usermeta` WHERE meta_key = 'user_real_name' AND meta_value LIKE '%{$v['truename']}%' ";
-        	$new_uesr_id = $wpdb->get_var($sql1);
-        	$data[$k]['new_uesr_id'] = $new_uesr_id;
-
-        	if(empty($new_uesr_id)){
-
-        		/*$user[$k]['member_id'] = $v['member_id'];
-        		$user[$k]['name'] = $v['truename'];*/
-        		$user[] = $v['member_id'];
-        	} else{
-
-				$new_user[] = $new_uesr_id;
-
-				/*$sql2 = "SELECT id FROM  zlin_match_team WHERE user_id = {$new_uesr_id}";
-	        	$num = 0;
-	        	if(!$wpdb->get_var($sql2)){
-
-	        		$insert = array(
-	        				'team_id'=>$new_team_id,
-	        				'user_id'=>$new_uesr_id,
-	        				'user_type'=>1,
-	        				'status'=>2,
-	        				'created_time'=>get_time('mysql')
-	        			);
-	        		$a = $wpdb->insert('zlin_match_team',$insert);
-	        		if($a){
-	        			$num ++;
-	        		}
-	        	}*/
-        	}
-        	//print_r($user_id.'<br/>');
-        	//var_dump($sql);
-        	//var_dump($row);
-        }
-
-        var_dump(count($user));
-        print_r(arr2str($user));
-        var_dump(count($new_user));
-		//$teams[] = $row;
-        //var_dump($teams);
-
-        //var_dump($data);
+    public function test(){
+        $str = '62871,62315,62491,62425,62700,62645,62524,62447,62601,62458,62513,62656,62370,62788,62359,62579,62689,62403,62282,62535,62733,62590,62722,62469,62678,62436,62392,62612,62766,62755,62414,62904,62293,62893,62348,62480,62882,62860,62667,62546,62326,62711,62623,62381,62634,62271,62557,62744,62777,62502,62337,62304';
+        $arr = str2arr($str);
+        $str1 = '56726';
+        $arr1 = str2arr($str1);
+        print_r(array_intersect($arr,$arr1));
     }
 
 

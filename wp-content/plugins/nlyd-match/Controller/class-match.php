@@ -578,7 +578,7 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">绑定题目</label>
             <div class="layui-input-block">
-                <select class="js-data-example-ajax" name="parent_id" style="width: 100%" data-action="get_question_list">
+                <select class="js-data-example-ajax" name="parent_id" style="width: 100%" data-action="get_question_list" data-type="problem">
                     <?php if(!empty($question)):?><option value="<?=$question->ID?>" selected="selected"><?=$question->post_title?></option><?php endif;?>
                 </select>
             </div>

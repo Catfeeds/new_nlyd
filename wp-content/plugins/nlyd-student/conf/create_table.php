@@ -187,6 +187,7 @@ function the_table_install () {
           `surplus_time` int(8) DEFAULT NULL COMMENT '剩余时间',
           `my_score` int(10) DEFAULT NULL COMMENT '成绩',
           `created_time` datetime DEFAULT NULL,
+          `post_id` int(20) DEFAULT NULL COMMENT '文章id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

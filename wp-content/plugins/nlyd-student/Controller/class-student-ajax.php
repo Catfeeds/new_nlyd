@@ -3442,6 +3442,7 @@ class Student_Ajax
             'my_answer'=>json_encode($_POST['my_answer']),
             'surplus_time'=>$_POST['surplus_time'],
             'my_score'=>$my_score,
+            'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
             'created_time'=>get_time('mysql'),
         );
         //print_r($insert);die;

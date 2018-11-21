@@ -490,7 +490,7 @@ function get_metadata($meta_type, $object_id, $meta_key = '', $single = false) {
 			return $check;
 	}
 
-	$meta_cache = wp_cache_get($object_id, $meta_type . '_meta');
+    $meta_cache = wp_cache_get($object_id, $meta_type . '_meta');
 
 	if ( !$meta_cache ) {
 		$meta_cache = update_meta_cache( $meta_type, array( $object_id ) );
