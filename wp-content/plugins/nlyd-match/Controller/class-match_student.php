@@ -1558,17 +1558,15 @@ class Match_student {
         //查询数据
         $projectDataArr = [];
         $categoryDataArr = [];
-        $allDataArr = [];
+//        $allDataArr = [];
 
-        //单项数据
         foreach ($projectArr as $proProv) {
-
+            //单项数据
             $projectDataArr[$proProv['match_project_id']]['name'] = $proProv['post_title'];
             $projectDataArr[$proProv['match_project_id']]['project_option_check'] = $this->getCategoryRankingData(['match_id' => $match_id], $proProv['match_project_id'], 0, '0,3');
 
 
             //大类数据
-
             $cateArr = $this->getCategoryArr($projectArr);
             foreach ($cateArr as $cateCatK => $cateCateV) {
                 //大类冠亚季
@@ -1588,7 +1586,7 @@ class Match_student {
 
                 //大类优秀选手
                 $categoryDataArr[$cateCatK]['name'] = $cateCateV['name'];
-                $categoryDataArr[$cateCatK]['category_honor']['name'] = '优秀';
+                $categoryDataArr[$cateCatK]['category_honor']['name'] = '优秀选手';
                 $categoryDataArr[$cateCatK]['category_honor']['data'] = $this->getCategoryRankingData(['match_id' => $match_id], join(',', $cateCateV['id']), 0, '3,7');
 
             }
@@ -1596,7 +1594,6 @@ class Match_student {
 
 
 //        leo_dump($projectDataArr);
-//        leo_dump($categoryDataArr);
         $allData = [];
         foreach ($projectDataArr as $pdaK => $pdaV){
             foreach ($pdaV['project_option_check'] as $project_option){
@@ -1604,17 +1601,17 @@ class Match_student {
                 $ranking_bonus = 0;
                 switch ($project_option['ranking']){
                     case 1:
-                        if($bonusTmp['project1'] == 0) continue 2;
+                        if($bonusTmp['project1'] == 0 || $project_option['my_score'] < 1) continue 2;
                         $ranking_name.='单项冠军';
                         $ranking_bonus = $bonusTmp['project1'];
                         break;
                     case 2:
-                        if($bonusTmp['project2'] == 0) continue 2;
+                        if($bonusTmp['project2'] == 0 || $project_option['my_score'] < 1) continue 2;
                         $ranking_name.='单项亚军';
                         $ranking_bonus = $bonusTmp['project2'];
                         break;
                     case 3:
-                        if($bonusTmp['project3'] == 0) continue 2;
+                        if($bonusTmp['project3'] == 0 || $project_option['my_score'] < 1) continue 2;
                         $ranking_name.='单项季军';
                         $ranking_bonus = $bonusTmp['project3'];
                         break;
@@ -1631,17 +1628,17 @@ class Match_student {
                     $ranking_bonus = 0;
                     switch ($cate_option['ranking']){
                         case 1:
-                            if($bonusTmp['category1'] == 0) continue 2;
+                            if($bonusTmp['category1'] == 0 || $cate_option['my_score'] < 1) continue 2;
                             $ranking_name.='总冠军';
                             $ranking_bonus = $bonusTmp['category1'];
                             break;
                         case 2:
-                            if($bonusTmp['category2'] == 0) continue 2;
+                            if($bonusTmp['category2'] == 0 || $cate_option['my_score'] < 1) continue 2;
                             $ranking_name.='总亚军';
                             $ranking_bonus = $bonusTmp['category2'];
                             break;
                         case 3:
-                            if($bonusTmp['category3'] == 0) continue 2;
+                            if($bonusTmp['category3'] == 0 || $cate_option['my_score'] < 1) continue 2;
                             $ranking_name.='总季军';
                             $ranking_bonus = $bonusTmp['category3'];
                             break;
@@ -1659,17 +1656,17 @@ class Match_student {
                             $ranking_bonus = 0;
                             switch ($cateAV['ranking']){
                                 case 1:
-                                    if($bonusTmp['category1_age'] == 0) continue 2;
+                                    if($bonusTmp['category1_age'] == 0 || $cate_option['my_score'] < 1) continue 2;
                                     $ranking_name.='冠军';
                                     $ranking_bonus = $bonusTmp['category1_age'];
                                     break;
                                 case 2:
                                     $ranking_name.='亚军';
-                                    if($bonusTmp['category2_age'] == 0) continue 2;
+                                    if($bonusTmp['category2_age'] == 0 || $cate_option['my_score'] < 1) continue 2;
                                     $ranking_bonus = $bonusTmp['category2_age'];
                                     break;
                                 case 3:
-                                    if($bonusTmp['category3_age'] == 0) continue 2;
+                                    if($bonusTmp['category3_age'] == 0 || $cate_option['my_score'] < 1) continue 2;
                                     $ranking_name.='季军';
                                     $ranking_bonus = $bonusTmp['category3_age'];
                                     break;
@@ -1909,8 +1906,6 @@ class Match_student {
                     </div>
 
                 </div>
-
-
                     <div>
                         <form action="" method="post">
                             <button class="button" type="button" id="bonus_tmp_box_view">查看设置</button>
