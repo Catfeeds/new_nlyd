@@ -162,12 +162,39 @@ class Student_Gradings extends Student_Home
             $row['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$row['grading_id']} and user_id = {$current_user->ID}");
         }
         $row['count_down'] = strtotime($row['start_time']) - get_time();
+
         $row['redirect_url'] = home_url('gradings/initialMatch/grad_id/'.$row['grading_id'].'/grad_type/'.$row['project_alias']);
+
         if($row['memory_lv'] > 0){
-            $row['redirect_url'] .= '/type/sz/memory_lv/'.$row['memory_lv'];
+
+            if($row['count_down'] < 0 ){
+
+                //获取已经参与的比赛项
+                $sql = "select questions_type from {$wpdb->prefix}grading_questions where grading_id = {$row['grading_id']} ";
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+                $questions_type = array_column($rows,'questions_type');
+
+                $keys = array_keys($this->get_grading_parameter($row['memory_lv']));
+
+                $diff = array_diff_assoc($keys,$questions_type);
+                /*print_r($questions_type);
+                print_r($keys);
+                print_r($diff);*/
+                $next_key = reset($diff);
+                if(!empty($next_key)){
+                    $row['redirect_url'] .= '/type/'.$next_key.'/memory_lv/'.$row['memory_lv'];
+                }else{
+                    $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    return;
+                }
+            }else{
+
+                $row['redirect_url'] .= '/type/sz/memory_lv/'.$row['memory_lv'];
+            }
             $_SESSION['memory_lv'] = $row['memory_lv'];
         }
-        //print_r($row);
+
+
         $view = student_view_path.CONTROLLER.'/match-waitting.php';
         load_view_template($view,$row);
     }
@@ -197,15 +224,15 @@ class Student_Gradings extends Student_Home
                 return;
             }
             $row['project'] = $project;
+            $memory_type = $project[$_GET['type']];
+            if(empty($memory_type)){
+                $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                return;
+            }
+            //print_r($memory_type);
+            $row['memory_type'] = $memory_type;
         }
 
-        $memory_type = $project[$_GET['type']];
-        if(empty($memory_type)){
-            $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
-            return;
-        }
-        //print_r($memory_type);
-        $row['memory_type'] = $memory_type;
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
         $view = student_view_path.CONTROLLER.'/match-initial.php';
@@ -409,7 +436,7 @@ class Student_Gradings extends Student_Home
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
         if($row['questions_type'] == 'wz'){
-            $len = count($questions_answer);
+            $len = 0;
             $success_len = 0;
             if(!empty($my_answer)){
                 //print_r($questions_answer);
@@ -417,11 +444,17 @@ class Student_Gradings extends Student_Home
 
                 foreach ($my_answer as $k => $v){
 
-                    $result=array_diff_assoc($v,$questions_answer[$k]);
+                    $len += count($v);
+                    $error_arr=array_diff_assoc($v,$questions_answer[$k]);
+                    //print_r($result);
                     //var_dump($result);
                     if(empty($result)){
-                        $success_len += 1;
+                        $error_len = 0;
+                    }else{
+                        $error_len = count($error_arr);
                     }
+
+                    $success_len += $len-$error_len;
                 }
             }
         }
@@ -456,9 +489,81 @@ class Student_Gradings extends Student_Home
         $next_project = $project[$next_index];
 
         //如果为当前考级最后一项就计算考核结果
+
         if(empty($next_project)){
-            //http://127.0.0.1/nlyd/gradings/initialMatch/grad_id/882/grad_type/memory/type/sz/memory_lv/1/
-            $next_project_url = home_url();
+            //获取所有项目
+            $sql_ = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate 
+                      from {$wpdb->prefix}grading_questions 
+                      where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} and grading_type = '{$_GET['grad_type']}' 
+                      ";
+            $rows = $wpdb->get_results($sql_,ARRAY_A);
+
+            if(!empty($rows) && $order->memory_lv > 0){
+
+                $total = count($rows);
+                $correct_rate = 0;
+                foreach ($rows as $v){
+                    if($v['questions_type'] != 'wz'){
+                        $correct_rate *= $v['correct_rate'];
+                    }else{
+                        $gxArr = $v;
+                    }
+                }
+                if($correct_rate < 1){
+                    $grading_result = 1;
+                }
+                if($order->memory_lv > 2){
+
+                    $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
+                    $gx_my_answer = json_decode($gxArr['my_answer'],true);
+                    //print_r($gx_questions_answer);
+                    //print_r($gx_my_answer);
+                    if(!empty($gx_my_answer)){
+                        foreach ($gx_my_answer as $x => $y){
+                            $length = count($gx_questions_answer[$x]);
+                            //print_r($length);
+                            $error_arr = array_diff_assoc($gx_questions_answer[$x],$y);
+                            $error_len += count($error_arr);
+
+                        }
+                        if($error_len > 10){
+                            $grading_result = 2;
+                        }
+                    }
+
+                }
+            }
+            $insert = array(
+                'user_id'=>$current_user->ID,
+                'grading_id'=>$_GET['grad_id'],
+                'grading_result'=>$grading_result,
+                'created_time'=>get_time('mysql'),
+            );
+
+            $wpdb->startTrans();
+
+            $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
+
+            $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
+            if($a && $grading_result == 1){
+                $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
+                if(!empty($rank_id)){
+                    $b = $wpdb->update($wpdb->prefix.'user_skill_rank',array('memory'=>$order->memory_lv),array('user_id'=>$current_user->ID,'id'=>$rank_id));
+                }else{
+                    $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv));
+                }
+                //wp_user_skill_rank
+            }else{
+                $b = 1;
+            }
+            if($a && $b ){
+                $wpdb->commit();
+            }else{
+                $wpdb->rollback();
+            }
+
+            $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id']);
+
         }else{
             $next_project['title'] = $this->get_memory_type_title($next_index);
             $next_project_url = home_url('gradings/initialMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/type/'.$next_index);
