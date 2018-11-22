@@ -25,7 +25,7 @@
                     <?php if(!empty($match_title)): ?>
                         <div class="order-info"><?=__('您已成功报名', 'nlyd-student')?><span>“<?=$match_title?>”</span></div>
                     <?php endif;?>
-                    <a class='top' href="<?=$url;?>"><?=__('比赛详情', 'nlyd-student')?></a>
+                    <a class='top' href="<?=$url;?>"><?=__('查看详情', 'nlyd-student')?></a>
                     <!--<a class='bottom' href="javascript:;">订单详情</a>-->
                 </div>
             </div>

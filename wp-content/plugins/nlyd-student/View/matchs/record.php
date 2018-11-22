@@ -224,7 +224,7 @@ jQuery(function($) {
             var _width=__this.width()
             width_total+=_width
         })
-        var W=width_total+marginRight*(len-1)+'px';
+        var W=width_total+marginRight*(len-1)+1+'px';
         _this.css('width',W);
     })
     layui.use(['element','flow'], function(){
