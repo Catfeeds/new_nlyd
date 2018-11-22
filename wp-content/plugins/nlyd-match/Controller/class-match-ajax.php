@@ -1923,6 +1923,16 @@ class Match_Ajax
         $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}order WHERE match_id='{$grading_id}' AND user_id='{$user_id}' AND order_type=2 AND pay_status IN(2,3,4)");
         if($id) wp_send_json_error(['info' => '该用户已存在考级,请勿重复加入!']);
 
+        //是否是记忆类
+        $cate = $wpdb->get_var("SELECT p.post_title FROM `{$wpdb->prefix}grading_meta` AS gm 
+            LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=gm.category_id 
+            WHERE gm.grading_id='{$grading_id}'");
+        $memory_lv = null;
+        if(preg_match('/记忆/',$cate) || preg_match('/速记/',$cate)){
+            $memory_lv = isset($_POST['lv']) ? intval($_POST['lv']) : 0;
+            if($memory_lv < 1) wp_send_json_error(['info' => '请输入正确记忆等级!']);
+        }
+
         $orderInsertData = [
             'user_id' => $user_id,
             'match_id'=>$grading_id,
@@ -1933,6 +1943,7 @@ class Match_Ajax
             'order_type'=>2,
             'pay_status'=>4,
             'created_time'=>get_time('mysql'),
+            'memory_lv' => $memory_lv
         ];
 
 
