@@ -175,11 +175,21 @@ class Grading
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         if($searchStr != ''){
+            global $wpdb;
+            //获取考级类型是否是记忆类
+            $cate = $wpdb->get_var("SELECT p.post_title FROM `{$wpdb->prefix}grading_meta` AS gm 
+            LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=gm.category_id 
+            WHERE gm.grading_id='{$gradingId}'");
+            $is_memory = false;
+            if(preg_match('/记忆/',$cate) || preg_match('/速记/',$cate)){
+                $is_memory = true;
+            }
+
+
             $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
             $page < 1 && $page = 1;
             $pageSize = 20;
             $start = ($page-1)*$pageSize;
-            global $wpdb;
             $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_mobile,u.ID AS user_id,um.meta_value AS user_real_name,um2.meta_value AS userID FROM {$wpdb->users} AS u  
             LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=u.ID AND um.meta_key='user_real_name' 
             LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=u.ID AND um2.meta_key='user_ID' 
@@ -259,7 +269,12 @@ class Grading
                             </td>
                             <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : ''?></td>
                             <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                            <td class="joinGrading column-joinGrading" data-colname="加入考级"><a href="javascript:;" class="joinGradingMember" style="color: #02892e">加入考级</a></td>
+                            <td class="joinGrading column-joinGrading" data-colname="加入考级">
+                                <?php if($is_memory){ ?>
+                                    <input type="text" placeholder="请输入记忆等级">
+                                <?php } ?>
+                                <a href="javascript:;" class="joinGradingMember" style="color: #02892e">加入考级</a>
+                            </td>
                         </tr>
                     <?php } ?>
                 <?php } ?>
@@ -291,10 +306,18 @@ class Grading
                     $('#the-list').find('.joinGradingMember').on('click', function () {
                         var grading_id = '<?=$gradingId?>';
                         var user_id = $(this).closest('tr').attr('data-id');
+                        var _data = Object();
+                        _data.action = 'joinGradingMember';
+                        _data.grading_id = grading_id;
+                        _data.user_id = user_id;
+                        <?php if($is_memory){ ?>
+                        var lv = $(this).prev().val();
+                        _data.lv = lv;
+                        <?php } ?>
                         if(user_id < 1 || grading_id < 1 || user_id == undefined || user_id == null) return false;
                         $.ajax({
                             url : ajaxurl,
-                            data : {'action':'joinGradingMember','grading_id':grading_id,'user_id':user_id},
+                            data : _data,
                             dataType : 'json',
                             type : 'post',
                             success : function (response) {
@@ -340,6 +363,11 @@ class Grading
         //获取记录类型
         $gradingArr = $wpdb->get_results('SELECT questions_type FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id, ARRAY_A);
         if(!$gradingArr) exit('无答题记录');
+
+        $gradingArr = array_reduce($gradingArr, function ($result, $value) {
+            return array_merge($result, array_values($value));
+        }, array());
+        $gradingArr = array_unique($gradingArr);
 
         $g_type = isset($_GET['g_type']) ? trim($_GET['g_type']) : $gradingArr[0]['questions_type'];
 
@@ -409,13 +437,12 @@ class Grading
                 <?php
 
                 $counts = count($gradingArr);
-
                 foreach ($gradingArr as $k => $gav){
 
-                       $p_name = $this->getProject($gav['questions_type']);
+                       $p_name = $this->getProject($gav);
                        ?>
-                    <li class="<?=$gav['questions_type']?>">
-                        <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav['questions_type'])?>" <?=$g_type==$gav['questions_type']?'class="current"':''?> aria-current="page"><?=$p_name?>
+                    <li class="<?=$gav?>">
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
                             <span class="count"></span>
                         </a>
                         <?=($k+1)<$counts?'|':''?>
