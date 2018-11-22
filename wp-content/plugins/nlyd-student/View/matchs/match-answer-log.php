@@ -58,7 +58,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog'){ ?>
                             }
                         },
                         complete:function (XMLHttpRequest, textStatus) {
-                            if(textStatus=='timeout'){
+                            //null、"timeout"、"error"、"abort"或"parsererror"notmodified
+                            if(textStatus=='timeout' || textStatus=="null" || textStatus=="error" || textStatus=="abort" || textStatus=="parsererror" || textStatus=="notmodified"){
                                 $.alerts("<?=__('网络延迟', 'nlyd-student')?>")
                                 $.DelSession('match_data')
                                 window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id

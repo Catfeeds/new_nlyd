@@ -181,7 +181,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
-        $.DelSession('match_data')
+        $.DelSession('match_data');
         <?php if(isset($_GET['grad_id'])): ?>
             leavePageLoad('<?=$wait_url?>');
             var endTimes=0;
