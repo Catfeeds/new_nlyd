@@ -231,7 +231,8 @@ class Student_Gradings extends Student_Home
             }
             //print_r($memory_type);
             $row['memory_type'] = $memory_type;
-        }elseif ($_GET['grad_type'] == 'reading'){
+        }
+        elseif ($_GET['grad_type'] == 'reading'){
             global $wpdb,$current_user;
             if(!isset($_SESSION['match_post_id'])){
 
@@ -253,7 +254,7 @@ class Student_Gradings extends Student_Home
                 $rows = $wpdb->get_results($sql,ARRAY_A);
 
                 if(empty($rows)){
-                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
                     return;
                 }
                 $result = array_column($rows,'object_id');
@@ -295,10 +296,9 @@ class Student_Gradings extends Student_Home
 
             $row['questions'] = $question;
             $row['post_id'] = $post_id;
-            $row['redirect_url'] .= '/post_id/'.$post_id;
             $row['questions_answer'] = $questions_answer;
             $row['match_questions'] = $match_questions;
-
+            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
             //print_r($row);
         }
 
@@ -306,6 +306,63 @@ class Student_Gradings extends Student_Home
 
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
+    }
+
+    /*
+     * 比赛项目记忆完成答题页
+     */
+    public function answerMatch(){
+
+        unset($_SESSION['match_post_id']);
+
+        if(empty($_GET['grad_id']) || empty($_GET['post_id'])){
+            $this->get_404(__('参数错误', 'nlyd-student'));
+            return;
+        }
+
+        global $wpdb,$current_user;
+
+        $row = $this->get_match_order($current_user->ID,$_GET['grad_id']);
+        //print_r($row);
+        if(empty($row)){
+
+            $this->get_404(__('你未报名', 'nlyd-student'));
+            return;
+        }else{
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404(__('订单未付款', 'nlyd-student'));
+                return;
+            }
+        }
+
+        //获取比赛题目
+        $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
+
+        $rows = $wpdb->get_results($sql1,ARRAY_A);
+        $questions_answer = array();
+        $match_questions = array();
+        if(!empty($rows)){
+            $answer_total = 1;  //默认答案个数
+            foreach ($rows as $k => $val){
+                //$val['problem_answer'] = 1;
+                $key = &$val['ID'];
+                $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                //if($val['problem_answer'] == 1) $answer_total += 1;
+            }
+            $match_questions = array_unique(array_column($rows,'post_title','ID'));
+        }
+        //}
+        $data['questions_answer'] = $questions_answer;
+        $data['match_questions'] = $match_questions;
+
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/matching-reading.php';
+        load_view_template($view,$data);
     }
 
 
