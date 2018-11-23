@@ -460,7 +460,7 @@ $('#selectWrapper .fastScan-item').each(function(){
         }
     }
     // if(<?=$count_down?><=0){//进入页面判断时间是否结束
-    //     $.alerts('比赛结束');
+    //     $.alerts('训练结束');
     //     if(typeof(timer)!="undefined"){
     //         clearTimeout(timer);
     //     }
@@ -476,11 +476,11 @@ $('#selectWrapper .fastScan-item').each(function(){
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=h+':'+m+':'+s;
          $(this).attr('data-seconds',S).text(time)
-        if(S<=0){//本轮比赛结束
+        if(S<=0){//本轮训练结束
             if(S==0){
                 $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             }else{
-                $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
+                $.alerts('<?=__('训练结束', 'nlyd-student')?>')
             }
             // if(typeof(timer)!="undefined"){
             //     clearTimeout(timer);

@@ -1,6 +1,6 @@
 <?php
 /**
- * 考级准备页面
+ * 比赛准备页面
  * Created by PhpStorm.
  * User: leo
  * Date: 2018/8/22

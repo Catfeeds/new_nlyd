@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </li>
-                        <!-- 比赛项目 -->
+                        <!-- 考级项目 -->
                         <?php if (!empty($match['category_id'])): ?>
                         <li class="nl-match">
                             <div class="nl-match-header noMargin">

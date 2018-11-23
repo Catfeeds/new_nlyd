@@ -116,7 +116,7 @@
                                     <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                                 <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入比赛', 'nlyd-student')?></div></a>
+                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                             </div>              
                         <?php }else { ?>
@@ -124,7 +124,7 @@
                                 <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"></div><?=__('查看战绩', 'nlyd-student')?></div></a>
                             <?php endif;?>
                             <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"></div><?=__('进入比赛', 'nlyd-student')?></div></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"></div><?=__('进入考级', 'nlyd-student')?></div></a>
                             <?php endif;?>
                        <?php }?>
                         
@@ -138,7 +138,7 @@
         </div>
     </div>
 </div>
-<!-- 比赛详情报名选手列表获取 -->
+<!-- 考级详情报名选手列表获取 -->
 <input type="hidden" name="_wpnonce" id="inputPlayer" value="<?=wp_create_nonce('student_get_entry_code_nonce');?>">
 
 <script>

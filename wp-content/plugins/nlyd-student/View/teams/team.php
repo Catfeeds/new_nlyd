@@ -39,7 +39,7 @@
                         <div class="swiper-pagination"></div>
                     </div>
                     <div class="width-margin width-margin-pc layui-row">
-                        <p class="team-tips">*<?=__('每位学员仅可加入1个战队，要加入新战队需退出旧的战队后申请加入', 'nlyd-student')?></p>
+                        <p class="team-tips">*<?=__('每位用户仅可加入1个战队，要加入新战队需退出旧的战队后申请加入', 'nlyd-student')?></p>
                         <div class="search-zoo" style="margin-bottom:10px">
                             <i class="iconfont search-Icon">&#xe63b;</i>
                             <div class="search-btn bg_gradient_blue"><span><?=__('搜 索', 'nlyd-student')?></span></div>

@@ -12,7 +12,7 @@
                                 <tr>
                                     <td><div class="table_content bold "><?=__('序 号', 'nlyd-student')?></div></td>
                                     <td><div class="table_content bold"><?=__('姓 名', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content bold"><?=__('学员ID', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content bold"><?=__('ID', 'nlyd-student')?></div></td>
                                     <td><div class="table_content bold"><?=__('考级成绩', 'nlyd-student')?></div></td>
                                 </tr>
                             </thead>

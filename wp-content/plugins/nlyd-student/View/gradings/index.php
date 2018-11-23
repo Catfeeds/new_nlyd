@@ -77,8 +77,7 @@
         <?php } ?>     
     </div>
 </div>
-<!-- 获取比赛列表 -->
-<input type="hidden" name="_wpnonce" id="inputMatch" value="<?=wp_create_nonce('student_get_match_code_nonce');?>">
+<!-- 获取考级列表 -->
 <script>
     
 jQuery(function($) { 
@@ -101,7 +100,7 @@ jQuery(function($) {
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
         $(this).attr('data-second',S).text(time)
-        if(S<=0){//本轮比赛结束
+        if(S<=0){//本轮考级结束
             window.location.reload()
         }
     });
@@ -121,7 +120,7 @@ jQuery(function($) {
                     }
                     if(parseInt(id)==1){//报名
                         postData['match_type']="signUp";
-                    }else if(parseInt(id)==2){//比赛
+                    }else if(parseInt(id)==2){//考级
                         postData['match_type']="matching";
                     }else{//往期
                         postData['match_type']="history";
@@ -141,7 +140,7 @@ jQuery(function($) {
                                     // 报名中1
                                     // 进行中2
                                     var isMe='';//标签
-                                    var match_status='c_blue';//比赛中高亮
+                                    var match_status='c_blue';//考级中高亮
                                     var rightBtn='';
                                     var endTime="";//报名截止
                                     var domTime=v.entry_end_time.replace(/-/g,'/');
@@ -153,7 +152,7 @@ jQuery(function($) {
                                     if(v.user_id!=null){//我报名参加的赛事
                                         isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                     }
-                                    if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
+                                    if(v.match_status==2 || v.match_status==-2){//考级进行中或等待开赛
                                         if(v.match_status==2){
                                             match_status='c_orange';
                                         }

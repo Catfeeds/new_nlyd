@@ -17,7 +17,7 @@
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <!-- 考级 -->
+                    <!-- 训练 -->
                     <div class="complete_zoo" id="match_zoo">
                         <div class="matching-row layui-row">
                             <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
@@ -183,7 +183,7 @@ jQuery(function($) {
                 }
         })
     } 
-    // 考级事件
+    // 训练事件
     $('.matching-number').each(function(){//填充区域
         var _this=$(this);
         new AlloyFinger(_this[0], {
