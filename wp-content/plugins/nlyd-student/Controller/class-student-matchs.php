@@ -383,6 +383,11 @@ class Student_Matchs extends Student_Home
 
             if(!isset($_SESSION['match_post_id'])){
 
+                //获取已比赛文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+
                 //判断语言
                 $language = get_user_meta($current_user->ID,'locale')[0];
                 $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
@@ -390,38 +395,20 @@ class Student_Matchs extends Student_Home
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' ";
-                $rows = $wpdb->get_results($sql,ARRAY_A);
+                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' and b.object_id not in($post_str) ";
                 //print_r($sql);
-                if(empty($rows[0]['term_taxonomy_id'])){
-                    $this->get_404(array('message'=>__('暂无比赛题目,联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
+
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                if(empty($rows)){
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
                     return;
                 }
-
-                $posts_arr = array_column($rows,'object_id');
-                //print_r($posts_arr);
-
-                //获取已比赛文章
-                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
-                //print_r($sql1);
-                $post_str = $wpdb->get_var($sql1);
-
-                if(!empty($post_str)){
-                    $post_arr = str2arr($post_str,',');
-                    //print_r($posts_arr);
-
-                    $result = array_diff($posts_arr,$post_arr);
-                    if(empty($result)){
-                        $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
-                        return;
-                    }
-                    //print_r($result);
-
-                }else{
-                    $result = $posts_arr;
-                }
-                //print_r($result);
+                $result = array_column($rows,'object_id');
+                //print_r($rows);
                 $post_id = $result[array_rand($result)];
+
+                //print_r($post_id);
 
                 $_SESSION['match_post_id'] = $post_id;
             }else{

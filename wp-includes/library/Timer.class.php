@@ -88,7 +88,7 @@ class Timer
                         $save['match_status'] = -3;
 
                         //将比赛题库清空
-                        $sql = "select a.post_id,c.slug
+                        /*$sql = "select a.post_id,c.slug
                                 from {$wpdb->prefix}match_questions a 
                                 left join {$wpdb->prefix}term_relationships b on a.post_id = b.object_id
                                 left join {$wpdb->prefix}terms c on b.term_taxonomy_id = c.term_id
@@ -106,9 +106,9 @@ class Timer
                                 //print_r($cat_id);
                                 $b = $wpdb->update($wpdb->prefix.'term_relationships',$cat_id,array('object_id'=>$x['post_id']));
                                 /*die;
-                                print_r($b);*/
+                                print_r($b);
                             }
-                        }
+                        }*/
                     }
                     //var_dump($v['match_id']);
                     //var_dump($save);
@@ -192,7 +192,7 @@ class Timer
                         $save['status'] = -3;
 
                         //将比赛题库清空
-                        $sql = "select a.post_id,c.slug
+                        /*$sql = "select a.post_id,c.slug
                                 from {$wpdb->prefix}match_questions a 
                                 left join {$wpdb->prefix}term_relationships b on a.post_id = b.object_id
                                 left join {$wpdb->prefix}terms c on b.term_taxonomy_id = c.term_id
@@ -209,9 +209,9 @@ class Timer
                                 //print_r($cat_id);
                                 $b = $wpdb->update($wpdb->prefix.'term_relationships',$cat_id,array('object_id'=>$x['post_id']));
                                 /*die;
-                                print_r($b);*/
+                                print_r($b);
                             }
-                        }
+                        }*/
                     }
 
                     //var_dump($v['match_id']);

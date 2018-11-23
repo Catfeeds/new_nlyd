@@ -12,7 +12,7 @@
                         <div class="c_black match_info_font"><div><?=__('语音记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="<?=$count_down?>" style="display:none;"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit" style="display:none"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -25,7 +25,7 @@
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
                             </div>
                         </div>
-                         <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
+                         <!-- <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div> -->
                     </div>
 
                     <!-- 比赛 -->
@@ -78,14 +78,16 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
-    var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
-    var sys_second=ready_time;
     var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
-    var endTime=$.GetEndTime(ready_time);//结束时间
     var que_len=<?=$memory_type['length']?>;//多少个字符
+    // var que_len=5;
+    var ready_time=que_len+1;//记忆时间
+    var sys_second=answer_time;
+    var endTime=$.GetEndTime(answer_time);//结束时间
     var file_url="<?=leo_match_url.'/upload/voice/'?>"
     var _index=0;
     init_question(que_len,_show)
+    
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
@@ -109,9 +111,10 @@ jQuery(function($) {
         }
         $.SetSession('grade_question',sessionData)
     })
-    count_down()
+    
     function count_down(){
         // sys_second=answer_time
+        $('.count_down').show()
         var timer = setInterval(function(){
             if (sys_second > 0) {
                 sys_second -= 1;
@@ -126,26 +129,8 @@ jQuery(function($) {
                 var text=day+hour+':'+minute+':'+second;
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
-                if(_show==1){//记忆页面
-                    $('.complete_zoo').hide();
-                    $('#match_zoo').show()
-                    $('.matching-sumbit').show();
-                    _show=2
-                    sys_second=answer_time
-                    var endTime=$.GetEndTime(answer_time);//结束时间
-                    var sessionData={
-                        grad_id:_grad_id,
-                        grad_type:_grad_type,
-                        type:_type,
-                        endTime:endTime,
-                        _show:2,
-                        questions_answer:questions_answer
-                    }
-                    $.SetSession('grade_question',sessionData)
-                }else if(_show==2){//答题页面
-                    clearInterval(timer)
-                    submit(3)
-                }
+                clearInterval(timer)
+                submit(3)
             }
 
         }, 1000);
@@ -155,8 +140,21 @@ jQuery(function($) {
         if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             questions_answer=grade_question['questions_answer'];
             _show=2
-            endTime=grade_question['endTime'];
-            sys_second=$.GetSecond(endTime);
+            if(!grade_question['endTime']){
+                var sessionData={
+                    grad_id:_grad_id,
+                    grad_type:_grad_type,
+                    type:_type,
+                    endTime:endTime,
+                    _show:2,
+                    questions_answer:questions_answer
+                }
+                $.SetSession('grade_question',sessionData)
+            }else{
+                endTime=grade_question['endTime'];
+                sys_second=$.GetSecond(endTime);
+            }
+            count_down()
         }else{
             for(var i=0;i<question_leng;i++){
                 var num=Math.floor(Math.random()*10);//生成0-9的随机数
@@ -167,7 +165,6 @@ jQuery(function($) {
                 grad_type:_grad_type,
                 type:_type,
                 _show:_show,
-                endTime:endTime,
                 questions_answer:questions_answer
             }
             $.SetSession('grade_question',sessionData)
@@ -184,7 +181,7 @@ jQuery(function($) {
             var audio=document.getElementById('audio');
             $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
             audio.loop = false;
-            audio.addEventListener('ended', function () {  
+            audio.addEventListener('ended', function () {
                 _index++
                 if(_index<=que_len-1){
                     $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
@@ -204,6 +201,7 @@ jQuery(function($) {
                         questions_answer:questions_answer
                     }
                     $.SetSession('grade_question',sessionData)
+                    count_down()
                 }  
             }, false);
        }

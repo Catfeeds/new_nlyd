@@ -265,9 +265,13 @@ p.question{
 }
 .matching-number-match-word span{
     display: block;
-    width: 80%;
+    width: 98%;
     height: 30px;
     margin: auto;
+    font-size: 0.12rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
 }
 .your-answer .matching-number-match-word.active span{
     border-bottom: 1px solid #CF1818;
@@ -310,11 +314,17 @@ p.question{
     word-wrap: break-word;
     font-size: 0.12rem;
     line-height: 20px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
 }
 .card_name{
     word-wrap: break-word;
     font-size: 0.12rem;
     line-height: 20px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
 }
 .your-answer .card_phone.active,
 .your-answer .card_name.active
