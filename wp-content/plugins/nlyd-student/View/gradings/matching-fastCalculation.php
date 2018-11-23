@@ -576,6 +576,13 @@ jQuery(function($) {
         // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
         $('#next').addClass('disabled')
         // setTimeout(function() {
+            var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
+            ajaxData[ajaxData.length-1]['yours']=yours;
+            if(yours==ajaxData[ajaxData.length-1]['rights']){
+                ajaxData[ajaxData.length-1]['isRight']=true;
+            }else{
+                ajaxData[ajaxData.length-1]['isRight']=false;
+            }
             submit(0,3)
         // }, 1000);
     }
@@ -595,6 +602,13 @@ jQuery(function($) {
             //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             // }
             // setTimeout(function() {
+                var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
+                ajaxData[ajaxData.length-1]['yours']=yours;
+                if(yours==ajaxData[ajaxData.length-1]['rights']){
+                    ajaxData[ajaxData.length-1]['isRight']=true;
+                }else{
+                    ajaxData[ajaxData.length-1]['isRight']=false;
+                }
                 submit(0,3)
             // }, 1000);
         }

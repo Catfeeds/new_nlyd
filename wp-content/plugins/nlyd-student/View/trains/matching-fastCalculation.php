@@ -572,6 +572,13 @@ jQuery(function($) {
     }
     if(sys_second<=0){//进入页面判断时间是否结束
         // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+        var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
+        ajaxData[ajaxData.length-1]['yours']=yours;
+        if(yours==ajaxData[ajaxData.length-1]['rights']){
+            ajaxData[ajaxData.length-1]['isRight']=true;
+        }else{
+            ajaxData[ajaxData.length-1]['isRight']=false;
+        }
         submit(0)
     }
 
@@ -590,13 +597,12 @@ jQuery(function($) {
             //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
             // }
             // setTimeout(function() {
-                var thisAjaxRow=ajaxData[ajaxData.length-1]
                 var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
-                thisAjaxRow['yours']=yours;
-                if(yours==thisAjaxRow['rights']){
-                    thisAjaxRow['isRight']=true;
+                ajaxData[ajaxData.length-1]['yours']=yours;
+                if(yours==ajaxData[ajaxData.length-1]['rights']){
+                    ajaxData[ajaxData.length-1]['isRight']=true;
                 }else{
-                    thisAjaxRow['isRight']=false;
+                    ajaxData[ajaxData.length-1]['isRight']=false;
                 }
                 submit(0)
             // }, 1000);
