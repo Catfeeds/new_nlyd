@@ -5,7 +5,7 @@
             <h1 class="mui-title"><div><?=__('考级成绩查看', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <p class="c_black bold fs_16 pl_10 mt_20 mb_20">国际速记水平认证考级(南京) <span class="ml_10 fs_14 c_green">1<?=__('级已达标', 'nlyd-student')?></span></p>
+                <p class="c_black bold fs_16 pl_10 mt_20 mb_20"><?=$rows[0]['post_title']?><span class="ml_10 fs_14  <?=$row['grading_result'] == 1 ? 'c_green' : 'c_black6';?> "><?=__($row['result_cn'], 'nlyd-student')?></span></p>
                 <div class="nl-table-wapper">
                         <table class="nl-table" >
                             <thead>
@@ -17,12 +17,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php foreach ($rows as $k =>$val ){ ?>
                                 <tr>
-                                    <td><div class="table_content">1</div></td>
-                                    <td><div class="table_content">张某某某</div></td>
-                                    <td><div class="table_content">10000365</div></td>
-                                    <td><div class="table_content"><span class="c_green">1级已达标</span></div></td>
+                                    <td><div class="table_content"><?=$k+1;?></div></td>
+                                    <td><div class="table_content"><?=$val['real_name'];?></div></td>
+                                    <td><div class="table_content"><?=$val['user_ID'];?></div></td>
+                                    <td><div class="table_content"><span class="<?=$val['grading_result'] == 1 ? 'c_green' : 'c_black6';?> "><?=$val['result_cn'];?></span></div></td>
                                 </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
