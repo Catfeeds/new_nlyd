@@ -9,12 +9,11 @@
                 <form class="layui-form" lay-filter='reading'>
                     <div class="remember width-margin width-margin-pc">
                         <div class="matching-row layui-row have-submit">
-                            <div class="c_black match_info_font"><div><span class="blue-font"><?php printf(__('第%s轮', 'nlyd-student'), $type_cn)?></span></div></div>
                             <?php $count_match_questions = !empty($match_questions) ? count($match_questions) : 1; ?>
                             <div class="c_blue match_info_font"><div><?=sprintf(__('第<span id="number">1</span>/%s题', 'nlyd-student'),$count_match_questions)?></div></div>
                             <div class="c_blue match_info_font">
                                 <div>
-                                    <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                                    <span class="count_down" data-seconds="300"><?=__('初始中', 'nlyd-student')?>...</span>
                                 </div>
                             </div>
                             <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
@@ -70,12 +69,12 @@ jQuery(function($) {
     var isSubmit=false;//是否正在提交
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
-    var _type=$.Request('type');
-    var sys_second="<?=$memory_type['memory_time']?>";//记忆时间
+    var _type=$.Request('grad_type');
+    var _length=$.Request('length');
+    var sys_second=300;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
     leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
+        submit(4);
     })
     layui.use(['form'], function(){
 
@@ -119,7 +118,7 @@ jQuery(function($) {
             $.SetSession('grade_question',sessionData)
         }
     }
-    function submit(time,submit_type){//提交答案
+    function submit(submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -149,9 +148,12 @@ jQuery(function($) {
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
-                grading_questions:<?=json_encode($match_questions)?>,,
-                questions_answer:<?=json_encode($questions_answer)?>,,
+                post_id:$.Request('post_id'),
+                grading_questions:<?=json_encode($match_questions)?>,
+                questions_answer:<?=json_encode($questions_answer)?>,
                 action:'grading_answer_submit',
+                length:_length,
+                usetime:$.Request('usetime'),
                 my_answer:my_answer,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
@@ -209,7 +211,6 @@ layui.use(['layer'], function(){
     // mTouch('body').on('tap','#sumbit',function(e){
     new AlloyFinger($('#sumbit')[0], {
         tap:function(){
-            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                 type: 1
                 ,maxWidth:300
@@ -226,7 +227,7 @@ layui.use(['layer'], function(){
                 ,btn2: function(index, layero){
                     //按钮【按钮二】的回调
                     layer.closeAll();
-                    submit(time,1)
+                    submit(1)
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中

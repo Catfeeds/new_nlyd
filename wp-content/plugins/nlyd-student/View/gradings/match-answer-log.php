@@ -149,6 +149,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ?>
 
                     <?php
+
                     switch ($match_row['questions_type']){
                         case 'sz':    //随机数字
                         case 'yzl':    //圆周率
@@ -163,6 +164,9 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             break;
                         case 'wz':    //国学默写
                             require_once student_view_path.CONTROLLER.'/subject-silent.php';
+                            break;
+                        case 'reading':    //文章速读
+                            require_once student_view_path.CONTROLLER.'/subject-reading.php';
                             break;
                         default:
                             require_once student_view_path.'public/my-404.php';

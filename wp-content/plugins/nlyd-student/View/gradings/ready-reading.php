@@ -10,19 +10,18 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row  layui-row">
-                        <div class="c_black match_info_font"><div><?=__($grading_title, 'nlyd-student')?> <?php printf(__('第%s轮', 'nlyd-student'), $type_cn)?></div></div>
                         <!-- <div class="c_blue match_info_font"><div><?=__('第1/1题', 'nlyd-student')?></div></div> -->
                         <div class="c_blue match_info_font">
                             <div>
                                 <!-- <i class="iconfont">&#xe685;</i> -->
-                                <span class="count_down" data-seconds="<?=$count_down?>">00:00:00</span>
+                                <span class="count_down" data-seconds="900"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                     </div>
                     <div class="matching-reading">
                         <div class="Glass"></div>
                         <div class="article-title fs_16 c_black"><?=$questions->post_title?></div>
-                        <?=$questions->post_content?>
+                        <div id="post_content"><?=$questions->post_content?></div>
                     </div>
                 </div>
                 <input type="hidden" name="questions_id" value="<?=$questions->ID?>">
@@ -39,20 +38,22 @@
 jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
-    var _type=$.Request('type');
-    var sys_second="<?=$memory_type['memory_time']?>";//记忆时间
+    var _type=$.Request('grad_type');
+    var _length=$('#post_content').text().length;
+    var init_time=900;
+    var sys_second=900;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
     leaveMatchPage(function(){//窗口失焦提交
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
+        submit(4);
     })
     new AlloyFinger($('#complete')[0], {//阅读完成
         tap:function(){
             if(!$('#complete').hasClass('disabled')){
-                var time=$('.count_down').attr('data-seconds');
+                var time=init_time-sys_second;
                 var href=$(this).attr('data-href')
-                var new_href=href+'/surplus_time/'+time;
-                window.location.href=new_href
+                var new_href=href+'/usetime/'+time+'/length/'+_length;
+                $.DelSession('grade_question')
+                window.location.href=new_href;
                 $('#complete').addClass('disabled')
             }
         }
@@ -97,20 +98,24 @@ jQuery(function($) {
             $.SetSession('grade_question',sessionData)
         }
     }
-    function submit(time,submit_type){//提交答案
+    function submit(submit_type){//提交答案
         // $('#load').css({
         //         'display':'block',
         //         'opacity': '1',
         //         'visibility': 'visible',
         //     })
         var my_answer={};
+        var time=init_time-sys_second;
         var data={
             grading_id:_grad_id,
             grading_type:_grad_type,
             questions_type:_type,
-            grading_questions:<?=json_encode($match_questions)?>,,
-            questions_answer:<?=json_encode($questions_answer)?>,,
+            post_id:<?=$post_id?>,
+            grading_questions:<?=json_encode($match_questions)?>,
+            questions_answer:<?=json_encode($questions_answer)?>,
             action:'grading_answer_submit',
+            length:_length,
+            usetime:time,
             my_answer:my_answer,
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }

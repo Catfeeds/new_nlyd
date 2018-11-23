@@ -1,11 +1,11 @@
 
 <div class="answer-zoo">
     <button class="matching-btn active"><?=__('答案对比', 'nlyd-student')?></button>
-        <?php if(!empty($match_questions)):?>
+        <?php if(!empty($grading_questions)):?>
         <div class="reading-answer">
             <?php
             $num = 0;
-            foreach ($match_questions as $k => $val){
+            foreach ($grading_questions as $k => $val){
                 $answer_my = array();
                 $answer_questions = array();
                 ++$num;

@@ -3960,6 +3960,27 @@ class Student_Ajax
                         break;
                 }
                 break;
+            case 'reading':
+                //print_r($_POST);die;
+                $questions_answer = $_POST['questions_answer'];
+                $len = count($questions_answer);
+                $success_len = 0;
+
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                        }
+                    }
+
+                    if(isset($_POST['my_answer'][$k])){
+                        if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
+                    }
+                }
+                $correct_rate = $success_len/$len;
+                //print_r($success_len);die;
+                break;
         }
         //zlin_user_skill_rank 技能表
 
@@ -3975,7 +3996,9 @@ class Student_Ajax
             'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
             'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
             'created_time'=>get_time('mysql'),
+            'use_time'=>isset($_POST['usetime']) ? $_POST['usetime'] : '',
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
+            'post_str_length'=>isset($_POST['length']) ? $_POST['length'] : '',
             'is_true'=>!empty($prison_log_id) ? 2 : 1,
         );
         //print_r($insert);die;
