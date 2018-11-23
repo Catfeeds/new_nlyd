@@ -65,7 +65,7 @@
                                     <div class="nl-match-body">
                                         国际<?=$match['project_alias_cn']?>水平考级认证
                                         <a class="c_blue" href="<?=home_url('gradings/matchRule/type/'.$match['project_alias'])?>" ><?= __('考级规则', 'nlyd-student') ?></a>
-                                        <?php if($match['project_alias'] == 'memory'): ?>
+                                        <?php if($match['project_alias'] == 'memory' && $match['is_me'] == 'y'): ?>
                                             <p class="c_orange"><?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student');?></p>
                                         <?php endif;?>
                                     </div>

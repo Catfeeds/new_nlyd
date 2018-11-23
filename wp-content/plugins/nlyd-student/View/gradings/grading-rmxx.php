@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -241,13 +241,13 @@ jQuery(function($) {
         })
         var data={
             grading_id:_grad_id,
-                grading_type:_grad_type,
-                questions_type:_type,
-                grading_questions:questions_answer,
-                questions_answer:questions_answer,
-                action:'grading_answer_submit',
-                my_answer:my_answer,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
+            grading_type:_grad_type,
+            questions_type:_type,
+            grading_questions:questions_answer,
+            questions_answer:questions_answer,
+            action:'grading_answer_submit',
+            my_answer:my_answer,
+            submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
         }
 

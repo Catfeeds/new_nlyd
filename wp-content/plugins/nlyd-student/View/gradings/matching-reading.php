@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <form class="layui-form" lay-filter='reading'>
@@ -71,6 +71,8 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
+    var sys_second="<?=$memory_type['memory_time']?>";//记忆时间
+    var endTime=$.GetEndTime(sys_second);//结束时间
     leaveMatchPage(function(){//窗口失焦提交
         var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
         submit(time,4);
@@ -78,6 +80,45 @@ jQuery(function($) {
     layui.use(['form'], function(){
 
     })
+    init_question()
+    count_down()
+    function count_down(){
+        // sys_second=answer_time
+        var timer = setInterval(function(){
+            if (sys_second > 0) {
+                sys_second -= 1;
+                var day = Math.floor((sys_second / 3600) / 24);
+                var hour = Math.floor((sys_second / 3600) % 24);
+                var minute = Math.floor((sys_second / 60) % 60);
+                var second = Math.floor(sys_second % 60);
+                day=day>0?day+'<?=__('天', 'nlyd-student')?>':'';
+                hour= hour<10?"0"+hour:hour;//计算小时
+                minute= minute<10?"0"+minute:minute;//计算分钟
+                second= second<10?"0"+second:second;//计算秒
+                var text=day+hour+':'+minute+':'+second;
+                $('.count_down').text(text).attr('data-seconds',sys_second)
+            } else {//倒计时结束
+                clearInterval(timer)
+                submit(3)
+            }
+
+        }, 1000);
+    } 
+    function init_question(question_leng,_show) {//初始化时间
+        var grade_question=$.GetSession('grade_question','true');
+        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+            endTime=grade_question['endTime'];
+            sys_second=$.GetSecond(endTime);
+        }else{
+            var sessionData={
+                grad_id:_grad_id,
+                grad_type:_grad_type,
+                type:_type,
+                endTime:endTime,
+            }
+            $.SetSession('grade_question',sessionData)
+        }
+    }
     function submit(time,submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
@@ -105,18 +146,13 @@ jQuery(function($) {
             })
             
             var data={
-                action:'answer_submit',
-                _wpnonce:$('#inputSubmit').val(),
-                grad_id:_grad_id,
-                grad_type:_grad_type,
-                type:_type,
-                project_alias:'wzsd',
-                project_more_id:$.Request('project_more_id'),
-                post_id:$.Request('post_id'),
-                match_questions:<?=json_encode($match_questions)?>,
-                questions_answer:<?=json_encode($questions_answer)?>,
+                grading_id:_grad_id,
+                grading_type:_grad_type,
+                questions_type:_type,
+                grading_questions:<?=json_encode($match_questions)?>,,
+                questions_answer:<?=json_encode($questions_answer)?>,,
+                action:'grading_answer_submit',
                 my_answer:my_answer,
-                surplus_time:time,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             
@@ -165,32 +201,8 @@ jQuery(function($) {
             $.alerts('<?=__('正在提交答案', 'nlyd-student')?>')
         }
     }
-    if(<?=$count_down?><=0){//进入页面判断时间是否结束
-        $.alerts('<?=__('考级结束', 'nlyd-student')?>');
-        // setTimeout(function() {
-            submit(0,3)
-        // }, 1000);
-    }
-    $('.count_down').countdown(function(S, d){//倒计时
-        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-        var h=d.hour<10 ? '0'+d.hour : d.hour;
-        var m=d.minute<10 ? '0'+d.minute : d.minute;
-        var s=d.second<10 ? '0'+d.second : d.second;
-        var time=D+h+':'+m+':'+s;
-        $(this).attr('data-seconds',S).text(time)
-        if(S<=0){//本轮考级结束
-            if(S==0){
-                $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
-            }else{
-                $.alerts('<?=__('考级结束', 'nlyd-student')?>')
-            }
-            // setTimeout(function() {
-                submit(0,3)
-            // }, 1000);
-        }
-    });
 
-    layui.use(['layer'], function(){
+layui.use(['layer'], function(){
 
 
 //提交tap事件
