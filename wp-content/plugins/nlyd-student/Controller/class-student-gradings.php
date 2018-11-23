@@ -231,6 +231,75 @@ class Student_Gradings extends Student_Home
             }
             //print_r($memory_type);
             $row['memory_type'] = $memory_type;
+        }elseif ($_GET['grad_type'] == 'reading'){
+            global $wpdb,$current_user;
+            if(!isset($_SESSION['match_post_id'])){
+
+                //获取已比赛文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                //获取文章速读考题
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
+                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' and b.object_id not in($post_str) ";
+                //print_r($sql);
+
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                if(empty($rows)){
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/match_id/'.$_GET['match_id'])));
+                    return;
+                }
+                $result = array_column($rows,'object_id');
+                //print_r($rows);
+                $post_id = $result[array_rand($result)];
+
+                //print_r($post_id);
+
+                $_SESSION['match_post_id'] = $post_id;
+            }else{
+                $post_id = $_SESSION['match_post_id'];
+            }
+
+
+            //获取文章
+            $question = get_post($post_id );
+            //print_r($question);
+
+            //获取比赛题目
+            $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$post_id} order by b.id asc
+                        ";
+
+            $rows = $wpdb->get_results($sql1,ARRAY_A);
+            $questions_answer = array();
+            $match_questions = array();
+            if(!empty($rows)){
+                foreach ($rows as $k => $val){
+                    //$val['problem_answer'] = 1;
+                    $key = &$val['ID'];
+                    $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                    $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                    //if($val['problem_answer'] == 1) $answer_total += 1;
+                }
+                $match_questions = array_unique(array_column($rows,'post_title','ID'));
+            }
+
+            $row['questions'] = $question;
+            $row['post_id'] = $post_id;
+            $row['redirect_url'] .= '/post_id/'.$post_id;
+            $row['questions_answer'] = $questions_answer;
+            $row['match_questions'] = $match_questions;
+
+            //print_r($row);
         }
 
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
@@ -597,7 +666,7 @@ class Student_Gradings extends Student_Home
     public function record(){//考级成绩
 
         global $wpdb,$current_user;
-        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id
+        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id
                 from wp_order a 
                 LEFT JOIN wp_posts b on a.match_id = b.ID
                 LEFT JOIN wp_grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
