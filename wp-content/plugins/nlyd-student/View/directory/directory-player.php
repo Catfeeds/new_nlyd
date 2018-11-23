@@ -28,7 +28,7 @@
                             <thead>
                                 <tr>
                                     <td><div class="table_content"><?=__('头像', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"><?=__('学员姓名', 'nlyd-student')?></div></td>
+                                    <td><div class="table_content"><?=__('姓名', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('ID', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('类&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></div></td>

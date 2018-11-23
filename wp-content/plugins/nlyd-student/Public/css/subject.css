@@ -3,9 +3,7 @@
     position: relative;
     margin-top: 20px;
     margin-bottom: 15px;
-    width: -webkit-calc(100% - 70px);
-    width: calc(100% - 70px);
-    padding-right: 70px;
+    width:100%;
     line-height: 20px;
 }
 
@@ -14,10 +12,11 @@
 } */
 .subject-title-info{
     display: table;
-    position: absolute;
+    /* position: absolute; */
     padding: 0 5px;
-    right: 0;
-    top: 0;
+    /* right: 0; */
+    /* top: 0; */
+    float: right;
     height: 28px;
     border: 1px solid #2484FE;
     border-radius: 6px;

@@ -1,6 +1,6 @@
 <?php
 /**
- * 考级答题记录页面
+ * 比赛答题记录页面
  * Created by PhpStorm.
  * User: leo
  * Date: 2018/8/22
@@ -95,15 +95,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title ta_c ">
-                            <?php if(ACTION == 'myAnswerLog'): ?>
-                            <?php if(!empty($prev)):?>
-                            <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
-                            <?php endif;?>
-                            <?php if(!empty($next)):?>
-                            <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
-                            <?php endif;?>
-                            <?php endif;?>
+                        <div class="subject-title">
                             <div class="c_black match_info_font"><div><?=__($match_row['questions_type_cn'], 'nlyd-student')?> </div></div>
                         </div>
                         <div class="subject-row flex-h">
@@ -124,11 +116,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     <?php
 
                         if($match_row['submit_type'] == 2){
-                            $error=__('由于考级过程中错误达上限，该轮答案由系统强制提交', 'nlyd-student');
+                            $error=__('由于比赛过程中错误达上限，该轮答案由系统强制提交', 'nlyd-student');
                         }elseif($match_row['submit_type'] == 3){
-                            $error=__('由于考级倒计时结束，该轮考级答题由系统自动提交', 'nlyd-student');
+                            $error=__('由于比赛倒计时结束，该轮比赛答题由系统自动提交', 'nlyd-student');
                         }elseif ($match_row['submit_type'] == 4){
-                            $error=__('由于考级过程中有切出系统行为，该轮答案由系统强制提交', 'nlyd-student');
+                            $error=__('由于比赛过程中有切出系统行为，该轮答案由系统强制提交', 'nlyd-student');
                             if(!empty($match_row['leave_page_time'])){
                                 $arr = json_decode($match_row['leave_page_time'],true);
                                 $end_time = end($arr)['out'];
@@ -175,28 +167,18 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 ?>
                     <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
-
-                <?php
-                    if(ACTION == 'answerLog') {
-                        if (empty($next_project)) { ?>
-                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
-                                <div><?= __('所有答题结束,查看详情', 'nlyd-student') ?></div>
-                            </a>
-                        <?php } else { ?>
-                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
-                                <div><?= __('跳过等待', 'nlyd-student') ?></div>
-                            </a>
-                            <?php
-                        }
-                    }
-                ?>
+                <?php if(empty($next_project)){ ?>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>
+                <?php }else{ ?>
+                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('跳过等待', 'nlyd-student')?></div></a>
+                <?php } ?>
             </div>
         </div>
     </div>
 </div>
 <script>
     jQuery(function($) {
-        $.DelSession('match');//考级记录参数
+        $.DelSession('match');//比赛记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');

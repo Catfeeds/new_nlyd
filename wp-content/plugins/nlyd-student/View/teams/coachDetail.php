@@ -117,8 +117,8 @@
                                         <thead>
                                             <tr>
                                                 <td><?=__('头像', 'nlyd-student')?></td>
-                                                <td><?=__('学员姓名', 'nlyd-student')?></td>
-                                                <td><?=__('学员ID', 'nlyd-student')?></td>
+                                                <td><?=__('姓名', 'nlyd-student')?></td>
+                                                <td><?=__('ID', 'nlyd-student')?></td>
                                                 <td><?=__('M级别', 'nlyd-student')?></td>
                                                 <td><?=__('R级别', 'nlyd-student')?></td>
                                                 <td><?=__('A级别', 'nlyd-student')?></td>

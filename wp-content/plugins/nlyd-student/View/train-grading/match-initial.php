@@ -1,6 +1,6 @@
 <?php
 /**
- * 考级准备页面
+ * 比赛准备页面
  * Created by PhpStorm.
  * User: leo
  * Date: 2018/8/22
@@ -33,7 +33,8 @@ switch ($project_alias){
         }
         break;
     case 'reading':    //速读
-        require_once student_view_path.CONTROLLER.'/ready-reading.php';
+
+        require_once student_view_path.CONTROLLER.'/ready-pokerRelay.php';
         break;
     case 'arithmetic':    //速算
         require_once student_view_path.CONTROLLER.'/matching-fastCalculation.php';

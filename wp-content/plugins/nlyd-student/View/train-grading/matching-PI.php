@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__($project_title, 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -17,7 +17,7 @@
                         </div>
                         <div class="matching-sumbit" id="sumbit"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
-                    <!-- 考级 -->
+                    <!-- 训练 -->
                     <div class="complete_zoo" id="match_zoo">
                         <div class="matching-row layui-row">
                             <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
@@ -183,7 +183,7 @@ jQuery(function($) {
                 }
         })
     } 
-    // 考级事件
+    // 训练事件
     $('.matching-number').each(function(){//填充区域
         var _this=$(this);
         new AlloyFinger(_this[0], {

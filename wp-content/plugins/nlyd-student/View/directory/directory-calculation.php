@@ -28,7 +28,7 @@
                             <thead>
                                 <tr>
                                     <td><?=__('头像', 'nlyd-student')?></td>
-                                    <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                    <td><?=__('姓名', 'nlyd-student')?></td>
                                     <td><?=__('ID', 'nlyd-student')?></td>
                                     <td><?=__('性别', 'nlyd-student')?></td>
                                     <td><?=__('心算级别', 'nlyd-student')?></td>

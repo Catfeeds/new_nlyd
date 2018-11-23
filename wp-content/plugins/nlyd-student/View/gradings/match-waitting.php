@@ -32,8 +32,8 @@
                             <a class="a-btn a-btn-table back" href="<?=$redirect_url?>"><div><?=__('立即进入', 'nlyd-student')?></div></a>
                         <?php } ?>
                         <div class="match_tips">
-                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。', 'nlyd-student')?></p>
-                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛过程中禁止切出页面，否则系统将强制自动提交你的当前比赛项目。', 'nlyd-student')?></p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('考级前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。', 'nlyd-student')?></p>
+                            <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('考级过程中禁止切出页面，否则系统将强制自动提交你的当前考级项目。', 'nlyd-student')?></p>
                         </div>
                     </div>
             </div>
@@ -43,7 +43,7 @@
 </div>
 <script>
     jQuery(function($) {
-        $.DelSession('match');//比赛记录参数
+        $.DelSession('match');//考级记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');

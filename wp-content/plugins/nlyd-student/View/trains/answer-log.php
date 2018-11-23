@@ -29,6 +29,12 @@ if(empty($_SESSION['train_list']) && !isset($_GET['back'])){ ?>
 
     <script>
         jQuery(function($) {
+            var data = $.GetSession('match_data', '1');
+            if(data == null){
+                $.alerts("<?=__('未检测到答题记录', 'nlyd-student')?>");
+                window.location.href= '<?=home_url("/trains/history/")?>';
+                return false;
+            }
             //console.log(data);return false;
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {

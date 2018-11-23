@@ -232,11 +232,137 @@ class Student_Gradings extends Student_Home
             //print_r($memory_type);
             $row['memory_type'] = $memory_type;
         }
+        elseif ($_GET['grad_type'] == 'reading'){
+            global $wpdb,$current_user;
+            if(!isset($_SESSION['match_post_id'])){
+
+                //获取已比赛文章
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                //print_r($sql1);
+                $post_str = $wpdb->get_var($sql1);
+
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                //获取文章速读考题
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
+                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' and b.object_id not in($post_str) ";
+                //print_r($sql);
+
+                $rows = $wpdb->get_results($sql,ARRAY_A);
+
+                if(empty($rows)){
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    return;
+                }
+                $result = array_column($rows,'object_id');
+                //print_r($rows);
+                $post_id = $result[array_rand($result)];
+
+                //print_r($post_id);
+
+                $_SESSION['match_post_id'] = $post_id;
+            }else{
+                $post_id = $_SESSION['match_post_id'];
+            }
+
+
+            //获取文章
+            $question = get_post($post_id );
+            //print_r($question);
+
+            //获取比赛题目
+            $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$post_id} order by b.id asc
+                        ";
+
+            $rows = $wpdb->get_results($sql1,ARRAY_A);
+            $questions_answer = array();
+            $match_questions = array();
+            if(!empty($rows)){
+                foreach ($rows as $k => $val){
+                    //$val['problem_answer'] = 1;
+                    $key = &$val['ID'];
+                    $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                    $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                    //if($val['problem_answer'] == 1) $answer_total += 1;
+                }
+                $match_questions = array_unique(array_column($rows,'post_title','ID'));
+            }
+
+            $row['questions'] = $question;
+            $row['post_id'] = $post_id;
+            $row['questions_answer'] = $questions_answer;
+            $row['match_questions'] = $match_questions;
+            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
+            //print_r($row);
+        }
 
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
         $view = student_view_path.CONTROLLER.'/match-initial.php';
         load_view_template($view,$row);
+    }
+
+    /*
+     * 比赛项目记忆完成答题页
+     */
+    public function answerMatch(){
+
+        unset($_SESSION['match_post_id']);
+
+        if(empty($_GET['grad_id']) || empty($_GET['post_id'])){
+            $this->get_404(__('参数错误', 'nlyd-student'));
+            return;
+        }
+
+        global $wpdb,$current_user;
+
+        $row = $this->get_match_order($current_user->ID,$_GET['grad_id']);
+        //print_r($row);
+        if(empty($row)){
+
+            $this->get_404(__('你未报名', 'nlyd-student'));
+            return;
+        }else{
+            if(!in_array($row->pay_status,array(2,3,4))){
+                $this->get_404(__('订单未付款', 'nlyd-student'));
+                return;
+            }
+        }
+
+        //获取比赛题目
+        $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
+                        from {$wpdb->prefix}posts a 
+                        left join {$wpdb->prefix}problem_meta b on a.ID = b.problem_id
+                        where a.post_parent = {$_GET['post_id']} order by b.id asc
+                        ";
+
+        $rows = $wpdb->get_results($sql1,ARRAY_A);
+        $questions_answer = array();
+        $match_questions = array();
+        if(!empty($rows)){
+            $answer_total = 1;  //默认答案个数
+            foreach ($rows as $k => $val){
+                //$val['problem_answer'] = 1;
+                $key = &$val['ID'];
+                $questions_answer[$key]['problem_select'][] = $val['problem_select'];
+                $questions_answer[$key]['problem_answer'][] = $val['problem_answer'];
+                //if($val['problem_answer'] == 1) $answer_total += 1;
+            }
+            $match_questions = array_unique(array_column($rows,'post_title','ID'));
+        }
+        //}
+        $data['questions_answer'] = $questions_answer;
+        $data['match_questions'] = $match_questions;
+
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/matching-reading.php';
+        load_view_template($view,$data);
     }
 
 
@@ -443,8 +569,9 @@ class Student_Gradings extends Student_Home
                 //print_r($my_answer);
 
                 foreach ($my_answer as $k => $v){
-
+                    $total = count($v);
                     $len += count($v);
+                    //print_r($len.'--');
                     $error_arr=array_diff_assoc($v,$questions_answer[$k]);
                     //print_r($result);
                     //var_dump($result);
@@ -454,7 +581,7 @@ class Student_Gradings extends Student_Home
                         $error_len = count($error_arr);
                     }
 
-                    $success_len += $len-$error_len;
+                    $success_len += $total-$error_len;
                 }
             }
         }
@@ -590,53 +717,187 @@ class Student_Gradings extends Student_Home
         load_view_template($view,$data);
     }
 
-
-
-    public function grading_voice(){//人脉信息记忆页
-        $view = student_view_path.CONTROLLER.'/grading-voice.php';
-        load_view_template($view);
-    }
-    public function grading_rmxx(){//人脉信息记忆页
-        $view = student_view_path.CONTROLLER.'/grading-rmxx.php';
-        load_view_template($view);
-    }
-    public function grading_zwcy(){//中文词语记忆页
-        $view = student_view_path.CONTROLLER.'/grading-zwcy.php';
-        load_view_template($view);
-    }
-    public function grading_szzb(){//数字英文字母记忆页
-        $view = student_view_path.CONTROLLER.'/grading-szzb.php';
-        load_view_template($view);
-    }   
-    public function matching_PI(){//圆周率默写
-        $view = student_view_path.CONTROLLER.'/matching-PI.php';
-        load_view_template($view);
-    }
-    public function matching_silent(){//国学经典默写
-        $view = student_view_path.CONTROLLER.'/matching-silent.php';
-        load_view_template($view);
-    }
-
-    public function matching_wzsd(){//文章速读比赛页
-        $view = student_view_path.CONTROLLER.'/matching-reading.php';
-        load_view_template($view);
-    }
-    public function ready_wzsd(){//文章速读准备页
-        $view = student_view_path.CONTROLLER.'/matching-ready.php';
-        load_view_template($view);
-    }
-    public function matching_zxss(){//正向速算比赛页
-        $view = student_view_path.CONTROLLER.'/matching-fastCalculation.php';
-        load_view_template($view);
-    }
-    public function matching_nxss(){//逆向速算比赛页
-        $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
-        load_view_template($view);
-    }
+    /**
+     * 考级成绩页
+     */
     public function record(){//考级成绩
+
+        global $wpdb,$current_user;
+        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id
+                from wp_order a 
+                LEFT JOIN wp_posts b on a.match_id = b.ID
+                LEFT JOIN wp_grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
+                where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
+                order by c.grading_result asc
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
+        if(empty($rows)){
+            $this->get_404(array('message'=>__('未查询到考级记录', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['match_id'])));
+            return;
+        }
+        if(!empty($rows)){
+            $row = array();
+            foreach ($rows as $k => $val){
+
+                $info = $wpdb->get_results("select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_real_name','user_ID')",ARRAY_A);
+                $user_info = array_column($info,'meta_value','meta_key');
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = $user_real_name['real_name'];
+                $rows[$k]['user_ID'] = $user_info['user_ID'];
+                if($val['user_id'] == $current_user->ID){
+                    $row = $rows[$k];
+                    $row['result_cn'] = $val['memory_lv'].'级'.$val['result_cn'];
+                }
+            }
+        }
+        //print_r($row);
+
+        $data = array(
+            'row'=>$row,
+            'rows'=>$rows,
+        );
+
         $view = student_view_path.CONTROLLER.'/record.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
+
+    /**
+     * 我的答题记录
+     */
+    public function myAnswerLog(){
+
+        global $wpdb,$current_user;
+        if(!isset($_GET['questions_type'])){
+            $str = "order by id asc limit 1";
+        }else{
+            $where = " and questions_type = '{$_GET['questions_type']}' ";
+        }
+        $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,
+                    case grading_type
+                    when 'reading' then '速读'
+                    when 'memory' then '记忆'
+                    when 'arithmetic' then '心算'
+                    end grading_type_cn,
+                    case questions_type
+                    when 'sz' then '随机数字'
+                    when 'cy' then '随机词汇'
+                    when 'zm' then '随机字母'
+                    when 'yzl' then '圆周率'
+                    when 'tl' then '听记数字'
+                    when 'rm' then '人脉信息'
+                    when 'wz' then '国学经典'
+                    end questions_type_cn 
+                from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} {$where}
+                {$str}
+                ";
+        $row  = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($sql);
+        if(empty($row)){
+            $this->get_404(__('未获取到答题记录', 'nlyd-student'));
+            return;
+        }
+
+        $questions_answer = json_decode($row['questions_answer'],true);
+        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+        if($row['questions_type'] == 'wz'){
+            $len = 0;
+            $success_len = 0;
+            if(!empty($my_answer)){
+                //print_r($questions_answer);
+                //print_r($my_answer);
+
+                foreach ($my_answer as $k => $v){
+                    $total = count($v);
+                    $len += count($v);
+                    //print_r($len.'--');
+                    $error_arr=array_diff_assoc($v,$questions_answer[$k]);
+                    //print_r($result);
+                    //var_dump($result);
+                    if(empty($result)){
+                        $error_len = 0;
+                    }else{
+                        $error_len = count($error_arr);
+                    }
+
+                    $success_len += $total-$error_len;
+                }
+            }
+        }
+        else{
+
+            if(!empty($questions_answer)){
+                $len = count($questions_answer);
+                if(!empty($my_answer)){
+
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                    $error_len = count($error_arr);
+                    $success_len = $len - $error_len;
+                }else{
+                    $success_len = 0;
+                }
+            }else{
+                $my_answer = array();
+                $error_arr = array();
+                $success_len = 0;
+                $len = 0;
+            }
+        }
+        //print_r($next_project);
+
+        $order = $this->get_match_order($current_user->ID,$_GET['grad_id']);
+        if($order->memory_lv > 0 ){
+            $project = $this->get_grading_parameter($order->memory_lv);
+            $keys = array_keys($project);
+            $index = array_search($row['questions_type'],$keys);
+            //print_r($keys);
+
+            $next_index = $keys[$index+1];
+            $prev_index = $keys[$index-1];
+            $next = !empty($next_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$next_index) : '';
+            $prev = !empty($prev_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$prev_index) : '';
+
+            /*print_r($next_index);
+            print_r($prev_index);*/
+        }
+
+        $data = array(
+            'next_count_down'=>300,
+            'str_len'=>$len,
+            'success_length'=>$success_len,
+            'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
+            'questions_answer'=>$questions_answer,
+            'my_answer'=>$my_answer,
+            'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'match_row'=>$row,
+            'next'=>$next,
+            'prev'=>$prev,
+        );
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/match-answer-log.php';
+        load_view_template($view,$data);
+
+    }
+
+    // public function matching_wzsd(){//文章速读比赛页
+    //     $view = student_view_path.CONTROLLER.'/matching-reading.php';
+    //     load_view_template($view);
+    // }
+    // public function ready_wzsd(){//文章速读准备页
+    //     $view = student_view_path.CONTROLLER.'/matching-ready.php';
+    //     load_view_template($view);
+    // }
+    // public function matching_zxss(){//正向速算比赛页
+    //     $view = student_view_path.CONTROLLER.'/matching-fastCalculation.php';
+    //     load_view_template($view);
+    // }
+    // public function matching_nxss(){//逆向速算比赛页
+    //     $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
+    //     load_view_template($view);
+    // }
+
     public function matchRule(){//规则
         $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view);
@@ -924,7 +1185,7 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        if(ACTION == 'answerLog'){//
+        if(in_array(ACTION,array('answerLog','myAnswerLog')) ){//
             wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
             wp_enqueue_style( 'my-student-subject' );
 
@@ -935,47 +1196,47 @@ class Student_Gradings extends Student_Home
             wp_enqueue_style( 'my-student-subject' );
         }*/
 
-        if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
-            wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }
+        // if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
+        //     wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-matching-numberBattle' );
+        // }
 
-        if(ACTION == 'grading_voice'){
-            wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-numberBattle' );
-        }
+        // if(ACTION == 'grading_voice'){
+        //     wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-matching-numberBattle' );
+        // }
 
         if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );
         }
 
-        if(ACTION == 'grading_rmxx'){//人脉信息记忆
-            wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-card' );
-        }
+        // if(ACTION == 'grading_rmxx'){//人脉信息记忆
+        //     wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-matching-card' );
+        // }
 
 
-        if(ACTION == 'matching_wzsd'){//文章速读比赛页
-            wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
-            wp_enqueue_style( 'my-student-reading' );
-        }
-        if(ACTION == 'ready_wzsd'){//文章速读准备页
-            wp_register_style( 'my-student-ready-reading', student_css_url.'ready-reading.css',array('my-student') );
-            wp_enqueue_style( 'my-student-ready-reading' );
-        }
-        if(ACTION == 'matching_zxss' ){//正向速算比赛页
-            wp_register_style( 'my-student-fastCalculation', student_css_url.'matching-fastCalculation.css',array('my-student') );
-            wp_enqueue_style( 'my-student-fastCalculation' );
-        }
+        // if(ACTION == 'matching_wzsd'){//文章速读比赛页
+        //     wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-reading' );
+        // }
+        // if(ACTION == 'ready_wzsd'){//文章速读准备页
+        //     wp_register_style( 'my-student-ready-reading', student_css_url.'ready-reading.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-ready-reading' );
+        // }
+        // if(ACTION == 'matching_zxss' ){//正向速算比赛页
+        //     wp_register_style( 'my-student-fastCalculation', student_css_url.'matching-fastCalculation.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-fastCalculation' );
+        // }
 
-        if(ACTION == 'matching_nxss'){//逆向速算比赛页
-            wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-check24_answer' );
-            wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-            wp_enqueue_style( 'my-student-fastReverse' );
-            wp_register_style( 'my-student-matching-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-            wp_enqueue_style( 'my-student-matching-fastReverse' );
-        }
+        // if(ACTION == 'matching_nxss'){//逆向速算比赛页
+        //     wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
+        //     wp_enqueue_script( 'student-check24_answer' );
+        //     wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-fastReverse' );
+        //     wp_register_style( 'my-student-matching-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+        //     wp_enqueue_style( 'my-student-matching-fastReverse' );
+        // }
     }
 }
