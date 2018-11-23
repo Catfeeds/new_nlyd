@@ -406,7 +406,7 @@ class Brainpower
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=get_post($match_id)->post_title?>-脑力健将名录</h1>
-
+            <hr class="wp-header-end">
             <form method="post" action="" onsubmit="" id="_F">
 
                 <p class="search-box">
@@ -440,9 +440,7 @@ class Brainpower
                     </div>
 
                     <div id="dra_set_btn">
-
-                            <input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="<?=$row3 ? '重新生成' : '生成名录'?>">
-
+                        <?=!$row3?'<input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="生成名录>">':''?>
                         <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
                     </div>
                     <script type="text/javascript">
@@ -468,7 +466,7 @@ class Brainpower
                     <br class="clear">
                 </div>
             </form>
-            <hr class="wp-header-end">
+
 
 
             <?php if(!is_mobile()){

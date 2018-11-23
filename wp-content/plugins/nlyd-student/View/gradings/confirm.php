@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="nl-match-detail layui-row">
-                                    <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>:</div>
+                                    <div class="nl-match-label"><?=__('考级地点', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$match['address']?></span>
                                     </div>

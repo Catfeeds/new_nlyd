@@ -7,7 +7,7 @@
   
                 <?php //if( $current_project['match_type'] == 'first' || isset($_GET['wait']) ){?>
                     <div class="count-wrapper">
-                        <p class="match-name c_blue"><?=$match_title?></p>
+                        <p class="match-name c_blue"><?=empty($match_title) ? '国际'.$project_alias_cn.'水平考级认证' : $match_title;?></p>
                         <div class="match_tips">
                             <?php
 
@@ -16,7 +16,7 @@
                             }
                             ?>
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__('国际'.$project_alias_cn.'水平考级认证','nlyd-student')?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__('国际'.$project_alias_cn.'级水平考级认证','nlyd-student')?>
                             </p>
                         </div>
 
@@ -27,6 +27,9 @@
                                     <p class="count_down" data-seconds="<?=$count_down?>"><?=__('初始中', 'nlyd-student')?>...</p>
                                 </div>
                             </div>
+                        <?php } ?>
+                        <?php if($count_down < 0 ){ ?>
+                            <a class="a-btn a-btn-table back" href="<?=$redirect_url?>"><div><?=__('立即进入', 'nlyd-student')?></div></a>
                         <?php } ?>
                         <div class="match_tips">
                             <p class="c_black"><i class="iconfont c_orange">&#xe64c;</i> <?=__('比赛前请关闭一切无关后台应用，我们将记录你当前的系统运行环境以及你的所有操作行为。', 'nlyd-student')?></p>

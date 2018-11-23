@@ -574,18 +574,8 @@ if(!class_exists('MatchController')){
             $questionTypeArr = array();
             if(!empty($category)){
                 foreach ($category as $k => $v){
-
-                    if($_GET['post_type'] == 'question' && in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
-                        $questionTypeArr[] = array(
-                            'term_id'=>$v->term_id,
-                            'name'=>$v->name,
-                        );
-                    }elseif ($_GET['post_type'] == 'grading' && in_array($v->slug,array('en-grading-question','cn-grading-question','en-grading-test-question','cn-grading-test-question'))){
-                        $questionTypeArr[] = array(
-                            'term_id'=>$v->term_id,
-                            'name'=>$v->name,
-                        );
-                    }else{
+                    //print_r($v);
+                    if(in_array($v->slug,array('cn-match-question','en-match-question','cn-test-question','en-test-question'))){
                         $questionTypeArr[] = array(
                             'term_id'=>$v->term_id,
                             'name'=>$v->name,
@@ -593,7 +583,7 @@ if(!class_exists('MatchController')){
                     }
                 }
             }
-
+            //print_r($questionTypeArr);
 //            $questionType = $wpdb->get_results('SELECT term_id,`name`,slug FROM '.$wpdb->prefix.'terms', ARRAY_A);
 //            $questionTypeArr = [];
 //            foreach ($questionType as $qtv){

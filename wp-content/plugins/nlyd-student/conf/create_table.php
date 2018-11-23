@@ -31,6 +31,23 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "grading_logs";  //考級记录表   储存考级是否通过
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) DEFAULT NULL COMMENT '用户id',
+          `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
+          `grading_result` tinyint(2) DEFAULT NULL COMMENT '考级结果 1 过级 2 失败',
+          `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "grading_questions";  //考級成绩表  储存考级成绩记录
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在

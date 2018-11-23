@@ -3460,11 +3460,14 @@ class Student_Ajax
         }
         if($result){
             if($_POST['project_type'] == 'wzsd'){
-                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type != 1";
-                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
+                $use_id = $wpdb->get_var($sql1);
+                //print_r($use_id);die;
                 if($use_id){
-                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} type = 2";
-                    $wpdb->query($sql2);
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 2";
+                    //print_r($sql2);
+                    $a = $wpdb->query($sql2);
+                    //print_r($a);die;
                 }else{
                     $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>2));
                 }
@@ -3890,13 +3893,20 @@ class Student_Ajax
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
+
+        //查看答案是否提交
         $sql = "select id,questions_answer
                 from {$wpdb->prefix}grading_questions
                 where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
                 ";
+        //print_r($sql);die;
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>home_url('matchs/answerLog/match_id/'.$_POST['match_id'].'/log_id/'.$row['id'].'/project_alias/'.$_POST['project_alias'].'/project_more_id/'.$_POST['project_more_id'])));
+        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grad_type']);
+        if($_POST['grad_type'] == 'memory'){
+            $url .= '/type/'.$_POST['questions_type'];
+        }
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //数据处理
 

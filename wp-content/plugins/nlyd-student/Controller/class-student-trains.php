@@ -122,43 +122,33 @@ class Student_Trains extends Student_Home
         switch ($_GET['type']){
             case 'wzsd':
 
-                //判断语言
-                $language = get_user_meta($current_user->ID,'locale')[0];
-                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
-
-                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
-                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
-                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' ";
-                $rows = $wpdb->get_results($sql,ARRAY_A);
-                //print_r($rows);
-                if(empty($rows[0]['term_taxonomy_id'])){
-                    $this->get_404(__('测试题库暂无文章,请联系管理员添加', 'nlyd-student'));
-                    return;
-                }
-
-                $posts_arr = array_column($rows,'object_id');
-                //print_r($posts_arr);
 
                 //获取已训练文章
-                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type != 1";
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
 
-                if(!empty($post_str)){
-                    $post_arr = str2arr($post_str,',');
-                    //print_r($posts_arr);
+                //判断语言
+                $language = get_user_meta($current_user->ID,'locale')[0];
+                $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
+                //获取文章速读考题
+                $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
+                        left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
+                        left join {$wpdb->prefix}posts c on b.object_id = c.ID
+                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' and b.object_id not in($post_str) ";
+                //print_r($sql);
 
-                    $result = array_diff($posts_arr,$post_arr);
-                    if(empty($result)){
-                        $this->get_404(array('message'=>__('恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！', 'nlyd-student'),'return_url'=>home_url('trains')));
-                        return;
-                    }
-                    //print_r($result);
+                $rows = $wpdb->get_results($sql,ARRAY_A);
 
-                }else{
-                    $result = $posts_arr;
+                if(empty($rows)){
+                    $this->get_404(array('message'=>__('恭喜您已训练完题库内所有文章，建议您再利用其他渠道来进行文章速读训练。题库更新后欢迎您回来继续挑战！', 'nlyd-student'),'match_url'=>home_url('trains')));
+                    return;
                 }
+                $result = array_column($rows,'object_id');
+
+                //print_r($result);
+                $post_id = $result[array_rand($result)];
+
                 //print_r($result);
                 $post_id = $result[array_rand($result)];
 
