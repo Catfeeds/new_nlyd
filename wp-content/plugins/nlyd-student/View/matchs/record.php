@@ -58,7 +58,7 @@
                                     <thead>
                                         <tr class='table-head'>
                                             <td><?=__('名次', 'nlyd-student')?></td>
-                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><?=__('姓名', 'nlyd-student')?></td>
                                             <td><span><?=__('ID', 'nlyd-student')?></span></td>
                                             <td><?=__('城市', 'nlyd-student')?></td>
                                             <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
@@ -91,7 +91,7 @@
                                     <thead>
                                         <tr class='table-head'>
                                             <td><?=__('名次', 'nlyd-student')?></td>
-                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><?=__('姓名', 'nlyd-student')?></td>
                                             <td><span><?=__('ID', 'nlyd-student')?></span></td>
                                             <td><?=__('城市', 'nlyd-student')?></td>
                                             <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
@@ -143,7 +143,7 @@
                                     <thead>
                                         <tr class='table-head' id="one_3_head">
                                             <td><?=__('名次', 'nlyd-student')?></td>
-                                            <td><?=__('学员姓名', 'nlyd-student')?></td>
+                                            <td><?=__('姓名', 'nlyd-student')?></td>
                                             <td><span><?=__('ID', 'nlyd-student')?></span></td>
                                             <td><?=__('城市', 'nlyd-student')?></td>
                                             <td><span><?=__('项目总分', 'nlyd-student')?></span></td>
@@ -270,7 +270,7 @@ jQuery(function($) {
                                 +'<td><?=__('总成绩', 'nlyd-student')?></td>'
                             }else if(arg['rank_type']=="danxiang"){//个人
                                 var html_='<td><?=__('名次', 'nlyd-student')?></td>'
-                                +'<td><?=__('学员姓名', 'nlyd-student')?></td>'
+                                +'<td><?=__('姓名', 'nlyd-student')?></td>'
                                 +'<td><?=__('ID', 'nlyd-student')?></td>'
                                 +'<td><?=__('城市', 'nlyd-student')?></td>'
                                 +'<td><?=__('项目总分', 'nlyd-student')?></td>'
