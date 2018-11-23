@@ -28,7 +28,7 @@
                             </tbody>
                         </table>
                     </div>
-                <a class="a-btn" id="complete" href=""><div><?=__('我的答题记录', 'nlyd-student')?></div></a>
+                <a class="a-btn" id="complete" href="<?=home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'])?>"><div><?=__('我的答题记录', 'nlyd-student')?></div></a>
             </div>
         </div>
     </div>

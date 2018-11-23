@@ -95,7 +95,15 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title">
+                        <div class="subject-title ta_c ">
+                            <?php if(ACTION == 'myAnswerLog'): ?>
+                            <?php if(!empty($prev)):?>
+                            <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
+                            <?php endif;?>
+                            <?php if(!empty($next)):?>
+                            <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
+                            <?php endif;?>
+                            <?php endif;?>
                             <div class="c_black match_info_font"><div><?=__($match_row['questions_type_cn'], 'nlyd-student')?> </div></div>
                         </div>
                         <div class="subject-row flex-h">
@@ -167,11 +175,21 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 ?>
                     <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
-                <?php if(empty($next_project)){ ?>
-                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('所有答题结束,查看详情', 'nlyd-student')?></div></a>
-                <?php }else{ ?>
-                    <a class="a-btn a-btn-table" href="<?=$next_project_url?>"><div><?=__('跳过等待', 'nlyd-student')?></div></a>
-                <?php } ?>
+
+                <?php
+                    if(ACTION == 'answerLog') {
+                        if (empty($next_project)) { ?>
+                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
+                                <div><?= __('所有答题结束,查看详情', 'nlyd-student') ?></div>
+                            </a>
+                        <?php } else { ?>
+                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
+                                <div><?= __('跳过等待', 'nlyd-student') ?></div>
+                            </a>
+                            <?php
+                        }
+                    }
+                ?>
             </div>
         </div>
     </div>

@@ -3,8 +3,7 @@
     position: relative;
     margin-top: 20px;
     margin-bottom: 15px;
-    width: -webkit-calc(100% - 70px);
-    width: calc(100% - 70px);
+    width: 100%;
     padding-right: 70px;
     line-height: 20px;
 }

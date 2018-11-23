@@ -637,6 +637,124 @@ class Student_Gradings extends Student_Home
         load_view_template($view,$data);
     }
 
+    /**
+     * 我的答题记录
+     */
+    public function myAnswerLog(){
+
+        global $wpdb,$current_user;
+        if(!isset($_GET['questions_type'])){
+            $str = "order by id asc limit 1";
+        }else{
+            $where = " and questions_type = '{$_GET['questions_type']}' ";
+        }
+        $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,
+                    case grading_type
+                    when 'reading' then '速读'
+                    when 'memory' then '记忆'
+                    when 'arithmetic' then '心算'
+                    end grading_type_cn,
+                    case questions_type
+                    when 'sz' then '随机数字'
+                    when 'cy' then '随机词汇'
+                    when 'zm' then '随机字母'
+                    when 'yzl' then '圆周率'
+                    when 'tl' then '听记数字'
+                    when 'rm' then '人脉信息'
+                    when 'wz' then '国学经典'
+                    end questions_type_cn 
+                from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} {$where}
+                {$str}
+                ";
+        $row  = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($sql);
+        if(empty($row)){
+            $this->get_404(__('未获取到答题记录', 'nlyd-student'));
+            return;
+        }
+
+        $questions_answer = json_decode($row['questions_answer'],true);
+        $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+
+        if($row['questions_type'] == 'wz'){
+            $len = 0;
+            $success_len = 0;
+            if(!empty($my_answer)){
+                //print_r($questions_answer);
+                //print_r($my_answer);
+
+                foreach ($my_answer as $k => $v){
+                    $total = count($v);
+                    $len += count($v);
+                    //print_r($len.'--');
+                    $error_arr=array_diff_assoc($v,$questions_answer[$k]);
+                    //print_r($result);
+                    //var_dump($result);
+                    if(empty($result)){
+                        $error_len = 0;
+                    }else{
+                        $error_len = count($error_arr);
+                    }
+
+                    $success_len += $total-$error_len;
+                }
+            }
+        }
+        else{
+
+            if(!empty($questions_answer)){
+                $len = count($questions_answer);
+                if(!empty($my_answer)){
+
+                    $error_arr = array_diff_assoc($questions_answer,$my_answer);
+                    $error_len = count($error_arr);
+                    $success_len = $len - $error_len;
+                }else{
+                    $success_len = 0;
+                }
+            }else{
+                $my_answer = array();
+                $error_arr = array();
+                $success_len = 0;
+                $len = 0;
+            }
+        }
+        //print_r($next_project);
+
+        $order = $this->get_match_order($current_user->ID,$_GET['grad_id']);
+        if($order->memory_lv > 0 ){
+            $project = $this->get_grading_parameter($order->memory_lv);
+            $keys = array_keys($project);
+            $index = array_search($row['questions_type'],$keys);
+            //print_r($keys);
+
+            $next_index = $keys[$index+1];
+            $prev_index = $keys[$index-1];
+            $next = !empty($next_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$next_index) : '';
+            $prev = !empty($prev_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$prev_index) : '';
+
+            /*print_r($next_index);
+            print_r($prev_index);*/
+        }
+
+        $data = array(
+            'next_count_down'=>300,
+            'str_len'=>$len,
+            'success_length'=>$success_len,
+            'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
+            'questions_answer'=>$questions_answer,
+            'my_answer'=>$my_answer,
+            'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'match_row'=>$row,
+            'next'=>$next,
+            'prev'=>$prev,
+        );
+        //print_r($data);
+        $view = student_view_path.CONTROLLER.'/match-answer-log.php';
+        load_view_template($view,$data);
+
+    }
+
 
     public function grading_voice(){//人脉信息记忆页
         $view = student_view_path.CONTROLLER.'/grading-voice.php';
@@ -967,7 +1085,7 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        if(ACTION == 'answerLog'){//
+        if(in_array(ACTION,array('answerLog','myAnswerLog')) ){//
             wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
             wp_enqueue_style( 'my-student-subject' );
 
