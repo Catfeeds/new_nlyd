@@ -28,7 +28,7 @@
                          <!-- <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div> -->
                     </div>
 
-                    <!-- 比赛 -->
+                    <!-- 训练 -->
                     <div class="complete_zoo" id="match_zoo" style="display:none">
                         <div class="matching-row layui-row">
                             <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
@@ -271,7 +271,7 @@ jQuery(function($) {
                 }
         })
     } 
-    // 比赛事件
+    // 训练事件
     $('.matching-number-match').each(function(){//填充区域
         var _this=$(this);
         new AlloyFinger(_this[0], {

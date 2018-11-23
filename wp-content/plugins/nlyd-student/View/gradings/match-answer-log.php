@@ -1,6 +1,6 @@
 <?php
 /**
- * 比赛答题记录页面
+ * 考级答题记录页面
  * Created by PhpStorm.
  * User: leo
  * Date: 2018/8/22
@@ -116,11 +116,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     <?php
 
                         if($match_row['submit_type'] == 2){
-                            $error=__('由于比赛过程中错误达上限，该轮答案由系统强制提交', 'nlyd-student');
+                            $error=__('由于考级过程中错误达上限，该轮答案由系统强制提交', 'nlyd-student');
                         }elseif($match_row['submit_type'] == 3){
-                            $error=__('由于比赛倒计时结束，该轮比赛答题由系统自动提交', 'nlyd-student');
+                            $error=__('由于考级倒计时结束，该轮考级答题由系统自动提交', 'nlyd-student');
                         }elseif ($match_row['submit_type'] == 4){
-                            $error=__('由于比赛过程中有切出系统行为，该轮答案由系统强制提交', 'nlyd-student');
+                            $error=__('由于考级过程中有切出系统行为，该轮答案由系统强制提交', 'nlyd-student');
                             if(!empty($match_row['leave_page_time'])){
                                 $arr = json_decode($match_row['leave_page_time'],true);
                                 $end_time = end($arr)['out'];
@@ -178,7 +178,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 </div>
 <script>
     jQuery(function($) {
-        $.DelSession('match');//比赛记录参数
+        $.DelSession('match');//考级记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');

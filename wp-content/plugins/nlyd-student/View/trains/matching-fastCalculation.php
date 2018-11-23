@@ -571,7 +571,7 @@ jQuery(function($) {
         }
     }
     if(sys_second<=0){//进入页面判断时间是否结束
-        // $.alerts('<?=__('比赛结束', 'nlyd-student')?>');
+        // $.alerts('<?=__('训练结束', 'nlyd-student')?>');
         var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
         ajaxData[ajaxData.length-1]['yours']=yours;
         if(yours==ajaxData[ajaxData.length-1]['rights']){
@@ -589,12 +589,12 @@ jQuery(function($) {
         var s=d.second<10 ? '0'+d.second : d.second;
         var time=D+h+':'+m+':'+s;
         $(this).text(time).attr('data-seconds',S)
-        if(S<=0){//本轮比赛结束
+        if(S<=0){//本轮训练结束
             $('#next').addClass('disabled')
             // if(S==0){
             //     $.alerts('<?=__('倒计时结束，即将提交答案', 'nlyd-student')?>')
             // }else{
-            //     $.alerts('<?=__('比赛结束', 'nlyd-student')?>')
+            //     $.alerts('<?=__('训练结束', 'nlyd-student')?>')
             // }
             // setTimeout(function() {
                 var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();

@@ -23,7 +23,7 @@
                         <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
                     </div>
 
-                    <!-- 比赛 -->
+                    <!-- 训练 -->
                     <div class="complete_zoo" id="match_zoo" style="display:none">
                         <div class="matching-number-zoo layui-row match_zoo">
 
