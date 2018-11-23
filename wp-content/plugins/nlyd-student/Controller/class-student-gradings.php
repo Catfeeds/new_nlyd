@@ -443,8 +443,9 @@ class Student_Gradings extends Student_Home
                 //print_r($my_answer);
 
                 foreach ($my_answer as $k => $v){
-
+                    $total = count($v);
                     $len += count($v);
+                    //print_r($len.'--');
                     $error_arr=array_diff_assoc($v,$questions_answer[$k]);
                     //print_r($result);
                     //var_dump($result);
@@ -454,7 +455,7 @@ class Student_Gradings extends Student_Home
                         $error_len = count($error_arr);
                     }
 
-                    $success_len += $len-$error_len;
+                    $success_len += $total-$error_len;
                 }
             }
         }
@@ -590,6 +591,51 @@ class Student_Gradings extends Student_Home
         load_view_template($view,$data);
     }
 
+    /**
+     * 考级成绩页
+     */
+    public function record(){//考级成绩
+
+        global $wpdb,$current_user;
+        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id
+                from wp_order a 
+                LEFT JOIN wp_posts b on a.match_id = b.ID
+                LEFT JOIN wp_grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
+                where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
+                order by c.grading_result asc
+                ";
+        //print_r($sql);
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($rows);
+        if(empty($rows)){
+            $this->get_404(array('message'=>__('未查询到考级记录', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['match_id'])));
+            return;
+        }
+        if(!empty($rows)){
+            $row = array();
+            foreach ($rows as $k => $val){
+
+                $info = $wpdb->get_results("select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$val['user_id']} and meta_key in('user_real_name','user_ID')",ARRAY_A);
+                $user_info = array_column($info,'meta_value','meta_key');
+                $user_real_name = unserialize($user_info['user_real_name']);
+                $rows[$k]['real_name'] = $user_real_name['real_name'];
+                $rows[$k]['user_ID'] = $user_info['user_ID'];
+                if($val['user_id'] == $current_user->ID){
+                    $row = $rows[$k];
+                    $row['result_cn'] = $val['memory_lv'].'级'.$val['result_cn'];
+                }
+            }
+        }
+        //print_r($row);
+
+        $data = array(
+            'row'=>$row,
+            'rows'=>$rows,
+        );
+
+        $view = student_view_path.CONTROLLER.'/record.php';
+        load_view_template($view,$data);
+    }
 
 
     public function grading_voice(){//人脉信息记忆页
@@ -633,10 +679,7 @@ class Student_Gradings extends Student_Home
         $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
         load_view_template($view);
     }
-    public function record(){//考级成绩
-        $view = student_view_path.CONTROLLER.'/record.php';
-        load_view_template($view);
-    }
+
     public function matchRule(){//规则
         $view = student_view_path.CONTROLLER.'/match-Rule.php';
         load_view_template($view);
