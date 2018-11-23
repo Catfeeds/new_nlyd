@@ -33,8 +33,7 @@ switch ($project_alias){
         }
         break;
     case 'reading':    //速读
-
-        require_once student_view_path.CONTROLLER.'/ready-pokerRelay.php';
+        require_once student_view_path.CONTROLLER.'/ready-reading.php';
         break;
     case 'arithmetic':    //速算
         require_once student_view_path.CONTROLLER.'/matching-fastCalculation.php';
