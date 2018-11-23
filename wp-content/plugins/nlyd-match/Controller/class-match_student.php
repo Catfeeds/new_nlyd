@@ -1781,7 +1781,11 @@ class Match_student {
             'tax_all' => 0,
             'tax_send_all' => 0,
         ];
+        //是否有已发放的,如果有则不能重新生成
+//        leo_dump($orderAllData);
+        $is_send = false;
         foreach ($orderAllData as &$v) {
+            $v['is_send'] == 2 && $is_send = true;
             $countData['bonus_all'] += $v['all_bonus'];
             $countData['tax_all'] += $v['tax_all'];
             $countData['tax_send_all'] += $v['tax_send_bonus'];
@@ -1911,14 +1915,16 @@ class Match_student {
                             <button class="button" type="button" id="bonus_tmp_box_view">查看设置</button>
                             <button class="button" type="button" onclick="window.location.href='<?=admin_url('admin.php?page=download&action=match_bonus&match_id='.$match_id)?>'">导出</button>
 
-
-                            <button class="button" type="submit" ">
+                            <?php if(!$is_send){ ?>
+                                <button class="button" type="submit" ">
                                 <?php if($reCreated == true || is_post()){ ?>
                                     重新生成
                                 <?php }else{ ?>
                                     生成
                                 <?php } ?>
-                            </button>
+                                </button>
+                            <?php } ?>
+
                         </form>
                     </div>
                 <div class="tablenav top">

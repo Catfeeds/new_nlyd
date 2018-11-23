@@ -35,6 +35,34 @@ class Spread_Ajax
         if($res) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+
+    /**
+     * 更新添加推广奖金项目设置
+     */
+    public function updateSpreadMoneySet(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 0;
+        if($id < 1 && $id != -1 || ($is_enable !=1 && $is_enable != 2)) wp_send_json_error(['info' => '参数错误!']);
+        $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+        $project = isset($_POST['project']) ? intval($_POST['project']) : '';
+        $user_type = isset($_POST['user_type']) ? intval($_POST['user_type']) : '';
+        $money = isset($_POST['money']) ? trim($_POST['money']) : '';
+        $arr = [
+            'money_name' => $name,
+            'project_type' => $project,
+            'user_type' => $user_type,
+            'money' => $money,
+            'is_enable' => $is_enable
+        ];
+        global $wpdb;
+        if($id < 1){
+            $bool = $wpdb->insert($wpdb->prefix.'spread_money_set',$arr);
+        }else{
+            $bool = $wpdb->update($wpdb->prefix.'spread_money_set',$arr,['id'=>$id]);
+        }
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
 }
 
 new Spread_Ajax();
