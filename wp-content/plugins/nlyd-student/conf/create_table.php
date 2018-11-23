@@ -617,6 +617,21 @@ function the_table_install () {
         ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;";
         dbDelta($sql);
     }
+
+    $table_name = $wpdb->prefix . "spread_money_set";  //推广奖金项设置
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+        $sql = "CREATE TABLE `wp_spread_money_set` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `money_name` varchar(255) DEFAULT NULL COMMENT '名称',
+          `project_type` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '1考级报名费,2战队赛报名费,3城市赛报名费,4购买商品',
+          `user_type` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '1分中心,2教练,3用户,4战队',
+          `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '获取金额',
+          `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1启用,2禁用',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;";
+        dbDelta($sql);
+    }
 }
 
 

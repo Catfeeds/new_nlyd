@@ -201,7 +201,7 @@ class Setting{
                             <input type="radio" name="is_enable_-1" value="2">关闭
                         </td>
                         <td class="options column-options" data-colname="操作">
-                            <button type="button" class="button enterUpdate" data-id="-1">确认修改</button>
+                            <button type="button" class="button enterUpdate" data-id="-1">确认添加</button>
                         </td>
                     </tr>
                     <?php foreach ($rows as $row){ ?>
@@ -234,6 +234,7 @@ class Setting{
                             </td>
                             <td class="options column-options" data-colname="操作">
                                 <button type="button" class="button enterUpdate" data-id="<?=$row['id']?>">确认修改</button>
+                                <button type="button" class="button enterRem" data-id="<?=$row['id']?>">删除</button>
                             </td>
                         </tr>
                     <?php } ?>
@@ -287,6 +288,26 @@ class Setting{
                                     alert('请求失败!')
                                 }
                             });
+                        }).on('click','.enterRem', function () {
+                           if(confirm('是否确认删除?')){
+                               var _data = {};
+                               _data.id = $(this).attr('data-id');
+                               _data.action = 'deleteSpreadMoneySet';
+                               $.ajax({
+                                   url : ajaxurl,
+                                   data : _data,
+                                   type : 'post',
+                                   dataType : 'json',
+                                   success : function (response) {
+                                       alert(response.data.info);
+                                       if(response['success']){
+                                           window.location.reload();
+                                       }
+                                   }, error : function () {
+                                       alert('请求失败!')
+                                   }
+                               });
+                           }
                         });
                     })
                 </script>

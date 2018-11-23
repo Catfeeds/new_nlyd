@@ -63,6 +63,17 @@ class Spread_Ajax
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+    /**
+     * 删除推广奖金项目设置
+     */
+    public function deleteSpreadMoneySet(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        if($id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $bool = $wpdb->delete($wpdb->prefix.'spread_money_set',['id'=>$id]);
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
 }
 
 new Spread_Ajax();
