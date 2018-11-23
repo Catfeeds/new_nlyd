@@ -44,7 +44,7 @@ class Teacher
         add_menu_page('教练', '教练', 'teacher', 'teacher',array($this,'teacher'),'dashicons-businessman',99);
         add_submenu_page('teacher','新增教练','新增教练','teacher_add','teacher-add',array($this,'newTeacher'));
         add_submenu_page('teacher','教练资料','教练资料','teacher_datum','teacher-datum',array($this,'datum'));
-        add_submenu_page('teacher','我的学员','我的学员','teacher_student','teacher-student',array($this,'student'));
+        add_submenu_page('teacher','我的学生','我的学生','teacher_student','teacher-student',array($this,'student'));
         add_submenu_page('teacher','我的课程','我的课程','teacher_course','teacher-course',array($this,'course'));
     }
 
@@ -123,7 +123,7 @@ class Teacher
                         <th scope="col" id="name" class="manage-column column-name">姓名</th>
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="datum" class="manage-column column-name">教练资料</th>
-                        <th scope="col" id="student" class="manage-column column-name">查看学员</th>
+                        <th scope="col" id="student" class="manage-column column-name">查看学生</th>
                         <th scope="col" id="student" class="manage-column column-apply_student">申请中</th>
                         <th scope="col" id="student" class="manage-column column-mobile">手机</th>
                         <th scope="col" id="email" class="manage-column column-email sortable desc">
@@ -173,7 +173,7 @@ class Teacher
                                 <span aria-hidden="true"><a href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">教练资料</a></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
-                            <td class="name column-name" data-colname="查看学员">
+                            <td class="name column-name" data-colname="查看学生">
                                 <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'].'&student_type=1' ?>" aria-label=""><?=$student_num?>人</a></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
@@ -211,7 +211,7 @@ class Teacher
                         <th scope="col" class="manage-column column-student">
                             教练资料
                         </th>
-                        <th scope="col" class="manage-column column-name">查看学员</th>
+                        <th scope="col" class="manage-column column-name">查看学生</th>
                         <th scope="col" class="manage-column column-apply_student">申请中</th>
                         <th scope="col" class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-email sortable desc">
@@ -270,7 +270,7 @@ class Teacher
             //查询当前教练
             $old = $wpdb->get_row('SELECT `read`,memory,compute FROM '.$wpdb->prefix.'coach_skill WHERE coach_id='.$_POST['user_id'], ARRAY_A);
             $sql = 'SELECT id FROM '.$wpdb->prefix.'my_coach WHERE coach_id='.$_POST['user_id'].' AND (apply_status=2 OR apply_status=1) AND category_id=';
-            $cateErr = '存在学员或正在申请的学员, 请先解除此类别所属学员或拒绝申请<br />';
+            $cateErr = '存在学生或正在申请的学生, 请先解除此类别所属学生或拒绝申请<br />';
             if($read == 0 && $old['read'] != 0){
                 $id = $wpdb->get_var($sql.$old['read']);
                 if($id) $err_msg .= '速读类'.$cateErr;
@@ -502,7 +502,7 @@ class Teacher
         $real_name = isset(get_user_meta($coach_id, 'user_real_name',true)['real_name']) ? get_user_meta($coach_id, 'user_real_name',true)['real_name'].'-' : '';
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline"><?=$real_name?>学员</h1>
+            <h1 class="wp-heading-inline"><?=$real_name?>学生</h1>
             <ul id="tab">
                 <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
                 <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>

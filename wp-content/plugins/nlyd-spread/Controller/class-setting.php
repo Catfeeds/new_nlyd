@@ -17,9 +17,13 @@ class Setting{
 
             $role = 'spread';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'spread_money';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_menu_page('推广', '推广', 'spread', 'spread',array($this,'spreadSetting'),'dashicons-businessman',102);
+        add_submenu_page('spread','推广金额设置','推广金额设置','spread_money','spread-spread_money',array($this,'spreadMoneySetting'));
     }
 
     public function spreadSetting(){
@@ -86,13 +90,6 @@ class Setting{
                     </tr>
 
                     <tr class="user-first-name-wrap">
-                        <th><label for="where_money">条件金额</label></th>
-                        <td>
-                            <input type="text" name="where_money" id="where_money" value="<?=$row['where_money']?>" class="regular-text">
-                            <span>消费达到此金额获得推广权限</span>
-                        </td>
-                    </tr>
-                    <tr class="user-first-name-wrap">
                         <th><label for="lxl_level">乐学乐开放下级</label></th>
                         <td>
                             <select name="lxl_level" id="lxl_level">
@@ -135,6 +132,210 @@ class Setting{
             </form>
         </div>
         <?php
+    }
+
+    /**
+     * 推广金额设置
+     */
+    public function spreadMoneySetting(){
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}spread_money_set`", ARRAY_A)
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">推广金额设置</h1>
+
+            <hr class="wp-header-end">
+
+                    <br class="clear">
+                <button class="button" type="button" id="add-money-set">添加</button>
+<!--                <div class="tr-" style="display: none">-->
+
+<!--                </div>-->
+                </div>
+                <h2 class="screen-reader-text">推广金额</h2><table class="wp-list-table widefat fixed striped users">
+                    <thead>
+                    <tr>
+                        <th scope="col" id="money_name" class="manage-column column-money_name column-primary sortable">
+                               名称
+                        </th>
+                        <th scope="col" id="project" class="manage-column column-project">项目</th>
+                        <th scope="col" id="user_type" class="manage-column column-user_type">收益体</th>
+                        <th scope="col" id="money" class="manage-column column-money">金额</th>
+                        <th scope="col" id="is_enable" class="manage-column column-is_enable">状态</th>
+                        <th scope="col" id="options" class="manage-column column-options">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="the-list" data-wp-lists="list:user">
+
+                    <tr style="display: none;">
+                        <td class="money_name column-money_name has-row-actions column-primary" data-colname="名称">
+                            <input type="text" name="money_name">
+                            <br>
+<!--                            <div class="row-actions">-->
+<!--                                <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=16&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
+<!--                                <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=16&amp;_wpnonce=e1d5f660de">删除</a> | </span>-->
+<!--                                <span class="view"><a href="http://127.0.0.1/nlyd/author/1115996550qq-com/" aria-label="阅读1115996550@qq.com, 1115996550@qq.com的文章">查看</a></span>-->
+<!--                            </div>-->
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="project column-project" data-colname="项目">
+                            <select name="project" id="">
+                                <?php foreach ($this->getMoneyProject() as $mpv){ ?>
+                                    <option value="<?=$mpv['key']?>"><?=$mpv['name']?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td class="user_type column-user_type" data-colname="收益体">
+                            <select name="user_type" id="">
+                                <?php foreach ($this->getMoneyUserType() as $mutv){ ?>
+                                    <option value="<?=$mutv['key']?>"><?=$mutv['name']?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                        <td class="money column-money" data-colname="金额">
+                            <input type="text" name="money">
+                        </td>
+                        <td class="is_enable column-is_enable" data-colname="状态">
+                            <input type="radio" name="is_enable_-1" checked="checked" value="1">开启
+                            <input type="radio" name="is_enable_-1" value="2">关闭
+                        </td>
+                        <td class="options column-options" data-colname="操作">
+                            <button type="button" class="button enterUpdate" data-id="-1">确认添加</button>
+                        </td>
+                    </tr>
+                    <?php foreach ($rows as $row){ ?>
+                        <tr>
+                            <td class="money_name column-money_name has-row-actions column-primary" data-colname="名称">
+                                <input type="text" name="money_name" value="<?=$row['money_name']?>">
+                                <br>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                            </td>
+                            <td class="project column-project" data-colname="项目">
+                                <select name="project" id="">
+                                    <?php foreach ($this->getMoneyProject() as $mpv){ ?>
+                                        <option <?=$row['project_type']==$mpv['key']?'selected="selected"':''?> value="<?=$mpv['key']?>"><?=$mpv['name']?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td class="user_type column-user_type" data-colname="收益体">
+                                <select name="user_type" id="">
+                                    <?php foreach ($this->getMoneyUserType() as $mutv){ ?>
+                                        <option <?=$row['user_type']==$mutv['key']?'selected="selected"':''?> value="<?=$mutv['key']?>"><?=$mutv['name']?></option>
+                                    <?php } ?>
+                                </select>
+                            </td>
+                            <td class="money column-money" data-colname="金额">
+                                <input type="text" name="money" value="<?=$row['money']?>">
+                            </td>
+                            <td class="is_enable column-is_enable" data-colname="状态">
+                                <input type="radio" name="is_enable_<?=$row['id']?>" <?=$row['is_enable']==1?'checked="checked"':''?> value="1">开启
+                                <input type="radio" name="is_enable_<?=$row['id']?>" <?=$row['is_enable']==2?'checked="checked"':''?> value="2">关闭
+                            </td>
+                            <td class="options column-options" data-colname="操作">
+                                <button type="button" class="button enterUpdate" data-id="<?=$row['id']?>">确认修改</button>
+                                <button type="button" class="button enterRem" data-id="<?=$row['id']?>">删除</button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    <tfoot>
+                    <tr>
+                        <th scope="col" class="manage-column column-money_name column-primary sortable">
+                            名称
+                        </th>
+                        <th scope="col" class="manage-column column-project">项目</th>
+                        <th scope="col" class="manage-column column-user_type">收益体</th>
+                        <th scope="col" class="manage-column column-money">金额</th>
+                        <th scope="col" class="manage-column column-is_enable">状态</th>
+                        <th scope="col" class="manage-column column-options">操作</th>
+                    </tr>
+                    </tfoot>
+
+                </table>
+                <div class="tablenav bottom">
+
+
+
+                    <br class="clear">
+                </div>
+                <script>
+                    jQuery(document).ready(function($) {
+                        $('#add-money-set').on('click',function () {
+                            var _html = $('#the-list').find('tr').first().clone(true);
+                            _html.css('display','table-row')
+                            $('#the-list').append(_html);
+                        });
+                        $('#the-list').on('click','.enterUpdate',function () {
+                            var _data = {},_tr = $(this).closest('tr');
+                            _data.id = $(this).attr('data-id');
+                            _data.name = _tr.find('input[name="money_name"]').val();
+                            _data.project = _tr.find('select[name="project"]').val();
+                            _data.user_type = _tr.find('select[name="user_type"]').val();
+                            _data.money = _tr.find('input[name="money"]').val();
+                            _data.is_enable = _tr.find('input[name="is_enable_'+_data.id+'"]:checked').val();
+                            _data.action = 'updateSpreadMoneySet';
+                            $.ajax({
+                                url : ajaxurl,
+                                data : _data,
+                                type : 'post',
+                                dataType : 'json',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        window.location.reload();
+                                    }
+                                }, error : function () {
+                                    alert('请求失败!')
+                                }
+                            });
+                        }).on('click','.enterRem', function () {
+                           if(confirm('是否确认删除?')){
+                               var _data = {};
+                               _data.id = $(this).attr('data-id');
+                               _data.action = 'deleteSpreadMoneySet';
+                               $.ajax({
+                                   url : ajaxurl,
+                                   data : _data,
+                                   type : 'post',
+                                   dataType : 'json',
+                                   success : function (response) {
+                                       alert(response.data.info);
+                                       if(response['success']){
+                                           window.location.reload();
+                                       }
+                                   }, error : function () {
+                                       alert('请求失败!')
+                                   }
+                               });
+                           }
+                        });
+                    })
+                </script>
+            <br class="clear">
+        </div>
+        <?php
+    }
+    /**
+     * 分钱项目
+     */
+    public function getMoneyProject(){
+        return [
+            ['key'=>1,'name'=>'考级报名费'],
+            ['key'=>2,'name'=>'战队赛报名费'],
+            ['key'=>3,'name'=>'城市赛报名费'],
+            ['key'=>4,'name'=>'购买商品'],
+        ];
+    }
+    /**
+     * 获取收益主体
+     */
+    public function getMoneyUserType(){
+        return [
+            ['key'=>1,'name'=>'分中心'],
+            ['key'=>2,'name'=>'教练'],
+            ['key'=>3,'name'=>'用户'],
+            ['key'=>4,'name'=>'战队'],
+        ];
     }
 
 }

@@ -31,7 +31,9 @@ if(!class_exists('SpreadController')){
         }
 
         private function main(){
+            //设置
             require_once spread_controller_path.'class-setting.php';
+
 
             require_once spread_controller_path.'class-spread.php';
 
