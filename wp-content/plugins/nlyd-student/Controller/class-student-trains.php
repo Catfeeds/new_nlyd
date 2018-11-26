@@ -561,7 +561,13 @@ class Student_Trains extends Student_Home
         $view = student_view_path.CONTROLLER.'/history.php';
         load_view_template($view,$data);
     }
-
+    /**
+     * 训练历史记录list
+     */
+    public function history_list(){
+        $view = student_view_path.CONTROLLER.'/history-list.php';
+        load_view_template($view);
+    }
     /**
      * @param $type 训练项目
      * @return int|void 倒计时
@@ -605,7 +611,7 @@ class Student_Trains extends Student_Home
         wp_enqueue_style( 'my-student-userCenter' );
         wp_register_script( 'student-leavePage',student_js_url.'matchs/leavePage.js',array('jquery'), leo_student_version  );
         wp_enqueue_script( 'student-leavePage' );
-        if(in_array(ACTION,array('index','lists','history'))){
+        if(in_array(ACTION,array('index','lists','history','history_list'))){
             wp_register_style( 'my-trains-index', student_css_url.'trains/index.css',array('my-student') );
             wp_enqueue_style( 'my-trains-index' );
         }

@@ -15,62 +15,39 @@
                 <div><?=__('训练类型', 'nlyd-student')?></div>
                 </h1>
             </header>
-  <!-- <div id="bdtts_div_id">
- 
-  </div> -->
-                    <?php if (empty($list)){ ?>
-                        <div class="layui-row nl-border nl-content">
-                            <div class="width-padding width-padding-pc">
-                                <div class="no-info-page">
-                                    <div class="no-info-img">
-                                        <img src="<?=student_css_url.'image/noInfo/noTrain1045@3x.png'?>">
-                                    </div>
-                                    <p class="no-info-text"><?=__('暂无专项比賽训练', 'nlyd-student')?></p>
+            <?php if (empty($list)){ ?>
+                <div class="layui-row nl-border nl-content">
+                    <div class="width-padding width-padding-pc">
+                        <div class="no-info-page">
+                            <div class="no-info-img">
+                                <img src="<?=student_css_url.'image/noInfo/noTrain1045@3x.png'?>">
+                            </div>
+                            <p class="no-info-text"><?=__('暂无专项比賽训练', 'nlyd-student')?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php }else{ ?>
+                <div class="layui-row nl-border nl-content have-footer">
+                    <div class="width-padding width-padding-pc">
+                        <?php foreach ($list as $v){ ?>
+                            <a class="train_row <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?= $v->post_status == 'draft' ? '' : home_url('trains/lists/id/'.$v->ID)?>">
+                                <div class="train-img" style="background:red">
+                                    <!-- <?php
+                                        $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
+                                    ?>
+                                    <img src="<?=$thumbnail_image_url[0]?>"> -->
                                 </div>
-                            </div>
-                        </div>
-                    <?php }else{ ?>
-                        <div class="layui-row nl-border nl-content have-footer">
-                            <div class="width-padding width-padding-pc">
-                                <?php foreach ($list as $v){ ?>
-                                    <a class="train_row <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?= $v->post_status == 'draft' ? '' : home_url('trains/lists/id/'.$v->ID)?>">
-                                        <div class="train-img">
-                                            <?php
-                                                $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
-                                            ?>
-                                            <img src="<?=$thumbnail_image_url[0]?>">
-                                        </div>
-                                        <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
-                                        <?php if($v->post_status == 'draft'):?>
-                                            <div class="train_tips"><?=__('暂未开放', 'nlyd-student')?></div>
-                                        <?php endif;?>
-                                    </a>
-                                <?php }?>
-                            </div>
-                        </div>
-                    <?php }?>
+                                <div class="train_name fs_16"><?=__($v->post_title, 'nlyd-student')?></div>
+                                
+                                <?php if($v->post_status !== 'draft'):?>
+                                    <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
+                                <?php endif;?>
+                            </a>
+                        <?php }?>
+                    </div>
+                </div>
+            <?php }?>
 
         </div>
     </div>
 </div>
-<script>
-    // function doTTS() {
-    //   var ttsDiv = document.getElementById('bdtts_div_id');
-    // var ttsText ="1234567"
-    //   // 文字转语音
-    //   var au1 = '<audio id="tts_autio_id" autoplay="autoplay">';
-    //   var sss = '<source id="tts_source_id" src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&per=3&spd=5&text=' + ttsText + '" type="audio/mpeg">';
-    //   var eee = '<embed id="tts_embed_id" height="0" width="0" src="">';
-    //   var au2 = '</audio>';
-    //   ttsDiv.innerHTML = au1 + sss + eee + au2;
-
-    //   ttsAudio = document.getElementById('tts_autio_id');
-
-    //   ttsAudio.play();
-    // }
-    // doTTS()
-jQuery(function($) {
-
-})
-</script>
-
