@@ -777,7 +777,7 @@ class Student_Gradings extends Student_Home
                     $wpdb->rollback();
                 }
 
-                $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id']);
+                $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);
             }
 
         }
@@ -841,8 +841,24 @@ class Student_Gradings extends Student_Home
                 $rows[$k]['real_name'] = $user_real_name['real_name'];
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
                 if($val['user_id'] == $current_user->ID){
+                    //print_r($val);
                     $row = $rows[$k];
-                    $row['result_cn'] = $val['memory_lv'].'级'.$val['result_cn'];
+                    if($val['grading_result'] == 1){
+                        $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
+                        //print_r($result);
+                        switch ($_GET['grad_type']){
+                            case 'memory':
+                                $val['memory_lv'] = $result['memory'];
+                                break;
+                            case 'reading':
+                                $val['memory_lv'] = $result['read'];
+                                break;
+                            case 'arithmetic':
+                                $val['memory_lv'] = $result['compute'];
+                                break;
+                        }
+                    }
+                    $row['result_cn'] = !empty($val['memory_lv']) ? $val['memory_lv'].'级'.$val['result_cn'] : $val['result_cn'];
                 }
             }
         }
