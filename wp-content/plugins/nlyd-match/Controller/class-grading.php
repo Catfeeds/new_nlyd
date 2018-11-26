@@ -364,16 +364,19 @@ class Grading
         $gradingArr = $wpdb->get_results('SELECT questions_type FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id, ARRAY_A);
         if(!$gradingArr) exit('无答题记录');
 
+
         $gradingArr = array_reduce($gradingArr, function ($result, $value) {
             return array_merge($result, array_values($value));
         }, array());
         $gradingArr = array_unique($gradingArr);
 
-        $g_type = isset($_GET['g_type']) ? trim($_GET['g_type']) : $gradingArr[0]['questions_type'];
+        $g_type = isset($_GET['g_type']) ? trim($_GET['g_type']) : $gradingArr[0];
 
         //获取答案
         $gradingQuestion = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id.' AND questions_type="'.$g_type.'"', ARRAY_A);
 //        leo_dump();
+//        die;
+//        leo_dump($gradingQuestion);
 //        die;
 
         $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
@@ -389,6 +392,11 @@ class Grading
                     $qav = join('<br>',$qav);
                 }
                 foreach ($my_answer as &$mav){
+                    if(isset($mav['picture']) && isset($mav['phone'])){
+                        $a = $mav['picture'];
+                        $mav['picture'] = $mav['phone'];
+                        $mav['phone'] = $a;
+                    }
                     $mav = join('<br>',$mav);
                 }
                 break;
@@ -401,7 +409,7 @@ class Grading
                         if($qav2 == $my_answer[$qak][$qak2]){
                             $my_answer[$qak][$qak2] = '<span class="correct-color">'.$my_answer[$qak][$qak2].'</span>';
                         }else{
-                            $my_answer[$qak][$qak2] = $my_answer[$qak][$qak2] == '' ? '&ensp;': $my_answer[$qak][$qak2];
+                            $my_answer[$qak][$qak2] = $my_answer[$qak][$qak2] == '' ? '&ensp;-&ensp;': $my_answer[$qak][$qak2];
                             $my_answer[$qak][$qak2] = '<span class="error-color">'.$my_answer[$qak][$qak2].'</span>';
                         }
 
@@ -579,7 +587,7 @@ class Grading
                                 </td>
                                 <td class="my_answer column-my_answer" data-colname="我的答案">
                                     <span class="<?=$questions_answer[$k]==$my_answer[$k]?'correct-color':'error-color'?>">
-                                        <?=$my_answer[$k]?$my_answer[$k]:'-'?>
+                                        <?=$my_answer[$k] || $my_answer[$k]=='0'?$my_answer[$k]:'-'?>
                                     </span>
                                 </td>
                             </tr>
