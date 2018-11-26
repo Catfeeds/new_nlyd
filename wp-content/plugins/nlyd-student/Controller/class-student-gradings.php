@@ -824,7 +824,7 @@ class Student_Gradings extends Student_Home
                 where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
                 order by c.grading_result asc
                 ";
-        //print_r($sql);
+        print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         if(empty($rows)){
@@ -840,25 +840,26 @@ class Student_Gradings extends Student_Home
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = $user_real_name['real_name'];
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
+                if($val['grading_result'] == 1){
+                    $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
+                    //print_r($result);
+                    switch ($_GET['grad_type']){
+                        case 'memory':
+                            $grading_lv = $result['memory'];
+                            break;
+                        case 'reading':
+                            $grading_lv = $result['read'];
+                            break;
+                        case 'arithmetic':
+                            $grading_lv = $result['compute'];
+                            break;
+                    }
+                }
+                $rows[$k]['result_cn'] = !empty($grading_lv) ? $grading_lv.'级'.$val['result_cn'] : $val['result_cn'];
+
                 if($val['user_id'] == $current_user->ID){
                     //print_r($val);
                     $row = $rows[$k];
-                    if($val['grading_result'] == 1){
-                        $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
-                        //print_r($result);
-                        switch ($_GET['grad_type']){
-                            case 'memory':
-                                $val['memory_lv'] = $result['memory'];
-                                break;
-                            case 'reading':
-                                $val['memory_lv'] = $result['read'];
-                                break;
-                            case 'arithmetic':
-                                $val['memory_lv'] = $result['compute'];
-                                break;
-                        }
-                    }
-                    $row['result_cn'] = !empty($val['memory_lv']) ? $val['memory_lv'].'级'.$val['result_cn'] : $val['result_cn'];
                 }
             }
         }
