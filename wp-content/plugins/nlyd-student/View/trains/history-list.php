@@ -27,7 +27,7 @@
                             </div>
                             <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
                         </a>
-                        <a class="train_row his_list <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?=home_url('/trains/history/');?>">
+                        <a class="train_row his_list <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?=home_url('/trains/history_grade/');?>">
                             <div class="train-img" style="background:yellow"></div>
                             <div class="train_name">
                                 <span class="bold fs_16"><?=__("考级专项训练", 'nlyd-student')?></span>

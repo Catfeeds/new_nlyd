@@ -72,11 +72,11 @@
 .his_thir{
     margin-right: 15px;
 }
-.his_thir .c_orange{
-    margin-right: 10px;
+.his_thir .c_black6{
+    margin-left: 10px;
 }
 .his_first{
-    width: 80px;
+    /* width: 80px; */
     text-align: left;
 }
 .his_second{
@@ -152,7 +152,7 @@
     height: auto;
 }
 @media screen and (max-width: 1199px){
-    #content{
-        background:#f6f6f6;
+    #page{
+        background:#f6f6f6!important;
     }
 }
