@@ -824,7 +824,7 @@ class Student_Gradings extends Student_Home
                 where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
                 order by c.grading_result asc
                 ";
-        print_r($sql);
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         if(empty($rows)){
