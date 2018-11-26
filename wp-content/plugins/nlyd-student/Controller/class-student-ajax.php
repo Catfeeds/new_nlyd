@@ -3981,6 +3981,43 @@ class Student_Ajax
                 $correct_rate = $success_len/$len;
                 //print_r($success_len);die;
                 break;
+            case 'arithmetic':
+
+                $data_arr = $_POST['my_answer'];
+                //print_r($data_arr);die;
+                if(!empty($data_arr)){
+                    $match_questions = array_column($data_arr,'question');
+                    $questions_answer = array_column($data_arr,'rights');
+                    $_POST['my_answer'] = array_column($data_arr,'yours');
+                }
+
+                if($_POST['questions_type'] == 'nxys'){
+                    $isRight = array_column($data_arr,'isRight');
+
+                    $success_len = 0;
+                    if(!empty($isRight)){
+                        $count_value = array_count_values($isRight);
+                        $success_len += $count_value['true'];
+                    }
+                    $answer['examples'] = $questions_answer;
+                    $answer['result'] = $isRight;
+                    $questions_answer = $answer;
+
+                    $my_score = $success_len * 10;
+
+                }else{
+
+                    $len = count($match_questions);
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
+                    $success_len = $len-$error_len;
+                    $my_score = $success_len*10;
+                }
+                $correct_rate = $success_len/$len;
+                //print_r($my_score);die;
+                $_POST['grading_questions'] = $match_questions;
+                $_POST['questions_answer'] = $questions_answer;
+                //var_dump($_POST);die;
+                break;
         }
         //zlin_user_skill_rank 技能表
 
@@ -3993,6 +4030,7 @@ class Student_Ajax
             'questions_answer'=>json_encode($_POST['questions_answer']),
             'my_answer'=>json_encode($_POST['my_answer']),
             'correct_rate'=>$correct_rate,
+            'my_score'=>$my_score,
             'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
             'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
             'created_time'=>get_time('mysql'),
@@ -4006,7 +4044,23 @@ class Student_Ajax
         /*print_r($result);
         die;*/
         if($result){
+
             $log_id = $wpdb->insert_id;
+
+            if(!empty($_POST['post_id']) && $_POST['grading_type'] == 'reading'){
+
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                    $a = $wpdb->query($sql2);
+                }else{
+
+                    $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>1));
+                }
+
+            }
+
             wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
         }
         else{
