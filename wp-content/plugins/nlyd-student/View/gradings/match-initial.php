@@ -44,6 +44,7 @@ switch ($project_alias){
                 require_once student_view_path.CONTROLLER.'/matching-fastCalculation.php';
                 break;
         }
+        break;
     default:
         require_once student_view_path.'public/my-404.php';
         break;
