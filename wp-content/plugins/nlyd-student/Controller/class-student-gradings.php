@@ -898,6 +898,9 @@ class Student_Gradings extends Student_Home
                     when 'tl' then '听记数字'
                     when 'rm' then '人脉信息'
                     when 'wz' then '国学经典'
+                    when 'reading' then '文章速读'
+                    when 'zxys' then '正向速算'
+                    when 'nxys' then '逆向速算'
                     end questions_type_cn 
                 from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} {$where}
                 {$str}
@@ -909,6 +912,7 @@ class Student_Gradings extends Student_Home
             return;
         }
 
+        $grading_questions = json_decode($row['grading_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
@@ -935,6 +939,43 @@ class Student_Gradings extends Student_Home
                     $success_len += $total-$error_len;
                 }
             }
+        }
+        elseif ($row['questions_type'] == 'reading'){
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
+
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
+                    }
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+            }
+        }
+        elseif ($row['questions_type'] == 'nxys'){
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
         }
         else{
 
@@ -971,6 +1012,10 @@ class Student_Gradings extends Student_Home
 
             /*print_r($next_index);
             print_r($prev_index);*/
+        }elseif ($row['grading_type'] == 'arithmetic'){
+
+            $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/nxys') : '';
+            $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/zxys') : '';
         }
 
         $data = array(
@@ -979,6 +1024,7 @@ class Student_Gradings extends Student_Home
             'success_length'=>$success_len,
             'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
             'questions_answer'=>$questions_answer,
+            'grading_questions'=>$grading_questions,
             'my_answer'=>$my_answer,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'match_row'=>$row,
