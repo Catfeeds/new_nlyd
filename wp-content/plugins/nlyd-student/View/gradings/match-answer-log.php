@@ -95,7 +95,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title ta_c ">
+                        <div class="subject-title 
+                        <?php if(ACTION == 'myAnswerLog'): ?>
+                        ta_c
+                        <?php endif;?>
+                        ">
                             <?php if(ACTION == 'myAnswerLog'): ?>
                             <?php if(!empty($prev)):?>
                             <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>

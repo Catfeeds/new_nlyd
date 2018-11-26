@@ -1241,8 +1241,8 @@ class Student_Gradings extends Student_Home
         ]);
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
-        wp_enqueue_style( 'my-public' );
+        // wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+        // wp_enqueue_style( 'my-public' );
         if(ACTION == 'index'){//考级列表
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
@@ -1269,7 +1269,8 @@ class Student_Gradings extends Student_Home
         }
 
         if(ACTION == 'initialMatch'){//
-
+            wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+            wp_enqueue_style( 'my-public' );
             if($_GET['grad_type'] == 'arithmetic'){
                 if($_GET['type'] == 'nxys'){
                     wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
@@ -1314,6 +1315,8 @@ class Student_Gradings extends Student_Home
         }
 
         if(ACTION == 'answerMatch'){
+            wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+                wp_enqueue_style( 'my-public' );
             if($_GET['grad_type'] == 'reading'){
                 wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
                 wp_enqueue_style( 'my-student-reading' );
