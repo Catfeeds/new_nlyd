@@ -149,6 +149,7 @@ class Student_Gradings extends Student_Home
 
         //获取数据
         $row = $this->get_grading($_GET['grad_id']);
+
         if(empty($row)){
             $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
@@ -159,6 +160,12 @@ class Student_Gradings extends Student_Home
         }
         //print_r($row);
         global $wpdb,$current_user;
+
+        if($row['user_id'] != $current_user->ID){
+            $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+
         if($row['project_alias'] == 'memory'){ //如果是记忆 获取报名记忆等级
             $row['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$row['grading_id']} and user_id = {$current_user->ID}");
         }
@@ -166,13 +173,15 @@ class Student_Gradings extends Student_Home
 
         $row['redirect_url'] = home_url('gradings/initialMatch/grad_id/'.$row['grading_id'].'/grad_type/'.$row['project_alias']);
 
+        //获取已经参与的比赛项
+        $sql = "select questions_type,post_more from {$wpdb->prefix}grading_questions where grading_id = {$row['grading_id']} and user_id = {$current_user->ID}";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
         if($row['memory_lv'] > 0){
 
             if($row['count_down'] < 0 ){
 
-                //获取已经参与的比赛项
-                $sql = "select questions_type from {$wpdb->prefix}grading_questions where grading_id = {$row['grading_id']} ";
-                $rows = $wpdb->get_results($sql,ARRAY_A);
+
                 $questions_type = array_column($rows,'questions_type');
 
                 $keys = array_keys($this->get_grading_parameter($row['memory_lv']));
@@ -193,6 +202,30 @@ class Student_Gradings extends Student_Home
                 $row['redirect_url'] .= '/type/sz/memory_lv/'.$row['memory_lv'];
             }
             $_SESSION['memory_lv'] = $row['memory_lv'];
+        }
+        elseif ($row['meta_value'] == 'reading'){
+            $post_more = array_column($rows,'post_more');
+            $diff = array_diff_assoc(array(1,2,3),$post_more);
+            $next_key = reset($diff);
+            if(!empty($next_key)){
+                $row['redirect_url'] .= '/more/'.$next_key;
+            }else{
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                return;
+            }
+        }
+        elseif ($row['meta_value'] == 'arithmetic'){
+            $questions_type = array_column($rows,'questions_type');
+            //print_r($questions_type);die;
+            $diff = array_diff_assoc(array('nxys','zxys'),$questions_type);
+            //print_r($diff);
+            $next_key = reset($diff);
+            if(!empty($next_key)){
+                $row['redirect_url'] .= '/type/'.$next_key;
+            }else{
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                return;
+            }
         }
 
 
@@ -217,6 +250,23 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
+        global $wpdb,$current_user;
+        if($row['user_id'] != $current_user->ID){
+            $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+
+        //获取答题记录
+        $sql = "select id from {$wpdb->prefix}grading_questions 
+                where grading_id = {$_GET['grad_id']} and user_id = {$current_user->ID} and grading_type = '{$_GET['grad_type']}' and questions_type = '{$_GET['type']}'  
+                ";
+        $id = $wpdb->get_var($sql);
+        //print_r($id);
+        if(!empty($id)){
+            $this->get_404(array('message'=>__('本项目答案已提交', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+            return;
+        }
+
         if($_GET['grad_type'] == 'memory'){
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
             $project = $this->get_grading_parameter($memory_lv);
@@ -234,14 +284,15 @@ class Student_Gradings extends Student_Home
             $row['memory_type'] = $memory_type;
         }
         elseif ($_GET['grad_type'] == 'reading'){
-            global $wpdb,$current_user;
 
             if(!isset($_SESSION['match_post_id'])){
                 //获取已比赛文章
                 $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
-
+                if(!empty($post_str)){
+                    $where = " and b.object_id not in({$post_str}) ";
+                }
                 //判断语言
                 $language = get_user_meta($current_user->ID,'locale')[0];
                 $locale = $language == 'zh_CN' || empty($language) ? 'cn' : 'en';
@@ -249,7 +300,7 @@ class Student_Gradings extends Student_Home
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' and b.object_id not in($post_str) ";
+                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' {$where} ";
                 //print_r($sql);
 
                 $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -579,9 +630,7 @@ class Student_Gradings extends Student_Home
                     $len += count($v);
                     //print_r($len.'--');
                     $error_arr=array_diff_assoc($v,$questions_answer[$k]);
-                    //print_r($result);
-                    //var_dump($result);
-                    if(empty($result)){
+                    if(empty($error_arr)){
                         $error_len = 0;
                     }else{
                         $error_len = count($error_arr);
@@ -590,6 +639,18 @@ class Student_Gradings extends Student_Home
                     $success_len += $total-$error_len;
                 }
             }
+        }
+        elseif($row['questions_type'] == 'rm'){
+            if(!empty($my_answer)){
+                $success_len = 0;
+                $len = count($my_answer);
+                foreach ($my_answer as $k => $v){
+                    if($v['name'] == $questions_answer[$k]['name'] && $v['phone'] == $questions_answer[$k]['phone']){
+                        $success_len += 1;
+                    }
+                }
+            }
+
         }
         elseif ($row['questions_type'] == 'reading'){
             if(empty($questions_answer)){
@@ -669,13 +730,17 @@ class Student_Gradings extends Student_Home
          }
         }else{
             $row['grad_type'] = '文章速读';
+            $next_more = $row['post_more']+1;
+
+            $next_project = $next_more <= 3 ? 'reading' : '';
+            $next_index = 'reading';
         }
 
         //如果为当前考级最后一项就计算考核结果
 
         if(empty($next_project)){
             //获取所有项目
-            $sql_ = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score
+            $sql_ = "select id,user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score,post_str_length,use_time
                       from {$wpdb->prefix}grading_questions 
                       where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} and grading_type = '{$_GET['grad_type']}' 
                       ";
@@ -685,8 +750,7 @@ class Student_Gradings extends Student_Home
 
                 if($order->memory_lv > 0){
 
-                    $total = count($rows);
-                    $correct_rate = 0;
+                    $correct_rate = array();
                     foreach ($rows as $v){
                         if($v['questions_type'] != 'wz'){
                             $correct_rate *= $v['correct_rate'];
@@ -694,9 +758,11 @@ class Student_Gradings extends Student_Home
                             $gxArr = $v;
                         }
                     }
-                    if($correct_rate < 1){
+                    $result = array_sum($correct_rate);
+                    if($result >= count($correct_rate) ){
                         $grading_result = 1;
                     }
+                    //print_r($correct_rate);
                     if($order->memory_lv > 2){
 
                         $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
@@ -721,9 +787,17 @@ class Student_Gradings extends Student_Home
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
                 }
                 elseif($_GET['grad_type']== 'reading'){
+                    $arr = array();
+                    foreach ($rows as $k =>$v){
+                        $rows[$k]['rate'] = $rate1 = $v['post_str_length']/($v['use_time']/60);
+                        $arr[] = $rate1;
+                    }
+                    array_multisort($arr, SORT_ASC, $rows);
+                    array_shift($rows);
+                    array_pop($rows);
+                    $row = $rows[0];
 
                     $grading_result = 2;
-
                     if($row['correct_rate'] >= 0.7){
                         $rate = $row['post_str_length']/($row['use_time']/60);
                         $lv = floor($rate/1000);
@@ -790,6 +864,9 @@ class Student_Gradings extends Student_Home
             if($order->memory_lv > 0 ){
                 $next_project_url .= '/memory_lv/'.$order->memory_lv;
             }
+            elseif ($_GET['grad_type'] == 'reading'){
+                $next_project_url .= '/more/'.$next_more;
+            }
         }
 
         //print_r($next_project);
@@ -818,9 +895,9 @@ class Student_Gradings extends Student_Home
 
         global $wpdb,$current_user;
         $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id
-                from wp_order a 
-                LEFT JOIN wp_posts b on a.match_id = b.ID
-                LEFT JOIN wp_grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
+                from {$wpdb->prefix}order a 
+                LEFT JOIN {$wpdb->prefix}posts b on a.match_id = b.ID
+                LEFT JOIN {$wpdb->prefix}grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
                 where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
                 order by c.grading_result asc
                 ";
@@ -854,6 +931,9 @@ class Student_Gradings extends Student_Home
                             $grading_lv = $result['compute'];
                             break;
                     }
+                }
+                else{
+                    $grading_lv = $_GET['grad_type'] == 'memory' ? $val['memory_lv'] : '';
                 }
                 $rows[$k]['result_cn'] = !empty($grading_lv) ? $grading_lv.'级'.$val['result_cn'] : $val['result_cn'];
 
@@ -1204,24 +1284,25 @@ class Student_Gradings extends Student_Home
         $sql = "select a.*,b.post_title grading_title,b.post_content,
                 c.post_title grading_type,if(d.id>0,'y','') is_me,
                 DATE_FORMAT(a.start_time,'%Y-%m-%d %H:%i') start_time,
-                DATE_FORMAT(a.end_time,'%Y-%m-%d %H:%i') end_time,
+                DATE_FORMAT(a.end_time,'%Y-%m-%d %H:%i') end_time,d.id order_id,d.user_id,
                 case a.status
                 when -2 then '等待开赛'
                 when 1 then '报名中'
                 when 2 then '进行中'
                 else '已结束'
                 end status_cn,
+                meta_value,
                 case e.meta_value
                 when 'memory' then '记忆'
                 when 'arithmetic' then '速算'
                 when 'reading' then '速读'
                 end project_alias_cn,
                 e.meta_value project_alias
-                from wp_grading_meta a 
-                left join wp_posts b on a.grading_id = b.ID 
-                left join wp_posts c on a.category_id = c.ID 
-                left join wp_order d on a.grading_id = d.match_id
-                left join wp_postmeta e ON a.category_id = e.post_id AND meta_key = 'project_alias'
+                from {$wpdb->prefix}grading_meta a 
+                left join {$wpdb->prefix}posts b on a.grading_id = b.ID 
+                left join {$wpdb->prefix}posts c on a.category_id = c.ID 
+                left join {$wpdb->prefix}order d on a.grading_id = d.match_id
+                left join {$wpdb->prefix}postmeta e ON a.category_id = e.post_id AND meta_key = 'project_alias'
                 where a.grading_id = {$grad_id}
                 ";
         //print_r($sql);
@@ -1253,7 +1334,7 @@ class Student_Gradings extends Student_Home
     public function get_grading_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,correct_rate,is_true,post_str_length,use_time,
+        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,correct_rate,is_true,post_str_length,use_time,post_more,
                     case grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'

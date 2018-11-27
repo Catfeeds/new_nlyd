@@ -8,6 +8,14 @@
 //设置时区
 //date_default_timezone_set('Asia/Shanghai');
 
+add_filter('gettext_with_context', 'disable_open_sans', 888, 4 );
+function disable_open_sans( $translations, $text, $context, $domain )
+{
+    if ( 'Open Sans font: on or off' == $context && 'on' == $text ) {
+        $translations = 'off';
+    }
+    return $translations;
+}
 
 /**
  * 计算年龄
