@@ -123,6 +123,12 @@ a.c_green:hover{
 a.c_blue:hover{
     color: #2484FE;
 }
+.c_red,a.c_red{
+    color: #D20101;
+}
+a.c_red:hover{
+    color: #D20101;
+}
 .c_orange,a.c_orange{
     color: #FB8E8E;
 }
