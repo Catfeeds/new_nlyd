@@ -8,6 +8,7 @@ jQuery(document).ready(function($) {
         $('#menu-posts-team'),
         $('#menu-posts-match'),
         $('#menu-posts-grading'),
+        $('#menu-users'),
     ];
     $.each(parentArray,function (pi,pv) {
         $.each($(pv).find('a'), function (i,v) {

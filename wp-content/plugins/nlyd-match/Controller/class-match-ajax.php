@@ -2038,6 +2038,46 @@ class Match_Ajax
         else wp_send_json_error(['info' => '修改失败', 'data' => $row['collect_name']]);
     }
 
+    /**
+     * 修改用户资料获取战队列表
+     */
+    public function get_team_list(){
+        $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
+        global $wpdb;
+        if($searchStr == ''){
+//            $rows = $wpdb->get_results("SELECT ID AS id,post_title AS text FROM {$wpdb->posts} WHERE post_title LIKE '%{$searchStr}%' AND post_parent=0 AND post_type='team' AND post_status!='trash' LIMIT 0,20",ARRAY_A);
+            $rows = [];
+        }else{
+             $id = isset($_GET['type']) ? intval($_GET['type']) : 0;
+             $rows = $wpdb->get_results("SELECT ID AS id,post_title AS text FROM {$wpdb->posts} WHERE post_title LIKE '%{$searchStr}%' AND post_parent=0 AND post_type='team' AND post_status!='trash' AND ID!='{$id}'",ARRAY_A);
+
+        }
+        wp_send_json_success($rows);
+    }
+
+    /**
+     * 解绑用户微信
+     */
+    public function relieveWechat(){
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        $user_id < 1 && wp_send_json_error(['info' => '参数错误!']);
+
+        global $wpdb;
+        $wpdb->startTrans();
+        $bool = $wpdb->update($wpdb->users,['weChat_openid' => ''],['ID'=>$user_id]);
+        if($bool){
+            if(!delete_user_meta($user_id,'wechat_nickname') && get_user_meta($user_id,'wechat_nickname')){
+                $wpdb->rollback();
+                wp_send_json_error(['info' => '解绑失败!']);
+            };
+            $wpdb->commit();
+            wp_send_json_success(['info' => '解绑成功!']);
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error(['info' => '解绑失败!']);
+        }
+    }
+
 }
 
 new Match_Ajax();
