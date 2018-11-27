@@ -136,6 +136,9 @@ if(!class_exists('MatchController')){
             //添加训练记录菜单
             include_once(match_controller_path.'class-trains.php');
 
+            //添加用户信息菜单
+            include_once(match_controller_path.'class-users.php');
+
             if($this->post_type == 'grading'){
                 include_once(match_controller_path.'class-grading.php');
             }
@@ -1724,6 +1727,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=grading&page=grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
+                    admin_url('users.php?page=users-info'),
                 ],
             ]);
         }

@@ -273,6 +273,7 @@ class Student_Weixin
 //            update_user_meta($user_id, 'user_gender', $sex);
 //            update_user_meta($user_id, 'user_address', $user_address);
             update_user_meta($user_id, 'nickname', $res['nickname']);
+            update_user_meta($user_id, 'wechat_nickname', $res['nickname']);
             update_user_meta($user_id, 'user_head', $res['headimgurl']);
         }
 //        if($type == true){
