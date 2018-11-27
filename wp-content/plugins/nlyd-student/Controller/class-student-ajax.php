@@ -547,7 +547,7 @@ class Student_Ajax
             'created_time'=>get_time('mysql'),
         );
         if($_POST['order_type'] == 2){
-            $data['memory_lv'] = $_POST['memory_lv'];
+            $data['memory_lv'] = !empty($_POST['memory_lv']) ? $_POST['memory_lv'] : '';
         }
         //print_r($data);die;
         //TODO 测试时 订单价格为0
@@ -565,7 +565,7 @@ class Student_Ajax
         $serialnumber = createNumber($current_user->ID,$wpdb->insert_id);
         $b = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
 
-
+        //print_r($a.'---'.$b);die;
         if($b && $a ){
             $wpdb->commit();
             if($data['pay_status'] == 2 || $data['pay_status'] == 4){
@@ -4038,6 +4038,7 @@ class Student_Ajax
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
             'post_str_length'=>isset($_POST['length']) ? $_POST['length'] : '',
             'is_true'=>!empty($prison_log_id) ? 2 : 1,
+            'post_more'=>!empty($_POST['more']) ? $_POST['more'] : '',
         );
         //print_r($insert);die;
         $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);

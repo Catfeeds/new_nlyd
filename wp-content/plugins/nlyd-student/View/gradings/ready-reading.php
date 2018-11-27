@@ -39,6 +39,7 @@ jQuery(function($) {
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
+    var _more=<?=isset($_GET['more']) ? $_GET['more'] : 1; ?>;
     var _length=$('#post_content').text().length;
     var init_time=900;
     var sys_second=900;//记忆时间
@@ -51,7 +52,7 @@ jQuery(function($) {
             if(!$('#complete').hasClass('disabled')){
                 var time=init_time-sys_second;
                 var href=$(this).attr('data-href')
-                var new_href=href+'/usetime/'+time+'/length/'+_length;
+                var new_href=href+'/usetime/'+time+'/length/'+_length+'/more/'+_more;
                 $.DelSession('grade_question')
                 window.location.href=new_href;
                 $('#complete').addClass('disabled')
@@ -111,6 +112,7 @@ jQuery(function($) {
             grading_type:_grad_type,
             questions_type:_type,
             post_id:<?=$post_id?>,
+            more:<?=isset($_GET['more']) ? $_GET['more'] : 1?>,
             grading_questions:<?=json_encode($match_questions)?>,
             questions_answer:<?=json_encode($questions_answer)?>,
             action:'grading_answer_submit',
@@ -152,7 +154,7 @@ jQuery(function($) {
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
+                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type+'/more/'+_more;
                         window.location.href=href;
             　　　　}
                 }
