@@ -1,5 +1,6 @@
 .train_row{
     display: block;
+    position: relative;
     overflow: hidden;
     border-radius: 6px;
     background-color: #fff;
@@ -8,25 +9,35 @@
     padding: 29px 0; 
     /* color: #262626; */
 }
+.train_row.his_list{
+    padding: 10px 0; 
+}
 .train-img{
-    display: table;
+    position: absolute;
+    left: 0;
+    top: 10%;
+    width: 6px;
+    /* background: transparent; */
+    height: 80%;
+    /* display: table;
     width: 28px;
     height: 28px;
     float: left;
     margin-left: 15px;
-    margin-right: 15px;
+    margin-right: 15px; */
 }
-.train-img img{
+/* .train-img img{
     display: table-cell;
     vertical-align: middle;
     width: 100%;
     height: 100%;
-}
+} */
 .train_name{
-    float: left;
+    /* float: left;
     width: -webkit-calc(100% - 140px);
-    width: calc(100% - 140px);
+    width: calc(100% - 140px); */
     text-align: left;
+    padding-left: 25px;
 }
 .train_row.disable{
     background-color: rgba(2, 2, 2, 0.06);    
@@ -43,10 +54,14 @@
 }
 
 .his_tips{
-    margin-top: 12px;
+    background: #ECF4FF;
 }
-
+/* .close{
+    margin-right: 30px;
+} */
 .his_row{
+    display: block;
+    position: relative;
     overflow: hidden;
     border-radius: 6px;
     background-color: #fff;
@@ -54,8 +69,14 @@
     margin-top: 10px;
     padding: 15px 11px; 
 }
+.his_thir{
+    margin-right: 15px;
+}
+.his_thir .c_black6{
+    margin-left: 10px;
+}
 .his_first{
-    width: 80px;
+    /* width: 80px; */
     text-align: left;
 }
 .his_second{
@@ -131,7 +152,7 @@
     height: auto;
 }
 @media screen and (max-width: 1199px){
-    #content{
-        background:#f6f6f6;
+    #page{
+        background:#f6f6f6!important;
     }
 }

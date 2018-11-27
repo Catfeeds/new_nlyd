@@ -521,9 +521,11 @@ jQuery(function($) {
             var data={
                 grading_id:_grad_id,
                 grading_type:_grad_type,
-                questions_type:_type,
+                questions_type:'zxys',
+                grading_questions:'zx',
+                questions_answer:'zx',
                 action:'grading_answer_submit',
-                my_answer:my_answer,
+                my_answer:ajaxData,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');

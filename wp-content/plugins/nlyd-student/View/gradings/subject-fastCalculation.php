@@ -2,8 +2,8 @@
                     <div class="answer-zoo">
                         <button class="matching-btn active"><?=__('答案对比', 'nlyd-student')?></button>
                         <div class="reading-answer">
-                            <?php if(!empty($match_questions)): ?>
-                                <?php foreach ($match_questions as $k => $val){ ?>
+                            <?php if(!empty($grading_questions)): ?>
+                                <?php foreach ($grading_questions as $k => $val){ ?>
                                     <div class="one-ques">
                                         <p class="question"><?=$k+1?>、<?=$val?></p>
                                         <p class="yours"><?=__('你的答案', 'nlyd-student')?>:<span class="<?=$my_answer[$k] == $questions_answer[$k] ? 'yes' : 'error';?>"><?= !empty($my_answer[$k]) ? $my_answer[$k] : __('未作答', 'nlyd-student') ;?></span></p>

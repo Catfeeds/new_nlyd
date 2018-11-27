@@ -62,6 +62,7 @@ function the_table_install () {
           `questions_answer` longtext COMMENT '考题答案',
           `my_answer` longtext COMMENT '我的答案',
           `correct_rate` float(3,3) COMMENT '准确率',
+          `my_score` mediumint(10) COMMENT '成绩',
           `use_time` smallint(20) DEFAULT NULL COMMENT '记忆使用时间',
           `submit_type` tinyint(2) DEFAULT NULL COMMENT '提交方式 1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切换,系统提交',
           `leave_page_time` text COMMENT '记录每次离开页面的时间',

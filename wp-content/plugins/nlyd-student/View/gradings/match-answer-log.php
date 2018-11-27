@@ -95,7 +95,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             <div class="layui-row nl-border nl-content ">
                 <div class="width-margin">
                     <div class="match-subject-info">
-                        <div class="subject-title ta_c ">
+                        <div class="subject-title 
+                        <?php if(ACTION == 'myAnswerLog'): ?>
+                        ta_c
+                        <?php endif;?>
+                        ">
                             <?php if(ACTION == 'myAnswerLog'): ?>
                             <?php if(!empty($prev)):?>
                             <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
@@ -168,6 +172,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         case 'reading':    //文章速读
                             require_once student_view_path.CONTROLLER.'/subject-reading.php';
                             break;
+                        case 'zxys':    //正向运算
+                            require_once student_view_path.CONTROLLER.'/subject-fastCalculation.php';
+                            break;
+                        case 'nxys':    //逆向运算
+                            require_once student_view_path.CONTROLLER.'/subject-fastReverse.php';
+                            break;
                         default:
                             require_once student_view_path.'public/my-404.php';
                             break;
@@ -236,52 +246,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 }
             });
         <?php endif;?>
-        <?php if($next_count_down > 0):
-                    if($next_project == 'y'){
-                        $title = '项';
-                    }elseif ($next_project == 'n'){
-                        $title = '轮';
-                    }
-                ?>
-        // var endTimes=0;
-        // new AlloyFinger($('body')[0], {//部分手机因为用户触摸事件导致计时器失效
-        //     touchStart: function () {
-        //         var counts_down=$('.count_down').attr('data-seconds')
-        //         endTimes=$.GetEndTime(counts_down)
-        //     },
-        //     touchMove: function () {
-        //         // console.log(2)
-        //     },
-        //     touchEnd: function () {
-        //         var count_down=$('.count_down').attr('data-seconds')
-        //         var new_count=$.GetSecond(endTimes);
-        //         console.log(count_down,new_count)
-        //         if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-        //             window.location.reload()
-        //         }
-        //     },
-        //     touchCancel: function () {
-        //     }
-        // })
-        <?php endif;?>
-         <?php if($project_alias == 'pkjl'): ?>
-            initWidth=function() {
-                var len=$('.first_wap.poker-wrapper .poker').length;
-                var width=$('.first_wap.poker-wrapper .poker').width()+2;
-                var marginRight=parseInt($('.first_wap.poker-wrapper .poker').css('marginRight'))
-                var W=width*len+marginRight*(len-1)+'px';
-                $('.first_wap.poker-wrapper').css('width',W);
-
-                var len1=$('.second_wap.poker-wrapper .poker').length;
-                var width1=$('.second_wap.poker-wrapper .poker').width()+2;
-                var marginRight1=parseInt($('.second_wap.poker-wrapper .poker').css('marginRight'))
-                var W1=width1*len1+marginRight1*(len1-1)+'px';
-                $('.second_wap.poker-wrapper').css('width',W1);
-            }
-            initWidth();
-            
-        <?php endif;?>
-
     })
 </script>
 <?php } ?>

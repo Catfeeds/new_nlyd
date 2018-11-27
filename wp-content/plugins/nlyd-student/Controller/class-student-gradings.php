@@ -106,6 +106,7 @@ class Student_Gradings extends Student_Home
 
         global $wpdb,$current_user;
         $match = $this->get_grading($_GET['grad_id']);
+        //print_r($match);
         if(empty($match)){
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
             return;
@@ -615,6 +616,18 @@ class Student_Gradings extends Student_Home
                 }
             }
         }
+        elseif ($row['questions_type'] == 'nxys'){
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
+        }
         else{
 
             if(!empty($questions_answer)){
@@ -646,105 +659,133 @@ class Student_Gradings extends Student_Home
             $next_index = $keys[$index];
             $next_project = $project[$next_index];
         }
+        elseif ($_GET['grad_type'] == 'arithmetic'){
+         if($row['questions_type'] == 'zxys'){
+             $row['questions_type_cn'] = '正向运算';
+             $next_project = $next_index = 'nxys';
+
+         }else{
+             $row['questions_type_cn'] = '逆向运算';
+         }
+        }else{
+            $row['grad_type'] = '文章速读';
+        }
 
         //如果为当前考级最后一项就计算考核结果
 
         if(empty($next_project)){
             //获取所有项目
-            $sql_ = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate 
+            $sql_ = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score
                       from {$wpdb->prefix}grading_questions 
                       where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} and grading_type = '{$_GET['grad_type']}' 
                       ";
             $rows = $wpdb->get_results($sql_,ARRAY_A);
             //print_r($rows);
-            if(!empty($rows) && $order->memory_lv > 0){
+            if(!empty($rows)){
 
-                $total = count($rows);
-                $correct_rate = 0;
-                foreach ($rows as $v){
-                    if($v['questions_type'] != 'wz'){
-                        $correct_rate *= $v['correct_rate'];
-                    }else{
-                        $gxArr = $v;
-                    }
-                }
-                if($correct_rate < 1){
-                    $grading_result = 1;
-                }
-                if($order->memory_lv > 2){
+                if($order->memory_lv > 0){
 
-                    $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
-                    $gx_my_answer = json_decode($gxArr['my_answer'],true);
-                    //print_r($gx_questions_answer);
-                    //print_r($gx_my_answer);
-                    if(!empty($gx_my_answer)){
-                        foreach ($gx_my_answer as $x => $y){
-                            $length = count($gx_questions_answer[$x]);
-                            //print_r($length);
-                            $error_arr = array_diff_assoc($gx_questions_answer[$x],$y);
-                            $error_len += count($error_arr);
-
-                        }
-                        if($error_len > 10){
-                            $grading_result = 2;
+                    $total = count($rows);
+                    $correct_rate = 0;
+                    foreach ($rows as $v){
+                        if($v['questions_type'] != 'wz'){
+                            $correct_rate *= $v['correct_rate'];
+                        }else{
+                            $gxArr = $v;
                         }
                     }
+                    if($correct_rate < 1){
+                        $grading_result = 1;
+                    }
+                    if($order->memory_lv > 2){
 
+                        $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
+                        $gx_my_answer = json_decode($gxArr['my_answer'],true);
+                        //print_r($gx_questions_answer);
+                        //print_r($gx_my_answer);
+                        if(!empty($gx_my_answer)){
+                            foreach ($gx_my_answer as $x => $y){
+                                $length = count($gx_questions_answer[$x]);
+                                //print_r($length);
+                                $error_arr = array_diff_assoc($gx_questions_answer[$x],$y);
+                                $error_len += count($error_arr);
+
+                            }
+                            if($error_len > 10){
+                                $grading_result = 2;
+                            }
+                        }
+
+                    }
+                    $update = array('memory'=>$order->memory_lv);
+                    $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
                 }
-                $update = array('memory'=>$order->memory_lv);
-                $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
-            }
-            else{
+                elseif($_GET['grad_type']== 'reading'){
 
-                $grading_result = 2;
+                    $grading_result = 2;
 
-                if($row['correct_rate'] >= 0.7){
-                    $rate = $row['post_str_length']/($row['use_time']/60);
-                    $lv = floor($rate/1000);
+                    if($row['correct_rate'] >= 0.7){
+                        $rate = $row['post_str_length']/($row['use_time']/60);
+                        $lv = floor($rate/1000);
+                        if($lv > 0){
+                            $grading_result = 1;
+                            $update = array('read'=>$lv);
+                            $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
+                        }
+
+                    }
+                    //print_r($row);
+                }
+                elseif($_GET['grad_type']== 'arithmetic'){
+                    $grading_result = 2;
+                    $my_score = array_sum(array_column($rows,'my_score'));
+                    $lv = floor($my_score/200);
                     if($lv > 0){
                         $grading_result = 1;
-                        $update = array('read'=>$lv);
-                        $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
+                        $update = array('compute'=>$lv);
+                        $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv);
                     }
-
                 }
-                //print_r($row);
-            }
-            $insert = array(
-                'user_id'=>$current_user->ID,
-                'grading_id'=>$_GET['grad_id'],
-                'grading_result'=>$grading_result,
-                'created_time'=>get_time('mysql'),
-            );
+                $insert = array(
+                    'user_id'=>$current_user->ID,
+                    'grading_id'=>$_GET['grad_id'],
+                    'grading_result'=>$grading_result,
+                    'created_time'=>get_time('mysql'),
+                );
 
-            $wpdb->startTrans();
+                $wpdb->startTrans();
 
-            $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
+                $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
 
-            $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
-            if($a && $grading_result == 1){
-                $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
-                if(!empty($rank_id)){
+                $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
 
-                    $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_id));
+                if($a && $grading_result == 1){
+                    $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
+                    if(!empty($rank_id)){
+
+                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_id));
+                    }else{
+                        $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                    }
+                    //wp_user_skill_rank
                 }else{
-                    $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                    $b = 1;
                 }
-                //wp_user_skill_rank
-            }else{
-                $b = 1;
-            }
-            if($a && $b ){
-                $wpdb->commit();
-            }else{
-                $wpdb->rollback();
-            }
+                if($a && $b ){
+                    $wpdb->commit();
+                }else{
+                    $wpdb->rollback();
+                }
 
-            $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id']);
+                $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);
+            }
 
         }
         else{
-            $next_project['title'] = $this->get_memory_type_title($next_index);
+            if($_GET['grad_type'] == 'memory'){
+
+                $next_project['title'] = $this->get_memory_type_title($next_index);
+            }
             $next_project_url = home_url('gradings/initialMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/type/'.$next_index);
             if($order->memory_lv > 0 ){
                 $next_project_url .= '/memory_lv/'.$order->memory_lv;
@@ -783,7 +824,7 @@ class Student_Gradings extends Student_Home
                 where a.match_id = {$_GET['grad_id']} AND a.pay_status in (2,3,4) and b.post_status = 'publish'
                 order by c.grading_result asc
                 ";
-        //print_r($sql);
+        print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
         if(empty($rows)){
@@ -799,9 +840,26 @@ class Student_Gradings extends Student_Home
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = $user_real_name['real_name'];
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
+                if($val['grading_result'] == 1){
+                    $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
+                    //print_r($result);
+                    switch ($_GET['grad_type']){
+                        case 'memory':
+                            $grading_lv = $result['memory'];
+                            break;
+                        case 'reading':
+                            $grading_lv = $result['read'];
+                            break;
+                        case 'arithmetic':
+                            $grading_lv = $result['compute'];
+                            break;
+                    }
+                }
+                $rows[$k]['result_cn'] = !empty($grading_lv) ? $grading_lv.'级'.$val['result_cn'] : $val['result_cn'];
+
                 if($val['user_id'] == $current_user->ID){
+                    //print_r($val);
                     $row = $rows[$k];
-                    $row['result_cn'] = $val['memory_lv'].'级'.$val['result_cn'];
                 }
             }
         }
@@ -841,6 +899,9 @@ class Student_Gradings extends Student_Home
                     when 'tl' then '听记数字'
                     when 'rm' then '人脉信息'
                     when 'wz' then '国学经典'
+                    when 'reading' then '文章速读'
+                    when 'zxys' then '正向速算'
+                    when 'nxys' then '逆向速算'
                     end questions_type_cn 
                 from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} {$where}
                 {$str}
@@ -852,6 +913,7 @@ class Student_Gradings extends Student_Home
             return;
         }
 
+        $grading_questions = json_decode($row['grading_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
 
@@ -878,6 +940,43 @@ class Student_Gradings extends Student_Home
                     $success_len += $total-$error_len;
                 }
             }
+        }
+        elseif ($row['questions_type'] == 'reading'){
+            if(empty($questions_answer)){
+                $len = 0;
+            }else{
+
+                $len = count($questions_answer);
+            }
+            $success_len = 0;
+            if(!empty($questions_answer)){
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    $answerArr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                            $answerArr[] = $key;
+                        }
+                    }
+                    $questions_answer[$k]['problem_answer'] = $answerArr;
+                    if(isset($my_answer[$k])){
+                        if(arr2str($arr) == arr2str($my_answer[$k])) ++$success_len;
+                    }
+                }
+            }
+        }
+        elseif ($row['questions_type'] == 'nxys'){
+            $answer = $questions_answer;
+            $answer_array = $answer['result'];
+            $questions_answer = $answer['examples'];
+            /*print_r($answer_array);
+            print_r($questions_answer);die;*/
+
+            $count_value = array_count_values($answer_array);
+            $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
+
+            $len = count($questions_answer);
         }
         else{
 
@@ -914,6 +1013,10 @@ class Student_Gradings extends Student_Home
 
             /*print_r($next_index);
             print_r($prev_index);*/
+        }elseif ($row['grading_type'] == 'arithmetic'){
+
+            $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/nxys') : '';
+            $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/zxys') : '';
         }
 
         $data = array(
@@ -922,6 +1025,7 @@ class Student_Gradings extends Student_Home
             'success_length'=>$success_len,
             'accuracy'=>$row['correct_rate'] > 0 ? $row['correct_rate']*100 : 0,
             'questions_answer'=>$questions_answer,
+            'grading_questions'=>$grading_questions,
             'my_answer'=>$my_answer,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'match_row'=>$row,
@@ -1184,8 +1288,8 @@ class Student_Gradings extends Student_Home
         ]);
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
-        wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
-        wp_enqueue_style( 'my-public' );
+        // wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+        // wp_enqueue_style( 'my-public' );
         if(ACTION == 'index'){//考级列表
             wp_register_style( 'my-student-matchList', student_css_url.'matchList.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchList' );
@@ -1212,7 +1316,21 @@ class Student_Gradings extends Student_Home
         }
 
         if(ACTION == 'initialMatch'){//
-
+            wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+            wp_enqueue_style( 'my-public' );
+            if($_GET['grad_type'] == 'arithmetic'){
+                if($_GET['type'] == 'nxys'){
+                    wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
+                    wp_enqueue_script( 'student-check24_answer' );
+                    wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+                    wp_enqueue_style( 'my-student-fastReverse' );
+                    wp_register_style( 'my-student-matching-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
+                    wp_enqueue_style( 'my-student-matching-fastReverse' );
+                }else{
+                    wp_register_style( 'my-student-fastCalculation', student_css_url.'matching-fastCalculation.css',array('my-student') );
+                    wp_enqueue_style( 'my-student-fastCalculation' );
+                }
+            }
             if($_GET['grad_type'] == 'reading'){
                 wp_register_style( 'my-student-ready-reading', student_css_url.'ready-reading.css',array('my-student') );
                 wp_enqueue_style( 'my-student-ready-reading' );
@@ -1244,6 +1362,8 @@ class Student_Gradings extends Student_Home
         }
 
         if(ACTION == 'answerMatch'){
+            wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
+                wp_enqueue_style( 'my-public' );
             if($_GET['grad_type'] == 'reading'){
                 wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
                 wp_enqueue_style( 'my-student-reading' );
@@ -1251,58 +1371,19 @@ class Student_Gradings extends Student_Home
         }
 
         if(in_array(ACTION,array('answerLog','myAnswerLog')) ){//
+
             wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
             wp_enqueue_style( 'my-student-subject' );
 
         }
 
 
-        /*if(ACTION == 'test'){
-            wp_register_style( 'my-student-subject', student_css_url.'subject.css',array('my-student') );
-            wp_enqueue_style( 'my-student-subject' );
-        }*/
-
-        // if(ACTION == 'grading_zwcy' || ACTION == 'matching_PI'){//中文词语记忆
-        //     wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-matching-numberBattle' );
-        // }
-
-        // if(ACTION == 'grading_voice'){
-        //     wp_register_style( 'my-student-matching-numberBattle', student_css_url.'matching-numberBattle.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-matching-numberBattle' );
-        // }
 
         if(ACTION == 'matchRule' ){//考级规则
             wp_register_style( 'my-student-matchRule', student_css_url.'match-Rule.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchRule' );
         }
 
-        // if(ACTION == 'grading_rmxx'){//人脉信息记忆
-        //     wp_register_style( 'my-student-matching-card', student_css_url.'grading/card.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-matching-card' );
-        // }
 
-
-        // if(ACTION == 'matching_wzsd'){//文章速读比赛页
-        //     wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-reading' );
-        // }
-        // if(ACTION == 'ready_wzsd'){//文章速读准备页
-        //     wp_register_style( 'my-student-ready-reading', student_css_url.'ready-reading.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-ready-reading' );
-        // }
-        // if(ACTION == 'matching_zxss' ){//正向速算比赛页
-        //     wp_register_style( 'my-student-fastCalculation', student_css_url.'matching-fastCalculation.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-fastCalculation' );
-        // }
-
-        // if(ACTION == 'matching_nxss'){//逆向速算比赛页
-        //     wp_register_script( 'student-check24_answer',student_js_url.'matchs/check24_answer.js',array('jquery'), leo_student_version  );
-        //     wp_enqueue_script( 'student-check24_answer' );
-        //     wp_register_style( 'my-student-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-fastReverse' );
-        //     wp_register_style( 'my-student-matching-fastReverse', student_css_url.'matching-fastReverse.css',array('my-student') );
-        //     wp_enqueue_style( 'my-student-matching-fastReverse' );
-        // }
     }
 }
