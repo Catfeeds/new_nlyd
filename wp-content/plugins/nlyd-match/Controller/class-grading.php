@@ -376,7 +376,7 @@ class Grading
         $gradingQuestion = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id.' AND questions_type="'.$g_type.'"', ARRAY_A);
 //        leo_dump();
 //        die;
-//        leo_dump($gradingQuestion);
+//        leo_dump($g_type);
 //        die;
 
         $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
@@ -392,11 +392,6 @@ class Grading
                     $qav = join('<br>',$qav);
                 }
                 foreach ($my_answer as &$mav){
-                    if(isset($mav['picture']) && isset($mav['phone'])){
-                        $a = $mav['picture'];
-                        $mav['picture'] = $mav['phone'];
-                        $mav['phone'] = $a;
-                    }
                     $mav = join('<br>',$mav);
                 }
                 break;
@@ -421,6 +416,41 @@ class Grading
                     $mav = join('',$mav);
                 }
 
+                break;
+            case 'reading'://速读
+                foreach ($questions_answer as $qak => &$qav){
+                    foreach ($qav['problem_select'] as $qaPeK => &$qaPeV){
+                        if($qav['problem_answer'][$qaPeK] == 1){
+                            $qaPeV = '<span class="correct-color">'.$qaPeV.'</span>';
+                        }
+                    }
+                    foreach ($my_answer[$qak] as $mak => &$mav){
+                        if($qav['problem_answer'][$mav] == 1){
+                            $mav = '<span class="correct-color">'.$qav['problem_select'][$mav].'</span>';
+                        }else{
+                            $mav = $qav['problem_select'][$mav];
+                        }
+                    }
+                    $questions_answer[$qak] = join('<br>',$qav['problem_select']);
+                    $my_answer[$qak] = join('<br>',$my_answer[$qak]);
+                }
+                break;
+            case 'nxys':
+
+//                leo_dump($grading_questions);
+//                leo_dump($questions_answer);
+//                leo_dump($my_answer);
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join(',',$gqv);
+                }
+                $arr = [];
+                foreach ($questions_answer['examples'] as $qak => $qav){
+                    $arr[$qak] = $qav;
+                    if($questions_answer['examples']['result'] == true){
+                        $my_answer[$qak] = '<span class="correct-color">'.$my_answer[$qak].'</span>';
+                    }
+                }
+                $questions_answer = $arr;
                 break;
         }
 
@@ -650,6 +680,15 @@ class Grading
                 break;
             case 'wz':
                 $name = '国学经典';
+                break;
+            case 'zxys':
+                $name = '正向运算';
+                break;
+            case 'nxys':
+                $name = '逆向运算';
+                break;
+            case 'reading':
+                $name = '速读';
                 break;
             default:
                 $name = $types;

@@ -149,6 +149,7 @@ jQuery(function($) {
                 grading_type:_grad_type,
                 questions_type:_type,
                 post_id:$.Request('post_id'),
+                more:<?=isset($_GET['more']) ? $_GET['more'] : 1?>,
                 grading_questions:<?=json_encode($match_questions)?>,
                 questions_answer:<?=json_encode($questions_answer)?>,
                 action:'grading_answer_submit',

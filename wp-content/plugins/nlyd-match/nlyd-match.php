@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-                define( 'leo_match_version','V2.1.1.8' );//样式版本
+            define( 'leo_match_version','V2.1.2.0' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -135,6 +135,9 @@ if(!class_exists('MatchController')){
 
             //添加训练记录菜单
             include_once(match_controller_path.'class-trains.php');
+
+            //添加用户信息菜单
+            include_once(match_controller_path.'class-users.php');
 
             if($this->post_type == 'grading'){
                 include_once(match_controller_path.'class-grading.php');
@@ -1724,6 +1727,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=grading&page=grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
+                    admin_url('users.php?page=users-info'),
                 ],
             ]);
         }
