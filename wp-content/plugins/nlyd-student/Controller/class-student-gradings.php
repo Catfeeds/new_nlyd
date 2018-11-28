@@ -218,7 +218,7 @@ class Student_Gradings extends Student_Home
         elseif ($row['meta_value'] == 'arithmetic'){
             $questions_type = array_column($rows,'questions_type');
             //print_r($questions_type);die;
-            $diff = array_diff_assoc(array('nxys','zxys'),$questions_type);
+            $diff = array_diff_assoc(array('zxys','nxys'),$questions_type);
             //print_r($diff);
             $next_key = reset($diff);
             if(!empty($next_key)){

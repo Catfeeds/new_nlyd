@@ -358,6 +358,7 @@ jQuery(function($) {
     })
     <?php if($match['project_alias'] == 'memory'):?>
     var sexSelectData= [
+        {id:"0",value:'请选择等级'},
         {id:"1",value:'<?=__('记忆一级', 'nlyd-student')?>'},
         {id:"2",value:'<?=__('记忆二级', 'nlyd-student')?>'},
         {id:"3",value:'<?=__('记忆三级', 'nlyd-student')?>'},

@@ -3989,6 +3989,7 @@ class Student_Ajax
                     $match_questions = array_column($data_arr,'question');
                     $questions_answer = array_column($data_arr,'rights');
                     $_POST['my_answer'] = array_column($data_arr,'yours');
+                    $len = count($match_questions);
                 }
 
                 if($_POST['questions_type'] == 'nxys'){
@@ -4007,7 +4008,6 @@ class Student_Ajax
 
                 }else{
 
-                    $len = count($match_questions);
                     $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
                     $success_len = $len-$error_len;
                     $my_score = $success_len*10;
