@@ -1,3 +1,5 @@
+<script>
+</script>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
@@ -77,10 +79,114 @@
         <?php } ?>     
     </div>
 </div>
+<!-- <audio id="audio" autoplay="autoplay" preload="none" type="audio/mpeg"> -->
+<audio id="audio" autoplay="false" preload type="audio/mpeg"> 
+    <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
+</audio>
 <!-- 获取考级列表 -->
 <script>
     
 jQuery(function($) { 
+    
+    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    var questions_answer=[]
+    var que_len=100;
+    var _index=0;
+    var spriteData = {};
+    var $button = $('.button.play');
+    for(var i=0;i<100;i++){
+        var num=Math.floor(Math.random()*10);//生成0-9的随机数
+        questions_answer.push(num)
+    }
+    for(var i=0;i<10;i++){
+        spriteData[i]={start:i,length:1}
+    }
+    spriteData={
+        3:{start:0,length:1.1},
+        4:{start:1.3,length:1.1},
+        5:{start:1.7,length:1.1},
+        6:{start:2.7,length:1.1},
+        7:{start:3.7,length:1.1},
+        8:{start:4.7,length:1.1},
+        9:{start:5.7,length:1.1},
+        0:{start:6.7,length:1.1},
+        1:{start:7.7,length:1.1},
+        2:{start:8.7,length:1.1},
+    }
+    console.log(questions_answer,questions_answer[_index])
+    var audio=document.getElementById('audio');
+    var bodys=document.getElementsByTagName('body')[0];
+    var u = navigator.userAgent;
+	if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+		audio.currentTime = spriteData[questions_answer[_index]].start;
+    }else{
+        audio.addEventListener("canplay",function() {
+				//设置播放时间
+            audio.currentTime = spriteData[questions_answer[_index]].start;
+        });
+    }
+    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+        audio.play();
+    } else {
+        //監聽客户端抛出事件"WeixinJSBridgeReady"
+        if (document.addEventListener) {
+            document.addEventListener("WeixinJSBridgeReady", function(){
+                audio.play();
+            }, false);
+        } else if (document.attachEvent) {
+            document.attachEvent("WeixinJSBridgeReady", function(){
+                audio.play();
+            });
+            document.attachEvent("onWeixinJSBridgeReady", function(){
+                audio.play();
+            });
+        }
+    }
+    audio.play();
+audio.addEventListener('timeupdate', function(){
+    var start=spriteData[questions_answer[_index]]['start'];
+    var len=spriteData[questions_answer[_index]]['length'];
+    if (this.currentTime >= start+len) {
+        this.pause();
+        
+        _index++
+        if(_index<=que_len-1){
+            this.currentTime = spriteData[questions_answer[_index]].start;
+            this.play();
+        }else{
+            this.pause();
+        }
+    }
+}, false);
+
+    // play()
+    // function play() {
+    //     to_speak = new SpeechSynthesisUtterance(ques_str);
+
+    //     to_speak.rate = 1.5;// 设置播放语速，范围：0.1 - 10之间
+    //     window.speechSynthesis.speak(to_speak);
+
+    // }
+
+
+    // var audio=document.getElementById('audio');
+    // var bodys=document.getElementsByTagName('body')[0];
+    // audio.src=file_url+questions_answer[_index]+".wav"
+    // audio.play();
+   
+    // //voiceStatu用來記録狀態,使 touchstart 事件只能觸發一次有效,避免與 click 事件衝突
+    bodys.addEventListener("click",function(e){
+        audio.play();
+    }, false);
+    // audio.addEventListener('ended', function () {
+    //     // alert(4)
+    //     _index++
+    //     if(_index<=que_len-1){
+    //         // $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
+    //         this.src=file_url+questions_answer[_index]+".wav"
+    //         $('#audio').click()
+    //     }
+    // }, false);
     $.DelSession('matching_question');
     $('body').on('click','.nl-match-button button',function(){
         var _this=$(this);
