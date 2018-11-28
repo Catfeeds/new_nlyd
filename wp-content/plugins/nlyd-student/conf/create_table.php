@@ -70,6 +70,7 @@ function the_table_install () {
           `is_true` tinyint(2) DEFAULT '1' COMMENT '成绩真实性 1 真实 2 虚假',
           `post_id` int(20) DEFAULT NULL COMMENT '文章id',
           `post_str_length` int(20) DEFAULT NULL COMMENT '阅读文章长度',
+          `post_more` tinyint(3) DEFAULT NULL COMMENT '速读考级轮数',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

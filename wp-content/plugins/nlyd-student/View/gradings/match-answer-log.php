@@ -187,7 +187,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <?php
                     if($next_count_down > 0 && !empty($next_project)):
                 ?>
-                    <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开赛', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
+                    <div class="a-btn a-btn-table a-btn-top" href="<?=$next_project_url?>"><div><?=__('距下一项开始', 'nlyd-student')?>&nbsp;&nbsp;&nbsp;&nbsp; <span class="count_down next_more_down" data-seconds="<?=$next_count_down?>">00:00:00</span></div></div>
                 <?php endif;?>
 
                 <?php
@@ -197,7 +197,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                                 <div><?= __('所有答题结束,查看详情', 'nlyd-student') ?></div>
                             </a>
                         <?php } else { ?>
-                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
+                            <a class="a-btn a-btn-table ingnore" href="<?= $next_project_url ?>">
                                 <div><?= __('跳过等待', 'nlyd-student') ?></div>
                             </a>
                             <?php
@@ -217,15 +217,22 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         <?php if(isset($_GET['grad_id'])): ?>
             leavePageLoad('<?=$wait_url?>');
             var endTimes=0;
-            var counts_down=$('.count_down').attr('data-seconds')
-            endTimes=$.GetEndTime(counts_down)
-            $('.count_down').countdown(function(S, d){//倒计时
-                var count_down=S
-                var new_count=$.GetSecond(endTimes);
-                // console.log(count_down,new_count)
-                if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-                    window.location.reload()
-                }else{
+            var countSession=$.GetSession('count')
+            if(countSession){
+                endTimes=countSession;
+            }else{
+                var counts_down=$('.count_down').attr('data-seconds')
+                endTimes=$.GetEndTime(counts_down)
+                $.SetSession('count',endTimes)
+            }
+            var new_count=$.GetSecond(endTimes);
+            $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
+                // var count_down=S
+                // var new_count=$.GetSecond(endTimes);
+                // // console.log(count_down,new_count)
+                // if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                //     window.location.reload()
+                // }else{
                     var _this=$(this);
                     var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
                     var h=d.hour<10 ? '0'+d.hour : d.hour;
@@ -237,14 +244,19 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     if(S==0){
                         var href=_this.parents('.a-btn').attr('href');
                         $.DelSession('leavePageWaits')
+                        $.DelSession('count');
                         if(href){
                             window.location.href=href
                         }else{
                             window.location.reload();
                         }
                     }
-                }
+                // }
             });
+            $('.ingnore').click(function(){
+                $.DelSession('leavePageWaits')
+                $.DelSession('count');
+            })
         <?php endif;?>
     })
 </script>

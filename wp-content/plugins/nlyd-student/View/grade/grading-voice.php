@@ -9,34 +9,26 @@
 
                 <div class="remember width-margin width-margin-pc">
                     <div class="matching-row layui-row have-submit">
-                        <div class="c_black match_info_font"><div><?=__($type_title, 'nlyd-student')?></div></div>
+                        <div class="c_black match_info_font"><div><?=__('语音记忆', 'nlyd-student')?></div></div>
                         <div class="c_blue match_info_font">
                             <div>
-                                <span class="count_down" data-seconds="<?=$memory_type['memory_time']?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                <span class="count_down" data-seconds="<?=$count_down?>" style="display:none;"><?=__('初始中', 'nlyd-student')?>...</span>
                             </div>
                         </div>
                         <div class="matching-sumbit" id="sumbit" style="display:none"><div><?=__('提交', 'nlyd-student')?></div></div>
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
-                        <div class="matching-row layui-row">
-                            <div class="matching-row-label"><div><?=__('划辅助线', 'nlyd-student')?></div></div>
-                            <div class="matching-row-list">
-                                <button class="matching-btn ready-btn active"><?=__('不划', 'nlyd-student')?></button>
-                                <button class="matching-btn ready-btn">2</button>
-                                <button class="matching-btn ready-btn">3</button>
-                                <button class="matching-btn ready-btn">4</button>
-                                <button class="matching-btn ready-btn">5</button>
-                                <button class="matching-btn ready-btn">8</button>
+                        <div class="ta_c c_black voice_title">正在播放语音中...</div>
+                        <div class="voice_wait">
+                            <div class="voice_img">
+                                <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
                             </div>
                         </div>
-                        <div class="matching-number-zoo layui-row ready_zoo">
-                            <div class="Glass"></div>
-                        </div>
-                        <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div>
+                         <!-- <div class="a-btn a-btn-table" style="position: relative;top:0;margin-top:30px;margin-bottom: 20px;" id="complete" href="match_zoo"><div><?=__('记忆完成', 'nlyd-student')?></div></div> -->
                     </div>
 
-                    <!-- 训练 -->
+                    <!-- 考级 -->
                     <div class="complete_zoo" id="match_zoo" style="display:none">
                         <div class="matching-row layui-row">
                             <div class="matching-row-label"><div><?=__('辅助操作', 'nlyd-student')?></div></div>
@@ -70,47 +62,6 @@
                                 <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="0"><div>0</div></div>
                             </div>
                         </div>
-
-                        <div class="matching-keyboard layui-row match_zimu"  style="display:none">
-                            <div class="matching-keyboard-row">
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="A"><div>A</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="B"><div>B</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="C"><div>C</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="D"><div>D</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="E"><div>E</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="F"><div>F</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="G"><div>G</div></div>
-                                
-                            </div>
-                            <div class="matching-keyboard-row">
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="H"><div>H</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="I"><div>I</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="J"><div>J</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="K"><div>K</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="L"><div>L</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="M"><div>M</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="N"><div>N</div></div>
-
-                            </div>
-                            <div class="matching-keyboard-row">
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="O"><div>O</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="P"><div>P</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Q"><div>Q</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="R"><div>R</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="S"><div>S</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="T"><div>T</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="U"><div>U</div></div>
-                                
-                            </div>
-                            <div class="matching-keyboard-row">
-                                <div class="bg_orange matching-key fs_16 c_white _del"><div><?=__('删除', 'nlyd-student')?></div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="V"><div>V</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="W"><div>W</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="X"><div>X</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Y"><div>Y</div></div>
-                                <div class="bg_gradient_blue matching-key fs_18 c_white number" date-number="Z"><div>Z</div></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
@@ -118,31 +69,29 @@
         </div>
     </div>
 </div>
+<audio id="audio" autoplay="autoplay" preload type="audio/mpeg"></audio>
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var questions_answer=[];//题目
-    var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
-    var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
-    var sys_second=ready_time;
     var answer_time="<?=$memory_type['answer_time']?>";//记忆时间
-    var endTime=$.GetEndTime(ready_time);//结束时间
-    var que_len="<?=$memory_type['length']?>";//多少个字符
-    init_question(que_len,_show,question_type)
-    console.log(questions_answer)
+    var que_len=<?=$memory_type['length']?>;//多少个字符
+    // var que_len=5;
+    var ready_time=que_len+1;//记忆时间
+    var sys_second=answer_time;
+    var endTime=$.GetEndTime(answer_time);//结束时间
+    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    var _index=0;
+    init_question(que_len,_show)
+    
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
-    $.each(questions_answer,function(i,v){
-        var dom='<div class="matching-number-readys">'+v+'</div>';
-        $('.ready_zoo').append(dom)
-        var dom1=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
-        $('.match_zoo').append(dom1)
-    })
+
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
@@ -150,40 +99,22 @@ jQuery(function($) {
         $('#'+href).show()
         $('.matching-sumbit').show();
         _show=2
-        sys_second=answer_time;
+        sys_second=answer_time
         var endTime=$.GetEndTime(answer_time);//结束时间
         var sessionData={
             grad_id:_grad_id,
             grad_type:_grad_type,
             type:_type,
-            question_type:question_type,
             endTime:endTime,
             _show:2,
             questions_answer:questions_answer
         }
         $.SetSession('grade_question',sessionData)
     })
-    $('.ready-btn').each(function(){//划线
-        var _this=$(this);
-        new AlloyFinger(_this[0], {
-            tap:function(){
-                $('.ready-btn').removeClass('active');
-                _this.addClass('active')
-                var text=parseInt(_this.text())
-                $('.matching-number-readys').removeClass('border-right');
-                if(text!='NAN'){
-                    $('.matching-number-readys').each(function(j){
-                        if((j+1)%text==0){
-                            $(this).addClass('border-right')
-                        }
-                    })
-                }
-            }
-        })
-    })
-    count_down()
+    
     function count_down(){
         // sys_second=answer_time
+        $('.count_down').show()
         var timer = setInterval(function(){
             if (sys_second > 0) {
                 sys_second -= 1;
@@ -198,7 +129,63 @@ jQuery(function($) {
                 var text=day+hour+':'+minute+':'+second;
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
-                if(_show==1){//记忆页面
+                clearInterval(timer)
+                submit(3)
+            }
+
+        }, 1000);
+    } 
+    function init_question(question_leng,_show) {//初始化题目
+        var grade_question=$.GetSession('grade_question','true');
+        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+            questions_answer=grade_question['questions_answer'];
+            _show=2
+            if(!grade_question['endTime']){
+                var sessionData={
+                    grad_id:_grad_id,
+                    grad_type:_grad_type,
+                    type:_type,
+                    endTime:endTime,
+                    _show:2,
+                    questions_answer:questions_answer
+                }
+                $.SetSession('grade_question',sessionData)
+            }else{
+                endTime=grade_question['endTime'];
+                sys_second=$.GetSecond(endTime);
+            }
+            count_down()
+        }else{
+            for(var i=0;i<question_leng;i++){
+                var num=Math.floor(Math.random()*10);//生成0-9的随机数
+                questions_answer.push(num)
+            }
+            var sessionData={
+                grad_id:_grad_id,
+                grad_type:_grad_type,
+                type:_type,
+                _show:_show,
+                questions_answer:questions_answer
+            }
+            $.SetSession('grade_question',sessionData)
+        }
+        $.each(questions_answer,function(i,v){
+            var dom1=i==0 ? '<div class="matching-number-match active"></div>' : '<div class="matching-number-match"></div>';
+            $('.match_zoo').append(dom1)
+        })
+        $('.complete_zoo').hide();
+        $('.complete_zoo').eq(_show-1).show();
+       if(_show==2){
+         $('.matching-sumbit').show();
+       }else{//准备页面播放语音
+            var audio=document.getElementById('audio');
+            $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
+            audio.loop = false;
+            audio.addEventListener('ended', function () {
+                _index++
+                if(_index<=que_len-1){
+                    $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
+                }else{
                     $('.complete_zoo').hide();
                     $('#match_zoo').show()
                     $('.matching-sumbit').show();
@@ -209,62 +196,15 @@ jQuery(function($) {
                         grad_id:_grad_id,
                         grad_type:_grad_type,
                         type:_type,
-                        question_type:question_type,
                         endTime:endTime,
                         _show:2,
                         questions_answer:questions_answer
                     }
                     $.SetSession('grade_question',sessionData)
-                }else if(_show==2){//答题页面
-                    clearInterval(timer)
-                    submit(3)
-                }
-            }
-
-        }, 1000);
-    } 
-    function init_question(question_leng,_show,question_type) {//初始化题目
-        var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
-            questions_answer=grade_question['questions_answer'];
-            question_type=grade_question['question_type']
-            _show=grade_question['_show']
-            endTime=grade_question['endTime'];
-            sys_second=$.GetSecond(endTime)
-        }else{
-            for(var i=0;i<question_leng;i++){
-                if(question_type==1){
-                    var num=Math.floor(Math.random()*10);//生成0-9的随机数
-                }else if(question_type==2){
-                    var num=randZF();//生成A-Z的随机数
-                }
-                questions_answer.push(num)
-            }
-            var sessionData={
-                grad_id:_grad_id,
-                grad_type:_grad_type,
-                type:_type,
-                question_type:question_type,
-                _show:_show,
-                endTime:endTime,
-                questions_answer:questions_answer
-            }
-            $.SetSession('grade_question',sessionData)
-        }
-        $('.matching-keyboard').hide();//键盘
-        $('.complete_zoo').hide();
-        $('.complete_zoo').eq(_show-1).show();
-        $('.matching-keyboard').eq(question_type-1).show();
-        $('.matching-keyboard').eq(question_type).remove()
-        if(_show==2){
-         $('.matching-sumbit').show();
+                    count_down()
+                }  
+            }, false);
        }
-       
-    }
-    function randZF() {//生成随即字符
-        var arr=["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-        var pos = Math.round(Math.random() * (arr.length - 1));
-        return arr[pos];
     }
     function submit(submit_type){//提交答案
         // $('#load').css({
@@ -278,7 +218,7 @@ jQuery(function($) {
             my_answer.push(answer)
         })
         var data={
-                grading_id:_grad_id,
+            grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 grading_questions:questions_answer,
@@ -288,8 +228,7 @@ jQuery(function($) {
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
         }
-        console.log(data)
-        /*return false*/
+
         var leavePage= $.GetSession('leavePage','1');
             if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
@@ -332,7 +271,7 @@ jQuery(function($) {
                 }
         })
     } 
-    // 训练事件
+    // 考级事件
     $('.matching-number-match').each(function(){//填充区域
         var _this=$(this);
         new AlloyFinger(_this[0], {
@@ -354,7 +293,7 @@ jQuery(function($) {
             }
         })
     })
-    $('.matching-keyboard').eq(question_type-1).find('.number').each(function(){//数字键盘
+    $('.matching-keyboard .number').each(function(){//数字键盘
         var _this=$(this);
         new AlloyFinger(_this[0], {
             touchStart: function () {
@@ -549,7 +488,7 @@ $('._del').each(function(){//数字键盘
                         }
                         ,btn2: function(index, layero){
                             layer.closeAll();
-                            submit(1);
+                            submit(1);  
                         }
                         ,closeBtn:2
                         ,btnAagn: 'c' //按钮居中

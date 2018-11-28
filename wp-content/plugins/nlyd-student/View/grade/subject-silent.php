@@ -22,6 +22,7 @@
     </div>
 </div>
 <?php } ?>
+</div>
 <script>
     jQuery(function($) { 
     var how_ques=$('.answer-zoo').length;//多少道题目

@@ -1,3 +1,5 @@
+<script>
+</script>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
@@ -32,6 +34,7 @@
                                 <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>
                                 <a href="<?=home_url('gradings/matching_nxss/')?>">逆向速算</a><br>
                                 <a href="<?=home_url('gradings/ready_wzsd/')?>">文章速读</a><br> -->
+                               
                                 </ul>
                             </div>
                             <!-- 考级中 -->
@@ -79,7 +82,6 @@
 </div>
 <!-- 获取考级列表 -->
 <script>
-    
 jQuery(function($) { 
     $.DelSession('matching_question');
     $('body').on('click','.nl-match-button button',function(){
@@ -286,7 +288,21 @@ jQuery(function($) {
         }
         var isClick={}
         pagation($('.layui-this').attr('data-id'),1)
+        var layid = location.hash.replace(/^#matchList=/, '');
+        if(layid.length>0){
+            $('.layui-tab-title li').each(function(){
+                var _this=$(this)
+                var lay_id=_this.attr('data-id');
+                if(lay_id==layid){
+                    setTimeout(function() {
+                        _this.click()
+                    }, 200);
+                    return false
+                }
+            })
+        }
         element.on('tab(tabs)', function(){//tabs
+            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
             var id=$(this).attr('data-id')
             $('.nl-transform').css({

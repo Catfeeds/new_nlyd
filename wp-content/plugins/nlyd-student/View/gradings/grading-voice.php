@@ -19,7 +19,7 @@
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
-                        <div class="ta_c c_black voice_title">正在播放语音中...</div>
+                        <div class="ta_c c_black voice_title"><?=__('正在播放语音中', 'nlyd-student')?>...</div>
                         <div class="voice_wait">
                             <div class="voice_img">
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
@@ -69,7 +69,9 @@
         </div>
     </div>
 </div>
-<audio id="audio" autoplay="autoplay" preload type="audio/mpeg"></audio>
+<audio id="audio" autoplay="false" preload type="audio/mpeg"> 
+    <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
+</audio>
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
@@ -84,8 +86,20 @@ jQuery(function($) {
     var ready_time=que_len+1;//记忆时间
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
-    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    // var file_url="<?=leo_match_url.'/upload/voice/'?>"
     var _index=0;
+    var spriteData={
+        0:{start:0,length:1},
+        1:{start:1,length:1},
+        2:{start:2,length:1},
+        3:{start:3,length:1},
+        4:{start:4,length:1},
+        5:{start:5,length:1},
+        6:{start:6,length:1},
+        7:{start:7,length:1},
+        8:{start:8,length:1},
+        9:{start:9,length:1},
+    }
     init_question(que_len,_show)
     
     leaveMatchPage(function(){//窗口失焦提交
@@ -179,31 +193,126 @@ jQuery(function($) {
          $('.matching-sumbit').show();
        }else{//准备页面播放语音
             var audio=document.getElementById('audio');
-            $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
-            audio.loop = false;
-            audio.addEventListener('ended', function () {
-                _index++
+            var voice_title=document.getElementsByClassName('voice_title')[0];
+            var u = navigator.userAgent;
+            if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+                audio.currentTime = spriteData[questions_answer[_index]].start;
+            }else{
+                audio.addEventListener("canplay",function() {
+                        //设置播放时间
+                    audio.currentTime = spriteData[questions_answer[_index]].start;
+                });
+            }
+            if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+                audio.play();
+            } else {
+                //監聽客户端抛出事件"WeixinJSBridgeReady"
+                if (document.addEventListener) {
+                    document.addEventListener("WeixinJSBridgeReady", function(){
+                        audio.play();
+                    }, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent("WeixinJSBridgeReady", function(){
+                        audio.play();
+                    });
+                    document.attachEvent("onWeixinJSBridgeReady", function(){
+                        audio.play();
+                    });
+                }
+            }
+            audio.play();
+            audio.addEventListener('timeupdate', function(){
                 if(_index<=que_len-1){
-                    $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
-                }else{
-                    $('.complete_zoo').hide();
-                    $('#match_zoo').show()
-                    $('.matching-sumbit').show();
-                    _show=2
-                    sys_second=answer_time
-                    var endTime=$.GetEndTime(answer_time);//结束时间
-                    var sessionData={
-                        grad_id:_grad_id,
-                        grad_type:_grad_type,
-                        type:_type,
-                        endTime:endTime,
-                        _show:2,
-                        questions_answer:questions_answer
+                    if(!spriteData[questions_answer[_index]]){
+
+                    }else{
+                        var start=spriteData[questions_answer[_index]]['start'];
+                        var len=spriteData[questions_answer[_index]]['length'];
+                        if (this.currentTime >= start+len) {
+                            this.pause();
+                            _index++
+                            if(_index<=que_len-1){
+                                this.currentTime = spriteData[questions_answer[_index]].start;
+                                this.play();
+                            }else{
+                                $('.complete_zoo').hide();
+                                $('#match_zoo').show()
+                                $('.matching-sumbit').show();
+                                _show=2
+                                sys_second=answer_time
+                                var endTime=$.GetEndTime(answer_time);//结束时间
+                                var sessionData={
+                                    grad_id:_grad_id,
+                                    grad_type:_grad_type,
+                                    type:_type,
+                                    endTime:endTime,
+                                    _show:2,
+                                    questions_answer:questions_answer
+                                }
+                                $.SetSession('grade_question',sessionData)
+                                count_down()
+                            }
+                            
+                        }
                     }
-                    $.SetSession('grade_question',sessionData)
-                    count_down()
-                }  
+
+                }
             }, false);
+            voice_title.addEventListener("click",function(e){
+                audio.play();
+            }, false);
+
+            // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
+            // audio.loop = false;
+            // audio.addEventListener('ended', function () {
+            //     _index++
+            //     if(_index<=que_len-1){
+            //         $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
+            //     }else{
+            //         $('.complete_zoo').hide();
+            //         $('#match_zoo').show()
+            //         $('.matching-sumbit').show();
+            //         _show=2
+            //         sys_second=answer_time
+            //         var endTime=$.GetEndTime(answer_time);//结束时间
+            //         var sessionData={
+            //             grad_id:_grad_id,
+            //             grad_type:_grad_type,
+            //             type:_type,
+            //             endTime:endTime,
+            //             _show:2,
+            //             questions_answer:questions_answer
+            //         }
+            //         $.SetSession('grade_question',sessionData)
+            //         count_down()
+            //     }  
+            // }, false);
+
+            // var str_que=questions_answer.join(',')
+            // if(!('speechSynthesis' in window)) {
+            //     throw alert("对不起，您的浏览器不支持")
+            // }
+            // to_speak = new SpeechSynthesisUtterance(str_que);
+            // to_speak.rate = 0.545;// 设置播放语速，范围：0.1 - 10之间
+            // window.speechSynthesis.speak(to_speak);
+            // to_speak.onend = function() { 
+            //     $('.complete_zoo').hide();
+            //     $('#match_zoo').show()
+            //     $('.matching-sumbit').show();
+            //     _show=2
+            //     sys_second=answer_time
+            //     var endTime=$.GetEndTime(answer_time);//结束时间
+            //     var sessionData={
+            //         grad_id:_grad_id,
+            //         grad_type:_grad_type,
+            //         type:_type,
+            //         endTime:endTime,
+            //         _show:2,
+            //         questions_answer:questions_answer
+            //     }
+            //     $.SetSession('grade_question',sessionData)
+            //     count_down()
+            // }
        }
     }
     function submit(submit_type){//提交答案

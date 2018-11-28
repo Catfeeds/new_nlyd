@@ -1,39 +1,53 @@
+<script>
+</script>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
                 require_once leo_student_public_view.'leftMenu.php';
-            
+
         ?>
 
-        <?php if($row){ ?>
+        <?php if(!$row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1" lay-id="1"><?=__('报名中', 'nlyd-student')?></li>
-                            <li data-id="2" lay-id="2"><?=__('比赛中', 'nlyd-student')?></li>
-                            <li data-id="3" lay-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
-                            <div class="nl-transform" data-y="-5"><?=__('近期比赛', 'nlyd-student')?></div>
+                            <li class="layui-this" data-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
+                            <li data-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
+                            <li data-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
+                            <div class="nl-transform" data-y="-5"></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
-                            <!-- 报名中 -->
+                            <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                    
+                                <!-- <a href="<?=home_url('gradings/grading_szzb/type/1')?>">随机数字记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_szzb/type/2')?>">随机字母记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_zwcy/')?>">随机中文词语记忆</a><br>
+                                <a href="<?=home_url('gradings/matching_PI/')?>">圆周率默写</a><br>
+                                <a href="<?=home_url('gradings/grading_rmxx/')?>">人脉信息记忆</a><br>
+                                <a href="<?=home_url('gradings/grading_voice/')?>">语音听记数字记忆</a><br>
+                                <a href="<?=home_url('gradings/matching_silent/')?>">国学经典默写</a><br>
+
+                                <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>
+                                <a href="<?=home_url('gradings/matching_nxss/')?>">逆向速算</a><br>
+                                <a href="<?=home_url('gradings/ready_wzsd/')?>">文章速读</a><br> -->
                                 </ul>
                             </div>
-                            <!-- 比赛中 -->
+                            <!-- 考级中 -->
                             <div class="layui-tab-item">
-                                <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新比赛倒计时', 'nlyd-student')?>
-                                    <span class="getTime" id="getTimes">00:00:00</span>        
-                                </div>
+                                <?php if(!empty($new_grading_time)): ?>
+                                    <div class="countdown-time c_blue"><i class="iconfont">&#xe685;</i>&nbsp;&nbsp;<?=__('最新考级倒计时', 'nlyd-student')?>
+                                        <span class="getTime count_down" data-seconds="<?=$new_grading_time?>"><?=__('初始中', 'nlyd-student')?>...</span>
+                                    </div>
+                                <?php endif;?>
                                 <ul class="flow-default layui-row layui-col-space20" id="2" style="margin:0">
 
                                 </ul>
                             </div>
-                            <!-- 往期比赛 -->
+                            <!-- 往期考级测评 -->
                             <div class="layui-tab-item">
                                 <ul class="flow-default layui-row layui-col-space20" id="3" style="margin:0">
 
@@ -58,23 +72,122 @@
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
-                        <p class="no-info-text"><?=__('无比赛信息', 'nlyd-student')?></p>
+                        <p class="no-info-text"><?=__('无考级测评信息', 'nlyd-student')?></p>
                     </div>
                 </div>
             </div>
         <?php } ?>     
     </div>
 </div>
-<!-- 获取比赛列表 -->
-<input type="hidden" name="_wpnonce" id="inputMatch" value="<?=wp_create_nonce('student_get_match_code_nonce');?>">
-<!-- 获取最新比赛倒计时 -->
-<input type="hidden" name="_wpnonce" id="inputNewMatch" value="<?=wp_create_nonce('student_get_count_down_code_nonce');?>">
+<!-- <audio id="audio" autoplay="autoplay" preload="none" type="audio/mpeg"> -->
+<audio id="audio" autoplay="false" preload type="audio/mpeg"> 
+    <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
+</audio>
+<!-- 获取考级列表 -->
 <script>
     
 jQuery(function($) { 
-    if(window.wait_match == ''){
-        $('.countdown-time').hide();
+    
+    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    var questions_answer=[]
+    var que_len=100;
+    var _index=0;
+    var spriteData = {};
+    var $button = $('.button.play');
+    for(var i=0;i<100;i++){
+        var num=Math.floor(Math.random()*10);//生成0-9的随机数
+        questions_answer.push(num)
     }
+    for(var i=0;i<10;i++){
+        spriteData[i]={start:i,length:1}
+    }
+    spriteData={
+        3:{start:0,length:1.1},
+        4:{start:1.3,length:1.1},
+        5:{start:1.7,length:1.1},
+        6:{start:2.7,length:1.1},
+        7:{start:3.7,length:1.1},
+        8:{start:4.7,length:1.1},
+        9:{start:5.7,length:1.1},
+        0:{start:6.7,length:1.1},
+        1:{start:7.7,length:1.1},
+        2:{start:8.7,length:1.1},
+    }
+    console.log(questions_answer,questions_answer[_index])
+    var audio=document.getElementById('audio');
+    var bodys=document.getElementsByTagName('body')[0];
+    var u = navigator.userAgent;
+	if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+		audio.currentTime = spriteData[questions_answer[_index]].start;
+    }else{
+        audio.addEventListener("canplay",function() {
+				//设置播放时间
+            audio.currentTime = spriteData[questions_answer[_index]].start;
+        });
+    }
+    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+        audio.play();
+    } else {
+        //監聽客户端抛出事件"WeixinJSBridgeReady"
+        if (document.addEventListener) {
+            document.addEventListener("WeixinJSBridgeReady", function(){
+                audio.play();
+            }, false);
+        } else if (document.attachEvent) {
+            document.attachEvent("WeixinJSBridgeReady", function(){
+                audio.play();
+            });
+            document.attachEvent("onWeixinJSBridgeReady", function(){
+                audio.play();
+            });
+        }
+    }
+    audio.play();
+audio.addEventListener('timeupdate', function(){
+    var start=spriteData[questions_answer[_index]]['start'];
+    var len=spriteData[questions_answer[_index]]['length'];
+    if (this.currentTime >= start+len) {
+        this.pause();
+        
+        _index++
+        if(_index<=que_len-1){
+            this.currentTime = spriteData[questions_answer[_index]].start;
+            this.play();
+        }else{
+            this.pause();
+        }
+    }
+}, false);
+
+    // play()
+    // function play() {
+    //     to_speak = new SpeechSynthesisUtterance(ques_str);
+
+    //     to_speak.rate = 1.5;// 设置播放语速，范围：0.1 - 10之间
+    //     window.speechSynthesis.speak(to_speak);
+
+    // }
+
+
+    // var audio=document.getElementById('audio');
+    // var bodys=document.getElementsByTagName('body')[0];
+    // audio.src=file_url+questions_answer[_index]+".wav"
+    // audio.play();
+   
+    // //voiceStatu用來記録狀態,使 touchstart 事件只能觸發一次有效,避免與 click 事件衝突
+    bodys.addEventListener("click",function(e){
+        audio.play();
+    }, false);
+    // audio.addEventListener('ended', function () {
+    //     // alert(4)
+    //     _index++
+    //     if(_index<=que_len-1){
+    //         // $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
+    //         this.src=file_url+questions_answer[_index]+".wav"
+    //         $('#audio').click()
+    //     }
+    // }, false);
+    $.DelSession('matching_question');
     $('body').on('click','.nl-match-button button',function(){
         var _this=$(this);
         var href=_this.attr('href');
@@ -86,6 +199,17 @@ jQuery(function($) {
             window.location.href=href;
         }
     })
+    $('.count_down').countdown(function(S, d){//倒计时
+        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+        var h=d.hour<10 ? '0'+d.hour : d.hour;
+        var m=d.minute<10 ? '0'+d.minute : d.minute;
+        var s=d.second<10 ? '0'+d.second : d.second;
+        var time=D+h+':'+m+':'+s;
+        $(this).attr('data-second',S).text(time)
+        if(S<=0){//本轮考级结束
+            window.location.reload()
+        }
+    });
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
@@ -96,14 +220,13 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_match_list',
-                        _wpnonce:$('#inputMatch').val(),
+                        action:'get_grading_logs',
                         page:match_page,
                         match_type:'',
                     }
                     if(parseInt(id)==1){//报名
                         postData['match_type']="signUp";
-                    }else if(parseInt(id)==2){//比赛
+                    }else if(parseInt(id)==2){//考级
                         postData['match_type']="matching";
                     }else{//往期
                         postData['match_type']="history";
@@ -123,8 +246,8 @@ jQuery(function($) {
                                     // 报名中1
                                     // 进行中2
                                     var isMe='';//标签
-                                    var match_status='c_blue';//比赛中高亮
-                                    var rightBtn='';  
+                                    var match_status='c_blue';//考级中高亮
+                                    var rightBtn='';
                                     var endTime="";//报名截止
                                     var domTime=v.entry_end_time.replace(/-/g,'/');
                                     var end_time = new Date(domTime).getTime();//月份是实际月份-1
@@ -135,9 +258,9 @@ jQuery(function($) {
                                     if(v.user_id!=null){//我报名参加的赛事
                                         isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
                                     }
-                                    if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
+                                    if(v.match_status==2 || v.match_status==-2){//考级进行中或等待开赛
                                         if(v.match_status==2){
-                                            match_status='c_orange';  
+                                            match_status='c_orange';
                                         }
                                         if(v.user_id==null){//未报名（未登录）
                                             rightBtn=""
@@ -157,8 +280,8 @@ jQuery(function($) {
                                                 +'</div>'
                                     }else if(v.match_status==-3){//已结束
                                         rightBtn='<div class="nl-match-button flex1 last-btn">'
-                                                    +'<button type="button" href="'+v.right_url+'"><?=__('查看战绩', 'nlyd-student')?></button>'
-                                                +'</div>';   
+                                                    +'<button type="button" href="'+v.right_url+'"><?=__('考级结果', 'nlyd-student')?></button>'
+                                                +'</div>';
                                     }else{
                                         if(v.right_url.length>0){
                                             rightBtn='<div class="nl-match-button flex1 last-btn">'
@@ -166,9 +289,9 @@ jQuery(function($) {
                                                     +'</div>'
                                             if(v.match_status==1 && v.user_id!=null){//报名中已报名
                                                 rightBtn='<div class="nl-match-button flex1 last-btn">'
-                                                            +'<button type="button" class="bg_gradient_grey"><?=__('已报名参赛', 'nlyd-student')?></button>'
+                                                            +'<button type="button" class="bg_gradient_grey"><?=__('您已报名', 'nlyd-student')?></button>'
                                                         +'</div>'
-                                                
+
                                             }
                                         }
                                         endTime='<div class="nl-match-detail layui-row">'
@@ -197,27 +320,27 @@ jQuery(function($) {
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.match_start_time+'</span>'
+                                                                +'<span class="c_black">'+v.start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('比赛地点', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><div><?=__('考级地点', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.match_address+'</span>'
+                                                                +'<span class="c_black">'+v.address+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('报名费用', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">¥'+v.match_cost+'</span>'
+                                                                +'<span class="c_black">¥'+v.cost+'</span>'
                                                             +'</div>'
                                                         +'</div>'
                                                         +endTime
                                                         +'<div class="nl-match-detail layui-row">'
                                                             +'<div class="nl-match-label"><div><?=__('已报选手', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
-                                                                +'<span class="c_black">'+v.entry_total+'<?=__('人', 'nlyd-student')?></span>'
+                                                                +'<span class="c_black">'+v.entry_total+'人</span>'
                                                                 +match_notice_url
                                                             +'</div>'
                                                         +'</div>'
@@ -269,23 +392,7 @@ jQuery(function($) {
         }
         var isClick={}
         pagation($('.layui-this').attr('data-id'),1)
-          //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
-        var layid = location.hash.replace(/^#matchList=/, '');
-        if(layid.length>0){
-            $('.layui-tab-title li').each(function(){
-                var _this=$(this)
-                var lay_id=_this.attr('data-id');
-                if(lay_id==layid){
-                    setTimeout(function() {
-                        _this.click()
-                    }, 200);
-                    return false
-                }
-            })
-        }
-        
         element.on('tab(tabs)', function(){//tabs
-            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
             var id=$(this).attr('data-id')
             $('.nl-transform').css({
