@@ -1370,7 +1370,11 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,b.match_notice_url,
+        if($_POST['type'] == 2){
+
+        }else{
+
+            $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,b.match_notice_url,
                     b.match_address,b.match_cost,b.entry_end_time,b.match_status,c.user_id,
                     case b.match_status 
                     when -3 then '已结束' 
@@ -1385,6 +1389,8 @@ class Student_Ajax
                   where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and b.match_start_time != ''
                   order by b.match_status desc limit $start,$pageSize
                   ";
+        }
+
         //print_r($sql_);
         $rows = $wpdb->get_results( $sql_,ARRAY_A);
 
@@ -3894,6 +3900,200 @@ class Student_Ajax
 
         global $wpdb,$current_user;
 
+        //查看答案是否提交
+        $sql = "select id,questions_answer
+                from {$wpdb->prefix}grading_questions
+                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
+                ";
+        //print_r($sql);die;
+        $row = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($sql);
+        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grad_type']);
+        if($_POST['grad_type'] == 'memory'){
+            $url .= '/type/'.$_POST['questions_type'];
+        }
+        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
+
+        //数据处理
+
+        $correct_rate = 0;  //准确率
+        switch ($_POST['grading_type']){
+            case 'memory':
+                switch ($_POST['questions_type']){
+                    case 'sz':
+                    case 'cy':
+                    case 'yzl':
+                    case 'tl':
+                        if(!empty($_POST['my_answer'])){
+
+                            $len = count($_POST['questions_answer']);
+                            $error_len = count(array_diff_assoc($_POST['questions_answer'],$_POST['my_answer']));
+                            $correct_rate = ($len-$error_len)/$len;
+                        }
+                        break;
+                    case 'rm':
+                        if(!empty($_POST['my_answer'])){
+
+                            $len = count($_POST['questions_answer']);
+                            $my_answer = $_POST['my_answer'];
+                            $questions_answer = $_POST['questions_answer'];
+                            $success_len = 0;
+                            foreach ($my_answer as $k => $v){
+                                if( ($my_answer[$k]['name'] == $questions_answer[$k]['name']) && ($my_answer[$k]['phone'] == $questions_answer[$k]['phone']) && ($my_answer[$k]['picture'] == $questions_answer[$k]['picture'])){
+                                    $success_len += 1;
+                                }
+                            }
+                            $correct_rate = $success_len/$len;
+                        }
+                        break;
+                    case 'wz':
+
+                        $questions_answer = $_POST['questions_answer'];
+                        $len = count($questions_answer);
+
+                        $success_len = 0;
+                        foreach ($questions_answer as $k =>$v){
+
+                            $result =array_diff_assoc($v['rights'],$v['yours']);
+                            if(empty($result)){
+                                $success_len += 1;
+                            }
+                        }
+                        $correct_rate = $success_len/$len;
+                        $_POST['grading_questions'] = array_column($questions_answer,'question');
+                        $_POST['questions_answer'] = array_column($questions_answer,'rights');
+                        $_POST['my_answer'] = array_column($questions_answer,'yours');
+                        break;
+                }
+                break;
+            case 'reading':
+                //print_r($_POST);die;
+                $questions_answer = $_POST['questions_answer'];
+                $len = count($questions_answer);
+                $success_len = 0;
+
+                foreach ($questions_answer as $k=>$val){
+                    $arr = array();
+                    foreach ($val['problem_answer'] as $key => $v){
+                        if($v == 1){
+                            $arr[] = $key;
+                        }
+                    }
+
+                    if(isset($_POST['my_answer'][$k])){
+                        if(arr2str($arr) == arr2str($_POST['my_answer'][$k])) ++$success_len;
+                    }
+                }
+                $correct_rate = $success_len/$len;
+                //print_r($success_len);die;
+                break;
+            case 'arithmetic':
+
+                $data_arr = $_POST['my_answer'];
+                //print_r($data_arr);die;
+                if(!empty($data_arr)){
+                    $match_questions = array_column($data_arr,'question');
+                    $questions_answer = array_column($data_arr,'rights');
+                    $_POST['my_answer'] = array_column($data_arr,'yours');
+                    $len = count($match_questions);
+                }
+
+                if($_POST['questions_type'] == 'nxys'){
+                    $isRight = array_column($data_arr,'isRight');
+
+                    $success_len = 0;
+                    if(!empty($isRight)){
+                        $count_value = array_count_values($isRight);
+                        $success_len += $count_value['true'];
+                    }
+                    $answer['examples'] = $questions_answer;
+                    $answer['result'] = $isRight;
+                    $questions_answer = $answer;
+
+                    $my_score = $success_len * 10;
+
+                }else{
+
+                    $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
+                    $success_len = $len-$error_len;
+                    $my_score = $success_len*10;
+                }
+                $correct_rate = $success_len/$len;
+                //print_r($my_score);die;
+                $_POST['grading_questions'] = $match_questions;
+                $_POST['questions_answer'] = $questions_answer;
+                //var_dump($_POST);die;
+                break;
+        }
+        //zlin_user_skill_rank 技能表
+
+        $insert = array(
+            'user_id'=>$current_user->ID,
+            'grading_id'=>$_POST['grading_id'],
+            'grading_type'=>$_POST['grading_type'],
+            'questions_type'=>$_POST['questions_type'],
+            'grading_questions'=>json_encode($_POST['grading_questions']),
+            'questions_answer'=>json_encode($_POST['questions_answer']),
+            'my_answer'=>json_encode($_POST['my_answer']),
+            'correct_rate'=>$correct_rate,
+            'my_score'=>$my_score,
+            'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
+            'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
+            'created_time'=>get_time('mysql'),
+            'use_time'=>isset($_POST['usetime']) ? $_POST['usetime'] : '',
+            'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
+            'post_str_length'=>isset($_POST['length']) ? $_POST['length'] : '',
+            'is_true'=>!empty($prison_log_id) ? 2 : 1,
+            'post_more'=>!empty($_POST['more']) ? $_POST['more'] : '',
+        );
+        //print_r($insert);die;
+        $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
+        /*print_r($result);
+        die;*/
+        if($result){
+
+            $log_id = $wpdb->insert_id;
+
+            if(!empty($_POST['post_id']) && $_POST['grading_type'] == 'reading'){
+
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                $use_id = $wpdb->get_row($sql1,ARRAY_A);
+                if($use_id){
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                    $a = $wpdb->query($sql2);
+                }else{
+
+                    $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>1));
+                }
+
+            }
+
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
+        }
+        else{
+            wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
+        }
+
+    }
+
+    /**
+     * 考级自测答案提交
+     */
+    public function grade_answer_submit(){
+        unset($_SESSION['count_down']);
+        unset($_SESSION['match_post_id']);
+        if($_POST['questions_type'] == 'wz'){
+            if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
+        }else{
+
+            if( empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
+                wp_send_json_error(array('所提交数据信息不完全'));
+            }
+        }
+        ini_set('post_max_size','20M');
+
+        global $wpdb,$current_user;
+        var_dump($_POST);die;
         //查看答案是否提交
         $sql = "select id,questions_answer
                 from {$wpdb->prefix}grading_questions

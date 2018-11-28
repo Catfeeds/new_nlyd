@@ -200,38 +200,9 @@ class Student_Grade extends Student_Home
     /**
      * 比赛初始页
      */
-    public function initialMatch(){
+    public function initial(){
 
-        //获取数据
-        $row = $this->get_grading($_GET['grad_id']);
-        if(empty($row)){
-            $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
-            return;
-        }
-        //print_r($row);
-        if($row['status'] == -3){
-            $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
-            return;
-        }
         global $wpdb,$current_user;
-        if($row['user_id'] != $current_user->ID){
-            $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
-            return;
-        }
-
-        //获取答题记录
-        if(isset($_GET['more'])){
-            $where = " and post_more = {$_GET['more']} ";
-        }
-        $sql = "select id from {$wpdb->prefix}grading_questions 
-                where grading_id = {$_GET['grad_id']} and user_id = {$current_user->ID} and grading_type = '{$_GET['grad_type']}' and questions_type = '{$_GET['type']}' {$where} 
-                ";
-        $id = $wpdb->get_var($sql);
-        //print_r($id);
-        if(!empty($id)){
-            $this->get_404(array('message'=>__('本项目答案已提交', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
-            return;
-        }
 
         if($_GET['grad_type'] == 'memory'){
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
@@ -248,12 +219,13 @@ class Student_Grade extends Student_Home
             }
             //print_r($memory_type);
             $row['memory_type'] = $memory_type;
+
         }
         elseif ($_GET['grad_type'] == 'reading'){
 
             if(!isset($_SESSION['match_post_id'])){
                 //获取已比赛文章
-                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1";
+                $sql1 = "select post_id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2";
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
                 if(!empty($post_str)){
@@ -312,12 +284,12 @@ class Student_Grade extends Student_Home
                 }
                 $match_questions = array_unique(array_column($rows,'post_title','ID'));
             }
-
+            $row['project_alias'] = $_GET['grad_type'];
             $row['questions'] = $question;
             $row['post_id'] = $post_id;
             $row['questions_answer'] = $questions_answer;
             $row['match_questions'] = $match_questions;
-            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
+            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
             //print_r($row);
         }
 
@@ -334,28 +306,12 @@ class Student_Grade extends Student_Home
 
         unset($_SESSION['match_post_id']);
 
-        if(empty($_GET['grad_id']) || empty($_GET['post_id'])){
+        if(empty($_GET['post_id'])){
             $this->get_404(__('参数错误', 'nlyd-student'));
             return;
         }
 
         global $wpdb,$current_user;
-
-        $row = $this->get_match_order($current_user->ID,$_GET['grad_id']);
-        //print_r($row);
-        if(empty($row)){
-
-            $this->get_404(__('你未报名', 'nlyd-student'));
-            return;
-        }else{
-            if(!in_array($row->pay_status,array(2,3,4))){
-                $this->get_404(__('订单未付款', 'nlyd-student'));
-                return;
-            }
-        }
-
-        $grad = $this->get_grading($_GET['grad_id']);
-        $data['grading_title'] = $grad['grading_title'];
 
         //获取比赛题目
         $sql1 = "select a.ID,a.post_title,b.problem_select,problem_answer
@@ -1345,24 +1301,12 @@ class Student_Grade extends Student_Home
             wp_register_style( 'my-student-matchDetail', student_css_url.'matchDetail.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchDetail' );
         }
-        if(ACTION=='confirm'){//信息确认页
-            wp_register_script( 'student-mobileSelect',student_js_url.'Mobile/mobileSelect.js',array('jquery'), leo_student_version  );
-            wp_enqueue_script( 'student-mobileSelect' );
-            wp_localize_script('student-mobileSelect','_mobileSelect',[
-                'sure'=>__('确认','nlyd-student'),
-                'cancel'=>__('取消','nlyd-student')
-            ]);
-            wp_register_style( 'my-student-mobileSelect', student_css_url.'Mobile/mobileSelect.css',array('my-student') );
-            wp_enqueue_style( 'my-student-mobileSelect' );
-            wp_register_style( 'my-student-confirm', student_css_url.'confirm.css',array('my-student') );
-            wp_enqueue_style( 'my-student-confirm' );
-        }
         if(ACTION=='matchWaitting'){//考级等待倒计时页面
             wp_register_style( 'my-student-matchWaitting', student_css_url.'match-waitting.css',array('my-student') );
             wp_enqueue_style( 'my-student-matchWaitting' );
         }
 
-        if(ACTION == 'initialMatch'){//
+        if(ACTION == 'initial'){//
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
             wp_enqueue_style( 'my-public' );
             if($_GET['grad_type'] == 'arithmetic'){

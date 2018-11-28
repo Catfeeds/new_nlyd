@@ -49,9 +49,14 @@
                                         //print_r($k);
                                         $alias = get_post_meta($k,'project_alias')[0];
                                     ?>
-                                    <div class="bold c_black fs_16">
-                                        <a href="<?=home_url('/grade/matchWaitting/grad_type/'.$alias)?>"><?=__($v["title"], 'nlyd-student')?></a>
+                                    <div class="lists_item_row">
+                                        <!--<div class="bold c_black fs_16"><?/*=__($v["title"], 'nlyd-student')*/?></div>-->
+                                        <a class="item_row lists_row c_black6"  href="<?=home_url('trains/ready/genre_id/'.$genre_id.'/type/'.$alias)?>" >
+                                            <div class="name_wrapper dis_table"><div class="dis_cell"><?=__($v["title"], 'nlyd-student')?></div></div>
+                                            <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
+                                        </a>
                                     </div>
+
                         <?php       }
                                 }else{
                                      foreach ($list as $v){ ?>

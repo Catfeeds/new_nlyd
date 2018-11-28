@@ -12,11 +12,11 @@
                             <?php
 
                             if(!empty($memory_lv)){
-                                $project_alias_cn .= chinanum($memory_lv);
+                                $project_alias_cn .= chinanum($memory_lv).'级';
                             }
                             ?>
                             <p class="match-detail fs_14 c_black">
-                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__('国际'.$project_alias_cn.'级水平考级认证','nlyd-student')?>
+                                <span class="c_blue"><?=__('即将进行', 'nlyd-student')?>: </span><?=__('国际'.$project_alias_cn.'水平考级认证','nlyd-student')?>
                             </p>
                         </div>
 
