@@ -197,7 +197,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                                 <div><?= __('所有答题结束,查看详情', 'nlyd-student') ?></div>
                             </a>
                         <?php } else { ?>
-                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
+                            <a class="a-btn a-btn-table ingnore" href="<?= $next_project_url ?>">
                                 <div><?= __('跳过等待', 'nlyd-student') ?></div>
                             </a>
                             <?php
