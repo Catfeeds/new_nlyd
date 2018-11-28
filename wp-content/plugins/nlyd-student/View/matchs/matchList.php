@@ -12,9 +12,9 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1"><?=__('报名中', 'nlyd-student')?></li>
-                            <li data-id="2"><?=__('比赛中', 'nlyd-student')?></li>
-                            <li data-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
+                            <li class="layui-this" data-id="1" lay-id="1"><?=__('报名中', 'nlyd-student')?></li>
+                            <li data-id="2" lay-id="2"><?=__('比赛中', 'nlyd-student')?></li>
+                            <li data-id="3" lay-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"><?=__('近期比赛', 'nlyd-student')?></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
@@ -269,7 +269,23 @@ jQuery(function($) {
         }
         var isClick={}
         pagation($('.layui-this').attr('data-id'),1)
+          //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+        var layid = location.hash.replace(/^#matchList=/, '');
+        if(layid.length>0){
+            $('.layui-tab-title li').each(function(){
+                var _this=$(this)
+                var lay_id=_this.attr('data-id');
+                if(lay_id==layid){
+                    setTimeout(function() {
+                        _this.click()
+                    }, 200);
+                    return false
+                }
+            })
+        }
+        
         element.on('tab(tabs)', function(){//tabs
+            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
             var id=$(this).attr('data-id')
             $('.nl-transform').css({

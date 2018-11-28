@@ -19,7 +19,7 @@
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
-                        <div class="ta_c c_black voice_title">正在播放语音中...</div>
+                        <div class="ta_c c_black voice_title"><?=__('正在播放语音中', 'nlyd-student')?>...</div>
                         <div class="voice_wait">
                             <div class="voice_img">
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
@@ -86,7 +86,7 @@ jQuery(function($) {
     var ready_time=que_len+1;//记忆时间
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
-    var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    // var file_url="<?=leo_match_url.'/upload/voice/'?>"
     var _index=0;
     var spriteData={
         0:{start:0,length:1},
@@ -193,7 +193,7 @@ jQuery(function($) {
          $('.matching-sumbit').show();
        }else{//准备页面播放语音
             var audio=document.getElementById('audio');
-            var bodys=document.getElementsByTagName('body')[0];
+            var voice_title=document.getElementsByClassName('voice_title')[0];
             var u = navigator.userAgent;
             if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
                 audio.currentTime = spriteData[questions_answer[_index]].start;
@@ -220,7 +220,6 @@ jQuery(function($) {
                     });
                 }
             }
-            audio.play();
             audio.play();
             audio.addEventListener('timeupdate', function(){
                 if(_index<=que_len-1){
@@ -259,9 +258,10 @@ jQuery(function($) {
 
                 }
             }, false);
-            bodys.addEventListener("click",function(e){
+            voice_title.addEventListener("click",function(e){
                 audio.play();
             }, false);
+
             // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
             // audio.loop = false;
             // audio.addEventListener('ended', function () {
@@ -287,6 +287,32 @@ jQuery(function($) {
             //         count_down()
             //     }  
             // }, false);
+
+            // var str_que=questions_answer.join(',')
+            // if(!('speechSynthesis' in window)) {
+            //     throw alert("对不起，您的浏览器不支持")
+            // }
+            // to_speak = new SpeechSynthesisUtterance(str_que);
+            // to_speak.rate = 0.545;// 设置播放语速，范围：0.1 - 10之间
+            // window.speechSynthesis.speak(to_speak);
+            // to_speak.onend = function() { 
+            //     $('.complete_zoo').hide();
+            //     $('#match_zoo').show()
+            //     $('.matching-sumbit').show();
+            //     _show=2
+            //     sys_second=answer_time
+            //     var endTime=$.GetEndTime(answer_time);//结束时间
+            //     var sessionData={
+            //         grad_id:_grad_id,
+            //         grad_type:_grad_type,
+            //         type:_type,
+            //         endTime:endTime,
+            //         _show:2,
+            //         questions_answer:questions_answer
+            //     }
+            //     $.SetSession('grade_question',sessionData)
+            //     count_down()
+            // }
        }
     }
     function submit(submit_type){//提交答案
