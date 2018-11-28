@@ -158,6 +158,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         case 'sz':    //随机数字
                         case 'yzl':    //圆周率
                         case 'tl':    //听记数字
+                        case 'zm':    //随机字母
                             require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
                             break;
                         case 'cy':    //随机词汇

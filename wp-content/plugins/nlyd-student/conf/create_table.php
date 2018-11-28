@@ -40,6 +40,7 @@ function the_table_install () {
           `user_id` int(20) DEFAULT NULL COMMENT '用户id',
           `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
           `grading_result` tinyint(2) DEFAULT NULL COMMENT '考级结果 1 过级 2 失败',
+          `grading_lv` tinyint(3) DEFAULT NULL COMMENT '本次考级等级',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
