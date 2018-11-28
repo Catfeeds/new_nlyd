@@ -257,8 +257,11 @@ class Student_Gradings extends Student_Home
         }
 
         //获取答题记录
+        if(isset($_GET['more'])){
+            $where = " and post_more = {$_GET['more']} ";
+        }
         $sql = "select id from {$wpdb->prefix}grading_questions 
-                where grading_id = {$_GET['grad_id']} and user_id = {$current_user->ID} and grading_type = '{$_GET['grad_type']}' and questions_type = '{$_GET['type']}'  
+                where grading_id = {$_GET['grad_id']} and user_id = {$current_user->ID} and grading_type = '{$_GET['grad_type']}' and questions_type = '{$_GET['type']}' {$where} 
                 ";
         $id = $wpdb->get_var($sql);
         //print_r($id);
@@ -753,7 +756,7 @@ class Student_Gradings extends Student_Home
                     $correct_rate = array();
                     foreach ($rows as $v){
                         if($v['questions_type'] != 'wz'){
-                            $correct_rate *= $v['correct_rate'];
+                            $correct_rate[] = $v['correct_rate'];
                         }else{
                             $gxArr = $v;
                         }
