@@ -288,7 +288,21 @@ jQuery(function($) {
         }
         var isClick={}
         pagation($('.layui-this').attr('data-id'),1)
+        var layid = location.hash.replace(/^#matchList=/, '');
+        if(layid.length>0){
+            $('.layui-tab-title li').each(function(){
+                var _this=$(this)
+                var lay_id=_this.attr('data-id');
+                if(lay_id==layid){
+                    setTimeout(function() {
+                        _this.click()
+                    }, 200);
+                    return false
+                }
+            })
+        }
         element.on('tab(tabs)', function(){//tabs
+            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
             var id=$(this).attr('data-id')
             $('.nl-transform').css({

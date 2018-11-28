@@ -1689,11 +1689,19 @@ if(!class_exists('MatchController')){
             wp_enqueue_style( 'admin_index_css' );
             //in_array($this->post_type,array('team','match','genre'));
             //if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
-            if(in_array($this->post_type,array('team','match','grading','genre'))){
+            if(in_array($this->post_type,array('team','match','grading'))){
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
                 wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
                 wp_enqueue_style( 'admin_layui_css' );
+            }
+            if($this->post_type=="genre"){
+                wp_register_script( 'colpick',match_js_url.'colorpicker/colpick.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'colpick' );
+                wp_register_script( 'colplugin',match_js_url.'colorpicker/plugin.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'colplugin' );
+                wp_register_style( 'colpick_css',match_css_url.'colorpicker/colpick.css','', leo_match_version  );
+                wp_enqueue_style( 'colpick_css' );
             }
             wp_register_script( 'drag',match_js_url.'drag/drag.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'drag' );

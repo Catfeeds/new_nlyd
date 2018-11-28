@@ -232,7 +232,21 @@ jQuery(function($) {
         var flow = layui.flow;//流加载
         var lastItem={lastItem_1:{},lastItem_2:{},lastItem_3:{}};//最后一条数据
         var isClick={}
+        var layid = location.hash.replace(/^#matchList=/, '');
+        if(layid.length>0){
+            $('.layui-tab-title li').each(function(){
+                var _this=$(this)
+                var lay_id=_this.attr('data-id');
+                if(lay_id==layid){
+                    setTimeout(function() {
+                        _this.click()
+                    }, 200);
+                    return false
+                }
+            })
+        }
         element.on('tab(tabs)', function(){//tabs
+            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
             var html=$(this).html();
             var data_id=$(this).attr('data-id')
