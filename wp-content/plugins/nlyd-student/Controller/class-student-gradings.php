@@ -134,7 +134,7 @@ class Student_Gradings extends Student_Home
         $data['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
 
         //获取当前比赛是否报名
-        $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']}",ARRAY_A);
+        $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID} ",ARRAY_A);
         $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : 1;
         //print_r($order);
         $view = student_view_path.CONTROLLER.'/confirm.php';
