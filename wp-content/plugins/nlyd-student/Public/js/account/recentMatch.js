@@ -27,6 +27,8 @@ jQuery(function($) {
                     data:postData,
                     success:function(res,ajaxStatu,xhr){ 
                         console.log(res)
+                            var _must=$.Request('type')=='2' ? _recentMatch.must_kaoji : _recentMatch.must;
+                            var _address=$.Request('type')=='2' ? _recentMatch.address_kaoji : _recentMatch.address;
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签
@@ -48,7 +50,7 @@ jQuery(function($) {
                                         +'</div>'
                                     }
                                     if(v.match_notice_url && v.match_notice_url.length>0){//参赛须知
-                                        match_notice_url='<a class="c_orange" style="margin-left:10px" href="'+v.match_notice_url+'">'+_recentMatch.must+'</a>'
+                                        match_notice_url='<a class="c_orange" style="margin-left:10px" href="'+v.match_notice_url+'">'+_must+'</a>'
                                     }
                                     var onBtn="" ;
                                     if(rightBtn.length==0){
@@ -74,7 +76,7 @@ jQuery(function($) {
                                                             +'</div>'
                                                         +'</div>'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div>'+_recentMatch.address+':</div></div>'
+                                                            +'<div class="nl-match-label"><div>'+_address+':</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<div class="c_black">'+v.match_address+'</div>'
                                                             +'</div>'

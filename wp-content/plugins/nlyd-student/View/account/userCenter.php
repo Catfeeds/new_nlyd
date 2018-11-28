@@ -156,7 +156,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的订单', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8" href="<?=home_url('grading');?>">
+                    <a class="c_black8" href="<?=home_url('/account/recentMatch/type/2');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-kaoji">
                             </div>

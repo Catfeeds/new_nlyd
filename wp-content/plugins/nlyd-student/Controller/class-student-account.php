@@ -141,14 +141,25 @@ class Student_Account extends Student_Home
     public function recentMatch(){
 
         global $wpdb,$current_user;
-        $sql = "select c.id
+
+        //判断比赛类型
+        if($_GET['type'] == 2){
+            $type = 2;
+            $view = '/recentGrad';
+        }else{
+            $type = 1;
+            $view = '/recentMatch';
+        }
+
+        $where = " and c.order_type = {$type} ";
+        $sql = "select count(c.id)
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}match_meta b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) LIMIT 1";
+                  where user_id = {$current_user->ID} and (c.pay_status=2 or c.pay_status=3 or c.pay_status=4) {$where} LIMIT 1";
         //var_dump($sql);
-        $row = $wpdb->get_row($sql);
+        $row = $wpdb->get_var($sql);
         //var_dump($row);
-        $view = student_view_path.CONTROLLER.'/recentMatch.php';
+        $view = student_view_path.CONTROLLER.$view.'.php';
         load_view_template($view, array('row' => $row));
 
     }
@@ -285,11 +296,13 @@ class Student_Account extends Student_Home
                 'stop'=>__('报名结束','nlyd-student'),
                 'date'=>__('开赛日期','nlyd-student'),
                 'address'=>__('比赛地点','nlyd-student'),
+                'address_kaoji'=>__('考级地点','nlyd-student'),
                 'money'=>__('报名费用','nlyd-student'),
                 'end'=>__('报名截止','nlyd-student'),
                 'player'=>__('已报选手','nlyd-student'),
                 'look'=>__('查看详情','nlyd-student'),
                 'must'=>__('参赛须知','nlyd-student'),
+                'must_kaoji'=>__('考级须知','nlyd-student'),
                 'people'=>__('人','nlyd-student'),
                 'day'=>__('天','nlyd-student'),
             ]);
