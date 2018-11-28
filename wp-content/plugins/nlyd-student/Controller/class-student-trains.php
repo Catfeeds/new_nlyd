@@ -53,6 +53,7 @@ class Student_Trains extends Student_Home
 
         //获取当前
         $row = get_post($_GET['id']);
+        $project_alias = get_post_meta($_GET['id'],'project_alias')[0];
 
         $args = array(
             'post_type' => array('match-category'),
@@ -84,7 +85,7 @@ class Student_Trains extends Student_Home
         }
 
         $view = student_view_path.CONTROLLER.'/lists.php';
-        load_view_template($view,array('list'=>$list,'post_title'=>$row->post_title,'genre_id'=>$_GET['id']));
+        load_view_template($view,array('list'=>$list,'post_title'=>$row->post_title,'project_alias'=>$project_alias,'genre_id'=>$_GET['id']));
     }
 
     /**

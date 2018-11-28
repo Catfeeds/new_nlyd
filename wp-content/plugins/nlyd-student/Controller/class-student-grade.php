@@ -99,53 +99,16 @@ class Student_Grade extends Student_Home
     }
 
 
-    /**
-     * 考级报名页
-     */
-    public function confirm(){
-
-        global $wpdb,$current_user;
-        $match = $this->get_grading($_GET['grad_id']);
-        //print_r($match);
-        if(empty($match)){
-            $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
-            return;
-        }
-        //print_r($match);
-        $data['match'] = $match;
-
-        //主训教练
-        $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$match['category_id']} and major = 1");
-        if($coach_id > 0){
-            $data['coach_real_name'] = get_user_meta($coach_id,'user_real_name')[0];
-        }else{
-            $data['coach_real_name'] = '';
-        }
-
-        //实名认证
-        $data['user_real_name'] = get_user_meta($current_user->ID,'user_real_name')[0];
-
-        //战队
-        $data['team_title'] = $wpdb->get_var("select b.post_title team_title 
-                                            from {$wpdb->prefix}match_team a  
-                                            left join {$wpdb->prefix}posts b on a.team_id = b.ID
-                                            where user_id = {$current_user->ID} and status = 2 and user_type = 1");
-        //选手ID
-        $data['user_ID'] = get_user_meta($current_user->ID,'user_ID')[0];
-
-        //获取当前比赛是否报名
-        $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']}",ARRAY_A);
-        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : 1;
-        //print_r($order);
-        $view = student_view_path.CONTROLLER.'/confirm.php';
-        load_view_template($view,$data);
-    }
 
 
     /**
-     * 考级等待页
+     * 考级测试等待页
      */
     public function matchWaitting(){
+
+
+        echo '准备页面';die;
+
 
         //获取数据
         $row = $this->get_grading($_GET['grad_id']);

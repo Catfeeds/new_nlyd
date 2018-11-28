@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','V2.1.2.0' );//样式版本
+            define( 'leo_match_version','V2.1.2.1' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -43,6 +43,7 @@ if(!class_exists('MatchController')){
 
             }elseif ($this->post_type == 'question'){
                 if($post->post_status == 'trash'){
+
                     $actions['delete'] = '<span class="del_question" style="color: #a00; cursor: pointer;">永久删除</span>';
                 }
             }elseif ($this->post_type == 'problem'){
@@ -933,7 +934,9 @@ if(!class_exists('MatchController')){
             // Check post type for movie reviews
             global $wpdb,$current_user;
             if(in_array($post_data->post_type,array('match','genre','project','match-category'))){
-
+                if(!empty($_POST['genre_highlight'])){
+                    update_post_meta($post_ID,'genre_highlight',$_POST['genre_highlight']);
+                }
                 if(!empty($_POST['project_alias'])){
                     update_post_meta($post_ID,'project_alias',$_POST['project_alias']);
                 }
@@ -1174,6 +1177,13 @@ if(!class_exists('MatchController')){
                         add_meta_box( 'alias_meta_box',
                             '别名设置',
                             array($this->match,'alias_meta_box'),
+                            $this->post_type, 'side', 'low'
+                        );
+                    }
+                    if($this->post_type == 'genre'){
+                        add_meta_box( 'highlighter_meta_box',
+                            '特色高亮',
+                            array($this->match,'highlighter_meta_box'),
                             $this->post_type, 'side', 'low'
                         );
                     }
@@ -1679,7 +1689,7 @@ if(!class_exists('MatchController')){
             wp_enqueue_style( 'admin_index_css' );
             //in_array($this->post_type,array('team','match','genre'));
             //if(!in_array($this->post_type,array('page','post','question','project','match-category','problem' ))){
-            if(in_array($this->post_type,array('team','match','grading'))){
+            if(in_array($this->post_type,array('team','match','grading','genre'))){
                 wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
                 wp_enqueue_script( 'admin_layui_js' );
                 wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
