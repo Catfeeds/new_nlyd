@@ -6459,3 +6459,25 @@ function getAgeGroupNameByAge($age)
 }
 
 
+
+function saveIosFile($filecontent,$upload_dir){
+
+    if(empty($filecontent)) return false;
+    //$base64 = htmlspecialchars($filecontent);
+    //$fileName = iconv ( "UTF-8", "GB2312", $filecontent );
+
+    $filename = date('YmdHis').'_'.rand(1000,9999).'.jpg';          //定义图片名字及格式
+
+    if(!file_exists($upload_dir)){
+        mkdir($upload_dir,0755,true);
+    }
+    $savepath = $upload_dir.'/'.$filename;
+    // $this->apiReturn(4001,$savepath);
+    if (move_uploaded_file($filecontent, $savepath)) {
+        return $filename;
+    }else{
+        return false;
+    }
+}
+
+

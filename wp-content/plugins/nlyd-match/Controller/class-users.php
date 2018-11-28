@@ -100,7 +100,7 @@ class Users {
             //证件照片
             $upload_dir = wp_upload_dir();
             $dir = '/user/'.$user_id.'/';
-            $file = $this->saveIosFile($_FILES['cardImg']['tmp_name'],$upload_dir['basedir'].$dir);
+            $file = saveIosFile($_FILES['cardImg']['tmp_name'],$upload_dir['basedir'].$dir);
             if($file){
                 update_user_meta($user_id,'user_ID_Card',[$upload_dir['baseurl'].$dir.$file]) && true;
             }
@@ -441,25 +441,6 @@ class Users {
             </script>
         </div>
         <?php
-    }
-    public function saveIosFile($filecontent,$upload_dir){
-
-        if(empty($filecontent)) return false;
-        //$base64 = htmlspecialchars($filecontent);
-        //$fileName = iconv ( "UTF-8", "GB2312", $filecontent );
-
-        $filename = date('YmdHis').'_'.rand(1000,9999).'.jpg';          //定义图片名字及格式
-
-        if(!file_exists($upload_dir)){
-            mkdir($upload_dir,0755,true);
-        }
-        $savepath = $upload_dir.'/'.$filename;
-        // $this->apiReturn(4001,$savepath);
-        if (move_uploaded_file($filecontent, $savepath)) {
-            return $filename;
-        }else{
-            return false;
-        }
     }
 
 }

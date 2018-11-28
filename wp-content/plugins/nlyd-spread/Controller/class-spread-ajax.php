@@ -74,6 +74,32 @@ class Spread_Ajax
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+
+    /**
+     * 根据真实姓名搜索教练
+     */
+    public function search_teacher_list(){
+        $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($searchStr != ''){
+            global $wpdb;
+            $rows = $wpdb->get_results("SELECT cs.coach_id AS id,um.meta_value AS user_real_name FROM `{$wpdb->prefix}coach_skill` AS cs 
+                    LEFT JOIN `{$wpdb->users}` AS u ON u.ID=cs.coach_id 
+                    LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=cs.coach_id AND um.meta_key='user_real_name' 
+                    WHERE u.ID!='' AND um.meta_value LIKE '%{$searchStr}%'", ARRAY_A);
+            if($rows){
+                foreach ($rows as &$row){
+                    if($row['user_real_name']){
+                        $row['text'] = unserialize($row['user_real_name'])['real_name'];
+                        unset($row['user_real_name']);
+                    }else{
+                        unset($row);
+                    }
+                }
+                wp_send_json_success($rows);
+            }
+        }
+    }
+
 }
 
 new Spread_Ajax();
