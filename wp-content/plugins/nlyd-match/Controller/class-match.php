@@ -1188,22 +1188,24 @@ class Match
      * 比赛时间box
      */
     public function grading_type_box($post){
-        $args = array(
-            'post_type' => array('match-category'),
-            'post_status' => array('publish'),
-            'order' => 'asc',
-            'orderby' => 'menu_order',
-        );
-        $the_query = new WP_Query( $args );
+        global $wpdb;
+        $post_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value = 'mental_world_cup'");
+
+        $sql = "select ID,post_title 
+                from {$wpdb->prefix}posts 
+                where post_parent = {$post_id} and post_status = 'publish'
+                " ;
+        $rows = $wpdb->get_results($sql);
+
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">考级类别</label>
             <div class="layui-input-block">
-                <?php if(!empty($the_query->post)){ ?>
+                <?php if(!empty($rows)){ ?>
                     <select name="grading[category_id]" lay-search="">
                         <option value="">请选择</option>
                         <?php
-                        foreach ($the_query->posts as $v){
+                        foreach ($rows as $v){
                             $selected = $v->ID == $this->grading['category_id'] ? "selected":" ";
                             echo '<option value="'.$v->ID.'" '.$selected.'>'.$v->post_title.'</option>';
                         }
