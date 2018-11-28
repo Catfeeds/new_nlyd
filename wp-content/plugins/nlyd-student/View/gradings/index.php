@@ -79,7 +79,6 @@
         <?php } ?>     
     </div>
 </div>
-<!-- <audio id="audio" autoplay="autoplay" preload="none" type="audio/mpeg"> -->
 <audio id="audio" autoplay="false" preload type="audio/mpeg"> 
     <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
 </audio>
@@ -87,33 +86,26 @@
 <script>
     
 jQuery(function($) { 
-    
-    var file_url="<?=leo_match_url.'/upload/voice/'?>"
     var questions_answer=[]
-    var que_len=100;
+    var que_len=5;
     var _index=0;
-    var spriteData = {};
-    var $button = $('.button.play');
-    for(var i=0;i<100;i++){
+    for(var i=0;i<5;i++){
         var num=Math.floor(Math.random()*10);//生成0-9的随机数
         questions_answer.push(num)
     }
-    for(var i=0;i<10;i++){
-        spriteData[i]={start:i,length:1}
+    console.log(questions_answer)
+    var spriteData={
+        0:{start:0,length:1},
+        1:{start:1,length:1},
+        2:{start:2,length:1},
+        3:{start:3,length:1},
+        4:{start:4,length:1},
+        5:{start:5,length:1},
+        6:{start:6,length:1},
+        7:{start:7,length:1},
+        8:{start:8,length:1},
+        9:{start:9,length:1},
     }
-    spriteData={
-        3:{start:0,length:1.1},
-        4:{start:1.3,length:1.1},
-        5:{start:1.7,length:1.1},
-        6:{start:2.7,length:1.1},
-        7:{start:3.7,length:1.1},
-        8:{start:4.7,length:1.1},
-        9:{start:5.7,length:1.1},
-        0:{start:6.7,length:1.1},
-        1:{start:7.7,length:1.1},
-        2:{start:8.7,length:1.1},
-    }
-    console.log(questions_answer,questions_answer[_index])
     var audio=document.getElementById('audio');
     var bodys=document.getElementsByTagName('body')[0];
     var u = navigator.userAgent;
@@ -143,21 +135,28 @@ jQuery(function($) {
         }
     }
     audio.play();
-audio.addEventListener('timeupdate', function(){
-    var start=spriteData[questions_answer[_index]]['start'];
-    var len=spriteData[questions_answer[_index]]['length'];
-    if (this.currentTime >= start+len) {
-        this.pause();
-        
-        _index++
+    audio.addEventListener('timeupdate', function(){
         if(_index<=que_len-1){
-            this.currentTime = spriteData[questions_answer[_index]].start;
-            this.play();
-        }else{
-            this.pause();
+            if(!spriteData[questions_answer[_index]]){
+
+            }else{
+                var start=spriteData[questions_answer[_index]]['start'];
+                var len=spriteData[questions_answer[_index]]['length'];
+                if (this.currentTime >= start+len) {
+                    this.pause();
+                    _index++
+                    if(_index<=que_len-1){
+                        this.currentTime = spriteData[questions_answer[_index]].start;
+                        this.play();
+                    }else{
+                        alert(2)
+                    }
+                    
+                }
+            }
+
         }
-    }
-}, false);
+    }, false);
 
     // play()
     // function play() {
