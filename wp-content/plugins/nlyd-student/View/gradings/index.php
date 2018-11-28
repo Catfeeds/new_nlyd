@@ -34,6 +34,7 @@
                                 <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>
                                 <a href="<?=home_url('gradings/matching_nxss/')?>">逆向速算</a><br>
                                 <a href="<?=home_url('gradings/ready_wzsd/')?>">文章速读</a><br> -->
+                               
                                 </ul>
                             </div>
                             <!-- 考级中 -->
@@ -79,113 +80,9 @@
         <?php } ?>     
     </div>
 </div>
-<audio id="audio" autoplay="false" preload type="audio/mpeg"> 
-    <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
-</audio>
 <!-- 获取考级列表 -->
 <script>
-    
 jQuery(function($) { 
-    var questions_answer=[]
-    var que_len=5;
-    var _index=0;
-    for(var i=0;i<5;i++){
-        var num=Math.floor(Math.random()*10);//生成0-9的随机数
-        questions_answer.push(num)
-    }
-    console.log(questions_answer)
-    var spriteData={
-        0:{start:0,length:1},
-        1:{start:1,length:1},
-        2:{start:2,length:1},
-        3:{start:3,length:1},
-        4:{start:4,length:1},
-        5:{start:5,length:1},
-        6:{start:6,length:1},
-        7:{start:7,length:1},
-        8:{start:8,length:1},
-        9:{start:9,length:1},
-    }
-    var audio=document.getElementById('audio');
-    var bodys=document.getElementsByTagName('body')[0];
-    var u = navigator.userAgent;
-	if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
-		audio.currentTime = spriteData[questions_answer[_index]].start;
-    }else{
-        audio.addEventListener("canplay",function() {
-				//设置播放时间
-            audio.currentTime = spriteData[questions_answer[_index]].start;
-        });
-    }
-    if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
-        audio.play();
-    } else {
-        //監聽客户端抛出事件"WeixinJSBridgeReady"
-        if (document.addEventListener) {
-            document.addEventListener("WeixinJSBridgeReady", function(){
-                audio.play();
-            }, false);
-        } else if (document.attachEvent) {
-            document.attachEvent("WeixinJSBridgeReady", function(){
-                audio.play();
-            });
-            document.attachEvent("onWeixinJSBridgeReady", function(){
-                audio.play();
-            });
-        }
-    }
-    audio.play();
-    audio.addEventListener('timeupdate', function(){
-        if(_index<=que_len-1){
-            if(!spriteData[questions_answer[_index]]){
-
-            }else{
-                var start=spriteData[questions_answer[_index]]['start'];
-                var len=spriteData[questions_answer[_index]]['length'];
-                if (this.currentTime >= start+len) {
-                    this.pause();
-                    _index++
-                    if(_index<=que_len-1){
-                        this.currentTime = spriteData[questions_answer[_index]].start;
-                        this.play();
-                    }else{
-                        alert(2)
-                    }
-                    
-                }
-            }
-
-        }
-    }, false);
-
-    // play()
-    // function play() {
-    //     to_speak = new SpeechSynthesisUtterance(ques_str);
-
-    //     to_speak.rate = 1.5;// 设置播放语速，范围：0.1 - 10之间
-    //     window.speechSynthesis.speak(to_speak);
-
-    // }
-
-
-    // var audio=document.getElementById('audio');
-    // var bodys=document.getElementsByTagName('body')[0];
-    // audio.src=file_url+questions_answer[_index]+".wav"
-    // audio.play();
-   
-    // //voiceStatu用來記録狀態,使 touchstart 事件只能觸發一次有效,避免與 click 事件衝突
-    bodys.addEventListener("click",function(e){
-        audio.play();
-    }, false);
-    // audio.addEventListener('ended', function () {
-    //     // alert(4)
-    //     _index++
-    //     if(_index<=que_len-1){
-    //         // $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
-    //         this.src=file_url+questions_answer[_index]+".wav"
-    //         $('#audio').click()
-    //     }
-    // }, false);
     $.DelSession('matching_question');
     $('body').on('click','.nl-match-button button',function(){
         var _this=$(this);
