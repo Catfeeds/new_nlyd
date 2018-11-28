@@ -33,6 +33,20 @@ class Grading
     public function gradingStudents(){
         $gradingId = isset($_GET['grading_id']) ? intval($_GET['grading_id']) : 0;
         $gradingId < 1 && exit('参数错误');
+        global $wpdb;
+        //查询考级类别
+        $category_title = $wpdb->get_var("SELECT p.post_title FROM `{$wpdb->prefix}grading_meta` AS gm 
+                          LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=gm.category_id 
+                          WHERE gm.grading_id={$gradingId}");
+        if(preg_match('/记忆/',$category_title) || preg_match('/速记/',$category_title)){
+            $field = 'memory';
+        }elseif (preg_match('/速算/',$category_title) || preg_match('/心算/',$category_title)){
+            $field = 'compute';
+        }elseif (preg_match('/速读/',$category_title)){
+            $field = 'read';
+        }else{
+            exit('未找到类别');
+        }
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -40,14 +54,20 @@ class Grading
         $start = ($page-1)*$pageSize;
         $searchJoin = '';
         $searchWhere = '';
-        global $wpdb;
         if($searchStr!=''){
             $searchJoin = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=o.user_id AND um.meta_key='user_real_name' 
                            LEFT JOIN {$wpdb->usermeta} AS um2 on um2.user_id=o.user_id AND um2.meta_key='user_ID'";
             $searchWhere = "AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
         }
-        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time FROM `{$wpdb->prefix}order` AS o 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time,gl.grading_result,o.memory_lv,usr.`{$field}` AS `level`,
+        CASE gl.grading_result 
+        WHEN 1 THEN '<span style=\"color: #20a831\">通过</span>' 
+        WHEN 2 THEN '<span style=\"color: #7f0000\">失败</span>' 
+        ELSE '-' END AS grading_result_name 
+        FROM `{$wpdb->prefix}order` AS o 
+        LEFT JOIN `{$wpdb->prefix}grading_logs` AS gl ON gl.user_id=o.user_id AND gl.grading_id=o.match_id 
         LEFT JOIN `{$wpdb->users}` AS u ON u.ID=o.user_id AND u.ID!='' 
+        LEFT JOIN `{$wpdb->prefix}user_skill_rank` AS usr ON usr.user_id=o.user_id 
         {$searchJoin} 
         WHERE o.match_id='{$gradingId}' AND o.order_type=2 AND o.pay_status IN(2,3,4) 
         {$searchWhere} 
@@ -125,8 +145,10 @@ class Grading
                         <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : ''?></td>
                         <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
                         <td class="email column-email" data-colname="邮箱"><?=$row['user_email']?></td>
-                        <td class="is_adopt column-is_adopt" data-colname="是否通过"><?='是否通过'?></td>
-                        <td class="adopt_level column-adopt_level" data-colname="通过级别"><?='2'?></td>
+                        <td class="is_adopt column-is_adopt" data-colname="是否通过"><?=$row['grading_result_name']?></td>
+                        <td class="adopt_level column-adopt_level" data-colname="通过级别">
+                            <?=$row['grading_result'] == '1' ? ($field == 'memory' ? $row['memory_lv']:$row['level']) : '未过级'?>
+                        </td>
                         <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
                     </tr>
                     <?php } ?>
@@ -371,14 +393,19 @@ class Grading
         $gradingArr = array_unique($gradingArr);
 
         $g_type = isset($_GET['g_type']) ? trim($_GET['g_type']) : $gradingArr[0];
+        $more = isset($_GET['more']) ? intval($_GET['more']) : 0;
 
         //获取答案
-        $gradingQuestion = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id.' AND questions_type="'.$g_type.'"', ARRAY_A);
+        $gradingQuestions = $wpdb->get_results('SELECT * FROM '.$wpdb->prefix.'grading_questions WHERE grading_id='.$gradingId.' AND user_id='.$user_id.' AND questions_type="'.$g_type.'"', ARRAY_A);
 //        leo_dump();
 //        die;
-//        leo_dump($g_type);
+//        leo_dump($gradingQuestion);
 //        die;
-
+        $gradingQuestion = $gradingQuestions[$more];
+        $moreArr = [];
+        if(count($gradingQuestions) > 1){
+            $moreArr = $gradingQuestions;
+        }
         $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
         $questions_answer = json_decode($gradingQuestion['questions_answer'],true);
         $my_answer = json_decode($gradingQuestion['my_answer'],true);
@@ -484,6 +511,27 @@ class Grading
                             <span class="count"></span>
                         </a>
                         <?=($k+1)<$counts?'|':''?>
+                    </li>
+
+                    <?php
+
+                } ?>
+
+<!--                <li class="editor"><a href="users.php?role=editor">人脉<span class="count">（5）</span></a></li>-->
+            </ul>
+        <br class="clear">
+            <ul class="subsubsub">
+                <?php
+
+                foreach ($moreArr as $mak => $mav){
+
+
+                       ?>
+                    <li class="<?=$mak?>">
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$g_type.'&more='.$mak)?>" <?=$more==$mak?'class="current"':''?> aria-current="page">
+                            第<?=$mav['post_more']?>轮
+                            <span class="count"></span>
+                        </a>
                     </li>
 
                     <?php
