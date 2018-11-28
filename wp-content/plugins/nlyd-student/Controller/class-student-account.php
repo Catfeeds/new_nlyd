@@ -285,11 +285,13 @@ class Student_Account extends Student_Home
                 'stop'=>__('报名结束','nlyd-student'),
                 'date'=>__('开赛日期','nlyd-student'),
                 'address'=>__('比赛地点','nlyd-student'),
+                'address_kaoji'=>__('考级地点','nlyd-student'),
                 'money'=>__('报名费用','nlyd-student'),
                 'end'=>__('报名截止','nlyd-student'),
                 'player'=>__('已报选手','nlyd-student'),
                 'look'=>__('查看详情','nlyd-student'),
                 'must'=>__('参赛须知','nlyd-student'),
+                'must_kaoji'=>__('考级须知','nlyd-student'),
                 'people'=>__('人','nlyd-student'),
                 'day'=>__('天','nlyd-student'),
             ]);
