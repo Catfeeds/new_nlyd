@@ -69,9 +69,6 @@
         </div>
     </div>
 </div>
-<audio id="audio" autoplay="false" preload type="audio/mpeg"> 
-    <source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />
-</audio>
 <script>
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
@@ -101,7 +98,7 @@ jQuery(function($) {
         9:{start:9,length:1},
     }
     init_question(que_len,_show)
-    
+    console.log(questions_answer)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
@@ -192,6 +189,10 @@ jQuery(function($) {
        if(_show==2){
          $('.matching-sumbit').show();
        }else{//准备页面播放语音
+            var doms='<audio id="audio" autoplay="false" preload type="audio/mpeg">' 
+                        +'<source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />'
+                    +'</audio>'
+            $('body').append(doms)
             var audio=document.getElementById('audio');
             var voice_title=document.getElementsByClassName('voice_title')[0];
             var u = navigator.userAgent;
@@ -292,10 +293,20 @@ jQuery(function($) {
             // if(!('speechSynthesis' in window)) {
             //     throw alert("对不起，您的浏览器不支持")
             // }
-            // to_speak = new SpeechSynthesisUtterance(str_que);
-            // to_speak.rate = 0.545;// 设置播放语速，范围：0.1 - 10之间
-            // window.speechSynthesis.speak(to_speak);
+            // $('.voice_title').click(function(){
+            //     play()
+            // })
+            // play()
+            // function play() {
+            //     to_speak = new SpeechSynthesisUtterance(str_que);
+            //     to_speak.rate = 0.545;// 设置播放语速，范围：0.1 - 10之间
+            //     var voices = speechSynthesis.getVoices();
+            //     to_speak.voice = voices[0];
+            //     window.speechSynthesis.speak(to_speak);
+            // }
+
             // to_speak.onend = function() { 
+            //     window.speechSynthesis.cancel();
             //     $('.complete_zoo').hide();
             //     $('#match_zoo').show()
             //     $('.matching-sumbit').show();

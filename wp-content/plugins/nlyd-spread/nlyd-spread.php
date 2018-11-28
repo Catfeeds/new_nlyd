@@ -34,18 +34,13 @@ if(!class_exists('SpreadController')){
             //设置
             require_once spread_controller_path.'class-setting.php';
 
-
             require_once spread_controller_path.'class-spread.php';
 
             require_once spread_controller_path.'class-spread-ajax.php';
+
+            //乐学乐
+            require_once spread_controller_path.'class-lxl.php';
         }
-
-
-
-
-
-
-
 
     }
 
