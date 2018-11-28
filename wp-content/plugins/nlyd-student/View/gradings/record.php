@@ -1,3 +1,8 @@
+<?php
+if(empty($row['grading_log_id'])):
+    require_once PLUGINS_PATH . 'nlyd-student/View/public/student-footer-menu.php';
+endif;
+?>
 <div class="layui-fluid noCopy">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">

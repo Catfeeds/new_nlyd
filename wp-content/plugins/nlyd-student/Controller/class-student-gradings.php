@@ -79,7 +79,7 @@ class Student_Gradings extends Student_Home
     public function info(){
 
         global $wpdb,$current_user;
-        $match = $this->get_grading($_GET['grad_id']);
+        $match = $this->get_grading($_GET['grad_id'],$current_user->ID);
         if(empty($match)){
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
             return;
@@ -105,7 +105,7 @@ class Student_Gradings extends Student_Home
     public function confirm(){
 
         global $wpdb,$current_user;
-        $match = $this->get_grading($_GET['grad_id']);
+        $match = $this->get_grading($_GET['grad_id'],$current_user->ID);
         //print_r($match);
         if(empty($match)){
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
@@ -147,8 +147,10 @@ class Student_Gradings extends Student_Home
      */
     public function matchWaitting(){
 
+        global $wpdb,$current_user;
+
         //获取数据
-        $row = $this->get_grading($_GET['grad_id']);
+        $row = $this->get_grading($_GET['grad_id'],$current_user->ID);
 
         if(empty($row)){
             $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
@@ -159,7 +161,6 @@ class Student_Gradings extends Student_Home
             return;
         }
         //print_r($row);
-        global $wpdb,$current_user;
 
         if($row['user_id'] != $current_user->ID){
             $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
@@ -239,8 +240,10 @@ class Student_Gradings extends Student_Home
      */
     public function initialMatch(){
 
+        global $wpdb,$current_user;
+        //var_dump($current_user->ID);
         //获取数据
-        $row = $this->get_grading($_GET['grad_id']);
+        $row = $this->get_grading($_GET['grad_id'],$current_user->ID);
         if(empty($row)){
             $this->get_404(array('message'=>__('暂无考级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
@@ -250,7 +253,7 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>__('考级已结束', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
         }
-        global $wpdb,$current_user;
+
         if($row['user_id'] != $current_user->ID){
             $this->get_404(array('message'=>__('未查询到报名信息', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
             return;
@@ -391,7 +394,7 @@ class Student_Gradings extends Student_Home
             }
         }
 
-        $grad = $this->get_grading($_GET['grad_id']);
+        $grad = $this->get_grading($_GET['grad_id'],$current_user->ID);
         $data['grading_title'] = $grad['grading_title'];
 
         //获取比赛题目
@@ -724,13 +727,13 @@ class Student_Gradings extends Student_Home
             $next_project = $project[$next_index];
         }
         elseif ($_GET['grad_type'] == 'arithmetic'){
-         if($row['questions_type'] == 'zxys'){
-             $row['questions_type_cn'] = '正向运算';
-             $next_project = $next_index = 'nxys';
+            if($row['questions_type'] == 'zxys'){
+                $row['questions_type_cn'] = '正向运算';
+                $next_project = $next_index = 'nxys';
 
-         }else{
-             $row['questions_type_cn'] = '逆向运算';
-         }
+            }else{
+                $row['questions_type_cn'] = '逆向运算';
+            }
         }else{
             $row['grad_type'] = '文章速读';
             $next_more = $row['post_more']+1;
@@ -1282,7 +1285,7 @@ class Student_Gradings extends Student_Home
      * 获取考级信息
      * $grad_id 考试比赛id
      */
-    public function get_grading($grad_id){
+    public function get_grading($grad_id,$user_id){
         global $wpdb;
         $sql = "select a.*,b.post_title grading_title,b.post_content,
                 c.post_title grading_type,if(d.id>0,'y','') is_me,
@@ -1304,7 +1307,7 @@ class Student_Gradings extends Student_Home
                 from {$wpdb->prefix}grading_meta a 
                 left join {$wpdb->prefix}posts b on a.grading_id = b.ID 
                 left join {$wpdb->prefix}posts c on a.category_id = c.ID 
-                left join {$wpdb->prefix}order d on a.grading_id = d.match_id
+                left join {$wpdb->prefix}order d on a.grading_id = d.match_id AND d.user_id = {$user_id}
                 left join {$wpdb->prefix}postmeta e ON a.category_id = e.post_id AND meta_key = 'project_alias'
                 where a.grading_id = {$grad_id}
                 ";
@@ -1447,7 +1450,7 @@ class Student_Gradings extends Student_Home
 
         if(ACTION == 'answerMatch'){
             wp_register_style( 'my-public', student_css_url.'matchs/matching-public.css',array('my-student') );
-                wp_enqueue_style( 'my-public' );
+            wp_enqueue_style( 'my-public' );
             if($_GET['grad_type'] == 'reading'){
                 wp_register_style( 'my-student-reading', student_css_url.'matching-reading.css',array('my-student') );
                 wp_enqueue_style( 'my-student-reading' );
