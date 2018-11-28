@@ -92,9 +92,12 @@ class Student_Trains extends Student_Home
      * 专项训练准备页
      */
     public function ready(){
-        if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])){
-            $this->get_404(__('参数错误', 'nlyd-student'));
-            return;
+        if(!in_array($_GET['type'],array('reading','memory','arithmetic'))){
+
+            if(empty($_GET['id']) || empty($_GET['type']) || empty($_GET['genre_id'])){
+                $this->get_404(__('参数错误', 'nlyd-student'));
+                return;
+            }
         }
 
         $genre = get_post($_GET['genre_id']);
