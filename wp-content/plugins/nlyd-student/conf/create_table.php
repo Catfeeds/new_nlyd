@@ -622,7 +622,7 @@ function the_table_install () {
     $table_name = $wpdb->prefix . "spread_money_set";  //推广奖金项设置
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
-        $sql = "CREATE TABLE `wp_spread_money_set` (
+        $sql = "CREATE TABLE `{$table_name}` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `money_name` varchar(255) DEFAULT NULL COMMENT '名称',
           `project_type` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '1考级报名费,2战队赛报名费,3城市赛报名费,4购买商品',
@@ -631,6 +631,31 @@ function the_table_install () {
           `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1启用,2禁用',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;";
+        dbDelta($sql);
+    }
+
+    $table_name = $wpdb->prefix . "lxl_course";  //乐学乐分享课程
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+        $sql = "CREATE TABLE `{$table_name}` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `course_title` varchar(255) NOT NULL,
+          `course_details` mediumtext,
+          `course_img` varchar(255) DEFAULT NULL,
+          `const` decimal(10,2) unsigned NOT NULL,
+          `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1启用,2禁用',
+          `teacher_id` int(10) unsigned NOT NULL,
+          `course_start_time` datetime DEFAULT NULL COMMENT '开课时间',
+          `course_end_time` datetime DEFAULT NULL,
+          `created_time` datetime DEFAULT NULL COMMENT '课程结束时间',
+          `province` varchar(180) NOT NULL COMMENT '省',
+          `city` varchar(180) NOT NULL COMMENT '城市',
+          `area` varchar(180) NOT NULL,
+          `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+          `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
+          `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
     }
 }

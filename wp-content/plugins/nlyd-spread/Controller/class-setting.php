@@ -12,7 +12,7 @@ class Setting{
 
     public function register_teacher_menu_page(){
 
-        if ( current_user_can( 'administrator' )) {
+        if ( current_user_can( 'administrator' ) && !current_user_can( 'spread' ) ) {
             global $wp_roles;
 
             $role = 'spread';//权限名
