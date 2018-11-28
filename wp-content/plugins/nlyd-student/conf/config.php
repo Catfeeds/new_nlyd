@@ -111,5 +111,11 @@ return array(
             'post_content'=>'[grading-home]',
             'url'=>'/grading',
         ),
+        array(
+            'post_title'=>'考级训练',
+            'post_name'=>'grade',
+            'post_content'=>'[grade-home]',
+            'url'=>'/grade',
+        ),
     ),
 );

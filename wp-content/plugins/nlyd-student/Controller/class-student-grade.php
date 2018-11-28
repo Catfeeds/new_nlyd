@@ -7,7 +7,7 @@
  * Date: 2018/6/29
  * Time: 21:44
  */
-class Student_Gradings extends Student_Home
+class Student_Grade extends Student_Home
 {
     private $ajaxControll;
     public function __construct($action)
@@ -21,7 +21,7 @@ class Student_Gradings extends Student_Home
         $this->ajaxControll = new Student_Ajax();
 
         //添加短标签
-        add_shortcode('grading-home',array($this,$action));
+        add_shortcode('grade-home',array($this,$action));
     }
 
 
