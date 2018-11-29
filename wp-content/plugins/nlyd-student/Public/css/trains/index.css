@@ -116,6 +116,11 @@
     width: -webkit-calc(50% - 40px);
     width: calc(50% - 40px);
 }
+.item_row.kaoji{
+    width: 100%;
+    
+}
+
 .lists_item_row .item_row{
     margin-left: 24px;
 }
