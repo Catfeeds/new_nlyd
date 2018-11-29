@@ -3924,6 +3924,7 @@ class Student_Ajax
                     case 'cy':
                     case 'yzl':
                     case 'tl':
+                    case 'zm':
                         if(!empty($_POST['my_answer'])){
 
                             $len = count($_POST['questions_answer']);

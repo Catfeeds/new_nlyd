@@ -753,7 +753,9 @@ class Student_Gradings extends Student_Home
             $rows = $wpdb->get_results($sql_,ARRAY_A);
             //print_r($rows);
             if(!empty($rows)){
-
+                //获取用户技能
+                $rank_row = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}",ARRAY_A);
+                $update = array();
                 if($order->memory_lv > 0){
 
                     $correct_rate = array();
@@ -768,7 +770,7 @@ class Student_Gradings extends Student_Home
                     if($result >= count($correct_rate) ){
                         $grading_result = 1;
                     }
-                    //print_r($correct_rate);
+                    //print_r($grading_result);
                     if($order->memory_lv > 2){
 
                         $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
@@ -783,13 +785,18 @@ class Student_Gradings extends Student_Home
                                 $error_len += count($error_arr);
 
                             }
+                            //print_r($error_len);
                             if($error_len > 10){
                                 $grading_result = 2;
                             }
                         }
 
                     }
-                    $update = array('memory'=>$order->memory_lv);
+                    //print_r($grading_result);
+                    $lv = $order->memory_lv;
+                    if($lv > $rank_row['memory']){
+                        $update = array('memory'=>$order->memory_lv);
+                    }
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
                 }
                 elseif($_GET['grad_type']== 'reading'){
@@ -809,7 +816,9 @@ class Student_Gradings extends Student_Home
                         $lv = floor($rate/1000);
                         if($lv > 0){
                             $grading_result = 1;
-                            $update = array('read'=>$lv);
+                            if($lv > $rank_row['read']){
+                                $update = array('read'=>$lv);
+                            }
                             $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
                         }
 
@@ -822,7 +831,9 @@ class Student_Gradings extends Student_Home
                     $lv = floor($my_score/200);
                     if($lv > 0){
                         $grading_result = 1;
-                        $update = array('compute'=>$lv);
+                        if($lv > $rank_row['compute']){
+                            $update = array('compute'=>$lv);
+                        }
                         $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv);
                     }
                 }
@@ -830,6 +841,7 @@ class Student_Gradings extends Student_Home
                     'user_id'=>$current_user->ID,
                     'grading_id'=>$_GET['grad_id'],
                     'grading_result'=>$grading_result,
+                    'grading_lv'=> $grading_result == 1 ? $lv : '',
                     'created_time'=>get_time('mysql'),
                 );
 
@@ -840,13 +852,17 @@ class Student_Gradings extends Student_Home
                 $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
 
                 if($a && $grading_result == 1){
-                    $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
-                    if(!empty($rank_id)){
-
-                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_id));
-                    }else{
+                    if(empty($rank_row)){
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                    }else{
+
+                        if(!empty($update)){
+                            $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id']));
+                        }else{
+                            $b = 1;
+                        }
                     }
+                    //print_r($b);
                     //wp_user_skill_rank
                 }else{
                     $b = 1;
