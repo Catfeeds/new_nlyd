@@ -1,5 +1,3 @@
-
-
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
