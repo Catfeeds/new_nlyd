@@ -78,6 +78,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 <?php if(!isset($_GET['type'])): ?>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <?php endif;?>
+<style>
+.layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
+    color:#fff;
+    background: #4394F9!important;
+}
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -256,6 +262,29 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             $('.ingnore').click(function(){
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
+            })
+            layui.use('layer', function(){
+                layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: '<?=__('考级认证结果', 'nlyd-student')?>' //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certifications' //防止重复弹出
+                    ,content: '<div class="box-conent-wrapper"><span class="c_green"><?=__('心算2级已达标', 'nlyd-student')?></span></div>'
+                    ,btn: ['确认']
+                    ,success: function(layero, index){
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
             })
         <?php endif;?>
     })
