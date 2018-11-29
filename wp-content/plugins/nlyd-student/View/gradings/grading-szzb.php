@@ -120,6 +120,7 @@
 </div>
 <script>
 jQuery(function($) { 
+    $.DelSession('count');
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var questions_answer=[];//题目
