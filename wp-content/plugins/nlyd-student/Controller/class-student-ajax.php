@@ -1371,7 +1371,21 @@ class Student_Ajax
         $start = ($page-1)*$pageSize;
 
         if($_POST['type'] == 2){
-
+            $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.start_time as match_start_time,b.grading_notice_url as match_notice_url,
+                    b.address as match_address,b.cost as match_cost,b.entry_end_time,b.status as match_status,c.user_id,
+                    case b.status 
+                    when -3 then '已结束' 
+                    when -2 then '等待开赛' 
+                    when -1 then '未开始' 
+                    when 1 then '报名中' 
+                    when 2 then '比赛中' 
+                    end match_status_cn
+                  from {$wpdb->prefix}order c 
+                  left join {$wpdb->prefix}posts a on c.match_id = a.ID 
+                  left join {$wpdb->prefix}grading_meta b on c.match_id = b.grading_id 
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 2 and b.start_time != ''
+                  order by b.status desc limit $start,$pageSize
+                  ";
         }else{
 
             $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.match_start_time,b.match_notice_url,
@@ -1386,7 +1400,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}match_meta_new b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and b.match_start_time != ''
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 1 and b.match_start_time != ''
                   order by b.match_status desc limit $start,$pageSize
                   ";
         }
@@ -1416,7 +1430,7 @@ class Student_Ajax
                 //两个链接
                 if($val['match_status'] == 2){
                     //比赛中
-                    $url = home_url('/matchs/matchWaitting/match_id/'.$val['ID']);
+                    $url = $_POST['type'] == 2 ? home_url('/gradings/matchWaitting/grad_id/'.$val['ID']) : home_url('/matchs/matchWaitting/match_id/'.$val['ID']);
                     $button_title = __('进入比赛', 'nlyd-student');
                 }else if ($val['match_status'] == 1){
                     //报名中
@@ -1428,16 +1442,16 @@ class Student_Ajax
                     $url = '';
                 }else if($val['match_status'] == -3){
                     //已结束
+                    $url = $_POST['type'] == 2 ? home_url('/gradings/record/grad_id/'.$val['ID']) : home_url('matchs/record/match_id/'.$val['ID']);
                     $button_title = __('查看战绩', 'nlyd-student');
-                    $url = home_url('matchs/record/match_id/'.$val['ID']);
                 }else{
                     //等待开赛
-                    $url = home_url('matchs/matchWaitting/match_id/'.$val['ID']);
+                    $url = $_POST['type'] == 2 ? home_url('/gradings/matchWaitting/grad_id/'.$val['ID']) : home_url('matchs/matchWaitting/match_id/'.$val['ID']);
                     $button_title = __('等待开赛', 'nlyd-student');
                 }
                 $rows[$k]['button_title'] = $button_title;
                 $rows[$k]['right_url'] = $url;
-                $rows[$k]['left_url'] = home_url('matchs/info/match_id/'.$val['ID']);
+                $rows[$k]['left_url'] = $_POST['type'] == 2 ? home_url('/gradings/info/grad_id/'.$val['ID']) : home_url('matchs/info/match_id/'.$val['ID']);
                 $rows[$k]['new_time'] = str2arr(get_time('mysql'),'-');
             }
         }
