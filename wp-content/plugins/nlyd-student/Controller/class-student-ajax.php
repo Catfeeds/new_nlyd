@@ -4101,30 +4101,16 @@ class Student_Ajax
             if(empty($_POST['questions_answer'])) wp_send_json_error(array('数据信息不能为空'));
         }else{
 
-            if( empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
+            if(empty($_POST['genre_id']) || empty($_POST['grading_type']) || empty($_POST['questions_type']) || empty($_POST['grading_questions']) || empty($_POST['questions_answer'])){
                 wp_send_json_error(array('所提交数据信息不完全'));
             }
         }
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
-        var_dump($_POST);die;
-        //查看答案是否提交
-        $sql = "select id,questions_answer
-                from {$wpdb->prefix}grading_questions
-                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
-                ";
-        //print_r($sql);die;
-        $row = $wpdb->get_row($sql,ARRAY_A);
-        //print_r($sql);
-        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grad_type']);
-        if($_POST['grad_type'] == 'memory'){
-            $url .= '/type/'.$_POST['questions_type'];
-        }
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
+        //print_r($_POST);die;
 
         //数据处理
-
         $correct_rate = 0;  //准确率
         switch ($_POST['grading_type']){
             case 'memory':
@@ -4176,7 +4162,7 @@ class Student_Ajax
                 }
                 break;
             case 'reading':
-                //print_r($_POST);die;
+
                 $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -4234,11 +4220,10 @@ class Student_Ajax
                 //var_dump($_POST);die;
                 break;
         }
-        //zlin_user_skill_rank 技能表
 
         $insert = array(
             'user_id'=>$current_user->ID,
-            'grading_id'=>$_POST['grading_id'],
+            'genre_id'=>$_POST['genre_id'],
             'grading_type'=>$_POST['grading_type'],
             'questions_type'=>$_POST['questions_type'],
             'grading_questions'=>json_encode($_POST['grading_questions']),
@@ -4246,17 +4231,13 @@ class Student_Ajax
             'my_answer'=>json_encode($_POST['my_answer']),
             'correct_rate'=>$correct_rate,
             'my_score'=>$my_score,
-            'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
-            'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
             'created_time'=>get_time('mysql'),
             'use_time'=>isset($_POST['usetime']) ? $_POST['usetime'] : '',
             'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
             'post_str_length'=>isset($_POST['length']) ? $_POST['length'] : '',
-            'is_true'=>!empty($prison_log_id) ? 2 : 1,
-            'post_more'=>!empty($_POST['more']) ? $_POST['more'] : '',
         );
         //print_r($insert);die;
-        $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
+        $result = $wpdb->insert($wpdb->prefix.'user_grade_logs',$insert);
         /*print_r($result);
         die;*/
         if($result){
@@ -4265,19 +4246,19 @@ class Student_Ajax
 
             if(!empty($_POST['post_id']) && $_POST['grading_type'] == 'reading'){
 
-                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
+                $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 2 ";
                 $use_id = $wpdb->get_row($sql1,ARRAY_A);
                 if($use_id){
-                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                    $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$_POST['post_id']},CONCAT_WS(',',post_id,{$_POST['post_id']})) WHERE user_id = {$current_user->ID} and type = 2";
                     $a = $wpdb->query($sql2);
                 }else{
 
-                    $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>1));
+                    $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$_POST['post_id'],'type'=>2));
                 }
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));

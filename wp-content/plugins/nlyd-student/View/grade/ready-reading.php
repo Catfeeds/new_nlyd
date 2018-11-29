@@ -37,7 +37,7 @@
 <script>
 jQuery(function($) {
     $.DelSession('count');
-    var _grad_id=$.Request('grad_id');
+    var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _more=<?=isset($_GET['more']) ? $_GET['more'] : 1; ?>;
@@ -87,12 +87,12 @@ jQuery(function($) {
     } 
     function init_question(question_leng,_show) {//初始化
         var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+        if(grade_question && grade_question['genre_id']===_genre_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             endTime=grade_question['endTime'];
             sys_second=$.GetSecond(endTime);
         }else{
             var sessionData={
-                grad_id:_grad_id,
+                grad_id:_genre_id,
                 grad_type:_grad_type,
                 type:_type,
                 endTime:endTime,
@@ -109,7 +109,7 @@ jQuery(function($) {
         var my_answer={};
         var time=init_time-sys_second;
         var data={
-            grading_id:_grad_id,
+            genre_id:_genre_id,
             grading_type:_grad_type,
             questions_type:_type,
             post_id:<?=$post_id?>,
@@ -123,7 +123,7 @@ jQuery(function($) {
             submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
         }
         var leavePage= $.GetSession('leavePage','1');
-        if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+        if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
             if(leavePage.Time){
                 data['leave_page_time']=leavePage.Time;
             }

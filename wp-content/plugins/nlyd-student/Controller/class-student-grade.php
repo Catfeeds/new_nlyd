@@ -289,7 +289,7 @@ class Student_Grade extends Student_Home
             $row['post_id'] = $post_id;
             $row['questions_answer'] = $questions_answer;
             $row['match_questions'] = $match_questions;
-            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
+            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id);
             //print_r($row);
         }
 
@@ -353,7 +353,7 @@ class Student_Grade extends Student_Home
 
         if(isset($_GET['log_id'])){
 
-            if(empty($_GET['grad_id']) || empty($_GET['log_id']) || empty($_GET['grad_type']) || empty($_GET['type']) ){
+            if(empty($_GET['genre_id']) || empty($_GET['log_id']) || empty($_GET['grad_type']) || empty($_GET['type']) ){
 
                 $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
@@ -514,22 +514,11 @@ class Student_Grade extends Student_Home
         //清空倒计时
         unset($_SESSION['count_down']);
 
-        $order = $this->get_match_order($current_user->ID,$_GET['grad_id']);
-        if(empty($order)){
-            $this->get_404(__('你未报名', 'nlyd-student'));
-            return;
-        }else{
-
-            if(!in_array($order->pay_status,array(2,3,4))){
-                $this->get_404(__('订单未付款', 'nlyd-student'));
-                return;
-            }
-        }
-
         if(isset($_GET['log_id'])){
 
             //获取答题记录
-            $row = $this->get_grading_questions($_GET['grad_id'],$_GET['log_id']);
+            $row = $this->get_grading_questions($_GET['genre_id'],$_GET['log_id']);
+            //print_r($row);
             if(empty($row)){
                 $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
                 return;
@@ -652,9 +641,6 @@ class Student_Grade extends Student_Home
          }
         }else{
             $row['grad_type'] = '文章速读';
-            $next_more = $row['post_more']+1;
-
-            $next_project = $next_more <= 3 ? 'reading' : '';
             $next_index = 'reading';
         }
 
@@ -662,9 +648,9 @@ class Student_Grade extends Student_Home
 
         if(empty($next_project)){
             //获取所有项目
-            $sql_ = "select id,user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score,post_str_length,use_time
-                      from {$wpdb->prefix}grading_questions 
-                      where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} and grading_type = '{$_GET['grad_type']}' 
+            $sql_ = "select id,user_id,genre_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,my_score,post_str_length,use_time
+                      from {$wpdb->prefix}user_grade_logs 
+                      where id = {$_GET['log_id']} and user_id = {$current_user->ID} and genre_id = {$_GET['genre_id']} and grading_type = '{$_GET['grad_type']}' 
                       ";
             $rows = $wpdb->get_results($sql_,ARRAY_A);
             //print_r($rows);
@@ -709,25 +695,13 @@ class Student_Grade extends Student_Home
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
                 }
                 elseif($_GET['grad_type']== 'reading'){
-                    $arr = array();
-                    foreach ($rows as $k =>$v){
-                        $rows[$k]['rate'] = $rate1 = $v['post_str_length']/($v['use_time']/60);
-                        $arr[] = $rate1;
-                    }
-                    array_multisort($arr, SORT_ASC, $rows);
-                    array_shift($rows);
-                    array_pop($rows);
-                    $row = $rows[0];
 
+                    //print_r($rows);die;
+                    $row_ = $rows[0];
                     $grading_result = 2;
                     if($row['correct_rate'] >= 0.7){
-                        $rate = $row['post_str_length']/($row['use_time']/60);
+                        $rate = $row_['post_str_length']/($row_['use_time']/60);
                         $lv = floor($rate/1000);
-                        if($lv > 0){
-                            $grading_result = 1;
-                            $update = array('read'=>$lv);
-                            $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
-                        }
 
                     }
                     //print_r($row);
@@ -736,41 +710,6 @@ class Student_Grade extends Student_Home
                     $grading_result = 2;
                     $my_score = array_sum(array_column($rows,'my_score'));
                     $lv = floor($my_score/200);
-                    if($lv > 0){
-                        $grading_result = 1;
-                        $update = array('compute'=>$lv);
-                        $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv);
-                    }
-                }
-                $insert = array(
-                    'user_id'=>$current_user->ID,
-                    'grading_id'=>$_GET['grad_id'],
-                    'grading_result'=>$grading_result,
-                    'created_time'=>get_time('mysql'),
-                );
-
-                $wpdb->startTrans();
-
-                $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
-
-                $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
-
-                if($a && $grading_result == 1){
-                    $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
-                    if(!empty($rank_id)){
-
-                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_id));
-                    }else{
-                        $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
-                    }
-                    //wp_user_skill_rank
-                }else{
-                    $b = 1;
-                }
-                if($a && $b ){
-                    $wpdb->commit();
-                }else{
-                    $wpdb->rollback();
                 }
 
                 $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);
@@ -785,9 +724,6 @@ class Student_Grade extends Student_Home
             $next_project_url = home_url('gradings/initialMatch/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'].'/type/'.$next_index);
             if($order->memory_lv > 0 ){
                 $next_project_url .= '/memory_lv/'.$order->memory_lv;
-            }
-            elseif ($_GET['grad_type'] == 'reading'){
-                $next_project_url .= '/more/'.$next_more;
             }
         }
 
@@ -804,8 +740,12 @@ class Student_Grade extends Student_Home
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
+            'grading_result'=>$grading_result,
+            'grade_lv'=>$lv,
+            'recur_url'=>home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/'),
+            'revert_url'=>home_url('/trains/lists/id/'.$_GET['genre_id'].'/'),
         );
-        //print_r($data);
+        //print_r($data['grade_lv']);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
     }
@@ -1256,7 +1196,7 @@ class Student_Grade extends Student_Home
     public function get_grading_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,correct_rate,is_true,post_str_length,use_time,post_more,
+        $sql = "select grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,post_str_length,use_time,
                     case grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'
@@ -1270,9 +1210,12 @@ class Student_Grade extends Student_Home
                     when 'tl' then '听记数字'
                     when 'rm' then '人脉信息'
                     when 'wz' then '国学经典'
+                    when 'reading' then '文章速读'
+                    when 'zxys' then '正向运算'
+                    when 'nxys' then '逆向运算'
                     end questions_type_cn
-                    from {$wpdb->prefix}grading_questions
-                    where user_id = {$current_user->ID} and grading_id = {$match_id} and id = {$log_id} 
+                    from {$wpdb->prefix}user_grade_logs
+                    where user_id = {$current_user->ID} and genre_id = {$match_id} and id = {$log_id} 
                     ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);

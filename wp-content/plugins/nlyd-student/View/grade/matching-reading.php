@@ -68,7 +68,7 @@
 jQuery(function($) { 
     $.DelSession('count');
     var isSubmit=false;//是否正在提交
-    var _grad_id=$.Request('grad_id');
+    var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _length=$.Request('length');
@@ -106,12 +106,12 @@ jQuery(function($) {
     } 
     function init_question(question_leng,_show) {//初始化时间
         var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+        if(grade_question && grade_question['genre_id']===_genre_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             endTime=grade_question['endTime'];
             sys_second=$.GetSecond(endTime);
         }else{
             var sessionData={
-                grad_id:_grad_id,
+                genre_id:_genre_id,
                 grad_type:_grad_type,
                 type:_type,
                 endTime:endTime,
@@ -146,7 +146,7 @@ jQuery(function($) {
             })
             
             var data={
-                grading_id:_grad_id,
+                genre_id:_genre_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 post_id:$.Request('post_id'),
@@ -161,7 +161,7 @@ jQuery(function($) {
             }
             
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
