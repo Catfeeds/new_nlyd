@@ -841,7 +841,7 @@ class Student_Gradings extends Student_Home
                     'user_id'=>$current_user->ID,
                     'grading_id'=>$_GET['grad_id'],
                     'grading_result'=>$grading_result,
-                    'grading_lv'=> $grading_result == 1 ? $lv : '',
+                    'grading_lv'=> $lv > 0 ? $lv : '',
                     'created_time'=>get_time('mysql'),
                 );
 
@@ -858,6 +858,7 @@ class Student_Gradings extends Student_Home
 
                         if(!empty($update)){
                             $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id']));
+                           #r$d+
                         }else{
                             $b = 1;
                         }
@@ -916,7 +917,7 @@ class Student_Gradings extends Student_Home
     public function record(){//考级成绩
 
         global $wpdb,$current_user;
-        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id
+        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id,c.grading_lv
                 from {$wpdb->prefix}order a 
                 LEFT JOIN {$wpdb->prefix}posts b on a.match_id = b.ID
                 LEFT JOIN {$wpdb->prefix}grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
@@ -939,25 +940,7 @@ class Student_Gradings extends Student_Home
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = $user_real_name['real_name'];
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-                if($val['grading_result'] == 1){
-                    $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
-                    //print_r($result);
-                    switch ($_GET['grad_type']){
-                        case 'memory':
-                            $grading_lv = $result['memory'];
-                            break;
-                        case 'reading':
-                            $grading_lv = $result['read'];
-                            break;
-                        case 'arithmetic':
-                            $grading_lv = $result['compute'];
-                            break;
-                    }
-                }
-                else{
-                    $grading_lv = $_GET['grad_type'] == 'memory' ? $val['memory_lv'] : '';
-                }
-                $rows[$k]['result_cn'] = !empty($grading_lv) ? $grading_lv.'级'.$val['result_cn'] : $val['result_cn'];
+                $rows[$k]['result_cn'] = !empty($val['grading_lv']) ? $val['grading_lv'].'级'.$val['result_cn'] : $val['result_cn'];
 
                 if($val['user_id'] == $current_user->ID){
                     //print_r($val);
