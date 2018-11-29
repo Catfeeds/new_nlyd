@@ -1,5 +1,3 @@
-
-
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -15,7 +13,6 @@
                 <div><?=__('训练类型', 'nlyd-student')?></div>
                 </h1>
             </header>
-
             <?php if ( empty($list)){ ?>
                 <div class="layui-row nl-border nl-content">
                     <div class="width-padding width-padding-pc">
