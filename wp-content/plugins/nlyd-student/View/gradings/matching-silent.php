@@ -27,6 +27,7 @@
 
 <script>
 jQuery(function($) { 
+    $.DelSession('count');
     var isSubmit=false;//是否正在提交
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');

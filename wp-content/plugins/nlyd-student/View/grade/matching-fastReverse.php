@@ -63,6 +63,7 @@
 </div>
 <script>
 jQuery(function($) {
+    $.DelSession('count');
     var isSubmit=false;//是否正在提交
     leaveMatchPage(function(){//窗口失焦提交
         $('#next').addClass('disabled')

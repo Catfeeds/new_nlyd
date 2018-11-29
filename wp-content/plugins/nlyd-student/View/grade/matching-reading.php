@@ -66,6 +66,7 @@
 
 <script>
 jQuery(function($) { 
+    $.DelSession('count');
     var isSubmit=false;//是否正在提交
     var _genre_id=$.Request('genre_id');
     var _grading_num=$.Request('num');

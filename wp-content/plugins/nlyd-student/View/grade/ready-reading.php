@@ -36,6 +36,7 @@
 <input type="hidden" name="_wpnonce" id="inputSubmit" value="<?=wp_create_nonce('student_answer_submit_code_nonce');?>">
 <script>
 jQuery(function($) {
+    $.DelSession('count');
     var _genre_id=$.Request('genre_id');
     var _grading_num=<?=$num?>;
     var _grad_type=$.Request('grad_type');
