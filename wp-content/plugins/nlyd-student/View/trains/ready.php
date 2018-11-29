@@ -439,12 +439,13 @@
         </div>
     </div>
     <?php
-        $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/match_more/1');
+        $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/');
         switch ($_GET['type']){
             case 'reading':
                 $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/');
                 break;
             case 'memory':
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/sz');
                 break;
             case 'arithmetic':
                 $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/zxys');
@@ -466,34 +467,34 @@ jQuery(function($) {
             $('#go').click(function(){
                 var dom='<ul class="kaoji_list">'
                             +'<li>'
-                                +'<a href=""><?=__('记忆一级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/1/';?>"><?=__('记忆一级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆二级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/2/'?>"><?=__('记忆二级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆三级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/3/'?>"><?=__('记忆三级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆四级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/4/'?>"><?=__('记忆四级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆五级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/5/'?>"><?=__('记忆五级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆六级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/6/'?>"><?=__('记忆六级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆七级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/7/'?>"><?=__('记忆七级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆八级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/8/'?>"><?=__('记忆八级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆九级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/9/'?>"><?=__('记忆九级', 'nlyd-student')?></a>'
                             +'</li>'
                             +'<li>'
-                                +'<a href=""><?=__('记忆十级', 'nlyd-student')?></a>'
+                                +'<a href="<?=$url.'/memory_lv/10/'?>"><?=__('记忆十级', 'nlyd-student')?></a>'
                             +'</li>'
                         +'</ul>'
                 layer.open({

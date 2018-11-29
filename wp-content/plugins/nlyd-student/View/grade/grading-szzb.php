@@ -3,7 +3,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__('速记考级水平(自测)', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
 
@@ -121,6 +121,7 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    var _grading_num=<?=$num?>;
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var questions_answer=[];//题目
@@ -279,12 +280,13 @@ jQuery(function($) {
             my_answer.push(answer)
         })
         var data={
+                grading_num:_grading_num,
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 grading_questions:questions_answer,
                 questions_answer:questions_answer,
-                action:'grading_answer_submit',
+                action:'grade_answer_submit',
                 my_answer:my_answer,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
 
