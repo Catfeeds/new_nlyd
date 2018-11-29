@@ -117,7 +117,8 @@
     width: calc(50% - 40px);
 }
 .item_row.kaoji{
-    width: 100%;
+    width: -webkit-calc(100% - 28px);
+    width: calc(100% - 28px);
     
 }
 

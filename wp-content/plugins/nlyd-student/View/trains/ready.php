@@ -8,6 +8,19 @@
     display:inline-block;
     vertical-align: middle;  
 }
+.kaoji_list li a{
+    display:block;
+    width:80%;
+    margin:0 auto 10px auto;
+    padding:2px 0;
+    background:#ebf4ff;
+    text-align:center;
+    color:#85868c;
+    border-radius:3px;
+}
+.layui-layer-content{
+    padding:10px;
+}
 </style>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -438,11 +451,82 @@
         }
     ?>
     <a class="a-btn a-btn-table" id="go" href="<?=$url?>"><div><?=__('开始训练', 'nlyd-student')?></div></a>
-</div>
 
+
+</div>
 <script>
 jQuery(function($) { 
     $.DelSession('train_match');//准备页面题目
     $.DelSession('_match_train');//答题页面记录的题目（无准备页）
+
+    var _type=$.Request('type');
+    layui.use('layer', function(){
+        if(_type=='memory'){
+            $('#go').click(function(){
+                var dom='<ul class="kaoji_list">'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆一级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆二级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆三级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆四级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆五级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆六级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆七级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆八级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆九级', 'nlyd-student')?></a>'
+                            +'</li>'
+                            +'<li>'
+                                +'<a href=""><?=__('记忆十级', 'nlyd-student')?></a>'
+                            +'</li>'
+                        +'</ul>'
+                layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: '<?=__('选择记忆级别', 'nlyd-student')?>' //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certifications' //防止重复弹出
+                    ,content: dom
+                    ,btn: []
+                    ,success: function(layero, index){
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.closeAll();
+                        submit(1);
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
+                return false;
+            })
+        }
+              
+    });
+    // if(_type=='memory'){
+    //     $('#go').click(function(){
+    //         console.log(1)
+    //         return false;
+    //     })
+    // }
 })
 </script>
