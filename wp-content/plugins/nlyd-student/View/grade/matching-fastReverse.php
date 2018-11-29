@@ -4,7 +4,7 @@
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
         <header class="mui-bar mui-bar-nav">
-            <h1 class="mui-title"><div><?=__($grading_title, 'nlyd-student')?></div></h1>
+            <h1 class="mui-title"><div><?=__('速算考级水平(自测)', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="remember width-margin width-margin-pc">
@@ -76,7 +76,8 @@ jQuery(function($) {
         }
         submit(time,4);
     })
-    var _grad_id=$.Request('grad_id');
+    var _grading_num=<?=$num?>;
+    var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
     var ajaxData=[],dataIndex=[];//记录选择数字得下标
@@ -85,7 +86,7 @@ jQuery(function($) {
     var grade_question=$.GetSession('grade_question','true');
     var isMatching=false;//判断用户是否刷新页面
     var no_answer=50;//每隔多少题出现一次无解
-    if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+    if(grade_question && grade_question['genre_id']===_genre_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
         isMatching=true;
         ajaxData=grade_question['ajaxData'];
         end_time=grade_question['end_time'];
@@ -161,7 +162,7 @@ jQuery(function($) {
                 end_time=$.GetEndTime($('.count_down').attr('data-seconds'));//结束时间
                 var sessionData={
                     ajaxData:ajaxData,
-                    grad_id:_grad_id,
+                    genre_id:_genre_id,
                     grad_type:_grad_type,
                     type:_type,
                     end_time:end_time
@@ -191,17 +192,18 @@ jQuery(function($) {
             delete ajaxData[_len-1]['examples'];
             delete ajaxData[_len-1]['have_noanswer'];
             var data={
-                grading_id:_grad_id,
+                grading_num:_grading_num,
+                genre_id:_genre_id,
                 grading_type:_grad_type,
                 questions_type:'nxys',
                 grading_questions:'nx',
                 questions_answer:'nx',
-                action:'grading_answer_submit',
+                action:'grade_answer_submit',
                 my_answer:ajaxData,
                 submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -239,7 +241,7 @@ jQuery(function($) {
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
+                        var href="<?=home_url('matchs/answerLog/genre_id/'.$_GET['genre_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }

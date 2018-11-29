@@ -37,6 +37,7 @@
 <script>
 jQuery(function($) {
     var _genre_id=$.Request('genre_id');
+    var _grading_num=<?=$num?>;
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _more=<?=isset($_GET['more']) ? $_GET['more'] : 1; ?>;
@@ -109,6 +110,7 @@ jQuery(function($) {
         var time=init_time-sys_second;
         var data={
             genre_id:_genre_id,
+            grading_num:_grading_num,
             grading_type:_grad_type,
             questions_type:_type,
             post_id:<?=$post_id?>,

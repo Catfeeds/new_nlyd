@@ -1112,6 +1112,7 @@ class Student_Gradings extends Student_Home
             'questions_answer'=>$questions_answer,
             'grading_questions'=>$grading_questions,
             'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'match_row'=>$row,
             'next'=>$next,

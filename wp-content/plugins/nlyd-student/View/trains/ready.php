@@ -442,11 +442,12 @@
         $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/match_more/1');
         switch ($_GET['type']){
             case 'reading':
-                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/grade_more/1');
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/');
                 break;
             case 'memory':
                 break;
             case 'arithmetic':
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/zxys');
                 break;
         }
     ?>

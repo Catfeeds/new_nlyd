@@ -68,6 +68,7 @@
 jQuery(function($) { 
     var isSubmit=false;//是否正在提交
     var _genre_id=$.Request('genre_id');
+    var _grading_num=$.Request('num');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _length=$.Request('length');
@@ -146,6 +147,7 @@ jQuery(function($) {
             
             var data={
                 genre_id:_genre_id,
+                grading_num:_grading_num,
                 grading_type:_grad_type,
                 questions_type:_type,
                 post_id:$.Request('post_id'),

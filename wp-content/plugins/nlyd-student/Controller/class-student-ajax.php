@@ -4224,6 +4224,7 @@ class Student_Ajax
         $insert = array(
             'user_id'=>$current_user->ID,
             'genre_id'=>$_POST['genre_id'],
+            'grading_num'=>$_POST['grading_num'],
             'grading_type'=>$_POST['grading_type'],
             'questions_type'=>$_POST['questions_type'],
             'grading_questions'=>json_encode($_POST['grading_questions']),
@@ -4258,7 +4259,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));

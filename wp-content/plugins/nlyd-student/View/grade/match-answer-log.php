@@ -172,10 +172,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <?php
                     if(ACTION == 'answerLog') {
                         if (empty($next_project)) { ?>
-                            <!--等级-->
-                            <?php if($grading_result == 1):?>
-                            <p><?=$grade_lv?></p>
-                            <?php endif;?>
+
                             <div class="a-btn two get_footer">
                                 <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><div><?=__('再来一局', 'nlyd-student')?></div></a>
                                 <a class="a-two right c_white" href="<?=$revert_url?>"><div><?=__('返回列表', 'nlyd-student')?></div></a>
@@ -194,12 +191,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 </div>
 <script>
     jQuery(function($) {
+        //var _grading_num=<?=$num?>;//grading_num:_grading_num,
         $.DelSession('match');//考级记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
-        <?php if(isset($_GET['grad_id'])): ?>
-            leavePageLoad('<?=$wait_url?>');
+        <?php if(isset($_GET['genre_id'])): ?>
             var endTimes=0;
             var countSession=$.GetSession('count')
             if(countSession){
@@ -241,6 +238,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
+            <?php if(empty($next_project)): ?>
             layui.use('layer', function(){
                 layer.open({
                     type: 1
@@ -248,7 +246,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ,title: '<?=__('考级认证结果', 'nlyd-student')?>' //不显示标题栏
                     ,skin:'nl-box-skin'
                     ,id: 'certifications' //防止重复弹出
-                    ,content: '<div class="box-conent-wrapper"><span class="c_green"><?=__('心算2级已达标', 'nlyd-student')?></span></div>'
+                    ,content: '<div class="box-conent-wrapper"><span class="<?=$grading_result == 1 ? 'c_green' : '';?>"><?=__($grade_result, 'nlyd-student')?></span></div>'
                     ,btn: ['确认']
                     ,success: function(layero, index){
                     }
@@ -264,6 +262,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ,isOutAnim:true//关闭动画
                 });
             })
+            <?php endif;?>
         <?php endif;?>
     })
 </script>
