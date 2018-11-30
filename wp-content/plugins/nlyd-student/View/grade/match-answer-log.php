@@ -137,6 +137,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         case 'sz':    //随机数字
                         case 'yzl':    //圆周率
                         case 'tl':    //听记数字
+                        case 'zm':    //随机数字
                             require_once student_view_path.CONTROLLER.'/subject-numberBattle.php';
                             break;
                         case 'cy':    //随机词汇
@@ -197,43 +198,45 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
         <?php if(isset($_GET['genre_id'])): ?>
-            var endTimes=0;
-            var countSession=$.GetSession('count')
-            if(countSession){
-                endTimes=countSession;
-            }else{
-                var counts_down=$('.count_down').attr('data-seconds')
-                endTimes=$.GetEndTime(counts_down)
-                $.SetSession('count',endTimes)
-            }
-            var new_count=$.GetSecond(endTimes);
-            $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
-                // var count_down=S
-                // var new_count=$.GetSecond(endTimes);
-                // // console.log(count_down,new_count)
-                // if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-                //     window.location.reload()
-                // }else{
-                    var _this=$(this);
-                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-                    var h=d.hour<10 ? '0'+d.hour : d.hour;
-                    var m=d.minute<10 ? '0'+d.minute : d.minute;
-                    var s=d.second<10 ? '0'+d.second : d.second;
-                    var time=D+h+':'+m+':'+s;
-                    $(this).attr('data-seconds',S).text(time)
+            if($('.count_down').length>0){
+                var endTimes=0;
+                var countSession=$.GetSession('count')
+                if(countSession){
+                    endTimes=countSession;
+                }else{
+                    var counts_down=$('.count_down').attr('data-seconds')
+                    endTimes=$.GetEndTime(counts_down)
+                    $.SetSession('count',endTimes)
+                }
+                var new_count=$.GetSecond(endTimes);
+                $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
+                    // var count_down=S
+                    // var new_count=$.GetSecond(endTimes);
+                    // // console.log(count_down,new_count)
+                    // if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                    //     window.location.reload()
+                    // }else{
+                        var _this=$(this);
+                        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+                        var h=d.hour<10 ? '0'+d.hour : d.hour;
+                        var m=d.minute<10 ? '0'+d.minute : d.minute;
+                        var s=d.second<10 ? '0'+d.second : d.second;
+                        var time=D+h+':'+m+':'+s;
+                        $(this).attr('data-seconds',S).text(time)
 
-                    if(S==0){
-                        var href=_this.parents('.a-btn').attr('href');
-                        $.DelSession('leavePageWaits')
-                        $.DelSession('count');
-                        if(href){
-                            window.location.href=href
-                        }else{
-                            window.location.reload();
+                        if(S==0){
+                            var href=_this.parents('.a-btn').attr('href');
+                            $.DelSession('leavePageWaits')
+                            $.DelSession('count');
+                            if(href){
+                                window.location.href=href
+                            }else{
+                                window.location.reload();
+                            }
                         }
-                    }
-                // }
-            });
+                    // }
+                });
+            }
             $('.ingnore').click(function(){
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');

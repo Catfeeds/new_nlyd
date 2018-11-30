@@ -209,15 +209,16 @@ class Student_Grade extends Student_Home
 
         if($_GET['grad_type'] == 'memory'){
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
+            $type = isset($_GET['type']) ? $_GET['type'] : 'sz';
             $project = $this->get_grading_parameter($memory_lv);
             if(empty($project)){
-                $this->get_404(array('message'=>__('请确认考级等级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('请确认考级等级', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                 return;
             }
             $row['project'] = $project;
-            $memory_type = $project[$_GET['type']];
+            $memory_type = $project[$type];
             if(empty($memory_type)){
-                $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                 return;
             }
             //print_r($memory_type);
@@ -247,7 +248,7 @@ class Student_Grade extends Student_Home
                 $rows = $wpdb->get_results($sql,ARRAY_A);
 
                 if(empty($rows)){
-                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                     return;
                 }
                 $result = array_column($rows,'object_id');
@@ -581,6 +582,7 @@ class Student_Grade extends Student_Home
             }
             $success_len = 0;
             if(!empty($questions_answer)){
+                //print_r($grading_questions);
                 foreach ($questions_answer as $k=>$val){
                     $arr = array();
                     $answerArr = array();
@@ -701,8 +703,7 @@ class Student_Grade extends Student_Home
                         }
 
                     }
-                    $update = array('memory'=>$_GET['memory_lv']);
-                    $insert1 = array('user_id'=>$current_user->ID,'memory'=>$_GET['memory_lv']);
+                    $lv = $_GET['memory_lv'];
                 }
                 elseif($_GET['grad_type']== 'reading'){
 
@@ -775,10 +776,13 @@ class Student_Grade extends Student_Home
             'match_row'=>$row,
             'grading_result'=>$grading_result,
             'grade_lv'=>$lv,
-            'recur_url'=>home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/'),
+            'recur_url'=>home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type']),
             'revert_url'=>home_url('/trains/lists/id/'.$_GET['genre_id'].'/'),
 
         );
+        if($_GET['grad_type'] == 'memory'){
+            $data['recur_url'] .= '/type/sz/memory_lv/'.$_GET['memory_lv'];
+        }
         //print_r($row);
         if($grading_result == 1){
             $grade_result = $lv.'级'.'已达标';

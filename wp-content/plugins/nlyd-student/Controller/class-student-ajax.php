@@ -3964,17 +3964,13 @@ class Student_Ajax
                     case 'wz':
 
                         $questions_answer = $_POST['questions_answer'];
-                        $len = count($questions_answer);
-
-                        $success_len = 0;
+                        $len = 0;
+                        $error_len = 0;
                         foreach ($questions_answer as $k =>$v){
-
-                            $result =array_diff_assoc($v['rights'],$v['yours']);
-                            if(empty($result)){
-                                $success_len += 1;
-                            }
+                            $len += count($v['rights']);
+                            $error_len += count(array_diff_assoc($v['rights'],$v['yours']));
                         }
-                        $correct_rate = $success_len/$len;
+                        $correct_rate = ($len-$error_len)/$len;
                         $_POST['grading_questions'] = array_column($questions_answer,'question');
                         $_POST['questions_answer'] = array_column($questions_answer,'rights');
                         $_POST['my_answer'] = array_column($questions_answer,'yours');
@@ -4118,6 +4114,7 @@ class Student_Ajax
                     case 'sz':
                     case 'cy':
                     case 'yzl':
+                    case 'zm':
                     case 'tl':
                         if(!empty($_POST['my_answer'])){
 
@@ -4144,17 +4141,14 @@ class Student_Ajax
                     case 'wz':
 
                         $questions_answer = $_POST['questions_answer'];
-                        $len = count($questions_answer);
-
-                        $success_len = 0;
+                        $len = 0;
+                        $error_len = 0;
                         foreach ($questions_answer as $k =>$v){
-
-                            $result =array_diff_assoc($v['rights'],$v['yours']);
-                            if(empty($result)){
-                                $success_len += 1;
-                            }
+                            $len += count($v['rights']);
+                            $error_len += count(array_diff_assoc($v['rights'],$v['yours']));
                         }
-                        $correct_rate = $success_len/$len;
+                        $correct_rate = ($len-$error_len)/$len;
+                        //print_r($correct_rate);die;
                         $_POST['grading_questions'] = array_column($questions_answer,'question');
                         $_POST['questions_answer'] = array_column($questions_answer,'rights');
                         $_POST['my_answer'] = array_column($questions_answer,'yours');
@@ -4162,7 +4156,7 @@ class Student_Ajax
                 }
                 break;
             case 'reading':
-
+                //print_r($_POST);die;
                 $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -4259,7 +4253,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'].'/memory_lv/'.$_POST['memory_lv'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));
