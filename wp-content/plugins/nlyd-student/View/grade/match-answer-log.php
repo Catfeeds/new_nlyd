@@ -128,6 +128,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             <div class="one-info flex1">
                                 <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
+                            <?php if(!empty($reading_rate)):?>
+                                <div class="one-info flex1">
+                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>/分钟</span>
+                                </div>
+                            <?php endif;?>
                         </div>
                     </div>
 

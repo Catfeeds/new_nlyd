@@ -902,6 +902,8 @@ class Student_Gradings extends Student_Home
             'grading_questions'=>$grading_questions,
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
+            'reading_rate'=> $row['post_str_length']/($row['use_time']/60),
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
@@ -969,6 +971,10 @@ class Student_Gradings extends Student_Home
             $str = "order by id asc limit 1";
         }else{
             $where = " and questions_type = '{$_GET['questions_type']}' ";
+        }
+        $post_more = isset($_GET['post_more']) ? $_GET['post_more'] : 1;
+        if($_GET['questions_type'] == 'reading'){
+            $where .= " and post_more = {$post_more} ";
         }
         $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,
                     case grading_type
@@ -1102,6 +1108,13 @@ class Student_Gradings extends Student_Home
 
             $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/nxys') : '';
             $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/zxys') : '';
+        }elseif ($row['grading_type'] == 'reading'){
+            //print_r($post_more);die;
+            $next_more = $post_more+1; //$post_more < 4 ? $post_more+1 : '';
+            $prev_more = $post_more-1; //$post_more < 4 ? $post_more-1 : '';
+
+            $next = $post_more < 3 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/reading/post_more/'.$next_more) : '';
+            $prev = $post_more > 1 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/reading/post_more/'.$prev_more) : '';
         }
 
         $data = array(
