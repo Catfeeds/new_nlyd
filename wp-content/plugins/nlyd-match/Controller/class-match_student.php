@@ -148,7 +148,7 @@ class Match_student {
                                     <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
                                     <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
                                     <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $match->ID . '&student_id='.$row['ID'])?>" aria-label="">答题记录</a> | </span>
-                                    <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$row['ID'])?>" aria-label="">编辑</a></span>
+                                    <span class=""><a href="<?=admin_url('users.php?page=users-info&ID='.$row['ID'])?>" aria-label="">编辑</a></span>
                                 </div>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button></td>
                             </td>
@@ -1014,7 +1014,7 @@ class Match_student {
                                         <span aria-hidden="true"><?=$raV['userID']?></span><span class="screen-reader-text">-</span>
 
                                         <div class="row-actions">
-                                            <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$raV['user_id'])?>" aria-label="">编辑用户</a></span>
+                                            <span class=""><a href="<?=admin_url('users.php?page=users-info&ID='.$raV['user_id'])?>" aria-label="">编辑用户</a></span>
                                             <!--                                    <span class="edit"><a href="https://ydbeta.gjnlyd.com/wp-admin/user-edit.php?user_id=311&amp;wp_http_referer=%2Fwp-admin%2Fusers.php">编辑</a> | </span>-->
                                             <!--                                    <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=311&amp;_wpnonce=0046431749">删除</a> | </span>-->
                                             <span class="view"><a href="<?=admin_url('admin.php?page=match_student-score&match_id=' . $post->ID . '&student_id='.$raV['user_id'])?>" aria-label="">答题记录</a></span>
