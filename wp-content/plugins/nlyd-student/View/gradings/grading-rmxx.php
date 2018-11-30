@@ -170,7 +170,7 @@ jQuery(function($) {
                 var pic_pos = Math.round(Math.random() * (pic_len - 1));
                 
                 var name=first_name[first_pos]+second_name[second_pos];//名字生成
-                if(Math.round()>0.5){
+                if(Math.random()>0.5){
                     var new_pos=Math.round(Math.random() * (second_len - 1));
                     name+=second_name[new_pos]
                 }

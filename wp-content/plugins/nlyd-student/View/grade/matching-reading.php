@@ -145,7 +145,6 @@ jQuery(function($) {
                     my_answer[id]=['-1']
                 }
             })
-            
             var data={
                 genre_id:_genre_id,
                 grading_num:_grading_num,
