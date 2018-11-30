@@ -35,18 +35,8 @@ class Grading
         $gradingId < 1 && exit('参数错误');
         global $wpdb;
         //查询考级类别
-        $category_title = $wpdb->get_var("SELECT p.post_title FROM `{$wpdb->prefix}grading_meta` AS gm 
-                          LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=gm.category_id 
-                          WHERE gm.grading_id={$gradingId}");
-        if(preg_match('/记忆/',$category_title) || preg_match('/速记/',$category_title)){
-            $field = 'memory';
-        }elseif (preg_match('/速算/',$category_title) || preg_match('/心算/',$category_title)){
-            $field = 'compute';
-        }elseif (preg_match('/速读/',$category_title)){
-            $field = 'read';
-        }else{
-            exit('未找到类别');
-        }
+
+
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -59,7 +49,7 @@ class Grading
                            LEFT JOIN {$wpdb->usermeta} AS um2 on um2.user_id=o.user_id AND um2.meta_key='user_ID'";
             $searchWhere = "AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
         }
-        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time,gl.grading_result,o.memory_lv,usr.`{$field}` AS `level`,
+        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time,gl.grading_result,o.memory_lv,gl.grading_lv,
         CASE gl.grading_result 
         WHEN 1 THEN '<span style=\"color: #20a831\">通过</span>' 
         WHEN 2 THEN '<span style=\"color: #7f0000\">失败</span>' 
@@ -67,7 +57,6 @@ class Grading
         FROM `{$wpdb->prefix}order` AS o 
         LEFT JOIN `{$wpdb->prefix}grading_logs` AS gl ON gl.user_id=o.user_id AND gl.grading_id=o.match_id 
         LEFT JOIN `{$wpdb->users}` AS u ON u.ID=o.user_id AND u.ID!='' 
-        LEFT JOIN `{$wpdb->prefix}user_skill_rank` AS usr ON usr.user_id=o.user_id 
         {$searchJoin} 
         WHERE o.match_id='{$gradingId}' AND o.order_type=2 AND o.pay_status IN(2,3,4) 
         {$searchWhere} 
@@ -147,7 +136,7 @@ class Grading
                         <td class="email column-email" data-colname="邮箱"><?=$row['user_email']?></td>
                         <td class="is_adopt column-is_adopt" data-colname="是否通过"><?=$row['grading_result_name']?></td>
                         <td class="adopt_level column-adopt_level" data-colname="通过级别">
-                            <?=$row['grading_result'] == '1' ? ($field == 'memory' ? $row['memory_lv']:$row['level']) : '未过级'?>
+                            <?=$row['grading_result'] == '1' ? $row['grading_lv'] : '未过级'?>
                         </td>
                         <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
                     </tr>
