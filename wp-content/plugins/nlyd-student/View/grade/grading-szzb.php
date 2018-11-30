@@ -122,11 +122,12 @@
 jQuery(function($) { 
     $.DelSession('count');
     var _grading_num=<?=$num?>;
+    var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var questions_answer=[];//题目
     var question_type="<?=isset($_GET['type']) && $_GET['type'] == 'sz' ? 1 : 2;?>";//1，数字.2,字母
-    var _grad_id=$.Request('grad_id');
+    var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
     var ready_time="<?=$memory_type['memory_time']?>";//记忆时间
@@ -155,7 +156,7 @@ jQuery(function($) {
         sys_second=answer_time;
         var endTime=$.GetEndTime(answer_time);//结束时间
         var sessionData={
-            grad_id:_grad_id,
+            genre_id:_genre_id,
             grad_type:_grad_type,
             type:_type,
             question_type:question_type,
@@ -208,7 +209,7 @@ jQuery(function($) {
                     sys_second=answer_time
                     var endTime=$.GetEndTime(answer_time);//结束时间
                     var sessionData={
-                        grad_id:_grad_id,
+                        genre_id:_genre_id,
                         grad_type:_grad_type,
                         type:_type,
                         question_type:question_type,
@@ -227,7 +228,7 @@ jQuery(function($) {
     } 
     function init_question(question_leng,_show,question_type) {//初始化题目
         var grade_question=$.GetSession('grade_question','true');
-        if(grade_question && grade_question['grad_id']===_grad_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
+        if(grade_question && grade_question['genre_id']===_genre_id && grade_question['grad_type']===_grad_type && grade_question['type']===_type){
             questions_answer=grade_question['questions_answer'];
             question_type=grade_question['question_type']
             _show=grade_question['_show']
@@ -243,7 +244,7 @@ jQuery(function($) {
                 questions_answer.push(num)
             }
             var sessionData={
-                grad_id:_grad_id,
+                genre_id:_genre_id,
                 grad_type:_grad_type,
                 type:_type,
                 question_type:question_type,
@@ -281,7 +282,8 @@ jQuery(function($) {
         })
         var data={
                 grading_num:_grading_num,
-                grading_id:_grad_id,
+                memory_lv:_memory_lv,
+                genre_id:_genre_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 grading_questions:questions_answer,
@@ -294,7 +296,7 @@ jQuery(function($) {
         console.log(data)
         /*return false*/
         var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['grad_id']===_grad_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
                 if(leavePage.Time){
                     data['leave_page_time']=leavePage.Time;
                 }
@@ -329,7 +331,7 @@ jQuery(function($) {
             complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
                         $.SetSession('match_data',data);
-                        var href="<?=home_url('matchs/answerLog/grad_id/'.$_GET['grad_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
+                        var href="<?=home_url('matchs/answerLog/genre_id/'.$_GET['genre_id'].'/project_alias/'.$_GET['project_alias'].'/project_more_id/'.$_GET['project_more_id'].'/type/')?>"+_type;
                         window.location.href=href;
             　　　　}
                 }

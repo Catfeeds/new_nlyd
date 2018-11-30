@@ -4259,7 +4259,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'].'/memory_lv/'.$_POST['memory_lv'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));

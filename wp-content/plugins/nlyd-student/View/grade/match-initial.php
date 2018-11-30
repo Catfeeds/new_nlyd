@@ -30,6 +30,9 @@ switch ($project_alias){
             case 'rm': //人脉信息
                 require_once student_view_path.CONTROLLER.'/grading-rmxx.php';
                 break;
+            default:
+                require_once student_view_path.CONTROLLER.'/grading-szzb.php';
+                break;
         }
         break;
     case 'reading':    //速读
