@@ -82,6 +82,10 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
     color:#fff;
     background: #4394F9!important;
+    width:100%;
+}
+.layui-layer.nl-box-skin .layui-layer-btn div{
+    width:100%;
 }
 </style>
 <div class="layui-fluid">
@@ -128,6 +132,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             <div class="one-info flex1">
                                 <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
+                            <?php if(!empty($reading_rate)):?>
+                                <div class="one-info flex1">
+                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>/分钟</span>
+                                </div>
+                            <?php endif;?>
                         </div>
                     </div>
 
@@ -194,10 +203,13 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
     jQuery(function($) {
         //var _grading_num=<?=$num?>;//grading_num:_grading_num,
         $.DelSession('match');//考级记录参数
-        $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
         <?php if(isset($_GET['genre_id'])): ?>
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
             if($('.count_down').length>0){
                 var endTimes=0;
                 var countSession=$.GetSession('count')
@@ -226,7 +238,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 
                         if(S==0){
                             var href=_this.parents('.a-btn').attr('href');
-                            $.DelSession('leavePageWaits')
                             $.DelSession('count');
                             if(href){
                                 window.location.href=href
@@ -238,7 +249,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 });
             }
             $('.ingnore').click(function(){
-                $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
             <?php if(empty($next_project)): ?>

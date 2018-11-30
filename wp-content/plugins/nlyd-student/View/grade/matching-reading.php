@@ -67,6 +67,10 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
     var _genre_id=$.Request('genre_id');
     var _grading_num=$.Request('num');
@@ -75,9 +79,6 @@ jQuery(function($) {
     var _length=$.Request('length');
     var sys_second=300;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     submit();
-    // })
     layui.use(['form'], function(){
 
     })
@@ -120,7 +121,7 @@ jQuery(function($) {
             $.SetSession('grade_question',sessionData)
         }
     }
-    function submit(){//提交答案
+    function submit(submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -161,13 +162,6 @@ jQuery(function($) {
                 usetime:$.Request('usetime'),
                 my_answer:my_answer,
             }
-            
-            // var leavePage= $.GetSession('leavePage','1');
-            // if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-            //     if(leavePage.Time){
-            //         data['leave_page_time']=leavePage.Time;
-            //     }
-            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -178,8 +172,7 @@ jQuery(function($) {
                         'visibility': 'visible',
                     })
                 },
-                success:function(res,ajaxStatu,xhr){  
-                    // $.DelSession('leavePage')
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

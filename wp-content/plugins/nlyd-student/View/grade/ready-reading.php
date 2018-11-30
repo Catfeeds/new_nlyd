@@ -37,6 +37,10 @@
 <script>
 jQuery(function($) {
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var _genre_id=$.Request('genre_id');
     var _grading_num=<?=$num?>;
     var _grad_type=$.Request('grad_type');
@@ -46,9 +50,6 @@ jQuery(function($) {
     var init_time=900;
     var sys_second=900;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     submit();
-    // })
     new AlloyFinger($('#complete')[0], {//阅读完成
         tap:function(){
             if(!$('#complete').hasClass('disabled')){
@@ -123,12 +124,6 @@ jQuery(function($) {
             usetime:time,
             my_answer:my_answer,
         }
-        // var leavePage= $.GetSession('leavePage','1');
-        // if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-        //     if(leavePage.Time){
-        //         data['leave_page_time']=leavePage.Time;
-        //     }
-        // }
         $.ajax({
             data:data,
             beforeSend:function(XMLHttpRequest){
@@ -138,8 +133,7 @@ jQuery(function($) {
                     'visibility': 'visible',
                 })
             },
-            success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
+            success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     if(res.data.url){
                         window.location.href=res.data.url

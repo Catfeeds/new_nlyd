@@ -64,18 +64,11 @@
 <script>
 jQuery(function($) {
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     $('#next').addClass('disabled')
-    //     var answer_Text=$('.answer div').text();
-    //     var answer_dateNumber=$('.answer').attr('date-number');
-    //     if(answer_dateNumber=="本题无解"){
-    //         isRights(answer_dateNumber)
-    //     }else{
-    //         isRights(answer_Text)
-    //     }
-    //     submit();
-    // })
     var _grading_num=<?=$num?>;
     var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
@@ -201,12 +194,6 @@ jQuery(function($) {
                 action:'grade_answer_submit',
                 my_answer:ajaxData,
             }
-            // var leavePage= $.GetSession('leavePage','1');
-            // if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-            //     if(leavePage.Time){
-            //         data['leave_page_time']=leavePage.Time;
-            //     }
-            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -217,9 +204,7 @@ jQuery(function($) {
                         'visibility': 'visible',
                     })
                 },
-                success:function(res,ajaxStatu,xhr){    
-                    // $.DelSession('match')
-                    // $.DelSession('leavePage')
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

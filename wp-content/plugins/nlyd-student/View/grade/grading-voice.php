@@ -1,4 +1,3 @@
-
 <div class="layui-fluid noCopy">
     <div class="layui-row">
         <div class="layui-col-lg12 layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
@@ -72,6 +71,10 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var _grading_num=<?=$num?>;
     var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
@@ -90,22 +93,18 @@ jQuery(function($) {
     var _index=0;
     var spriteData={
         0:{start:0,length:1},
-        1:{start:1,length:1},
-        2:{start:2,length:1},
-        3:{start:3,length:1},
-        4:{start:4,length:1},
-        5:{start:5,length:1},
-        6:{start:6,length:1},
-        7:{start:7,length:1},
-        8:{start:8,length:1},
-        9:{start:9,length:1},
+        1:{start:1.4,length:1},
+        2:{start:2.8,length:1},
+        3:{start:4.2,length:1},
+        4:{start:5.6,length:1},
+        5:{start:7,length:1},
+        6:{start:8.4,length:1},
+        7:{start:9.8,length:1},
+        8:{start:11.2,length:1},
+        9:{start:12.6,length:1},
     }
     init_question(que_len,_show)
     console.log(questions_answer)
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     submit();
-    // })
-
     $('#complete').click(function(){//记忆完成
         var _this=$(this);
         var href=_this.attr('href');
@@ -146,7 +145,6 @@ jQuery(function($) {
                 clearInterval(timer)
                 submit()
             }
-
         }, 1000);
     } 
     function init_question(question_leng,_show) {//初始化题目
@@ -228,7 +226,6 @@ jQuery(function($) {
             audio.addEventListener('timeupdate', function(){
                 if(_index<=que_len-1){
                     if(!spriteData[questions_answer[_index]]){
-
                     }else{
                         var start=spriteData[questions_answer[_index]]['start'];
                         var len=spriteData[questions_answer[_index]]['length'];
@@ -259,13 +256,11 @@ jQuery(function($) {
                             
                         }
                     }
-
                 }
             }, false);
             voice_title.addEventListener("click",function(e){
                 audio.play();
             }, false);
-
             // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
             // audio.loop = false;
             // audio.addEventListener('ended', function () {
@@ -291,7 +286,6 @@ jQuery(function($) {
             //         count_down()
             //     }  
             // }, false);
-
             // var str_que=questions_answer.join(',')
             // if(!('speechSynthesis' in window)) {
             //     throw alert("对不起，您的浏览器不支持")
@@ -307,7 +301,6 @@ jQuery(function($) {
             //     to_speak.voice = voices[0];
             //     window.speechSynthesis.speak(to_speak);
             // }
-
             // to_speak.onend = function() { 
             //     window.speechSynthesis.cancel();
             //     $('.complete_zoo').hide();
@@ -351,13 +344,6 @@ jQuery(function($) {
             action:'grade_answer_submit',
             my_answer:my_answer,
         }
-
-        // var leavePage= $.GetSession('leavePage','1');
-        //     if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-        //         if(leavePage.Time){
-        //             data['leave_page_time']=leavePage.Time;
-        //         }
-        //     }
         $.ajax({
             data:data,
             beforeSend:function(XMLHttpRequest){
@@ -367,8 +353,7 @@ jQuery(function($) {
                     'visibility': 'visible',
                 })
             },
-            success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
+            success:function(res,ajaxStatu,xhr){ 
                 if(res.success){
                     //return false;
                     if(res.data.url){
@@ -495,7 +480,6 @@ $('._del').each(function(){//数字键盘
                 })
             }else{
                 active.text('');
-
             }
         }
     })
@@ -568,7 +552,6 @@ $('._del').each(function(){//数字键盘
                         var dom='<div class="matching-number-match active"></div>'
                         $(this).removeClass('active').after(dom);
                         $('.match_zoo .matching-number-match').last().remove()
-
                         var newDom=$('.matching-number-match.active')
                         new AlloyFinger(newDom[0], {
                             touchStart: function () {
