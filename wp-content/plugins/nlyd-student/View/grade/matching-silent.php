@@ -41,6 +41,7 @@ jQuery(function($) {
     var grade_level="<?=$memory_type['lv']?>";//考级等级
     var how_ques=grade_level>3 ? 6 : 3;//多少道题目
     init_question()
+    console.log(questions_answer)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
@@ -190,7 +191,6 @@ jQuery(function($) {
             })
         }
 
-        console.log(questions_answer)
     }
     function _slice_ques(pos_arr,_question){//截取题目
         var _question_len=_question.length;

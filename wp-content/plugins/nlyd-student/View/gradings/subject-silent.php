@@ -1,7 +1,7 @@
 
 <div class="two layui-row">
-    <div class="c_blue left disabled pull-left"><div><?=__('上一题', 'nlyd-student')?></div></div>
-    <div class="c_blue right pull-right"><div><?=__('下一题', 'nlyd-student')?></div></div>
+    <div class="c_blue lefts disabled pull-left"><div><?=__('上一题', 'nlyd-student')?></div></div>
+    <div class="c_blue rights pull-right"><div><?=__('下一题', 'nlyd-student')?></div></div>
 </div>
 <?php foreach ($questions_answer as $key =>$val){
 
@@ -28,26 +28,26 @@
     var how_ques=$('.answer-zoo').length;//多少道题目
     var n=0;
     if(how_ques<=1){
-        $('.right').addClass('disabled')
+        $('.rights').addClass('disabled')
     }
-    new AlloyFinger($('.left')[0], {
+    new AlloyFinger($('.lefts')[0], {
         touchStart: function () {
-            var left=$('.left');
+            var left=$('.lefts');
             if(!left.hasClass('disabled')){
                 left.addClass("opacity");
             }
         },
         touchMove: function () {
-            $('.left').removeClass("opacity");
+            $('.lefts').removeClass("opacity");
         },
         touchEnd: function () {
-            $('.left').removeClass("opacity");
+            $('.lefts').removeClass("opacity");
         },
         touchCancel: function () {
-            $('.left').removeClass("opacity");
+            $('.lefts').removeClass("opacity");
         },
         tap:function(){
-            var left=$('.left');
+            var left=$('.lefts');
             var len=$('.answer-zoo').length-1;
             if(!left.hasClass('disabled')){
                 if(n>0){
@@ -56,7 +56,7 @@
                     if(n==0){
                         left.addClass('disabled')
                     }
-                    $('.right').removeClass('disabled')
+                    $('.rights').removeClass('disabled')
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){
@@ -72,24 +72,24 @@
         }
     });
     // mTouch('body').on('tap','.right',function(e){//下一题
-    new AlloyFinger($('.right')[0], {
+    new AlloyFinger($('.rights')[0], {
         touchStart: function () {
-            var right=$('.right');
+            var right=$('.rights');
             if(!right.hasClass('disabled')){
-                $('.right').addClass("opacity");
+                $('.rights').addClass("opacity");
             }
         },
         touchMove: function () {
-            $('.right').removeClass("opacity");
+            $('.rights').removeClass("opacity");
         },
         touchEnd: function () {
-            $('.right').removeClass("opacity");
+            $('.rights').removeClass("opacity");
         },
         touchCancel: function () {
-            $('.right').removeClass("opacity");
+            $('.rights').removeClass("opacity");
         },
         tap:function(){
-            var right=$('.right');
+            var right=$('.rights');
             var len=$('.answer-zoo').length-1;
             if(!right.hasClass('disabled')){
                 if(n<len){
@@ -98,7 +98,7 @@
                     if(n==len){
                         right.addClass('disabled')  
                     }
-                    $('.left').removeClass('disabled')  
+                    $('.lefts').removeClass('disabled')  
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){

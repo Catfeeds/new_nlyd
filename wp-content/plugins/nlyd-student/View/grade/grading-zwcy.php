@@ -56,6 +56,7 @@ jQuery(function($) {
     var remember_time=ready_time;
     var file_url="<?=leo_match_url.'/upload/vocabulary/vocabulary.json'?>";
     init_question(que_len,_show)
+    console.log(questions_answer)
     leaveMatchPage(function(){//窗口失焦提交
         submit(4);
     })
