@@ -27,6 +27,8 @@
 
 <script>
 jQuery(function($) { 
+    $.DelSession('count');
+    var _grading_num=<?=$num?>;
     var isSubmit=false;//是否正在提交
     var _grad_id=$.Request('grad_id');
     var _grad_type=$.Request('grad_type');
@@ -239,6 +241,7 @@ jQuery(function($) {
             // console.log(ajax_question);
             //  return false;
             var data={
+                grading_num:_grading_num,
                 grading_id:_grad_id,
                 grading_type:_grad_type,
                 questions_type:_type,

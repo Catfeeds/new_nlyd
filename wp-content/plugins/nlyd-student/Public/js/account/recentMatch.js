@@ -13,6 +13,7 @@ jQuery(function($) {
     layui.use(['element','flow'], function(){
         var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
         var flow = layui.flow;//流加载
+        var _type = $.Request('type');
         flow.load({
             elem: '#flow-list' //流加载容器
             ,isAuto: true
@@ -21,14 +22,15 @@ jQuery(function($) {
                 var postData={
                     action:'get_my_match_list',
                     page:page,
+                    type:_type
                 };
                 var lis = [];
                 $.ajax({
                     data:postData,
                     success:function(res,ajaxStatu,xhr){ 
                         console.log(res)
-                            var _must=$.Request('type')=='2' ? _recentMatch.must_kaoji : _recentMatch.must;
-                            var _address=$.Request('type')=='2' ? _recentMatch.address_kaoji : _recentMatch.address;
+                            var _must=$.Request('type')==2 ? _recentMatch.must_kaoji : _recentMatch.must;
+                            var _address=$.Request('type')==2 ? _recentMatch.address_kaoji : _recentMatch.address;
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
                                     var isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>';//标签

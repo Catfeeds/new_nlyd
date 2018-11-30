@@ -2090,7 +2090,10 @@ class wpdb {
 		$sql = "$type INTO `$table` ($fields) VALUES ($formats)";
 
 		$this->check_current_query = false;
-		//print_r($this->prepare( $sql, $values ));die;
+
+		/*if($table == 'wp_user_grade_log_history'){
+            print_r($this->prepare( $sql, $values ));die;
+        }*/
 		return $this->query( $this->prepare( $sql, $values ) );
 	}
 

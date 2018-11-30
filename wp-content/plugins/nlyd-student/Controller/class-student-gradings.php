@@ -753,7 +753,9 @@ class Student_Gradings extends Student_Home
             $rows = $wpdb->get_results($sql_,ARRAY_A);
             //print_r($rows);
             if(!empty($rows)){
-
+                //获取用户技能
+                $rank_row = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}",ARRAY_A);
+                $update = array();
                 if($order->memory_lv > 0){
 
                     $correct_rate = array();
@@ -768,7 +770,7 @@ class Student_Gradings extends Student_Home
                     if($result >= count($correct_rate) ){
                         $grading_result = 1;
                     }
-                    //print_r($correct_rate);
+                    //print_r($grading_result);
                     if($order->memory_lv > 2){
 
                         $gx_questions_answer = json_decode($gxArr['questions_answer'],true);
@@ -783,13 +785,18 @@ class Student_Gradings extends Student_Home
                                 $error_len += count($error_arr);
 
                             }
+                            //print_r($error_len);
                             if($error_len > 10){
                                 $grading_result = 2;
                             }
                         }
 
                     }
-                    $update = array('memory'=>$order->memory_lv);
+                    //print_r($grading_result);
+                    $lv = $order->memory_lv;
+                    if($lv > $rank_row['memory']){
+                        $update = array('memory'=>$order->memory_lv);
+                    }
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
                 }
                 elseif($_GET['grad_type']== 'reading'){
@@ -809,7 +816,9 @@ class Student_Gradings extends Student_Home
                         $lv = floor($rate/1000);
                         if($lv > 0){
                             $grading_result = 1;
-                            $update = array('read'=>$lv);
+                            if($lv > $rank_row['read']){
+                                $update = array('read'=>$lv);
+                            }
                             $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
                         }
 
@@ -822,7 +831,9 @@ class Student_Gradings extends Student_Home
                     $lv = floor($my_score/200);
                     if($lv > 0){
                         $grading_result = 1;
-                        $update = array('compute'=>$lv);
+                        if($lv > $rank_row['compute']){
+                            $update = array('compute'=>$lv);
+                        }
                         $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv);
                     }
                 }
@@ -830,6 +841,7 @@ class Student_Gradings extends Student_Home
                     'user_id'=>$current_user->ID,
                     'grading_id'=>$_GET['grad_id'],
                     'grading_result'=>$grading_result,
+                    'grading_lv'=> $lv > 0 ? $lv : '',
                     'created_time'=>get_time('mysql'),
                 );
 
@@ -840,13 +852,18 @@ class Student_Gradings extends Student_Home
                 $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
 
                 if($a && $grading_result == 1){
-                    $rank_id = $wpdb->get_var("select id from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}");
-                    if(!empty($rank_id)){
-
-                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_id));
-                    }else{
+                    if(empty($rank_row)){
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                    }else{
+
+                        if(!empty($update)){
+                            $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id']));
+                           #r$d+
+                        }else{
+                            $b = 1;
+                        }
                     }
+                    //print_r($b);
                     //wp_user_skill_rank
                 }else{
                     $b = 1;
@@ -900,7 +917,7 @@ class Student_Gradings extends Student_Home
     public function record(){//考级成绩
 
         global $wpdb,$current_user;
-        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id
+        $sql = "select a.id,a.user_id,b.post_title,a.memory_lv,c.grading_result,if(c.grading_result = 1,'已达标','未达标') result_cn,c.id grading_log_id,c.grading_lv
                 from {$wpdb->prefix}order a 
                 LEFT JOIN {$wpdb->prefix}posts b on a.match_id = b.ID
                 LEFT JOIN {$wpdb->prefix}grading_logs c on a.match_id = c.grading_id and a.user_id = c.user_id
@@ -923,25 +940,7 @@ class Student_Gradings extends Student_Home
                 $user_real_name = unserialize($user_info['user_real_name']);
                 $rows[$k]['real_name'] = $user_real_name['real_name'];
                 $rows[$k]['user_ID'] = $user_info['user_ID'];
-                if($val['grading_result'] == 1){
-                    $result = $wpdb->get_row("select user_id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank  where user_id = {$val['user_id']}",ARRAY_A);
-                    //print_r($result);
-                    switch ($_GET['grad_type']){
-                        case 'memory':
-                            $grading_lv = $result['memory'];
-                            break;
-                        case 'reading':
-                            $grading_lv = $result['read'];
-                            break;
-                        case 'arithmetic':
-                            $grading_lv = $result['compute'];
-                            break;
-                    }
-                }
-                else{
-                    $grading_lv = $_GET['grad_type'] == 'memory' ? $val['memory_lv'] : '';
-                }
-                $rows[$k]['result_cn'] = !empty($grading_lv) ? $grading_lv.'级'.$val['result_cn'] : $val['result_cn'];
+                $rows[$k]['result_cn'] = !empty($val['grading_lv']) ? $val['grading_lv'].'级'.$val['result_cn'] : $val['result_cn'];
 
                 if($val['user_id'] == $current_user->ID){
                     //print_r($val);
@@ -1113,6 +1112,7 @@ class Student_Gradings extends Student_Home
             'questions_answer'=>$questions_answer,
             'grading_questions'=>$grading_questions,
             'my_answer'=>$my_answer,
+            'answer_array'=>$answer_array,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'match_row'=>$row,
             'next'=>$next,

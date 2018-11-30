@@ -136,11 +136,13 @@ class Match
     /**
      * 特色高亮设置
      */
-    public function highlighter_meta_box(){ ?>
+    public function highlighter_meta_box($post){
+        $color = get_post_meta($post->ID,'genre_highlight')[0];
+    ?>
         <div id="picker"></div>
         <script>
            $('#picker').colpick({
-            color:'6bc732',
+            color:'<?=$color?>',
             flat:true,
             layout:'hex',
             submit:0,

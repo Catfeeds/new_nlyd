@@ -569,8 +569,36 @@ class Student_Trains extends Student_Home
      * 训练历史记录list
      */
     public function history_list(){
+        global $wpdb,$current_user;
+        //获取所有比赛类型
+        $sql = "select a.ID id ,a.post_title,b.meta_value alias 
+                from {$wpdb->prefix}posts a 
+                left join {$wpdb->prefix}postmeta b on a.ID = b.post_id and b.meta_key = 'project_alias'
+                where post_type = 'genre' and post_status = 'publish' order by menu_order asc 
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        //print_r($sql);
+        if(!empty($rows)){
+            foreach ($rows as $key => $val){
+                //获取高亮
+                $rows[$key]['highlight'] = get_post_meta($val['id'],'genre_highlight')[0];
+                //获取上次训练时间
+                $prefix = $wpdb->prefix;
+                switch ($val['alias']){
+                    case 'grading'; //考级训练
+                        $table = $prefix.'user_grade_logs';
+                        break;
+                    case 'mental_world_cup';    //脑力世界杯训练
+                        $table = $prefix.'user_train_logs';
+                        break;
+                }
+                $rows[$key]['last_time'] = $wpdb->get_var("select max(created_time) from {$table} ");
+            }
+        }
+        //print_r($rows);
+        $data['list'] = $rows;
         $view = student_view_path.CONTROLLER.'/history-list.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
   /**
      * 考级训练记录list

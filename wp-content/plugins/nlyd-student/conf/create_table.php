@@ -31,6 +31,33 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "user_grade_logs";  //考級训练记录表   储存考级训练记录
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) NOT NULL,
+          `genre_id` int(20) NOT NULL COMMENT '考级id',
+          `grading_num` int(20) NOT NULL COMMENT '训练的次数',
+          `grading_type` varchar(50) NOT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
+          `questions_type` varchar(50) NOT NULL COMMENT '考题类型',
+          `grading_questions` longtext COMMENT '考试题',
+          `questions_answer` longtext COMMENT '考题答案',
+          `my_answer` longtext COMMENT '我的答案',
+          `correct_rate` float(5,3) DEFAULT NULL COMMENT '准确率',
+          `my_score` mediumint(10) DEFAULT NULL,
+          `use_time` smallint(20) DEFAULT NULL COMMENT '记忆耗时',
+          `created_time` datetime DEFAULT NULL,
+          `post_id` int(20) DEFAULT NULL COMMENT '文章id',
+          `post_str_length` int(20) DEFAULT NULL COMMENT '阅读文章长度',
+          PRIMARY KEY (`id`,`user_id`,`genre_id`,`questions_type`,`grading_type`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "grading_logs";  //考級记录表   储存考级是否通过
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
@@ -40,6 +67,7 @@ function the_table_install () {
           `user_id` int(20) DEFAULT NULL COMMENT '用户id',
           `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
           `grading_result` tinyint(2) DEFAULT NULL COMMENT '考级结果 1 过级 2 失败',
+          `grading_lv` tinyint(3) DEFAULT NULL COMMENT '本次考级等级',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";

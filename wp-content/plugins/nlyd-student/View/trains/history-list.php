@@ -1,5 +1,3 @@
-
-
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -15,29 +13,36 @@
                 <div><?=__('训练类型', 'nlyd-student')?></div>
                 </h1>
             </header>
-        
-                <div class="layui-row nl-border nl-content have-footer">
+            <?php if ( empty($list)){ ?>
+                <div class="layui-row nl-border nl-content">
                     <div class="width-padding width-padding-pc">
-                        <a class="train_row his_list <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?=home_url('/trains/history/');?>">
-                            <div class="train-img" style="background:red"></div>
-                            <div class="train_name">
-                                <span class="bold fs_16"><?=__("脑力世界杯专项训练", 'nlyd-student')?></span>
-                                <br>
-                                <span class="fs_12 c_black6">2018/11/8 13:18</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fs_12 c_black6">训练记录16条</span>
+                        <div class="no-info-page">
+                            <div class="no-info-img">
+                                <img src="<?=student_css_url.'image/noInfo/noTrain1045@3x.png'?>">
                             </div>
-                            <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
-                        </a>
-                        <a class="train_row his_list <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?=home_url('/trains/history_grade/');?>">
-                            <div class="train-img" style="background:yellow"></div>
-                            <div class="train_name">
-                                <span class="bold fs_16"><?=__("考级专项训练", 'nlyd-student')?></span>
-                                <br>
-                                <span class="fs_12 c_black6">2018/11/8 13:18</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fs_12 c_black6">训练记录16条</span>
-                            </div>
-                            <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
-                        </a>
+                            <p class="no-info-text"><?=__('暂无考级自测训练', 'nlyd-student')?></p>
+                        </div>
                     </div>
                 </div>
+            <?php }else{ ?>
+                <div class="layui-row nl-border nl-content have-footer">
+                    <div class="width-padding width-padding-pc">
+                        <?php foreach ($list as $v){ ?>
+                            <a class="train_row his_list c_black " href="<?=home_url('trains/lists/id/'.$v['id'])?>">
+                                <div class="train-img" style="background:#<?=$v['highlight']?>"></div>
+                                <div class="train_name">
+
+                                    <span class="bold fs_16"><?=__($v['post_title'], 'nlyd-student')?></span>
+                                    <br>
+                                    <span class="fs_12 c_black6">上次训练时间</span>：
+                                    <span class="fs_12 c_black6"><?= !empty($v['last_time']) ? $v['last_time'] : '-'?></span>
+                                </div>
+                                <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
+                            </a>
+                        <?php }?>
+                    </div>
+                </div>
+            <?php }?>
         </div>
     </div>
 </div>

@@ -60,6 +60,8 @@
 </div>
 <script>
 jQuery(function($) { 
+    $.DelSession('count');
+    var _grading_num=<?=$num?>;
     var isSubmit=false;//是否正在提交
     var _show=1;//1,准备区展示，2答题区展示
     var _grad_id=$.Request('grad_id');
@@ -130,6 +132,7 @@ jQuery(function($) {
             my_answer.push(answer)
         })
         var data={
+            grading_num:_grading_num,
             grading_id:_grad_id,
             grading_type:_grad_type,
             questions_type:_type,

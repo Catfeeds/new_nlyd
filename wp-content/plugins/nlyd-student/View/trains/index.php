@@ -1,5 +1,3 @@
-
-
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -31,7 +29,7 @@
                     <div class="width-padding width-padding-pc">
                         <?php foreach ($list as $v){ ?>
                             <a class="train_row <?=$v->post_status == 'draft' ? 'disable' : 'c_black';?>" <?php if($v->post_status == 'draft') echo 'onclick="return false;"'?> href="<?= $v->post_status == 'draft' ? '' : home_url('trains/lists/id/'.$v->ID)?>">
-                                <div class="train-img" style="background:red">
+                                <div class="train-img" style="background:#<?=get_post_meta($v->ID,'genre_highlight')[0]?>">
                                     <!-- <?php
                                         $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
                                     ?>

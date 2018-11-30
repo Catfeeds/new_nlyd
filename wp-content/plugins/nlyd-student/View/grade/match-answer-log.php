@@ -78,6 +78,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 <?php if(!isset($_GET['type'])): ?>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <?php endif;?>
+<style>
+.layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
+    color:#fff;
+    background: #4394F9!important;
+}
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -127,33 +133,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 
                     <?php
 
-                        if($match_row['submit_type'] == 2){
-                            $error=__('由于考级过程中错误达上限，该轮答案由系统强制提交', 'nlyd-student');
-                        }elseif($match_row['submit_type'] == 3){
-                            $error=__('由于考级倒计时结束，该轮考级答题由系统自动提交', 'nlyd-student');
-                        }elseif ($match_row['submit_type'] == 4){
-                            $error=__('由于考级过程中有切出系统行为，该轮答案由系统强制提交', 'nlyd-student');
-                            if(!empty($match_row['leave_page_time'])){
-                                $arr = json_decode($match_row['leave_page_time'],true);
-                                $end_time = end($arr)['out'];
-                                //print_r($end_time);
-                            }
-                        }elseif ($match_row['submit_type'] == 5){
-                            $error=__('连续作答“本题无解”超过5次，该轮答案由系统强制提交');
-                        }
-                    ?>
-                    <div style="color:#CF1818;"><?=$error?></div>
-                    <?php if(!empty($end_time)): ?>
-                        <div><?=__('切出页面时间', 'nlyd-student')?>:<span class="c_blue"><?=$end_time?></span></div>
-                    <?php endif;?>
-                    <?php
-                    if($match_row['is_true'] == 2){
-                        echo '<div style="color:#CF1818;">由于你本轮未进入赛场,本轮分数不参与排名</div>';
-                    }
-                    ?>
-
-                    <?php
-
                     switch ($match_row['questions_type']){
                         case 'sz':    //随机数字
                         case 'yzl':    //圆周率
@@ -193,9 +172,11 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 <?php
                     if(ACTION == 'answerLog') {
                         if (empty($next_project)) { ?>
-                            <a class="a-btn a-btn-table" href="<?= $next_project_url ?>">
-                                <div><?= __('所有答题结束,查看详情', 'nlyd-student') ?></div>
-                            </a>
+
+                            <div class="a-btn two get_footer">
+                                <a class="a-two left c_white" id="again" href="<?=$recur_url?>"><div><?=__('再来一局', 'nlyd-student')?></div></a>
+                                <a class="a-two right c_white" href="<?=$revert_url?>"><div><?=__('返回列表', 'nlyd-student')?></div></a>
+                            </div>
                         <?php } else { ?>
                             <a class="a-btn a-btn-table ingnore" href="<?= $next_project_url ?>">
                                 <div><?= __('跳过等待', 'nlyd-student') ?></div>
@@ -210,12 +191,12 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 </div>
 <script>
     jQuery(function($) {
+        //var _grading_num=<?=$num?>;//grading_num:_grading_num,
         $.DelSession('match');//考级记录参数
         $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
-        <?php if(isset($_GET['grad_id'])): ?>
-            leavePageLoad('<?=$wait_url?>');
+        <?php if(isset($_GET['genre_id'])): ?>
             var endTimes=0;
             var countSession=$.GetSession('count')
             if(countSession){
@@ -257,6 +238,31 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
+            <?php if(empty($next_project)): ?>
+            layui.use('layer', function(){
+                layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: '<?=__('考级认证结果', 'nlyd-student')?>' //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certifications' //防止重复弹出
+                    ,content: '<div class="box-conent-wrapper"><span class="<?=$grading_result == 1 ? 'c_green' : '';?>"><?=__($grade_result, 'nlyd-student')?></span></div>'
+                    ,btn: ['确认']
+                    ,success: function(layero, index){
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
+            })
+            <?php endif;?>
         <?php endif;?>
     })
 </script>
