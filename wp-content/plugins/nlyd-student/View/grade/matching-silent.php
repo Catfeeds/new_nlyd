@@ -42,9 +42,9 @@ jQuery(function($) {
     var how_ques=grade_level>3 ? 6 : 3;//多少道题目
     init_question()
     console.log(questions_answer)
-    leaveMatchPage(function(){//窗口失焦提交
-        submit(4);
-    })
+    // leaveMatchPage(function(){//窗口失焦提交
+    //     submit();
+    // })
     count_down()
     $('body').on('focusout','.answer_q',function(e){
         var _this=$(this);
@@ -77,7 +77,7 @@ jQuery(function($) {
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
                 clearInterval(timer)
-                submit(3)
+                submit()
             }
 
         }, 1000);
@@ -210,7 +210,7 @@ jQuery(function($) {
         } 
     }
 
-    function submit(submit_type){//提交答案
+    function submit(){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -249,14 +249,13 @@ jQuery(function($) {
                 questions_type:_type,
                 action:'grade_answer_submit',
                 questions_answer:ajax_question,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+            // var leavePage= $.GetSession('leavePage','1');
+            // if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            //     if(leavePage.Time){
+            //         data['leave_page_time']=leavePage.Time;
+            //     }
+            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -316,7 +315,7 @@ layui.use('layer', function(){
                     }
                     ,btn2: function(index, layero){
                         layer.closeAll();
-                        submit(1);  
+                        submit();  
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中

@@ -61,18 +61,17 @@
 jQuery(function($) {
     $.DelSession('count');
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        $('#next').addClass('disabled')
-        var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
-        ajaxData[ajaxData.length-1]['yours']=yours;
-        if(yours==ajaxData[ajaxData.length-1]['rights']){
-            ajaxData[ajaxData.length-1]['isRight']=true;
-        }else{
-            ajaxData[ajaxData.length-1]['isRight']=false;
-        }
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        submit(time,4);
-    })
+    // leaveMatchPage(function(){//窗口失焦提交
+    //     $('#next').addClass('disabled')
+    //     var yours=$('#answer div').text().length==0 ? '' : $('#answer div').text();
+    //     ajaxData[ajaxData.length-1]['yours']=yours;
+    //     if(yours==ajaxData[ajaxData.length-1]['rights']){
+    //         ajaxData[ajaxData.length-1]['isRight']=true;
+    //     }else{
+    //         ajaxData[ajaxData.length-1]['isRight']=false;
+    //     }
+    //     submit();
+    // })
     var _grading_num=<?=$num?>;
     var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
@@ -512,7 +511,7 @@ jQuery(function($) {
         }
         
     });
-    function submit(time,submit_type){//提交答案
+    function submit(){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -529,14 +528,13 @@ jQuery(function($) {
                 questions_answer:'zx',
                 action:'grade_answer_submit',
                 my_answer:ajaxData,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+            // var leavePage= $.GetSession('leavePage','1');
+            // if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            //     if(leavePage.Time){
+            //         data['leave_page_time']=leavePage.Time;
+            //     }
+            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -588,7 +586,7 @@ jQuery(function($) {
             }else{
                 ajaxData[ajaxData.length-1]['isRight']=false;
             }
-            submit(0,3)
+            submit()
         // }, 1000);
     }
 
@@ -614,7 +612,7 @@ jQuery(function($) {
                 }else{
                     ajaxData[ajaxData.length-1]['isRight']=false;
                 }
-                submit(0,3)
+                submit()
             // }, 1000);
         }
     });  
@@ -622,7 +620,6 @@ layui.use('layer', function(){
     // mTouch('body').on('tap','#sumbit',function(e){
     new AlloyFinger($('#sumbit')[0], {
         tap:function(){
-            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                 type: 1
                 ,maxWidth:300
@@ -645,7 +642,7 @@ layui.use('layer', function(){
                         ajaxData[ajaxData.length-1]['isRight']=false;
                     }
                     layer.closeAll();
-                    submit(time,1);
+                    submit();
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中

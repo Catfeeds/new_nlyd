@@ -75,9 +75,9 @@ jQuery(function($) {
     var _length=$.Request('length');
     var sys_second=300;//记忆时间
     var endTime=$.GetEndTime(sys_second);//结束时间
-    leaveMatchPage(function(){//窗口失焦提交
-        submit(4);
-    })
+    // leaveMatchPage(function(){//窗口失焦提交
+    //     submit();
+    // })
     layui.use(['form'], function(){
 
     })
@@ -100,7 +100,7 @@ jQuery(function($) {
                 $('.count_down').text(text).attr('data-seconds',sys_second)
             } else {//倒计时结束
                 clearInterval(timer)
-                submit(3)
+                submit()
             }
 
         }, 1000);
@@ -120,7 +120,7 @@ jQuery(function($) {
             $.SetSession('grade_question',sessionData)
         }
     }
-    function submit(submit_type){//提交答案
+    function submit(){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -147,11 +147,6 @@ jQuery(function($) {
                     my_answer[id]=['-1']
                 }
             })
-<<<<<<< HEAD
-=======
-            /*console.log(my_answer)
-            return false*/
->>>>>>> ece2415d153c23bf96feab79857c4b5a13cf5252
             var data={
                 genre_id:_genre_id,
                 grading_num:_grading_num,
@@ -165,15 +160,14 @@ jQuery(function($) {
                 length:_length,
                 usetime:$.Request('usetime'),
                 my_answer:my_answer,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
             }
             
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
+            // var leavePage= $.GetSession('leavePage','1');
+            // if(leavePage && leavePage['grad_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
+            //     if(leavePage.Time){
+            //         data['leave_page_time']=leavePage.Time;
+            //     }
+            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -237,7 +231,7 @@ layui.use(['layer'], function(){
                 ,btn2: function(index, layero){
                     //按钮【按钮二】的回调
                     layer.closeAll();
-                    submit(1)
+                    submit()
                 }
                 ,closeBtn:2
                 ,btnAagn: 'c' //按钮居中
