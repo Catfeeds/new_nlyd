@@ -147,11 +147,7 @@ jQuery(function($) {
                     my_answer[id]=['-1']
                 }
             })
-<<<<<<< HEAD
-=======
-            /*console.log(my_answer)
-            return false*/
->>>>>>> ece2415d153c23bf96feab79857c4b5a13cf5252
+
             var data={
                 genre_id:_genre_id,
                 grading_num:_grading_num,
