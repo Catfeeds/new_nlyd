@@ -28,6 +28,10 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var _grading_num=<?=$num?>;
     var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
@@ -42,9 +46,6 @@ jQuery(function($) {
     var how_ques=grade_level>3 ? 6 : 3;//多少道题目
     init_question()
     console.log(questions_answer)
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     submit();
-    // })
     count_down()
     $('body').on('focusout','.answer_q',function(e){
         var _this=$(this);
@@ -250,12 +251,6 @@ jQuery(function($) {
                 action:'grade_answer_submit',
                 questions_answer:ajax_question,
             }
-            // var leavePage= $.GetSession('leavePage','1');
-            // if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-            //     if(leavePage.Time){
-            //         data['leave_page_time']=leavePage.Time;
-            //     }
-            // }
             $.ajax({
                 data:data,
                 beforeSend:function(XMLHttpRequest){
@@ -266,8 +261,7 @@ jQuery(function($) {
                         'visibility': 'visible',
                     })
                 },
-                success:function(res,ajaxStatu,xhr){  
-                    // $.DelSession('leavePage')
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){

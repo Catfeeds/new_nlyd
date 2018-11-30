@@ -61,6 +61,10 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var _grading_num=<?=$num?>;
     var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
@@ -77,9 +81,6 @@ jQuery(function($) {
     var questions_answer=que_PI.substring(0,que_len).split('')
     init_question(que_len)
     console.log(que_PI)
-    // leaveMatchPage(function(){//窗口失焦提交
-    //     submit();
-    // });
     count_down();
     function count_down(){
         // sys_second=answer_time
@@ -144,13 +145,6 @@ jQuery(function($) {
             questions_answer:questions_answer,
             my_answer:my_answer,
         }
-
-        // var leavePage= $.GetSession('leavePage','1');
-        //     if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-        //         if(leavePage.Time){
-        //             data['leave_page_time']=leavePage.Time;
-        //         }
-        //     }
         $.ajax({
             data:data,
             beforeSend:function(XMLHttpRequest){
@@ -160,8 +154,7 @@ jQuery(function($) {
                     'visibility': 'visible',
                 })
             },
-            success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
+            success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     //return false;
                     if(res.data.url){
