@@ -58,6 +58,42 @@ jQuery(document).ready(function($) {
      * 解除教学关系
      */
     $('.relieve').on('click', function () {
+        var _tr = $(this).closest('tr');
+        var _options_div = _tr.find('.option-child');
+        _options_div.show();
+        _options_div.find('.cancel-option').off('click').on('click',function () {
+            _tr.find('.option-child').hide();
+        });
+        _options_div.find('.confirm-option').off('click').on('click',function () {
+            var val = [];
+            $.each(_options_div.find('input[type="checkbox"]:checked'),function (i,v) {
+                val[i]=$(v).val();
+            });
+            $.ajax({
+                data : {'action' : 'relieveMyStudent', 'id' : val},
+                type : 'post',
+                dataType : 'json',
+                url : ajax_url,
+                success : function (response) {
+                    alert(response.data.info)
+                    if(response.success){
+                        window.location.reload();
+                    }
+                    eventToken = 1;
+                },error : function () {
+                    eventToken = 1;
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+        return false;
         if(eventToken == 0) return false;
         eventToken = 0;
         var id = $(this).closest('tr').attr('data-id');

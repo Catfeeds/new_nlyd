@@ -94,16 +94,20 @@ class Teacher
                 <div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
-<!--                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">-->
-<!--                            <option value="-1">批量操作</option>-->
-<!--                            <option value="delete">删除</option>-->
-<!--                        </select>-->
-<!--                        <input type="submit" id="doaction" class="button action" value="应用">-->
+                        <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                        <select name="action" id="bulk-action-selector-top">
+                            <option value="-1">批量操作</option>
+                            <option value="delete">解除教练资格</option>
+                        </select>
+                        <input type="submit" id="doaction" class="button action" value="应用">
                     </div>
                     <p class="search-box">
                         <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                         <input type="text" id="searchs" name="s" placeholder="姓名/手机/邮箱" value="<?=$searchStr?>">
                         <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
+                        <select name="" id="">
+                            <option value="">机构名称</option>
+                        </select>
                     </p>
                     <div class="tablenav-pages one-page">
                         <?=$pageHtml?>
@@ -117,18 +121,17 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary">
-                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
-                        </th>
-                        <th scope="col" id="name" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
-                        <th scope="col" id="datum" class="manage-column column-name">教练资料</th>
-                        <th scope="col" id="student" class="manage-column column-name">查看学生</th>
-                        <th scope="col" id="student" class="manage-column column-apply_student">申请中</th>
+                        <th scope="col" id="name" class="manage-column column-name column-primary">姓名</th>
+                        <th scope="col" id="sex" class="manage-column column-sex">性别</th>
+                        <th scope="col" id="age" class="manage-column column-age">年龄</th>
                         <th scope="col" id="student" class="manage-column column-mobile">手机</th>
-                        <th scope="col" id="email" class="manage-column column-email sortable desc">
-                            <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
-                        </th>
+                        <th scope="col" id="ID" class="manage-column column-ID">教练ID</th>
+                        <th scope="col" id="image" class="manage-column column-image">教练照片</th>
+                        <th scope="col" id="category" class="manage-column column-category">教学类别 </th>
+                        <th scope="col" id="student_num" class="manage-column column-student_num">学员数量 </th>
+                        <th scope="col" id="course_num" class="manage-column column-course_num">课程数量 </th>
+                        <th scope="col" id="outfit" class="manage-column column-outfit">所属机构 </th>
+                        <th scope="col" id="option" class="manage-column column-option">操作 </th>
                     </tr>
                     </thead>
 
@@ -136,57 +139,70 @@ class Teacher
                     <?php
                     foreach ($rows as $row){
                         //有多少学员
-                        $student_num = $wpdb->get_var("SELECT COUNT(id) FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id={$row['coach_id']}");
-                        $student_apply_num = $wpdb->get_var("SELECT COUNT(id) FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id={$row['coach_id']}");
+                        $student_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id={$row['coach_id']} GROUP BY user_id");
+                        $student_apply_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id={$row['coach_id']} GROUP BY user_id");
+                        $student_num = count($student_num);
+                        $student_apply_num = count($student_apply_num);
                         $student_num = $student_num > 0 ? $student_num : 0;
                         $student_apply_num = $student_apply_num > 0 ? $student_apply_num : 0;
                         //教练信息
                         $usermeta = get_user_meta($row['coach_id']);
                         $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
+//                        leo_dump($usermeta);
+//                        die;
                         //有多少类别
-
+                        $categoryArr = [];
+                         if($row['read']) $categoryArr[]='速读';
+                         if($row['memory']) $categoryArr[]='记忆';
+                         if($row['compute']) $categoryArr[]='心算';
                         ?>
-                        <tr id="user-3">
+                        <tr>
                             <th scope="row" class="check-column">
-                                <label class="screen-reader-text" for="user_3">选择15982345102</label>
-                                <input type="checkbox" name="users[]" id="user_3" class="subscriber" value="3">
+                                <label class="screen-reader-text" for="teacher_<?=$row['coach_id']?>"></label>
+                                <input type="checkbox" name="users[]" id="teacher_<?=$row['coach_id']?>" class="subscriber" value="<?=$row['coach_id']?>">
                             </th>
-                            <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                                <strong><a href="javascript:;"><?=$row['user_login']?></a></strong><br>
-<!--                                <div class="row-actions">-->
-<!--                                    <span class="edit"><a href="--><?php //echo '?page=teacher-datum&id='.$row['id'] ?><!--">教练资料</a> | </span>-->
-<!--                                    <span class="view"><a href="--><?php //echo '?page=teacher-student&id='.$row['coach_id'] ?><!--" aria-label="">查看学员</a></span>-->
-<!--                                </div>-->
+
+                            <td class="name column-name column-primary" data-colname="姓名">
+                                <span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span>
                                 <button type="button" class="toggle-row">
                                     <span class="screen-reader-text">显示详情</span>
                                 </button>
                             </td>
-                            <td class="name column-name" data-colname="姓名">
-                                <span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span>
-                                <span class="screen-reader-text">未知</span>
+                            <td class="sex column-sex" data-colname="性别">
+                                <span aria-hidden="true"><?=isset($usermeta['user_gender']) ? $usermeta['user_gender'][0] : '-'?></span>
                             </td>
-                            <td class="ID column-ID" data-colname="ID">
-                                <span aria-hidden="true"><?=$row['userID']?></span>
-                                <span class="screen-reader-text">未知</span>
-                            </td>
-                            <td class="name column-name" data-colname="教练资料">
-                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">教练资料</a></span>
-                                <span class="screen-reader-text">-</span>
-                            </td>
-                            <td class="name column-name" data-colname="查看学生">
-                                <span aria-hidden="true"><a href="<?php echo '?page=teacher-student&id='.$row['coach_id'].'&student_type=1' ?>" aria-label=""><?=$student_num?>人</a></span>
-                                <span class="screen-reader-text">-</span>
-                            </td>
-                            <td class="name column-apply_student" data-colname="申请中">
-                                <span aria-hidden="true"><a <?=$student_apply_num>0 ? 'style="color: #C40000"' : ''?> href="<?php echo '?page=teacher-student&id='.$row['coach_id'].'&type=1' ?>" aria-label=""><?=$student_apply_num?>个</a></span>
-                                <span class="screen-reader-text">-</span>
+                            <td class="age column-age" data-colname="年龄">
+                                <span aria-hidden="true"><?=isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '-'?></span>
                             </td>
                             <td class="name column-mobile" data-colname="手机">
                                 <span aria-hidden="true"><?=$row['user_mobile']?></span>
                                 <span class="screen-reader-text">-</span>
                             </td>
-                            <td class="email column-email" data-colname="电子邮件"><a href="mailto:<?=$row['user_email']?>"><?=$row['user_email']?></a></td>
-
+                            <td class="ID column-ID" data-colname="ID">
+                                <span aria-hidden="true"><?=$row['userID']?></span>
+                                <span class="screen-reader-text">未知</span>
+                            </td>
+                            <td class="image column-image" data-colname="教练照片">
+                                <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
+                            </td>
+                            <td class="category column-category" data-colname="教学类别">
+                                <?=join('/',$categoryArr)?>
+                            </td>
+                            <td class="student_num column-student_num" data-colname="学员数量">
+                                <a href="<?php echo '?page=teacher-student&id='.$row['coach_id']?><?=$student_apply_num>0?'&type=1':''?>" aria-label="">
+                                    <span style="color: #00aff9"><?=$student_num?></span>
+                                    <?php if($student_apply_num>0) echo '<span style="color: #c42e00">+'.$student_apply_num.'</span>'; ?>
+                                </a>
+                            </td>
+                            <td class="course_num column-course_num" data-colname="课程数量">
+                                待定
+                            </td>
+                            <td class="outfit column-outfit" data-colname="所属机构">
+                                待定
+                            </td>
+                            <td class="option column-option" data-colname="操作">
+                                <a style="color: #00aff9" href="<?php echo '?page=teacher-datum&id='.$row['id'] ?>">编辑</a>
+                            </td>
                         </tr>
                     <?php } ?>
 
@@ -199,24 +215,17 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-2">全选</label>
                             <input id="cb-select-all-2" type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-username column-primary">
-                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
-                        </th>
-                        <th scope="col" class="manage-column column-datum">
-                            姓名
-                        </th>
-                        <th scope="col" class="manage-column column-ID">
-                            ID
-                        </th>
-                        <th scope="col" class="manage-column column-student">
-                            教练资料
-                        </th>
-                        <th scope="col" class="manage-column column-name">查看学生</th>
-                        <th scope="col" class="manage-column column-apply_student">申请中</th>
+                        <th scope="col" class="manage-column column-datum column-primary">姓名 </th>
+                        <th scope="col" class="manage-column column-sex"> 性别</th>
+                        <th scope="col" class="manage-column column-age"> 年龄</th>
                         <th scope="col" class="manage-column column-mobile">手机</th>
-                        <th scope="col" class="manage-column column-email sortable desc">
-                            <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
-                        </th>
+                        <th scope="col" class="manage-column column-ID"> 教练ID</th>
+                        <th scope="col" class="manage-column column-image"> 教练照片</th>
+                        <th scope="col" class="manage-column column-category">教学类别</th>
+                        <th scope="col" class="manage-column column-student_num">学员数量 </th>
+                        <th scope="col" class="manage-column column-course_num">课程数量 </th>
+                        <th scope="col" class="manage-column column-outfit">所属机构 </th>
+                        <th scope="col" class="manage-column column-option">操作 </th>
                     </tr>
                     </tfoot>
 
@@ -435,8 +444,10 @@ class Teacher
 
         $page = ($page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1) < 1 ? 1 : $page;
         $type = isset($_GET['type']) ? intval($_GET['type']) : 2;
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
+        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc  ";
         $postsRows = $wpdb->get_results($sql,ARRAY_A);
+
         $catArr = [];
         //类别
         $compute = isset($_GET['compute']) ? intval($_GET['compute']) : 0;
@@ -461,20 +472,30 @@ class Teacher
         //类别end
         if($type == 0) $typeWhere = '';
         else $typeWhere = ' AND co.apply_status='.$type;
-        $typeWhere .= ' AND co.apply_status!=-1';
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $searchWhere = '';
         $searchJoin = '';
         if($searchStr != ''){
-            $searchWhere = " AND (u.user_mobile LIKE '%{$searchStr}%' OR u.user_email LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
-            $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=co.user_id AND um2.meta_key='user_real_name'";
+            $searchWhere = " AND (u.user_mobile LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
+            $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=co.user_id AND um2.meta_key='user_real_name'
+                            LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=co.user_id AND um.meta_key='user_ID' ";
         }
-
+        //通过数量
+        $member_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //申请数量
+        $addly_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //拒绝数量
+        $refuse_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=-1 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //解除数量
+        $relieve_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=3 AND coach_id='{$coach_id}' GROUP BY user_id");
+        $addly_num = count($addly_num);
+        $member_num = count($member_num);
+        $refuse_num = count($refuse_num);
+        $relieve_num = count($relieve_num);
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $coach_id = isset($_GET['id']) ? intval($_GET['id']) : $current_user->ID;
-        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.display_name,u.user_login,u.user_email,u.user_mobile,co.id,co.apply_status,p.post_title,u.ID AS user_id,um.meta_value AS userID, 
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.user_mobile,co.apply_status,u.ID AS user_id,GROUP_CONCAT(p.post_title separator "/") AS category_name,GROUP_CONCAT(co.id separator "/") AS coach_id,
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
                 WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
@@ -482,10 +503,10 @@ class Teacher
                 WHEN 2 THEN "<span style=\'color:#0073aa\'>已通过</span>" 
                 END AS apply_name 
                 FROM '.$wpdb->prefix.'my_coach co LEFT JOIN '.$wpdb->users.' u ON u.ID=co.user_id 
-                LEFT JOIN '.$wpdb->prefix.'posts AS p ON p.ID=co.category_id  
-                LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=co.user_id AND um.meta_key="user_ID" 
-                '.$searchJoin.'   
+                LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=co.category_id 
+                '.$searchJoin.' 
                 WHERE co.coach_id='.$coach_id.' AND u.ID>0 '.$typeWhere.$cateWhere.$searchWhere.' 
+                GROUP BY co.user_id 
                 ORDER BY co.apply_status ASC 
                 LIMIT '.$start.','.$pageSize;
         $rows = $wpdb->get_results($sql, ARRAY_A);
@@ -504,10 +525,11 @@ class Teacher
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=$real_name?>学生</h1>
             <ul id="tab">
-                <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过</li>
-                <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中</li>
+                <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过(<?=$member_num?>)</li>
+                <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中(<?=$addly_num?>)</li>
+                <li class="<?php if($type == -1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=-1'.'&id='.$coach_id?>'">已拒绝(<?=$refuse_num?>)</li>
 
-                <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除</li>
+                <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除(<?=$relieve_num?>)</li>
             </ul>
             <br class="clear">
             <br class="clear">
@@ -517,11 +539,11 @@ class Teacher
                     <lable for="du"><?=$prow['post_title']?></lable>
 
                     <?php if(preg_match('/算/', $prow['post_title'])){ ?>
-                        <input id="compute" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="compute" value="<?=$prow['ID']?>">
+                        <input id="compute" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="compute" value="<?=$prow['ID']?>">&nbsp;
                     <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
-                        <input id="memory" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="memory" value="<?=$prow['ID']?>">
+                        <input id="memory" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="memory" value="<?=$prow['ID']?>">&nbsp;
                     <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
-                        <input id="read" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="read" value="<?=$prow['ID']?>">
+                        <input id="read" type="checkbox" <?php if(in_array($prow['ID'], $catArr)) echo 'checked="checked"'; ?> name="read" value="<?=$prow['ID']?>">&nbsp;
                     <?php } ?>
 
 
@@ -539,9 +561,14 @@ class Teacher
             </div>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="text" id="searchs" name="s" placeholder="姓名/手机/邮箱" value="">
+                <input type="text" id="searchs" name="s" placeholder="姓名/ID/手机" value="">
                 <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher-student&id='.$coach_id.'&s=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
             </p>
+            <style type="text/css">
+                .option-child{
+                    display: none;
+                }
+            </style>
             <form method="get" onsubmit="return false;">
 
 
@@ -570,19 +597,17 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" id="username" class="manage-column column-username column-primary sortable desc">
-                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
+
+                        <th scope="col" id="name" class="manage-column column-name column-primary">
+                            姓名
                         </th>
-                        <th scope="col" id="name" class="manage-column column-name">姓名</th>
-                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="sex" class="manage-column column-sex">性别</th>
                         <th scope="col" id="age" class="manage-column column-age">年龄</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
+                        <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="type" class="manage-column column-type">类别</th>
-                        <th scope="col" id="email" class="manage-column column-email sortable desc">
-                            <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
-                        </th>
                         <th scope="col" id="role" class="manage-column column-role">申请状态</th>
+                        <th scope="col" id="option" class="manage-column column-option">操作</th>
 
                     </tr>
                     </thead>
@@ -593,37 +618,49 @@ class Teacher
                              $usermeta = get_user_meta($row['user_id']);
                              $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
                          ?>
-                             <tr id="user-5" data-id="<?=$row['id']?>">
+                             <tr data-id="<?=$row['coach_id']?>">
                                  <th scope="row" class="check-column check" >
                                      <label class="screen-reader-text">选择</label>
-                                     <input type="checkbox" name="users[]" id="user_5" class="subscriber" value="5">
+                                     <input type="checkbox" name="users[]" class="subscriber" value="5">
                                  </th>
-                                 <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                                     <strong><a href="javascript:;">   <?=$row['user_login']?></a></strong><br>
+                                 <td class="name column-name column-primary" data-colname="姓名">
+
+                                     <span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span>
+                                     <br>
                                      <div class="apply_option">
-                                     <div class="row-actions">
+                                         <div class="row-actions">
 
-                                         <?php if($row['apply_status'] == 1){ ?>
-
-
-                                         <span class="edit"><a href="javascript:;" class="agree"> 通过审核</a> | </span>
-                                         <span class="delete"><a class="submitdelete refuse" href="javascript:;">拒绝申请</a>  </span>
-
-                                         <?php }elseif ($row['apply_status'] == 2){?>
-                                             <span class="delete"><a class="submitdelete relieve" href="javascript:;">解除</a>  </span>
-                                         <?php }?>
-                                     </div>
+                                         </div>
+                                         <button type="button" class="toggle-row">
+                                             <span class="screen-reader-text">显示详情</span>
+                                         </button>
                                  </td>
-                                 <td class="name column-name" data-colname="姓名"><span aria-hidden="true"><?=isset($user_real_name['real_name']) ? $user_real_name['real_name'] : '-'?></span><span class="screen-reader-text">未知</span></td>
-                                 <td class="ID column-ID" data-colname="ID"><span aria-hidden="true"><?=$row['userID']?></span><span class="screen-reader-text">未知</span></td>
                                  <td class="mobile column-sex" data-colname="性别"><?=isset($usermeta['user_gender'][0]) ? $usermeta['user_gender'][0] : '-'?></td>
                                  <td class="mobile column-age" data-colname="年龄"><?=isset($user_real_name['real_age']) ? $user_real_name['real_age'] : '-'?></td>
 
-
                                  <td class="email column-mobile" data-colname="手机"><a href="tel:<?=$row['user_mobile']?>"><?=$row['user_mobile']?></a></td>
-                                 <td class="email column-type" data-colname="类别"><?=$row['post_title']?></td>
-                                 <td class="email column-email" data-colname="电子邮件"><a href="mailto:456789@qq.com"><?=$row['user_email']?></a></td>
+                                 <td class="ID column-ID" data-colname="ID"><span aria-hidden="true"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0]:'-'?></span><span class="screen-reader-text">未知</span></td>
+                                 <td class="email column-type" data-colname="类别"><?=$row['category_name']?></td>
                                  <td class="role column-role" data-colname="申请状态"><?=$row['apply_name']?></td>
+                                 <td class="option column-option" data-colname="操作">
+                                     <?php if($row['apply_status'] == 1){ ?>
+                                         <span class="edit"><a href="javascript:;" class="agree"> 通过审核</a> | </span>
+                                         <span class="delete"><a class="submitdelete refuse" href="javascript:;">拒绝申请</a>  </span>
+                                     <?php }elseif ($row['apply_status'] == 2){?>
+                                         <span class="delete"><a class="submitdelete relieve" href="javascript:;">解除</a>  </span>
+                                     <?php }?>
+                                     <div class="option-child">
+                                         <?php
+                                            $category_arr = explode('/',$row['category_name']);
+                                            $coach_id = explode('/',$row['coach_id']);
+                                            foreach ($category_arr as $cak => $cav){
+                                                echo '<input type="checkbox" id="ca_'.$coach_id[$cak].'" value="'.$coach_id[$cak].'" ><label for="ca_'.$coach_id[$cak].'">'.$cav.'</label>';
+                                            }
+                                         ?>
+                                         <button type="button" class="button confirm-option">确定</button>
+                                         <button type="button" class="button cancel-option">取消</button>
+                                     </div>
+                                 </td>
 
                              </tr>
                          <?php } ?>
@@ -636,19 +673,16 @@ class Teacher
                             <label class="screen-reader-text" for="cb-select-all-1">全选</label>
                             <input id="cb-select-all-1" type="checkbox">
                         </td>
-                        <th scope="col" class="manage-column column-username column-primary sortable desc">
-                            <a href="javascript:;"><span>用户名</span><span class="sorting-indicator"></span></a>
+                        <th scope="col" class="manage-column column-name column-primary">
+                            姓名
                         </th>
-                        <th scope="col"  class="manage-column column-name">姓名</th>
-                        <th scope="col"  class="manage-column column-ID">ID</th>
                         <th scope="col"  class="manage-column column-sex">性别</th>
                         <th scope="col"  class="manage-column column-age">年龄</th>
                         <th scope="col"  class="manage-column column-mobile">手机</th>
+                        <th scope="col"  class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-type">类别</th>
-                        <th scope="col" class="manage-column column-email sortable desc">
-                            <a href="javascript:;"><span>电子邮件</span><span class="sorting-indicator"></span></a>
-                        </th>
                         <th scope="col" class="manage-column column-role">申请状态</th>
+                        <th scope="col" class="manage-column column-option">操作</th>
                     </tr>
                     </tfoot>
 

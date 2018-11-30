@@ -172,7 +172,7 @@ class Users {
 
                     <tr class="user-user-login-wrap">
                         <th><label for="user_login">用户名</label></th>
-                        <td><input type="text" name="user_login" id="user_login" value="cd_leo" disabled="disabled" class="regular-text"> </td>
+                        <td><input type="text" name="user_login" id="user_login" value="<?=$user['user_login']?>" disabled="disabled" class="regular-text"> </td>
                     </tr>
 
 
