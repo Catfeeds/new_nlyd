@@ -44,7 +44,6 @@
 <script>
     jQuery(function($) {
         $.DelSession('match');//考级记录参数
-        $.DelSession('leavePage');//切换页面参数参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
         <?php if($match_status == 2 || $count_down <= 120): ?>
@@ -55,7 +54,6 @@
         var counts_down=$('.count_down').attr('data-seconds')
         endTimes=$.GetEndTime(counts_down)
         if($('.count_down').attr('data-seconds')<=0){
-            $.DelSession('leavePageWaitting')
             window.location.href="<?=$redirect_url?>"
         }
         $('.count_down').countdown(function(S, d){//倒计时
@@ -72,7 +70,6 @@
                 var time=D+h+':'+m+':'+s;
                 $(this).attr('data-seconds',S).text(time);
                 if(S<=0){//
-                    $.DelSession('leavePageWaitting')
                     window.location.href="<?=$redirect_url?>"
                 }
             }

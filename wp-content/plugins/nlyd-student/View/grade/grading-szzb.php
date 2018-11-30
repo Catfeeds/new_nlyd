@@ -121,6 +121,10 @@
 <script>
 jQuery(function($) { 
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var _grading_num=<?=$num?>;
     var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
@@ -137,9 +141,6 @@ jQuery(function($) {
     var que_len="<?=$memory_type['length']?>";//多少个字符
     init_question(que_len,_show,question_type)
     console.log(questions_answer)
-    leaveMatchPage(function(){//窗口失焦提交
-        submit(4);
-    })
     $.each(questions_answer,function(i,v){
         var dom='<div class="matching-number-readys">'+v+'</div>';
         $('.ready_zoo').append(dom)
@@ -220,7 +221,7 @@ jQuery(function($) {
                     $.SetSession('grade_question',sessionData)
                 }else if(_show==2){//答题页面
                     clearInterval(timer)
-                    submit(3)
+                    submit()
                 }
             }
 
@@ -269,7 +270,7 @@ jQuery(function($) {
         var pos = Math.round(Math.random() * (arr.length - 1));
         return arr[pos];
     }
-    function submit(submit_type){//提交答案
+    function submit(){//提交答案
         // $('#load').css({
         //         'display':'block',
         //         'opacity': '1',
@@ -281,26 +282,17 @@ jQuery(function($) {
             my_answer.push(answer)
         })
         var data={
-                grading_num:_grading_num,
-                memory_lv:_memory_lv,
-                genre_id:_genre_id,
-                grading_type:_grad_type,
-                questions_type:_type,
-                grading_questions:questions_answer,
-                questions_answer:questions_answer,
-                action:'grade_answer_submit',
-                my_answer:my_answer,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-
+            grading_num:_grading_num,
+            memory_lv:_memory_lv,
+            genre_id:_genre_id,
+            grading_type:_grad_type,
+            questions_type:_type,
+            grading_questions:questions_answer,
+            questions_answer:questions_answer,
+            action:'grade_answer_submit',
+            my_answer:my_answer,
         }
         console.log(data)
-        /*return false*/
-        var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
-            }
         $.ajax({
             data:data,
             beforeSend:function(XMLHttpRequest){
@@ -310,8 +302,7 @@ jQuery(function($) {
                     'visibility': 'visible',
                 })
             },
-            success:function(res,ajaxStatu,xhr){  
-                // $.DelSession('leavePage')
+            success:function(res,ajaxStatu,xhr){
                 if(res.success){
                     //return false;
                     if(res.data.url){
@@ -554,7 +545,7 @@ $('._del').each(function(){//数字键盘
                         }
                         ,btn2: function(index, layero){
                             layer.closeAll();
-                            submit(1);
+                            submit();
                         }
                         ,closeBtn:2
                         ,btnAagn: 'c' //按钮居中

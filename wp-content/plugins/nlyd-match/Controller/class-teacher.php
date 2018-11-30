@@ -495,7 +495,9 @@ class Teacher
         $relieve_num = count($relieve_num);
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.user_mobile,co.apply_status,u.ID AS user_id,GROUP_CONCAT(p.post_title separator "/") AS category_name,GROUP_CONCAT(co.id separator "/") AS coach_id,
+        $sql = 'SELECT SQL_CALC_FOUND_ROWS u.user_mobile,co.apply_status,u.ID AS user_id,
+                GROUP_CONCAT(p.ID,",",p.post_title separator "/") AS category,
+                GROUP_CONCAT(p.post_title separator "/") AS category_name,
                 CASE co.apply_status 
                 WHEN -1 THEN "<span style=\'color:#a00\'>已拒绝</span>" 
                 WHEN 3 THEN "<span style=\'color:#a00\'>已解除</span>" 
@@ -569,18 +571,23 @@ class Teacher
                     display: none;
                 }
             </style>
-            <form method="get" onsubmit="return false;">
+            <form method="get" onsubmit="return false;" data-cid="<?=$coach_id?>">
 
 
 
                 <input type="hidden" id="_wpnonce" name="_wpnonce" value="31db78f456"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">	<div class="tablenav top">
 
                     <div class="alignleft actions bulkactions">
-                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action" id="bulk-action-selector-top">
+                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                        <select name="action" id="bulk-action-selector-top" class="all_select">
                             <option value="">批量操作</option>
                             <option value="2">通过申请</option>
                             <option value="-1">拒绝申请</option>
+                            <option value="3">解除教学</option>
                         </select>
+                        <?php foreach ($postsRows as $prv){ ?>
+                            <label for="all_category_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
+                        <?php } ?>
                         <input type="button" id="doaction" class="button action batch-btn" value="应用">
                     </div>
 
@@ -618,7 +625,7 @@ class Teacher
                              $usermeta = get_user_meta($row['user_id']);
                              $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
                          ?>
-                             <tr data-id="<?=$row['coach_id']?>">
+                             <tr data-uid="<?=$row['user_id']?>">
                                  <th scope="row" class="check-column check" >
                                      <label class="screen-reader-text">选择</label>
                                      <input type="checkbox" name="users[]" class="subscriber" value="5">
@@ -651,10 +658,10 @@ class Teacher
                                      <?php }?>
                                      <div class="option-child">
                                          <?php
-                                            $category_arr = explode('/',$row['category_name']);
-                                            $coach_id = explode('/',$row['coach_id']);
+                                            $category_arr = explode('/',$row['category']);
                                             foreach ($category_arr as $cak => $cav){
-                                                echo '<input type="checkbox" id="ca_'.$coach_id[$cak].'" value="'.$coach_id[$cak].'" ><label for="ca_'.$coach_id[$cak].'">'.$cav.'</label>';
+                                                $cav = explode(',',$cav);
+                                                echo '<input type="checkbox" id="ca_'.$cav[0].'" value="'.$cav[0].'" ><label for="ca_'.$cav[0].'">'.$cav[1].'</label>';
                                             }
                                          ?>
                                          <button type="button" class="button confirm-option">确定</button>
@@ -690,11 +697,16 @@ class Teacher
                 <div class="tablenav bottom">
 
                     <div class="alignleft actions bulkactions">
-                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label><select name="action2" id="bulk-action-selector-bottom">
+                        <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                        <select name="action2" id="bulk-action-selector-bottom" class="all_select">
                             <option value="">批量操作</option>
                             <option value="2">通过申请</option>
                             <option value="-1">拒绝申请</option>
+                            <option value="3">解除教学</option>
                         </select>
+                        <?php foreach ($postsRows as $prv){ ?>
+                            <label for="all_category_<?=$prv['ID']?>"><?=$prv['post_title']?></label><input id="all_category_<?=$prv['ID']?>" type="checkbox" name="all_category[]" value="<?=$prv['ID']?>">
+                        <?php } ?>
                         <input type="button" id="doaction3" class="button action batch-btn" value="应用">
                     </div>
                     <div class="tablenav-pages one-page">

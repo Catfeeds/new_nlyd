@@ -64,19 +64,11 @@
 <script>
 jQuery(function($) {
     $.DelSession('count');
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
     var isSubmit=false;//是否正在提交
-    leaveMatchPage(function(){//窗口失焦提交
-        $('#next').addClass('disabled')
-        var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-        var answer_Text=$('.answer div').text();
-        var answer_dateNumber=$('.answer').attr('date-number');
-        if(answer_dateNumber=="本题无解"){
-            isRights(answer_dateNumber)
-        }else{
-            isRights(answer_Text)
-        }
-        submit(time,4);
-    })
     var _grading_num=<?=$num?>;
     var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
@@ -181,7 +173,7 @@ jQuery(function($) {
         $('.answer div').text('')
         $('.answer').removeClass('error-fast').removeClass('right-fast');
     }
-    function submit(time,submit_type){//提交答案
+    function submit(){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
@@ -201,13 +193,6 @@ jQuery(function($) {
                 questions_answer:'nx',
                 action:'grade_answer_submit',
                 my_answer:ajaxData,
-                submit_type:submit_type,//1:选手提交;2:错误达上限提交;3:时间到达提交;4:来回切
-            }
-            var leavePage= $.GetSession('leavePage','1');
-            if(leavePage && leavePage['genre_id']===_genre_id && leavePage['grad_type']===_grad_type && leavePage['type']===_type){
-                if(leavePage.Time){
-                    data['leave_page_time']=leavePage.Time;
-                }
             }
             $.ajax({
                 data:data,
@@ -219,9 +204,7 @@ jQuery(function($) {
                         'visibility': 'visible',
                     })
                 },
-                success:function(res,ajaxStatu,xhr){    
-                    // $.DelSession('match')
-                    // $.DelSession('leavePage')
+                success:function(res,ajaxStatu,xhr){
                     if(res.success){
                         isSubmit=false;
                         if(res.data.url){
@@ -276,7 +259,7 @@ jQuery(function($) {
                 }else{
                     isRights(answer_Text)
                 }
-                submit(0,3)
+                submit()
             }
 
         }, 1000);
@@ -503,8 +486,7 @@ new AlloyFinger($('#next')[0], {
                      if(_len>=5){
                         if(ajaxData[_len-1]['yours']=='本题无解' && ajaxData[_len-2]['yours']=='本题无解' && ajaxData[_len-3]['yours']=='本题无解' && ajaxData[_len-4]['yours']=='本题无解' && ajaxData[_len-5]['yours']=='本题无解'){
                             $.alerts("<?=__('检测到恶意答题，强制提交答案', 'nlyd-student')?>")
-                            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
-                            submit(time,5)
+                            submit()
                         }
                     }
                 }else{
@@ -649,7 +631,6 @@ function isRights(text) {
         // mTouch('body').on('tap','#sumbit',function(e){
     new AlloyFinger($('#sumbit')[0], {
         tap:function(){
-            var time=$('.count_down').attr('data-seconds')?$('.count_down').attr('data-seconds'):0;
             layer.open({
                     type: 1
                     ,maxWidth:300
@@ -672,7 +653,7 @@ function isRights(text) {
                         }else{
                             isRights(answer_Text)
                         }
-                        submit(time,1);  
+                        submit();  
                     }
                     ,closeBtn:2
                     ,btnAagn: 'c' //按钮居中
