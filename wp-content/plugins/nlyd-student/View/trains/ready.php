@@ -460,7 +460,8 @@
 jQuery(function($) { 
     $.DelSession('train_match');//准备页面题目
     $.DelSession('_match_train');//答题页面记录的题目（无准备页）
-
+    $.DelSession('grade_question');//考级自测题目
+    $.DelSession('count');//考级自测，记录页倒计时
     var _type=$.Request('type');
     layui.use('layer', function(){
         if(_type=='memory'){
