@@ -31,6 +31,25 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "user_grade_log_history";  //考級训练次数记录表   储存考级训练次数
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) DEFAULT NULL,
+          `reading` int(20) DEFAULT NULL,
+          `arithmetic` int(20) DEFAULT NULL,
+          `memory` int(20) DEFAULT NULL,
+          `last_time` datetime DEFAULT NULL COMMENT '最后一次训练时间',
+          PRIMARY KEY (`id`),
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+
     $table_name = $wpdb->prefix . "user_grade_logs";  //考級训练记录表   储存考级训练记录
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
