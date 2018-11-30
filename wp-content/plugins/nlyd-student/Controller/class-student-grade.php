@@ -775,6 +775,7 @@ class Student_Grade extends Student_Home
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
             'grading_result'=>$grading_result,
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? $row['post_str_length']/($row['use_time']/60) : '',
             'grade_lv'=>$lv,
             'recur_url'=>home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type']),
             'revert_url'=>home_url('/trains/lists/id/'.$_GET['genre_id'].'/'),

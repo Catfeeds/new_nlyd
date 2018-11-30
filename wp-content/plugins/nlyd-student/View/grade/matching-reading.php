@@ -121,7 +121,7 @@ jQuery(function($) {
             $.SetSession('grade_question',sessionData)
         }
     }
-    function submit(){//提交答案
+    function submit(submit_type){//提交答案
         if(!isSubmit){
             // $('#load').css({
             //     'display':'block',
