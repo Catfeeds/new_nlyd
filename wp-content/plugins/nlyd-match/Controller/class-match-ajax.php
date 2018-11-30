@@ -368,48 +368,46 @@ class Match_Ajax
     /****************************************************以下为后台Ajax功能方法***********************************************************************/
 
     /**
-     * 申请教练审核
+     * 批量申请教练审核和批量解除关系
      */
     public function coachApplyStatus(){
         global $wpdb;
         $status = intval($_POST['status']);
+        $apply_status = 1;
         if($status == 2){
             $statusName = '通过审核';
         }elseif ($status == -1){
             $statusName = '被拒绝';
+        }elseif ($status == 3){
+            $apply_status = 2;
+            $statusName = '解除关系';
         }
-        if(is_array($_POST['id'])){
-            $id = '';
-            foreach ($_POST['id'] as $v){
-                $id.= $v.',';
-            }
-            $id = substr($id,0,strlen($id)-1);
-            $idWhere = 'id IN('.$id.')';
-        }else{
-            $id = intval($_POST['id']);
-            $idWhere = 'id='.$id;
+        $coach_id = isset($_POST['coach_id']) ? intval($_POST['coach_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
+        $category_id = isset($_POST['category']) ? trim($_POST['category']) : '';
+        if($user_id=='' || $coach_id < 1){
+            wp_send_json_error(array('info' => '参数错误'));
         }
-        $user = $wpdb->get_results('SELECT u.ID AS user_id,u.user_mobile,u.display_name,m.category_id,mu.display_name AS coach_name,mu.ID,m.coach_id,um.meta_value AS user_real_name,u.user_email FROM '.$wpdb->prefix.'my_coach AS m 
-            LEFT JOIN '.$wpdb->users.' AS u ON m.user_id=u.ID 
-            LEFT JOIN '.$wpdb->users.' AS mu ON m.coach_id=mu.ID 
+        if($category_id  == '') wp_send_json_error(array('info' => '请选择类别!'));
+        $user = $wpdb->get_results('SELECT u.ID AS user_id,u.user_mobile,um.meta_value AS user_real_name,u.user_email,GROUP_CONCAT(p.post_title separator "/") AS category_name 
+            FROM '.$wpdb->prefix.'my_coach AS mc  
+            LEFT JOIN '.$wpdb->users.' AS u ON mc.user_id=u.ID AND u.ID!=""  
             LEFT JOIN '.$wpdb->prefix.'usermeta AS um ON um.user_id=u.ID AND um.meta_key="user_real_name"  
-            WHERE m.'.$idWhere.' AND m.`apply_status`=1',ARRAY_A);
-
+            LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id   
+            WHERE mc.user_id IN('.$user_id.') AND mc.category_id IN('.$category_id.') and mc.coach_id='.$coach_id.' 
+            GROUP BY mc.user_id',ARRAY_A);
         //TODO
-        $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE '.$idWhere.' AND `apply_status`=1';
-        if($status != -1  && $status != 2){
+        $sql = 'UPDATE '.$wpdb->prefix.'my_coach SET `apply_status`='.$status.' WHERE coach_id='.$coach_id.' AND user_id IN('.$user_id.') AND `apply_status`='.$apply_status.' AND category_id IN('.$category_id.')';
+        if($status != -1  && $status != 2 && $status != 3){
             wp_send_json_error(array('info' => '操作失败,状态参数异常'));
         }
-
-
-//        leo_dump($user);
-//        die;
         $bool = $wpdb->query($sql);
+
 //        $bool = true;
         if($bool) {
             //TODO 发送通知
             //获取教练姓名
-            $coach_user_meta = get_user_meta($user[0]['coach_id']);
+            $coach_user_meta = get_user_meta($coach_id);
             if(!$coach_user_meta) wp_send_json_error(['info' => '未获取到教练信息']);
             if(isset($coach_user_meta['user_real_name'][0]) && !empty($coach_user_meta['user_real_name'][0])){
                 $coach_real_name = unserialize($coach_user_meta['user_real_name'][0])['real_name'];
@@ -419,29 +417,29 @@ class Match_Ajax
                 $coach_real_name = $coach_user_meta['nickname'][0];
             }
             $sendErr = "\n";
-            $categoryArr = []; //post数据数组. 避免重复查询
             foreach ($user as $v){
-                $userContact = $this->getMobileOrEmailAndRealname($v['user_id'],$v['user_mobile'], $v['user_email']);
-                if($userContact == false){
-                    $sendErr .= $v['user_login'].': 用户信息不完整, 未发送信息'."\n";
-                    continue;
-                }
                 //查询类别名称
-                if(isset($categoryArr[$v['category_id']])){
-                    $post_title = $categoryArr[$v['category_id']];
-                }else{
-                    $post_title = get_post($v['category_id'])->post_title;
-                    $categoryArr[$v['category_id']] = $post_title;
-                }
+                $user_real_name = $v['user_real_name'] ? unserialize($v['user_real_name'])['real_name'] : $v['user_login'];
 
-                if($userContact['type'] == 'mobile'){
-                    $ali = new AliSms();
-                    $result = $ali->sendSms($userContact['contact'], 10, array('user'=>$userContact['real_name'],'cate'=>$post_title, 'coach' => $coach_real_name, 'type' => $statusName));
-                    if(!$result) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'短信发送失败'."\n";
-                }else{
-                    $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].',您申请的'.$post_title.'教练'.$coach_real_name.'已'.$statusName);
-                    if($result !== true) $sendErr .= $userContact['real_name'].': '.$userContact['contact'].'邮件发送失败'."\n";
-                }
+//                if($status == 3){
+//                    if(!empty($v['user_mobile']) == 'mobile'){
+//                        $ali = new AliSms();
+//                        $result = $ali->sendSms($v['user_mobile'], 7, array('user'=>$user_real_name, 'cate' => "({$v['category_name']})", 'coach' => $coach_real_name));
+//                        if(!$result) $sendErr .= $user_real_name.': '.$v['user_mobile'].'短信发送失败'."\n";
+//                    }else{
+//                        $result = $this->send_mail($v['user_email'], '国际脑力运动', '尊敬的'.$user_real_name.'您好，您的('.$v['category_name'].')教练'.$coach_real_name.'解除了与您的教学关系，您可登录系统查看');
+//                        if($result !== true) $sendErr .= $user_real_name.': '.$v['user_email'].'邮件发送失败'."\n";
+//                    }
+//                }else{
+//                    if(!empty($v['user_mobile'])){
+//                        $ali = new AliSms();
+//                        $result = $ali->sendSms($v['user_mobile'], 10, array('user'=>$user_real_name,'cate'=>"({$v['category_name']})", 'coach' => $coach_real_name, 'type' => $statusName));
+//                        if(!$result) $sendErr .= $user_real_name.': '.$v['user_mobile'].'短信发送失败'."\n";
+//                    }else{
+//                        $result = $this->send_mail($v['user_email'], '国际脑力运动', '尊敬的'.$user_real_name.',您申请的('.$v['category_name'].')教练'.$coach_real_name.'已'.$statusName);
+//                        if($result !== true) $sendErr .= $user_real_name.': '.$v['user_email'].'邮件发送失败'."\n";
+//                    }
+//                }
 
             }
 
