@@ -4162,7 +4162,7 @@ class Student_Ajax
                 }
                 break;
             case 'reading':
-
+                //print_r($_POST);die;
                 $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;

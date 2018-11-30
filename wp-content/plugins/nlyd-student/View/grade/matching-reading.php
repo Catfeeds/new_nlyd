@@ -129,9 +129,11 @@ jQuery(function($) {
             // })
             // isSubmit=true;
             var my_answer={}
-            $('.matching-reading').each(function(){
+            $('.matching-reading').each(function(i){
+
                 var _this=$(this);
                 var id=_this.attr('data-id');
+                //console.log(i,id)
                 my_answer[id]=[];
                 var flag=false;
                 _this.find('.select_answer').each(function(e){
@@ -145,6 +147,11 @@ jQuery(function($) {
                     my_answer[id]=['-1']
                 }
             })
+<<<<<<< HEAD
+=======
+            /*console.log(my_answer)
+            return false*/
+>>>>>>> ece2415d153c23bf96feab79857c4b5a13cf5252
             var data={
                 genre_id:_genre_id,
                 grading_num:_grading_num,

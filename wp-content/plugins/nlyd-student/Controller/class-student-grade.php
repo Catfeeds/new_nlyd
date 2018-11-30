@@ -212,13 +212,13 @@ class Student_Grade extends Student_Home
             $type = isset($_GET['type']) ? $_GET['type'] : 'sz';
             $project = $this->get_grading_parameter($memory_lv);
             if(empty($project)){
-                $this->get_404(array('message'=>__('请确认考级等级', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('请确认考级等级', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                 return;
             }
             $row['project'] = $project;
             $memory_type = $project[$type];
             if(empty($memory_type)){
-                $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('未找到此类型考级题目', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                 return;
             }
             //print_r($memory_type);
@@ -248,7 +248,7 @@ class Student_Grade extends Student_Home
                 $rows = $wpdb->get_results($sql,ARRAY_A);
 
                 if(empty($rows)){
-                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    $this->get_404(array('message'=>__('题库暂未更新，联系管理员录题', 'nlyd-student'),'match_url'=>home_url('/trains/')));
                     return;
                 }
                 $result = array_column($rows,'object_id');
@@ -582,6 +582,7 @@ class Student_Grade extends Student_Home
             }
             $success_len = 0;
             if(!empty($questions_answer)){
+                //print_r($grading_questions);
                 foreach ($questions_answer as $k=>$val){
                     $arr = array();
                     $answerArr = array();
