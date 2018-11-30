@@ -912,28 +912,29 @@ class Match_Ajax
      * 教练解除教学关系
      */
     public function relieveMyStudent(){
-        $id = intval($_POST['id']);
-        if($id < 1) wp_send_json_error(['info' => '参数错误']);
+        $id = $_POST['id'];
+        if($id == '') wp_send_json_error(['info' => '参数错误']);
+        $id = join(',',$id);
         //查询是否是战队成员
         global $wpdb;
-        $res = $wpdb->get_row('SELECT id,user_id,category_id,coach_id FROM '.$wpdb->prefix.'my_coach WHERE id='.$id.' AND apply_status=2', ARRAY_A);
+        $res = $wpdb->get_results('SELECT id,user_id,category_id,coach_id FROM '.$wpdb->prefix.'my_coach WHERE id IN ('.$id.') AND apply_status=2', ARRAY_A);
         //不存在或已解除
         if(!$res) wp_send_json_error(['info' => '该学员不存在或已解除']);
 
         //获取用户信息
-        $user = $wpdb->get_row('SELECT ID,user_mobile,display_name,user_email FROM '.$wpdb->users.' WHERE ID='.$res['user_id'], ARRAY_A);
+        $user = $wpdb->get_row('SELECT ID,user_mobile,display_name,user_email FROM '.$wpdb->users.' WHERE ID='.$res[0]['user_id'], ARRAY_A);
 
 
         if(!$user) wp_send_json_error(['info' => '该学员不存在']);
 
 
         //开始解除
-        $bool = $wpdb->update($wpdb->prefix.'my_coach', ['apply_status' => 3], ['id' => $id]);
+        $bool = $wpdb->query("UPDATE {$wpdb->prefix}my_coach SET apply_status=3 WHERE id IN({$id})");
         if($bool){
             //TODO 发送短信通知学员
             //教练名字
 
-            $user_coach_meta = get_user_meta($res['coach_id']);
+            $user_coach_meta = get_user_meta($res[0]['coach_id']);
             if(isset($user_user_meta['user_real_name'][0]) && !empty($user_coach_meta['user_real_name'][0])){
                 $coach_real_name = unserialize($user_coach_meta['user_real_name'][0])['real_name'];
             }elseif(isset($user_coach_meta['last_name'][0]) && isset($user_coach_meta['first_name'][0]) && !empty($user_coach_meta['first_name'][0]) && !empty($user_coach_meta['first_name'][0])){
@@ -943,8 +944,12 @@ class Match_Ajax
             }else{
                 $coach_real_name = '';
             }
+            $post_titleArr = [];
+           foreach ($res as $rv){
+               $post_titleArr[] = get_post($rv['category_id'])->post_title;
 
-            $post_title = get_post($res['category_id'])->post_title;
+           }
+            $post_title = ('(').join('/',$post_titleArr).')';
             $userContact = $this->getMobileOrEmailAndRealname($user['ID'],$user['user_mobile'], $user['user_email']);
             if($userContact == false){
                 $sendMsg = ', 用户信息不完整, 未发送信息';
@@ -956,7 +961,6 @@ class Match_Ajax
                     $result = $this->send_mail($userContact['contact'], '国际脑力运动', '尊敬的'.$userContact['real_name'].'您好，您的'.$post_title.'教练'.$coach_real_name.'解除了与您的教学关系，您可登录系统查看');
                 }
             }
-
             wp_send_json_success(['info' => '已解除教学关系']);
 
         }else{
