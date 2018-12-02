@@ -580,27 +580,24 @@ class Student_Trains extends Student_Home
 
         global $wpdb,$current_user;
         if($_GET['alias'] == 'grading'){
-            $sql = "select id,grading_type,questions_type,grading_num,my_score,correct_rate,date_format(created_time,'%Y/%m/%d') time ,created_time,
-                case questions_type
-                    when 'sz' then '随机数字'
-                    when 'cy' then '随机词汇'
-                    when 'zm' then '随机字母'
-                    when 'yzl' then '圆周率'
-                    when 'tl' then '听记数字'
-                    when 'rm' then '人脉信息'
-                    when 'wz' then '国学经典'
-                    when 'reading' then '文章速读'
-                    when 'zxys' then '正向速算'
-                    when 'nxys' then '逆向速算'
+            $sql = "select id,grade_type,grade_lv,if(grade_result=1,'已达标','未达标') grade_result_cn,grade_result,date_format(created_time,'%Y/%m/%d') time ,date_format(created_time,'%H:%i') created_time,
+                case grade_type
+                    when 'reading' then '速读考级训练'
+                    when 'arithmetic' then '心算考级训练'
+                    when 'memory' then '记忆考级训练'
                 else '--'
                 end project_type_cn
-                from {$wpdb->prefix}user_grade_logs 
-                where user_id = {$current_user->ID} and  questions_type != '' AND grading_num > 0
+                from {$wpdb->prefix}user_grade_log_history 
+                where user_id = {$current_user->ID}
                 order by created_time desc ";
+
+            //获取用户考级训练等级
+            $data['rank_row'] = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID} and skill_type = 2",ARRAY_A);
+            //print_r($rank_row);
         }
         elseif($_GET['alias'] == 'mental_world_cup'){
 
-            $sql = "select id,my_score,date_format(created_time,'%Y/%m/%d') time ,created_time,project_type,
+            $sql = "select id,my_score,date_format(created_time,'%Y/%m/%d') time ,date_format(created_time,'%H/%i') created_time,project_type,
                 case project_type
                 when 'szzb' then '数字争霸' 
                 when 'kysm' then '快眼扫描' 
@@ -619,21 +616,13 @@ class Student_Trains extends Student_Home
         //print_r($rows);
         if(!empty($rows)){
 
-            if($_GET['alias'] == 'grading'){
-                $list = array();
-                foreach ($rows as $v){
-                    $k = $v['grading_num'];
-                    $k1 = $v['grading_type'];
-                    $list[$k][$k1][] = $v;
+            $list = array();
+            foreach ($rows as $v){
+                $k = $v['time'];
+                if($_GET['alias'] == 'grading'){
+                    $v['grade_result_cn'] = !empty($v['grade_lv']) ?  $v['grade_lv'].'级'.$v['grade_result_cn'] : $v['grade_result_cn'];
                 }
-                
-            }
-            elseif($_GET['alias'] == 'mental_world_cup'){
-                $list = array();
-                foreach ($rows as $v){
-                    $k = $v['time'];
-                    $list[$k][] = $v;
-                }
+                $list[$k][] = $v;
             }
         }
         //print_r($list);
