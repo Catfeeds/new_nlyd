@@ -95,14 +95,14 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             require_once leo_student_public_view.'leftMenu.php';
         }
         ?>
-        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
+        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(!isset($_GET['type'])){ ?>
                     <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
                 <h1 class="mui-title"><div><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title 
@@ -111,12 +111,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         <?php endif;?>
                         ">
                             <?php if(ACTION == 'myAnswerLog'): ?>
-                            <?php if(!empty($prev)):?>
-                            <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
-                            <?php endif;?>
-                            <?php if(!empty($next)):?>
-                            <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
-                            <?php endif;?>
+                            <?php if(!empty($prev)){ ?>
+                                <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
+                            <?php }else{ ?>
+                                <a class="pull-left c_grey"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
+                            <?php } ?>
+                            <?php if(!empty($next)){ ?>
+                                <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
+                            <?php }else{ ?>
+                                <a class="pull-right c_grey"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
+                            <?php } ?>
                             <?php endif;?>
                             <div class="c_black match_info_font"><div><?=__($match_row['questions_type_cn'], 'nlyd-student')?> </div></div>
                         </div>
@@ -132,9 +136,14 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             <div class="one-info flex1">
                                 <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
-                            <?php if(!empty($reading_rate)):?>
+                            <?php if(!empty($_GET['reading']=='grad_type')):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>/分钟</span>
+                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
+                                </div>
+                            <?php endif;?>
+                            <?php if(!empty($_GET['grad_type']=='arithmetic')):?>
+                                <div class="one-info flex1">
+                                    <div class="left-label"><?=__('得分', 'nlyd-student')?>:</div><span class="c_blue"><?=empty($match_row['my_score']) ? 0 : $match_row['my_score'];?>分</span>
                                 </div>
                             <?php endif;?>
                         </div>
@@ -204,7 +213,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         $.DelSession('match');//考级记录参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');
-        <?php if(isset($_GET['genre_id'])): ?>
+        <?php if(isset($_GET['history_id'])): ?>
         history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
@@ -212,7 +221,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             if($('.count_down').length>0){
                 var endTimes=0;
                 var countSession=$.GetSession('count')
-                if(countSession){
+                if(countSession && !isNaN(countSession)){
                     endTimes=countSession;
                 }else{
                     var counts_down=$('.count_down').attr('data-seconds')
@@ -220,6 +229,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     $.SetSession('count',endTimes)
                 }
                 var new_count=$.GetSecond(endTimes);
+                console.log(new_count)
+                // if(new_count=0){
+                //     $.DelSession('count');
+                //     var href=$('.count_down').parents('.a-btn').attr('href');
+                //     if(href){
+                //         window.location.href=href
+                //     }else{
+                //         window.location.reload();
+                //     }
+                // }
                 $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
                     // var count_down=S
                     // var new_count=$.GetSecond(endTimes);
@@ -250,7 +269,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             $('.ingnore').click(function(){
                 $.DelSession('count');
             })
-            <?php if(empty($next_project)): ?>
+            <?php if(empty($next_project) && ACTION == 'answerLog'): ?>
             layui.use('layer', function(){
                 layer.open({
                     type: 1

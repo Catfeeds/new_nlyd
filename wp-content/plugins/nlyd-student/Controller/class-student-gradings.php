@@ -754,7 +754,7 @@ class Student_Gradings extends Student_Home
             //print_r($rows);
             if(!empty($rows)){
                 //获取用户技能
-                $rank_row = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID}",ARRAY_A);
+                $rank_row = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID} and skill_type = 1",ARRAY_A);
                 $update = array();
                 if($order->memory_lv > 0){
 
@@ -797,7 +797,7 @@ class Student_Gradings extends Student_Home
                     if($lv > $rank_row['memory']){
                         $update = array('memory'=>$order->memory_lv);
                     }
-                    $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv);
+                    $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv,'skill_type'=>1);
                 }
                 elseif($_GET['grad_type']== 'reading'){
                     $arr = array();
@@ -819,7 +819,7 @@ class Student_Gradings extends Student_Home
                             if($lv > $rank_row['read']){
                                 $update = array('read'=>$lv);
                             }
-                            $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv);
+                            $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv,'skill_type'=>1);
                         }
 
                     }
@@ -834,7 +834,7 @@ class Student_Gradings extends Student_Home
                         if($lv > $rank_row['compute']){
                             $update = array('compute'=>$lv);
                         }
-                        $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv);
+                        $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv,'skill_type'=>1);
                     }
                 }
                 $insert = array(
@@ -847,7 +847,7 @@ class Student_Gradings extends Student_Home
 
                 $wpdb->startTrans();
 
-                $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
+                //$c = $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
 
                 $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
 
@@ -857,8 +857,7 @@ class Student_Gradings extends Student_Home
                     }else{
 
                         if(!empty($update)){
-                            $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id']));
-                           #r$d+
+                            $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
                         }else{
                             $b = 1;
                         }
@@ -1068,6 +1067,18 @@ class Student_Gradings extends Student_Home
             $success_len = !empty($count_value['true']) ? $count_value['true'] : 0;
 
             $len = count($questions_answer);
+        }
+        elseif($row['questions_type'] == 'rm'){
+            if(!empty($my_answer)){
+                $success_len = 0;
+                $len = count($my_answer);
+                foreach ($my_answer as $k => $v){
+                    if($v['name'] == $questions_answer[$k]['name'] && $v['phone'] == $questions_answer[$k]['phone']){
+                        $success_len += 1;
+                    }
+                }
+            }
+
         }
         else{
 
@@ -1353,7 +1364,8 @@ class Student_Gradings extends Student_Home
     public function get_grading_questions($match_id,$log_id){
 
         global $wpdb,$current_user;
-        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,correct_rate,is_true,post_str_length,use_time,post_more,
+        $sql = "select grading_type,questions_type,submit_type,leave_page_time,grading_questions,questions_answer,my_answer,my_score,
+                    correct_rate,is_true,post_str_length,use_time,post_more,
                     case grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'

@@ -90,14 +90,14 @@ if(!in_array($project_alias,array('szzb','pkjl','zxss','nxss','wzsd','kysm'))){
             require_once leo_student_public_view.'leftMenu.php';
         }
         ?>
-        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
+        <div class="nl-right-content layui-col-lg8 layui-col-md12 layui-col-sm12 layui-col-xs12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <?php if(isset($_GET['type'])){ ?>
                     <a class="mui-pull-left nl-goback"><div><i class="iconfont">&#xe610;</i></div></a>
                 <?php } ?>
                 <h1 class="mui-title"><div><?=$match_title?><?=__('答题记录', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content ">
+            <div class="layui-row nl-border nl-content <?php if(!isset($_GET['back'])){ ?>have-bottom<?php } ?>">
                 <div class="width-margin">
                     <div class="match-subject-info">
                         <div class="subject-title">
