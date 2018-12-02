@@ -1372,7 +1372,7 @@ class Student_Ajax
 
         if($_POST['type'] == 2){
             $sql_ = "select SQL_CALC_FOUND_ROWS a.ID,a.post_title,a.post_content,b.start_time as match_start_time,b.grading_notice_url as match_notice_url,
-                    b.address as match_address,b.cost as match_cost,b.entry_end_time,b.status as match_status,c.user_id,
+                    b.address as match_address,b.cost as match_cost,b.start_time,b.entry_end_time,b.status as match_status,c.user_id,
                     case b.status 
                     when -3 then '已结束' 
                     when -2 then '等待开赛' 
@@ -1384,7 +1384,7 @@ class Student_Ajax
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}grading_meta b on c.match_id = b.grading_id 
                   where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 2 and b.start_time != ''
-                  order by b.status desc limit $start,$pageSize
+                  order by b.status desc,b.start_time desc limit $start,$pageSize
                   ";
         }else{
 
