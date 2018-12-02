@@ -17,7 +17,7 @@
                     <div class="layui-row nl-border nl-content have-bottom">
                         <div class="width-padding width-padding-pc ta_c c_blue fs_12 his_tips"><?=__('温馨提示:训练记录最多保存100条', 'nlyd-student')?> <span class="c_black pull-right close fs_20">×</span></div>
                         <?php if($_GET['alias'] == 'grading'):?>
-                        <div class="width-padding width-padding-pc ta_c">
+                        <div class="width-padding width-padding-pc ta_c mt_10">
                             <span class="fs_16">训练记录：
                                 记忆<span class="c_blue"><?=$rank_row['memory'] > 0 ? $rank_row['memory'] : 0;?></span>级
                                 心算<span class="c_blue"><?=$rank_row['compute'] > 0 ? $rank_row['compute'] : 0;?></span>级
