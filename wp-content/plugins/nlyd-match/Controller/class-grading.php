@@ -130,7 +130,7 @@ class Grading
                             <strong><?=isset($use_real_name['real_name']) ? $use_real_name['real_name'] : ''?></strong>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'])?>">答题记录</a>  </span>
+                                <span class="edit"><a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$row['user_id'])?>">答题记录</a>  </span>
                                 <span class=""><a href="<?=admin_url('user-edit.php?user_id='.$row['user_id'])?>" aria-label="">编辑用户</a></span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
@@ -395,6 +395,7 @@ class Grading
 //        leo_dump($gradingQuestion);
 //        die;
         $gradingQuestion = $gradingQuestions[$more];
+//        leo_dump($gradingQuestion);
         $moreArr = [];
         if(count($gradingQuestions) > 1){
             $moreArr = $gradingQuestions;
@@ -500,7 +501,7 @@ class Grading
                        $p_name = $this->getProject($gav);
                        ?>
                     <li class="<?=$gav?>">
-                        <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
                             <span class="count"></span>
                         </a>
                         <?=($k+1)<$counts?'|':''?>
@@ -521,7 +522,7 @@ class Grading
 
                        ?>
                     <li class="<?=$mak?>">
-                        <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$g_type.'&more='.$mak)?>" <?=$more==$mak?'class="current"':''?> aria-current="page">
+                        <a href="<?=admin_url('edit.php?post_type=grading&page=grading-studentScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$g_type.'&more='.$mak)?>" <?=$more==$mak?'class="current"':''?> aria-current="page">
                             第<?=$mav['post_more']?>轮
                             <span class="count"></span>
                         </a>
@@ -609,7 +610,19 @@ class Grading
                 <?php if($gradingQuestion['post_id'] > 0){ ?>
                     <div class="intro-box">
                         <span class="intro-key">文章: </span>
-                        <span class="intro-value"><?=isset(get_posts(['ID'=>$gradingQuestion['post_id']])[0]) ? get_posts(['ID'=>$gradingQuestion['post_id']])[0]->post_title : ''?></span>
+                        <span class="intro-value"><?=get_post($gradingQuestion['post_id']) ? get_post($gradingQuestion['post_id'])->post_title : ''?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['my_score'] > 0){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">分数: </span>
+                        <span class="intro-value"><?=$gradingQuestion['my_score']?></span>
+                    </div>
+                <?php } ?>
+                <?php if($gradingQuestion['my_score'] == 0){ ?>
+                    <div class="intro-box">
+                        <span class="intro-key">阅读速读: </span>
+                        <span class="intro-value">每分钟<?=floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60))?>字</span>
                     </div>
                 <?php } ?>
 
@@ -720,7 +733,7 @@ class Grading
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS utl.questions_type,utl.correct_rate,utl.my_score,utl.use_time,utl.created_time,u.user_mobile,utl.user_id,
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS utl.questions_type,utl.correct_rate,utl.my_score,utl.use_time,utl.created_time,u.user_mobile,utl.user_id,utl.post_str_length,
                 CASE utl.grading_type 
                 WHEN 'memory' THEN '记忆类' 
                 WHEN 'reading' THEN '速读类' 
@@ -797,7 +810,7 @@ class Grading
                 <th scope="col" id="category" class="manage-column column-category">训练类别</th>
                 <th scope="col" id="correct_rate" class="manage-column column-correct_rate">准确率</th>
                 <th scope="col" id="my_score" class="manage-column column-my_score">分数</th>
-                <th scope="col" id="use_time" class="manage-column column-use_time">记忆耗时</th>
+                <th scope="col" id="use_time" class="manage-column column-use_time">阅读速度</th>
                 <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
                 <th scope="col" id="status" class="manage-column column-status">训练状态</th>
                 <th scope="col" id="level" class="manage-column column-level">训练等级</th>
@@ -826,7 +839,7 @@ class Grading
                         <td class="category column-category" data-colname="训练类别"><?=$row['grading_name']?></td>
                         <td class="correct_rate column-correct_rate" data-colname="准确率"><?=$row['correct_rate']*100?>%</td>
                         <td class="my_score column-my_score" data-colname="分数"><?=$row['my_score']?></td>
-                        <td class="use_time column-use_time" data-colname="记忆耗时"><?=$row['use_time']?></td>
+                        <td class="use_time column-use_time" data-colname="阅读速度"><?=$row['post_str_length']&&$row['use_time'] ? '每分钟'.floor($row['post_str_length']/($row['use_time']/60)).'字':''?></td>
                         <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
                         <td class="status column-status" data-colname="训练状态"><?=$row['created_time']?></td>
                         <td class="level column-level" data-colname="训练等级"><?=$row['created_time']?></td>
@@ -845,7 +858,7 @@ class Grading
                     <th scope="col" class="manage-column column-category">训练类别</th>
                     <th scope="col" class="manage-column column-correct_rate">准确率</th>
                     <th scope="col" class="manage-column column-my_score">分数</th>
-                    <th scope="col" class="manage-column column-use_time">记忆耗时</th>
+                    <th scope="col" class="manage-column column-use_time">阅读速度</th>
                     <th scope="col" class="manage-column column-created_time">提交时间</th>
                     <th scope="col" class="manage-column column-status">训练状态</th>
                     <th scope="col" class="manage-column column-level">训练等级</th>
