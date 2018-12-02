@@ -73,7 +73,7 @@ jQuery(function($) {
     });
     var isSubmit=false;//是否正在提交
     var _genre_id=$.Request('genre_id');
-    var _grading_num=$.Request('num');
+    var _history_id=$.Request('history_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _length=$.Request('length');
@@ -150,11 +150,10 @@ jQuery(function($) {
             })
             var data={
                 genre_id:_genre_id,
-                grading_num:_grading_num,
+                history_id:_history_id,
                 grading_type:_grad_type,
                 questions_type:_type,
                 post_id:$.Request('post_id'),
-                more:<?=isset($_GET['more']) ? $_GET['more'] : 1?>,
                 grading_questions:<?=json_encode($match_questions)?>,
                 questions_answer:<?=json_encode($questions_answer)?>,
                 action:'grade_answer_submit',
