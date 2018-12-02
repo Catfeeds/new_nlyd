@@ -275,8 +275,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
-            <?php if(empty($next_project)): ?>
-            layui.use('layer', function(){
+            <?php /*if(empty($next_project)):*/ ?>
+            /*layui.use('layer', function(){
                 layer.open({
                     type: 1
                     ,maxWidth:300
@@ -298,8 +298,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ,shade: 0.3 //遮罩
                     ,isOutAnim:true//关闭动画
                 });
-            })
-            <?php endif;?>
+            })*/
+            <?php  /*endif;*/?>
         <?php endif;?>
     })
 </script>
