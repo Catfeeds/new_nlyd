@@ -15,7 +15,7 @@
         </div>
         <div class="nl-foot-name"><?=__('首页', 'nlyd-student')?></div>
     </a>
-    <a class="nl-foot-item flex1 <?=CONTROLLER == 'trains' ? 'active':'';?> " href="<?=home_url('/trains');?>">
+    <a class="nl-foot-item flex1 <?=CONTROLLER == 'trains' || CONTROLLER == 'grade' ? 'active':'';?> " href="<?=home_url('/trains');?>">
         <div class="nl-foot-icon">
             <div class="footer-train"></div>
         </div>

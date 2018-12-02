@@ -138,7 +138,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             </div>
                             <?php if(!empty($_GET['reading']=='grad_type')):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
+                                    <div class="left-label"><?=__('速度', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
                                 </div>
                             <?php endif;?>
                             <?php if(!empty($_GET['grad_type']=='arithmetic')):?>
