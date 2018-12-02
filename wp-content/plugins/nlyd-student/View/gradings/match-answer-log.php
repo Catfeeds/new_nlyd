@@ -235,7 +235,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             if($('.count_down').length>0){
                 var endTimes=0;
                 var countSession=$.GetSession('count')
-                if(countSession){
+                if(countSession  && !isNaN(countSession)){
                     endTimes=countSession;
                 }else{
                     var counts_down=$('.count_down').attr('data-seconds')
@@ -243,6 +243,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     $.SetSession('count',endTimes)
                 }
                 var new_count=$.GetSecond(endTimes);
+                console.log(new_count)
+                // if(new_count<=0){
+                //     $.DelSession('count');
+                //     var href=$('.count_down').parents('.a-btn').attr('href');
+                //     if(href){
+                //         window.location.href=href
+                //     }else{
+                //         window.location.reload();
+                //     }
+                // }
                 $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
                     // var count_down=S
                     // var new_count=$.GetSecond(endTimes);
