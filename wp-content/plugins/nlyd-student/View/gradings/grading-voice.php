@@ -88,15 +88,15 @@ jQuery(function($) {
     var _index=0;
     var spriteData={
         0:{start:0,length:1},
-        1:{start:1,length:1},
-        2:{start:2,length:1},
-        3:{start:3,length:1},
-        4:{start:4,length:1},
-        5:{start:5,length:1},
-        6:{start:6,length:1},
-        7:{start:7,length:1},
-        8:{start:8,length:1},
-        9:{start:9,length:1},
+        1:{start:1.4,length:1},
+        2:{start:2.8,length:1},
+        3:{start:4.2,length:1},
+        4:{start:5.6,length:1},
+        5:{start:7,length:1},
+        6:{start:8.4,length:1},
+        7:{start:9.8,length:1},
+        8:{start:11.2,length:1},
+        9:{start:12.6,length:1},
     }
     init_question(que_len,_show)
     console.log(questions_answer)

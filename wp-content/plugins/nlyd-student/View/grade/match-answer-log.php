@@ -82,6 +82,10 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 .layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
     color:#fff;
     background: #4394F9!important;
+    width:100%;
+}
+.layui-layer.nl-box-skin .layui-layer-btn div{
+    width:100%;
 }
 </style>
 <div class="layui-fluid">

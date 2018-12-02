@@ -139,12 +139,7 @@ class Teacher
                     <?php
                     foreach ($rows as $row){
                         //有多少学员
-                        $student_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id={$row['coach_id']} GROUP BY user_id");
-                        $student_apply_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id={$row['coach_id']} GROUP BY user_id");
-                        $student_num = count($student_num);
-                        $student_apply_num = count($student_apply_num);
-                        $student_num = $student_num > 0 ? $student_num : 0;
-                        $student_apply_num = $student_apply_num > 0 ? $student_apply_num : 0;
+                        $studentNumArr = $this->getStudentNum($row['coach_id']);
                         //教练信息
                         $usermeta = get_user_meta($row['coach_id']);
                         $user_real_name = isset($usermeta['user_real_name'][0]) ? unserialize($usermeta['user_real_name'][0]) : [];
@@ -189,9 +184,9 @@ class Teacher
                                 <?=join('/',$categoryArr)?>
                             </td>
                             <td class="student_num column-student_num" data-colname="学员数量">
-                                <a href="<?php echo '?page=teacher-student&id='.$row['coach_id']?><?=$student_apply_num>0?'&type=1':''?>" aria-label="">
-                                    <span style="color: #00aff9"><?=$student_num?></span>
-                                    <?php if($student_apply_num>0) echo '<span style="color: #c42e00">+'.$student_apply_num.'</span>'; ?>
+                                <a href="<?php echo '?page=teacher-student&id='.$row['coach_id']?><?=$studentNumArr['apply']>0?'&type=1':''?>" aria-label="">
+                                    <span style="color: #00aff9"><?=$studentNumArr['member']?></span>
+                                    <?php if($studentNumArr['apply']>0) echo '<span style="color: #c42e00">+'.$studentNumArr['apply'].'</span>'; ?>
                                 </a>
                             </td>
                             <td class="course_num column-course_num" data-colname="课程数量">
@@ -264,75 +259,60 @@ class Teacher
         $err_msg = '';
         $suc_msg = '';
         global $wpdb;
-
-
+        $id = $_GET['id'];
         if(is_post()){
-            if(!preg_match('/1[345678][0-9]{9}/', $_POST['mobile'])) $err_msg = '手机格式错误';
-            if(!preg_match('/[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}/',$_POST['email'])){
-                $err_msg = $err_msg != '' ? $err_msg.', 邮箱格式错误' : '邮箱格式错误';
-            }
-            //教练技能
-            $read = isset($_POST['read']) ? intval($_POST['read']) : 0;
-            $memory = isset($_POST['memory']) ? intval($_POST['memory']) : 0;
-            $compute = isset($_POST['compute']) ? intval($_POST['compute']) : 0;
-            //如果取消教练类别, 判断此教练的类别是否还存在学员
-            //查询当前教练
-            $old = $wpdb->get_row('SELECT `read`,memory,compute FROM '.$wpdb->prefix.'coach_skill WHERE coach_id='.$_POST['user_id'], ARRAY_A);
-            $sql = 'SELECT id FROM '.$wpdb->prefix.'my_coach WHERE coach_id='.$_POST['user_id'].' AND (apply_status=2 OR apply_status=1) AND category_id=';
-            $cateErr = '存在学生或正在申请的学生, 请先解除此类别所属学生或拒绝申请<br />';
-            if($read == 0 && $old['read'] != 0){
-                $id = $wpdb->get_var($sql.$old['read']);
-                if($id) $err_msg .= '速读类'.$cateErr;
-            }
-            if($memory == 0 && $old['memory'] != 0){
-                $id = $wpdb->get_var($sql.$old['memory']);
-                if($id) $err_msg .= '速记类'.$cateErr;
-            }
-            if($compute == 0 && $old['compute'] != 0){
-                $id = $wpdb->get_var($sql.$old['compute']);
-                if($id) $err_msg .= '速算类'.$cateErr;
-            }
-
-            if($err_msg == ''){
-                //教练资料
-                $bool = $wpdb->update($wpdb->users,
-                    ['display_name' => $_POST['surname'].', '.$_POST['dis_name'], 'user_mobile' => $_POST['mobile'], 'user_email' => $_POST['email']],
-                    ['id' => $_POST['user_id']]);
-                if($bool){
-                    //修改usermeta
-                    update_user_meta($_POST['user_id'], 'last_name', $_POST['surname']);
-                    update_user_meta($_POST['user_id'], 'first_name', $_POST['dis_name']);
+            //教学类别
+            $read_value = 0;
+            $memory_value = 0;
+            $compute_value = 0;
+            if(isset($_POST['categorys'])){
+                foreach ($_POST['categorys'] as $v){
+                    $category_v = explode('_',$v);
+                    switch ($category_v[1]){
+                        case 'reading':
+                            $read_value = $category_v[0];
+                            break;
+                        case 'memory':
+                            $memory_value = $category_v[0];
+                            break;
+                        case 'arithmetic':
+                            $compute_value = $category_v[0];
+                            break;
+                    }
                 }
+            }
 
-
-
-                $bool_skill = $wpdb->update($wpdb->prefix.'coach_skill',['read' => $read, 'memory' => $memory, 'compute' => $compute], ['id' => intval($_POST['sk_id'])]);
-
-                if($bool || $bool_skill) $suc_msg = '编辑成功';
-                else $err_msg = '编辑失败';
+            $bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$read_value,'memory'=>$memory_value,'compute'=>$compute_value],['id'=>$id]);
+            if($bool){
+                $suc_msg = '更新成功';
+            }else{
+                $err_msg = '更新失败';
             }
 
         }
-        $id = $_GET['id'];
 
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.display_name,b.user_mobile,b.user_login,b.user_email,a.id,a.coach_id,a.read,b.id as user_id,a.memory,a.compute
-                    FROM {$wpdb->prefix}users b  
-                    LEFT JOIN {$wpdb->prefix}coach_skill a ON a.coach_id = b.ID 
+        $sql = "SELECT b.user_mobile,b.ID AS user_id,a.read,a.memory,a.compute 
+                    FROM {$wpdb->users} AS  b  
+                    LEFT JOIN {$wpdb->prefix}coach_skill AS  a ON a.coach_id = b.ID 
                     WHERE a.id={$id}";
         $row = $wpdb->get_row($sql, ARRAY_A);
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        if(!$row) exit('未找到用户数据!');
+        $sql = "select p.ID,p.post_title,pm.meta_value as alis from {$wpdb->prefix}posts as p 
+                left join {$wpdb->postmeta} as pm on pm.post_id=p.ID and pm.meta_key='project_alias' 
+                where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc";
         $postsRows = $wpdb->get_results($sql,ARRAY_A);
-
-
+        $usermeta = get_user_meta($row['user_id']);
+        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
+//        leo_dump($postsRows);
+        //学员数量
+        $studentNumArr = $this->getStudentNum($row['user_id']);
         ?>
         <div id="wpbody" role="main">
 
             <div id="wpbody-content" aria-label="主内容" tabindex="0">
 
                 <div class="wrap" id="profile-page">
-                    <h1 class="wp-heading-inline">教练资料</h1>
-
-
+                    <h1 class="wp-heading-inline">教练详情</h1>
 
                     <form id="" action="" method="post" novalidate="novalidate">
                         <input type="hidden" id="_wpnonce" name="_wpnonce" value="5fcd054cd3"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">	<input type="hidden" name="wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -340,84 +320,94 @@ class Teacher
                             <input type="hidden" name="from" value="profile">
                             <input type="hidden" name="checkuser_id" value="1">
                         </p>
-
-
-
                         <table class="form-table">
 
                         </table>
                         <div id="err-box"><?=$err_msg?></div>
                         <div id="suc-box"><?=$suc_msg?></div>
-                        <h2>姓名</h2>
+                        <div style="line-height: 30px;height: 30px;">
+                            <span style="font-size: 26px;">教练详情</span>
+                            &ensp;&ensp;&ensp;&ensp;
+                            <span><a href="<?=admin_url('users.php?page=users-info&ID='.$row['user_id'])?>" style="color: #00afc4; text-decoration: none">编辑更多账户资料</a></span>
+                        </div>
 
                         <table class="form-table">
                             <tbody><tr class="user-user-login-wrap">
-                                <th><label for="user_login">用户名</label></th>
-                                <td><input type="text" name="user_login" id="user_login" value="<?=$row['user_login']?>" disabled="disabled" class="regular-text"> <span class="description">用户名不可更改。</span></td>
+                                <th><label for="user_login">教练姓名</label></th>
+                                <td><?=isset($user_real_name['real_name']) ? $user_real_name['real_name']: ''?></td>
                             </tr>
 
-
                             <tr class="user-first-name-wrap">
-                                <th><label for="dis_name">名字</label></th>
-                                <td><input type="text" name="dis_name" id="dis_name" value="<?=explode(', ',$row['display_name'])[1]?>" class="regular-text"></td>
+                                <th><label for="dis_name">教练性别</label></th>
+                                <td><?=isset($usermeta['user_gender']) ? $usermeta['user_gender'][0]: ''?></td>
                             </tr>
 
                             <tr class="user-last-name-wrap">
-                                <th><label for="surname">姓氏</label></th>
+                                <th><label for="surname">教练年龄</label></th>
+                                <td><?=isset($user_real_name['real_age']) ? $user_real_name['real_age']: ''?></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">手机号码</label></th>
+                                <td><?=isset($row['user_mobile']) ? $row['user_mobile']: ''?></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">账户ID</label></th>
+                                <td><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0]: ''?></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">教练照片</label></th>
+                                <td>
+                                    <img src="" alt="">
+                                    <input type="file">
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="">教学类别</label></th>
+                                <td>
+                                    <?php foreach ($postsRows as $prv){ ?>
+                                        <label for="category_<?=$prv['ID']?>"><?=$prv['post_title']?></label>
+                                        <input name="categorys[]" type="checkbox" <?=in_array($prv['ID'],[$row['read'],$row['memory'],$row['compute']])?'checked="checked"':''?> id="category_<?=$prv['ID']?>" value="<?=$prv['ID'].'_'.$prv['alis']?>">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">教练职称</label></th>
+                                <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">教练证书</label></th>
                                 <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
                             </tr>
 
-                            </tbody>
-                        </table>
-
-                        <h2>联系信息</h2>
-
-                        <table class="form-table">
-                            <tbody><tr class="user-email-wrap">
-                                <th><label for="email">电子邮件 <span class="description">（必填）</span></label></th>
-                                <td><input type="email" name="email" id="email" value="<?=$row['user_email']?>" class="regular-text ltr">
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">教练简介</label></th>
+                                <td>
+                                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">学员数量</label></th>
+                                <td>
+                                    <span style="color: #007fc4"><?=$studentNumArr['member']?>位</span>
+                                    &ensp;&ensp;
+                                    <span style="color: #C4003D">(<?=$studentNumArr['apply']?>个新申请用户)</span>
+                                    &ensp;&ensp;&ensp;&ensp;
+                                    <a style="color: #c4071c;text-decoration: none;font-weight: 600" href="<?php echo '?page=teacher-student&id='.$row['user_id']?>?>">(点击进入学员列表)</a>
+                                </td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">相关课程</label></th>
+                                <td><input type="text" name="surname" id="surname" value="<?=explode(', ',$row['display_name'])[0]?>" class="regular-text"></td>
+                            </tr>
+                            <tr class="user-last-name-wrap">
+                                <th><label for="surname">所属机构</label></th>
+                                <td>
+                                    <select name="" id=""></select>
                                 </td>
                             </tr>
 
-                            <tr class="user-url-wrap">
-                                <th><label for="mobile">手机</label></th>
-                                <td><input type="text" name="mobile" id="mobile" value="<?=$row['user_mobile']?>" class="regular-text code"></td>
-                            </tr>
-
                             </tbody>
                         </table>
-
-
-                        <?php if(is_array($postsRows)){ ?>
-                            <h2>技能</h2>
-                            <table class="form-table">
-                                <tbody>
-                                <tr class="user-url-wrap">
-                                    <th><label for="skill">技能</label></th>
-                                    <td>
-                                        <?php foreach ($postsRows as $prow){?>
-
-                                            <lable for="du"><?=$prow['post_title']?></lable>
-
-                                            <?php if(preg_match('/算/', $prow['post_title'])){ ?>
-                                                <input id="du" type="checkbox" <?php if($row['compute'] == $prow['ID']){ ?> checked="checked"<?php } ?> name="compute" value="<?=$prow['ID']?>">
-                                            <?php }elseif(preg_match('/记/', $prow['post_title'])){ ?>
-                                                <input id="du" type="checkbox" <?php if($row['memory'] == $prow['ID']){ ?> checked="checked"<?php } ?> name="memory" value="<?=$prow['ID']?>">
-                                            <?php }elseif(preg_match('/读/', $prow['post_title'])){ ?>
-                                                <input id="du" type="checkbox" <?php if($row['read'] == $prow['ID']){ ?> checked="checked"<?php } ?> name="read" value="<?=$prow['ID']?>">
-                                            <?php } ?>
-
-
-                                        <?php } ?>
-                                        <input type="hidden" name="sk_id" value="<?=$id?>">
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        <?php }?>
-
-
-
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
 
@@ -481,18 +471,7 @@ class Teacher
             $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=co.user_id AND um2.meta_key='user_real_name'
                             LEFT JOIN '.$wpdb->usermeta.' AS um ON um.user_id=co.user_id AND um.meta_key='user_ID' ";
         }
-        //通过数量
-        $member_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id='{$coach_id}' GROUP BY user_id");
-        //申请数量
-        $addly_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id='{$coach_id}' GROUP BY user_id");
-        //拒绝数量
-        $refuse_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=-1 AND coach_id='{$coach_id}' GROUP BY user_id");
-        //解除数量
-        $relieve_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=3 AND coach_id='{$coach_id}' GROUP BY user_id");
-        $addly_num = count($addly_num);
-        $member_num = count($member_num);
-        $refuse_num = count($refuse_num);
-        $relieve_num = count($relieve_num);
+        $studentNumArr = $this->getStudentNum($coach_id);
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $sql = 'SELECT SQL_CALC_FOUND_ROWS u.user_mobile,co.apply_status,u.ID AS user_id,
@@ -527,11 +506,11 @@ class Teacher
         <div class="wrap">
             <h1 class="wp-heading-inline"><?=$real_name?>学生</h1>
             <ul id="tab">
-                <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过(<?=$member_num?>)</li>
-                <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中(<?=$addly_num?>)</li>
-                <li class="<?php if($type == -1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=-1'.'&id='.$coach_id?>'">已拒绝(<?=$refuse_num?>)</li>
+                <li class="<?php if($type == 2) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=2'.'&id='.$coach_id?>'">已通过(<?=$studentNumArr['member']?>)</li>
+                <li class="<?php if($type == 1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=1'.'&id='.$coach_id?>'">申请中(<?=$studentNumArr['apply']?>)</li>
+                <li class="<?php if($type == -1) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=-1'.'&id='.$coach_id?>'">已拒绝(<?=$studentNumArr['refuse']?>)</li>
 
-                <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除(<?=$relieve_num?>)</li>
+                <li class="<?php if($type == 3) echo 'active'?>" onclick="window.location.href='<?='?page=teacher-student&type=3'.'&id='.$coach_id?>'">已解除(<?=$studentNumArr['relieve']?>)</li>
             </ul>
             <br class="clear">
             <br class="clear">
@@ -906,6 +885,22 @@ class Teacher
      */
     public function course(){
 
+    }
+
+    /**
+     * 获取学员的数量
+     */
+    public function getStudentNum($coach_id){
+        global $wpdb;
+        //通过数量
+        $member_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=2 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //申请数量
+        $apply_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=1 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //拒绝数量
+        $refuse_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=-1 AND coach_id='{$coach_id}' GROUP BY user_id");
+        //解除数量
+        $relieve_num = $wpdb->get_results("SELECT id FROM `{$wpdb->prefix}my_coach` WHERE apply_status=3 AND coach_id='{$coach_id}' GROUP BY user_id");
+        return ['member'=>count($member_num),'apply'=>count($apply_num),'refuse'=>count($refuse_num),'relieve'=>count($relieve_num)];
     }
 
     /**
