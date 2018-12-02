@@ -636,7 +636,7 @@ class Student_Trains extends Student_Home
                 }
             }
         }
-        print_r($list);
+        //print_r($list);
         //die;
         $data['list'] = $list;
 
@@ -664,7 +664,7 @@ class Student_Trains extends Student_Home
                 $prefix = $wpdb->prefix;
                 switch ($val['alias']){
                     case 'grading'; //考级训练
-                        $table = $prefix.'user_grade_logs';
+                        $table = $prefix.'user_grade_log_history';
                         break;
                     case 'mental_world_cup';    //脑力世界杯训练
                         $table = $prefix.'user_train_logs';
