@@ -667,7 +667,7 @@ class Student_Grade extends Student_Home
             if(!empty($rows)){
                 //获取用户技能 (考级测试)
                 $rank_row = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID} and skill_type = 2",ARRAY_A);
-                $update = array();
+                $update1 = array();
                 if($_GET['memory_lv'] > 0){
 
                     $correct_rate = array();
@@ -704,7 +704,9 @@ class Student_Grade extends Student_Home
 
                     }
                     $lv = $_GET['memory_lv'];
-                    //var_dump($lv);
+                    if($lv > $rank_row['memory']){
+                        $update1 = array('memory'=>$lv);
+                    }
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$lv,'skill_type'=>2);
                 }
                 elseif($_GET['grad_type']== 'reading'){
@@ -718,7 +720,7 @@ class Student_Grade extends Student_Home
                         if($lv > 0){
                             $grading_result = 1;
                             if($lv > $rank_row['read']){
-                                $update = array('read'=>$lv);
+                                $update1 = array('read'=>$lv);
                             }
                             $insert1 = array('user_id'=>$current_user->ID,'read'=>$lv,'skill_type'=>2);
                         }
@@ -734,7 +736,7 @@ class Student_Grade extends Student_Home
                     if($lv > 0){
                         $grading_result = 1;
                         if($lv > $rank_row['compute']){
-                            $update = array('compute'=>$lv);
+                            $update1 = array('compute'=>$lv);
                         }
                         $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv,'skill_type'=>2);
                     }
@@ -756,8 +758,8 @@ class Student_Grade extends Student_Home
             if(empty($rank_row) && $grading_result == 1){
                 $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
             }else{
-                if(!empty($update)){
-                    $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>2));
+                if(!empty($update1)){
+                    $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update1,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>2));
                 }else{
                     $b = 1;
                 }
@@ -913,7 +915,8 @@ class Student_Grade extends Student_Home
         }else{
             $where = " and a.questions_type = '{$_GET['questions_type']}' ";
         }
-        $sql = "select a.user_id,a.grade_log_id,a.grading_type,a.questions_type,a.grading_questions,a.questions_answer,a.my_answer,a.my_score,a.correct_rate,b.grade_lv,
+        $sql = "select a.user_id,a.grade_log_id,a.grading_type,a.questions_type,a.grading_questions,a.questions_answer,a.my_answer,
+                a.my_score,a.correct_rate,b.grade_lv,post_str_length,use_time,
                     case a.grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'
