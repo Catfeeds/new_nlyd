@@ -38,11 +38,10 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL,
-          `reading` int(20) DEFAULT NULL,
-          `arithmetic` int(20) DEFAULT NULL,
-          `memory` int(20) DEFAULT NULL,
-          `last_time` datetime DEFAULT NULL COMMENT '最后一次训练时间',
+          `grade_type` varchar(20) DEFAULT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
+          `created_time` datetime DEFAULT NULL COMMENT '最后一次训练时间',
           PRIMARY KEY (`id`),
+          KEY `user_id` (`user_id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
         dbDelta($sql);
@@ -510,6 +509,7 @@ function the_table_install () {
           `nationality` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '国籍',
           `mental_lv` tinyint(3) DEFAULT NULL COMMENT '脑力级别',
           `mental_type` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '脑力健将',
+          `skill_type` tinyint(2) DEFAULT '1' COMMENT '考级类别 1 专业比赛  2 考级训练',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

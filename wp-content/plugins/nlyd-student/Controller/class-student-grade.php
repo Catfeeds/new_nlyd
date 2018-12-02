@@ -242,7 +242,7 @@ class Student_Grade extends Student_Home
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' {$where} ";
+                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where} ";
                 //print_r($sql);
 
                 $rows = $wpdb->get_results($sql,ARRAY_A);

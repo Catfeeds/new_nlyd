@@ -17,8 +17,9 @@
                     <div class="layui-row nl-border nl-content have-bottom">
                         <div class="width-padding width-padding-pc ta_c c_blue fs_12 his_tips"><?=__('温馨提示:训练记录最多保存100条', 'nlyd-student')?> <span class="c_black pull-right close fs_20">×</span></div>
                         <div class="width-padding width-padding-pc">
-                            <?php foreach ($list as $v){ ?>
-                            <div class="ta_c mt_10"><?=__('今 天 2018/10/26', 'nlyd-student')?></div>
+                            <?php foreach ($list as $k => $val){ ?>
+                            <div class="ta_c mt_10"><?=__($k, 'nlyd-student')?></div>
+                            <?php foreach ($val as $v){ ?>
                             <a class="his_row"  href="<?=home_url('trains/logs/back/1/id/'.$v['id'].'/type/'.$v['project_type'])?>">
                                 <div class="bold c_black pull-left his_first"> <?=__($v['project_type_cn'], 'nlyd-student')?></div>
                                 <!-- <div class="c_orange pull-left his_second"><?=$v['my_score']?>分</div> -->
@@ -28,6 +29,7 @@
                                 </div>
                                 <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
                             </a>
+                            <?php } ?>
                             <?php } ?>
                             <a class="a-btn" href="<?=home_url('trains')?>"><?=__('马上去训练', 'nlyd-student')?></a>
                         </div>
