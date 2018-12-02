@@ -32,7 +32,7 @@ jQuery(function($) {
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
-    var _grading_num=<?=$num?>;
+    var _history_id=<?=$history_id?>;
     var _memory_lv=<?=isset($_GET['memory_lv']) ? $_GET['memory_lv'] : 1 ;?>;
     var isSubmit=false;//是否正在提交
     var _genre_id=$.Request('genre_id');
@@ -243,7 +243,7 @@ jQuery(function($) {
             // console.log(ajax_question);
             //  return false;
             var data={
-                grading_num:_grading_num,
+                history_id:_history_id,
                 memory_lv:_memory_lv,
                 genre_id:_genre_id,
                 grading_type:_grad_type,

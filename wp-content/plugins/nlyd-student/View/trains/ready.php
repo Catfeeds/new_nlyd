@@ -439,16 +439,16 @@
         </div>
     </div>
     <?php
-        $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/');
-        switch ($_GET['type']){
+        $url = home_url('trains/initial/genre_id/'.$_GET['genre_id'].'/type/'.$_GET['type'].'/');   //脑力世界杯训练
+        switch ($_GET['type']){ //考级训练
             case 'reading':
-                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/');
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/history_id/'.$history_id);
                 break;
             case 'memory':
-                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/sz');
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/sz/history_id/'.$history_id);
                 break;
             case 'arithmetic':
-                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/zxys');
+                $url = home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['type'].'/type/zxys/history_id/'.$history_id);
                 break;
         }
     ?>

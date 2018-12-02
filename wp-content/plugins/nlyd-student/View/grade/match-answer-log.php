@@ -201,7 +201,6 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 </div>
 <script>
     jQuery(function($) {
-        //var _grading_num=<?=$num?>;//grading_num:_grading_num,
         $.DelSession('match');//考级记录参数
         $.DelSession('grade_question');//准备页面题目参数
         $.DelSession('match_data');

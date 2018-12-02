@@ -28,7 +28,7 @@
                 <div class="layui-row nl-border nl-content have-footer">
                     <div class="width-padding width-padding-pc">
                         <?php foreach ($list as $v){ ?>
-                            <a class="train_row his_list c_black " href="<?=home_url('trains/lists/id/'.$v['id'])?>">
+                            <a class="train_row his_list c_black " href="<?=home_url('trains/history/id/'.$v['id'].'/alias/'.$v['alias'])?>">
                                 <div class="train-img" style="background:#<?=$v['highlight']?>"></div>
                                 <div class="train_name">
 

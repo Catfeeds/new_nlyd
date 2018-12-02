@@ -69,7 +69,7 @@ jQuery(function($) {
         history.pushState(null, null, document.URL);
     });
     var isSubmit=false;//是否正在提交
-    var _grading_num=<?=$num?>;
+    var _history_id=<?=$history_id?>;
     var _genre_id=$.Request('genre_id');
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('type');
@@ -185,7 +185,7 @@ jQuery(function($) {
             delete ajaxData[_len-1]['examples'];
             delete ajaxData[_len-1]['have_noanswer'];
             var data={
-                grading_num:_grading_num,
+                history_id:_history_id,
                 genre_id:_genre_id,
                 grading_type:_grad_type,
                 questions_type:'nxys',

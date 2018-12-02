@@ -42,7 +42,7 @@ jQuery(function($) {
         history.pushState(null, null, document.URL);
     });
     var _genre_id=$.Request('genre_id');
-    var _grading_num=<?=$num?>;
+    var _history_id=<?=$history_id?>;
     var _grad_type=$.Request('grad_type');
     var _type=$.Request('grad_type');
     var _more=<?=isset($_GET['more']) ? $_GET['more'] : 1; ?>;
@@ -55,7 +55,7 @@ jQuery(function($) {
             if(!$('#complete').hasClass('disabled')){
                 var time=init_time-sys_second;
                 var href=$(this).attr('data-href')
-                var new_href=href+'/usetime/'+time+'/length/'+_length+'/more/'+_more;
+                var new_href=href+'/usetime/'+time+'/length/'+_length;
                 $.DelSession('grade_question')
                 window.location.href=new_href;
                 $('#complete').addClass('disabled')
@@ -112,7 +112,7 @@ jQuery(function($) {
         var time=init_time-sys_second;
         var data={
             genre_id:_genre_id,
-            grading_num:_grading_num,
+            history_id:_history_id,
             grading_type:_grad_type,
             questions_type:_type,
             post_id:<?=$post_id?>,

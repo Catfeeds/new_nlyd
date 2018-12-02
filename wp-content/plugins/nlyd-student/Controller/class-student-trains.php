@@ -98,16 +98,49 @@ class Student_Trains extends Student_Home
                 $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
             }
+            $project = get_post($_GET['id']);
+        }
+        else{
+            //新建训练记录
+            global $wpdb,$current_user;
+
+            $sql = "select a.id history_id,b.id questions_id from {$wpdb->prefix}user_grade_log_history a  
+                    left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
+                    where a.user_id = {$current_user->ID} and a.grade_type = '{$_GET['type']}'
+                    order by a.id desc  limit 1
+                    ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+
+            if(empty($row) || !empty($row['questions_id'])){
+                $insert = array(
+                    'user_id'=>$current_user->ID,
+                    'genre_id'=>$_GET['genre_id'],
+                    'grade_type'=>$_GET['type'],
+                    'created_time'=>get_time('mysql'),
+                );
+                $a = $wpdb->insert($wpdb->prefix.'user_grade_log_history',$insert);
+                //var_dump($a);
+                if($a){
+                    $history_id = $wpdb->insert_id;
+                    //print_r($log_id);
+                }else{
+                    $this->get_404(__('数据错误,请联系管理员', 'nlyd-student'));
+                    return;
+                }
+
+            }else{
+
+                $history_id = $row['history_id'];
+            }
         }
 
-        $genre = get_post($_GET['genre_id']);
 
-        $project = get_post($_GET['id']);
+        $genre = get_post($_GET['genre_id']);
 
         //print_r($row);
         $view = student_view_path.CONTROLLER.'/ready.php';
 
-        load_view_template($view,array('project_title'=>$project->post_title,'genre_title'=>$genre->post_title));
+        load_view_template($view,array('project_title'=>$project->post_title,'genre_title'=>$genre->post_title,'history_id'=>$history_id));
     }
 
     /**
@@ -546,7 +579,28 @@ class Student_Trains extends Student_Home
     public function history(){
 
         global $wpdb,$current_user;
-        $sql = "select id,my_score,created_time,project_type,
+        if($_GET['alias'] == 'grading'){
+            $sql = "select id,grading_type,questions_type,grading_num,my_score,correct_rate,date_format(created_time,'%Y/%m/%d') time ,created_time,
+                case questions_type
+                    when 'sz' then '随机数字'
+                    when 'cy' then '随机词汇'
+                    when 'zm' then '随机字母'
+                    when 'yzl' then '圆周率'
+                    when 'tl' then '听记数字'
+                    when 'rm' then '人脉信息'
+                    when 'wz' then '国学经典'
+                    when 'reading' then '文章速读'
+                    when 'zxys' then '正向速算'
+                    when 'nxys' then '逆向速算'
+                else '--'
+                end project_type_cn
+                from {$wpdb->prefix}user_grade_logs 
+                where user_id = {$current_user->ID} and  questions_type != '' AND grading_num > 0
+                order by created_time desc ";
+        }
+        elseif($_GET['alias'] == 'mental_world_cup'){
+
+            $sql = "select id,my_score,date_format(created_time,'%Y/%m/%d') time ,created_time,project_type,
                 case project_type
                 when 'szzb' then '数字争霸' 
                 when 'kysm' then '快眼扫描' 
@@ -558,15 +612,39 @@ class Student_Trains extends Student_Home
                 end project_type_cn
                 from {$wpdb->prefix}user_train_logs 
                 where user_id = {$current_user->ID} and  project_type != ''
-                order by created_time desc ";
+                order by created_time desc limit 0,100";
+        }
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        $data['list'] = $rows;
+        //print_r($rows);
+        if(!empty($rows)){
+
+            if($_GET['alias'] == 'grading'){
+                $list = array();
+                foreach ($rows as $v){
+                    $k = $v['grading_num'];
+                    $k1 = $v['grading_type'];
+                    $list[$k][$k1][] = $v;
+                }
+                
+            }
+            elseif($_GET['alias'] == 'mental_world_cup'){
+                $list = array();
+                foreach ($rows as $v){
+                    $k = $v['time'];
+                    $list[$k][] = $v;
+                }
+            }
+        }
+        print_r($list);
+        //die;
+        $data['list'] = $list;
 
         $view = student_view_path.CONTROLLER.'/history.php';
         load_view_template($view,$data);
     }
     /**
-     * 训练历史记录list
+     * 训练类型列表
      */
     public function history_list(){
         global $wpdb,$current_user;

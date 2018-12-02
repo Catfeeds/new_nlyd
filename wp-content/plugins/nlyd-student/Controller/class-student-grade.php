@@ -204,8 +204,10 @@ class Student_Grade extends Student_Home
 
         global $wpdb,$current_user;
 
-        //获取自己考级训练次数
-        $result1 = $wpdb->get_row("select * from {$wpdb->prefix}user_grade_log_history where user_id = {$current_user->ID}",ARRAY_A);
+        if(empty($_GET['history_id']) || empty($_GET['genre_id']) || empty($_GET['grad_type'])){
+           $this->get_404(array('message'=>__('参数错误', 'nlyd-student'),'match_url'=>home_url('/trains/')));
+           return;
+        }
 
         if($_GET['grad_type'] == 'memory'){
             $memory_lv = isset($_GET['memory_lv']) ? $_GET['memory_lv'] : $_SESSION['memory_lv'];
@@ -223,7 +225,6 @@ class Student_Grade extends Student_Home
             }
             //print_r($memory_type);
             $row['memory_type'] = $memory_type;
-            $num = !empty($result1['memory']) ? $result1['memory']+1 : 1;
         }
         elseif ($_GET['grad_type'] == 'reading'){
 
@@ -242,7 +243,7 @@ class Student_Grade extends Student_Home
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-match-question' and c.post_status = 'publish' {$where} ";
+                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where} ";
                 //print_r($sql);
 
                 $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -293,15 +294,11 @@ class Student_Grade extends Student_Home
             $row['post_id'] = $post_id;
             $row['questions_answer'] = $questions_answer;
             $row['match_questions'] = $match_questions;
-            $num = !empty($result1['reading']) ? $result1['reading']+1 : 1;
-            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id.'/num/'.$num);
+            $row['redirect_url'] = home_url(CONTROLLER.'/answerMatch/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type'].'/post_id/'.$post_id.'/history_id/'.$_GET['history_id']);
             //print_r($row);
         }
-        elseif ($_GET['grad_type'] == 'arithmetic'){
-            $num = !empty($result1['arithmetic']) ? $result1['arithmetic']+1 : 1;
-        }
         //print_r($num);die;
-        $row['num'] = $num;
+        $row['history_id'] = $_GET['history_id'];
         $row['project_alias'] = $_GET['grad_type'];
         $row['type_title'] = $this->get_memory_type_title($_GET['type']);
 
@@ -363,7 +360,7 @@ class Student_Grade extends Student_Home
 
         if(isset($_GET['log_id'])){
 
-            if(empty($_GET['genre_id']) || empty($_GET['log_id']) || empty($_GET['grad_type']) || empty($_GET['type']) ){
+            if(empty($_GET['grade_log_id']) || empty($_GET['log_id']) || empty($_GET['grad_type']) || empty($_GET['type']) ){
 
                 $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
@@ -527,7 +524,7 @@ class Student_Grade extends Student_Home
         if(isset($_GET['log_id'])){
 
             //获取答题记录
-            $row = $this->get_grading_questions($_GET['genre_id'],$_GET['log_id']);
+            $row = $this->get_grading_questions($_GET['grade_log_id'],$_GET['log_id']);
             //print_r($row);
             if(empty($row)){
                 $this->get_404(__('数据为空,请确认是否参加本轮答题', 'nlyd-student'));
@@ -775,7 +772,7 @@ class Student_Grade extends Student_Home
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
             'grading_result'=>$grading_result,
-            'reading_rate'=> $_GET['grad_type'] == 'reading' ? $row['post_str_length']/($row['use_time']/60) : '',
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? floor($row['post_str_length']/($row['use_time']/60)) : '',
             'grade_lv'=>$lv,
             'recur_url'=>home_url('grade/initial/genre_id/'.$_GET['genre_id'].'/grad_type/'.$_GET['grad_type']),
             'revert_url'=>home_url('/trains/lists/id/'.$_GET['genre_id'].'/'),
@@ -1238,11 +1235,11 @@ class Student_Grade extends Student_Home
 
     /**
      * 获取答题记录
-     * @param $match_id 比赛id
+     * @param $grade_log_id 训练id
      * @param $log_id   答题记录
      * @return array|null|object|void
      */
-    public function get_grading_questions($match_id,$log_id){
+    public function get_grading_questions($grade_log_id,$log_id){
 
         global $wpdb,$current_user;
         $sql = "select grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,post_str_length,use_time,
@@ -1264,7 +1261,7 @@ class Student_Grade extends Student_Home
                     when 'nxys' then '逆向运算'
                     end questions_type_cn
                     from {$wpdb->prefix}user_grade_logs
-                    where user_id = {$current_user->ID} and genre_id = {$match_id} and id = {$log_id} 
+                    where user_id = {$current_user->ID} and grade_log_id = {$grade_log_id} and id = {$log_id} 
                     ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
