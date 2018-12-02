@@ -4088,7 +4088,7 @@ class Student_Ajax
     }
 
     /**
-     * 考级自测答案提交
+     * 考级训练答案提交
      */
     public function grade_answer_submit(){
         unset($_SESSION['count_down']);
@@ -4217,8 +4217,7 @@ class Student_Ajax
 
         $insert = array(
             'user_id'=>$current_user->ID,
-            'genre_id'=>$_POST['genre_id'],
-            'grading_num'=>$_POST['grading_num'],
+            'grade_log_id'=>$_POST['history_id'],
             'grading_type'=>$_POST['grading_type'],
             'questions_type'=>$_POST['questions_type'],
             'grading_questions'=>json_encode($_POST['grading_questions']),
@@ -4253,7 +4252,7 @@ class Student_Ajax
 
             }
 
-            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/grading_num/'.$_POST['grading_num'].'/memory_lv/'.$_POST['memory_lv'])));
+            wp_send_json_success(array('info'=>__('提交完成', 'nlyd-student'),'url'=>home_url('grade/answerLog/genre_id/'.$_POST['genre_id'].'/history_id/'.$_POST['history_id'].'/log_id/'.$log_id.'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type'].'/memory_lv/'.$_POST['memory_lv'])));
         }
         else{
             wp_send_json_error(array('info' => __('提交失败', 'nlyd-student')));

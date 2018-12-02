@@ -2091,7 +2091,7 @@ class wpdb {
 
 		$this->check_current_query = false;
 
-		/*if($table == 'wp_user_grade_log_history'){
+		/*if($table == 'wp_user_grade_logs'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
 		return $this->query( $this->prepare( $sql, $values ) );
@@ -2201,8 +2201,8 @@ class wpdb {
 		$conditions = implode( ' AND ', $conditions );
 
 		$sql = "UPDATE `$table` SET $fields WHERE $conditions";
-		/*if($table == 'wp_grading_meta'){
-            print_r($this->prepare( $sql, $values ));
+		/*if($table == 'wp_user_grade_log_history'){
+            print_r($this->prepare( $sql, $values ));die;
         }*/
         //print_r($this->prepare( $sql, $values ));die;
 		$this->check_current_query = false;

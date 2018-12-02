@@ -39,7 +39,9 @@ function the_table_install () {
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL,
           `grade_type` varchar(20) DEFAULT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
-          `created_time` datetime DEFAULT NULL COMMENT '最后一次训练时间',
+          `grade_lv` tinyint(3) DEFAULT NULL COMMENT '考级等级',
+          `grade_result` tinyint(2) DEFAULT NULL COMMENT '考级结果',
+          `created_time` datetime DEFAULT NULL COMMENT '训练时间',
           PRIMARY KEY (`id`),
           KEY `user_id` (`user_id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -56,8 +58,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) NOT NULL,
-          `genre_id` int(20) NOT NULL COMMENT '考级id',
-          `grading_num` int(20) NOT NULL COMMENT '训练的次数',
+          `grade_log_id` int(20) NOT NULL COMMENT '训练记录id',
           `grading_type` varchar(50) NOT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
           `questions_type` varchar(50) NOT NULL COMMENT '考题类型',
           `grading_questions` longtext COMMENT '考试题',

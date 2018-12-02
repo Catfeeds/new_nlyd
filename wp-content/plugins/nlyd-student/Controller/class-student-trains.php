@@ -98,20 +98,49 @@ class Student_Trains extends Student_Home
                 $this->get_404(__('参数错误', 'nlyd-student'));
                 return;
             }
-
+            $project = get_post($_GET['id']);
+        }
+        else{
             //新建训练记录
             global $wpdb,$current_user;
-            $insert = array($current_user->ID,'grade_type');
+
+            $sql = "select a.id history_id,b.id questions_id from {$wpdb->prefix}user_grade_log_history a  
+                    left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
+                    where a.user_id = {$current_user->ID} and a.grade_type = '{$_GET['type']}'
+                    order by a.id desc  limit 1
+                    ";
+            $row = $wpdb->get_row($sql,ARRAY_A);
+
+            if(empty($row) || !empty($row['questions_id'])){
+                $insert = array(
+                    'user_id'=>$current_user->ID,
+                    'genre_id'=>$_GET['genre_id'],
+                    'grade_type'=>$_GET['type'],
+                    'created_time'=>get_time('mysql'),
+                );
+                $a = $wpdb->insert($wpdb->prefix.'user_grade_log_history',$insert);
+                //var_dump($a);
+                if($a){
+                    $history_id = $wpdb->insert_id;
+                    //print_r($log_id);
+                }else{
+                    $this->get_404(__('数据错误,请联系管理员', 'nlyd-student'));
+                    return;
+                }
+
+            }else{
+
+                $history_id = $row['history_id'];
+            }
         }
 
-        $genre = get_post($_GET['genre_id']);
 
-        $project = get_post($_GET['id']);
+        $genre = get_post($_GET['genre_id']);
 
         //print_r($row);
         $view = student_view_path.CONTROLLER.'/ready.php';
 
-        load_view_template($view,array('project_title'=>$project->post_title,'genre_title'=>$genre->post_title));
+        load_view_template($view,array('project_title'=>$project->post_title,'genre_title'=>$genre->post_title,'history_id'=>$history_id));
     }
 
     /**
@@ -607,7 +636,7 @@ class Student_Trains extends Student_Home
                 }
             }
         }
-        print_r($list);
+        //print_r($list);
         //die;
         $data['list'] = $list;
 
@@ -635,7 +664,7 @@ class Student_Trains extends Student_Home
                 $prefix = $wpdb->prefix;
                 switch ($val['alias']){
                     case 'grading'; //考级训练
-                        $table = $prefix.'user_grade_logs';
+                        $table = $prefix.'user_grade_log_history';
                         break;
                     case 'mental_world_cup';    //脑力世界杯训练
                         $table = $prefix.'user_train_logs';

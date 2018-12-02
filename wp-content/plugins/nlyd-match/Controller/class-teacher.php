@@ -297,10 +297,7 @@ class Teacher
                     WHERE a.id={$id}";
         $row = $wpdb->get_row($sql, ARRAY_A);
         if(!$row) exit('未找到用户数据!');
-        $sql = "select p.ID,p.post_title,pm.meta_value as alis from {$wpdb->prefix}posts as p 
-                left join {$wpdb->postmeta} as pm on pm.post_id=p.ID and pm.meta_key='project_alias' 
-                where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc";
-        $postsRows = $wpdb->get_results($sql,ARRAY_A);
+        $postsRows = getCategory();
         $usermeta = get_user_meta($row['user_id']);
         $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
 //        leo_dump($postsRows);

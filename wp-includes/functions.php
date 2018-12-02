@@ -6480,4 +6480,17 @@ function saveIosFile($filecontent,$upload_dir){
     }
 }
 
+/**
+ * 获取类别
+ */
+function getCategory(){
+    global $wpdb;
+    $sql = "select p.ID,p.post_title,pm.meta_value as alis from {$wpdb->prefix}posts as p 
+                left join {$wpdb->postmeta} as pm on pm.post_id=p.ID and pm.meta_key='project_alias' 
+                where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc";
+    $rows = $wpdb->get_results($sql,ARRAY_A);
+    if(!$rows) $rows = [];
+    return $rows;
+}
+
 

@@ -347,7 +347,6 @@ if(!class_exists('MatchController')){
             add_submenu_page( 'edit.php?post_type=question', '题库导入', '题库导入', 'administrator', 'question_import', array($this,'questionImport') );
             add_submenu_page( 'edit.php?post_type=grading', '速记上传', '速记上传', 'vocabulary_import', 'vocabulary_import', array($this,'vocabulary_import') );
             add_submenu_page( 'edit.php?post_type=grading', '速读上传', '速读上传', 'administrator', 'grading_import', array($this,'questionImport') );
-            add_submenu_page( 'options-general.php', '速读上传', '速读上传', 'administrator', 'clear_history', array($this,'questionImport') );
 
         }
 
@@ -1747,6 +1746,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=grading&page=add-grading-students'),
                     admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
                     admin_url('users.php?page=users-info'),
+                    admin_url('edit.php?post_type=grading&page=grading-studentScore'),
                 ],
             ]);
         }
