@@ -78,6 +78,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
 <?php if(!isset($_GET['type'])): ?>
 <?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <?php endif;?>
+<style>
+.layui-layer.nl-box-skin .layui-layer-btn .layui-layer-btn0{
+    color:#fff;
+    background: #4394F9!important;
+    width:100%;
+}
+.layui-layer.nl-box-skin .layui-layer-btn div{
+    width:100%;
+}
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -222,47 +232,74 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
         $.DelSession('match_data');
         <?php if(isset($_GET['grad_id'])): ?>
             leavePageLoad('<?=$wait_url?>');
-            var endTimes=0;
-            var countSession=$.GetSession('count')
-            if(countSession){
-                endTimes=countSession;
-            }else{
-                var counts_down=$('.count_down').attr('data-seconds')
-                endTimes=$.GetEndTime(counts_down)
-                $.SetSession('count',endTimes)
-            }
-            var new_count=$.GetSecond(endTimes);
-            $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
-                // var count_down=S
-                // var new_count=$.GetSecond(endTimes);
-                // // console.log(count_down,new_count)
-                // if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
-                //     window.location.reload()
-                // }else{
-                    var _this=$(this);
-                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
-                    var h=d.hour<10 ? '0'+d.hour : d.hour;
-                    var m=d.minute<10 ? '0'+d.minute : d.minute;
-                    var s=d.second<10 ? '0'+d.second : d.second;
-                    var time=D+h+':'+m+':'+s;
-                    $(this).attr('data-seconds',S).text(time)
+            if($('.count_down').length>0){
+                var endTimes=0;
+                var countSession=$.GetSession('count')
+                if(countSession){
+                    endTimes=countSession;
+                }else{
+                    var counts_down=$('.count_down').attr('data-seconds')
+                    endTimes=$.GetEndTime(counts_down)
+                    $.SetSession('count',endTimes)
+                }
+                var new_count=$.GetSecond(endTimes);
+                $('.count_down').attr('data-seconds',new_count).countdown(function(S, d){//倒计时
+                    // var count_down=S
+                    // var new_count=$.GetSecond(endTimes);
+                    // // console.log(count_down,new_count)
+                    // if(count_down-new_count>10 || count_down-new_count<-10){//相差10s重新刷新
+                    //     window.location.reload()
+                    // }else{
+                        var _this=$(this);
+                        var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+                        var h=d.hour<10 ? '0'+d.hour : d.hour;
+                        var m=d.minute<10 ? '0'+d.minute : d.minute;
+                        var s=d.second<10 ? '0'+d.second : d.second;
+                        var time=D+h+':'+m+':'+s;
+                        $(this).attr('data-seconds',S).text(time)
 
-                    if(S==0){
-                        var href=_this.parents('.a-btn').attr('href');
-                        $.DelSession('leavePageWaits')
-                        $.DelSession('count');
-                        if(href){
-                            window.location.href=href
-                        }else{
-                            window.location.reload();
+                        if(S==0){
+                            var href=_this.parents('.a-btn').attr('href');
+                            $.DelSession('leavePageWaits')
+                            $.DelSession('count');
+                            if(href){
+                                window.location.href=href
+                            }else{
+                                window.location.reload();
+                            }
                         }
-                    }
-                // }
-            });
+                    // }
+                });
+            }
             $('.ingnore').click(function(){
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
+            <?php if(empty($next_project)): ?>
+            layui.use('layer', function(){
+                layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: '<?=__('考级认证结果', 'nlyd-student')?>' //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certifications' //防止重复弹出
+                    ,content: '<div class="box-conent-wrapper"><span class="<?=$grading_result == 1 ? 'c_green' : '';?>"><?=__($grade_result, 'nlyd-student')?></span></div>'
+                    ,btn: ['确认']
+                    ,success: function(layero, index){
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
+            })
+            <?php endif;?>
         <?php endif;?>
     })
 </script>
