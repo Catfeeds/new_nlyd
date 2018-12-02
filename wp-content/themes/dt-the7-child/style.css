@@ -141,6 +141,12 @@ a.c_orange:hover{
 a.c_black:hover{
     color: #262626;
 }
+.c_grey,a.c_grey{
+    color: #919191;
+}
+a.c_grey:hover{
+    color: #919191;
+}
 .c_black8,a.c_black8{
     color: rgba(38, 38, 38, 0.8);
 }

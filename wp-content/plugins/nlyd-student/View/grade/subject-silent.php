@@ -1,6 +1,6 @@
 
 <div class="two layui-row">
-    <div class="c_blue lefts disabled pull-left"><div><?=__('上一题', 'nlyd-student')?></div></div>
+    <div class="c_grey lefts disabled pull-left"><div><?=__('上一题', 'nlyd-student')?></div></div>
     <div class="c_blue rights pull-right"><div><?=__('下一题', 'nlyd-student')?></div></div>
 </div>
 <?php foreach ($questions_answer as $key =>$val){
@@ -28,7 +28,7 @@
     var how_ques=$('.answer-zoo').length;//多少道题目
     var n=0;
     if(how_ques<=1){
-        $('.rights').addClass('disabled')
+        $('.rights').addClass('disabled').removeClass('c_blue').addClass('c_grey');
     }
     new AlloyFinger($('.lefts')[0], {
         touchStart: function () {
@@ -54,9 +54,9 @@
                     n--
                     $('#number').text(n+1)
                     if(n==0){
-                        left.addClass('disabled')
+                        left.addClass('disabled').removeClass('c_blue').addClass('c_grey')
                     }
-                    $('.rights').removeClass('disabled')
+                    $('.rights').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){
@@ -96,9 +96,9 @@
                     n++
                     $('#number').text(n+1)
                     if(n==len){
-                        right.addClass('disabled')  
+                        right.addClass('disabled').removeClass('c_blue').addClass('c_grey')
                     }
-                    $('.lefts').removeClass('disabled')  
+                    $('.lefts').removeClass('disabled').removeClass('c_grey').addClass('c_blue')
                     $('.answer-zoo').each(function(){
                         $(this).removeClass('active')
                         if($(this).attr('data-index')==n){

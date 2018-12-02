@@ -111,12 +111,16 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                         <?php endif;?>
                         ">
                             <?php if(ACTION == 'myAnswerLog'): ?>
-                            <?php if(!empty($prev)):?>
-                            <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
-                            <?php endif;?>
-                            <?php if(!empty($next)):?>
-                            <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
-                            <?php endif;?>
+                            <?php if(!empty($prev)){ ?>
+                                <a class="pull-left c_blue" href="<?=$prev?>"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
+                            <?php }else{ ?>
+                                <a class="pull-left c_grey"><i class="iconfont" style="font-size:0.20rem">&#xe647;</i></a>
+                            <?php } ?>
+                            <?php if(!empty($next)){ ?>
+                                <a class="pull-right c_blue" href="<?=$next?>"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
+                            <?php }else{ ?>
+                                <a class="pull-right c_grey"><i class="iconfont" style="font-size:0.20rem">&#xe648;</i></a>
+                            <?php } ?>
                             <?php endif;?>
                             <div class="c_black match_info_font"><div><?=__($match_row['questions_type_cn'], 'nlyd-student')?> </div></div>
                         </div>
