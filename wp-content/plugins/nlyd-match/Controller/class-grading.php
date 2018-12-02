@@ -704,6 +704,7 @@ class Grading
     public function gradingTrainLog(){
         global $wpdb;
         $categoryArr = getCategory();
+        if($categoryArr == []) exit('未找到类别!');
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $searchWhere = '';
@@ -711,26 +712,44 @@ class Grading
         if($searchStr != ''){
             $searchJOIN = "LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=utl.user_id AND um.meta_key='user_real_name' 
                            LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=utl.user_id AND um2.meta_key='user_ID ' ";
-            $searchWhere = "WHERE um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' ";
+            $searchWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%') ";
         }
-        if($categoryArr == []) exit('未找到类别!');
-        $categoryType = isset($_GET['ctype']) ? intval($_GET['ctype']) : $categoryArr[0]['ID'];
+
+        $categoryType = isset($_GET['ctype']) ? trim($_GET['ctype']) : '0';
+        $categoryWhere = $categoryType != '0' ? " AND utl.grading_type='{$categoryType}'" : '';
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT utl.grading_num,utl.questions_type,utl.correct_rate,utl.my_score,utl.use_time,utl.created_time,u.user_mobile,p.post_title AS category_name FROM `{$wpdb->prefix}user_grade_logs` AS utl 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS utl.questions_type,utl.correct_rate,utl.my_score,utl.use_time,utl.created_time,u.user_mobile,utl.user_id,
+                CASE utl.grading_type 
+                WHEN 'memory' THEN '记忆类' 
+                WHEN 'reading' THEN '速读类' 
+                WHEN 'arithmetic' THEN '心算类' 
+                ELSE '-' 
+                END AS grading_name 
+                FROM `{$wpdb->prefix}user_grade_logs` AS utl 
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=utl.user_id AND u.ID!='' 
-                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=utl.genre_id 
                 {$searchJOIN} 
-                {$searchWhere}
+                WHERE 1=1 
+                {$categoryWhere}
+                {$searchWhere} 
                 ORDER BY utl.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
-        leo_dump($wpdb->last_query);
-        leo_dump($rows);
-        die;
-        $cateOptions = [];
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page,
+            'add_fragment' => '&searchCode='.$searchStr,
+        ));
+        $categoryCurrent = $categoryType=='0'?'class="current"':'';
+        $cateOptions[0] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-trainLog&ctype=0').'" '.$categoryCurrent.' aria-current="page">全部</a> </li>';
         foreach ($categoryArr as $cgV){
-            $categoryCurrent = $categoryType == $cgV['ID'] ? 'class="current"' : '';
-            $cateOptions[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=add-grading-trainLog&ctype='.$cgV['ID']).'" '.$categoryCurrent.' aria-current="page">'.$cgV['post_title'].'</a> </li>';
+            $categoryCurrent = $categoryType == $cgV['alis'] ? 'class="current"' : '';
+            $cateOptions[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-trainLog&ctype='.$cgV['alis']).'" '.$categoryCurrent.' aria-current="page">'.$cgV['post_title'].'</a> </li>';
         }
 
         ?>
@@ -743,22 +762,27 @@ class Grading
         </ul>
         <p class="search-box">
             <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-            <input type="text" id="searchs" name="s" placeholder="姓名/ID/手机" value="">
-            <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('edit.php?post_type=grading&page=add-grading-trainLog&ctype='.$categoryCurrent.'&s=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
+            <input type="text" id="searchs" name="s" placeholder="姓名/ID/手机" value="<?=$searchStr?>">
+            <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('edit.php?post_type=grading&page=grading-trainLog&ctype='.$categoryType.'&s=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
         </p>
         <input type="hidden" id="_wpnonce" name="_wpnonce" value="cad3ad3c1f"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
         <div class="tablenav top">
-            <div class="alignleft actions bulkactions">
-                <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
-                <select name="action" id="bulk-action-selector-top">
-                    <option value="-1">批量操作</option>
-                    <option value="delete">删除</option>
-                </select>
-                <input type="submit" id="doaction" class="button action" value="应用">
-            </div>
-            <div class="tablenav-pages one-page">
 
+<!--            <div class="alignleft actions bulkactions">-->
+<!--                <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>-->
+<!--                <select name="action" id="bulk-action-selector-top">-->
+<!--                    <option value="-1">批量操作</option>-->
+<!--                    <option value="delete">删除</option>-->
+<!--                </select>-->
+<!--                <input type="submit" id="doaction" class="button action" value="应用">-->
+<!--            </div>-->
+            <div class="tablenav-pages">
+                <span class="displaying-num"><?=$count['count']?>个项目</span>
+                <span class="pagination-links">
+                    <?=$pageHtml?>
+                </span>
             </div>
+
             <br class="clear">
         </div>
         <h2 class="screen-reader-text">训练记录</h2>
@@ -771,11 +795,14 @@ class Grading
                 <th scope="col" id="age" class="manage-column column-age">年龄</th>
                 <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                 <th scope="col" id="category" class="manage-column column-category">训练类别</th>
+                <th scope="col" id="correct_rate" class="manage-column column-correct_rate">准确率</th>
+                <th scope="col" id="my_score" class="manage-column column-my_score">分数</th>
+                <th scope="col" id="use_time" class="manage-column column-use_time">记忆耗时</th>
+                <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
                 <th scope="col" id="status" class="manage-column column-status">训练状态</th>
                 <th scope="col" id="level" class="manage-column column-level">训练等级</th>
             </tr>
             </thead>
-
                 <tbody id="the-list" data-wp-lists="list:user">
                     <?php
                     foreach ($rows as $row){
@@ -783,18 +810,26 @@ class Grading
                         $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                      ?>
                     <tr data-id="">
-                        <td class="username column-username has-row-actions column-primary" data-colname="用户名">
-                            <img alt="" src="http://0.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="http://1.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32">
-                            <strong><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">13982242710</a></strong>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="用户名">
+                            <?=isset($user_real_name['real_name'])?$user_real_name['real_name']:''?>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="http://127.0.0.1/nlyd/wp-admin/user-edit.php?user_id=5&amp;wp_http_referer=%2Fnlyd%2Fwp-admin%2Fusers.php">编辑</a> | </span>
-                                <span class="delete"><a class="submitdelete" href="users.php?action=delete&amp;user=5&amp;_wpnonce=cad3ad3c1f">删除</a> | </span>
-                                <span class="view"><a href="http://127.0.0.1/nlyd/wp-admin/users.php?page=users-info&amp;ID=5">资料</a></span>
+                                <span class="delete"><a class="submitdelete" href="javascript:;">答题记录</a> | </span>
+                                <span class="edit"><a href="<?=admin_url('users.php?page=users-info&ID='.$row['user_id'])?>">用户资料</a>  </span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="real_name column-real_name" data-colname="姓名"></td>
+                        <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID'])?$usermeta['user_ID'][0]:''?></td>
+                        <td class="sex column-sex" data-colname="性别"><?=isset($usermeta['user_gender'])?$usermeta['user_gender'][0]:''?></td>
+                        <td class="age column-age" data-colname="年龄"><?=isset($user_real_name['real_age'])?$user_real_name['real_age']:''?></td>
+                        <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+                        <td class="category column-category" data-colname="训练类别"><?=$row['grading_name']?></td>
+                        <td class="correct_rate column-correct_rate" data-colname="准确率"><?=$row['correct_rate']*100?>%</td>
+                        <td class="my_score column-my_score" data-colname="分数"><?=$row['my_score']?></td>
+                        <td class="use_time column-use_time" data-colname="记忆耗时"><?=$row['use_time']?></td>
+                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
+                        <td class="status column-status" data-colname="训练状态"><?=$row['created_time']?></td>
+                        <td class="level column-level" data-colname="训练等级"><?=$row['created_time']?></td>
                     </tr>
                      <?php
                      }
@@ -808,26 +843,32 @@ class Grading
                     <th scope="col" class="manage-column column-age">年龄</th>
                     <th scope="col" class="manage-column column-mobile">手机</th>
                     <th scope="col" class="manage-column column-category">训练类别</th>
+                    <th scope="col" class="manage-column column-correct_rate">准确率</th>
+                    <th scope="col" class="manage-column column-my_score">分数</th>
+                    <th scope="col" class="manage-column column-use_time">记忆耗时</th>
+                    <th scope="col" class="manage-column column-created_time">提交时间</th>
                     <th scope="col" class="manage-column column-status">训练状态</th>
                     <th scope="col" class="manage-column column-level">训练等级</th>
                 </tr>
             </tfoot>
-
         </table>
             <div class="tablenav bottom">
+<!---->
+<!--                <div class="alignleft actions bulkactions">-->
+<!--                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>-->
+<!--                    <select name="action2" id="bulk-action-selector-bottom">-->
+<!--                        <option value="-1">批量操作</option>-->
+<!--                            <option value="delete">删除</option>-->
+<!--                        </select>-->
+<!--                    <input type="submit" id="doaction2" class="button action" value="应用">-->
+<!--                </div>-->
 
-                <div class="alignleft actions bulkactions">
-                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
-                    <select name="action2" id="bulk-action-selector-bottom">
-                        <option value="-1">批量操作</option>
-                            <option value="delete">删除</option>
-                        </select>
-                    <input type="submit" id="doaction2" class="button action" value="应用">
+               <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <span class="pagination-links">
+                        <?=$pageHtml?>
+                    </span>
                 </div>
-
-            <div class="tablenav-pages one-page">
-
-            </div>
                 <br class="clear">
             </div>
         <br class="clear">
