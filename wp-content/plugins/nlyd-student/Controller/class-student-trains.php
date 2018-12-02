@@ -580,17 +580,19 @@ class Student_Trains extends Student_Home
 
         global $wpdb,$current_user;
         if($_GET['alias'] == 'grading'){
-            $sql = "select id,grade_type,grade_lv,if(grade_result=1,'已达标','未达标') grade_result_cn,grade_result,date_format(created_time,'%Y/%m/%d') time ,date_format(created_time,'%H:%i') created_time,
+            $sql = "select a.id,grade_type,grade_lv,if(grade_result=1,'已达标','未达标') grade_result_cn,grade_result,date_format(a.created_time,'%Y/%m/%d') time ,date_format(a.created_time,'%H:%i') created_time,
                 case grade_type
                     when 'reading' then '速读考级训练'
                     when 'arithmetic' then '心算考级训练'
                     when 'memory' then '记忆考级训练'
                 else '--'
                 end project_type_cn
-                from {$wpdb->prefix}user_grade_log_history 
-                where user_id = {$current_user->ID}
-                order by created_time desc ";
-
+                from {$wpdb->prefix}user_grade_log_history a 
+                left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
+                where a.user_id = {$current_user->ID} and b.id != ''
+                GROUP BY a.id
+                order by a.created_time desc ";
+            //print_r($sql);
             //获取用户考级训练等级
             $data['rank_row'] = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID} and skill_type = 2",ARRAY_A);
             //print_r($rank_row);

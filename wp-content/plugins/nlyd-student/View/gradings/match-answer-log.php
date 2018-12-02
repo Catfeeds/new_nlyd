@@ -132,9 +132,14 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             <div class="one-info flex1">
                                 <div class="left-label"><?=__('正确率', 'nlyd-student')?>:</div><span class="c_blue"><?=$accuracy;?>%</span>
                             </div>
-                            <?php if(!empty($reading_rate)):?>
+                            <?php if(!empty($_GET['grad_type']=='reading')):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>/分钟</span>
+                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
+                                </div>
+                            <?php endif;?>
+                            <?php if(!empty($_GET['grad_type']=='arithmetic')):?>
+                                <div class="one-info flex1">
+                                    <div class="left-label"><?=__('得分', 'nlyd-student')?>:</div><span class="c_blue"><?=empty($match_row['my_score']) ? 0 : $match_row['my_score'];?>分</span>
                                 </div>
                             <?php endif;?>
                         </div>

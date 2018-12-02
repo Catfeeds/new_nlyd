@@ -265,7 +265,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             $('.ingnore').click(function(){
                 $.DelSession('count');
             })
-            <?php if(empty($next_project)): ?>
+            <?php if(empty($next_project) && ACTION == 'answerLog'): ?>
             layui.use('layer', function(){
                 layer.open({
                     type: 1

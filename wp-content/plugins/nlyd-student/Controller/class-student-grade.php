@@ -795,7 +795,6 @@ class Student_Grade extends Student_Home
             }
         }
 
-
         //print_r($next_project);
         $data = array(
             'next_project'=>$next_project,
@@ -910,17 +909,17 @@ class Student_Grade extends Student_Home
 
         global $wpdb,$current_user;
         if(!isset($_GET['questions_type'])){
-            $str = "order by id asc limit 1";
+            $str = "order by a.id asc limit 1";
         }else{
-            $where = " and questions_type = '{$_GET['questions_type']}' ";
+            $where = " and a.questions_type = '{$_GET['questions_type']}' ";
         }
-        $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,
-                    case grading_type
+        $sql = "select a.user_id,a.grade_log_id,a.grading_type,a.questions_type,a.grading_questions,a.questions_answer,a.my_answer,a.my_score,a.correct_rate,b.grade_lv,
+                    case a.grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'
                     when 'arithmetic' then '心算'
                     end grading_type_cn,
-                    case questions_type
+                    case a.questions_type
                     when 'sz' then '随机数字'
                     when 'cy' then '随机词汇'
                     when 'zm' then '随机字母'
@@ -932,7 +931,9 @@ class Student_Grade extends Student_Home
                     when 'zxys' then '正向速算'
                     when 'nxys' then '逆向速算'
                     end questions_type_cn 
-                from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} {$where}
+                from {$wpdb->prefix}user_grade_logs a 
+                left join {$wpdb->prefix}user_grade_log_history b on a.grade_log_id = b.id
+                where a.user_id = {$current_user->ID} and a.grade_log_id = {$_GET['log_id']} {$where}
                 {$str}
                 ";
         $row  = $wpdb->get_row($sql,ARRAY_A);
@@ -945,6 +946,7 @@ class Student_Grade extends Student_Home
         $grading_questions = json_decode($row['grading_questions'],true);
         $questions_answer = json_decode($row['questions_answer'],true);
         $my_answer = !empty($row['my_answer']) ? json_decode($row['my_answer'],true) : array();
+        //print_r($row);
 
         if($row['questions_type'] == 'wz'){
             $len = 0;
@@ -960,7 +962,7 @@ class Student_Grade extends Student_Home
                     $error_arr=array_diff_assoc($v,$questions_answer[$k]);
                     //print_r($result);
                     //var_dump($result);
-                    if(empty($result)){
+                    if(empty($error_arr)){
                         $error_len = 0;
                     }else{
                         $error_len = count($error_arr);
@@ -1007,12 +1009,23 @@ class Student_Grade extends Student_Home
 
             $len = count($questions_answer);
         }
+        elseif($row['questions_type'] == 'rm'){
+            if(!empty($my_answer)){
+                $success_len = 0;
+                $len = count($my_answer);
+                foreach ($my_answer as $k => $v){
+                    if($v['name'] == $questions_answer[$k]['name'] && $v['phone'] == $questions_answer[$k]['phone']){
+                        $success_len += 1;
+                    }
+                }
+            }
+
+        }
         else{
 
             if(!empty($questions_answer)){
                 $len = count($questions_answer);
                 if(!empty($my_answer)){
-
                     $error_arr = array_diff_assoc($questions_answer,$my_answer);
                     $error_len = count($error_arr);
                     $success_len = $len - $error_len;
@@ -1028,24 +1041,23 @@ class Student_Grade extends Student_Home
         }
         //print_r($next_project);
 
-        $order = $this->get_match_order($current_user->ID,$_GET['grad_id']);
-        if($_GET['memory_lv'] > 0 ){
-            $project = $this->get_grading_parameter($_GET['memory_lv']);
+        if($row['grade_lv'] > 0 ){
+            $project = $this->get_grading_parameter($row['grade_lv']);
             $keys = array_keys($project);
             $index = array_search($row['questions_type'],$keys);
             //print_r($keys);
 
             $next_index = $keys[$index+1];
             $prev_index = $keys[$index-1];
-            $next = !empty($next_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$next_index) : '';
-            $prev = !empty($prev_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$prev_index) : '';
+            $next = !empty($next_index) ? home_url('grade/myAnswerLog/grad_type/'.$_GET['grad_type'].'/log_id/'.$_GET['log_id'].'/questions_type/'.$next_index) : '';
+            $prev = !empty($prev_index) ? home_url('grade/myAnswerLog/grad_type/'.$_GET['grad_type'].'/log_id/'.$_GET['log_id'].'/questions_type/'.$prev_index) : '';
 
             /*print_r($next_index);
             print_r($prev_index);*/
         }elseif ($row['grading_type'] == 'arithmetic'){
 
-            $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/nxys') : '';
-            $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/zxys') : '';
+            $next = $row['questions_type']=='zxys' ? home_url('grade/myAnswerLog/grad_type/'.$_GET['grad_type'].'/log_id/'.$_GET['log_id'].'/questions_type/nxys') : '';
+            $prev = $row['questions_type']=='nxys' ? home_url('grade/myAnswerLog/grad_type/'.$_GET['grad_type'].'/log_id/'.$_GET['log_id'].'/questions_type/zxys') : '';
         }
 
         $data = array(
@@ -1057,6 +1069,7 @@ class Student_Grade extends Student_Home
             'grading_questions'=>$grading_questions,
             'my_answer'=>$my_answer,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? floor($row['post_str_length']/($row['use_time']/60)) : '',
             'match_row'=>$row,
             'next'=>$next,
             'prev'=>$prev,
@@ -1065,28 +1078,6 @@ class Student_Grade extends Student_Home
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
 
-    }
-
-    // public function matching_wzsd(){//文章速读比赛页
-    //     $view = student_view_path.CONTROLLER.'/matching-reading.php';
-    //     load_view_template($view);
-    // }
-    // public function ready_wzsd(){//文章速读准备页
-    //     $view = student_view_path.CONTROLLER.'/matching-ready.php';
-    //     load_view_template($view);
-    // }
-    // public function matching_zxss(){//正向速算比赛页
-    //     $view = student_view_path.CONTROLLER.'/matching-fastCalculation.php';
-    //     load_view_template($view);
-    // }
-    // public function matching_nxss(){//逆向速算比赛页
-    //     $view = student_view_path.CONTROLLER.'/matching-fastReverse.php';
-    //     load_view_template($view);
-    // }
-
-    public function matchRule(){//规则
-        $view = student_view_path.CONTROLLER.'/match-Rule.php';
-        load_view_template($view);
     }
 
 

@@ -31,10 +31,10 @@
                                 if($_GET['alias'] == 'mental_world_cup'){
                                     $url = home_url('trains/logs/back/1/id/'.$v['id'].'/type/'.$v['project_type']);
                                 }elseif ($_GET['alias'] == 'grading'){
-                                    $url = home_url('grade/myAnswerLog/id/'.$v['id']);
+                                    $url = home_url('grade/myAnswerLog/back/1/grad_type/'.$v['grade_type'].'/log_id/'.$v['id']);
                                 }
                             ?>
-                            <a class="his_row"  href="<?=home_url('trains/logs/back/1/id/'.$v['id'].'/type/'.$v['project_type'])?>">
+                            <a class="his_row"  href="<?=$url?>">
                                 <div class="bold c_black pull-left his_first"> <?=__($v['project_type_cn'], 'nlyd-student')?></div>
                                 <!-- <div class="c_orange pull-left his_second"><?=$v['my_score']?>分</div> -->
                                 <div class="pull-right his_thir"> 
