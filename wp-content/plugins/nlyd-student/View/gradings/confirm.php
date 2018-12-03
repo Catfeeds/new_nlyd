@@ -346,7 +346,7 @@ jQuery(function($) {
                             // if(res.data.info=="请先实名认证"){
                             if(res.data.info=="<?=__('请先实名认证', 'nlyd-student')?>"){
                                 setTimeout(function(){
-                                    window.location.href=window.home_url+'/account/info/match_id/'+$.Request('match_id');
+                                    window.location.href=window.home_url+'/account/info/grad_id/'+$.Request('grad_id');
                                 }, 1000);
                             }else{
                                 $.alerts(res.data.info)

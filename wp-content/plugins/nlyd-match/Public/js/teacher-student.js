@@ -58,26 +58,27 @@ jQuery(document).ready(function($) {
      * 通过审核
      */
     $('.agree').on('click',function () {
-        options_click($(this),2);
+        options_click($(this),2,'通过');
     });
     /**
      * 拒绝审核
      */
     $('.refuse').on('click',function () {
-        options_click($(this),-1);
+        options_click($(this),-1,'拒绝');
     });
     
     /**
      * 解除教学关系
      */
     $('.relieve').on('click', function () {
-        options_click($(this),3);
+        options_click($(this),3,'解除');
     });
 
-    function options_click(_this,status) {
+    function options_click(_this,status,btn_name) {
         var _tr = _this.closest('tr');
         var _options_div = _tr.find('.option-child');
         _options_div.show();
+        _options_div.find('.confirm-option').text('确定'+btn_name);
         _options_div.find('.cancel-option').off('click').on('click',function () {
             _tr.find('.option-child').hide();
         });

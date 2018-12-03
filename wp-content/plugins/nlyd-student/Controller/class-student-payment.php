@@ -149,7 +149,7 @@ class Student_Payment {
             $open_id = $wexinClass->getWebCode(true);
 
         }
-        if(!isset($_GET['match_id'])){
+        if(!isset($_GET['match_id']) && !isset($_GET['grad_id'])){
             $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
             load_view_template($view,array('param'=>['status' => false, 'data' => '订单信息不匹配,请联系客服'],'match_id' => 0));
             exit;
@@ -160,10 +160,13 @@ class Student_Payment {
 
             $result = $this->wx_jsApiPay($open_id);
         }
-        $match_id = isset($_GET['match_id']) ? $_GET['match_id'] : 0;
+        $match_id = isset($_GET['match_id']) ? intval($_GET['match_id']) : 0;
+        if($match_id < 1) $match_id =  isset($_GET['grad_id']) ? intval($_GET['grad_id']) : 0;
+        //查询订单类型
+        $order_type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$match_id}'");
 //        add_shortcode('payment-home',array($this,'wx_js_pay'));
         $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
-        load_view_template($view,array('param'=>$result,'match_id' => $match_id));
+        load_view_template($view,array('param'=>$result,'match_id' => $match_id,'order_type'=>$order_type));
     }
 
     /**

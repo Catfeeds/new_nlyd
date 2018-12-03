@@ -2490,6 +2490,19 @@ class Student_Ajax
                     ];
                     $allPrice = $order['cost'];
                     break;
+                case 2://考级订单
+                    $posts = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$order['match_id']);
+                    $goodsData = [
+                        [
+                            'goods_title' => $posts->post_title,
+                            'goods_num' => 1,
+                            'price' => $order['cost'],
+                            'pay_price' => $order['cost'],
+                            'pay_brain' => 0,
+                        ]
+                    ];
+                    $allPrice = $order['cost'];
+                    break;
                 case 3://商品订单
                     $goodsRows = $wpdb->get_results('SELECT od.goods_num,od.pay_price,od.pay_brain,g.goods_title FROM 
                     '.$wpdb->prefix.'order_goods AS od 
@@ -2551,7 +2564,7 @@ class Student_Ajax
         //查询配置
 //        $interface_config = get_option('interface_config');
         $order = $wpdb->get_row(
-            'SELECT id,serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
+            'SELECT id,serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time,order_type FROM '
             .$wpdb->prefix.'order WHERE serialnumber='.$otderSn.' AND user_id='.$current_user->ID, ARRAY_A);
         if(!$order)  wp_send_json_error(array('info'=>__('订单不存在', 'nlyd-student')));
         if($order['pay_status'] != 1)  wp_send_json_error(array('info'=>__('此订单不是待支付订单', 'nlyd-student')));
@@ -2571,7 +2584,13 @@ class Student_Ajax
                 //判断是否是微信浏览器
                 if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
                     //jsapi支付需要一个单独的页面获取openid
-                    $result = ['status' => true, 'data' => home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id'])];
+                    $url = '';
+                    if($order['order_type'] == '1'){
+                        $url = home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/match_id/'.$_POST['match_id']);
+                    }elseif($order['order_type'] == '2'){
+                        $url = home_url('payment/wx_js_pay/type/wxpay/id/'.$order['id'].'/grad_id/'.$_POST['match_id']);
+                    }
+                    $result = ['status' => true, 'data' => $url];
 
 //                    $params['notify_url'] = home_url('payment/wxpay/type/wx_notifyUrl/jspai/y'); //商品描述
 //                    $params['open_id'] =$current_user->weChat_openid;

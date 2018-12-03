@@ -1,4 +1,4 @@
-
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -57,7 +57,7 @@
 
                                     <div class="goods-name"><?=$row['goods_title']?></div>
                                     <div class="goods-price">
-                                        <span class="nl-dark-blue">￥ <?php echo ($row['price']+$row['brain']);?></span>
+                                        <span class="nl-dark-blue">￥<?php echo ($row['price']+$row['brain']);?></span>
                                         <br />
                                         <span class="orange-color"><?=$row['price']?>+<?=$row['brain']?>脑币</span>
                                         <i class="iconfont addShopCar pull-right">&#xe673;</i>
@@ -70,22 +70,22 @@
 
                     <?php } ?>
 
-                    <a class="goods-row layui-row">
+                    <div class="goods-row layui-row" href="<?=home_url('orders');?>">
                         <div class="goods-left-img img-box">
-                            <img src="">
+                            <img src="<?=student_css_url.'image/noInfo/noOrder1096@2x.png'?>">
                         </div>
                         <div class="goods-right-info">
                             <div class="goods-wrap">
                                 <div class="goods-name">商品名字</div>
                                 <div class="goods-price">
-                                    <span class="c_blue">￥ 180.00</span>
+                                    <span class="c_blue">￥180.00</span>
                                     <span class="orange-color">170+10脑币</span>
                                     <i class="iconfont addShopCar pull-right">&#xe673;</i>
                                 </div>
                                 <div class="goods-detail">商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍商品介绍</div>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                     <!-- <div class="no-info-page">
@@ -115,6 +115,13 @@ jQuery(function($) {
             clickable :true,
         },
     }); 
+    $('.goods-row').click(function(){
+        var href=$(this).attr('href');
+        if(href){
+            window.location.href=$(this).attr('href')
+        }
+        
+    })
 layui.use(['element','flow','layer'], function(){
     var element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
     var flow = layui.flow;//流加载

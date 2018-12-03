@@ -17,8 +17,10 @@
             <?php if($param['status'] == false){ ?>
                 <div class="layui-row nl-border nl-content layui-bg-white">
                     <p class="ta_c c_black" style="margin-top:100px"><?=$param['data']?></p>
-                    <?php if($match_id > 0){ ?>
+                    <?php if($match_id > 0 && $order_type=='1'){ ?>
                         <a class="a-btn" style="position: relative;top: 20px" href="<?=home_url('matchs/confirm/match_id/'.$match_id)?>"><?=__('返回重新支付', 'nlyd-student')?></a>
+                    <?php }elseif($match_id > 0 && $order_type=='2'){ ?>
+                        <a class="a-btn" style="position: relative;top: 20px" href="<?=home_url('gradings/confirm/grad_id/'.$match_id)?>"><?=__('返回重新支付', 'nlyd-student')?></a>
                     <?php } ?>
                 </div>
             <?php } ?>
@@ -38,10 +40,18 @@
                 'getBrandWCPayRequest',
                 <?=json_encode($param['data'])?>,
                 function(res){
-                    if(res.err_msg=='get_brand_wcpay_request:ok'){//支付成功
-                        window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
-                    }else{//失败
 
+                    if(res.err_msg=='get_brand_wcpay_request:ok'){//支付成功
+                        var orderType="<?=$order_type?>";//1,比赛2，考级3，商品
+                        if(orderType=="1"){
+                            window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
+                        }else if(orderType=="2"){
+                            window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
+                        }else if(orderType=="3"){
+                            
+                        }
+                        
+                    }else{//失败
                     }
                 }
             );

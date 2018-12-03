@@ -11,7 +11,10 @@ endif;
             <h1 class="mui-title"><div><?=__('考级成绩查看', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content">
-                <p class="c_black bold fs_16 pl_10 mt_20 mb_20"><?=$rows[0]['post_title']?><span class="ml_10 fs_14  <?=$row['grading_result'] == 1 ? 'c_green' : 'c_black6';?> "><?=__($row['result_cn'], 'nlyd-student')?></span></p>
+                <div class="width-padding width-padding-pc">
+                    <p class="c_black bold fs_16 mt_20 mb_20"><?=$rows[0]['post_title']?><span class="ml_10 fs_14  <?=$row['grading_result'] == 1 ? 'c_green' : 'c_black6';?> "><?=__($row['result_cn'], 'nlyd-student')?></span></p>
+                </div>
+                
                 <div class="nl-table-wapper">
                         <table class="nl-table" >
                             <thead>

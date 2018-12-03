@@ -119,7 +119,7 @@
 .item_row.kaoji{
     width: -webkit-calc(100% - 28px);
     width: calc(100% - 28px);
-    
+    padding: 25px 14px;
 }
 
 .lists_item_row .item_row{
