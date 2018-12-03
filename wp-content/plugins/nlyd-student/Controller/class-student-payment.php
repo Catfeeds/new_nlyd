@@ -161,9 +161,11 @@ class Student_Payment {
             $result = $this->wx_jsApiPay($open_id);
         }
         $match_id = isset($_GET['match_id']) ? $_GET['match_id'] : 0;
+        //查询订单类型
+        $order_type = $wpdb->get_var("SELECT order_type FROM {$wpdb->prefix}order WHERE match_id='{$match_id}'");
 //        add_shortcode('payment-home',array($this,'wx_js_pay'));
         $view = student_view_path.CONTROLLER.'/wxJsApiPay.php';
-        load_view_template($view,array('param'=>$result,'match_id' => $match_id));
+        load_view_template($view,array('param'=>$result,'match_id' => $match_id,'order_type'=>$order_type));
     }
 
     /**
