@@ -57,7 +57,7 @@ class Student_Account extends Student_Home
                 if(compute >0,compute,0) compute,
                 nationality,mental_lv,mental_type
                 from {$wpdb->prefix}user_skill_rank 
-                where user_id = {$user_info['user_id']}  ";
+                where user_id = {$user_info['user_id']} and skill_type = 1";
             $my_skill = $wpdb->get_row($sql1,ARRAY_A);
             //print_r($sql1);
             //var_dump($my_skill);

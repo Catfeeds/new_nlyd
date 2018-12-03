@@ -53,11 +53,7 @@ class Grading
                            LEFT JOIN {$wpdb->usermeta} AS um2 on um2.user_id=o.user_id AND um2.meta_key='user_ID'";
             $searchWhere = "AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
         }
-        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time,gl.grading_result,o.memory_lv,gl.grading_lv,
-        CASE gl.grading_result 
-        WHEN 1 THEN '<span style=\"color: #20a831\">通过</span>' 
-        WHEN 2 THEN '<span style=\"color: #7f0000\">失败</span>' 
-        ELSE '-' END AS grading_result_name 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,u.user_email,o.user_id,o.created_time,gl.grading_result,o.memory_lv,gl.grading_lv 
         FROM `{$wpdb->prefix}order` AS o 
         LEFT JOIN `{$wpdb->prefix}grading_logs` AS gl ON gl.user_id=o.user_id AND gl.grading_id=o.match_id 
         LEFT JOIN `{$wpdb->users}` AS u ON u.ID=o.user_id AND u.ID!='' 
@@ -113,8 +109,7 @@ class Grading
                         <th scope="col" id="ID" class="manage-column column-ID">ID</th>
                         <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                         <th scope="col" id="email" class="manage-column column-email">邮箱</th>
-                        <th scope="col" id="is_adopt" class="manage-column column-is_adopt">是否通过</th>
-                        <th scope="col" id="adopt_level" class="manage-column column-adopt_level">通过级别</th>
+                        <th scope="col" id="adopt_level" class="manage-column column-adopt_level">考级状态</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">报名时间</th>
                     </tr>
                      </thead>
@@ -138,9 +133,14 @@ class Grading
                         <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : ''?></td>
                         <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
                         <td class="email column-email" data-colname="邮箱"><?=$row['user_email']?></td>
-                        <td class="is_adopt column-is_adopt" data-colname="是否通过"><?=$row['grading_result_name']?></td>
                         <td class="adopt_level column-adopt_level" data-colname="通过级别">
-                            <?=$row['grading_result'] == '1' ? $row['grading_lv'] : '未过级'?>
+                            <?php
+                                if($row['grading_result'] == '1' && $row['grading_result']){
+                                           echo '通过<span style="color: #00c400;font-weight:bold"> '.$row['grading_lv'].' </span>级';
+                                }else{
+                                    echo '<span style="color: #c42800">未过级</span>';
+                                }
+                             ?>
                         </td>
                         <td class="created_time column-created_time" data-colname="报名时间"><?=$row['created_time']?></td>
                     </tr>
@@ -156,8 +156,7 @@ class Grading
                         <th scope="col" class="manage-column column-ID">ID</th>
                         <th scope="col" class="manage-column column-mobile">手机</th>
                         <th scope="col" class="manage-column column-email">邮箱</th>
-                        <th scope="col" class="manage-column column-is_adopt">是否通过</th>
-                        <th scope="col" class="manage-column column-adopt_level">通过级别</th>
+                        <th scope="col" class="manage-column column-adopt_level">考级状态</th>
                         <th scope="col" class="manage-column column-created_time">报名时间</th>
                     </tr>
                      </tfoot>
@@ -619,7 +618,7 @@ class Grading
                         <span class="intro-value"><?=$gradingQuestion['my_score']?></span>
                     </div>
                 <?php } ?>
-                <?php if($gradingQuestion['my_score'] == 0){ ?>
+                <?php if($gradingQuestion['post_str_length'] && $gradingQuestion['use_time']){ ?>
                     <div class="intro-box">
                         <span class="intro-key">阅读速读: </span>
                         <span class="intro-value">每分钟<?=floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60))?>字</span>
@@ -716,7 +715,7 @@ class Grading
      */
     public function gradingTrainLog(){
         global $wpdb;
-        $categoryArr = getCategory();
+        $categoryArr = getCategory(1);
         if($categoryArr == []) exit('未找到类别!');
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
