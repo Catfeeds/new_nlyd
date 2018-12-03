@@ -107,30 +107,30 @@
                                 </div>
                             </li>
                         </ul>
-                        <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
-                        <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"></div><?=__('报名参赛', 'nlyd-student')?></div></a>
+                        <?php if($match['is_me'] != 'y' && $match['status'] == 1): ?>
+                        <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/confirm/grad_id/'.$_GET['grad_id']);?>"></div><?=__('报名考级', 'nlyd-student')?></div></a>
                         <?php endif; ?>
-                        <?php if( ($match['is_me'] == 'y' && $match['match_status'] == 2) && ($match['match_status'] == -3 || $match['match_status'] == 2)){?>
+                        <?php if( ($match['is_me'] == 'y' && $match['status'] == 2) && ($match['status'] == -3 || $match['status'] == 2)){?>
                             <div class="a-btn two get_footer">
-                                <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                    <a class="a-two left c_white" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
+                                <?php if($match['status'] == -3 || $match['status'] == 2):?>
+                                    <a class="a-two left c_white" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                                 <?php endif;?>
-                                <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                    <a class="a-two right c_white" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
+                                <?php if( $match['is_me'] == 'y' && $match['status'] == 2):?>
+                                    <a class="a-two right c_white" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"><div><?=__('进入考级', 'nlyd-student')?></div></a>
                                 <?php endif;?>
                             </div>              
                         <?php }else { ?>
-                            <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"></div><?=__('查看战绩', 'nlyd-student')?></div></a>
+                            <?php if($match['status'] == -3 || $match['status'] == 2):?>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/record/grad_id/'.$_GET['grad_id']);?>"></div><?=__('查看战绩', 'nlyd-student')?></div></a>
                             <?php endif;?>
-                            <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"></div><?=__('进入考级', 'nlyd-student')?></div></a>
+                            <?php if( $match['is_me'] == 'y' && $match['status'] == 2):?>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);?>"></div><?=__('进入考级', 'nlyd-student')?></div></a>
                             <?php endif;?>
                        <?php }?>
                         
-                        <?php if($match['is_me'] == 'y' && $match['match_status'] == -2 && $match['down_time'] > 0):?>
+                        <?php if($match['is_me'] == 'y' && $match['status'] == -2 && $match['down_time'] > 0):?>
                         <!--倒计时-->
-                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match['match_url']?>"></div>
+                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id'])?>"></div>
                         <?php endif;?>
                     </div>
                 </div>
