@@ -1437,7 +1437,8 @@ class Student_Ajax
                 if($val['match_status'] == 2){
                     //比赛中
                     $url = $_POST['type'] == 2 ? home_url('/gradings/matchWaitting/grad_id/'.$val['ID']) : home_url('/matchs/matchWaitting/match_id/'.$val['ID']);
-                    $button_title = __('进入比赛', 'nlyd-student');
+                    $title = $_POST['type'] == 2 ? '考级' : '比赛';
+                    $button_title = __('进入'.$title, 'nlyd-student');
                 }else if ($val['match_status'] == 1){
                     //报名中
                     $url = '';
@@ -1453,7 +1454,8 @@ class Student_Ajax
                 }else{
                     //等待开赛
                     $url = $_POST['type'] == 2 ? home_url('/gradings/matchWaitting/grad_id/'.$val['ID']) : home_url('matchs/matchWaitting/match_id/'.$val['ID']);
-                    $button_title = __('等待开赛', 'nlyd-student');
+                    $title = $_POST['type'] == 2 ? '考级' : '比赛';
+                    $button_title = __('等待'.$title, 'nlyd-student');
                 }
                 $rows[$k]['button_title'] = $button_title;
                 $rows[$k]['right_url'] = $url;
