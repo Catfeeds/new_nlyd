@@ -523,6 +523,12 @@ class Student_Ajax
             }
         }
 
+        if(isset($_POST['memory_lv'])){
+            if($_POST['memory_lv'] < 1){
+                wp_send_json_error(array('info'=>__('请选择考级等级', 'nlyd-student')));
+            }
+        }
+
         $row = $wpdb->get_row("select id,pay_status from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_POST['match_id']}");
 
         if(!empty($row)) {
