@@ -35,11 +35,11 @@ class Student_Orders extends Student_Home
      * 订单详情
      */
     public function details(){
-        // $id = intval($_GET['id']);;
-        // global $wpdb,$current_user;
-        // require_once 'class-student-account-order.php';
-        // $row = $wpdb->get_row('SELECT '.self::selectField().' FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' AND id='.$id, ARRAY_A);
-        // var_dump($row);
+         $id = intval($_GET['id']);;
+         global $wpdb,$current_user;
+//         require_once 'class-student-account-order.php';
+         $row = $wpdb->get_row('SELECT '.self::selectField().' FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' AND id='.$id, ARRAY_A);
+//         leo_dump($row);
         $view = student_view_path.CONTROLLER.'/order-detail.php';
         load_view_template($view);
     }
@@ -57,6 +57,8 @@ class Student_Orders extends Student_Home
             IFNULL(o.address, "-") AS address,
             CASE o.order_type 
             WHEN 1 THEN "报名订单" 
+            WHEN 2 THEN "考级订单" 
+            WHEN 3 THEN "商品订单" 
             END AS order_type,
             IFNULL(o.express_number, "-") AS express_number,
             IFNULL(o.express_company, "-") AS express_company,
@@ -83,6 +85,8 @@ class Student_Orders extends Student_Home
             IFNULL(address, "-") AS address,
             CASE order_type 
             WHEN 1 THEN "报名订单" 
+            WHEN 2 THEN "考级订单" 
+            WHEN 3 THEN "商品订单" 
             END AS order_type,
             IFNULL(express_number, "-") AS express_number,
             IFNULL(express_company, "-") AS express_company,

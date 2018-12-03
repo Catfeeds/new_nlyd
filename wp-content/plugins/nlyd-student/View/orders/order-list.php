@@ -291,18 +291,18 @@ layui.use(['element','flow'], function(){
                                     }else if(v.pay_status=="2"){//2待发货
                                         list_info['time']="<?=__('支付时间', 'nlyd-student')?>";
                                         list_info['statu_color']="c_blue";
-                                        list_info['btn_html']='<a href="<?=home_url('orders/details')?>" class="order-right-btn c_blue"><?=__('查看详情', 'nlyd-student')?></a>'
+                                        list_info['btn_html']='<a href="<?=home_url('orders/details/id/')?>'+v.order_id+'" class="order-right-btn c_blue"><?=__('查看详情', 'nlyd-student')?></a>'
                                                             +'<div class="order-left-btn"><?=__('提醒发货', 'nlyd-student')?></div>';
                                     }else if(v.pay_status=="3"){//3待收货
                                         list_info['time']="<?=__('发货时间', 'nlyd-student')?>";
                                         list_info['statu_color']="c_blue"
                                         list_info['btn_html']='<a href="" class="order-right-btn c_blue"><?=__('确认收货', 'nlyd-student')?></a>'
                                                             +'<a  href="<?=home_url('orders/logistics')?>" class="order-left-btn ml-20"><?=__('查看物流', 'nlyd-student')?></a>'
-                                                            +'<a class="order-left-btn" href="<?=home_url('orders/details')?>"><?=__('查看详情', 'nlyd-student')?></a>';
+                                                            +'<a class="order-left-btn" href="<?=home_url('orders/details/id/')?>'+v.order_id+'"><?=__('查看详情', 'nlyd-student')?></a>';
                                     }else if(v.pay_status=="4"){//4已完成
                                         list_info['time']="<?=__('完成时间', 'nlyd-student')?>";
                                         list_info['statu_color']="c_black6"
-                                        list_info['btn_html']='<a class="order-left-btn" href="<?=home_url('orders/details')?>"><?=__('查看详情', 'nlyd-student')?></a>';
+                                        list_info['btn_html']='<a class="order-left-btn" href="<?=home_url('orders/details/id/')?>'+v.order_id+'"><?=__('查看详情', 'nlyd-student')?></a>';
                                     }
                                     var dom='<div class="order-row layui-row">'
                                                 +'<div class="order-title layui-row width-padding width-padding-pc">'
