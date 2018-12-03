@@ -138,7 +138,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             </div>
                             <?php if(!empty($_GET['grad_type']=='reading')):?>
                                 <div class="one-info flex1">
-                                    <div class="left-label"><?=__('速率', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
+                                    <div class="left-label"><?=__('速度', 'nlyd-student')?>:</div><span class="c_blue"><?=$reading_rate;?>字/分钟</span>
                                 </div>
                             <?php endif;?>
                             <?php if(!empty($_GET['grad_type']=='arithmetic')):?>
@@ -294,8 +294,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                 $.DelSession('leavePageWaits')
                 $.DelSession('count');
             })
-            <?php /*if(empty($next_project)):*/ ?>
-            /*layui.use('layer', function(){
+            <?php if(empty($next_project) && ACTION == 'answerLog'): ?>
+            layui.use('layer', function(){
                 layer.open({
                     type: 1
                     ,maxWidth:300
@@ -317,8 +317,8 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                     ,shade: 0.3 //遮罩
                     ,isOutAnim:true//关闭动画
                 });
-            })*/
-            <?php  /*endif;*/?>
+            })
+            <?php  endif;?>
         <?php endif;?>
     })
 </script>

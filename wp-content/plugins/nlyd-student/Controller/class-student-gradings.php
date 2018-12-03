@@ -847,11 +847,28 @@ class Student_Gradings extends Student_Home
 
                 $wpdb->startTrans();
 
-                //$c = $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
-
+                $c = $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
                 $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
+                if(empty($rank_row)){
+                    $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
+                }else{
 
-                if($a && $grading_result == 1){
+                    if(!empty($update)){
+                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
+                    }else{
+                        $b = 1;
+                    }
+                }
+                //var_dump($c .'---'.$a.'---'.$b);die;
+                if($a && $b && $c){
+                    $wpdb->commit();
+                }else{
+                    $wpdb->rollback();
+                }
+
+                /*var_dump($c .'---'.$a);
+                die;*/
+                /*if($a && $grading_result == 1){
                     if(empty($rank_row)){
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
                     }else{
@@ -871,7 +888,7 @@ class Student_Gradings extends Student_Home
                     $wpdb->commit();
                 }else{
                     $wpdb->rollback();
-                }
+                }*/
 
                 $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);
             }
@@ -902,12 +919,23 @@ class Student_Gradings extends Student_Home
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
-            'reading_rate'=> $row['post_str_length']/($row['use_time']/60),
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? $row['post_str_length']/($row['use_time']/60) : '',
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
         );
         //print_r($data);
+        if($grading_result == 1){
+            $grade_result = $lv.'级'.'已达标';
+        }else{
+            $grade_result = '未达标';
+            if($row['grading_type'] == 'memory'){
+                //var_dump($lv);
+                $grade_result = $lv.$grade_result;
+            }
+        }
+        $data['grade_result'] = $row['grading_type_cn'].$grade_result;
+
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
     }
@@ -975,7 +1003,7 @@ class Student_Gradings extends Student_Home
         if($_GET['questions_type'] == 'reading'){
             $where .= " and post_more = {$post_more} ";
         }
-        $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,correct_rate,
+        $sql = "select user_id,grading_id,grading_type,questions_type,grading_questions,questions_answer,my_answer,my_score,correct_rate,post_str_length,use_time,
                     case grading_type
                     when 'reading' then '速读'
                     when 'memory' then '记忆'
@@ -1110,22 +1138,22 @@ class Student_Gradings extends Student_Home
 
             $next_index = $keys[$index+1];
             $prev_index = $keys[$index-1];
-            $next = !empty($next_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$next_index) : '';
-            $prev = !empty($prev_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/'.$prev_index) : '';
+            $next = !empty($next_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/memory/questions_type/'.$next_index) : '';
+            $prev = !empty($prev_index) ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/memory/questions_type/'.$prev_index) : '';
 
             /*print_r($next_index);
             print_r($prev_index);*/
         }elseif ($row['grading_type'] == 'arithmetic'){
 
-            $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/nxys') : '';
-            $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/zxys') : '';
+            $next = $row['questions_type']=='zxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/arithmetic/questions_type/nxys') : '';
+            $prev = $row['questions_type']=='nxys' ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/arithmetic/questions_type/zxys') : '';
         }elseif ($row['grading_type'] == 'reading'){
             //print_r($post_more);die;
             $next_more = $post_more+1; //$post_more < 4 ? $post_more+1 : '';
             $prev_more = $post_more-1; //$post_more < 4 ? $post_more-1 : '';
 
-            $next = $post_more < 3 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/reading/post_more/'.$next_more) : '';
-            $prev = $post_more > 1 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/questions_type/reading/post_more/'.$prev_more) : '';
+            $next = $post_more < 3 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/reading/questions_type/reading/post_more/'.$next_more) : '';
+            $prev = $post_more > 1 ? home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/reading/questions_type/reading/post_more/'.$prev_more) : '';
         }
 
         $data = array(
@@ -1138,6 +1166,7 @@ class Student_Gradings extends Student_Home
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? floor($row['post_str_length']/($row['use_time']/60)) : '',
             'match_row'=>$row,
             'next'=>$next,
             'prev'=>$prev,

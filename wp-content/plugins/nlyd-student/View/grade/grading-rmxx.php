@@ -197,7 +197,7 @@ jQuery(function($) {
                     +'</div>'
                     +'<div class="card_detail layui-bg-white">'
                         +'<div class="card_name c_black pd_"><input class="matching-number-input" type="text"></div>'
-                        +'<div class="card_phone c_black pd_"><input class="matching-number-input" type="text"></div>'
+                        +'<div class="card_phone c_black pd_"><input class="matching-number-input" type="tel"></div>'
                     +'</div>'
                 +'</div>'
                 
