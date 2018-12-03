@@ -135,7 +135,7 @@ class Student_Gradings extends Student_Home
 
         //获取当前比赛是否报名
         $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID} ",ARRAY_A);
-        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : '';
+        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : 0;
         //print_r($order);
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
@@ -794,9 +794,10 @@ class Student_Gradings extends Student_Home
                     }
                     //print_r($grading_result);
                     $lv = $order->memory_lv;
-                    if($lv > $rank_row['memory']){
+                    if($lv > $rank_row['memory'] && $grading_result == 1){
                         $update = array('memory'=>$order->memory_lv);
                     }
+                    //print_r($update);die;
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$order->memory_lv,'skill_type'=>1);
                 }
                 elseif($_GET['grad_type']== 'reading'){
@@ -828,7 +829,10 @@ class Student_Gradings extends Student_Home
                 elseif($_GET['grad_type']== 'arithmetic'){
                     $grading_result = 2;
                     $my_score = array_sum(array_column($rows,'my_score'));
-                    $lv = floor($my_score/200);
+                    if($my_score > 400){
+                        $lv = 1;
+                        $lv = floor(($my_score-400)/200+$lv);
+                    }
                     if($lv > 0){
                         $grading_result = 1;
                         if($lv > $rank_row['compute']){
@@ -850,7 +854,9 @@ class Student_Gradings extends Student_Home
                         'created_time'=>get_time('mysql'),
                     );
                     $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
+                    //var_dump($a);
                     if(empty($rank_row)){
+
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
                     }else{
 
@@ -955,7 +961,6 @@ class Student_Gradings extends Student_Home
                 }
             }
         }
-        //print_r($row);
 
         $data = array(
             'row'=>$row,

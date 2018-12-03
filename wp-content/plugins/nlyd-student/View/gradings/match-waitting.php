@@ -7,7 +7,7 @@
   
                 <?php //if( $current_project['match_type'] == 'first' || isset($_GET['wait']) ){?>
                     <div class="count-wrapper">
-                        <p class="match-name c_blue"><?=empty($row['post_title']) ? '国际'.$project_alias_cn.'水平考级认证' : $row['post_title'];?></p>
+                        <p class="match-name c_blue"><?=empty($grading_title) ? '国际'.$project_alias_cn.'水平考级认证' : $grading_title;?></p>
                         <div class="match_tips">
                             <?php
 

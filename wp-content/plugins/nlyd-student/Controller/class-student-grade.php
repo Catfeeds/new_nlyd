@@ -731,7 +731,10 @@ class Student_Grade extends Student_Home
                     //print_r($rows);
                     $grading_result = 2;
                     $my_score = array_sum(array_column($rows,'my_score'));
-                    $lv = floor($my_score/200);
+                    if($my_score > 400){
+                        $lv = 1;
+                        $lv = floor(($my_score-400)/200+$lv);
+                    }
 
                     if($lv > 0){
                         $grading_result = 1;
@@ -774,7 +777,7 @@ class Student_Grade extends Student_Home
 
             $sql_1 = "select a.id history_id,b.id questions_id from {$wpdb->prefix}user_grade_log_history a  
                     left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
-                    where a.user_id = {$current_user->ID} and a.grade_type = '{$_GET['type']}' 
+                    where a.user_id = {$current_user->ID} and a.grade_type = '{$_GET['grad_type']}' 
                     order by a.id desc
                     ";
             $results = $wpdb->get_results($sql_1,ARRAY_A);
