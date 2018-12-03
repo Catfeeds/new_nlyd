@@ -195,7 +195,7 @@ class Student_Gradings extends Student_Home
                 if(!empty($next_key)){
                     $row['redirect_url'] .= '/type/'.$next_key.'/memory_lv/'.$row['memory_lv'];
                 }else{
-                    $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                     return;
                 }
             }else{
@@ -211,7 +211,7 @@ class Student_Gradings extends Student_Home
             if(!empty($next_key)){
                 $row['redirect_url'] .= '/more/'.$next_key;
             }else{
-                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                 return;
             }
         }
@@ -224,7 +224,7 @@ class Student_Gradings extends Student_Home
             if(!empty($next_key)){
                 $row['redirect_url'] .= '/type/'.$next_key;
             }else{
-                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                 return;
             }
         }
