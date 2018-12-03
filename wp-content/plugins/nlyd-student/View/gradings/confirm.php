@@ -65,7 +65,7 @@
                             </div>
                             <div class="nl-match-body">
                                 国际<?=$match['project_alias_cn']?>水平考级认证
-                                <a class="c_orange" href="<?=home_url('/gradings/matchRule/type/'.$match['project_alias'])?>" ><?= __('考级须知', 'nlyd-student') ?></a>
+                                <a class="c_blue" href="<?=home_url('/gradings/matchRule/type/'.$match['project_alias'])?>" ><?= __('考级须知', 'nlyd-student') ?></a>
                             </div>
                             <!-- 如果是记忆类 -->
                             <?php if($match['project_alias'] == 'memory'):?>
