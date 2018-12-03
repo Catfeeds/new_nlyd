@@ -177,7 +177,7 @@ class Teacher
                                 <span aria-hidden="true"><?=$row['userID']?></span>
                                 <span class="screen-reader-text">未知</span>
                             </td>
-                            <td class="image column-image" data-colname="教练照片">
+                            <td class="image column-image" data-colname="教练照片" id="cardImg-<?=$row['coach_id']?>">
                                 <img src="<?=isset($usermeta['user_head'])?$usermeta['user_head'][0]:''?>" style="height: 60px;" alt="">
                             </td>
                             <td class="category column-category" data-colname="教学类别">
@@ -239,14 +239,31 @@ class Teacher
                     </div>
                 </div>
 
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php
+                        foreach ($rows as $row){
+                        $real_name = get_user_meta($row['ID'], 'user_real_name', true);
+                        $real_name = isset($real_name['real_name']) ? $real_name['real_name'] :'';
+                        ?>
+                        _title = '<?=$real_name?>'
+                        layer.photos({//图片预览
+                            photos: '#cardImg-<?=$row['coach_id']?>',
+                            move : false,
+                            title : _title,
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                    });
+
+                })
+
+            </script>
         </div>
-
-
-
-
-
-
-
     <?php
 //        load_view_template(match_view_path.'teacher.php', array('rows' => $rows));
     }
@@ -262,27 +279,49 @@ class Teacher
         $id = $_GET['id'];
         if(is_post()){
             //教学类别
-            $read_value = 0;
+            $reading_value = 0;
             $memory_value = 0;
-            $compute_value = 0;
+            $arithmetic_value = 0;
             if(isset($_POST['categorys'])){
                 foreach ($_POST['categorys'] as $v){
                     $category_v = explode('_',$v);
                     switch ($category_v[1]){
                         case 'reading':
-                            $read_value = $category_v[0];
+                            $reading_value = $category_v[0];
                             break;
                         case 'memory':
                             $memory_value = $category_v[0];
                             break;
                         case 'arithmetic':
-                            $compute_value = $category_v[0];
+                            $arithmetic_value = $category_v[0];
                             break;
                     }
                 }
             }
+            //解除取消的类别下的学员
+            $categoryArr = getCategory();
+            $coach_id = $wpdb->get_var("SELECT coach_id FROM {$wpdb->prefix}coach_skill WHERE id='{$id}'");
+            $newCategoryArr = array_reduce($categoryArr,function(&$newArray,$v){
+                $newArray[$v['alis']] = $v;
+                return $newArray;
+            });
+            foreach (['reading'=>$reading_value,'memory'=>$memory_value,'arithmetic'=>$arithmetic_value] AS $cateK => $cateV){
+                if($cateV < 1){
+                    $bool = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}my_coach WHERE coach_id='{$coach_id}' AND category_id='{$newCategoryArr[$cateK]['ID']}' AND apply_status=2");
+                    if($bool){
+                        $cate_name = $cateK.'_value';
+                        $bool = $wpdb->update($wpdb->prefix.'my_coach',['apply_status'=>3],['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>2]);
+                        if(!$bool) {
+                            $$cate_name = $newCategoryArr[$cateK]['ID'];
+                            $err_msg .= '<br> 取消'.$newCategoryArr[$cateK]['post_title'].'教学资格失败!';
+                        }
+                    }
+                    //删除申请
+                    $wpdb->delete($wpdb->prefix.'my_coach',['coach_id'=>$coach_id,'category_id'=>$newCategoryArr[$cateK]['ID'],'apply_status'=>1]);
+                }
+            }
 
-            $bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$read_value,'memory'=>$memory_value,'compute'=>$compute_value],['id'=>$id]);
+            $bool = $wpdb->update($wpdb->prefix.'coach_skill',['read'=>$reading_value,'memory'=>$memory_value,'compute'=>$arithmetic_value],['id'=>$id]);
             if($bool){
                 $suc_msg = '更新成功';
             }else{
@@ -633,14 +672,15 @@ class Teacher
                                          <span class="delete"><a class="submitdelete relieve" href="javascript:;">解除</a>  </span>
                                      <?php }?>
                                      <div class="option-child">
-                                         <?php
-                                            $category_arr = explode('/',$row['category']);
-                                            foreach ($category_arr as $cak => $cav){
-                                                $cav = explode(',',$cav);
-                                                echo '<input type="checkbox" id="ca_'.$cav[0].'" value="'.$cav[0].'" ><label for="ca_'.$cav[0].'">'.$cav[1].'</label>';
-                                            }
-                                         ?>
-                                         <button type="button" class="button confirm-option">确定</button>
+                                     <?php
+                                        $checkboxType = $row['apply_status'] == 1 ? 'checked="checked"' : '';
+                                        $category_arr = explode('/',$row['category']);
+                                        foreach ($category_arr as $cak => $cav){
+                                            $cav = explode(',',$cav);
+                                            echo '<input type="checkbox" id="ca_'.$cav[0].'" '.$checkboxType.' value="'.$cav[0].'" ><label for="ca_'.$cav[0].'">'.$cav[1].'</label>';
+                                        }
+                                     ?>
+                                         <button type="button" class="button confirm-option"></button>
                                          <button type="button" class="button cancel-option">取消</button>
                                      </div>
                                  </td>
@@ -910,6 +950,8 @@ class Teacher
                 wp_enqueue_script( 'list-js' );
                 wp_register_style('list-css',match_css_url.'teacher-list.css');
                 wp_enqueue_style( 'list-css' );
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
                 break;
             case 'teacher-datum':
                 wp_register_style('datum-css',match_css_url.'teacher-datum.css');

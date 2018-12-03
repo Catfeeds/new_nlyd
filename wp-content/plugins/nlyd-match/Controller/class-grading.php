@@ -621,7 +621,7 @@ class Grading
                 <?php if($gradingQuestion['post_str_length'] && $gradingQuestion['use_time']){ ?>
                     <div class="intro-box">
                         <span class="intro-key">阅读速读: </span>
-                        <span class="intro-value">每分钟<?=floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60))?>字</span>
+                        <span class="intro-value">每分钟<?=!is_nan(floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60))) ? floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60)) : 0?>字</span>
                     </div>
                 <?php } ?>
 
