@@ -157,6 +157,15 @@
     width: 100%;
     height: auto;
 }
+
+.kaoji .name_wrapper{
+    width: -webkit-calc(100% - 45px);
+    width: calc(100% - 45px);
+}
+.kaoji .item_img{
+    width: 25px;
+    margin-top: -3px
+}
 @media screen and (max-width: 1199px){
     #page{
         background:#f6f6f6!important;
