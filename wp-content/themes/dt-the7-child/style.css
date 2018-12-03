@@ -77,6 +77,9 @@ a:hover {
     font-family:'Arial'!important;
 }
 /* 字体大小 */
+.fs_22{
+    font-size: 0.22rem;
+}
 .fs_20{
     font-size: 0.20rem;
 }
@@ -170,6 +173,9 @@ a.c_black3:hover{
 }
 .bold{
     font-weight: bold;
+}
+.ti_32{
+    text-indent: 0.32rem;
 }
 .ti_28{
     text-indent: 0.28rem;
