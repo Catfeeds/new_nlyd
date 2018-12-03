@@ -38,6 +38,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL,
+          `genre_id` int(20) DEFAULT NULL,
           `grade_type` varchar(20) DEFAULT NULL COMMENT '考级类型 memory 速记 reading 速读 arithmetic 速算',
           `grade_lv` tinyint(3) DEFAULT NULL COMMENT '考级等级',
           `grade_result` tinyint(2) DEFAULT NULL COMMENT '考级结果',
@@ -65,12 +66,12 @@ function the_table_install () {
           `questions_answer` longtext COMMENT '考题答案',
           `my_answer` longtext COMMENT '我的答案',
           `correct_rate` float(5,3) DEFAULT NULL COMMENT '准确率',
-          `my_score` mediumint(10) DEFAULT NULL,
+          `my_score` mediumint(10) DEFAULT NULL COMMENT '分数',
           `use_time` smallint(20) DEFAULT NULL COMMENT '记忆耗时',
           `created_time` datetime DEFAULT NULL,
           `post_id` int(20) DEFAULT NULL COMMENT '文章id',
           `post_str_length` int(20) DEFAULT NULL COMMENT '阅读文章长度',
-          PRIMARY KEY (`id`,`user_id`,`genre_id`,`questions_type`,`grading_type`)
+           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
         dbDelta($sql);

@@ -749,6 +749,7 @@ class Student_Grade extends Student_Home
             $update = array(
                 'grade_result'=>$grading_result,
                 'grade_lv'=>$lv > 0 ? $lv : '',
+                'created_time'=>get_time('mysql')
 
             );
 
@@ -769,6 +770,27 @@ class Student_Grade extends Student_Home
                 $wpdb->commit();
             }else{
                 $wpdb->rollback();
+            }
+
+            $sql_1 = "select a.id history_id,b.id questions_id from {$wpdb->prefix}user_grade_log_history a  
+                    left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
+                    where a.user_id = {$current_user->ID} and a.grade_type = '{$_GET['type']}' 
+                    order by a.id desc
+                    ";
+            $results = $wpdb->get_results($sql_1,ARRAY_A);
+            if(!empty($results)){
+                $history_id_arr = array();
+                foreach ($results as $x){
+                    if(empty($x['questions_id'])){
+                        $history_id_arr[] = $x['history_id'];
+                    }
+                }
+
+                if(!empty($history_id_arr)){
+                    $ids = arr2str($history_id_arr);
+                    $r = $wpdb->query("DELETE FROM {$wpdb->prefix}user_grade_log_history where id in($ids) ");
+                    //var_dump($r);
+                }
             }
             //print_r($a);
             //新建训练记录
@@ -836,6 +858,7 @@ class Student_Grade extends Student_Home
         //print_r($data['grade_result']);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
+        exit;
     }
 
     /**

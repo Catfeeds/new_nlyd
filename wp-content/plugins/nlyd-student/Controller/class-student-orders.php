@@ -20,19 +20,28 @@ class Student_Orders extends Student_Home
         global $wpdb, $current_user;
         $row = $wpdb->get_row('SELECT count(id) as count FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID, ARRAY_A);
         // var_dump($row['count']);
-        $view = student_view_path.CONTROLLER.'/order.php';
+        $view = student_view_path.CONTROLLER.'/order-list.php';
         load_view_template($view, array('is_show' => $row));
+    }
+    /**
+     * 物流信息
+     */
+     public function logistics(){
+        $view = student_view_path.CONTROLLER.'/order-logistics.php';
+        load_view_template($view);
     }
 
     /**
      * 订单详情
      */
     public function details(){
-        $id = intval($_GET['id']);;
-        global $wpdb,$current_user;
-        require_once 'class-student-account-order.php';
-        $row = $wpdb->get_row('SELECT '.self::selectField().' FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' AND id='.$id, ARRAY_A);
-        var_dump($row);
+        // $id = intval($_GET['id']);;
+        // global $wpdb,$current_user;
+        // require_once 'class-student-account-order.php';
+        // $row = $wpdb->get_row('SELECT '.self::selectField().' FROM '.$wpdb->prefix.'order WHERE user_id='.$current_user->ID.' AND id='.$id, ARRAY_A);
+        // var_dump($row);
+        $view = student_view_path.CONTROLLER.'/order-detail.php';
+        load_view_template($view);
     }
     /**
      * 查询字段
@@ -177,10 +186,17 @@ class Student_Orders extends Student_Home
      */
     public function scripts_default(){
 
-        if(ACTION=='index'){//比赛详情页
-            wp_register_style( 'my-student-orderList', student_css_url.'order-list.css',array('my-student') );
+        if(ACTION=='index'){//订单列表
+            wp_register_style( 'my-student-orderList', student_css_url.'order/order-list.css',array('my-student') );
             wp_enqueue_style( 'my-student-orderList' );
         }
-
+        if(ACTION=='logistics'){//物流
+            wp_register_style( 'my-student-orderList', student_css_url.'order/order-list.css',array('my-student') );
+            wp_enqueue_style( 'my-student-orderList' );
+        }
+        if(ACTION=='details'){//订单详情页
+            wp_register_style( 'my-student-orderList', student_css_url.'order/order-list.css',array('my-student') );
+            wp_enqueue_style( 'my-student-orderList' );
+        }  
     }
 }

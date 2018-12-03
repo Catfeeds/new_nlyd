@@ -68,6 +68,7 @@ input[type="text"].serachInput{
 .goods-left-img{
     width: 150px;
     float: left;
+    background: #f6f6f6;
 }
 .goods-right-info{
     float: left;

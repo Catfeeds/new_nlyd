@@ -129,7 +129,7 @@ class Student_Trains extends Student_Home
                 }
 
             }else{
-
+                $a = $wpdb->update($wpdb->prefix.'user_grade_log_history',array('created_time'=>get_time('mysql')),array('id'=>$row['history_id'],'user_id'=>$current_user->ID));
                 $history_id = $row['history_id'];
             }
         }

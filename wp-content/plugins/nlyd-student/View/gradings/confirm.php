@@ -334,7 +334,7 @@ jQuery(function($) {
                                     ,isOutAnim:true//关闭动画
                                 });
                             }else{
-                                window.location.href=window.home_url+'/matchs/info/match_id/'+$.Request('match_id')
+                                window.location.href=window.home_url+'/gradings/info/grad_id/'+$.Request('grad_id')
                             }
                         }else{
                             // if(res.data.info=="请先实名认证"){

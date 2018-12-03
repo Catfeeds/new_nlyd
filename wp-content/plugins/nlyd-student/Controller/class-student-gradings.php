@@ -135,7 +135,7 @@ class Student_Gradings extends Student_Home
 
         //获取当前比赛是否报名
         $order = $wpdb->get_row("select memory_lv,pay_status from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID} ",ARRAY_A);
-        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : 1;
+        $data['memory_lv'] = !empty($order['memory_lv']) ? $order['memory_lv'] : '';
         //print_r($order);
         $view = student_view_path.CONTROLLER.'/confirm.php';
         load_view_template($view,$data);
@@ -195,7 +195,7 @@ class Student_Gradings extends Student_Home
                 if(!empty($next_key)){
                     $row['redirect_url'] .= '/type/'.$next_key.'/memory_lv/'.$row['memory_lv'];
                 }else{
-                    $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                    $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                     return;
                 }
             }else{
@@ -211,7 +211,7 @@ class Student_Gradings extends Student_Home
             if(!empty($next_key)){
                 $row['redirect_url'] .= '/more/'.$next_key;
             }else{
-                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                 return;
             }
         }
@@ -224,7 +224,7 @@ class Student_Gradings extends Student_Home
             if(!empty($next_key)){
                 $row['redirect_url'] .= '/type/'.$next_key;
             }else{
-                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'match_url'=>home_url(CONTROLLER.'/info/grad_id/'.$_GET['grad_id'])));
+                $this->get_404(array('message'=>__('你已完成全部作答', 'nlyd-student'),'return_log_url'=>home_url(CONTROLLER.'/myAnswerLog/grad_id/'.$_GET['grad_id'])));
                 return;
             }
         }
@@ -837,38 +837,19 @@ class Student_Gradings extends Student_Home
                         $insert1 = array('user_id'=>$current_user->ID,'compute'=>$lv,'skill_type'=>1);
                     }
                 }
-                $insert = array(
-                    'user_id'=>$current_user->ID,
-                    'grading_id'=>$_GET['grad_id'],
-                    'grading_result'=>$grading_result,
-                    'grading_lv'=> $lv > 0 ? $lv : '',
-                    'created_time'=>get_time('mysql'),
-                );
 
                 $wpdb->startTrans();
 
-                $c = $wpdb->delete($wpdb->prefix.'grading_logs',array('user_id'=>$current_user->ID,'grading_id'=>$_GET['grad_id']));
-                $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
-                if(empty($rank_row)){
-                    $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
-                }else{
-
-                    if(!empty($update)){
-                        $b = $wpdb->update($wpdb->prefix.'user_skill_rank',$update,array('user_id'=>$current_user->ID,'id'=>$rank_row['id'],'skill_type'=>1));
-                    }else{
-                        $b = 1;
-                    }
-                }
-                //var_dump($c .'---'.$a.'---'.$b);die;
-                if($a && $b && $c){
-                    $wpdb->commit();
-                }else{
-                    $wpdb->rollback();
-                }
-
-                /*var_dump($c .'---'.$a);
-                die;*/
-                /*if($a && $grading_result == 1){
+                $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_logs where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} ");
+                if(empty($id)){
+                    $insert = array(
+                        'user_id'=>$current_user->ID,
+                        'grading_id'=>$_GET['grad_id'],
+                        'grading_result'=>$grading_result,
+                        'grading_lv'=> $lv > 0 ? $lv : '',
+                        'created_time'=>get_time('mysql'),
+                    );
+                    $a = $wpdb->insert($wpdb->prefix.'grading_logs',$insert);
                     if(empty($rank_row)){
                         $b =  $wpdb->insert($wpdb->prefix.'user_skill_rank',$insert1);
                     }else{
@@ -879,16 +860,13 @@ class Student_Gradings extends Student_Home
                             $b = 1;
                         }
                     }
-                    //print_r($b);
-                    //wp_user_skill_rank
-                }else{
-                    $b = 1;
+                    //var_dump($c .'---'.$a.'---'.$b);die;
+                    if($a && $b){
+                        $wpdb->commit();
+                    }else{
+                        $wpdb->rollback();
+                    }
                 }
-                if($a && $b ){
-                    $wpdb->commit();
-                }else{
-                    $wpdb->rollback();
-                }*/
 
                 $next_project_url = home_url('gradings/record/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type']);
             }
