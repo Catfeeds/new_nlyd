@@ -347,9 +347,8 @@ layui.use(['element','flow'], function(){
                 }
             });
     }
-    
+    pagation(10)
     var layid = location.hash.replace(/^#matchList=/, '');
-    pagation(layid)
         if(layid.length>0){
             $('.layui-tab-title li').each(function(){
                 var _this=$(this)
