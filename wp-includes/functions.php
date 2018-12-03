@@ -6483,11 +6483,21 @@ function saveIosFile($filecontent,$upload_dir){
 /**
  * 获取类别
  */
-function getCategory(){
+function getCategory($type=0){
+    switch ($type){
+        case 1://考级自测类别
+            $parentAlis = 'grading';
+            break;
+        default://比赛类别
+            $parentAlis = 'mental_world_cup';
+    }
+
     global $wpdb;
     $sql = "select p.ID,p.post_title,pm.meta_value as alis from {$wpdb->prefix}posts as p 
                 left join {$wpdb->postmeta} as pm on pm.post_id=p.ID and pm.meta_key='project_alias' 
-                where post_type = 'match-category' and post_status = 'publish' and post_title not like '%自测%' order by menu_order asc";
+                left join {$wpdb->posts} AS pp on pp.ID=p.post_parent 
+                left join {$wpdb->postmeta} as ppm on ppm.post_id=pp.ID and ppm.meta_key='project_alias'  
+                where p.post_type = 'match-category' and p.post_status = 'publish' and ppm.meta_value='{$parentAlis}' order by p.menu_order asc";
     $rows = $wpdb->get_results($sql,ARRAY_A);
     if(!$rows) $rows = [];
     return $rows;
