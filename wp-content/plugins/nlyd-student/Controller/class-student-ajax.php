@@ -2490,6 +2490,19 @@ class Student_Ajax
                     ];
                     $allPrice = $order['cost'];
                     break;
+                case 2://考级订单
+                    $posts = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$order['match_id']);
+                    $goodsData = [
+                        [
+                            'goods_title' => $posts->post_title,
+                            'goods_num' => 1,
+                            'price' => $order['cost'],
+                            'pay_price' => $order['cost'],
+                            'pay_brain' => 0,
+                        ]
+                    ];
+                    $allPrice = $order['cost'];
+                    break;
                 case 3://商品订单
                     $goodsRows = $wpdb->get_results('SELECT od.goods_num,od.pay_price,od.pay_brain,g.goods_title FROM 
                     '.$wpdb->prefix.'order_goods AS od 
