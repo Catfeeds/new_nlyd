@@ -749,6 +749,7 @@ class Student_Grade extends Student_Home
             $update = array(
                 'grade_result'=>$grading_result,
                 'grade_lv'=>$lv > 0 ? $lv : '',
+                'created_time'=>get_time('mysql')
 
             );
 
@@ -836,6 +837,7 @@ class Student_Grade extends Student_Home
         //print_r($data['grade_result']);
         $view = student_view_path.CONTROLLER.'/match-answer-log.php';
         load_view_template($view,$data);
+        exit;
     }
 
     /**
