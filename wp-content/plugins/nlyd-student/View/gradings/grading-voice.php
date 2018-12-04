@@ -260,7 +260,7 @@ jQuery(function($) {
                 }
             }, false);
             if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
-                $(".voice_title").text("<?=__('点击页面开始听记', 'nlyd-student')?>")
+                $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>")
                 $('body').one("click",function(){
                     $(".voice_title").text("<?=__('正在播放语音中', 'nlyd-student')?>")
                     audio.play();
