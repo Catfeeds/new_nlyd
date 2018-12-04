@@ -3938,6 +3938,7 @@ class Student_Ajax
             }
         }
         ini_set('post_max_size','20M');
+        $_SESSION['match_data'] = $_POST;
 
         global $wpdb,$current_user;
 
@@ -3953,7 +3954,7 @@ class Student_Ajax
         if($_POST['grad_type'] == 'memory'){
             $url .= '/type/'.$_POST['questions_type'];
         }
-        if($row['answer_status'] == 1) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
+        if(!empty($row)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //数据处理
 
@@ -4128,11 +4129,24 @@ class Student_Ajax
                 wp_send_json_error(array('所提交数据信息不完全'));
             }
         }
+        $_SESSION['match_data'] = $_POST;
         ini_set('post_max_size','20M');
 
         global $wpdb,$current_user;
-        //print_r($_POST);die;
+        $sql1 = "select * from {$wpdb->prefix}user_grade_logs 
+                          where grade_log_id = {$_POST['history_id']} 
+                          and grading_type = '{$_POST['grading_type']}' 
+                          and questions_type = '{$_POST['questions_type']}' 
+                          and user_id = {$current_user->ID} ";
+        //print_r($sql1);
+        $row_1 = $wpdb->get_row($sql1,ARRAY_A);
+        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row_1['id'].'/grad_type/'.$_POST['grad_type']);
+        if($_POST['grad_type'] == 'memory'){
+            $url .= '/type/'.$_POST['questions_type'];
+        }
+        if(!empty($row_1)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
 
+        //print_r($_POST);die;
         //数据处理
         $correct_rate = 0;  //准确率
         switch ($_POST['grading_type']){

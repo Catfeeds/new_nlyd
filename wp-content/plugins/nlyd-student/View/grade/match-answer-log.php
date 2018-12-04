@@ -7,7 +7,7 @@
  * Time: 20:28
  */
 
-if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_id'])){ ?>
+if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_id'])){  ?>
     <style>
         @media screen and (max-width: 1199px){
             #page {
@@ -32,7 +32,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             var data = $.GetSession('match_data', '1');
             if(data == null){
                 $.alerts("<?=__('未检测到答题记录', 'nlyd-student')?>");
-                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/".$_GET['match_id'])?>';
+                window.location.href= '<?=home_url("/trains/lists/id/".$_GET['genre_id'])?>';
                 return false;
             }
             //console.log(data);return false;
@@ -62,7 +62,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             if(textStatus=='timeout'){
                                 $.alerts("<?=__('网络延迟', 'nlyd-student')?>")
                                 $.DelSession('match_data')
-                                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
+                                window.location.href= '<?=home_url("/trains/lists/id/")?>'+data.genre_id
                             }
                         }
                     })

@@ -32,7 +32,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
             var data = $.GetSession('match_data', '1');
             if(data == null){
                 $.alerts("<?=__('未检测到答题记录', 'nlyd-student')?>");
-                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/".$_GET['match_id'])?>';
+                window.location.href= '<?=home_url("/gradings/matchWaitting/grad_id/".$_GET['grad_id'])?>';
                 return false;
             }
             //console.log(data);return false;
@@ -62,7 +62,7 @@ if(empty($_SESSION['match_data']) && ACTION =='answerLog' && !isset($_GET['log_i
                             if(textStatus=='timeout'){
                                 $.alerts("<?=__('网络延迟', 'nlyd-student')?>")
                                 $.DelSession('match_data')
-                                window.location.href= '<?=home_url("/matchs/matchWaitting/match_id/")?>'+data.match_id
+                                window.location.href= '<?=home_url("/gradings/matchWaitting/grad_id/".$_GET["grad_id"])?>'
                             }
                         }
                     })
