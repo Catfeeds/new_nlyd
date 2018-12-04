@@ -19,7 +19,7 @@
                     </div>
                     <!-- 记忆 -->
                     <div class="complete_zoo">
-                        <div class="ta_c c_black voice_title"><?=__('正在播放语音中', 'nlyd-student')?>...</div>
+                        <div class="ta_c c_black voice_title"><?=__('语音文件加载中', 'nlyd-student')?>...</div>
                         <div class="voice_wait">
                             <div class="voice_img">
                                 <img src="<?=student_css_url.'image/grading/voice.png'?>" alt="<?=__('开始播放', 'nlyd-student')?>">
@@ -85,6 +85,7 @@ jQuery(function($) {
     var sys_second=answer_time;
     var endTime=$.GetEndTime(answer_time);//结束时间
     // var file_url="<?=leo_match_url.'/upload/voice/'?>"
+    var palying=false;//是否在播放
     var _index=0;
     var spriteData={
         0:{start:0,length:1},
@@ -191,11 +192,23 @@ jQuery(function($) {
          $('.matching-sumbit').show();
        }else{//准备页面播放语音
             var doms='<audio id="audio" autoplay="false" preload type="audio/mpeg">' 
-                        +'<source src="<?=leo_match_url.'/upload/voice/all.wav'?>" type="audio/mpeg" />'
                     +'</audio>'
             $('body').append(doms)
             var audio=document.getElementById('audio');
+            audio.src="<?=leo_match_url.'/upload/voice/all.wav'?>";
             var u = navigator.userAgent;
+            audio.pause();
+            audio.addEventListener("canplaythrough",
+                function() {
+                    if(!palying){
+                        $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>");
+                        $('body').addClass('canplay');
+                        audio.pause();
+                    }else{
+                        $('body').addClass('canplay');
+                    }
+                },
+            false);
             if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
                 audio.currentTime = spriteData[questions_answer[_index]].start;
             }else{
@@ -205,19 +218,34 @@ jQuery(function($) {
                 });
             }
             if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
-                audio.play();
+             
             } else {
                 //監聽客户端抛出事件"WeixinJSBridgeReady"
                 if (document.addEventListener) {
                     document.addEventListener("WeixinJSBridgeReady", function(){
-                        audio.play();
+                        if(!palying){
+                            $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>");
+                            $('body').addClass('canplay');
+                        }else{
+                            $('body').addClass('canplay');
+                        }
                     }, false);
                 } else if (document.attachEvent) {
                     document.attachEvent("WeixinJSBridgeReady", function(){
-                        audio.play();
+                        if(!palying){
+                            $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>");
+                            $('body').addClass('canplay');
+                        }else{
+                            $('body').addClass('canplay');
+                        }
                     });
                     document.attachEvent("onWeixinJSBridgeReady", function(){
-                        audio.play();
+                        if(!palying){
+                            $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>");
+                            $('body').addClass('canplay');
+                        }else{
+                            $('body').addClass('canplay');
+                        }
                     });
                 }
             }
@@ -259,13 +287,13 @@ jQuery(function($) {
 
                 }
             }, false);
-            if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
-                $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>")
-                $('body').one("click",function(){
+            $('body').click(function(){
+                if($(this).hasClass('canplay') && !palying){
+                    palying=true;
                     $(".voice_title").text("<?=__('正在播放语音中', 'nlyd-student')?>")
                     audio.play();
-                })
-            }
+                }
+            })
 
             // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
             // audio.loop = false;
