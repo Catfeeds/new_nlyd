@@ -704,7 +704,7 @@ class Student_Grade extends Student_Home
 
                     }
                     $lv = $_GET['memory_lv'];
-                    if($lv > $rank_row['memory']){
+                    if($lv > $rank_row['memory'] && $grading_result == 1){
                         $update1 = array('memory'=>$lv);
                     }
                     $insert1 = array('user_id'=>$current_user->ID,'memory'=>$lv,'skill_type'=>2);
