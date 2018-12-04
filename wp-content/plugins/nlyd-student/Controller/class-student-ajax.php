@@ -1162,7 +1162,13 @@ class Student_Ajax
     public function get_coach_category($json=true){
 
         global $wpdb;
-        $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'match-category' and post_status = 'publish' order by menu_order asc  ";
+        $post_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value = 'mental_world_cup'");
+
+        $sql = "select ID,post_title 
+                from {$wpdb->prefix}posts 
+                where post_parent = {$post_id} and post_status = 'publish'
+                order by menu_order asc
+                " ;
 
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if($json){
