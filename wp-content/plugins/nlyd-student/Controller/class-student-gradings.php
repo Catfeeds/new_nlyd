@@ -86,14 +86,14 @@ class Student_Gradings extends Student_Home
         }
         //print_r($match);
         $data['match'] = $match;
-
+        //print_r($match);
         //获取报名人数
         $total = $wpdb->get_var("select count(*) total from {$wpdb->prefix}order where match_id = {$match['grading_id']} and order_type = 2 and pay_status in (2,3,4)");
         $data['total'] = $total > 0 ? $total : 0;
 
         //获取订单
         $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID}");
-
+        $data['down_time'] = strtotime($data['start_time'])-time();
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
