@@ -84,7 +84,15 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
             return;
         }
-        //print_r($match);
+
+        //根据时间修改比赛状态
+        if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['start_time'])){
+            $a = $wpdb->update($wpdb->prefix.'grading_meta',array('status'=>-2),array('id'=>$match['id'],'grading_id'=>$match['grading_id']));
+            $match['status'] = -2;
+            $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
+        }
+        $match['down_time'] = strtotime($match['start_time'])-get_time();
+        $match['match_url'] = home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);
         $data['match'] = $match;
         //print_r($match);
         //获取报名人数
@@ -93,7 +101,7 @@ class Student_Gradings extends Student_Home
 
         //获取订单
         $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID}");
-        $data['down_time'] = strtotime($data['start_time'])-time();
+
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
