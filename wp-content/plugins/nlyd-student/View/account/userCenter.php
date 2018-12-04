@@ -149,7 +149,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的教练', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8"  href="<?=home_url('orders');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>

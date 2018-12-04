@@ -48,11 +48,14 @@
                                     foreach ($list as $k =>$v){
                                         //print_r($k);
                                         $alias = get_post_meta($k,'project_alias')[0];
+                                        $thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($k), 'thumbnail');
                                     ?>
                                     <div class="lists_item_row">
                                         <div class="bold c_black fs_16"></div>
                                         <a class="item_row lists_row c_black6 kaoji"  href="<?=home_url('trains/ready/genre_id/'.$genre_id.'/type/'.$alias)?>" >
-                                            <div class="item_img"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
+                                            <div class="item_img">
+                                                <img src="<?=$thumbnail_image_url[0]?>">
+                                            </div>
                                             <div class="name_wrapper dis_table"><div class="dis_cell"><?=__($v["title"], 'nlyd-student')?></div></div>
                                             <div class="arrow_box"><img src="<?=student_css_url.'image/trains/arrow.png'?>"></div>
                                         </a>

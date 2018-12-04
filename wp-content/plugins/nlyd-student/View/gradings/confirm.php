@@ -65,14 +65,20 @@
                             </div>
                             <div class="nl-match-body">
                                 国际<?=$match['project_alias_cn']?>水平考级认证
-                                <a class="c_orange" href="<?=home_url('/gradings/matchRule/type/'.$match['project_alias'])?>" ><?= __('考级须知', 'nlyd-student') ?></a>
+                                <a class="c_blue" href="<?=home_url('/gradings/matchRule/type/'.$match['project_alias'])?>" ><?= __('考级须知', 'nlyd-student') ?></a>
                             </div>
                             <!-- 如果是记忆类 -->
                             <?php if($match['project_alias'] == 'memory'):?>
                             <div class="nl-match-detail layui-row">
                                 <div class="nl-match-label"><?=__('记忆级别', 'nlyd-student')?>:</div>
                                 <div class="nl-match-info">
-                                    <div class="c_orange" id="trigger3"><?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student') ?></div>
+                                    <div class="c_orange" id="trigger3">
+                                        <?php if($memory_lv > 0){ ?>
+                                        <?= __('记忆'.chinanum($memory_lv).'级', 'nlyd-student') ?>
+                                        <?php }else{ ?>
+                                        请选择等级
+                                        <?php } ?>
+                                    </div>
                                     <input type="hidden" id="trigger4" name="memory_lv" value="<?=$memory_lv?>">
                                 </div>
                             </div>
