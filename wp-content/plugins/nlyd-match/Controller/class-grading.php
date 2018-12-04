@@ -39,8 +39,6 @@ class Grading
         $gradingId < 1 && exit('参数错误');
         global $wpdb;
         //查询考级类别
-
-
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
         $page < 1 && $page = 1;
@@ -74,7 +72,7 @@ class Grading
         ));
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">考级选手</h1>
+            <h1 class="wp-heading-inline"><?=get_post($gradingId)->post_title.'-'?>考级选手</h1>
 
             <a href="<?=admin_url('edit.php?post_type=grading&page=add-grading-students&grading_id='.$gradingId)?>" class="page-title-action">添加选手</a>
 
@@ -184,8 +182,6 @@ class Grading
     public function addGradingStudents(){
         $gradingId = isset($_GET['grading_id']) ? intval($_GET['grading_id']) : 0;
         $gradingId < 1 && exit('参数错误');
-
-
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         if($searchStr != ''){
@@ -198,8 +194,6 @@ class Grading
             if(preg_match('/记忆/',$cate) || preg_match('/速记/',$cate)){
                 $is_memory = true;
             }
-
-
             $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
             $page < 1 && $page = 1;
             $pageSize = 20;
@@ -227,7 +221,7 @@ class Grading
         }
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">添加选手</h1>
+            <h1 class="wp-heading-inline"><?=get_post($gradingId)->post_title.'-'?>添加选手</h1>
 
 
             <hr class="wp-header-end">
@@ -243,7 +237,7 @@ class Grading
 
 
                 <div class="tablenav-pages">
-                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <span class="displaying-num"><?=$count['count']>0?$count['count'].'个项目':''?></span>
                     <?=$pageHtml?>
                 </div>
                 <br class="clear">
@@ -310,7 +304,7 @@ class Grading
 
 
                 <div class="tablenav-pages">
-                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                      <span class="displaying-num"><?=$count['count']>0?$count['count'].'个项目':''?></span>
                     <?=$pageHtml?>
                 </div>
                 <br class="clear">
@@ -597,7 +591,16 @@ class Grading
                 <?php if($gradingQuestion['leave_page_time']){ ?>
                     <div class="intro-box">
                         <span class="intro-key">每次离开页面的时间: </span>
-                        <span class="intro-value"><?=$gradingQuestion['leave_page_time']?></span>
+                        <span class="intro-value"><?php
+                            $leave_page_time = json_decode($gradingQuestion['leave_page_time'],true);
+                            $leave_page_time_count = count($leave_page_time);
+                            foreach ($leave_page_time as $lptK => $lptV){
+                                echo $lptV['out'];
+                                if(isset($lptV['back'])) echo ' 至 '.$lptV['back'];
+                                if($lptK < ($leave_page_time_count-1)) echo ',';
+                            }
+                         ?>
+                        </span>
                     </div>
                 <?php } ?>
                 <?php if($gradingQuestion['created_time']){ ?>
