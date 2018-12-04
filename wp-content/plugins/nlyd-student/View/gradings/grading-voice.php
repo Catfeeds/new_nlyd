@@ -195,7 +195,6 @@ jQuery(function($) {
                     +'</audio>'
             $('body').append(doms)
             var audio=document.getElementById('audio');
-            var voice_title=document.getElementsByClassName('voice_title')[0];
             var u = navigator.userAgent;
             if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
                 audio.currentTime = spriteData[questions_answer[_index]].start;
@@ -260,9 +259,11 @@ jQuery(function($) {
 
                 }
             }, false);
-            voice_title.addEventListener("click",function(e){
-                audio.play();
-            }, false);
+            if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
+                $('body').one("click",function(){
+                    audio.play();
+                })
+            }
 
             // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
             // audio.loop = false;
