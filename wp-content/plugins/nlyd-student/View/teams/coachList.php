@@ -115,13 +115,13 @@
 <!-- 申请当我的教练 -->
 <input type="hidden" name="_wpnonce" id="setCoach" value="<?=wp_create_nonce('student_set_coach_code_nonce');?>">
 <!-- 设为主训教练 -->
-<input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>">
+<!-- <input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>"> -->
 <!-- 解除教练关系 -->
 <input type="hidden" name="_wpnonce" id="clearCoach" value="<?=wp_create_nonce('student_relieve_coach_code_nonce');?>">
 <!-- 更换主训教练 -->
-<input type="hidden" name="_wpnonce" id="replaceMain" value="<?=wp_create_nonce('student_replace_major_code_nonce');?>">
+<!-- <input type="hidden" name="_wpnonce" id="replaceMain" value="<?=wp_create_nonce('student_replace_major_code_nonce');?>"> -->
 <!-- 判断是否存在主训 -->
-<input type="hidden" name="_wpnonce" id="isMajor" value="<?=wp_create_nonce('student_current_coach_code_nonce');?>">
+<!-- <input type="hidden" name="_wpnonce" id="isMajor" value="<?=wp_create_nonce('student_current_coach_code_nonce');?>"> -->
 <script>
 jQuery(function($) { 
     var mySwiper = new Swiper('.swiper-container', {
@@ -156,13 +156,14 @@ layui.use(['element','flow','layer','form'], function(){
             var category_id=_this.attr('data-categoryId');
             var coach_name=_this.attr('data-coachName')
             var type=$('.layui-this a').text()
-            var ajax_data={
-                action:'searchCurrentCoach',
-                _wpnonce:$('#isMajor').val(),
-                category_id:category_id
-            }
-            $.ajax({
-                data:ajax_data,success:function(resp,ajaxStatu,xhr){  
+            // var ajax_data={
+            //     action:'searchCurrentCoach',
+            //     _wpnonce:$('#isMajor').val(),
+            //     category_id:category_id
+            // }
+            // $.ajax({
+            //     data:ajax_data,
+            //     success:function(resp,ajaxStatu,xhr){
                     // var hasMajor= resp.success ? true : false;
                     var content='<div class="box-conent-wrapper"><?=__('您是否确认与', 'nlyd-student')?>“'+coach_name+'”<?=__('建立教学关系', 'nlyd-student')?>？</div>'
                     // if(hasMajor){
@@ -228,8 +229,8 @@ layui.use(['element','flow','layer','form'], function(){
                         ,shade: 0.3 //遮罩
                         ,isOutAnim:true//关闭动画
                     });
-                }
-            });
+                // }
+            // });
         }
         return false
     })
