@@ -26,7 +26,7 @@ class alipay {
      * @throws Exception
      */
     public function pay($param){
-
+        $this->writeLog('', '支付宝支付异步回调');
 //        require_once dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'wappay/service/AlipayTradeService.php';
 //        require dirname ( __FILE__ ).DIRECTORY_SEPARATOR.'./../config.php';
 

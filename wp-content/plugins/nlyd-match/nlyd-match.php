@@ -109,6 +109,8 @@ if(!class_exists('MatchController')){
                 add_filter( "manage_edit-{$this->post_type}_sortable_columns",array($this, 'sort_postviews_column' ));
 
             }
+            //函数
+            include_once(PLUGINS_PATH.'functions.php');
 
             include_once(match_controller_path.'class-match.php');
             $this->match = new Match();
