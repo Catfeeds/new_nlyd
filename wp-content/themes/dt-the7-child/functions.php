@@ -1073,6 +1073,6 @@ require_once(leo_student_path.'library/Autoloader.class.php');
 //require_once(ABSPATH.'wp-includes/library/Autoloader.class.php');
 
 //引入定时器
-require_once(leo_student_path.'library/Timer.class.php');
+/*require_once(leo_student_path.'library/Timer.class.php');
 $timer = new \library\Timer();
-$timer->autoTimer();
+$timer->autoTimer();*/
