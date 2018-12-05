@@ -81,8 +81,8 @@ if ( !defined('ABSPATH') )
     define('ABSPATH', dirname(__FILE__) . '/');
 
 define('INCLUDES_PATH', ABSPATH . 'wp-includes/');
-define('LIBRARY_PATH', INCLUDES_PATH . 'library/');
 define('PLUGINS_PATH', ABSPATH . 'wp-content/plugins/');
+define('LIBRARY_PATH', PLUGINS_PATH . '/nlyd-student/library/');
 
 //禁用自动保存
 define('AUTOSAVE_INTERVAL', false);
