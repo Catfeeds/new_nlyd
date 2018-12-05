@@ -168,15 +168,15 @@
     text-align: center;
     height: 20px;
     line-height: 20px;
-    border-right: 1px solid #2484FE;
+    /* border-right: 1px solid #2484FE; */
 }
 
 .coach-detail-footer{
     margin-top: 6px;
 }
-.coach-detail-footer .coach-type:last-child{
+/* .coach-detail-footer .coach-type:last-child{
     border-right: none;
-}
+} */
 .coach-row-footer{
     padding-top: 15px;
     /* display: flex; */
