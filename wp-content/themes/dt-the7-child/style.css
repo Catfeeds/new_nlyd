@@ -193,6 +193,9 @@ a.c_black3:hover{
 .bg_yellow{
     background: #F8BF36;
 }
+.bg_white{
+    background: #fff;
+}
 .bg_gradient_orange{
     background: -webkit-linear-gradient(90deg,#F9A9B8, #FB8E8E);
     background: -o-linear-gradient(90deg,#F9A9B8, #FB8E8E);

@@ -247,12 +247,12 @@ class Student_Teams
         }
 
         if(in_array(ACTION,array('myCoach','coachList'))){//教练列表页
-            wp_register_style( 'my-student-coachList', student_css_url.'coachList.css',array('my-student') );
+            wp_register_style( 'my-student-coachList', student_css_url.'coach/coachList.css',array('my-student') );
             wp_enqueue_style( 'my-student-coachList' );
 
         }
         if(ACTION=='coachDetail'){//教练详情页
-            wp_register_style( 'my-student-coachDetail', student_css_url.'coachDetail.css',array('my-student') );
+            wp_register_style( 'my-student-coachDetail', student_css_url.'coach/coachDetail.css',array('my-student') );
             wp_enqueue_style( 'my-student-coachDetail' );
 
         }

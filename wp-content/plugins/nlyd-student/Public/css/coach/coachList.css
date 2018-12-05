@@ -31,7 +31,7 @@
     min-width: 65px;
     text-align: center;
     cursor: pointer;
-    border: 0.5px solid rgba(116, 116, 116, 1);
+    border: 0.5px solid rgba(38, 38, 38, 0.15);
     border-radius: 6px;
     font-size: 0.16rem;
     transition: none;
@@ -145,6 +145,10 @@
     border: none;
     outline: none;
 }
+.coach-btn.detail{
+    color: rgba(38, 38, 38, 0.6); 
+    border:1px solid rgba(38, 38, 38, 0.6); 
+}
 .nl-badge{
     position: relative;
     display: inline-block;
@@ -167,9 +171,9 @@
     border-right: 1px solid #2484FE;
 }
 
-/* .coach-detail-footer{
-    display: flex;
-} */
+.coach-detail-footer{
+    margin-top: 6px;
+}
 .coach-detail-footer .coach-type:last-child{
     border-right: none;
 }

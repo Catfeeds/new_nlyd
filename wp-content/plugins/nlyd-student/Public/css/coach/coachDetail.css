@@ -1,11 +1,73 @@
-
+.content ul.layui-tab-title{
+    margin: 0;
+}
+.layui-tab{
+    margin:0;
+}
+.layui-tab-title li{
+    color:#262626;
+    height: 44px;
+    width: -webkit-calc(100% / 2);
+    width: calc(100% / 2);
+    line-height: 44px;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+}
+.layui-tab-brief>.layui-tab-title .layui-this{
+    color: #2484FE;
+    border:none;
+}
+.nl-transform{
+    position: absolute;
+    transform: translate3d(0px, -5px, 0px);
+    transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s;
+    height: 5px;
+    width: -webkit-calc(100% / 2);
+    width: calc(100% / 2);
+    background: #2484FE;
+}
+.layui-tab-brief>.layui-tab-more li:after, .layui-tab-brief>.layui-tab-title li:after{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    width: 100%;
+    height: 5px;
+    border-width: 0;
+    border: none;
+    border-style: none;
+    background: #a5ccff;
+}
+.layui-tab-title .layui-this:after{
+    bottom: 0;
+    top: -webkit-calc(100% - 5px);
+    top: calc(100% - 5px);
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    position: absolute;
+    left: 0;
+    content: '';
+    width: 100%;
+    height: 5px;
+    border-width: 0;
+    border: none;
+    border-style: none;
+    background: #a5ccff;
+}
+.layui-tab-brief[overflow]>.layui-tab-title .layui-this:after{
+    top: auto;
+}
 .coachDetail-row.have-metal{
     padding-top: 35px;
 }
 .coachDetail-row p{
     margin-bottom: 0;
 }
-
+.coachDetail-row:last-child{
+    padding-top: 0;
+}
 .coachDetail-metal{
     position: absolute;
     top: 0;
@@ -38,13 +100,16 @@
 .coachDetail-infoRow{
     overflow: hidden;
     width: 100%;
+    margin-top: 6px;
+}
+.coachDetail-infoRow:first-child{
+    margin-top: 0;
 }
 .coach-type{
-    /* flex:1; */
-    text-align: center;
+    text-align: left;
     height: 20px;
     line-height: 20px;
-    border-right: 1px solid #2484FE;
+    /* border-right: 1px solid #2484FE; */
 }
 /* .coach-detail-footer{
     display: flex;
