@@ -157,7 +157,6 @@ class Student_Teams
                 where {$where}";
 
         $count = $wpdb->get_row($sql);
-
         $view = student_view_path.CONTROLLER.'/coachList.php';
         load_view_template($view,array('category'=>$category,'category_id' => $category_id,'user_id'=>$current_user->ID, 'coachCount' => $count->len,'action'=>'myCoach'));
     }
