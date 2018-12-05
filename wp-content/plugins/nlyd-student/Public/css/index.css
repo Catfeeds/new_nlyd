@@ -801,7 +801,7 @@ p.share-font{
     margin: auto;
     white-space: normal;
     line-height: 20px;
-    max-width: 117px;
+    min-width: 40px;
 }
 /* 透明遮罩 */
 .Glass{
