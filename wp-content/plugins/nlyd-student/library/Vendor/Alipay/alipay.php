@@ -312,7 +312,7 @@ class alipay {
             'write_intro' => $intro,
             'data' => $result
         ];
-        $file_tmp = fopen(INCLUDES_PATH.'library/Vendor/Alipay/log.txt', 'a+');
+        $file_tmp = fopen(PLUGINS_PATH.'nlyd-student/library/Vendor/Alipay/log.txt', 'a+');
         fwrite($file_tmp, "\r\n".json_encode($data, JSON_UNESCAPED_UNICODE));
         fclose($file_tmp);
     }

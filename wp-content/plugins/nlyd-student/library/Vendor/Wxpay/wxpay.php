@@ -15,7 +15,7 @@ require_once(dirname(__FILE__) . '/WxPay.NotifyCallBack.php');
 class wxpay
 {
     //日志文件路径
-    const LOG_PATH = INCLUDES_PATH.'library/Vendor/Wxpay/log.txt';
+    const LOG_PATH = PLUGINS_PATH.'nlyd-student/library/Vendor/Wxpay/log.txt';
     //接口API URL前缀
     const API_URL_PREFIX = 'https://api.mch.weixin.qq.com';
 //下单地址URL
@@ -29,9 +29,9 @@ class wxpay
 //退款查询URL
     const REFUND_QUERY_URL = "/pay/refundquery";
 //证书路径
-    const SSLCERT_PATH = INCLUDES_PATH.'library/Vendor/Wxpay/cert/apiclient_cert.pem';
+    const SSLCERT_PATH = PLUGINS_PATH.'nlyd-student/library/Vendor/Wxpay/cert/apiclient_cert.pem';
 //证书路径
-    const SSLKEY_PATH = INCLUDES_PATH.'library/Vendor/Wxpay/cert/apiclient_key.pem';
+    const SSLKEY_PATH = PLUGINS_PATH.'nlyd-student/library/Vendor/Wxpay/cert/apiclient_key.pem';
 //公众账号ID
     private $appid;
 //商户号
