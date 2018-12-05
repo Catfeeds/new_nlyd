@@ -1747,6 +1747,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=grading&page=add-grading-studentScore'),
                     admin_url('users.php?page=users-info'),
                     admin_url('edit.php?post_type=grading&page=grading-studentScore'),
+                    admin_url('edit.php?post_type=grading&page=grading-trainLogScore'),
                 ],
             ]);
         }

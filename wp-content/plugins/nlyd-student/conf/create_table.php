@@ -31,6 +31,84 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "zone_join_coach";  //机构与员工的关系表   储存机构拥有的员工
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `zone_id` int(20) DEFAULT NULL COMMENT '机构id 即user_id',
+          `coach_id` int(20) DEFAULT NULL COMMENT '教练id 即(user_id)',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+    $table_name = $wpdb->prefix . "zone_join_role";  //机构类型与权限关联表   储存机构拥有的权限
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
+          `role_id` varchar(255) DEFAULT NULL COMMENT '权限id合集 以,为分割符',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+    $table_name = $wpdb->prefix . "zone_type_role";  //机构权限表   储存权限
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `role_name` varchar(255) DEFAULT NULL COMMENT '权限名',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+    $table_name = $wpdb->prefix . "zone_type";  //机构类型表   储存机构所有类型
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `zone_type_name` varchar(255) DEFAULT NULL COMMENT '机构名字',
+          `zone_type_status` tinyint(2) DEFAULT NULL COMMENT '状态 1正常 2关闭',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
+    $table_name = $wpdb->prefix . "zone_meta";  //机构外键表   储存机构信息
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `user_id` int(20) NOT NULL,
+          `type_id` int(20) DEFAULT NULL COMMENT '升级后用户类型',
+          `referee_id` int(20) DEFAULT NULL COMMENT '推荐人id',
+          `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',
+          `created_time` datetime DEFAULT NULL COMMENT '提交时间',
+          `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "user_grade_log_history";  //考級训练次数记录表   储存考级训练次数
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在

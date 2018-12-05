@@ -1201,13 +1201,13 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">比赛地点</label>
+            <label class="layui-form-label">考级地点</label>
             <div class="layui-input-block">
                 <input placeholder="比赛地点" class="layui-input" value="<?=$this->grading['address']?>" type="text" name="grading[address]">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">比赛费用</label>
+            <label class="layui-form-label">考级费用</label>
             <div class="layui-input-block">
                 <input placeholder="比赛费用" class="layui-input" value="<?=$this->grading['cost']?>" type="text" name="grading[cost]">
             </div>
@@ -1219,7 +1219,7 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">比赛时间</label>
+            <label class="layui-form-label">考级时间</label>
             <div class="layui-input-block">
                 <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->grading['start_time']))?>" name="grading[start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
             </div>
@@ -1231,13 +1231,13 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">参赛须知</label>
+            <label class="layui-form-label">考级须知</label>
             <div class="layui-input-block">
                 <input placeholder="https://" class="layui-input" value="<?=$this->grading['grading_notice_url'];?>" type="text" name="grading[grading_notice_url]">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">比赛状态</label>
+            <label class="layui-form-label">考级状态</label>
 
             <div class="layui-input-block">
                 <!-- <span class="layui-input <?/*=$className*/?>"><?/*=$text*/?></span>-->

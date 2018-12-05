@@ -23,12 +23,16 @@ class Grading
 
             $role = 'grading_trainLog';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'grading_trainLogScore';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
 
         add_submenu_page('edit.php?post_type=grading','考级选手','考级选手','grading_students','grading-students',array($this,'gradingStudents'));
         add_submenu_page('edit.php?post_type=grading','添加选手','添加选手','add_grading_students','add-grading-students',array($this,'addGradingStudents'));
         add_submenu_page('edit.php?post_type=grading','答题记录','答题记录','grading_studentScore','grading-studentScore',array($this,'gradingStudentScore'));
         add_submenu_page('edit.php?post_type=grading','训练记录','训练记录','grading_trainLog','grading-trainLog',array($this,'gradingTrainLog'));
+        add_submenu_page('edit.php?post_type=grading','训练答题记录','训练答题记录','grading_trainLogScore','grading-trainLogScore',array($this,'trainLogScore'));
     }
 
     /**
@@ -133,7 +137,7 @@ class Grading
                         <td class="email column-email" data-colname="邮箱"><?=$row['user_email']?></td>
                         <td class="adopt_level column-adopt_level" data-colname="通过级别">
                             <?php
-                                if($row['grading_result'] == '1' && $row['grading_result']){
+                                if($row['grading_result'] && $row['grading_result'] == '1'){
                                            echo '通过<span style="color: #00c400;font-weight:bold"> '.$row['grading_lv'].' </span>级';
                                 }else{
                                     echo '<span style="color: #c42800">未过级</span>';
@@ -552,16 +556,10 @@ class Grading
                         <span class="intro-value"><?=$gradingQuestion['correct_rate']*100?>%</span>
                     </div>
                 <?php } ?>
-                <?php if($gradingQuestion['memory_time']){ ?>
+                <?php if($gradingQuestion['use_time']){ ?>
                     <div class="intro-box">
                         <span class="intro-key">记忆耗时: </span>
-                        <span class="intro-value"><?=$gradingQuestion['memory_time']?></span>
-                    </div>
-                <?php } ?>
-                <?php if($gradingQuestion['answer_time']){ ?>
-                    <div class="intro-box">
-                        <span class="intro-key">回答耗时: </span>
-                        <span class="intro-value"><?=$gradingQuestion['answer_time']?></span>
+                        <span class="intro-value"><?=$gradingQuestion['use_time']?></span>
                     </div>
                 <?php } ?>
                 <?php if($gradingQuestion['submit_type']){ ?>
@@ -731,24 +729,19 @@ class Grading
         }
 
         $categoryType = isset($_GET['ctype']) ? trim($_GET['ctype']) : '0';
-        $categoryWhere = $categoryType != '0' ? " AND utl.grading_type='{$categoryType}'" : '';
+        $categoryWhere = $categoryType != '0' ? " AND uglh.grade_type='{$categoryType}'" : '';
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS utl.questions_type,utl.correct_rate,utl.my_score,utl.use_time,utl.created_time,u.user_mobile,utl.user_id,utl.post_str_length,
-                CASE utl.grading_type 
-                WHEN 'memory' THEN '记忆类' 
-                WHEN 'reading' THEN '速读类' 
-                WHEN 'arithmetic' THEN '心算类' 
-                ELSE '-' 
-                END AS grading_name 
-                FROM `{$wpdb->prefix}user_grade_logs` AS utl 
-                LEFT JOIN `{$wpdb->users}` AS u ON u.ID=utl.user_id AND u.ID!='' 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS uglh.created_time,
+                u.user_mobile,uglh.user_id,uglh.grade_lv,uglh.grade_result,uglh.id AS gid,uglh.grade_type 
+                FROM `{$wpdb->prefix}user_grade_log_history` AS uglh 
+                LEFT JOIN `{$wpdb->users}` AS u ON u.ID=uglh.user_id AND u.ID!='' 
                 {$searchJOIN} 
                 WHERE 1=1 
                 {$categoryWhere}
                 {$searchWhere} 
-                ORDER BY utl.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
+                ORDER BY uglh.created_time DESC LIMIT {$start},{$pageSize}" ,ARRAY_A);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -766,7 +759,10 @@ class Grading
             $categoryCurrent = $categoryType == $cgV['alis'] ? 'class="current"' : '';
             $cateOptions[] = '<li class="all"><a href="'.admin_url('edit.php?post_type=grading&page=grading-trainLog&ctype='.$cgV['alis']).'" '.$categoryCurrent.' aria-current="page">'.$cgV['post_title'].'</a> </li>';
         }
-
+        $categoryArr = array_reduce($categoryArr,function(&$newArray,$v){
+            $newArray[$v['alis']] = $v;
+            return $newArray;
+        });
         ?>
         <div class="wrap">
         <h1 class="wp-heading-inline">训练记录</h1>
@@ -810,12 +806,8 @@ class Grading
                 <th scope="col" id="age" class="manage-column column-age">年龄</th>
                 <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                 <th scope="col" id="category" class="manage-column column-category">训练类别</th>
-                <th scope="col" id="correct_rate" class="manage-column column-correct_rate">准确率</th>
-                <th scope="col" id="my_score" class="manage-column column-my_score">分数</th>
-                <th scope="col" id="use_time" class="manage-column column-use_time">阅读速度</th>
-                <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
+                <th scope="col" id="created_time" class="manage-column column-created_time">训练时间</th>
                 <th scope="col" id="status" class="manage-column column-status">训练状态</th>
-                <th scope="col" id="level" class="manage-column column-level">训练等级</th>
             </tr>
             </thead>
                 <tbody id="the-list" data-wp-lists="list:user">
@@ -829,7 +821,7 @@ class Grading
                             <?=isset($user_real_name['real_name'])?$user_real_name['real_name']:''?>
                             <br>
                             <div class="row-actions">
-                                <span class="delete"><a class="submitdelete" href="javascript:;">答题记录</a> | </span>
+                                <span class="delete"><a class="submitdelete" href="<?=admin_url('edit.php?post_type=grading&page=grading-trainLogScore&grading_id='.$row['gid'])?>">答题记录</a> | </span>
                                 <span class="edit"><a href="<?=admin_url('users.php?page=users-info&ID='.$row['user_id'])?>">用户资料</a>  </span>
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
@@ -838,13 +830,17 @@ class Grading
                         <td class="sex column-sex" data-colname="性别"><?=isset($usermeta['user_gender'])?$usermeta['user_gender'][0]:''?></td>
                         <td class="age column-age" data-colname="年龄"><?=isset($user_real_name['real_age'])?$user_real_name['real_age']:''?></td>
                         <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                        <td class="category column-category" data-colname="训练类别"><?=$row['grading_name']?></td>
-                        <td class="correct_rate column-correct_rate" data-colname="准确率"><?=$row['correct_rate']*100?>%</td>
-                        <td class="my_score column-my_score" data-colname="分数"><?=$row['my_score']?></td>
-                        <td class="use_time column-use_time" data-colname="阅读速度"><?=$row['post_str_length']&&$row['use_time'] ? '每分钟'.floor($row['post_str_length']/($row['use_time']/60)).'字':''?></td>
-                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
-                        <td class="status column-status" data-colname="训练状态"><?=$row['created_time']?></td>
-                        <td class="level column-level" data-colname="训练等级"><?=$row['created_time']?></td>
+                        <td class="category column-category" data-colname="训练类别"><?=$categoryArr[$row['grade_type']]['post_title']?></td>
+                        <td class="created_time column-created_time" data-colname="训练时间"><?=$row['created_time']?></td>
+                        <td class="status column-status" data-colname="训练状态">
+                              <?php
+                                if($row['grade_result'] && $row['grade_result'] == '1'){
+                                           echo '通过<span style="color: #00c400;font-weight:bold"> '.$row['grade_lv'].' </span>级';
+                                }else{
+                                    echo '<span style="color: #c42800">未过级</span>';
+                                }
+                             ?>
+                        </td>
                     </tr>
                      <?php
                      }
@@ -858,12 +854,8 @@ class Grading
                     <th scope="col" class="manage-column column-age">年龄</th>
                     <th scope="col" class="manage-column column-mobile">手机</th>
                     <th scope="col" class="manage-column column-category">训练类别</th>
-                    <th scope="col" class="manage-column column-correct_rate">准确率</th>
-                    <th scope="col" class="manage-column column-my_score">分数</th>
-                    <th scope="col" class="manage-column column-use_time">阅读速度</th>
-                    <th scope="col" class="manage-column column-created_time">提交时间</th>
+                    <th scope="col" class="manage-column column-created_time">训练时间</th>
                     <th scope="col" class="manage-column column-status">训练状态</th>
-                    <th scope="col" class="manage-column column-level">训练等级</th>
                 </tr>
             </tfoot>
         </table>
@@ -887,6 +879,293 @@ class Grading
                 <br class="clear">
             </div>
         <br class="clear">
+        </div>
+        <?php
+    }
+
+    /**
+    * 训练答题记录
+     */
+    public function trainLogScore(){
+
+        $gradingId = intval($_GET['grading_id']);
+        global $wpdb;
+
+        $grading = get_post($gradingId);
+
+
+        //获取记录类型
+        $gradingArr = $wpdb->get_results('SELECT questions_type FROM '.$wpdb->prefix.'user_grade_logs WHERE grade_log_id='.$gradingId, ARRAY_A);
+        if(!$gradingArr) exit('无答题记录');
+
+
+        $gradingArr = array_reduce($gradingArr, function ($result, $value) {
+            return array_merge($result, array_values($value));
+        }, array());
+        $gradingArr = array_unique($gradingArr);
+
+        $g_type = isset($_GET['g_type']) ? trim($_GET['g_type']) : $gradingArr[0];
+
+        //获取答案
+        $gradingQuestion = $wpdb->get_row('SELECT * FROM '.$wpdb->prefix.'user_grade_logs WHERE grade_log_id='.$gradingId.' AND questions_type="'.$g_type.'"', ARRAY_A);
+//        leo_dump($wpdb->last_query);
+//        die;
+        $grading_questions = json_decode($gradingQuestion['grading_questions'],true);
+        $questions_answer = json_decode($gradingQuestion['questions_answer'],true);
+        $my_answer = json_decode($gradingQuestion['my_answer'],true);
+        //项目处理
+        switch ($g_type){
+            case 'rm':
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join('<br>',$gqv);
+                }
+                foreach ($questions_answer as &$qav){
+                    $qav = join('<br>',$qav);
+                }
+                foreach ($my_answer as &$mav){
+                    $mav = join('<br>',$mav);
+                }
+                break;
+            case 'wz':
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join('',$gqv);
+                }
+                foreach ($questions_answer as $qak => &$qav){
+                    foreach ($qav as $qak2 => $qav2){
+                        if($qav2 == $my_answer[$qak][$qak2]){
+                            $my_answer[$qak][$qak2] = '<span class="correct-color">'.$my_answer[$qak][$qak2].'</span>';
+                        }else{
+                            $my_answer[$qak][$qak2] = $my_answer[$qak][$qak2] == '' ? '&ensp;-&ensp;': $my_answer[$qak][$qak2];
+                            $my_answer[$qak][$qak2] = '<span class="error-color">'.$my_answer[$qak][$qak2].'</span>';
+                        }
+
+                    }
+                    $qav = join('',$qav);
+                }
+
+                foreach ($my_answer as &$mav){
+                    $mav = join('',$mav);
+                }
+
+                break;
+            case 'reading'://速读
+                foreach ($questions_answer as $qak => &$qav){
+                    foreach ($qav['problem_select'] as $qaPeK => &$qaPeV){
+                        if($qav['problem_answer'][$qaPeK] == 1){
+                            $qaPeV = '<span class="correct-color">'.$qaPeV.'</span>';
+                        }
+                    }
+                    if(isset($my_answer[$qak])){
+                        foreach ($my_answer[$qak] as $mak => &$mav){
+                            if($qav['problem_answer'][$mav] == 1){
+                                $mav = '<span class="correct-color">'.$qav['problem_select'][$mav].'</span>';
+                            }else{
+                                $mav = $qav['problem_select'][$mav];
+                            }
+                        }
+                        $questions_answer[$qak] = join('<br>',$qav['problem_select']);
+                        $my_answer[$qak] = join('<br>',$my_answer[$qak]);
+                    }else{
+                        $questions_answer[$qak] = '-';
+                        $my_answer[$qak] = '-';
+                    }
+
+                }
+
+                break;
+            case 'nxys':
+                foreach ($grading_questions as &$gqv){
+                    $gqv = join(',',$gqv);
+                }
+                $arr = [];
+                foreach ($questions_answer['examples'] as $qak => $qav){
+                    $arr[$qak] = $qav;
+                    if($questions_answer['examples']['result'] == true){
+                        $my_answer[$qak] = '<span class="correct-color">'.$my_answer[$qak].'</span>';
+                    }
+                }
+                $questions_answer = $arr;
+                break;
+        }
+        $categoryArr = getCategory(1);
+        $categoryArr = array_reduce($categoryArr,function(&$newArray,$v){
+            $newArray[$v['alis']] = $v;
+            return $newArray;
+        });
+        $user_real_name = get_user_meta($gradingQuestion['user_id'],'user_real_name',true);
+        ?>
+        <div class="wrap">
+        <h1 class="wp-heading-inline"><?=$categoryArr[$gradingQuestion['grading_type']]['post_title']?>-<?=isset($user_real_name['real_name'])?$user_real_name['real_name'].'-':''?>答题记录</h1>
+
+        <hr class="wp-header-end">
+
+        <h2 class="screen-reader-text"></h2>
+        <style type="text/css">
+
+            .error-color {
+                color: #a80000;
+            }
+            .correct-color {
+                color: #02892e;
+            }
+        </style>
+        <ul class="subsubsub">
+            <?php
+
+            $counts = count($gradingArr);
+            foreach ($gradingArr as $k => $gav){
+
+                $p_name = $this->getProject($gav);
+                ?>
+                <li class="<?=$gav?>">
+                    <a href="<?=admin_url('edit.php?post_type=grading&page=grading-trainLogScore&grading_id='.$gradingId.'&user_id='.$user_id.'&g_type='.$gav)?>" <?=$g_type==$gav?'class="current"':''?> aria-current="page"><?=$p_name?>
+                        <span class="count"></span>
+                    </a>
+                    <?=($k+1)<$counts?'|':''?>
+                </li>
+
+                <?php
+
+            } ?>
+
+            <!--                <li class="editor"><a href="users.php?role=editor">人脉<span class="count">（5）</span></a></li>-->
+        </ul>
+        <br class="clear">
+
+        <p class="search-box">
+
+        </p>
+
+        <input type="hidden" id="_wpnonce" name="_wpnonce" value="5ce30f05fd"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+        <div class="top">
+
+
+            <br class="clear">
+
+        </div>
+        <style type="text/css">
+            .intro-box{
+                padding-top: 0.5em;
+            }
+            .intro-box .intro-key{
+                font-weight: bold;
+            }
+        </style>
+        <?php if($gradingQuestion['correct_rate']){ ?>
+            <div class="intro-box">
+                <span class="intro-key">准确率: </span>
+                <span class="intro-value"><?=$gradingQuestion['correct_rate']*100?>%</span>
+            </div>
+        <?php } ?>
+        <?php if($gradingQuestion['use_time']){ ?>
+            <div class="intro-box">
+                <span class="intro-key">记忆耗时: </span>
+                <span class="intro-value"><?=$gradingQuestion['use_time']?></span>
+            </div>
+        <?php } ?>
+
+        <?php if($gradingQuestion['created_time']){ ?>
+            <div class="intro-box">
+                <span class="intro-key">提交时间: </span>
+                <span class="intro-value"><?=$gradingQuestion['created_time']?></span>
+            </div>
+        <?php } ?>
+        <?php if($gradingQuestion['post_id'] > 0){ ?>
+            <div class="intro-box">
+                <span class="intro-key">文章: </span>
+                <span class="intro-value"><?=get_post($gradingQuestion['post_id']) ? get_post($gradingQuestion['post_id'])->post_title : ''?></span>
+            </div>
+        <?php } ?>
+        <?php if($gradingQuestion['my_score'] > 0){ ?>
+            <div class="intro-box">
+                <span class="intro-key">分数: </span>
+                <span class="intro-value"><?=$gradingQuestion['my_score']?></span>
+            </div>
+        <?php } ?>
+        <?php if($gradingQuestion['post_str_length'] && $gradingQuestion['use_time']){ ?>
+            <div class="intro-box">
+                <span class="intro-key">阅读速读: </span>
+                <span class="intro-value">每分钟<?=!is_nan(floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60))) ? floor($gradingQuestion['post_str_length']/($gradingQuestion['use_time']/60)) : 0?>字</span>
+            </div>
+        <?php } ?>
+
+
+
+
+        <h2 class="screen-reader-text">答题记录</h2>
+        <br class="clear">
+        <!--                <div><span>剩余时间:</span> <span> --><?//=$data['surplus_time']?><!--</span></div>-->
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <td id="cb" class="manage-column column-cb check-column">
+                    <label class="screen-reader-text" for="cb-select-all-1">全选</label>
+                    <input id="cb-select-all-1" type="checkbox">
+                </td>
+                <th scope="col" id="match_questions" class="manage-column column-match_questions column-primary">比赛考题</th>
+                <th scope="col" id="questions_answer" class="manage-column column-questions_answer">考题答案</th>
+                <th scope="col" id="my_answer" class="manage-column column-my_answer">我的答案</th>
+            </tr>
+            </thead>
+
+            <tbody id="the-list" data-wp-lists="list:user">
+            <!--                        </tr>-->
+            <?php
+
+            foreach ($grading_questions as $k => $grading_questions_v){
+
+                ?>
+                <tr>
+
+                    <th scope="row" class="check-column">
+                    </th>
+                    <td class="match_questions column-match_questions column-primary" data-colname="比赛考题">
+                        <?=$grading_questions_v?>
+                        <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                    </td>
+
+                    <td class="questions_answer column-questions_answer" data-colname="考题答案">
+                        <?=$questions_answer[$k]?>
+                    </td>
+                    <td class="my_answer column-my_answer" data-colname="我的答案">
+                                    <span class="<?=$questions_answer[$k]==$my_answer[$k]?'correct-color':'error-color'?>">
+                                        <?=$my_answer[$k] || $my_answer[$k]=='0'?$my_answer[$k]:'-'?>
+                                    </span>
+                    </td>
+                </tr>
+                <?php
+
+            }
+
+
+            ?>
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td class="manage-column column-cb check-column">
+                    <label class="screen-reader-text" for="cb-select-all-2">全选</label>
+                    <input id="cb-select-all-2" type="checkbox">
+                </td>
+                <th scope="col" class="manage-column column-match_questions column-primary">比赛考题</th>
+                <th scope="col" class="manage-column column-questions_answer">考题答案</th>
+                <th scope="col" class="manage-column column-my_answer">我的答案</th>
+            </tr>
+            </tfoot>
+
+        </table>
+        <div class="tablenav bottom">
+
+            <div class="alignleft actions bulkactions">
+            </div>
+            <div class="alignleft actions">
+
+
+                <br class="clear">
+            </div>
+
+            <br class="clear">
         </div>
         <?php
     }
