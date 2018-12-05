@@ -972,12 +972,15 @@ if(is_admin()){
 
             //搜索手机号码
             if(!empty($search)){
-                $user_search->query_where = substr(trim($user_search->query_where), 0, -1) . " OR user_mobile LIKE '%". $search . "%' OR user_email LIKE '%". $search . "%')";
+                $user_search->query_where = substr(trim($user_search->query_where), 0, -1) . " OR user_mobile LIKE '%". $search . "%')";
             }
             //搜索名字和姓氏
             $user_search->query_from .= " LEFT JOIN {$wpdb->usermeta} m1 ON " .
-                "{$wpdb->users}.ID=m1.user_id AND (m1.meta_key='user_real_name')";
-            $names_where = "m1.meta_value LIKE '%$search%'";
+                "{$wpdb->users}.ID=m1.user_id AND m1.meta_key='user_real_name '
+                 LEFT JOIN {$wpdb->usermeta} m2 ON " .
+                "{$wpdb->users}.ID=m2.user_id AND m2.meta_key='user_ID' ";
+            $names_where = "m1.meta_value LIKE '%$search%' OR m2.meta_value LIKE '%$search%'";
+
             $user_search->query_where = str_replace('WHERE 1=1 AND (', "WHERE 1=1 AND ({$names_where} OR ", $user_search->query_where);
         }
         return $user_search;

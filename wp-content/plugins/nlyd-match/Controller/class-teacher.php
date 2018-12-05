@@ -59,13 +59,14 @@ class Teacher
         $join = '';
         global $wpdb;
         if($searchStr != ''){
-            $join = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
-            $serachWhere = " AND (b.user_mobile LIKE '%{$searchStr}%' OR b.user_email LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')" ;
+            $join = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name' 
+                LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=a.coach_id AND um2.meta_key='user_ID' ";
+            $serachWhere = " AND (b.user_mobile LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')" ;
         }
 
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,b.user_email,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
+        $sql = "SELECT SQL_CALC_FOUND_ROWS b.user_login,a.id,a.coach_id,a.read,a.memory,a.compute,b.user_mobile,um_id.meta_value AS userID 
                     FROM {$wpdb->prefix}coach_skill a 
                     LEFT JOIN {$wpdb->prefix}users b ON a.coach_id = b.ID 
                     LEFT JOIN {$wpdb->usermeta} AS um_id ON um_id.user_id = a.coach_id AND um_id.meta_key='user_ID' 
@@ -103,7 +104,7 @@ class Teacher
                     </div>
                     <p class="search-box">
                         <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                        <input type="text" id="searchs" name="s" placeholder="姓名/手机/邮箱" value="<?=$searchStr?>">
+                        <input type="text" id="searchs" name="s" placeholder="姓名/ID/手机" value="<?=$searchStr?>">
                         <input type="button" id="search-button" onclick="window.location.href='<?=admin_url('admin.php?page=teacher&search=')?>'+document.getElementById('searchs').value" class="button" value="搜索用户">
                         <select name="" id="">
                             <option value="">机构名称</option>
