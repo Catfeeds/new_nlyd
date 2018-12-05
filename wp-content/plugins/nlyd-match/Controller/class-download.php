@@ -8,6 +8,8 @@ class Download
 //        //配置自己的重写规则
         add_action( 'init', array($this,'custom_rewrite_basic'),10,0);
         self::$downloadPath = WP_PLUGIN_DIR.'/downloadFile/';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel.php';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         if(!isset($_GET['action']) || !method_exists($this, $_GET['action'])) exit;
         $action = $_GET['action'];
         $this->$action();
@@ -97,8 +99,6 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
 
 
@@ -232,8 +232,6 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
 
         $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -661,8 +659,7 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
         $objPHPExcel = new \PHPExcel();
         //边框
 
@@ -970,8 +967,6 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
         $objPHPExcel = new \PHPExcel();
         //边框
 
@@ -1472,10 +1467,8 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
         $objPHPExcel = new \PHPExcel();
 
 //        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -1642,10 +1635,8 @@ class Download
         header('Pragma:public');
         header('Content-Type:application/x-msexecl;name="'.$filename.'"');
         header('Content-Disposition:inline;filename="'.$filename.'"');
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
-        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/RichText.php';
+        require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/Style/Color.php';
         $objPHPExcel = new \PHPExcel();
 
 //        $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
