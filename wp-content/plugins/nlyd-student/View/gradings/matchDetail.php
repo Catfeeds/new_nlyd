@@ -130,7 +130,7 @@
                         
                         <?php if($match['is_me'] == 'y' && $match['status'] == -2 && $match['down_time'] > 0):?>
                         <!--倒计时-->
-                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id'])?>"></div>
+                            <div class="a-btn count_down get_footer" data-seconds="<?=$match['down_time']?>" href="<?=$match['match_url']?>"></div>
                         <?php endif;?>
                     </div>
                 </div>

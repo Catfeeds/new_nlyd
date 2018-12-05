@@ -84,7 +84,15 @@ class Student_Gradings extends Student_Home
             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('grading')));
             return;
         }
-        //print_r($match);
+
+        //根据时间修改比赛状态
+        if(strtotime($match['entry_end_time']) <= get_time() && get_time() < strtotime($match['start_time'])){
+            $a = $wpdb->update($wpdb->prefix.'grading_meta',array('status'=>-2),array('id'=>$match['id'],'grading_id'=>$match['grading_id']));
+            $match['status'] = -2;
+            $match['match_status_cn'] = __('等待开赛', 'nlyd-student');
+        }
+        $match['down_time'] = strtotime($match['start_time'])-get_time();
+        $match['match_url'] = home_url('/gradings/matchWaitting/grad_id/'.$_GET['grad_id']);
         $data['match'] = $match;
         //print_r($match);
         //获取报名人数
@@ -93,7 +101,7 @@ class Student_Gradings extends Student_Home
 
         //获取订单
         $data['memory_lv'] = $wpdb->get_var("select memory_lv from {$wpdb->prefix}order where match_id = {$match['grading_id']} and user_id = {$current_user->ID}");
-        $data['down_time'] = strtotime($data['start_time'])-time();
+
         $view = student_view_path.CONTROLLER.'/matchDetail.php';
         load_view_template($view,$data);
     }
@@ -450,78 +458,66 @@ class Student_Gradings extends Student_Home
                 $match_data = $_SESSION['match_data'];
                 //print_r($match_data);
 
-                $sql1 = "select * from {$wpdb->prefix}match_questions where match_id = {$match_data['match_id']} and project_id = {$match_data['project_id']} and match_more = {$match_data['match_more']} and user_id = {$current_user->ID}";
-                $row = $wpdb->get_row($sql1,ARRAY_A);
-                //print_r($row);
-                if(empty($row)){
+                $sql1 = "select * from {$wpdb->prefix}grading_questions 
+                          where grading_id = {$match_data['grading_id']} 
+                          and grading_type = '{$match_data['grading_type']}' 
+                          and questions_type = '{$match_data['questions_type']}' 
+                          and user_id = {$current_user->ID} ";
+                //print_r($sql1);
+                $row_1 = $wpdb->get_row($sql1,ARRAY_A);
+                //print_r($row_1);
+                if(empty($row_1)){
 
-                    //计算成绩
-                    switch ($match_data['project_alias']){
-                        case 'szzb':
-                        case 'pkjl':
+                    //数据处理
+                    $correct_rate = 0;  //准确率
+                    switch ($match_data['grading_type']){
+                        case 'memory':
+                            switch ($match_data['questions_type']){
+                                case 'sz':
+                                case 'cy':
+                                case 'yzl':
+                                case 'zm':
+                                case 'tl':
+                                    if(!empty($match_data['my_answer'])){
 
-                            if(!empty($match_data['my_answer'])){
+                                        $len = count($match_data['questions_answer']);
+                                        $error_len = count(array_diff_assoc($match_data['questions_answer'],$match_data['my_answer']));
+                                        $correct_rate = ($len-$error_len)/$len;
+                                    }
+                                    break;
+                                case 'rm':
+                                    if(!empty($match_data['my_answer'])){
 
-                                $len = count($match_data['questions_answer']);
+                                        $len = count($match_data['questions_answer']);
+                                        $my_answer = $match_data['my_answer'];
+                                        $questions_answer = $match_data['questions_answer'];
+                                        $success_len = 0;
+                                        foreach ($my_answer as $k => $v){
+                                            if( ($my_answer[$k]['name'] == $questions_answer[$k]['name']) && ($my_answer[$k]['phone'] == $questions_answer[$k]['phone']) && ($my_answer[$k]['picture'] == $questions_answer[$k]['picture'])){
+                                                $success_len += 1;
+                                            }
+                                        }
+                                        $correct_rate = $success_len/$len;
+                                    }
+                                    break;
+                                case 'wz':
 
-                                $error_len = count(array_diff_assoc($match_data['questions_answer'],$match_data['my_answer']));
-
-                                $score = $match_data['project_type'] == 'szzb' ? 12 : 18;
-
-                                $my_score = ($len-$error_len)*$score;
-
-                                if ($error_len == 0 && !empty($match_data['my_answer'])){
-                                    $my_score += $match_data['surplus_time'] * 1;
-                                }
-                            }else{
-                                $my_score = 0;
+                                    $questions_answer = $match_data['questions_answer'];
+                                    $len = 0;
+                                    $error_len = 0;
+                                    foreach ($questions_answer as $k =>$v){
+                                        $len += count($v['rights']);
+                                        $error_len += count(array_diff_assoc($v['rights'],$v['yours']));
+                                    }
+                                    $correct_rate = ($len-$error_len)/$len;
+                                    //print_r($correct_rate);die;
+                                    $match_data['grading_questions'] = array_column($questions_answer,'question');
+                                    $match_data['questions_answer'] = array_column($questions_answer,'rights');
+                                    $match_data['my_answer'] = array_column($questions_answer,'yours');
+                                    break;
                             }
-
                             break;
-                        case 'kysm':
-                        case 'zxss':
-                        case 'nxss':
-
-
-                            $data_arr = $match_data['my_answer'];
-                            //print_r($data_arr);die;
-                            if(!empty($data_arr)){
-                                $match_questions = array_column($data_arr,'question');
-                                $questions_answer = array_column($data_arr,'rights');
-                                $match_data['my_answer'] = array_column($data_arr,'yours');
-                            }
-
-                            if($_POST['project_alias'] == 'nxss'){
-                                $isRight = array_column($data_arr,'isRight');
-
-                                $success_len = 0;
-                                if(!empty($isRight)){
-                                    $count_value = array_count_values($isRight);
-                                    $success_len += $count_value['true'];
-                                }
-                                $answer['examples'] = $questions_answer;
-                                $answer['result'] = $isRight;
-                                $questions_answer = $answer;
-
-                                $my_score = $success_len * 10;
-
-                            }else{
-
-                                $len = count($match_questions);
-                                $error_len = count(array_diff_assoc($questions_answer,$match_data['my_answer']));
-                                $my_score = ($len-$error_len)*10;
-                            }
-
-
-                            $match_data['match_questions'] = $match_questions;
-                            $match_data['questions_answer'] = $questions_answer;
-
-                            break;
-                        case 'wzsd':
-                            //print_r($_POST);die;
-                            if(empty($match_data['post_id'])){
-                                $this->get_404('文章id不存在');
-                            }
+                        case 'reading':
                             //print_r($_POST);die;
                             $questions_answer = $match_data['questions_answer'];
                             $len = count($questions_answer);
@@ -539,56 +535,94 @@ class Student_Gradings extends Student_Home
                                     if(arr2str($arr) == arr2str($match_data['my_answer'][$k])) ++$success_len;
                                 }
                             }
-                            $my_score = $success_len * 23;
-                            if ($success_len == $len){
-                                $my_score += $match_data['surplus_time'] * 1;
+                            $correct_rate = $success_len/$len;
+                            //print_r($success_len);die;
+                            break;
+                        case 'arithmetic':
+
+                            $data_arr = $match_data['my_answer'];
+                            //print_r($data_arr);die;
+                            if(!empty($data_arr)){
+                                $match_questions = array_column($data_arr,'question');
+                                $questions_answer = array_column($data_arr,'rights');
+                                $_POST['my_answer'] = array_column($data_arr,'yours');
+                                $len = count($match_questions);
                             }
 
-                            break;
-                        default:
+                            if($_POST['questions_type'] == 'nxys'){
+                                $isRight = array_column($data_arr,'isRight');
+
+                                $success_len = 0;
+                                if(!empty($isRight)){
+                                    $count_value = array_count_values($isRight);
+                                    $success_len += $count_value['true'];
+                                }
+                                $answer['examples'] = $questions_answer;
+                                $answer['result'] = $isRight;
+                                $questions_answer = $answer;
+
+                                $my_score = $success_len * 10;
+
+                            }else{
+
+                                $error_len = count(array_diff_assoc($questions_answer,$_POST['my_answer']));
+                                $success_len = $len-$error_len;
+                                $my_score = $success_len*10;
+                            }
+                            $correct_rate = $success_len/$len;
+                            //print_r($my_score);die;
+                            $match_data['grading_questions'] = $match_questions;
+                            $match_data['questions_answer'] = $questions_answer;
+                            //var_dump($_POST);die;
                             break;
                     }
 
                     $insert = array(
                         'user_id'=>$current_user->ID,
-                        'match_id'=>$match_data['match_id'],
-                        'project_id'=>$match_data['project_id'],
-                        'match_more'=>$match_data['match_more'],
-                        'match_questions'=>json_encode($match_data['match_questions']),
-                        'questions_answer'=>json_encode($match_data['questions_answer']),
-                        'my_answer'=>json_encode($match_data['my_answer']),
-                        'surplus_time'=>$match_data['surplus_time'],
+                        'grading_id'=>$_POST['grading_id'],
+                        'grading_type'=>$_POST['grading_type'],
+                        'questions_type'=>$_POST['questions_type'],
+                        'grading_questions'=>json_encode($_POST['grading_questions']),
+                        'questions_answer'=>json_encode($_POST['questions_answer']),
+                        'my_answer'=>json_encode($_POST['my_answer']),
+                        'correct_rate'=>$correct_rate,
                         'my_score'=>$my_score,
-                        'answer_status'=>1,
-                        'submit_type'=>isset($match_data['submit_type']) ? $match_data['submit_type'] : 1,
-                        'leave_page_time'=>isset($match_data['leave_page_time']) ? json_encode($match_data['leave_page_time']) : '',
+                        'submit_type'=>isset($_POST['submit_type']) ? $_POST['submit_type'] : 1,
+                        'leave_page_time'=>isset($_POST['leave_page_time']) ? json_encode($_POST['leave_page_time']) : '',
                         'created_time'=>get_time('mysql'),
-                        'created_microtime'=>str2arr(microtime(),' ')[0],
+                        'use_time'=>isset($_POST['usetime']) ? $_POST['usetime'] : '',
+                        'post_id'=>isset($_POST['post_id']) ? $_POST['post_id'] : '',
+                        'post_str_length'=>isset($_POST['length']) ? $_POST['length'] : '',
+                        'is_true'=>!empty($prison_log_id) ? 2 : 1,
+                        'post_more'=>!empty($_POST['more']) ? $_POST['more'] : '',
                     );
+                    //print_r($insert);die;
+                    $result = $wpdb->insert($wpdb->prefix.'grading_questions',$insert);
 
                     /*print_r($insert);
                     die;*/
-
-                    $result = $wpdb->insert($wpdb->prefix.'match_questions',$insert);
+                    //print_r($result);die;
                     if($result){
                         $_GET['log_id'] = $wpdb->insert_id;
 
-                        if(!empty($match_data['post_id']) && $match_data['project_alias'] == 'wzsd'){
+                        if(!empty($match_data['post_id']) && $match_data['grading_type'] == 'reading'){
 
                             $sql1 = "select id from {$wpdb->prefix}user_post_use where user_id = {$current_user->ID} and type = 1 ";
                             $use_id = $wpdb->get_row($sql1,ARRAY_A);
                             if($use_id){
-                                $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$match_data['post_id']},CONCAT_WS(',',post_id,{$match_data['post_id']})) WHERE user_id = {$current_user->ID} and type = 1";
+                                $sql2 = "UPDATE {$wpdb->prefix}user_post_use SET post_id = if(post_id = '',{$match_data['post_id']},CONCAT_WS(',',post_id,{$match_data['post_id']})) WHERE user_id = {$current_user->ID} and type = 2";
                                 $a = $wpdb->query($sql2);
                             }else{
 
-                                $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$match_data['post_id'],'type'=>1));
+                                $a = $wpdb->insert($wpdb->prefix.'user_post_use',array('user_id'=>$current_user->ID,'post_id'=>$match_data['post_id'],'type'=>2));
                             }
 
                         }
                     }
-                }else{
-                    $_GET['log_id'] = $row['id'];
+                }
+
+                else{
+                    $_GET['log_id'] = $row_1['id'];
                 }
 
             }

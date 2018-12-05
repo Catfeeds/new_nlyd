@@ -45,7 +45,7 @@ input[type=text].matching-number-input:focus{
     display: none;
 }
 .matching-reading.active{
-    padding-bottom: 85px;
+    padding-bottom: 333px;
     display: block;
 }
 

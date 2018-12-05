@@ -195,10 +195,6 @@ class Student_Matchs extends Student_Home
         //print_r($sql2);
         $order_total = (int) $wpdb->get_var($sql2);
 
-
-
-
-
         //判断选手是否报名
         $sql3 = "select id from {$wpdb->prefix}order where user_id = {$current_user->ID} and match_id = {$_GET['match_id']} ";
         $order_id = $wpdb->get_var($sql3);
