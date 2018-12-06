@@ -564,7 +564,7 @@ layui.use(['element','flow','layer','form'], function(){
                         category_id:category_id,
                         page:page,
                         user_id:user_id,
-                        search:searchValue,
+                        s:searchValue,
                     }
                     var lis = [];
                     $.ajax({
@@ -665,14 +665,14 @@ layui.use(['element','flow','layer','form'], function(){
                                     next(lis.join(''),true) 
                                 }
                             }else{
-                                if(page==1){
-                                    var flag='<?=$action ?>';
-                                    if(flag.length>0){
-                                        var text=$('.layui-this').text();
-                                        var dom='<a class="a-btn a-btn-table" href="<?=$next_url?>"><div><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></div></a>'
-                                    }
-                                    lis.push(dom) 
-                                }
+                                // if(page==1){
+                                //     var flag='<?=$action ?>';
+                                //     if(flag.length>0){
+                                //         var text=$('.layui-this').text();
+                                //         var dom='<a class="a-btn a-btn-table" href="<?=$next_url?>"><div><?=__('设置我的', 'nlyd-student')?>'+text+'<?=__('教练', 'nlyd-student')?></div></a>'
+                                //     }
+                                //     lis.push(dom) 
+                                // }
                                 next(lis.join(''),false)
                             }
                         }
