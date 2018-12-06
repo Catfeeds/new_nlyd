@@ -38,8 +38,8 @@
                                                 </div>
                                                 <div class="coach-detail-footer flex-h">
                                                     <div class="coach-type flex1 text_1 c_blue ta_l" data-id="11"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速算类</span></div>
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div>
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l"></div>
+                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
+                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -93,19 +93,21 @@ jQuery(function($) {
         var _this=$(this);
         if(!_this.hasClass('opacity')){
             _this.addClass('opacity')
+            var coach_type=$('.coach-detail-footer .coach-type');
             var coach_id=_this.attr('data-coachId');
             // var category_id=_this.attr('data-categoryId');
             var coach_name=_this.attr('data-coachName')
             var content='<div class="box-conent-wrapper"><?=__('您是否确认解除与', 'nlyd-student')?>“'+coach_name+'”<?=__('的教练关系', 'nlyd-student')?>？</div>';
-            $('.coach-detail-footer .coach-type').each(function(){
-                var _this=$(this);
-                var id=_this.attr('data-id');
-                if(id){
-                    var type=_this.find('span').text()
-                    content+='<div style="text-align:center" class="fs_12 c_blue"><div class="layui-unselect layui-form-checkbox" data-id="'+id+'" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> '+type+'<?=__('教练', 'nlyd-student')?></div>'
-                }
-            })
-            
+            if(coach_type.length>1){
+                coach_type.each(function(){
+                    var _this=$(this);
+                    var id=_this.attr('data-id');
+                    if(id){
+                        var type=_this.find('span').text()
+                        content+='<div style="text-align:center" class="fs_12 c_blue"><div class="layui-unselect layui-form-checkbox" data-id="'+id+'" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> '+type+'<?=__('教练', 'nlyd-student')?></div>'
+                    }
+                })
+            }
 
                 layer.open({
                 type: 1
@@ -127,10 +129,16 @@ jQuery(function($) {
                 }
                 ,btn2: function(index, layero){
                     var category_id=[];
-                    $('.layui-form-checked').each(function(){
-                        var id=$(this).attr('data-id');
-                        category_id.push(id)
-                    })
+                    
+                    if(coach_type.lenth>1){
+                        $('.layui-form-checked').each(function(){
+                            var id=$(this).attr('data-id');
+                            category_id.push(id)
+                        })
+                    }else{
+                        var id=coach_type.attr('data-id');
+                        category_id=id;
+                    }
                     
                     var postData={
                         action:'relieveMyCoach',
@@ -138,7 +146,6 @@ jQuery(function($) {
                         coach_id:coach_id,
                         category_id:category_id,
                     }
-                    console.log(postData)
                     $.ajax({
                         data:postData,
                         success:function(res,ajaxStatu,xhr){
