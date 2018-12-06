@@ -25,7 +25,7 @@
                                        <div class="coach-row mt_10">
                                            <div class="coach-row-top">
                                                <div class="coach-picture img-box">
-                                                   <img src="<?=$row1['user_head']?>">
+                                                   <img src="<?=$row1['user_head']?$row1['user_head']:home_url('wp-content/plugins/nlyd-student/Public/css/image/nlyd.png')?>">
                                                </div>
                                                <div class="coach-detail">
                                                    <div class="text_1">
@@ -37,8 +37,11 @@
                                                        <span class="c_black6"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） 高级教练</span>
                                                    </div>
                                                    <div class="coach-detail-footer flex-h">
-                                                       <div class="coach-type flex1 text_1 c_blue ta_l" data-id="<?=$row1['category_id']?>"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($row1['post_title'],'nlyd-student')?></span></div>
-                                                       <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
+                                                       <?php foreach ($row1['category'] as $vv){ ?>
+                                                       <div class="coach-type flex1 text_1 c_blue ta_l" data-id="<?=$vv['category_id']?>"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($vv['category_name'],'nlyd-student')?></span></div>
+
+                                                       <?php } ?>
+                                                     <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
                                                        <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
                                                    </div>
                                                </div>

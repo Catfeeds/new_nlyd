@@ -1024,7 +1024,7 @@ class Student_Ajax
         $searchJoin = '';
         $searchWhere = '';
         if($searchStr != ''){
-            $searchJoin = " LEFTT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
+            $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
             $searchWhere = " ADN um.meta_value LIKE '%{$searchStr}%'";
         }
         //$user_id = 3;
@@ -2996,8 +2996,8 @@ class Student_Ajax
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
         where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
-        echo $wpdb->last_query;
-        die;
+//        echo $wpdb->last_query;
+//        die;
         if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
 //        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
 
