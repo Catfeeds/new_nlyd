@@ -1024,45 +1024,23 @@ class Student_Ajax
         $searchJoin = '';
         $searchWhere = '';
         if($searchStr != ''){
-            $searchJoin = " LEFTT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
-            $searchWhere = " ADN um.meta_value LIKE '%{$searchStr}%'";
-        }
-        //$user_id = 3;
-        if(!empty($_POST['user_id'])){
-            $user_id = $_POST['user_id'];
-            $wap[] = " a.user_id = {$user_id} ";
-            $wap[] = " a.apply_status = 2 ";
-        }
-        if(!empty($wap)){
-            $where = join(' and ',$wap);
+            $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
+            $searchWhere = " AND um.meta_value LIKE '%{$searchStr}%'";
         }
 
-        if(!empty($_POST['user_id'])){
-
-            $sql = " select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.coach_id,b.display_name,c.read,c.memory,c.compute
-                from {$wpdb->prefix}my_coach a 
-                left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id 
+        if(empty($category_id)){
+            $category_id = $category[0]['ID'];
+        }
+        $where = "(a.read = {$category_id} or a.memory = {$category_id} or a.compute = {$category_id})";
+        $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
+                from {$wpdb->prefix}coach_skill a 
+                left join {$wpdb->prefix}users b on a.coach_id = b.ID  
                 {$searchJoin}
                 where {$where} 
-                {$searchWhere} 
-                order by a.major desc limit $start,$pageSize
+                {$searchWhere}
+                limit $start,$pageSize
                 ";
-        }else{
 
-            if(empty($category_id)){
-                $category_id = $category[0]['ID'];
-            }
-            $where = "a.read = {$category_id} or a.memory = {$category_id} or a.compute = {$category_id}";
-            $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
-                    from {$wpdb->prefix}coach_skill a 
-                    left join {$wpdb->prefix}users b on a.coach_id = b.ID  
-                    {$searchJoin}
-                    where {$where} 
-                    {$searchWhere}
-                    limit $start,$pageSize
-                    ";
-        }
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
@@ -1076,7 +1054,7 @@ class Student_Ajax
         if(!empty($rows)){
             foreach ($rows as $k=>$val){
                 //获取教练信息
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_head','user_gender','user_coach_level') and user_id = {$val['coach_id']} ";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_head','user_gender','user_coach_level','user_real_name') and user_id = {$val['coach_id']} ";
                 $meta = $wpdb->get_results($sql1,ARRAY_A);
                 //print_r($sql1);
                 //print_r($meta);
@@ -1084,14 +1062,14 @@ class Student_Ajax
                     $user_meta = array_column($meta,'meta_value','meta_key');
                     //print_r($user_meta);
                 }
-                $rows[$k]['display_name'] = preg_replace('/, /','',$val['display_name']);
+                $rows[$k]['display_name'] = !empty($user_meta['user_real_name']) ? unserialize($user_meta['user_real_name'])['real_name'] : '';
                 $rows[$k]['user_gender'] = !empty($user_meta['user_gender']) ? $user_meta['user_gender'] : '-';
                 $rows[$k]['user_ID'] = !empty($user_meta['user_ID']) ? $user_meta['user_ID'] : '-';
                 $rows[$k]['user_head'] = !empty($user_meta['user_head']) ? $user_meta['user_head'] : student_css_url.'image/nlyd.png';
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训
-                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
+                $sql2 = "select apply_status from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id}";
                 //print_r($sql2);
                 $my_coach = $wpdb->get_row($sql2,ARRAY_A);
                 // print_r($my_coach);
@@ -1102,12 +1080,14 @@ class Student_Ajax
                 $rows[$k]['category_id'] = $category_id;
 //                $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
-
                 if(!empty($my_coach)){
                     if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
 //                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
+                    $rows[$k]['apply_status'] = $my_coach['apply_status'];
+                }else{
+                    $rows[$k]['apply_status'] = 0;
                 }
                 //每种分类对应的状态
                 $categoryArr = ['read', 'memory', 'compute'];
@@ -3011,8 +2991,8 @@ class Student_Ajax
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
         where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
-        echo $wpdb->last_query;
-        die;
+//        echo $wpdb->last_query;
+//        die;
         if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
 //        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
 
