@@ -40,6 +40,9 @@
                             <div class="form-input-row">
                                 <div class="form-input-label"><div><?=__('清除缓存', 'nlyd-student')?></div></div>
                             </div>
+                            <div class="form-input-row">
+                                <div class="form-input-label"><div><?=__('我的二维码', 'nlyd-student')?></div></div>
+                            </div>
                             <a class="a-btn a-btn-table" id="loginOut"><div><?=__('退出登录', 'nlyd-student')?></div></a>
                         </div>
                     </div>
