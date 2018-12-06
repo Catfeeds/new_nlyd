@@ -762,7 +762,7 @@ function the_table_install () {
         dbDelta($sql);
     }
 
-    $table_name = $wpdb->prefix . "lxl_course";  //乐学乐分享课程
+    $table_name = $wpdb->prefix . "course";  //乐学乐分享课程
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
         $sql = "CREATE TABLE `{$table_name}` (
@@ -782,6 +782,7 @@ function the_table_install () {
           `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
           `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
+          `course_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1乐学乐',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);

@@ -34,19 +34,8 @@
                                 </div>
                                 <?php if(!empty($skill)):?>
                                 <div class="coachDetail-infoRow coach-detail-footer flex-h">
-                                    <?php foreach ($skill['category'] as $v){ ?>
-                                        <?php if($v['is_current'] === false){?>
-                                            <div class="coach-type flex1 text_1 is_current"><?=$v['post_title']?></div>
-                                        <?php }elseif($v['is_current'] === true && $v['is_apply'] == true && $v['is_my_coach'] === false){ ?>
-                                            <div class="coach-type flex1 text_1 is_current c_blue" style="color:#FF2300;"><?=__('审核中', 'nlyd-student')?>...</div>
-                                        <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === true){?>
-                                            <div class="coach-type flex1 text_1 is_current c_orange"><div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                        <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === true && $v['is_my_major'] === false){?>
-                                            <div class="coach-type flex1 text_1 is_current c_blue"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <?=$v['post_title']?></div>
-                                        <?php }elseif ($v['is_current'] === true && $v['is_my_coach'] === false && $v['is_my_major'] === false){?>
-                                            <div class="coach-type flex1 text_1 is_current c_blue"><?=$v['post_title']?></div>
-                                        <?php }?>
-                                    <?php } ?>
+
+
                                 </div>
                                 <?php endif;?>
                             </div>

@@ -1009,6 +1009,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
+        $searchStr = isset($_POST['s'])?trim($_POST['s']):'';
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         if(isset($_POST['category_id'])) $category_id = $_POST['category_id'];
@@ -1019,6 +1020,12 @@ class Student_Ajax
             $category = $this->get_coach_category(false);
             $wap[] = " a.category_id = {$category[0]['ID']} ";
             $category_id = $category[0]['ID'];
+        }
+        $searchJoin = '';
+        $searchWhere = '';
+        if($searchStr != ''){
+            $searchJoin = " LEFTT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
+            $searchWhere = " ADN um.meta_value LIKE '%{$searchStr}%'";
         }
         //$user_id = 3;
         if(!empty($_POST['user_id'])){
@@ -1035,8 +1042,11 @@ class Student_Ajax
             $sql = " select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.coach_id,b.display_name,c.read,c.memory,c.compute
                 from {$wpdb->prefix}my_coach a 
                 left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id
-                where {$where} order by a.major desc limit $start,$pageSize
+                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id 
+                {$searchJoin}
+                where {$where} 
+                {$searchWhere} 
+                order by a.major desc limit $start,$pageSize
                 ";
         }else{
 
@@ -1047,7 +1057,9 @@ class Student_Ajax
             $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
                     from {$wpdb->prefix}coach_skill a 
                     left join {$wpdb->prefix}users b on a.coach_id = b.ID  
+                    {$searchJoin}
                     where {$where} 
+                    {$searchWhere}
                     limit $start,$pageSize
                     ";
         }
@@ -1079,22 +1091,22 @@ class Student_Ajax
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训
-                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status != -1";
+                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
                 //print_r($sql2);
                 $my_coach = $wpdb->get_row($sql2,ARRAY_A);
                 // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
-                $rows[$k]['my_major_coach'] = 'n';
+//                $rows[$k]['my_major_coach'] = 'n';
 
                 $rows[$k]['category_id'] = $category_id;
-                $rows[$k]['apply_status'] = $my_coach['apply_status'];
+//                $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
 
                 if(!empty($my_coach)){
                     if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
-                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
+//                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
                 }
                 //每种分类对应的状态
@@ -1119,7 +1131,7 @@ class Student_Ajax
                     $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
                     $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
                     $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
-                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
+//                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
                     $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
                     $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
                     if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
@@ -1132,7 +1144,7 @@ class Student_Ajax
                                     break;
                                 case 2://已通过
                                     $rows[$k]['category'][$cateK]['is_my_coach'] = 'true';
-                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
+//                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
                                     break;
                                 case 3://已解除
                                     $rows[$k]['category'][$cateK]['is_relieve'] = 'true';
@@ -1196,22 +1208,19 @@ class Student_Ajax
         //不允许申请自己为教练
         if($_POST['coach_id'] == $current_user->ID) wp_send_json_error(array('info'=>__('不能申请自己为教练', 'nlyd-student')));
         //是否同时设置为主训教练
-        $major = intval($_POST['major']) == 1 ? 1 : 0;
+//        $major = intval($_POST['major']) == 1 ? 1 : 0;
 //        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
         $row = $wpdb->get_row("select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} ",ARRAY_A);
         if(!empty($row)){
             if($row['apply_status'] == 1) wp_send_json_error(array('info'=>__('此类下已有申请,等待审核', 'nlyd-student')));
             if($row['apply_status'] == 2) wp_send_json_error(array('info'=>__('此类下已有教练,请先解除', 'nlyd-student')));
+            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1),array('id'=>$row['id']));
+        }else{
+            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1);
+            $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
         }
 
-        //开启事务,发送短信失败回滚
-        if(empty($id)){
-            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1, 'major' => $major);
-            $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
-        }else{
-            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1,'major'=>$major),array('id'=>$id,'category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
-        }
 
 
 
@@ -2975,34 +2984,39 @@ class Student_Ajax
         /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
-
-        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        $categoryId = isset($_POST['category_id']) ? trim($_POST['category_id']) : '';
+        $coach_id = isset($_POST['coach_id']) ? intval($_POST['coach_id']) : '';
+        if(empty($coach_id) ||  empty($categoryId)) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         //判断是否登录
         if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
 
         //判断当前是否是已申请的教练
-        $row = $wpdb->get_row("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,display_name,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
+        $rows = $wpdb->get_results("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
-        where mc.coach_id = {$_POST['coach_id']} and mc.user_id = $current_user->ID and mc.category_id = {$_POST['category_id']} and mc.apply_status=2",ARRAY_A);
-        if(empty($row)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
-        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
+        where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
+        echo $wpdb->last_query;
+        die;
+        if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+//        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
 
         //改变状态
-        $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id']);
+        $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE user_id='.$current_user->ID.' AND coach_id='.$coach_id.' AND category_id IN('.$categoryId.')');
         if($update){
             //TODO 发送短信通知教练 ===================================
-            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
-                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
-                if($userContact){
-                    if($userContact['type'] == 'mobile'){
-                        $ali = new AliSms();
-                        $result = $ali->sendSms($userContact['contact'], 14, array('coach'=>$userContact['real_name'], 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
-                    }else{
-                        $result = send_mail($userContact['contact'], 12, ['coach' => $userContact['real_name'], 'userID' => $userID, 'cate' => $row['post_title']]);
-                    }
-                }
+                $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+//                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
+               foreach ($rows as $v){
+                   $coach_real_name = get_user_meta($v['coach_id'], 'user_real_name',true);
+                   $coach_real_name = isset($coach_real_name['real_name']) ? $coach_real_name['real_name'] : $v['user_login'];
+                   if($v['user_mobile']){
+                       $ali = new AliSms();
+                       $result = $ali->sendSms($v['user_mobile'], 14, array('coach'=>$coach_real_name, 'user_id' => $userID ,'cate' => $v['post_title']), '国际脑力运动');
+                   }else{
+                       $result = send_mail($v['user_email'], 12, ['coach' => $coach_real_name, 'userID' => $userID, 'cate' => $v['post_title']]);
+                   }
+               }
 //            $ali = new AliSms();
 //            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             wp_send_json_success(['info' => __('解除教学关系成功', 'nlyd-student')]);
