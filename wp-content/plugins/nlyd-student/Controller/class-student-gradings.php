@@ -937,7 +937,7 @@ class Student_Gradings extends Student_Home
             'questions_answer'=>$questions_answer,
             'my_answer'=>$my_answer,
             'answer_array'=>$answer_array,
-            'reading_rate'=> $_GET['grad_type'] == 'reading' ? $row['post_str_length']/($row['use_time']/60) : '',
+            'reading_rate'=> $_GET['grad_type'] == 'reading' ? floor($row['post_str_length']/($row['use_time']/60)) : '',
             'error_arr'=>!empty($error_arr) ? array_keys($error_arr) : array(),
             'next_project_url'=>$next_project_url,
             'match_row'=>$row,
