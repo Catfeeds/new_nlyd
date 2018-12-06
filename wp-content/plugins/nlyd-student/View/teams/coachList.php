@@ -114,14 +114,8 @@
 </div>
 <!-- 申请当我的教练 -->
 <input type="hidden" name="_wpnonce" id="setCoach" value="<?=wp_create_nonce('student_set_coach_code_nonce');?>">
-<!-- 设为主训教练 -->
-<!-- <input type="hidden" name="_wpnonce" id="setMain" value="<?=wp_create_nonce('student_set_major_code_nonce');?>"> -->
 <!-- 解除教练关系 -->
 <input type="hidden" name="_wpnonce" id="clearCoach" value="<?=wp_create_nonce('student_relieve_coach_code_nonce');?>">
-<!-- 更换主训教练 -->
-<!-- <input type="hidden" name="_wpnonce" id="replaceMain" value="<?=wp_create_nonce('student_replace_major_code_nonce');?>"> -->
-<!-- 判断是否存在主训 -->
-<!-- <input type="hidden" name="_wpnonce" id="isMajor" value="<?=wp_create_nonce('student_current_coach_code_nonce');?>"> -->
 <script>
 jQuery(function($) { 
     var mySwiper = new Swiper('.swiper-container', {
