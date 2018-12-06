@@ -23,6 +23,71 @@ class Student_Safety extends Student_Home
         add_shortcode('safety-home',array($this,$action));
     }
 
+    /**
+     * 获取用户二维码
+     * @param $code
+     * @return string
+     */
+    public function qrcode(){
+
+        global $current_user;
+        $upload_dir = wp_upload_dir();
+        $spread_qrcode = get_user_meta($current_user->ID,'spread_qrcode');
+        if(!empty($spread_qrcode)){
+            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+        }else{
+
+            include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
+            $value="https://www.baidu.com";
+            $dir = '/spread/'.$current_user->ID.'/';
+            $path = $upload_dir['basedir'].$dir;
+            if(!file_exists($path)){
+                mkdir($path,0755,true);
+            }
+            $filename = date('YmdHis').'_'.rand(1000,9999).'.jpg';          //定义图片名字及格式
+            $qrcode_path = $path.$filename;
+
+            $errorCorrectionLevel = "L"; //容错级别
+            $matrixPointSize = "6"; //生成图片大小
+            QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
+            //生成带logo的二维码
+            $logo = student_css_url.'image\logo1.jpg';
+            //die;
+            if ($logo !== FALSE) {
+                $QR = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
+                $logo = imagecreatefromstring ( file_get_contents ( $logo ) );
+                $QR_width = imagesx ( $QR );
+                $QR_height = imagesy ( $QR );
+                $logo_width = imagesx ( $logo );
+                $logo_height = imagesy ( $logo );
+                $logo_qr_width = $QR_width / 5;
+                $scale = $logo_width / $logo_qr_width;
+                $logo_qr_height = $logo_height / $scale;
+                $from_width = ($QR_width - $logo_qr_width) / 2;
+                imagecopyresampled ( $QR, $logo, $from_width, $from_width, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height );
+            }
+            imagejpeg ( $QR, $qrcode_path );//带Logo二维码的文件名
+            //die;
+            $back = student_css_url.'image\test.jpg';
+            if ($back !== FALSE) {
+                $back_ = imagecreatefromstring ( file_get_contents ( $back ) );
+                $qrcode = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
+                // $back_width = imagesx ( $back_ );
+                //$back_height = imagesy ( $back_ );
+                $qrcode_width = imagesx ( $qrcode );
+                $qrcode_height = imagesy ( $qrcode );
+                /*$logo_qr_width = $QR_width / 5;
+                $scale = $logo_width / $logo_qr_width;
+                $logo_qr_height = $logo_height / $scale;
+                $from_width = ($QR_width - $logo_qr_width) / 2;*/
+                imagecopyresampled ( $back_, $qrcode, 95, 195, 0, 0, $qrcode_width, $qrcode_height, $qrcode_width, $qrcode_height );
+            }
+            imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名
+            update_user_meta($current_user->ID,'spread_qrcode',$dir.$filename);
+            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+        }
+    }
+
 
 
     /*

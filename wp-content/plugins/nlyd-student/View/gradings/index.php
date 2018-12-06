@@ -214,7 +214,7 @@ jQuery(function($) {
                                                     +'</div>'
                                                     +'<div class="nl-match-body">'
                                                         +'<div class="nl-match-detail layui-row">'
-                                                            +'<div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>'
+                                                            +'<div class="nl-match-label"><div><?=__('考级日期', 'nlyd-student')?>:</div></div>'
                                                             +'<div class="nl-match-info">'
                                                                 +'<span class="c_black">'+v.start_time+'</span>'
                                                                 +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
