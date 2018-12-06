@@ -3952,21 +3952,20 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         //查看答案是否提交
+        if($_POST['more']>0){
+            $where = " and more = {$_POST['more']} ";
+        }
         $sql = "select id,questions_answer
                 from {$wpdb->prefix}grading_questions
-                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}'
+                where user_id = {$current_user->ID} and grading_id = {$_POST['grading_id']} and grading_type = '{$_POST['grading_type']}' and questions_type = '{$_POST['questions_type']}' {$where}
                 ";
         //print_r($sql);die;
         $row = $wpdb->get_row($sql,ARRAY_A);
         //print_r($sql);
-        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grad_type']);
-        if($_POST['grad_type'] == 'memory'){
-            $url .= '/type/'.$_POST['questions_type'];
-        }
+        $url = home_url('gradings/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row['id'].'/grad_type/'.$_POST['grading_type'].'/type/'.$_POST['questions_type']);
         if(!empty($row)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //数据处理
-
         $correct_rate = 0;  //准确率
         switch ($_POST['grading_type']){
             case 'memory':
@@ -4015,7 +4014,7 @@ class Student_Ajax
                 }
                 break;
             case 'reading':
-                //print_r($_POST);die;
+
                 $questions_answer = $_POST['questions_answer'];
                 $len = count($questions_answer);
                 $success_len = 0;
@@ -4149,10 +4148,7 @@ class Student_Ajax
                           and user_id = {$current_user->ID} ";
         //print_r($sql1);
         $row_1 = $wpdb->get_row($sql1,ARRAY_A);
-        $url = home_url('matchs/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row_1['id'].'/grad_type/'.$_POST['grad_type']);
-        if($_POST['grad_type'] == 'memory'){
-            $url .= '/type/'.$_POST['questions_type'];
-        }
+        $url = home_url('grade/answerLog/grad_id/'.$_POST['grading_id'].'/log_id/'.$row_1['id'].'/grad_type/'.$_POST['grad_type'].'/type/'.$_POST['questions_type']);
         if(!empty($row_1)) wp_send_json_success(array('info'=>__('答案已提交', 'nlyd-student'),'url'=>$url));
 
         //print_r($_POST);die;
