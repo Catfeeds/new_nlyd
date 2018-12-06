@@ -1091,9 +1091,9 @@ class Student_Ajax
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训
-                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
+                $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
                 //print_r($sql2);
-                $my_coach = $wpdb->get_row($sql2,ARRAY_A);
+                $my_coach = $wpdb->get_vaar($sql2,ARRAY_A);
                 // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
@@ -1104,10 +1104,10 @@ class Student_Ajax
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
 
                 if(!empty($my_coach)){
-                    if($my_coach['apply_status'] == 2){
+//                    if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
 //                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
-                    }
+//                    }
                 }
                 //每种分类对应的状态
                 $categoryArr = ['read', 'memory', 'compute'];
