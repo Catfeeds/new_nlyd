@@ -35,6 +35,7 @@
                                 <div class="layui-input-inline">
                                     <input type="hidden" name="action" value="student_login">
                                     <input type="hidden" name="login_type" value="mobile">
+                                    <input type="hidden" name="referee_id" value="<?=$_GET['referee_id']?>">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce');?>">
                                     <input type="tel" name="user_login" lay-verify="phone" autocomplete="off" placeholder="<?=__('手机号', 'nlyd-student')?>" class="layui-input ">
                                 </div>
@@ -62,6 +63,7 @@
                                 <div class="layui-input-inline">
                                     <input type="hidden" name="action" value="student_login">
                                     <input type="hidden" name="login_type" value="pass">
+                                    <input type="hidden" name="referee_id" value="<?=$_GET['referee_id']?>">
                                     <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_login_code_nonce')?>">
                                     <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="<?=__('手机号/邮箱', 'nlyd-student')?>" class="layui-input ">
                                 </div>
@@ -126,6 +128,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-inline">
                                 <input type="hidden" name="action" value="student_register">
+                                <input type="hidden" name="referee_id" value="<?=$_GET['referee_id']?>">
                                 <input type="hidden" name="_wpnonce" value="<?=wp_create_nonce('student_register_code_nonce');?>">
                                 <input type="text" name="user_login" lay-verify="phoneOrEmail" autocomplete="off" placeholder="<?=__('手机号/邮箱', 'nlyd-student')?>" class="layui-input ">
                             </div>

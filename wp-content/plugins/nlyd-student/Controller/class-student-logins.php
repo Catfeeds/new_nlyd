@@ -13,10 +13,23 @@ class Student_Logins
     public $action;
     public function __construct($action)
     {
-        
-        if($_SESSION['user_openid'] == false){
 
-            if(is_user_logged_in()) wp_redirect(home_url('account'));    
+        //引入当前页面css/js
+        if($_SESSION['user_openid'] == false){
+            if(is_user_logged_in()){
+                if($_GET['referee_id'] > 0){
+                    global $current_user,$wpdb;
+                    if(empty($current_user->data->referee_id)){
+                        //添加推广人
+                        $a = $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_GET['referee_id']),array('ID'=>$current_user->ID));
+                        //var_dump($a);die;
+                    }
+                }
+
+                wp_redirect(home_url('account'));
+            }
+
+
             if(is_weixin() && !isset($_GET['access']) && !isset($_GET['login_type']) && $_GET['login_type'] != 'out' && ($_SERVER['SERVER_NAME'] == 'ydbeta.gjnlyd.com')){
 
                 wp_redirect(home_url('weixin/webLogin'));
@@ -24,7 +37,6 @@ class Student_Logins
             }
             $this->action = $action;
         }
-        //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
 
         //添加短标签
@@ -44,7 +56,6 @@ class Student_Logins
     public function index(){
 
         $setting = get_option('default_setting');
-
         $view = student_view_path.CONTROLLER.'/login.php';
         load_view_template($view,$setting);
     }
