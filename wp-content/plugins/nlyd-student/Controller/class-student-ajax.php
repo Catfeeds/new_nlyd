@@ -1009,6 +1009,7 @@ class Student_Ajax
         global $wpdb,$current_user;
 
         $page = isset($_POST['page'])?$_POST['page']:1;
+        $searchStr = isset($_POST['s'])?trim($_POST['s']):'';
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         if(isset($_POST['category_id'])) $category_id = $_POST['category_id'];
@@ -1019,6 +1020,12 @@ class Student_Ajax
             $category = $this->get_coach_category(false);
             $wap[] = " a.category_id = {$category[0]['ID']} ";
             $category_id = $category[0]['ID'];
+        }
+        $searchJoin = '';
+        $searchWhere = '';
+        if($searchStr != ''){
+            $searchJoin = " LEFTT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
+            $searchWhere = " ADN um.meta_value LIKE '%{$searchStr}%'";
         }
         //$user_id = 3;
         if(!empty($_POST['user_id'])){
@@ -1035,8 +1042,11 @@ class Student_Ajax
             $sql = " select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.coach_id,b.display_name,c.read,c.memory,c.compute
                 from {$wpdb->prefix}my_coach a 
                 left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id
-                where {$where} order by a.major desc limit $start,$pageSize
+                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id 
+                {$searchJoin}
+                where {$where} 
+                {$searchWhere} 
+                order by a.major desc limit $start,$pageSize
                 ";
         }else{
 
@@ -1047,7 +1057,9 @@ class Student_Ajax
             $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
                     from {$wpdb->prefix}coach_skill a 
                     left join {$wpdb->prefix}users b on a.coach_id = b.ID  
+                    {$searchJoin}
                     where {$where} 
+                    {$searchWhere}
                     limit $start,$pageSize
                     ";
         }

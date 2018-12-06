@@ -15,7 +15,7 @@
             <h1 class="mui-title"><div><?=__('我的教练', 'nlyd-student')?></div></h1>
         </header>
             <div class="layui-row nl-border nl-content layui-bg-white">
-                <?php if(!$coachCount > 0){?>
+                <?php if($rows){?>
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
 
                         <div data-id="1">

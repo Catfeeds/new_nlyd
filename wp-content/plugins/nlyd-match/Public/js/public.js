@@ -9,6 +9,7 @@ jQuery(document).ready(function($) {
         $('#menu-posts-match'),
         $('#menu-posts-grading'),
         $('#menu-users'),
+        $('#toplevel_page_fission'),
     ];
     $.each(parentArray,function (pi,pv) {
         $.each($(pv).find('a'), function (i,v) {

@@ -25,19 +25,21 @@ if(!class_exists('FissionController')){
         }
         private function main(){
             add_action('admin_menu',array($this,'add_submenu'));
+
+            //引入主体组织文件
+            require_once fission_path.'Controller/class-organize.php';
         }
 
         public function add_submenu(){
-
             if ( current_user_can( 'administrator' ) && !current_user_can( 'fission' ) ) {
                 global $wp_roles;
-
                 $role = 'fission';//权限名
                 $wp_roles->add_cap('administrator', $role);
             }
-            add_menu_page('裂变中心', '裂变中心', 'fission', 'fission',array($this,'fissionIndex'),'dashicons-businessman',99);
+
+            add_menu_page('裂变中心', '裂变中心', 'fission', 'fission',array(new Organize(true),'organizeList'),'dashicons-businessman',100);
         }
-        private function fissionIndex(){
+        public function fissionIndex(){
 
         }
     }
