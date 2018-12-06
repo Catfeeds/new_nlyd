@@ -116,8 +116,8 @@ class Student_Payment {
             $filename .= get_time().".xls";
             header('Content-Type:application/x-msexecl;name="'.$filename.'"');
             header('Content-Disposition:inline;filename="'.$filename.'"');
-            require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
-            require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
+            require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel.php';
+            require_once PLUGINS_PATH.'nlyd-student/library/Vendor/PHPExcel/Classes/PHPExcel/IOFactory.php';
             $objPHPExcel = new \PHPExcel();
             $objPHPExcel->getDefaultStyle()->getAlignment()->setHorizontal('left');
             foreach ($arr as $k => $row){

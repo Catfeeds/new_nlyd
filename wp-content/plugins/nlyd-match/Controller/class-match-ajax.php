@@ -1255,9 +1255,9 @@ class Match_Ajax
         $config = $interface_config['smtp'];
         if(empty($config)) wp_send_json_error(array('info'=>'邮件接口未配置'));
 
-        if(!is_file(LIBRARY_PATH.'Vendor/PHPMailer/class.phpmailer.php')) wp_send_json_error(array('info'=>'找不到邮件接口文件'));
-        include_once (LIBRARY_PATH.'Vendor/PHPMailer/class.phpmailer.php');
-        include_once (LIBRARY_PATH.'Vendor/SMTP.php');
+        if(!is_file(PLUGINS_PATH.'nlyd-student/library/Vendor/PHPMailer/class.phpmailer.php')) wp_send_json_error(array('info'=>'找不到邮件接口文件'));
+        include_once (PLUGINS_PATH.'nlyd-student/library/Vendor/PHPMailer/class.phpmailer.php');
+        include_once (PLUGINS_PATH.'nlyd-student/library/Vendor/SMTP.php');
         /*ini_set("display_errors","On");
         error_reporting(E_ALL);*/
 

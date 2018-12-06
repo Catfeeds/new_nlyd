@@ -1199,10 +1199,13 @@ class Student_Ajax
         $major = intval($_POST['major']) == 1 ? 1 : 0;
 //        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
-        $id = $wpdb->get_var("select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} and coach_id = {$_POST['coach_id']}");
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} ",ARRAY_A);
+        if(!empty($row)){
+            if($row['apply_status'] == 1) wp_send_json_error(array('info'=>__('此类下已有申请,等待审核', 'nlyd-student')));
+            if($row['apply_status'] == 2) wp_send_json_error(array('info'=>__('此类下已有教练,请先解除', 'nlyd-student')));
+        }
+
         //开启事务,发送短信失败回滚
-
-
         if(empty($id)){
             $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1, 'major' => $major);
             $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
