@@ -17,42 +17,43 @@
             <div class="layui-row nl-border nl-content layui-bg-white">
                 <?php if(!$coachCount > 0){?>
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
-                   
-                        <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
+
                         <div data-id="1">
                             <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                <li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">
-                                    <div class="coach-row mt_10">
-                                        <div class="coach-row-top">
-                                            <div class="coach-picture img-box">
-                                                <img src="'+v.user_head+'">
-                                            </div>
-                                            <div class="coach-detail">
-                                                <div class="text_1">
-                                                    <span class="fs_16 c_blue">名字</span>
-                                                    <span class="c_black6">性别</span>
-                                                    <span class="c_black6">ID 1231312312</span>
-                                                </div>
-                                                <div class="text_3">
-                                                    <span class="c_black6"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） 高级教练</span>
-                                                </div>
-                                                <div class="coach-detail-footer flex-h">
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l" data-id="11"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速算类</span></div>
-                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
-                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="coach-row-footer flex-h">
-                                            <div class="left_c flex1">
-                                                <button class="coach-btn detail c_black text_1 bg_white see_detail"  href=""><?=__('查看详情', 'nlyd-student')?></button>
-                                            </div>
-                                            <div class="right_c flex1">
-                                                <button type="button" class="clearCoach coach-btn text_1  detail bg_white c_black" data-coachName="陈卫东" data-coachId="1" data-categoryId="2"><?=__('解除关联', 'nlyd-student')?></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                               <?php foreach ($rows as $row1){ ?>
+                                   <li class="layui-col-lg4 layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                       <div class="coach-row mt_10">
+                                           <div class="coach-row-top">
+                                               <div class="coach-picture img-box">
+                                                   <img src="<?=$row1['user_head']?>">
+                                               </div>
+                                               <div class="coach-detail">
+                                                   <div class="text_1">
+                                                       <span class="fs_16 c_blue"><?=$row1['real_name']?></span>
+                                                       <span class="c_black6"><?=$row1['sex']?></span>
+                                                       <span class="c_black6">ID <?=$row1['ID']?></span>
+                                                   </div>
+                                                   <div class="text_3">
+                                                       <span class="c_black6"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） 高级教练</span>
+                                                   </div>
+                                                   <div class="coach-detail-footer flex-h">
+                                                       <div class="coach-type flex1 text_1 c_blue ta_l" data-id="11"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($row1['post_title'],'nlyd-student')?></span></div>
+                                                       <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
+                                                       <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <div class="coach-row-footer flex-h">
+                                               <div class="left_c flex1">
+                                                   <button class="coach-btn detail c_black text_1 bg_white see_detail"  href="<?=home_url('teams/coachDetail/coach_id/'.$row1['coach_id'])?>"><?=__('查看详情', 'nlyd-student')?></button>
+                                               </div>
+                                               <div class="right_c flex1">
+                                                   <button type="button" class="clearCoach coach-btn text_1  detail bg_white c_black" data-coachName="陈卫东" data-coachId="1" data-categoryId="2"><?=__('解除关联', 'nlyd-student')?></button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </li>
+                               <?php } ?>
                             </ul>
                         </div>
                     </div>

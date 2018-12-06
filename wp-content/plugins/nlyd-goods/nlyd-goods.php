@@ -37,6 +37,9 @@ if(!class_exists('GoodsController')){
 
             //引入ajax操作文件
             include_once(leo_goods_path.'/Controller/class-goods-ajax.php');
+
+            //引入课程文件
+            include_once(leo_goods_path.'/Controller/class-course.php');
         }
 
         public function add_submenu(){

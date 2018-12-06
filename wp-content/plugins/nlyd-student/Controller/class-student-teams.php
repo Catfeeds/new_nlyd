@@ -147,20 +147,22 @@ class Student_Teams
         $category = $this->ajaxControll->get_coach_category(false);
 
         //获取我的教练列表
-        $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : $category[0]['ID'];
         global $current_user,$wpdb;
+        $rows = $wpdb->get_results("SELECT my.coach_id,p.post_title FROM `{$wpdb->prefix}my_coach` AS my 
+                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID =my.category_id AND p.ID!='' 
+                WHERE my.user_id='{$current_user->ID}' AND my.apply_status=2", ARRAY_A);
+        foreach ($rows as &$row){
+            $usermeta = get_user_meta($row['coach_id']);
+//            leo_dump($usermeta);
+            $row['real_name'] = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
+            $row['real_name'] = isset($row['real_name']['real_name']) ? $row['real_name']['real_name'] : '';
+            $row['sex'] = isset($usermeta['user_gender']) ? $usermeta['user_gender'][0] : '';
+            $row['ID'] = isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : '';
+            $row['user_head'] = isset($usermeta['user_head']) ? $usermeta['user_head'][0] : '';
+        }
 
-        $where = 'user_id='.$current_user->ID.' and apply_status=2';
-
-        $sql = " select count(id) as len
-                from {$wpdb->prefix}my_coach
-                where {$where}";
-
-        $count = $wpdb->get_row($sql);
-        // $view = student_view_path.CONTROLLER.'/coachList.php';
-        // load_view_template($view,array('category'=>$category,'category_id' => $category_id,'user_id'=>$current_user->ID, 'coachCount' => $count->len,'action'=>'myCoach'));
         $view = student_view_path.CONTROLLER.'/myCoach.php';
-        load_view_template($view);
+        load_view_template($view,['rows'=>$rows]);
     }
 
 
