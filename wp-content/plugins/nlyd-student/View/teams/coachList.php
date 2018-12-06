@@ -324,7 +324,7 @@ layui.use(['element','flow','layer','form'], function(){
             ,isLazyimg: true
             ,done: function(page, next){//加载下一页
                 //模拟插入
-                 
+                    var coach_name=$('.layui-this').text()
                     var s=searchValue;
                     if(!isClick[category_id]){
                         s=''
@@ -383,7 +383,7 @@ layui.use(['element','flow','layer','form'], function(){
                                     // }) 
                                     var is_current=v.my_coach=='y'?"c_blue":"";
                                     var bg=v.my_coach=='y'?"bg_gradient_blue":"bg_gradient_grey";
-                                    detailFooter='<div data-id="'+v.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'"><div class="nl-badge '+bg+'"><i class="iconfont">&#xe608;</i></div> '+v.display_name+'</div>'
+                                    detailFooter='<div data-id="'+v.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'"><div class="nl-badge '+bg+'"><i class="iconfont">&#xe608;</i></div> '+coach_name+'</div>'
                                     if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
                                         if(v.apply_status==1){//1，申请中，2我的教练
                                             coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_grey text_1 "><?=__('关联审核中', 'nlyd-student')?>···</button></div>';

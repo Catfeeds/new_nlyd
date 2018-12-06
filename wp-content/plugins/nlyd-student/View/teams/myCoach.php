@@ -131,24 +131,31 @@ jQuery(function($) {
                     _this.removeClass('opacity')
                 }
                 ,btn2: function(index, layero){
-                    var category_id='';
-                    
-                    if(coach_type.lenth>1){
+                    var category_id=[];
+                    if(coach_type.length>1){
                         $('.layui-form-checked').each(function(){
                             var id=$(this).attr('data-id');
-                            category_id+=id
+                            category_id.push(id)
                         })
+                        category_id=category_id.join(',')
                     }else{
                         var id=coach_type.attr('data-id');
                         category_id+=id;
                     }
-                    
+                    if(category_id.length<1){
+                        
+                        layer.closeAll();
+                        $.alerts("<?=__('请选择您要解除的教练类别', 'nlyd-student')?>");
+                        _this.removeClass('opacity')
+                        return false;
+                    }
                     var postData={
                         action:'relieveMyCoach',
                         _wpnonce:$('#clearCoach').val(),
                         coach_id:coach_id,
                         category_id:category_id,
                     }
+                    
                     $.ajax({
                         data:postData,
                         success:function(res,ajaxStatu,xhr){
