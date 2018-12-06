@@ -1079,22 +1079,22 @@ class Student_Ajax
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训
-                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status != -1";
+                $sql2 = "select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
                 //print_r($sql2);
                 $my_coach = $wpdb->get_row($sql2,ARRAY_A);
                 // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
-                $rows[$k]['my_major_coach'] = 'n';
+//                $rows[$k]['my_major_coach'] = 'n';
 
                 $rows[$k]['category_id'] = $category_id;
-                $rows[$k]['apply_status'] = $my_coach['apply_status'];
+//                $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
 
                 if(!empty($my_coach)){
                     if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
-                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
+//                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
                     }
                 }
                 //每种分类对应的状态
@@ -1119,7 +1119,7 @@ class Student_Ajax
                     $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
                     $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
                     $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
-                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
+//                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
                     $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
                     $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
                     if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
@@ -1132,7 +1132,7 @@ class Student_Ajax
                                     break;
                                 case 2://已通过
                                     $rows[$k]['category'][$cateK]['is_my_coach'] = 'true';
-                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
+//                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
                                     break;
                                 case 3://已解除
                                     $rows[$k]['category'][$cateK]['is_relieve'] = 'true';
@@ -1196,22 +1196,19 @@ class Student_Ajax
         //不允许申请自己为教练
         if($_POST['coach_id'] == $current_user->ID) wp_send_json_error(array('info'=>__('不能申请自己为教练', 'nlyd-student')));
         //是否同时设置为主训教练
-        $major = intval($_POST['major']) == 1 ? 1 : 0;
+//        $major = intval($_POST['major']) == 1 ? 1 : 0;
 //        var_dump($_POST['category_id']);die;
         //查询以前是否进行过申请
         $row = $wpdb->get_row("select * from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$_POST['category_id']} ",ARRAY_A);
         if(!empty($row)){
             if($row['apply_status'] == 1) wp_send_json_error(array('info'=>__('此类下已有申请,等待审核', 'nlyd-student')));
             if($row['apply_status'] == 2) wp_send_json_error(array('info'=>__('此类下已有教练,请先解除', 'nlyd-student')));
+            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1),array('id'=>$row['id']));
+        }else{
+            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1);
+            $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
         }
 
-        //开启事务,发送短信失败回滚
-        if(empty($id)){
-            $data = array('category_id'=>$_POST['category_id'],'coach_id'=>$_POST['coach_id'],'user_id'=>$current_user->ID,'apply_status'=>1, 'major' => $major);
-            $result = $wpdb->insert($wpdb->prefix.'my_coach',$data);
-        }else{
-            $result = $wpdb->update($wpdb->prefix.'my_coach',array('apply_status'=>1,'major'=>$major),array('id'=>$id,'category_id'=>$_POST['category_id'],'user_id'=>$current_user->ID));
-        }
 
 
 
