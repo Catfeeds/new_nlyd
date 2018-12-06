@@ -37,7 +37,7 @@
                                                        <span class="c_black6"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） 高级教练</span>
                                                    </div>
                                                    <div class="coach-detail-footer flex-h">
-                                                       <div class="coach-type flex1 text_1 c_blue ta_l" data-id="11"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($row1['post_title'],'nlyd-student')?></span></div>
+                                                       <div class="coach-type flex1 text_1 c_blue ta_l" data-id="<?=$row1['category_id']?>"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($row1['post_title'],'nlyd-student')?></span></div>
                                                        <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
                                                        <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
                                                    </div>
@@ -48,7 +48,7 @@
                                                    <button class="coach-btn detail c_black text_1 bg_white see_detail"  href="<?=home_url('teams/coachDetail/coach_id/'.$row1['coach_id'])?>"><?=__('查看详情', 'nlyd-student')?></button>
                                                </div>
                                                <div class="right_c flex1">
-                                                   <button type="button" class="clearCoach coach-btn text_1  detail bg_white c_black" data-coachName="陈卫东" data-coachId="1" data-categoryId="2"><?=__('解除关联', 'nlyd-student')?></button>
+                                                   <button type="button" class="clearCoach coach-btn text_1  detail bg_white c_black" data-coachName="<?=$row1['real_name']?>" data-coachId="<?=$row1['coach_id']?>" data-categoryId="<?=$row1['category_id']?>"><?=__('解除关联', 'nlyd-student')?></button>
                                                </div>
                                            </div>
                                        </div>
@@ -129,12 +129,12 @@ jQuery(function($) {
                     _this.removeClass('opacity')
                 }
                 ,btn2: function(index, layero){
-                    var category_id=[];
+                    var category_id='';
                     
                     if(coach_type.lenth>1){
                         $('.layui-form-checked').each(function(){
                             var id=$(this).attr('data-id');
-                            category_id.push(id)
+                            category_id+=id
                         })
                     }else{
                         var id=coach_type.attr('data-id');
@@ -147,6 +147,8 @@ jQuery(function($) {
                         coach_id:coach_id,
                         category_id:category_id,
                     }
+                    console.log(postData)
+                        return false;
                     $.ajax({
                         data:postData,
                         success:function(res,ajaxStatu,xhr){

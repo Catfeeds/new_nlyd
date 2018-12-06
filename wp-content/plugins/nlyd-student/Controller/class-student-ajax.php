@@ -2992,10 +2992,12 @@ class Student_Ajax
         if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
 
         //判断当前是否是已申请的教练
-        $rows = $wpdb->get_results("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,display_name,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
+        $rows = $wpdb->get_results("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
         where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
+        echo $wpdb->last_query;
+        die;
         if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
 //        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
 

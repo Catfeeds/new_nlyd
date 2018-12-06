@@ -148,7 +148,7 @@ class Student_Teams
 
         //获取我的教练列表
         global $current_user,$wpdb;
-        $rows = $wpdb->get_results("SELECT my.coach_id,p.post_title FROM `{$wpdb->prefix}my_coach` AS my 
+        $rows = $wpdb->get_results("SELECT my.coach_id,p.post_title,my.category_id FROM `{$wpdb->prefix}my_coach` AS my 
                 LEFT JOIN `{$wpdb->posts}` AS p ON p.ID =my.category_id AND p.ID!='' 
                 WHERE my.user_id='{$current_user->ID}' AND my.apply_status=2", ARRAY_A);
         foreach ($rows as &$row){
