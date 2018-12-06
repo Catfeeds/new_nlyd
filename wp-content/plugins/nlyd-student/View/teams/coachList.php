@@ -80,7 +80,6 @@
                            
                         </ul>
                         <?php endif;?>
-                        <input type="hidden" name="user_id" value="<?=$action=='myCoach'?$user_id:'';?>">
                         <div class="layui-tab-content" style="padding:0">
                             <?php foreach ($category as $k => $val){ ?>
                                 <div data-id="<?=$val['ID']?>" class="layui-tab-item <?=$val['ID'] == $_GET['category_id'] || (!isset($_GET['category_id']) && $k==0) ? 'layui-show' : '';?>">
@@ -251,12 +250,10 @@ layui.use(['element','flow','layer','form'], function(){
             tap: function () {
                 var _this=$('.search-btn');
                 var value=$('.serach-Input').val()
-                if(value!=searchValue){
-                    searchValue=value;
-                    var id=$('.layui-this').attr('data-id');
-                    $('#'+id).empty()
-                    pagation(id)
-                }
+                searchValue=value;
+                var id=$('.layui-this').attr('data-id');
+                $('#'+id).empty()
+                pagation(id)
             }
         });
     }
@@ -327,16 +324,16 @@ layui.use(['element','flow','layer','form'], function(){
             ,isLazyimg: true
             ,done: function(page, next){//加载下一页
                 //模拟插入
-                    var user_id="";
-                    if($('input[name="user_id"]').val().length>0){
-                        user_id=$('input[name="user_id"]').val()
+                 
+                    var s=searchValue;
+                    if(!isClick[category_id]){
+                        s=''
                     }
                     var postData={
                         action:'get_coach_lists',
                         category_id:category_id,
                         page:page,
-                        user_id:user_id,
-                        s:searchValue,
+                        s:s,
                     }
                     var lis = [];
                     $.ajax({
@@ -351,8 +348,8 @@ layui.use(['element','flow','layer','form'], function(){
                                     // var clear_btn="";
                                     var isLeft='ta_r';
                                     // var post_title="";
-                                    $.each(v.category,function(index,value){
-                                        var is_current="";//当前教练橘色或蓝色类型判断
+                                    // $.each(v.category,function(index,value){
+                                    //     var is_current="";//当前教练橘色或蓝色类型判断
                                         // var metal="";//我的教练主训教练展示的标签
                                         // if(value.is_current=="true"){//教练属于当前类型教练
                                         
@@ -374,16 +371,19 @@ layui.use(['element','flow','layer','form'], function(){
                                         // }
                                         // var categoryBtnDom='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 '+is_current+'">'+metal+' '+post_title+'</div>'
                                         // detailFooter+=categoryBtnDom
-                                        if(value.category_id==category_id){//当前类目教练
-                                            if(v.apply_status==2){
-                                                is_current="c_blue"
-                                                metal='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
-                                            }else{
-                                                metal='<div class="nl-badge bg_gradient_grey"><i class="iconfont">&#xe608;</i></div>';
-                                            }
-                                            detailFooter='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'">'+metal+' '+value.post_title+'</div>'
-                                        }   
-                                    }) 
+                                        // if(value.category_id==category_id){//当前类目教练
+                                        //     if(v.apply_status==2){
+                                        //         is_current="c_blue"
+                                        //         metal='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
+                                        //     }else{
+                                        //         metal='<div class="nl-badge bg_gradient_grey"><i class="iconfont">&#xe608;</i></div>';
+                                        //     }
+                                        //     detailFooter='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'">'+metal+' '+v.post_title+'</div>'
+                                        // }   
+                                    // }) 
+                                    var is_current=v.my_coach=='y'?"c_blue":"";
+                                    var bg=v.my_coach=='y'?"bg_gradient_blue":"bg_gradient_grey";
+                                    detailFooter='<div data-id="'+v.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'"><div class="nl-badge '+bg+'"><i class="iconfont">&#xe608;</i></div> '+v.display_name+'</div>'
                                     if(v.apply_status!=null){//-1,拒绝1，申请中，2我的教练，3,取消
                                         if(v.apply_status==1){//1，申请中，2我的教练
                                             coach_btn='<div class="right_c flex1"><button type="button" class="coach-btn bg_gradient_grey text_1 "><?=__('关联审核中', 'nlyd-student')?>···</button></div>';
@@ -463,7 +463,9 @@ layui.use(['element','flow','layer','form'], function(){
         $('.nl-transform').css({
             'transform':'translate3d('+left+'px, 0px, 0px)'
         }).html(html)
+        // var value=$('.serach-Input').val();
         if(!isClick[id]){
+            // searchValue=value
             pagation(id)
         }
     })
