@@ -1090,52 +1090,52 @@ class Student_Ajax
                     $rows[$k]['apply_status'] = 0;
                 }
                 //每种分类对应的状态
-                $categoryArr = ['read', 'memory', 'compute'];
-                foreach ($categoryArr as $cateK => $cate){
-//                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title,mc.major FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
-//                      $readApply = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$val[$cate]);
-                    switch ($cate){
-                        case 'read':
-                            $post_title = __('速读类', 'nlyd-student');
-                            break;
-                        case 'memory':
-                            $post_title = __('记忆类', 'nlyd-student');
-                            break;
-                        case 'compute':
-                            $post_title = __('心算类', 'nlyd-student');
-                            break;
-                    }
-                    $rows[$k]['category'][$cateK]['name'] = $cate;
-                    $rows[$k]['category'][$cateK]['post_title'] = $post_title;
-                    $rows[$k]['category'][$cateK]['category_id'] = $rows[$k][$cate];
-                    $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
-                    $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
-                    $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
-//                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
-                    $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
-                    $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
-                    if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
-                        $rows[$k]['category'][$cateK]['is_current'] = 'true';//此教练是否在当前分类
-                        $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate].' AND user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
-                        if($coachStudent){
-                            switch ($coachStudent->apply_status){
-                                case 1://申请中
-                                    $rows[$k]['category'][$cateK]['is_apply'] = 'true';
-                                    break;
-                                case 2://已通过
-                                    $rows[$k]['category'][$cateK]['is_my_coach'] = 'true';
-//                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
-                                    break;
-                                case 3://已解除
-                                    $rows[$k]['category'][$cateK]['is_relieve'] = 'true';
-                                    break;
-                                case -1://已拒绝
-                                    $rows[$k]['category'][$cateK]['is_refuse'] = 'true';
-                                    break;
-                            }
-                        }
-                    }
-                }
+//                $categoryArr = ['read', 'memory', 'compute'];
+//                foreach ($categoryArr as $cateK => $cate){
+////                    $readApply = $wpdb->get_row('SELECT mc.apply_status,p.post_title,mc.major FROM '.$wpdb->prefix.'my_coach AS mc LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=mc.category_id WHERE mc.category_id='.$rows[$k][$cate].' AND mc.user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
+////                      $readApply = $wpdb->get_row('SELECT post_title FROM '.$wpdb->prefix.'posts WHERE ID='.$val[$cate]);
+//                    switch ($cate){
+//                        case 'read':
+//                            $post_title = __('速读类', 'nlyd-student');
+//                            break;
+//                        case 'memory':
+//                            $post_title = __('记忆类', 'nlyd-student');
+//                            break;
+//                        case 'compute':
+//                            $post_title = __('心算类', 'nlyd-student');
+//                            break;
+//                    }
+//                    $rows[$k]['category'][$cateK]['name'] = $cate;
+//                    $rows[$k]['category'][$cateK]['post_title'] = $post_title;
+//                    $rows[$k]['category'][$cateK]['category_id'] = $rows[$k][$cate];
+//                    $rows[$k]['category'][$cateK]['is_current'] = 'false';//此教练是否在当前分类
+//                    $rows[$k]['category'][$cateK]['is_apply'] = 'false'; //是否申请中
+//                    $rows[$k]['category'][$cateK]['is_my_coach'] = 'false'; //是否已通过
+////                    $rows[$k]['category'][$cateK]['is_my_major'] = 'false'; //是否是主训
+//                    $rows[$k]['category'][$cateK]['is_relieve'] = 'false'; //是否已解除
+//                    $rows[$k]['category'][$cateK]['is_refuse'] = 'false';//是否已拒绝
+//                    if($rows[$k][$cate] != 0 && $rows[$k][$cate] != null){
+//                        $rows[$k]['category'][$cateK]['is_current'] = 'true';//此教练是否在当前分类
+//                        $coachStudent = $wpdb->get_row('SELECT apply_status,major FROM '.$wpdb->prefix.'my_coach WHERE category_id='.$rows[$k][$cate].' AND user_id='.$current_user->ID.' AND coach_id='.$val['coach_id']);
+//                        if($coachStudent){
+//                            switch ($coachStudent->apply_status){
+//                                case 1://申请中
+//                                    $rows[$k]['category'][$cateK]['is_apply'] = 'true';
+//                                    break;
+//                                case 2://已通过
+//                                    $rows[$k]['category'][$cateK]['is_my_coach'] = 'true';
+////                                    $rows[$k]['category'][$cateK]['is_my_major'] = $coachStudent->major == 1 ? 'true' : 'false';
+//                                    break;
+//                                case 3://已解除
+//                                    $rows[$k]['category'][$cateK]['is_relieve'] = 'true';
+//                                    break;
+//                                case -1://已拒绝
+//                                    $rows[$k]['category'][$cateK]['is_refuse'] = 'true';
+//                                    break;
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
 //        echo '<pre />';
