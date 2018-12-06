@@ -208,16 +208,16 @@
 .layui-form-checkbox{
     vertical-align: text-top;
 }
-.layui-form-checked[lay-skin=primary] i{
+/* .layui-form-checked[lay-skin=primary] i{
     border-color: #FB8E8E;
     background-color: #FB8E8E;
-}
-.layui-form-checkbox[lay-skin=primary]{
+} */
+/* .layui-form-checkbox[lay-skin=primary]{
     height: 18px!important;
-}
-.layui-form-checkbox[lay-skin=primary]:hover i{
+} */
+/* .layui-form-checkbox[lay-skin=primary]:hover i{
     border-color: #FB8E8E;
-}
+} */
 @media screen and (min-width: 1200px){
     .coach-row{
         display: block;

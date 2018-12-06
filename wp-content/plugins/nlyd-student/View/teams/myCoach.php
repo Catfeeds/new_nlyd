@@ -1,3 +1,4 @@
+<?php require_once PLUGINS_PATH.'nlyd-student/View/public/student-footer-menu.php' ;?>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -36,9 +37,9 @@
                                                     <span class="c_black6"><?=__('国际脑力运动委员会', 'nlyd-student')?>（IISC） 高级教练</span>
                                                 </div>
                                                 <div class="coach-detail-footer flex-h">
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> 速算类</div>
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> 速记类</div>
-                                                    <div class="coach-type flex1 text_1 c_blue ta_l"></div>
+                                                    <div class="coach-type flex1 text_1 c_blue ta_l" data-id="11"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速算类</span></div>
+                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
+                                                    <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -81,7 +82,6 @@ jQuery(function($) {
     $('body').on('click','.layui-form-checkbox',function(){
         var _this=$(this);
         _this.toggleClass('layui-form-checked')
-        _this.prev('input').click()
     })
     $('body').on('click','.see_detail',function(){
         var href=$(this).attr('href');
@@ -93,17 +93,29 @@ jQuery(function($) {
         var _this=$(this);
         if(!_this.hasClass('opacity')){
             _this.addClass('opacity')
+            var coach_type=$('.coach-detail-footer .coach-type');
             var coach_id=_this.attr('data-coachId');
-            var category_id=_this.attr('data-categoryId');
+            // var category_id=_this.attr('data-categoryId');
             var coach_name=_this.attr('data-coachName')
-            var type=$('.layui-this a').text()
+            var content='<div class="box-conent-wrapper"><?=__('您是否确认解除与', 'nlyd-student')?>“'+coach_name+'”<?=__('的教练关系', 'nlyd-student')?>？</div>';
+            if(coach_type.length>1){
+                coach_type.each(function(){
+                    var _this=$(this);
+                    var id=_this.attr('data-id');
+                    if(id){
+                        var type=_this.find('span').text()
+                        content+='<div style="text-align:center" class="fs_12 c_blue"><div class="layui-unselect layui-form-checkbox" data-id="'+id+'" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> '+type+'<?=__('教练', 'nlyd-student')?></div>'
+                    }
+                })
+            }
+
                 layer.open({
                 type: 1
                 ,maxWidth:300
                 ,title: '<?=__('解除教学关系', 'nlyd-student')?>' //不显示标题栏
                 ,skin:'nl-box-skin'
                 ,id: 'certification' //防止重复弹出
-                ,content: '<div class="box-conent-wrapper"><?=__('您是否确认解除与', 'nlyd-student')?>“'+coach_name+'”<?=__('的教练关系', 'nlyd-student')?>？</div>'
+                ,content: content
                 ,btn: ['<?=__('再想想', 'nlyd-student')?>', '<?=__('确认', 'nlyd-student')?>', ]
                 ,cancel:function(){
                     _this.removeClass('opacity')
@@ -116,6 +128,18 @@ jQuery(function($) {
                     _this.removeClass('opacity')
                 }
                 ,btn2: function(index, layero){
+                    var category_id=[];
+                    
+                    if(coach_type.lenth>1){
+                        $('.layui-form-checked').each(function(){
+                            var id=$(this).attr('data-id');
+                            category_id.push(id)
+                        })
+                    }else{
+                        var id=coach_type.attr('data-id');
+                        category_id=id;
+                    }
+                    
                     var postData={
                         action:'relieveMyCoach',
                         _wpnonce:$('#clearCoach').val(),
