@@ -41,8 +41,6 @@
                                                        <div class="coach-type flex1 text_1 c_blue ta_l" data-id="<?=$vv['category_id']?>"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span><?=__($vv['category_name'],'nlyd-student')?></span></div>
 
                                                        <?php } ?>
-                                                     <!-- <div class="coach-type flex1 text_1 c_blue ta_l" data-id="22"><div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div> <span>速记类</span></div> -->
-                                                       <!-- <div class="coach-type flex1 text_1 c_blue ta_l"></div> -->
                                                    </div>
                                                </div>
                                            </div>

@@ -54,7 +54,6 @@
                     <div class="layui-tab layui-tab-brief width-margin  width-margin-pc" lay-filter="tabs">
                         <?php if(!empty($category)):
                             $url = home_url('/teams/'.$action);
-                            //$action = isset($_GET['action'])?$_GET['action']:'index';
                             $set_url = home_url('/teams/coachList/category_id/'.$_GET['category_id']);
                             if(isset($_GET['match_id'])) $url .= '/match_id/'.$_GET['match_id'];
                             if(isset($_GET['match_id'])) $set_url .= '/match_id/'.$_GET['match_id'];
@@ -149,22 +148,8 @@ layui.use(['element','flow','layer','form'], function(){
             var category_id=_this.attr('data-categoryId');
             var coach_name=_this.attr('data-coachName')
             var type=$('.layui-this a').text()
-            // var ajax_data={
-            //     action:'searchCurrentCoach',
-            //     _wpnonce:$('#isMajor').val(),
-            //     category_id:category_id
-            // }
-            // $.ajax({
-            //     data:ajax_data,
-            //     success:function(resp,ajaxStatu,xhr){
-                    // var hasMajor= resp.success ? true : false;
                     var content='<div class="box-conent-wrapper"><?=__('您是否确认与', 'nlyd-student')?>“'+coach_name+'”<?=__('建立教学关系', 'nlyd-student')?>？</div>'
-                    // if(hasMajor){
-                    //     content='<div class="box-conent-wrapper"><?=__('是否确认向', 'nlyd-student')?>“'+coach_name+'”<?=__('发送教练申请', 'nlyd-student')?>？</div>'
-                    //             +'<div style="text-align:center" class="fs_12 c_orange"><input type="checkbox" class="coachCheckbox" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon layui-icon-ok"></i></div> <?=__('同时设为', 'nlyd-student')?>'+type+'<?=__('主训教练', 'nlyd-student')?></div>'
-                    // }else{
-                    //     content='<div class="box-conent-wrapper"><?=__('是否确认向', 'nlyd-student')?>“'+coach_name+'”<?=__('发送教练申请', 'nlyd-student')?>？</div>'
-                    // }
+
                         layer.open({
                         type: 1
                         ,maxWidth:300
@@ -200,12 +185,8 @@ layui.use(['element','flow','layer','form'], function(){
                                 success:function(res,ajaxStatu,xhr){  
                                     $.alerts(res.data.info)
                                     if(res.success){
-                                        // coach-btn bg_gradient_grey text_1 
                                         _this.removeClass('setTeacher').removeClass('bg_gradient_blue').removeClass('detail').addClass('bg_gradient_grey').text('<?=__('关联审核中', 'nlyd-student')?>···');
-                                        // _this.parents('.coach-row').find('.coach-type').each(function(){
-                                        //     var __this=$(this);
-                                        //     var data_id=__this.attr('data-id')
-                                        // })
+                                       
                                     }
                                     _this.removeClass('opacity')
                                 },
@@ -222,8 +203,6 @@ layui.use(['element','flow','layer','form'], function(){
                         ,shade: 0.3 //遮罩
                         ,isOutAnim:true//关闭动画
                     });
-                // }
-            // });
         }
         return false
     })
@@ -345,42 +324,7 @@ layui.use(['element','flow','layer','form'], function(){
                                 $.each(res.data.info,function(i,v){
                                     var detailFooter="";
                                     var coach_btn="";
-                                    // var clear_btn="";
                                     var isLeft='ta_r';
-                                    // var post_title="";
-                                    // $.each(v.category,function(index,value){
-                                    //     var is_current="";//当前教练橘色或蓝色类型判断
-                                        // var metal="";//我的教练主训教练展示的标签
-                                        // if(value.is_current=="true"){//教练属于当前类型教练
-                                        
-                                        //     is_current="c_blue"
-                                        //     if(value.is_my_major=="true"){//当前教练是主训教练
-                                        //         is_current='c_orange'
-                                        //         metal='<div class="nl-badge bg_gradient_orange"><i class="iconfont">&#xe608;</i></div>';
-                                        //     }else{
-                                        //         if(value.is_my_coach=="true"){//当前教练是我的教练
-                                        //             metal='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
-                                        //         }
-                                        //     }
-                                        // }
-                                        // post_title=value.post_title
-                                        // if(v.apply_status==1){//1，申请中
-                                        //     if(value.category_id==category_id){//当前类目教练
-                                        //         post_title='<span style="color:#FF2300"><?=__('审核中', 'nlyd-student')?>···</span>'
-                                        //     }   
-                                        // }
-                                        // var categoryBtnDom='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 '+is_current+'">'+metal+' '+post_title+'</div>'
-                                        // detailFooter+=categoryBtnDom
-                                        // if(value.category_id==category_id){//当前类目教练
-                                        //     if(v.apply_status==2){
-                                        //         is_current="c_blue"
-                                        //         metal='<div class="nl-badge bg_gradient_blue"><i class="iconfont">&#xe608;</i></div>';
-                                        //     }else{
-                                        //         metal='<div class="nl-badge bg_gradient_grey"><i class="iconfont">&#xe608;</i></div>';
-                                        //     }
-                                        //     detailFooter='<div data-id="'+value.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'">'+metal+' '+v.post_title+'</div>'
-                                        // }   
-                                    // }) 
                                     var is_current=v.my_coach=='y'?"c_blue":"";
                                     var bg=v.my_coach=='y'?"bg_gradient_blue":"bg_gradient_grey";
                                     detailFooter='<div data-id="'+v.category_id+'" class="coach-type flex1 text_1 ta_l '+is_current+'"><div class="nl-badge '+bg+'"><i class="iconfont">&#xe608;</i></div> '+coach_name+'</div>'
