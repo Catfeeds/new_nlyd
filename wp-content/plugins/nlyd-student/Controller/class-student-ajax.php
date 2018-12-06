@@ -2984,34 +2984,37 @@ class Student_Ajax
         /*if (!wp_verify_nonce($_POST['_wpnonce'], 'student_relieve_coach_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }*/
-
-        if(empty($_POST['coach_id']) ||  empty($_POST['category_id'])) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        $categoryId = isset($_POST['category_id']) ? trim($_POST['category_id']) : '';
+        $coach_id = isset($_POST['coach_id']) ? intval($_POST['coach_id']) : '';
+        if(empty($coach_id) ||  empty($categoryId)) wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         global $wpdb,$current_user;
         //判断是否登录
         if($current_user->ID < 1) wp_send_json_error(array('info'=>__('未登录', 'nlyd-student')));
 
         //判断当前是否是已申请的教练
-        $row = $wpdb->get_row("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,display_name,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
+        $rows = $wpdb->get_results("select mc.id,mc.apply_status,mc.major,u.user_mobile,u.user_email,p.post_title,display_name,u.ID as uid,mc.coach_id from {$wpdb->prefix}my_coach as mc 
         left join {$wpdb->users} as u on u.ID=mc.coach_id 
         left join {$wpdb->posts} as p on mc.category_id=p.ID 
-        where mc.coach_id = {$_POST['coach_id']} and mc.user_id = $current_user->ID and mc.category_id = {$_POST['category_id']} and mc.apply_status=2",ARRAY_A);
-        if(empty($row)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
-        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
+        where mc.coach_id = {$coach_id} and mc.user_id = $current_user->ID and mc.category_id IN({$categoryId}) and mc.apply_status=2",ARRAY_A);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('数据错误', 'nlyd-student')));
+//        if($row['apply_status'] != 2) wp_send_json_error(array('info'=>__('该教练还不是你的教练', 'nlyd-student')));
 
         //改变状态
-        $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE id='.$row['id']);
+        $update = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET apply_status=3 WHERE user_id='.$current_user->ID.' AND coach_id='.$coach_id.' AND category_id IN('.$categoryId.')');
         if($update){
             //TODO 发送短信通知教练 ===================================
-            $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
-                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
-                if($userContact){
-                    if($userContact['type'] == 'mobile'){
-                        $ali = new AliSms();
-                        $result = $ali->sendSms($userContact['contact'], 14, array('coach'=>$userContact['real_name'], 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
-                    }else{
-                        $result = send_mail($userContact['contact'], 12, ['coach' => $userContact['real_name'], 'userID' => $userID, 'cate' => $row['post_title']]);
-                    }
-                }
+                $userID = get_user_meta($current_user->ID, '', true)['user_ID'][0];
+//                $userContact = getMobileOrEmailAndRealname($row['coach_id'], $row['user_mobile'], $row['user_email']);
+               foreach ($rows as $v){
+                   $coach_real_name = get_user_meta($v['coach_id'], 'user_real_name',true);
+                   $coach_real_name = isset($coach_real_name['real_name']) ? $coach_real_name['real_name'] : $v['user_login'];
+                   if($v['user_mobile']){
+                       $ali = new AliSms();
+                       $result = $ali->sendSms($v['user_mobile'], 14, array('coach'=>$coach_real_name, 'user_id' => $userID ,'cate' => $v['post_title']), '国际脑力运动');
+                   }else{
+                       $result = send_mail($v['user_email'], 12, ['coach' => $coach_real_name, 'userID' => $userID, 'cate' => $v['post_title']]);
+                   }
+               }
 //            $ali = new AliSms();
 //            $result = $ali->sendSms($row['user_mobile'], 14, array('coach'=>str_replace(', ', '', $row['display_name']), 'user_id' => $userID ,'cate' => $row['post_title']), '国际脑力运动');
             wp_send_json_success(['info' => __('解除教学关系成功', 'nlyd-student')]);

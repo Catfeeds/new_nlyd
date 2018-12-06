@@ -20,7 +20,6 @@ class Organize{
     }
 
     public function organizeList(){
-
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">主体列表</h1>
