@@ -1025,44 +1025,22 @@ class Student_Ajax
         $searchWhere = '';
         if($searchStr != ''){
             $searchJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=a.coach_id AND um.meta_key='user_real_name'";
-            $searchWhere = " ADN um.meta_value LIKE '%{$searchStr}%'";
-        }
-        //$user_id = 3;
-        if(!empty($_POST['user_id'])){
-            $user_id = $_POST['user_id'];
-            $wap[] = " a.user_id = {$user_id} ";
-            $wap[] = " a.apply_status = 2 ";
-        }
-        if(!empty($wap)){
-            $where = join(' and ',$wap);
+            $searchWhere = " AND um.meta_value LIKE '%{$searchStr}%'";
         }
 
-        if(!empty($_POST['user_id'])){
-
-            $sql = " select SQL_CALC_FOUND_ROWS a.id,a.user_id,a.coach_id,b.display_name,c.read,c.memory,c.compute
-                from {$wpdb->prefix}my_coach a 
-                left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                left join {$wpdb->prefix}coach_skill c on a.coach_id = c.coach_id 
+        if(empty($category_id)){
+            $category_id = $category[0]['ID'];
+        }
+        $where = "(a.read = {$category_id} or a.memory = {$category_id} or a.compute = {$category_id})";
+        $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
+                from {$wpdb->prefix}coach_skill a 
+                left join {$wpdb->prefix}users b on a.coach_id = b.ID  
                 {$searchJoin}
                 where {$where} 
-                {$searchWhere} 
-                order by a.major desc limit $start,$pageSize
+                {$searchWhere}
+                limit $start,$pageSize
                 ";
-        }else{
 
-            if(empty($category_id)){
-                $category_id = $category[0]['ID'];
-            }
-            $where = "a.read = {$category_id} or a.memory = {$category_id} or a.compute = {$category_id}";
-            $sql = "select SQL_CALC_FOUND_ROWS b.display_name,a.coach_id,a.read,a.memory,a.compute
-                    from {$wpdb->prefix}coach_skill a 
-                    left join {$wpdb->prefix}users b on a.coach_id = b.ID  
-                    {$searchJoin}
-                    where {$where} 
-                    {$searchWhere}
-                    limit $start,$pageSize
-                    ";
-        }
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         //print_r($rows);
@@ -1093,7 +1071,7 @@ class Student_Ajax
                 //判断是否为我的教练/主训
                 $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
                 //print_r($sql2);
-                $my_coach = $wpdb->get_vaar($sql2,ARRAY_A);
+                $my_coach = $wpdb->get_var($sql2,ARRAY_A);
                 // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
