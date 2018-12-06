@@ -1054,7 +1054,7 @@ class Student_Ajax
         if(!empty($rows)){
             foreach ($rows as $k=>$val){
                 //获取教练信息
-                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_head','user_gender','user_coach_level') and user_id = {$val['coach_id']} ";
+                $sql1 = "select meta_key,meta_value from {$wpdb->prefix}usermeta where meta_key in('user_ID','user_head','user_gender','user_coach_level','user_real_name') and user_id = {$val['coach_id']} ";
                 $meta = $wpdb->get_results($sql1,ARRAY_A);
                 //print_r($sql1);
                 //print_r($meta);
@@ -1062,16 +1062,16 @@ class Student_Ajax
                     $user_meta = array_column($meta,'meta_value','meta_key');
                     //print_r($user_meta);
                 }
-                $rows[$k]['display_name'] = preg_replace('/, /','',$val['display_name']);
+                $rows[$k]['display_name'] = !empty($user_meta['user_real_name']) ? unserialize($user_meta['user_real_name'])['real_name'] : '';
                 $rows[$k]['user_gender'] = !empty($user_meta['user_gender']) ? $user_meta['user_gender'] : '-';
                 $rows[$k]['user_ID'] = !empty($user_meta['user_ID']) ? $user_meta['user_ID'] : '-';
                 $rows[$k]['user_head'] = !empty($user_meta['user_head']) ? $user_meta['user_head'] : student_css_url.'image/nlyd.png';
                 $rows[$k]['user_coach_level'] = !empty($user_meta['user_coach_level']) ? $user_meta['user_coach_level'] : '高级教练';
 
                 //判断是否为我的教练/主训
-                $sql2 = "select id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id} and apply_status =2";
+                $sql2 = "select apply_status from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and coach_id = {$val['coach_id']} and category_id = {$category_id}";
                 //print_r($sql2);
-                $my_coach = $wpdb->get_var($sql2,ARRAY_A);
+                $my_coach = $wpdb->get_row($sql2,ARRAY_A);
                 // print_r($my_coach);
 
                 $rows[$k]['my_coach'] = 'n';
@@ -1080,12 +1080,14 @@ class Student_Ajax
                 $rows[$k]['category_id'] = $category_id;
 //                $rows[$k]['apply_status'] = $my_coach['apply_status'];
                 $rows[$k]['coach_url'] = home_url('/teams/coachDetail/coach_id/'.$val['coach_id']);
-
                 if(!empty($my_coach)){
-//                    if($my_coach['apply_status'] == 2){
+                    if($my_coach['apply_status'] == 2){
                         $rows[$k]['my_coach'] = 'y';
 //                        $rows[$k]['my_major_coach'] = $my_coach['major'] == 1 ? 'y' : 'n';
-//                    }
+                    }
+                    $rows[$k]['apply_status'] = $my_coach['apply_status'];
+                }else{
+                    $rows[$k]['apply_status'] = 0;
                 }
                 //每种分类对应的状态
                 $categoryArr = ['read', 'memory', 'compute'];
@@ -2153,6 +2155,13 @@ class Student_Ajax
                 $url = home_url('account');
             }
 
+            //添加推广人
+            if($_POST['referee_id'] > 0){
+                if(empty($user->referee_id)){
+                    $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$user->ID));
+                }
+            }
+
             wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
 
         }else{
@@ -2165,7 +2174,6 @@ class Student_Ajax
                 //print_r($result);die;
                 if($result){
                     unset($_SESSION['sms']);
-
                     $this->setUserCookie($result);
 
                     if(isset($_SESSION['redirect_url'])){
@@ -2173,6 +2181,11 @@ class Student_Ajax
                         unset($_SESSION['redirect_url']);
                     }else{
                         $url = home_url('account');
+                    }
+
+                    //添加推广人
+                    if($_POST['referee_id'] > 0){
+                        $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$result));
                     }
 
                     wp_send_json_success( array('info'=>__('登录成功', 'nlyd-student'),'url'=>$url));
@@ -2218,8 +2231,12 @@ class Student_Ajax
         if($result){
             unset($_SESSION['sms']);
             unset($_SESSION['smtp']);
-
             $this->setUserCookie($result);
+
+            //添加推广人
+            if($_POST['referee_id'] > 0){
+                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$result));
+            }
 
             wp_send_json_success(array('info'=>__('注册成功', 'nlyd-student'),'url'=>home_url('account')));
         }else{
@@ -4298,6 +4315,69 @@ class Student_Ajax
 
     }
 
+    /**
+     * 用户推广二维码生成
+     *
+     */
+    public function qrcode(){
+
+        global $current_user;
+        $upload_dir = wp_upload_dir();
+        $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
+        if(!empty($spread_qrcode)){
+            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+        }else{
+
+            include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
+            $value=home_url('/logins/index/referee_id/'.$current_user->ID);
+            $dir = '/referee/'.$current_user->ID.'/';
+            $path = $upload_dir['basedir'].$dir;
+            if(!file_exists($path)){
+                mkdir($path,0755,true);
+            }
+            $filename = date('YmdHis').'_'.rand(1000,9999).'.jpg';          //定义图片名字及格式
+            $qrcode_path = $path.$filename;
+
+            $errorCorrectionLevel = "L"; //容错级别
+            $matrixPointSize = "6"; //生成图片大小
+            QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
+            //生成带logo的二维码
+            $logo = student_css_url.'image\logo1.jpg';
+            //die;
+            if ($logo !== FALSE) {
+                $QR = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
+                $logo = imagecreatefromstring ( file_get_contents ( $logo ) );
+                $QR_width = imagesx ( $QR );
+                $QR_height = imagesy ( $QR );
+                $logo_width = imagesx ( $logo );
+                $logo_height = imagesy ( $logo );
+                $logo_qr_width = $QR_width / 5;
+                $scale = $logo_width / $logo_qr_width;
+                $logo_qr_height = $logo_height / $scale;
+                $from_width = ($QR_width - $logo_qr_width) / 2;
+                imagecopyresampled ( $QR, $logo, $from_width, $from_width, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height );
+            }
+            imagejpeg ( $QR, $qrcode_path );//带Logo二维码的文件名
+            //die;
+            $back = student_css_url.'image\test.jpg';
+            if ($back !== FALSE) {
+                $back_ = imagecreatefromstring ( file_get_contents ( $back ) );
+                $qrcode = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
+                // $back_width = imagesx ( $back_ );
+                //$back_height = imagesy ( $back_ );
+                $qrcode_width = imagesx ( $qrcode );
+                $qrcode_height = imagesy ( $qrcode );
+                /*$logo_qr_width = $QR_width / 5;
+                $scale = $logo_width / $logo_qr_width;
+                $logo_qr_height = $logo_height / $scale;
+                $from_width = ($QR_width - $logo_qr_width) / 2;*/
+                imagecopyresampled ( $back_, $qrcode, 95, 195, 0, 0, $qrcode_width, $qrcode_height, $qrcode_width, $qrcode_height );
+            }
+            imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名
+            update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
+            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+        }
+    }
 
 
     /*
