@@ -52,7 +52,7 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
+          `user_id` int(20) DEFAULT NULL COMMENT '主体用户id',
           `role_id` varchar(255) DEFAULT NULL COMMENT '权限id合集 以,为分割符',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -762,7 +762,7 @@ function the_table_install () {
         dbDelta($sql);
     }
 
-    $table_name = $wpdb->prefix . "course";  //乐学乐分享课程
+    $table_name = $wpdb->prefix . "course";  //课程
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
         $sql = "CREATE TABLE `{$table_name}` (
