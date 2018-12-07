@@ -14,9 +14,9 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
-                            <li data-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
-                            <li data-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
+                            <li class="layui-this" lay-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
+                            <li lay-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
+                            <li lay-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
@@ -287,24 +287,30 @@ jQuery(function($) {
             });
         }
         var isClick={}
-        pagation($('.layui-this').attr('data-id'),1)
-        var layid = location.hash.replace(/^#matchList=/, '');
-        if(layid.length>0){
-            $('.layui-tab-title li').each(function(){
-                var _this=$(this)
-                var lay_id=_this.attr('data-id');
-                if(lay_id==layid){
-                    setTimeout(function() {
-                        _this.click()
-                    }, 200);
-                    return false
-                }
-            })
-        }
+        
+        var layid = location.hash.replace(/^#tabs=/, '');
+        // if(layid.length>0){
+        //     $('.layui-tab-title li').each(function(){
+        //         var _this=$(this)
+        //         var lay_id=_this.attr('data-id');
+        //         if(lay_id==layid){
+        //             setTimeout(function() {
+        //                 _this.click()
+        //             }, 200);
+        //             return false
+        //         }
+        //     })
+        // }
+        element.tabChange('tabs', layid);
+        pagation($('.layui-this').attr('lay-id'),1)
+        var lefts=$('.layui-this').position().left;
+        $('.nl-transform').css({
+            'transform':'translate3d('+lefts+'px, -5px, 0px)'
+        })
         element.on('tab(tabs)', function(){//tabs
-            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
-            var id=$(this).attr('data-id')
+            var id=$(this).attr('lay-id')
+            location.hash = 'tabs='+ id;
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, -5px, 0px)'
             })
