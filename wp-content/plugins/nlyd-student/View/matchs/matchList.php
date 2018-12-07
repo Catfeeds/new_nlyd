@@ -282,13 +282,13 @@ jQuery(function($) {
             });
         }
         var isClick={}
-        pagation($('.layui-this').attr('data-id'),1)
+        pagation($('.layui-this').attr('lay-id'),1)
           //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
         var layid = location.hash.replace(/^#matchList=/, '');
         if(layid.length>0){
             $('.layui-tab-title li').each(function(){
                 var _this=$(this)
-                var lay_id=_this.attr('data-id');
+                var lay_id=_this.attr('lay-id');
                 if(lay_id==layid){
                     setTimeout(function() {
                         _this.click()
@@ -297,11 +297,16 @@ jQuery(function($) {
                 }
             })
         }
-        
-        element.on('tab(tabs)', function(){//tabs
-            location.hash = 'matchList='+ $(this).attr('data-id');
+        element.tabChange('matchList', layid);
+        pagation($('.layui-this').attr('lay-id'),1)
+        var lefts=$('.layui-this').position().left;
+        $('.nl-transform').css({
+            'transform':'translate3d('+lefts+'px, -5px, 0px)'
+        })
+        element.on('tab(matchList)', function(){//matchList
+            location.hash = 'matchList='+ $(this).attr('lay-id');
             var left=$(this).position().left;
-            var id=$(this).attr('data-id')
+            var id=$(this).attr('lay-id')
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, -5px, 0px)'
             })
