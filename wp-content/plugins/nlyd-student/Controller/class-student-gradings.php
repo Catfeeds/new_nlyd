@@ -39,20 +39,25 @@ class Student_Gradings extends Student_Home
 
         if(!empty($rows)){
             $new_time = get_time('mysql');
+            $entry_is_true = 0;
+            $match_is_true = 0;
             foreach ($rows as $v){
 
                 if($v['match_switch'] == 'ON') {
                     if($new_time < $v['entry_end_time']){
                         //报名中
                         $save['status'] = 1;
+                        $entry_is_true += 1;
                     }
                     elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['start_time']){
                         //等待开赛
                         $save['status'] = -2;
+                        $match_is_true += 1;
                     }
                     elseif ($v['start_time'] <= $new_time && $new_time < $v['end_time']){
                         //进行中
                         $save['status'] = 2;
+                        $match_is_true += 1;
                     }else{
                         //已结束
                         $save['status'] = -3;
@@ -62,12 +67,23 @@ class Student_Gradings extends Student_Home
             }
         }
 
+        if($entry_is_true>0){
+            $anchor = 1;
+        }elseif ($match_is_true>0){
+            $anchor = 2;
+        }else{
+            $anchor = 3;
+        }
+
         //获取最近一场考级
         $start_time = $wpdb->get_var("select start_time from {$wpdb->prefix}grading_meta where status = -2 order by start_time asc ");
 
         if(!empty($start_time)){
             $data['new_grading_time'] = strtotime($start_time)-get_time();
         }
+        $data['entry_is_true'] = $entry_is_true;
+        $data['match_is_true'] = $match_is_true;
+        $data['anchor'] = $anchor;
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);

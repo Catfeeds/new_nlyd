@@ -246,6 +246,11 @@ class Student_Weixin
                 $url = home_url('account');
             }
 
+            //添加推广人
+            if($_POST['referee_id'] > 0){
+                $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$user_id));
+            }
+
             wp_redirect($url);//跳转到用户中心
             exit;
         }

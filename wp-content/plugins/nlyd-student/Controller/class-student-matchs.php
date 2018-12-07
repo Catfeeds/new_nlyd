@@ -85,33 +85,51 @@ class Student_Matchs extends Student_Home
 
         if(!empty($rows)){
             $new_time = get_time('mysql');
+            $entry_is_true = 0;
+            $match_is_true = 0;
             foreach ($rows as $v){
 
                 if($v['match_switch'] == 'ON') {
                     if($new_time < $v['entry_end_time']){
                         //报名中
                         $save['match_status'] = 1;
+                        $entry_is_true += 1;
+
                     }
                     elseif ($v['entry_end_time'] <= $new_time && $new_time < $v['match_start_time']){
                         //等待开赛
                         $save['match_status'] = -2;
+                        $match_is_true += 1;
+
                     }
                     elseif ($v['match_start_time'] <= $new_time && $new_time < $v['match_end_time']){
                         //进行中
                         $save['match_status'] = 2;
+                        $match_is_true += 1;
+
                     }else{
                         //已结束
                         $save['match_status'] = -3;
+
                     }
                 }
                 $a = $wpdb->update($wpdb->prefix.'match_meta_new',$save,array('id'=>$v['id'],'match_id'=>$v['match_id']));
             }
         }
 
+        if($entry_is_true>0){
+            $anchor = 1;
+        }elseif ($match_is_true>0){
+            $anchor = 2;
+        }else{
+            $anchor = 3;
+        }
+
+
         $row = $wpdb->get_row('SELECT ID FROM '.$wpdb->prefix.'posts WHERE post_status="publish" AND post_type="match"');
 
         $view = student_view_path.CONTROLLER.'/matchList.php';
-        load_view_template($view,array('row' => $row));
+        load_view_template($view,array('row' => $row,'entry_is_true'=>$entry_is_true,'match_is_true'=>$match_is_true,'anchor'=>$anchor));
     }
 
     /**

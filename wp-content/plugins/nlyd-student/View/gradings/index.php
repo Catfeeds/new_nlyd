@@ -14,27 +14,29 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
-                            <li data-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
-                            <li data-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
+                            <li class="layui-this" lay-id="1">
+                                <?=__('考级报名中', 'nlyd-student')?>
+                                <?php
+                                if($entry_is_true > 0){
+                                    echo '('.$entry_is_true.')';
+                                }
+                                ?>
+                            </li>
+                            <li lay-id="2">
+                                <?=__('考级进行中', 'nlyd-student')?>
+                                <?php
+                                if($match_is_true > 0){
+                                    echo '('.$match_is_true.')';
+                                }
+                                ?>
+                            </li>
+                            <li lay-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 近期考级测评 -->
                             <div class="layui-tab-item layui-show">
                                 <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
-                                <!-- <a href="<?=home_url('gradings/grading_szzb/type/1')?>">随机数字记忆</a><br>
-                                <a href="<?=home_url('gradings/grading_szzb/type/2')?>">随机字母记忆</a><br>
-                                <a href="<?=home_url('gradings/grading_zwcy/')?>">随机中文词语记忆</a><br>
-                                <a href="<?=home_url('gradings/matching_PI/')?>">圆周率默写</a><br>
-                                <a href="<?=home_url('gradings/grading_rmxx/')?>">人脉信息记忆</a><br>
-                                <a href="<?=home_url('gradings/grading_voice/')?>">语音听记数字记忆</a><br>
-                                <a href="<?=home_url('gradings/matching_silent/')?>">国学经典默写</a><br>
-
-                                <a href="<?=home_url('gradings/matching_zxss/')?>">正向速算</a><br>
-                                <a href="<?=home_url('gradings/matching_nxss/')?>">逆向速算</a><br>
-                                <a href="<?=home_url('gradings/ready_wzsd/')?>">文章速读</a><br> -->
-                               
                                 </ul>
                             </div>
                             <!-- 考级中 -->
@@ -287,24 +289,21 @@ jQuery(function($) {
             });
         }
         var isClick={}
-        pagation($('.layui-this').attr('data-id'),1)
-        var layid = location.hash.replace(/^#matchList=/, '');
-        if(layid.length>0){
-            $('.layui-tab-title li').each(function(){
-                var _this=$(this)
-                var lay_id=_this.attr('data-id');
-                if(lay_id==layid){
-                    setTimeout(function() {
-                        _this.click()
-                    }, 200);
-                    return false
-                }
-            })
+        if(location.hash.replace(/^#tabs=/, '').length==0){
+            //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+            location.hash = 'tabs='+ <?=$anchor?>;
         }
+        var layid = location.hash.replace(/^#tabs=/, '');
+        element.tabChange('tabs', layid);
+        pagation($('.layui-this').attr('lay-id'),1)
+        var lefts=$('.layui-this').position().left;
+        $('.nl-transform').css({
+            'transform':'translate3d('+lefts+'px, -5px, 0px)'
+        })
         element.on('tab(tabs)', function(){//tabs
-            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left;
-            var id=$(this).attr('data-id')
+            var id=$(this).attr('lay-id')
+            location.hash = 'tabs='+ id;
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, -5px, 0px)'
             })
