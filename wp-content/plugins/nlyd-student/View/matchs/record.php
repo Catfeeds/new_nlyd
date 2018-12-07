@@ -31,9 +31,9 @@
                    
                     <?php if($_GET['type'] != 'project'): ?>
                     <ul style="margin-left: 0" class="layui-tab-title">
-                        <li class="layui-this" data-id="1"><div><?=__('单项排名', 'nlyd-student')?></div></li>
-                        <li data-id="2"><div><?=__('分类排名', 'nlyd-student')?></div></li>
-                        <li data-id="3"><div><?=__('总排名', 'nlyd-student')?></div></li>
+                        <li class="layui-this" lay-id="1"><div><?=__('单项排名', 'nlyd-student')?></div></li>
+                        <li lay-id="2"><div><?=__('分类排名', 'nlyd-student')?></div></li>
+                        <li lay-id="3"><div><?=__('总排名', 'nlyd-student')?></div></li>
                         <div class="nl-transform"><div><?=__('单项排名', 'nlyd-student')?></div></div>
                     </ul>
                     <?php endif;?>
@@ -232,24 +232,43 @@ jQuery(function($) {
         var flow = layui.flow;//流加载
         var lastItem={lastItem_1:{},lastItem_2:{},lastItem_3:{}};//最后一条数据
         var isClick={}
-        var layid = location.hash.replace(/^#matchList=/, '');
-        if(layid.length>0){
-            $('.layui-tab-title li').each(function(){
-                var _this=$(this)
-                var lay_id=_this.attr('data-id');
-                if(lay_id==layid){
-                    setTimeout(function() {
-                        _this.click()
-                    }, 200);
-                    return false
-                }
-            })
+        var layid = location.hash.replace(/^#tabs=/, '');
+        // if(layid.length>0){
+        //     $('.layui-tab-title li').each(function(){
+        //         var _this=$(this)
+        //         var lay_id=_this.attr('lay-id');
+        //         if(lay_id==layid){
+        //             setTimeout(function() {
+        //                 _this.click()
+        //             }, 200);
+        //             return false
+        //         }
+        //     })
+        // }
+        
+        element.tabChange('tabs', layid);
+        var _data_id=$('.layui-this').attr('lay-id')
+        pagation(_data_id,1)
+        var lefts=$('.layui-this').position().left+parseInt($('.layui-this').css('marginLeft'));
+        var _html=$('.layui-this').html();
+        $('.nl-transform').css({
+            'transform':'translate3d('+lefts+'px, 0px, 0px)'
+        }).html(_html)
+        
+        var _datas={data_id:_data_id,myPage:1,category_id:null,project_id:null,age_group:null,rank_type:'danxiang'};
+        if(_data_id==2){//分类
+            _datas['category_id']=$('.one_'+_data_id+' .classify-active').attr('data-post-id');
+            _datas['age_group']=$("#show-type").attr('data-group');
+        }else if(_data_id==1){//单项
+            _datas['project_id']=$('.one_'+_data_id+' .classify-active').attr('data-post-id');
+            _datas['age_group']='';
         }
+         pagation(_datas)
         element.on('tab(tabs)', function(){//tabs
-            location.hash = 'matchList='+ $(this).attr('data-id');
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
             var html=$(this).html();
-            var data_id=$(this).attr('data-id')
+            var data_id=$(this).attr('lay-id')
+            location.hash = 'tabs='+ data_id;
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             }).html(html)
@@ -266,7 +285,7 @@ jQuery(function($) {
             }
         })
         
-        pagation = function(arg) {//总排名，个人成绩
+        function pagation(arg) {//总排名，个人成绩
             flow.load({
                     elem: '#flow_'+arg['data_id'] //流加载容器
                     // ,scrollElem:'#flow_'+arg['data_id']
@@ -491,7 +510,7 @@ jQuery(function($) {
             })
         }
 
-        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group'),rank_type:"danxiang"})
+        // pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:null,project_id:$('.one_1 .classify-active').attr('data-post-id'),age_group:$('#show_text').attr('data-group'),rank_type:"danxiang"})
         $('body').click(function(e){
             if(!$(e.target).hasClass('show-type')&&$(e.target).parents('.show-type').length<=0){
                 $('.ul-select').removeClass('ul-select-show')
@@ -506,22 +525,22 @@ jQuery(function($) {
                 if(_this.parents('.btn-wrapper').hasClass('one_1')){//单项排名
                     var id=_this.attr('data-post-id');
                     $('#flow_1').empty();
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group'),rank_type:"danxiang"})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:null,project_id:id,age_group:$('#show_text').attr('data-group'),rank_type:"danxiang"})
                 }else if(_this.parents('.btn-wrapper').hasClass('one_3')){//总排名
                     var id=_this.attr('data-post-id');
                     $('#flow_3').empty();
                     if(id=='0'){//个人排名
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"danxiang"})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"danxiang"})
                     }else if(id=="1"){//战队排名
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"team"})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"team"})
                     }else if(id=='2'){//奖金明细
                         $('.power').addClass('active')
-                        pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"money"})
+                        pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:null,project_id:null,age_group:null,rank_type:"money"})
                     }
                 }else{//分类排名
                     var id=_this.attr('data-post-id');
                     $('#flow_2').empty();
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:id,project_id:null,age_group:null,rank_type:"danxiang"})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:id,project_id:null,age_group:null,rank_type:"danxiang"})
                 }
             }
         })
@@ -637,7 +656,7 @@ jQuery(function($) {
                     var data_group=_this.attr('data-group')
                     $('#flow_2').empty();
                     $('#show_text').text(thisText).attr('data-group',data_group)
-                    pagation({data_id:$('.layui-tab-title .layui-this').attr('data-id'),myPage:1,category_id:$('.one_2 .classify-active').attr('data-post-id'),project_id:null,age_group:data_group,rank_type:"danxiang"})
+                    pagation({data_id:$('.layui-tab-title .layui-this').attr('lay-id'),myPage:1,category_id:$('.one_2 .classify-active').attr('data-post-id'),project_id:null,age_group:data_group,rank_type:"danxiang"})
                 }
             }
         })

@@ -10,23 +10,25 @@
         <?php if($row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
                 <div class="layui-row nl-border nl-content">
-                    <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
+                    <div class="layui-tab layui-tab-brief" lay-filter="matchList" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" data-id="1" lay-id="1"><?=__('报名中', 'nlyd-student')?>
+                            <li class="layui-this" lay-id="1">
+                                <?=__('报名中', 'nlyd-student')?>
                                 <?php
-                                    if($entry_is_true > 0){
-                                        echo '('.$entry_is_true.')';
-                                    }
+                                if($entry_is_true > 0){
+                                    echo '('.$entry_is_true.')';
+                                }
                                 ?>
                             </li>
-                            <li data-id="2" lay-id="2"><?=__('比赛中', 'nlyd-student')?>
+                            <li lay-id="2">
+                                <?=__('比赛中', 'nlyd-student')?>
                                 <?php
                                 if($match_is_true > 0){
                                     echo '('.$match_is_true.')';
                                 }
                                 ?>
                             </li>
-                            <li data-id="3" lay-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
+                            <li lay-id="3"><?=__('往期比赛', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"><?=__('近期比赛', 'nlyd-student')?></div>
                         </ul>
                         <div class="layui-tab-content width-margin width-margin-pc">
