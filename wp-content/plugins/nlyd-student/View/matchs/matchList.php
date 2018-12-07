@@ -282,21 +282,11 @@ jQuery(function($) {
             });
         }
         var isClick={}
-        pagation($('.layui-this').attr('lay-id'),1)
+       
           //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+        location.hash = 'matchList='+ 1;
         var layid = location.hash.replace(/^#matchList=/, '');
-        if(layid.length>0){
-            $('.layui-tab-title li').each(function(){
-                var _this=$(this)
-                var lay_id=_this.attr('lay-id');
-                if(lay_id==layid){
-                    setTimeout(function() {
-                        _this.click()
-                    }, 200);
-                    return false
-                }
-            })
-        }
+     
         element.tabChange('matchList', layid);
         pagation($('.layui-this').attr('lay-id'),1)
         var lefts=$('.layui-this').position().left;
