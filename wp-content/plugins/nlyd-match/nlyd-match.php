@@ -1751,7 +1751,7 @@ if(!class_exists('MatchController')){
                     admin_url('edit.php?post_type=grading&page=grading-studentScore'),
                     admin_url('edit.php?post_type=grading&page=grading-trainLogScore'),
                     admin_url('admin.php?page=fission-organize-detail'),
-                    admin_url('admin.php?page=fission-add-organize'),
+//                    admin_url('admin.php?page=fission-add-organize'),
                 ],
             ]);
         }

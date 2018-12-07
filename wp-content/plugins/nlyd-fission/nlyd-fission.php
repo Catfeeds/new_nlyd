@@ -28,6 +28,8 @@ if(!class_exists('FissionController')){
 
             //引入主体组织文件
             require_once fission_path.'Controller/class-organize.php';
+            //引入aiax操作文件
+            require_once fission_path.'Controller/class-fission-ajax.php';
         }
 
         public function add_submenu(){
