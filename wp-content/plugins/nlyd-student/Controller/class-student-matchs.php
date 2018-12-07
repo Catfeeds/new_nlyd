@@ -117,10 +117,19 @@ class Student_Matchs extends Student_Home
             }
         }
 
+        if($entry_is_true>0){
+            $anchor = 1;
+        }elseif ($match_is_true>0){
+            $anchor = 2;
+        }else{
+            $anchor = 3;
+        }
+
+
         $row = $wpdb->get_row('SELECT ID FROM '.$wpdb->prefix.'posts WHERE post_status="publish" AND post_type="match"');
 
         $view = student_view_path.CONTROLLER.'/matchList.php';
-        load_view_template($view,array('row' => $row,'entry_is_true'=>$entry_is_true,'match_is_true'=>$match_is_true));
+        load_view_template($view,array('row' => $row,'entry_is_true'=>$entry_is_true,'match_is_true'=>$match_is_true,'anchor'=>$anchor));
     }
 
     /**

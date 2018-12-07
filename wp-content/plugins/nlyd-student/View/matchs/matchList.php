@@ -282,9 +282,10 @@ jQuery(function($) {
             });
         }
         var isClick={}
-       
-          //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
-        location.hash = 'matchList='+ 1;
+       if(location.hash.replace(/^#matchList=/, '').length==0){
+           //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+           location.hash = 'matchList='+ <?=$anchor?>;
+       }
         var layid = location.hash.replace(/^#matchList=/, '');
      
         element.tabChange('matchList', layid);

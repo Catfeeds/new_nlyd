@@ -14,8 +14,22 @@
                 <div class="layui-row nl-border nl-content">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabs" style="margin:0">
                         <ul style="margin-left:0;padding:0" class="mui-bar mui-bar-nav layui-tab-title">
-                            <li class="layui-this" lay-id="1"><?=__('考级报名中', 'nlyd-student')?></li>
-                            <li lay-id="2"><?=__('考级进行中', 'nlyd-student')?></li>
+                            <li class="layui-this" lay-id="1">
+                                <?=__('考级报名中', 'nlyd-student')?>
+                                <?php
+                                if($entry_is_true > 0){
+                                    echo '('.$entry_is_true.')';
+                                }
+                                ?>
+                            </li>
+                            <li lay-id="2">
+                                <?=__('考级进行中', 'nlyd-student')?>
+                                <?php
+                                if($match_is_true > 0){
+                                    echo '('.$match_is_true.')';
+                                }
+                                ?>
+                            </li>
                             <li lay-id="3"><?=__('往期考级测评', 'nlyd-student')?></li>
                             <div class="nl-transform" data-y="-5"></div>
                         </ul>
@@ -275,20 +289,11 @@ jQuery(function($) {
             });
         }
         var isClick={}
-        
+        if(location.hash.replace(/^#tabs=/, '').length==0){
+            //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
+            location.hash = 'tabs='+ <?=$anchor?>;
+        }
         var layid = location.hash.replace(/^#tabs=/, '');
-        // if(layid.length>0){
-        //     $('.layui-tab-title li').each(function(){
-        //         var _this=$(this)
-        //         var lay_id=_this.attr('data-id');
-        //         if(lay_id==layid){
-        //             setTimeout(function() {
-        //                 _this.click()
-        //             }, 200);
-        //             return false
-        //         }
-        //     })
-        // }
         element.tabChange('tabs', layid);
         pagation($('.layui-this').attr('lay-id'),1)
         var lefts=$('.layui-this').position().left;
