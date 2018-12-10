@@ -20,7 +20,7 @@ if(!class_exists('MatchController')){
         {
             define( 'leo_match_path', plugin_dir_path( __FILE__ ) );
             define( 'leo_match_url', plugins_url('',__FILE__ ) );
-            define( 'leo_match_version','V2.1.3.2' );//样式版本
+            define( 'leo_match_version','V2.1.3.3' );//样式版本
 
             define( 'match_css_url', leo_match_url.'/Public/css/' );
             define( 'match_js_url', leo_match_url.'/Public/js/' );
@@ -1011,8 +1011,10 @@ if(!class_exists('MatchController')){
 
                     $this->save_problem($post_ID,$_POST['problem']);
                 }
-            }elseif ($post_data->post_type == 'grading'){
+            }
+            elseif ($post_data->post_type == 'grading'){
                 if(!empty($_POST['grading'])){
+                    //var_dump($_POST);die;
                     if(!empty($_POST['match_switch']) && $_POST['match_switch'] == 'ON'){
 
                         update_post_meta($post_ID,'default_match_switch',$_POST['match_switch']);
@@ -1021,6 +1023,7 @@ if(!class_exists('MatchController')){
                     }
                     $insert = $_POST['grading'];
                     $insert['grading_id'] = $post_ID;
+                    $insert['created_person'] = $current_user->ID;
                     $insert['created_time'] = get_time('mysql');
                     $wpdb->delete($wpdb->prefix.'grading_meta',array('grading_id'=>$post_ID));
                     //print_r($insert);die;

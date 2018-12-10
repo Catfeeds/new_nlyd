@@ -842,6 +842,17 @@ class Match
         $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
     ?>
         <div class="layui-form-item">
+            <label class="layui-form-label">比赛场景</label>
+            <div class="layui-input-block">
+                <select name="match[match_scene]" lay-search="">
+                    <option value="">请选择</option>
+                    <option value="1" <?=$this->meta['match_scene'] == 1 ? 'selected' : '';?> >正式比赛</option>
+                    <option value="2" <?=$this->meta['match_scene'] == 1 ? 'selected' : '';?> >模拟比赛</option>
+                </select>
+                <input placeholder="比赛口号" class="layui-input" value="<?=$this->meta['match_scene'];?>" type="text" name="match[match_scene]">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">比赛口号</label>
             <div class="layui-input-block">
             <input placeholder="比赛口号" class="layui-input" value="<?=$this->meta['match_slogan'];?>" type="text" name="match[match_slogan]">
@@ -1199,6 +1210,16 @@ class Match
 
     ?>
         <div class="layui-form-item">
+            <label class="layui-form-label">考级场景</label>
+            <div class="layui-input-block">
+                <select name="grading[scene]" lay-search="">
+                    <option value="">请选择</option>
+                    <option value="1" <?=$this->grading['scene'] == 1 ? 'selected' : '';?> >正式考级</option>
+                    <option value="2" <?=$this->grading['scene'] == 2 ? 'selected' : '';?> >模拟考级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">考级类别</label>
             <div class="layui-input-block">
                 <?php if(!empty($rows)){ ?>
@@ -1248,9 +1269,16 @@ class Match
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">考级须知</label>
+            <label class="layui-form-label">责任人</label>
             <div class="layui-input-block">
-                <input placeholder="https://" class="layui-input" value="<?=$this->grading['grading_notice_url'];?>" type="text" name="grading[grading_notice_url]">
+                <?php
+                    if(!empty($this->grading['person_liable'])){
+                        $user_real_name = get_user_meta($this->grading['person_liable'],'user_real_name')[0];
+                    }
+                ?>
+                <select class="js-data-select-ajax" name="grading[person_liable]" style="width: 100%" data-action="admin_get_user_list" data-type="user" data-placeholder="输入用户名/手机/邮箱/昵称" >
+                    <?php if(!empty($user_real_name)):?><option value="<?=$this->grading['person_liable']?>" selected="selected"><?=$user_real_name['real_name']?></option><?php endif;?>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
