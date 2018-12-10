@@ -91,13 +91,21 @@ jQuery(document).ready(function($) {
       //日期时间选择器
       $('.date-picker').each(function(){
           var id=$(this).attr('id');
+          var format='yyyy-MM-dd HH:mm';
+          var type='datetime';
+          if($(this).hasClass('y-m-d')){
+              format='yyyy-MM-dd';
+              type='date'
+          }
+
             laydate.render({
                 elem: '#'+id
-                ,type: 'datetime'
-                ,format: 'yyyy-MM-dd HH:mm'
+                ,type: type
+                ,format: format
             });
       })
     })
+
     $('.remove_more').live('click',function(event){//删除
         var id = $(this).attr('data-id');
         $.post(ajaxurl,{action:'remove_match_more',id:id},function (data) {

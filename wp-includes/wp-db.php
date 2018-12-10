@@ -2091,7 +2091,7 @@ class wpdb {
 
 		$this->check_current_query = false;
 
-		/*if($table == 'wp_user_grade_logs'){
+		/*if($table == 'wp_match_meta_new'){
             print_r($this->prepare( $sql, $values ));die;
         }*/
 		return $this->query( $this->prepare( $sql, $values ) );
