@@ -22,11 +22,19 @@ class Organize{
 
             $role = 'add_organize_type';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'organize_power';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'add_organize_power';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','主体详情','主体详情','organize_detail','fission-organize-detail',array($this,'organizeDetails'));
-        add_submenu_page('fission','新增主体','新增主体','add_organize','fission-add-organize',array($this,'addOrganize'));
         add_submenu_page('fission','主体类型','主体类型','organize_type','fission-organize-type',array($this,'organizeType'));
+        add_submenu_page('fission','主体权限','主体权限','organize_power','fission-organize-power',array($this,'organizePower'));
+        add_submenu_page('fission','新增主体','新增主体','add_organize','fission-add-organize',array($this,'addOrganize'));
         add_submenu_page('fission','新增主体类型','新增主体类型','add_organize_type','fission-add-organize-type',array($this,'addOrganizeType'));
+        add_submenu_page('fission','新增主体权限','新增主体权限','add_organize_power','fission-add-organize-power',array($this,'addOrganizePower'));
     }
 
     /**
@@ -35,7 +43,7 @@ class Organize{
     public function organizeList(){
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
-        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 1;
+        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $page < 1 && $page = 1;
@@ -51,7 +59,7 @@ class Organize{
             $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
             $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%')";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
                 WHEN -1 THEN '正在审核' 
@@ -59,6 +67,7 @@ class Organize{
                 END AS user_status_name 
                 FROM {$wpdb->prefix}zone_meta AS zm 
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=zm.user_id 
+                LEFT JOIN `{$wpdb->prefix}zone_type` AS zt ON zt.id=zm.type_id 
                 {$leftJoin} 
                 {$where} 
                 {$joinWhere} 
@@ -76,11 +85,9 @@ class Organize{
         //各种数量
         $numSql = "SELECT count(id) FROM {$wpdb->prefix}zone_meta";
         $all_num = $wpdb->get_var($numSql);
-        $fzx_num = $wpdb->get_var($numSql." WHERE type_id=1");
-        $sq_num = $wpdb->get_var($numSql." WHERE type_id=2");
-        $kjzx_num = $wpdb->get_var($numSql." WHERE type_id=3");
-        $jg_num = $wpdb->get_var($numSql." WHERE type_id=4");
-
+        //类型列表
+        $typeList = $wpdb->get_results("SELECT id,zone_type_name FROM {$wpdb->prefix}zone_type", ARRAY_A);
+        $typeListCount = count($typeList)-1;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">主体列表</h1>
@@ -92,10 +99,15 @@ class Organize{
             <h2 class="screen-reader-text">过滤主体列表</h2>
             <ul class="subsubsub">
                 <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype=0')?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype=1')?>" <?=$type===1?'class="current"':''?> aria-current="page">分中心<span class="count">（<?=$fzx_num?>）</span></a> |</li>
-                <li class="administrator"><a href="<?=admin_url('admin.php?page=fission&ctype=2')?>" <?=$type===2?'class="current"':''?>>赛区<span class="count">（<?=$sq_num?>）</span></a> |</li>
-                <li class="editor"><a href="<?=admin_url('admin.php?page=fission&ctype=3')?>" <?=$type===3?'class="current"':''?>>考级中心<span class="count">（<?=$kjzx_num?>）</span></a> |</li>
-                <li class="subscriber"><a href="<?=admin_url('admin.php?page=fission&ctype=4')?>" <?=$type===4?'class="current"':''?>>机构<span class="count">（<?=$jg_num?>）</span></a></li>
+                <?php
+                foreach ($typeList as $tlk => $tlv){
+
+                    $typeNum = $wpdb->get_var($numSql." WHERE type_id='{$tlv['id']}'");
+                ?>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id'])?>" <?=$type===$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
+                <?php
+                }
+                ?>
             </ul>
 
             <p class="search-box">
@@ -163,7 +175,7 @@ class Organize{
                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                        </td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
-                       <td class="zone_type column-zone_type" data-colname="主体类型"><?=$this->getZoneTypeNameByType($row['type_id'])?></td>
+                       <td class="zone_type column-zone_type" data-colname="主体类型"><?=$row['zone_type_name']?></td>
                        <td class="zone_status column-zone_status" data-colname="状态"><?=$row['user_status_name']?></td>
                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
                        <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
@@ -272,32 +284,10 @@ class Organize{
                     </tbody>
                 </table>
 
-                <p class="submit"><input type="submit" class="button button-primary" value="添加主体类型"></p>
+                <p class="submit"><input type="submit" class="button button-primary" value="提交"></p>
             </form>
         </div>
         <?php
-    }
-    /**
-     * 主体类型
-     */
-    public function getZoneTypeNameByType($type){
-        switch ($type){
-            case 1:
-                $name = '分中心';
-                break;
-            case 2:
-                $name = '赛区';
-                break;
-            case 3:
-                $name = '考级中心';
-                break;
-            case 4:
-                $name = '机构';
-                break;
-            default :
-                $name = '';
-        }
-        return $name;
     }
 
     /**
@@ -306,8 +296,6 @@ class Organize{
     public function organizeType(){
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
-        $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 1;
-        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $page < 1 && $page = 1;
         $pageSize = 20;
@@ -338,12 +326,6 @@ class Organize{
             <a href="<?=admin_url('admin.php?page=fission-add-organize-type')?>" class="page-title-action">添加主体类型</a>
 
             <hr class="wp-header-end">
-
-            <p class="search-box">
-                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="负责人姓名/手机" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission&ctype='.$type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
-            </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
@@ -439,6 +421,7 @@ class Organize{
      * 新增主体
      */
     public function addOrganize(){
+        global $wpdb;
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -450,7 +433,6 @@ class Organize{
             if($user_id < 0) $error_msg = '请选择升级账号';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
-            global $wpdb;
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -465,6 +447,8 @@ class Organize{
                 else $error_msg = '添加失败!';
             }
         }
+        //类型列表
+        $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加主体</h1>
@@ -491,10 +475,9 @@ class Organize{
                         <th scope="row"><label for="zone_type">主体类型</label></th>
                         <td>
                             <select name="zone_type" id="zone_type">
-                                <option value="1">分中心</option>
-                                <option value="2">赛区</option>
-                                <option value="3">考级中心</option>
-                                <option value="4">机构</option>
+                                <?php foreach ($typeList as $tlv){ ?>
+                                    <option value="<?=$tlv['id']?>"><?=$tlv['zone_type_name']?></option>
+                                <?php } ?>
                             </select>
                         </td>
                     </tr>
@@ -521,8 +504,185 @@ class Organize{
                 </table>
 
 
-                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="添加主体"></p>
+                <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交"></p>
             </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * 新增主体权限
+     */
+    public function addOrganizePower(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        global $wpdb;
+        if(is_post()){
+            $success_msg = '';
+            $error_msg = '';
+            $role_name = isset($_POST['role_name']) ? trim($_POST['role_name']) : '';
+
+            if($role_name == '') $error_msg = '请填写类型名称';
+
+            if($error_msg == ''){
+                $insertData = [
+                    'role_name' => $role_name,
+                ];
+                if($id > 0){
+                    $bool = $wpdb->update($wpdb->prefix.'zone_type_role',$insertData,['id'=>$id]);
+                }else{
+                    $bool = $wpdb->insert($wpdb->prefix.'zone_type_role',$insertData);
+                }
+                if($bool) $success_msg = '操作成功!';
+                else $error_msg = '操作失败!';
+            }
+        }
+        if($id > 0){
+            $row = $wpdb->get_row("SELECT role_name FROM {$wpdb->prefix}zone_type_role WHERE id='{$id}'", ARRAY_A);
+        }
+        ?>
+        <div class="wrap">
+            <h1 id="add-new-user">添加主体权限</h1>
+
+            <div id="ajax-response">
+                <span style="color: #2bc422"><?=$success_msg?></span>
+                <span style="color: #c44e00"><?=$error_msg?></span>
+            </div>
+
+            <form method="post" action="" id="adduser" class="validate" novalidate="novalidate">
+                <input name="action" type="hidden" value="createuser">
+                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
+                    <tbody>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="role_name">权限名称 </label></th>
+                        <td>
+                            <input name="role_name" type="text" id="role_name" value="<?=isset($row['role_name'])?$row['role_name']:''?>" maxlength="60">
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+                </table>
+
+                <p class="submit"><input type="submit" class="button button-primary" value="提交"></p>
+            </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * 主体权限
+     */
+    public function organizePower(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS id,role_name 
+                FROM {$wpdb->prefix}zone_type_role  
+                LIMIT {$start},{$pageSize}",ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">主体权限列表</h1>
+
+            <a href="<?=admin_url('admin.php?page=fission-add-organize-power')?>" class="page-title-action">添加主体权限</a>
+
+            <hr class="wp-header-end">
+
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" id="option1" class="manage-column column-option1">操作</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    ?>
+                    <tr>
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['role_name']?></label>
+                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$row['role_name']?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="name column-name has-row-actions column-primary" data-colname="名称">
+                            <?=$row['role_name']?>
+                            <br>
+
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="option1 column-option1" data-colname="状态">
+                            <a href="<?=admin_url('admin.php?page=fission-add-organize-power&id='.$row['id'])?>">编辑</a>
+                        </td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" class="manage-column column-option1">操作</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction2" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
         </div>
         <?php
     }
