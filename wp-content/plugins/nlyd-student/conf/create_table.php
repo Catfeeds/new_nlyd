@@ -211,6 +211,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `grading_id` int(20) DEFAULT NULL COMMENT '考级id',
+          `scene` tinyint(2) NOT NULL COMMENT '考级场景 1 正式考级 2 模拟考级',
           `category_id` int(20) NOT NULL COMMENT '考级类别',
           `entry_end_time` datetime NOT NULL COMMENT '报名截止时间',
           `start_time` datetime NOT NULL COMMENT '开始时间',
@@ -219,6 +220,8 @@ function the_table_install () {
           `cost` decimal(10,2) DEFAULT NULL COMMENT '考级费用',
           `status` tinyint(2) DEFAULT NULL COMMENT '考级状态 -3:已结束 -2等待开赛 1:报名中 2:进行中',
           `grading_notice_url` varchar(255) DEFAULT NULL COMMENT '考级须知',
+          `person_liable` int(20) DEFAULT NULL COMMENT '考级须知',
+          `created_person` int(20) DEFAULT NULL COMMENT '责任人',
           `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -257,6 +260,7 @@ function the_table_install () {
             `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
             `match_id` int(20) NOT NULL COMMENT '比赛id(posts主键ID)',
             `match_slogan` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '比赛口号',
+            `match_scene` tinyint(2) DEFAULT NULL COMMENT '比赛口号',
             `match_genre` int(20) DEFAULT NULL COMMENT '比赛类型',
             `match_start_time` datetime DEFAULT NULL COMMENT '比赛时间',
             `match_end_time` datetime DEFAULT NULL COMMENT '比赛结束时间',

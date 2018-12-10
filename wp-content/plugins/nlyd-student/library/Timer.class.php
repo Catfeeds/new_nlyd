@@ -52,7 +52,7 @@ class Timer
         $map[] = ' a.post_status = "publish" ';
         $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.match_id,b.match_start_time,b.match_end_time,b.entry_end_time,c.meta_value as match_switch';
+        $filed = 'a.post_title,b.id,b.match_id,match_scene,b.match_start_time,b.match_end_time,b.entry_end_time,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
                 RIGHT JOIN {$wpdb->prefix}match_meta_new b ON a.ID = b.match_id
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
@@ -156,7 +156,7 @@ class Timer
         $map[] = ' a.post_status = "publish" ';
         $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.grading_id,b.start_time,b.end_time,b.entry_end_time,c.meta_value as match_switch';
+        $filed = 'a.post_title,b.id,b.grading_id,scene,b.start_time,b.end_time,b.entry_end_time,person_liable,person_liable,created_person,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
                 RIGHT JOIN {$wpdb->prefix}grading_meta b ON a.ID = b.grading_id
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
@@ -167,9 +167,6 @@ class Timer
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
             //var_dump($rows);
-            //获取训练题库
-            $cats = $wpdb->get_results("select term_id,slug from {$wpdb->prefix}terms where slug in('cn-grading-test-question','en-grading-test-question')" ,ARRAY_A);
-            $test = array_column($cats,'slug','term_id');
 
             $new_time = get_time('mysql');
             foreach ($rows as $v){
@@ -191,27 +188,86 @@ class Timer
                         //已结束
                         $save['status'] = -3;
 
-                        //将比赛题库清空
-                        /*$sql = "select a.post_id,c.slug
-                                from {$wpdb->prefix}match_questions a 
-                                left join {$wpdb->prefix}term_relationships b on a.post_id = b.object_id
-                                left join {$wpdb->prefix}terms c on b.term_taxonomy_id = c.term_id
-                                where a.match_id = {$v['grading_id']} AND a.post_id != ''
-                                ";
-                        $results = $wpdb->get_results($sql,ARRAY_A);
-                        if(!empty($results)){
-                            foreach ($results as $x){
-                                if($x['slug'] == 'cn-grading-question'){
-                                    $cat_id['term_taxonomy_id'] = array_search('cn-grading-test-question',$test);
-                                }elseif ($x['slug'] == 'en-grading-question'){
-                                    $cat_id['term_taxonomy_id'] = array_search('en-grading-test-question',$test);
+                        //如果是正式考级根据规则进行费用发布
+                        if($v['scene'] == 1){
+
+                            //获取本次考级所有考级学员以及2级推广人
+                            $sql = "select a.user_id,a.pay_type,a.match_id,b.referee_id,c.referee_id as indirect_referee_id 
+                                    from {$wpdb->prefix}order a 
+                                    left join {$wpdb->prefix}users b on a.user_id = b.ID
+                                    left join {$wpdb->prefix}users c on b.referee_id = c.ID
+                                    where a.match_id = {$v['grading_id']} and a.pay_type = 2 and pay_status in (2,3,4) ";
+                            $rows_ = $wpdb->get_results($sql,ARRAY_A);
+
+                            if(!empty($rows_)){
+                                $str = '';
+                                foreach ($rows_ as $i) {
+                                    //考级负责人
+                                    if($v['person_liable'] > 1){    //如果有负责人
+                                        $person_liable_id = $v['person_liable'];
+                                    }
+                                    else{  //否则发布人就是负责人
+                                        $person_liable_id = $v['created_person'];
+                                    }
+                                    //考级中心
+                                    $sponsor_id = $v['created_person'];
+                                    //考级中心上级
+                                    if(!empty($created_person)){
+                                        $manager_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$created_person}");
+                                    }
+                                    else{
+                                        $manager_id = '';
+                                    }
+
+                                    //准备对应的数据
+                                    $money1 = 5;    //考级直接推广人
+                                    $money2 = 2.5;    //考级间接推广人
+                                    $money3 = 3;    //考级负责人
+                                    $money4 = 40;    //考级中心
+                                    $money5 = 20;    //考级中心上级
+
+                                    "( '{$i['pay_type']}', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', '{$manager_id}', '{$money5}', NOW())";
                                 }
-                                //print_r($cat_id);
-                                $b = $wpdb->update($wpdb->prefix.'term_relationships',$cat_id,array('object_id'=>$x['post_id']));
-                                /*die;
-                                print_r($b);
+
+                                $sql = "INSERT INTO `{$wpdb->prefix}income_logs` 
+                                    ( `pay_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`, `indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`, `sponsor_income`, `manager_id`, `manager_income`, `created_time`) VALUES";
                             }
-                        }*/
+
+                            //if($v['grading_id'] == 897){
+                                //print_r($v);
+                                print_r($rows_);
+                                /*if($v['person_liable'] > 1){    //如果有负责人
+                                    $person_liable = $v['person_liable'];
+                                }
+                                else{  //否则发布人就是负责人
+                                    $person_liable = $v['created_person'];
+                                }
+                                //考级中心
+                                $created_person = $v['created_person'];
+
+                                //获取考级中心上级
+                                if(!empty($created_person)){
+                                    $manager_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$created_person}");
+                                }
+                                else{
+                                    $manager_id = '';
+                                }
+                                print_r($manager_id);*/
+
+                                //准备对应的数据
+                                $money1 = 5;    //考级直接推广人
+                                $money2 = 2.5;    //考级间接推广人
+                                $money3 = 3;    //考级负责人
+                                $money4 = 40;    //考级中心
+                                $money5 = 20;    //考级中心上级
+
+
+                            //}
+
+
+
+                            //数据插入
+                        }
                     }
 
                     //var_dump($v['match_id']);
