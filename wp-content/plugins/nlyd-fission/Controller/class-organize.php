@@ -168,7 +168,7 @@ class Organize{
                             <?=isset($user_real_name['real_name'])?$user_real_name['real_name']:$row['user_login']?>
                            <br>
                            <div class="row-actions">
-<!--                               <span class="edit"><a href="">编辑</a> | </span>-->
+                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&user_id='.$row['user_id'])?>">编辑</a></span>
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
 <!--                               <span class="view"><a href="">资料</a></span>-->
                            </div>
@@ -418,10 +418,11 @@ class Organize{
     }
 
     /**
-     * 新增主体
+     * 新增/编辑主体
      */
     public function addOrganize(){
         global $wpdb;
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -429,26 +430,99 @@ class Organize{
             $zone_type = isset($_POST['zone_type']) ? intval($_POST['zone_type']) : 0;
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
+            $power = isset($_POST['power']) ? $_POST['power'] : [];
 
             if($user_id < 0) $error_msg = '请选择升级账号';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
+            if(!is_array($power)) $error_msg = $error_msg==''?'权限错误':$error_msg.'<br >权限错误';
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
                     'user_id' => $user_id,
                     'referee_id' => $referee_id,
                     'user_status' => $user_status,
-                    'created_time' => get_time('mysql'),
-                    'audit_time' => get_time('mysql'),
                 ];
-                $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
-                if($bool) $success_msg = '添加成功!';
-                else $error_msg = '添加失败!';
+                $wpdb->startTrans();
+                if($user_id>0){
+                    $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['user_id'=>$user_id]);
+                    $deleteBool = $wpdb->delete("{$wpdb->prefix}zone_join_role",['user_id'=>$user_id]);
+                    if(!$deleteBool){
+                        $wpdb->rollback();
+                        $error_msg = '操作失败!';
+                    }else{
+                        $powerSql = "INSERT INTO {$wpdb->prefix}zone_join_role (`user_id`,`role_id`) VALUES ";
+                        $powerData = [];
+                        foreach ($power as $pv){
+                            $powerData[] = "('{$user_id}','{$pv}')";
+                        }
+                        if(!empty($powerData)){
+                            $powerSql .= join(',', $powerData);
+                            $powerBool = $wpdb->query($powerSql);
+                            if($powerBool) {
+                                $wpdb->commit();
+                                $success_msg = '操作成功';
+                            }else{
+                                $wpdb->rollback();
+                                $error_msg = '操作失败!';
+                            }
+                        }else{
+                            $wpdb->commit();
+                            $success_msg = '操作成功';
+                        }
+                    }
+
+                }else{
+                    $insertData['created_time'] = get_time('mysql');
+                    $insertData['audit_time'] = get_time('mysql');
+                    $bool = $wpdb->insert($wpdb->prefix.'zone_meta',$insertData);
+                    if(!$bool){
+                        $error_msg = '操作失败!';
+                    }else{
+                        $powerSql = "INSERT INTO {$wpdb->prefix}zone_join_role (`user_id`,`role_id`) VALUES ";
+                        $powerData = [];
+                        foreach ($power as $pv){
+                            $powerData[] = "('{$user_id}','{$pv}')";
+                        }
+                        if(!empty($powerData)){
+                            $powerSql .= join(',', $powerData);
+                            $powerBool = $wpdb->query($powerSql);
+                            if($powerBool) {
+                                $wpdb->commit();
+                                $success_msg = '操作成功';
+                            }else{
+                                $wpdb->rollback();
+                                $error_msg = '操作失败!';
+                            }
+                        }else{
+                            $wpdb->commit();
+                            $success_msg = '操作成功';
+                        }
+                    }
+                }
+            }
+        }
+        if($user_id > 0){
+            $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,
+                   um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile 
+                   FROM {$wpdb->prefix}zone_meta AS zm 
+                   LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
+                   LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
+                   LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name' 
+                   LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=zm.referee_id AND um2.meta_key='user_real_name' 
+                   WHERE zm.user_id='{$user_id}'", ARRAY_A);
+//            leo_dump($row);die;
+            //已有权限
+            $editPowerList = $wpdb->get_results("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE user_id='{$user_id}'", ARRAY_A);
+            $editPowerListArr = [];
+            foreach ($editPowerList as $eplv){
+                $editPowerListArr[] = $eplv['role_id'];
             }
         }
         //类型列表
         $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        //权限列表
+        $powerList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加主体</h1>
@@ -466,7 +540,10 @@ class Organize{
                         <th scope="row"><label for="user_id">升级账号 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
-
+                                <option value="<?=$user_id?>" selected="selected">
+                                    <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
+                                    <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
+                                </option>
                             </select>
 
                         </td>
@@ -476,7 +553,7 @@ class Organize{
                         <td>
                             <select name="zone_type" id="zone_type">
                                 <?php foreach ($typeList as $tlv){ ?>
-                                    <option value="<?=$tlv['id']?>"><?=$tlv['zone_type_name']?></option>
+                                    <option value="<?=$tlv['id']?>" <?=$row['type_id']==$tlv['id']?'selected="selected"':''?> ><?=$tlv['zone_type_name']?></option>
                                 <?php } ?>
                             </select>
                         </td>
@@ -485,7 +562,10 @@ class Organize{
                         <th scope="row"><label for="referee_id">推荐人 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="referee_id" style="width: 50%" data-action="get_base_user_list" data-type="all">
-
+                                <option value="<?=$row['referee_id']?>" selected="selected">
+                                    <?=isset($row['referee_real_name']) ? unserialize($row['referee_real_name'])['real_name'] : $row['referee_login']?>
+                                    <?=!empty($row['referee_mobile'])?'('.$row['referee_mobile'].')':''?>
+                                </option>
                             </select>
                         </td>
                     </tr>
@@ -493,10 +573,18 @@ class Organize{
                         <th scope="row"><label for="user_status">状态 </label></th>
                         <td>
                             <select name="user_status" id="user_status">
-                                <option value="1">正常</option>
-                                <option value="-1">正在审核</option>
-                                <option value="-2">未通过</option>
+                                <option <?=$row['user_status']=='1'?'selected="selected"':''?> value="1">正常</option>
+                                <option <?=$row['user_status']=='-1'?'selected="selected"':''?> value="-1">正在审核</option>
+                                <option <?=$row['user_status']=='-2'?'selected="selected"':''?> value="-2">未通过</option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="form-field">
+                        <th scope="row">权限</th>
+                        <td>
+                            <?php foreach ($powerList as $plv){ ?>
+                                <label for="power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$editPowerListArr)?'checked="checked"':''?> id="power_<?=$plv['id']?>" type="checkbox" name="power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                            <?php } ?>
                         </td>
                     </tr>
 
