@@ -26,6 +26,100 @@ class Match_Ajax
         add_action( 'wp_ajax_nopriv_'.$action,  array($this,$action) );
     }
 
+    /**
+     * 一键生成比赛项目
+     */
+    public function found_match(){
+
+        global $wpdb,$current_user;
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ");
+        if(empty($id)){
+            wp_send_json_error('请先进行比赛发布,再进行项目生成');
+        }
+        require_once LIBRARY_PATH.'Vendor/PHPExcel/Classes/PHPExcel.php';
+        $PHPExcel = new PHPExcel();
+        $PHPReader = new PHPExcel_Reader_Excel2007();
+        $file_path = leo_match_path.'/upload/match_template/nlgj_match_template.xlsx';
+        //为了可以读取所有版本Excel文件
+        if(!$PHPReader->canRead($file_path))
+        {
+            $PHPReader = new PHPExcel_Reader_Excel5();
+            if(!$PHPReader->canRead($file_path))
+            {
+                echo '未发现Excel文件！';
+                return;
+            }
+        }
+
+        //不需要读取整个Excel文件而获取所有工作表数组的函数，感觉这个函数很有用，找了半天才找到
+        $sheetNames  = $PHPReader->listWorksheetNames($file_path);
+        //读取Excel文件
+        $PHPExcel = $PHPReader->load($file_path);
+        //选择第一个工作表
+        $currentSheet = $PHPExcel->getSheet(0);
+        //取得一共有多少列
+        $allColumn = $currentSheet->getHighestColumn();
+        //取得一共有多少行
+        $allRow = $currentSheet->getHighestRow();
+
+        //循环读取数据，并且保存数据
+        $str = '';
+        $match_project_id = array();
+        $match_start_day = $_POST['match_start_time'];
+        $match_start_time = '';
+        //('1473', '197', '1', '2018-12-07 10:32:00', '2018-12-07 10:52:00', '20', '1', '2018-12-07 16:23:27')
+        for($currentRow = 2;$currentRow<=$allRow;$currentRow++)
+        {
+            $a = $currentSheet->getCell('A'.$currentRow)->getValue();
+            $b = $currentSheet->getCell('B'.$currentRow)->getValue();
+            $c = $currentSheet->getCell('C'.$currentRow)->getValue();
+            $d = $currentSheet->getCell('D'.$currentRow)->getValue();
+            $e = $currentSheet->getCell('E'.$currentRow)->getValue();
+            if(!empty($a) && !empty($b) && !empty($c) && !empty($d) && !empty($e)){
+                $project_id = $wpdb->get_var("select post_id from {$wpdb->prefix}postmeta where meta_key = 'project_alias' and meta_value='{$a}' ");
+                $start_time = $match_start_day.$c;
+                $end_time = $match_start_day.$d;
+
+
+                $created_time = get_time('mysql');
+                $str .= "('{$_POST['match_id']}','{$project_id}','{$b}','{$start_time}','{$end_time}','{$e}','{$current_user->ID}','{$created_time}'),";
+                //print_r($str.'</br>');
+                if($currentRow == 2){
+                    $match_start_time = $start_time;
+                }
+                if($currentRow == $allRow){
+                    $str = rtrim($str, ',');
+                    $match_end_time = $end_time;
+                }
+                $match_project_id[] = $project_id;
+
+            }else{
+                continue;
+            }
+        }
+        /*print_r($str);
+        die;*/
+        $sql = "INSERT INTO `{$wpdb->prefix}match_project_more` 
+                (`match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `created_id`, `created_time`) 
+                VALUES ".$str;
+
+        $wpdb->startTrans();
+        $result = $wpdb->query($sql);
+
+        $update = array(
+            'match_start_time' => $match_start_time,
+            'match_end_time' => $match_end_time,
+            'match_project_id' => arr2str(array_unique($match_project_id)),
+        );
+        $result1 = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$_POST['match_id']));
+        if($result && $result1){
+            $wpdb->commit();
+            wp_send_json_success('生成成功');
+        }else{
+            $wpdb->rollback();
+            wp_send_json_error('生成失败');
+        }
+    }
 
     /**
      * 手动换座位

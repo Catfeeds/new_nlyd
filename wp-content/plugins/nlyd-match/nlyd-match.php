@@ -965,7 +965,7 @@ if(!class_exists('MatchController')){
 
                     $match_meta = $_POST['match'];
 
-                    if(empty($match_meta['match_project'])){
+                    /*if(empty($match_meta['match_project'])){
                         //获取所有比赛项目
                         $args = array(
                             'post_type' => array('project'),
@@ -979,12 +979,11 @@ if(!class_exists('MatchController')){
                     }else{
                         $project_array = array_column($match_meta['match_project'],'match_project_id');
                     }
-
                     $project_id = arr2str($project_array);
+                    $match_meta['match_project_id'] = $project_id;*/
 
 
                     $match_meta['match_id'] = $post_ID;
-                    $match_meta['match_project_id'] = $project_id;
                     $match_meta['created_id'] = $current_user->ID;
                     $match_meta['created_time'] = get_time('mysql');
 
