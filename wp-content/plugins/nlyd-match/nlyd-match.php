@@ -160,10 +160,12 @@ if(!class_exists('MatchController')){
             if($this->post_type == 'match'){
                 $match_status = isset($_GET['match_status']) ? $_GET['match_status'] : '';
                 global $wpdb;
-                $enrollNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=1");
-                $waitNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=-2");
-                $conductNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=2");
-                $endNum = $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}match_meta_new WHERE match_status=-3");
+                $join = "LEFT JOIN {$wpdb->posts} AS p ON p.ID=mn.match_id";
+                $joinWhere = "AND p.post_status!='trash'";
+                $enrollNum = $wpdb->get_var("SELECT count(mn.id) FROM {$wpdb->prefix}match_meta_new AS mn {$join} WHERE mn.match_status=1 {$joinWhere}");
+                $waitNum = $wpdb->get_var("SELECT count(mn.id) FROM {$wpdb->prefix}match_meta_new AS mn {$join} WHERE mn.match_status=-2 {$joinWhere}");
+                $conductNum = $wpdb->get_var("SELECT count(mn.id) FROM {$wpdb->prefix}match_meta_new AS mn {$join} WHERE mn.match_status=2 {$joinWhere}");
+                $endNum = $wpdb->get_var("SELECT count(mn.id) FROM {$wpdb->prefix}match_meta_new AS mn {$join} WHERE mn.match_status=-3 {$joinWhere}");
                 ?>
                 <script type="text/javascript">
                     jQuery(document).ready(function($) {
