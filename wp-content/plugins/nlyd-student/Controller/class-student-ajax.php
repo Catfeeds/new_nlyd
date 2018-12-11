@@ -4380,6 +4380,14 @@ class Student_Ajax
     }
 
 
+    /**
+     * 机构申请资料提交
+     */
+    public function zone_apply_submit(){
+
+    }
+
+
     /*
     *比较字符串不同的字符
     *@参数：$str1:第一个字符串，$str2:第二个字符串

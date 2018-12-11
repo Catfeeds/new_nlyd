@@ -117,5 +117,11 @@ return array(
             'post_content'=>'[grade-home]',
             'url'=>'/grade',
         ),
+        array(
+            'post_title'=>'分支机构',
+            'post_name'=>'zone',
+            'post_content'=>'[zone-home]',
+            'url'=>'/grade',
+        ),
     ),
 );
