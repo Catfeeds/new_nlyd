@@ -134,6 +134,7 @@ function the_table_install () {
           `opening_bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `bank_card_num` varchar(255) DEFAULT NULL COMMENT '银行卡号',
           `referee_id` int(20) DEFAULT NULL COMMENT '推荐人id',
+          `zone_title` varchar(255) DEFAULT NULL COMMENT '主体机构名称',
           `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',
           `created_time` datetime DEFAULT NULL COMMENT '提交时间',
           `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
