@@ -31,6 +31,33 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "income_logs";  //收益领取记录表   存储收益分配记录
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `order_type` tinyint(2) DEFAULT NULL COMMENT '同order表order_type',
+          `match_id` int(20) DEFAULT NULL COMMENT '同order表match_id',
+          `user_id` int(20) DEFAULT NULL COMMENT '付款人id',
+          `referee_id` int(20) DEFAULT NULL COMMENT '直接推广人',
+          `referee_income` decimal(10,2) DEFAULT NULL COMMENT '直接收益',
+          `indirect_referee_id` int(20) DEFAULT NULL COMMENT '间接推广人',
+          `indirect_referee_income` decimal(10,2) DEFAULT NULL COMMENT '间接收益',
+          `person_liable_id` int(20) DEFAULT NULL COMMENT '负责人',
+          `person_liable_income` decimal(10,2) DEFAULT NULL COMMENT '负责人收益',
+          `sponsor_id` int(20) DEFAULT NULL COMMENT '主办方',
+          `sponsor_income` decimal(10,2) DEFAULT NULL COMMENT '主办方收益',
+          `manager_id` int(20) DEFAULT NULL COMMENT '事业员(主办方上级)',
+          `manager_income` int(20) DEFAULT NULL COMMENT '事业员收益',
+          `created_time` datetime DEFAULT NULL,
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "zone_join_coach";  //机构与员工的关系表   储存机构拥有的员工
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
@@ -448,6 +475,7 @@ function the_table_install () {
           `serialnumber` varchar(50) DEFAULT NULL,
           `user_id` int(20) NOT NULL COMMENT '学生id(user主键id)',
           `match_id` int(20) DEFAULT NULL COMMENT '参与的比赛id(posts表主键)',
+          `sub_centres_id` int(20) DEFAULT NULL COMMENT '分中心',
           `fullname` varchar(255) NOT NULL,
           `telephone` varchar(50) NOT NULL COMMENT '联系电话',
           `address` text NOT NULL COMMENT '收货地址',
