@@ -60,6 +60,18 @@ class Fission_Ajax
 
     }
 
+    /**
+     * 删除主体成员
+     */
+    public function deleteOrganizeMember(){
+        $member_id = isset($_POST['member_id']) ? intval($_POST['member_id']) : 0;
+        $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+        if($member_id < 1 || $user_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $bool = $wpdb->delete($wpdb->prefix.'zone_join_coach',['coach_id'=>$member_id,'zone_id'=>$user_id]);
+        if($bool) wp_send_json_success(['info' => '删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 
 }
 

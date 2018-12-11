@@ -109,6 +109,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `zone_type_name` varchar(255) DEFAULT NULL COMMENT '机构名字',
+          `zone_type_alias` varchar(50) DEFAULT NULL COMMENT '机构别名',
           `zone_type_status` tinyint(2) DEFAULT NULL COMMENT '状态 1正常 2关闭',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -133,6 +134,8 @@ function the_table_install () {
           `opening_bank` varchar(255) DEFAULT NULL COMMENT '开户行',
           `opening_bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `bank_card_num` varchar(255) DEFAULT NULL COMMENT '银行卡号',
+          `chairman_id` varchar(255) DEFAULT NULL COMMENT '组委会主席id',
+          `secretary_id` varchar(255) DEFAULT NULL COMMENT '秘书长id',
           `referee_id` int(20) DEFAULT NULL COMMENT '推荐人id',
           `zone_title` varchar(255) DEFAULT NULL COMMENT '主体机构名称',
           `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',

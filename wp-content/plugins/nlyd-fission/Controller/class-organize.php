@@ -437,7 +437,7 @@ class Organize{
      */
     public function addOrganize(){
         global $wpdb;
-        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+        $old_user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -462,10 +462,10 @@ class Organize{
                     'zone_title' => $zone_title,
                 ];
                 $wpdb->startTrans();
-                if($user_id>0){
-                    $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['user_id'=>$user_id]);
-                    $deleteBool = $wpdb->delete("{$wpdb->prefix}zone_join_role",['user_id'=>$user_id]);
-                    $powerOne = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_join_role WHERE user_id='{$user_id}'");
+                if($old_user_id>0){
+                    $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['user_id'=>$old_user_id]);
+                    $powerOne = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_join_role WHERE user_id='{$old_user_id}'");
+                    $deleteBool = $wpdb->delete("{$wpdb->prefix}zone_join_role",['user_id'=>$old_user_id]);
                     if(!$deleteBool && $powerOne){
                         $wpdb->rollback();
                         $error_msg = '操作失败!';
@@ -522,7 +522,7 @@ class Organize{
             }
         }
         $editPowerListArr = [];
-        if($user_id > 0){
+        if($old_user_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_title,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile 
                    FROM {$wpdb->prefix}zone_meta AS zm 
@@ -530,10 +530,10 @@ class Organize{
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name' 
                    LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=zm.referee_id AND um2.meta_key='user_real_name' 
-                   WHERE zm.user_id='{$user_id}'", ARRAY_A);
+                   WHERE zm.user_id='{$old_user_id}'", ARRAY_A);
 //            leo_dump($row);die;
             //已有权限
-            $editPowerList = $wpdb->get_results("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE user_id='{$user_id}'", ARRAY_A);
+            $editPowerList = $wpdb->get_results("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE user_id='{$old_user_id}'", ARRAY_A);
             foreach ($editPowerList as $eplv){
                 $editPowerListArr[] = $eplv['role_id'];
             }
@@ -565,7 +565,7 @@ class Organize{
                         <th scope="row"><label for="user_id">升级账号 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
-                                <option value="<?=$user_id?>" selected="selected">
+                                <option value="<?=$old_user_id?>" selected="selected">
                                     <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
                                     <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
                                 </option>
@@ -875,7 +875,7 @@ class Organize{
                     $real_name = isset($user_real_name['real_name']) ? $user_real_name['real_name'] : $row['user_login'];
 //                    leo_dump($usermeta);
                     ?>
-                    <tr>
+                    <tr data-id="<?=$row['coach_id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
                             <input id="cb-select-<?=$row['coach_id']?>" type="checkbox" name="post[]" value="<?=$row['coach_id']?>">
@@ -893,7 +893,7 @@ class Organize{
                         <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID'])?$usermeta['user_ID'][0]:''?></td>
                         <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
                         <td class="option1 column-option1" data-colname="操作">
-                            <a href="javascript:;" class="">删除</a>
+                            <a href="javascript:;" class="del-member">删除</a>
                         </td>
 
                     </tr>
@@ -930,6 +930,28 @@ class Organize{
             </div>
 
             <br class="clear">
+            <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                    $('.del-member').on('click',function () {
+                        var member_id = $(this).closest('tr').attr('data-id');
+                        if(member_id == '' || member_id == undefined) return false;
+                        if(confirm('是否确认删除此成员?')){
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action':'deleteOrganizeMember','member_id':member_id,'user_id':'<?=$user_id?>'},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function(response){
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                })
+            </script>
         </div>
         <?php
     }
