@@ -243,6 +243,12 @@ a.c_black3:hover{
 .ml_10{
     margin-left: 10px;
 }
+.mr_10{
+    margin-right: 10px;
+}
+.m_a{
+    margin: auto;
+}
 /* 图片 */
 .img-box{
     min-height: 1px;
