@@ -91,7 +91,7 @@ class Timer
                             $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}income_logs where match_id = {$v['match_id']} and order_type = 1 ");
                             if($total < 1){
                                 //获取本次比赛所有考级学员以及2级推广人
-                                $sql = "select a.user_id,a.order_type,a.match_id,b.referee_id,c.referee_id as indirect_referee_id 
+                                $sql = "select a.user_id,a.order_type,a.match_id,a.sub_centres_id,b.referee_id,c.referee_id as indirect_referee_id 
                                     from {$wpdb->prefix}order a 
                                     left join {$wpdb->prefix}users b on a.user_id = b.ID
                                     left join {$wpdb->prefix}users c on b.referee_id = c.ID
@@ -104,26 +104,22 @@ class Timer
 
                                         //比赛中心
                                         $sponsor_id = $v['created_id'];
-                                        //比赛中心上级
-                                        if(!empty($created_person)){
-                                            $manager_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$created_person}");
-                                        }
-                                        else{
-                                            $manager_id = '';
-                                        }
+                                        //参赛机构
+                                        $person_liable_id = $v['sub_centres_id'];
+
 
                                         //准备对应的数据
                                         $money1 = 5;        //比赛直接推广人
                                         $money2 = 2.5;    //比赛间接推广人
+                                        $money3 = 40;    //参赛机构
                                         $money4 = 40;    //比赛中心
-                                        $money5 = 0;    //比赛中心上级
 
-                                        $str .= "( '{$i['order_type']}', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$sponsor_id}', '{$money4}', '{$manager_id}', '{$money5}', NOW()),";
+                                        $str .= "( '{$i['order_type']}', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', NOW()),";
                                     }
 
                                     //print_r($str);
 
-                                    $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `order_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `sponsor_id`,`sponsor_income`, `manager_id`, `manager_income`, `created_time`) VALUES ".rtrim($str, ',');
+                                    $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `order_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`, `indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`, `sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
 
                                     //print_r($sql);
                                     $result = $wpdb->query($sql);
@@ -238,28 +234,21 @@ class Timer
                                         }
                                         //考级中心
                                         $sponsor_id = $v['created_person'];
-                                        //考级中心上级
-                                        if(!empty($created_person)){
-                                            $manager_id = $wpdb->get_var("select referee_id from {$wpdb->prefix}users where ID = {$created_person}");
-                                        }
-                                        else{
-                                            $manager_id = '';
-                                        }
+
 
                                         //准备对应的数据
                                         $money1 = 5;    //考级直接推广人
                                         $money2 = 2.5;    //考级间接推广人
                                         $money3 = 3;    //考级负责人
                                         $money4 = 40;    //考级中心
-                                        $money5 = 0;    //考级中心上级
 
-                                        $str .= "( '{$i['order_type']}', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', '{$manager_id}', '{$money5}', NOW()),";
+                                        $str .= "( '{$i['order_type']}', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', NOW()),";
                                         //}
                                     }
 
                                     //print_r($str);
 
-                                    $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `order_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`,`sponsor_income`, `manager_id`, `manager_income`, `created_time`) VALUES ".rtrim($str, ',');
+                                    $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `order_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`,`sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
 
                                     $result = $wpdb->query($sql);
 

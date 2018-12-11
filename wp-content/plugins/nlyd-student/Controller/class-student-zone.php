@@ -27,6 +27,10 @@ class Student_Zone extends Student_Home
     public function apply(){
 
         global $wpdb,$current_user,$user_info;
+
+        //获取所有机构
+        $data['list'] = $wpdb->get_results("select id,zone_type_name from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
+
         //获取事业管理员
         $user_real_name = get_user_meta($current_user->data->referee_id,'user_real_name')[0];
         if(!empty($user_real_name)){
