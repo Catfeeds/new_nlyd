@@ -96,6 +96,34 @@
     background: #e7ebf1;
     color: rgba(38, 38, 38, 0.4);
 }
+.apply{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    background-color: #fff;
+    border: none;
+    overflow: hidden;
+}
+.apply_list{
+    display: block;
+    padding: 10px 0;
+    border-top: 1px solid rgba(38, 38, 38, 0.1);
+}
+.apply_title{
+    padding: 10px 0;
+}
+.apply_list_line{
+    display: inline-block;
+}
+.apply_list_line.center{
+    margin-left: 21px;
+}
+.apply_list_line.pull-left{
+    margin-left: 20px;
+}
+.apply_list_line.pull-right{
+    margin-right: 20px;
+}
 @media screen and (min-width: 1200px){
 
     .userCenter-detail-head{
@@ -198,8 +226,10 @@
     .userCenter-detail{
         background-color: #fff;
         border: none;
-        background-color: #fff;
         overflow: hidden;
+    }
+    .apply{
+        display: none;
     }
 }
 @media screen and (max-width: 1199px){
@@ -338,7 +368,6 @@
         padding-top: 15px;
         background-color: #fff;
         border: none;
-        background-color: #fff;
         overflow: hidden;
     }
     .userCenter-detail-head{
@@ -388,15 +417,6 @@
     .userCenter-detail a:nth-child(4n){
         border-right: none;
     }
-    /* .userCenter-detail a:nth-last-child(1){
-        border-bottom: none;
-    }
-    .userCenter-detail a:nth-last-child(2){
-        border-bottom: none;
-    }
-    .userCenter-detail a:nth-last-child(3){
-        border-bottom: none;
-    } */
 }
 @media screen and (max-width: 374px){
 /* iphone6以下 */
@@ -416,10 +436,4 @@
     .userCenter-detail a:nth-child(3n){
         border-right: none;
     }
-    /* .userCenter-detail a:nth-last-child(1){
-        border-bottom: none;
-    }
-    .userCenter-detail a:nth-last-child(2){
-        border-bottom: none;
-    } */
 }

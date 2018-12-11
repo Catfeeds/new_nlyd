@@ -4384,7 +4384,39 @@ class Student_Ajax
      * 机构申请资料提交
      */
     public function zone_apply_submit(){
+        global $wpdb,$current_user;
+        if(empty($_POST['type_id']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['business_licence']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+            wp_send_json_error(array('info'=>'相关资料不能有空值'));
+        }
+        if(empty($_FILES['business_licence_image'])){
+            wp_send_json_error(array('info'=>'营业执照必传'));
+        }
+        else{
+            $upload_dir = wp_upload_dir();
+            $dir = '/business_licence/'.$current_user->ID.'/';
+            $tmp = $_FILES['business_licence_image']['tmp_name'];
+            $file = $this->saveIosFile($tmp,$upload_dir['basedir'].$dir);
+            if($file){
+                $business_licence_url = $upload_dir['baseurl'].$dir.$file;
+            }
+        }
 
+        $insert = array(
+                    'user_id'=>$current_user->ID,
+                    'type_id'=>$_POST['type_id'],
+                    'zone_name'=>$_POST['zone_name'],
+                    'zone_address'=>$_POST['zone_address'],
+                    'business_licence'=>$_POST['business_licence'],
+                    'business_licence_url'=>$business_licence_url,
+                    'legal_person'=>$_POST['legal_person'],
+                    'opening_bank'=>$_POST['opening_bank'],
+                    'opening_bank_address'=>$_POST['opening_bank_address'],
+                    'bank_card_num'=>$_POST['bank_card_num'],
+                    'referee_id'=>$current_user->data->referee_id,
+                    'user_status'=>-1,
+                    'created_time'=>get_time('mysql'),
+        );
+        $wpdb->insert($wpdb->prefix.'zone_meta',$insert);
     }
 
 
