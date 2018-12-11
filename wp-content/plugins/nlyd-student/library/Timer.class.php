@@ -52,7 +52,7 @@ class Timer
         $map[] = ' a.post_status = "publish" ';
         $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.match_id,match_scene,b.match_start_time,b.match_end_time,b.entry_end_time,created_id,c.meta_value as match_switch';
+        $filed = 'a.post_title,b.id,b.match_id,b.match_scene,b.match_start_time,b.match_end_time,b.entry_end_time,b.match_cost,b.created_id,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
                 RIGHT JOIN {$wpdb->prefix}match_meta_new b ON a.ID = b.match_id
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
@@ -85,7 +85,7 @@ class Timer
                         $save['match_status'] = -3;
 
                         //如果是正式比赛根据规则进行费用发布
-                        if($v['match_scene'] == 1){
+                        if($v['match_scene'] == 1 && $v['match_cost'] > 200){
 
                             //获取当前考级是否已经进行了收益分配
                             $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}income_logs where match_id = {$v['match_id']} and order_type = 1 ");
@@ -178,7 +178,7 @@ class Timer
         $map[] = ' a.post_status = "publish" ';
         $map[] = ' c.meta_value="ON" ';
         $where = join(' and ',$map);
-        $filed = 'a.post_title,b.id,b.grading_id,scene,b.start_time,b.end_time,b.entry_end_time,person_liable,person_liable,created_person,c.meta_value as match_switch';
+        $filed = 'a.post_title,b.id,b.grading_id,scene,b.start_time,b.end_time,b.entry_end_time,person_liable,b.cost,b.person_liable,b.created_person,c.meta_value as match_switch';
         $sql = "SELECT $filed FROM {$wpdb->prefix}posts a 
                 RIGHT JOIN {$wpdb->prefix}grading_meta b ON a.ID = b.grading_id
                 LEFT JOIN {$wpdb->prefix}postmeta c ON a.ID = c.post_id and meta_key = 'default_match_switch'
@@ -211,7 +211,7 @@ class Timer
                         $save['status'] = -3;
 
                         //如果是正式考级根据规则进行费用发布
-                        if($v['scene'] == 1){
+                        if($v['scene'] == 1 && $v['match_cost'] > 300){
 
                             //获取当前考级是否已经进行了收益分配
                             $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}income_logs where match_id = {$v['grading_id']} and order_type = 2 ");
