@@ -183,7 +183,7 @@ jQuery(function($) {
         // 自定义验证规则
         form.verify($.validationLayui.allRules);
         // 监听提交
-        form.on('submit(certificationFormBtn)', function(data){//实名认证提交
+        form.on('submit(layform)', function(data){//实名认证提交
             
             var fd = new FormData();
             fd.append('action','zone_apply_submit');
@@ -197,7 +197,7 @@ jQuery(function($) {
             fd.append('bank_card_num',data.field['bank_card_num']);
             fd.append('chairman_id',data.field['chairman_id']);
             fd.append('secretary_id',data.field['secretary_id']);
-            fd.append('business_licence',imgs[0]);
+            fd.append('business_licence',imgs1[0]);
             $.ajax({
                 data: fd,
                 contentType : false,
