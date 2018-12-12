@@ -36,7 +36,14 @@ class Student_Zone extends Student_Home
         load_view_template($view,$data);
 
     }
+    /**
+     * 申请项目介绍页
+     */
+     public function introduce(){
+        $view = student_view_path.CONTROLLER.'/introduce.php';
+        load_view_template($view);
 
+    }
 
     /*
      *机构主体信息页面
@@ -99,12 +106,24 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);
     }
+   /**
+     * 分支机构申请页面成功后提示页面
+     */
+     public function applySuccess(){
+        $view = student_view_path.CONTROLLER.'/apply-success.php';
+        load_view_template($view);
 
+    }
     /**
      * 默认公用js/css引入
      */
     public function scripts_default(){
-
+        wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
+        wp_enqueue_style( 'my-student-userCenter' );
+        // if(ACTION == 'index'){
+            wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
+            wp_enqueue_style( 'my-student-zone' );
+        // }
     }
 
 }

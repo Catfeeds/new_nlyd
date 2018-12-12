@@ -118,10 +118,10 @@
 .apply_list_line.center{
     margin-left: 21px;
 }
-.apply_list_line.pull-left{
+.apply_list_line.ml{
     margin-left: 20px;
 }
-.apply_list_line.pull-right{
+.apply_list_line.mr{
     margin-right: 20px;
 }
 @media screen and (min-width: 1200px){

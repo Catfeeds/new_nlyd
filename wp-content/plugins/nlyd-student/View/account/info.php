@@ -431,6 +431,12 @@ jQuery(document).ready(function($) {
 
         function changes(e,_this,array) {
             var file=e.target.files[0];
+            //var fileSize=file.size;
+            // var fSize=1;
+            // if(fileSize > 1024*1024*fSize){
+            //     alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
+            //     return false;
+            // }
             array.unshift(file)
             var reader = new FileReader();
             var src='';
