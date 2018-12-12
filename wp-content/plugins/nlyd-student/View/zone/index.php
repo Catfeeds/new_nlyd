@@ -21,19 +21,38 @@
             <div class="layui-row nl-border nl-content">
                 <div class="zone_user width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="img-box zone_user_img pull-left">
-                        <img src="<?=student_css_url.'image/login-logo.png'?>">
+                        <img src="<?=$row['user_head']?>">
                     </div>    
                     <div class="zone_user_detail pull-left">
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
-                        <div class="c_black"><span class="bold"><?=__('李倩倩/IIsc脑博瑞国际脑力训练中心（成都）', 'nlyd-student')?></span></div>
-                        <div class="c_black"><?=__('ID/编  号', 'nlyd-student')?>:1000000789</div>
-                        <div class="c_black"><span><?=__('推荐人', 'nlyd-student')?>：王二</span></div>
-                        <div class="c_black"><span><?=__('管理员', 'nlyd-student')?>：王二</span><a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a></div>
                         <div class="c_black">
-                            <span><?=__('管理员', 'nlyd-student')?>：王二</span>
+                            <span class="bold">
+                                <?=$row['user_real_name']?>
+                                <?php if(!empty($row['legal_person'])):?>
+                                    /<?=$row['zone_name']?>
+                                <?php endif;?>
+                            </span></div>
+                        <div class="c_black">
+                            <?=__('ID/编  号', 'nlyd-student')?>:<?=!empty($row['legal_person']) ? dispRepair($row['id'],4,0) : $row['user_ID']?>
+                        </div>
+
+                        <div class="c_black">
+                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
+                            <?php if($row['user_status'] == 1){ ?>
+                            <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
+                            <?php }
+                            elseif ($row['user_status'] == -1){ ?>
                             <a class="pull-right c_blue"><?=__('修改', 'nlyd-student')?></a>
                             <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
+                            <?php } ?>
                         </div>
+
+                        <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
+                        <div class="c_black">
+                            <span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span>
+                            <a class="pull-right c_blue"><?/*=__('修改', 'nlyd-student')*/?></a>
+                            <span class="pull-right c_red mr_10"><?/*=__('资料审核中', 'nlyd-student')*/?></span>
+                        </div>-->
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
@@ -53,7 +72,7 @@
                         <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?>0.00</div>
                     </a>
                 </div>
-
+                <?php if(empty($row['legal_person'])){ ?>
                 <!-- 合作申请 (普通用户控制台，入口推广合作)-->
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
@@ -83,7 +102,7 @@
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
                 </div>
-
+                <?php } ?>
                 <!-- (资料审核通过的控制台)-->
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
                     <a class="apply_list c_black3 layui-row " style="border-top:none">
