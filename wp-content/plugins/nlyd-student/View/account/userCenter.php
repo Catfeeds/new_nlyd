@@ -124,7 +124,7 @@
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-match">
                             </div>
-                            
+
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的比赛', 'nlyd-student')?></div>
                     </a>
@@ -268,10 +268,11 @@
                 'show_option_site_default'    => false,
                 'is_current_languages_list'   => true,//加的
             ) );
+//            var_dump($select);die;
             ?>
 
             <input style="display:none;" type="file" name="meta_val" id="file" class="file" value="" accept="image/*" />
-            <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">        
+            <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
         </div>
         <div class="nl-right-content layui-show-lg-block layui-hide-md layui-hide-sm layui-hide-xs layui-bg-white">
             <header class="mui-bar mui-bar-nav">
@@ -284,15 +285,24 @@
 
             </div>
         </div>
+        <div style="display: none;" id="language_div">
+            <?=$select?>
+        </div>
     </div>
 </div>
 
 <script>
 jQuery(document).ready(function($) {
-
+    var _select = $('#language_div').find('select');
+    var selectData = [{id:'zh_CN',value:'中文'}];
+    $.each(_select.find('option'),function (i,v) {
+        if($(v).val() != ''){
+            selectData.push({'id':$(v).val(),'value':$(v).text()});
+        }
+    });
     // 模拟手机下拉列表，选择性别
     // var selectData= [{id:'zh_CN',value:'中文'},{id:'',value:'English'},]
-    var selectData= <?=json_encode($select)?>;
+    //var selectData= <?//=json_encode($select)?>//;
     var mobileSelect2 = new MobileSelect({
         trigger: '#checked_lan',
         title: '语言 language',
@@ -336,14 +346,14 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
             ,content: '<div class="box-conent-wrapper"><?=__('是否立即进行实名认证？', 'nlyd-student')?></div>'
             ,btn: ['<?=__('稍后认证', 'nlyd-student')?>', '<?=__('立即认证', 'nlyd-student')?>', ]
             ,success: function(layero, index){
-                
+
             }
             ,yes: function(index, layero){
                 layer.closeAll();
             }
             ,btn2: function(index, layero){
                 //按钮【按钮二】的回调
-                
+
                 //return false 开启该代码可禁止点击该按钮关闭
                 window.location.href="<?=home_url('account/certification');?>"
             }
@@ -363,14 +373,14 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
         ,content: '<div class="box-conent-wrapper"><?=__('是否继续进入比赛？', 'nlyd-student')?></div>'
         ,btn: ['<?=__('不进入', 'nlyd-student')?>', '<?=__('进入', 'nlyd-student')?>', ]
         ,success: function(layero, index){
-            
+
         }
         ,yes: function(index, layero){
             layer.closeAll();
         }
         ,btn2: function(index, layero){
             //按钮【按钮二】的回调
-            
+
             //return false 开启该代码可禁止点击该按钮关闭
             window.location.href="<?=$waitting_url;?>"
         }
@@ -469,7 +479,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
                         cropper = null;
                     }
                 })
-            }); 
+            });
         }
     });
 });
