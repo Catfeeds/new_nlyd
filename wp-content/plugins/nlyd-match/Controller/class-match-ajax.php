@@ -107,10 +107,12 @@ class Match_Ajax
         $result = $wpdb->query($sql);
 
         $update = array(
+            'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($match_start_time))),
             'match_start_time' => $match_start_time,
             'match_end_time' => $match_end_time,
             'match_project_id' => arr2str(array_unique($match_project_id)),
         );
+
         $result1 = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$_POST['match_id']));
         if($result && $result1){
             $wpdb->commit();

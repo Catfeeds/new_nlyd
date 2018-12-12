@@ -137,7 +137,6 @@ function the_table_install () {
           `chairman_id` varchar(255) DEFAULT NULL COMMENT '组委会主席id',
           `secretary_id` varchar(255) DEFAULT NULL COMMENT '秘书长id',
           `referee_id` int(20) DEFAULT NULL COMMENT '推荐人id',
-          `zone_title` varchar(255) DEFAULT NULL COMMENT '主体机构名称',
           `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',
           `created_time` datetime DEFAULT NULL COMMENT '提交时间',
           `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
