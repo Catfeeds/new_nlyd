@@ -73,6 +73,53 @@ class Fission_Ajax
         else wp_send_json_error(['info' => '删除失败!']);
     }
 
+    /**
+     * 通过/拒绝主体账号申请
+     */
+    public function editOrganizeApply(){
+        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
+        if($user_id == '') wp_send_json_error(['info' => '参数错误!']);
+        $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
+        if($type == 'agree'){//同意申请
+            $user_status = 1;
+        }elseif ($type == 'refuse'){//拒绝申请
+            $user_status = -2;
+        }else{
+            wp_send_json_error(['info' => '参数错误!']);
+        }
+        //查询原数据
+        global $wpdb;
+        $zone_meta_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id IN({$user_id}) AND user_status=-1");
+        if(!$zone_meta_id || $zone_meta_id == '') wp_send_json_error(['info' => '未找到申请记录!']);
+        //审核时间
+        $apply_date = get_time('mysql');
+        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `user_status` = '{$user_status}',`audit_time` = '{$apply_date}' WHERE user_id IN({$user_id}) AND user_status=-1");
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
+    /**
+     * 冻结/解冻主体账号
+     */
+    public function editOrganizeAble(){
+        $user_id = isset($_POST['user_id']) ? trim($_POST['user_id']) : '';
+        if($user_id == '') wp_send_json_error(['info' => '参数错误!']);
+        $type = isset($_POST['request_type']) ? trim($_POST['request_type']) : '';
+        if($type == 'frozen'){//冻结
+            $is_able = 2;
+        }elseif ($type == 'thaw'){//解冻
+            $is_able = 1;
+        }else{
+            wp_send_json_error(['info' => '参数错误!']);
+        }
+        //查询原数据
+        global $wpdb;
+        $zone_meta_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id IN({$user_id}) AND user_status=1");
+        if(!$zone_meta_id || $zone_meta_id == '') wp_send_json_error(['info' => '未找到可操作主体!']);
+        $bool = $wpdb->query("UPDATE `{$wpdb->prefix}zone_meta` SET `is_able` = '{$is_able}' WHERE user_id IN({$user_id}) AND user_status=1");
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
+
 }
 
 new Fission_Ajax();
