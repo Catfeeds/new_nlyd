@@ -99,6 +99,9 @@ class Match_Ajax
         }
         /*print_r($str);
         die;*/
+
+        $delete = $wpdb->delete($wpdb->prefix.'match_project_more',array('match_id'=>$_POST['match_id']));
+
         $sql = "INSERT INTO `{$wpdb->prefix}match_project_more` 
                 (`match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `created_id`, `created_time`) 
                 VALUES ".$str;
@@ -114,7 +117,7 @@ class Match_Ajax
         );
 
         $result1 = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$_POST['match_id']));
-        if($result && $result1){
+        if($delete && $result && $result1){
             $wpdb->commit();
             wp_send_json_success('生成成功');
         }else{
