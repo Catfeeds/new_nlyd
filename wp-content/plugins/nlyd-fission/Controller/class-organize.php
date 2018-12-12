@@ -52,22 +52,24 @@ class Organize{
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
         $type = isset($_GET['ctype']) ? intval($_GET['ctype']) : 0;
+        $status_type = isset($_GET['stype']) ? intval($_GET['stype']) : 1;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $where = "WHERE 1=1";
+        $where = "WHERE zm.user_status='{$status_type}'";
         $leftJoin = '';
         $joinWhere = '';
         if($type>0){
             $where .= " AND zm.type_id='{$type}'";
         }
+
         if($searchStr != ''){
             $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
             $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_title,
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
                 WHEN -1 THEN '正在审核' 
@@ -93,6 +95,10 @@ class Organize{
         ));
         //各种数量
         $numSql = "SELECT count(id) FROM {$wpdb->prefix}zone_meta";
+        $ok_num  = $wpdb->get_var($numSql.' WHERE user_status=1');
+        $apply_num  = $wpdb->get_var($numSql.' WHERE user_status=-1');
+        $refuse_num  = $wpdb->get_var($numSql.' WHERE user_status=-2');
+        $numSql .= " WHERE user_status='{$status_type}'";
         $all_num = $wpdb->get_var($numSql);
         //类型列表
         $typeList = $wpdb->get_results("SELECT id,zone_type_name FROM {$wpdb->prefix}zone_type", ARRAY_A);
@@ -107,22 +113,28 @@ class Organize{
 
             <h2 class="screen-reader-text">过滤主体列表</h2>
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype=0')?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=1&ctype='.$type)?>" <?=$status_type===1?'class="current"':''?> aria-current="page">已通过<span class="count">（<?=$ok_num?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=-1&ctype='.$type)?>" <?=$status_type===-1?'class="current"':''?> aria-current="page">待审核<span class="count">（<?=$apply_num?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&stype=-2&ctype='.$type)?>" <?=$status_type===-2?'class="current"':''?> aria-current="page">未通过<span class="count">（<?=$refuse_num?>）</span></a> </li>
+            </ul>
+            <br class="clear">
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype=0&stype='.$status_type)?>" <?=$type===0?'class="current"':''?> aria-current="page">全部<span class="count">（<?=$all_num?>）</span></a> |</li>
                 <?php
                 foreach ($typeList as $tlk => $tlv){
-
-                    $typeNum = $wpdb->get_var($numSql." WHERE type_id='{$tlv['id']}'");
+                    $typeNum = $wpdb->get_var($numSql." AND type_id='{$tlv['id']}'");
                 ?>
-                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id'])?>" <?=$type===$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=fission&ctype='.$tlv['id']).'&stype='.$status_type?>" <?=$type==$tlv['id']?'class="current"':''?> aria-current="page"><?=$tlv['zone_type_name']?><span class="count">（<?=$typeNum>0?$typeNum:0?>）</span></a><?=$tlk<$typeListCount?' | ':''?></li>
                 <?php
                 }
                 ?>
             </ul>
 
+
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="负责人姓名/手机/用户名" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission&ctype='.$type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission&ctype='.$type.'&stype='.$status_type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
@@ -154,6 +166,7 @@ class Organize{
                         <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" id="audit_time" class="manage-column column-audit_time">审核时间</th>
+                        <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                     </tr>
                  </thead>
 
@@ -166,17 +179,17 @@ class Organize{
 
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                    ?>
-                   <tr>
+                   <tr data-uid="<?=$row['user_id']?>">
                        <th scope="row" class="check-column">
-                           <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_title']?></label>
+                           <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_name']?></label>
                            <input id="cb-select-<?=$row['user_id']?>" type="checkbox" name="post[]" value="<?=$row['user_id']?>">
                            <div class="locked-indicator">
                                <span class="locked-indicator-icon" aria-hidden="true"></span>
-                               <span class="screen-reader-text">“<?=$row['zone_title']?>”已被锁定</span>
+                               <span class="screen-reader-text">“<?=$row['zone_name']?>”已被锁定</span>
                            </div>
                        </th>
                        <td class="zone_title column-zone_title has-row-actions column-primary" data-colname="主体名称">
-                            <?=$row['zone_title']?>
+                            <?=$row['zone_name']?>
                            <br>
                            <div class="row-actions">
                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&user_id='.$row['user_id'])?>">编辑</a></span>
@@ -192,6 +205,29 @@ class Organize{
                        <td class="view_member column-view_member" data-colname="查看成员"><a href="<?=admin_url('admin.php?page=fission-organize-coach&user_id='.$row['user_id'])?>">查看成员</a></td>
                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
                        <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
+                       <td class="options1 column-options1" data-colname="操作">
+                       <?php
+                       //操作列表
+                       $optionsArr = [];
+                       if($row['user_status'] == '-1'){
+                           array_push($optionsArr,"<a href='javascript:;' class='edit-agree'>通过</a>");
+                           array_push($optionsArr,"<a href='javascript:;' class='edit-refuse'>拒绝</a>");
+                       }
+                       if($row['user_status'] == '1'){
+                           switch ($row['is_able']){
+                               case 1:
+                                   array_push($optionsArr,"<a href='javascript:;' class='edit-frozen'>冻结</a>");
+                                   break;
+                               case 2:
+                                   array_push($optionsArr,"<a href='javascript:;' class='edit-thaw'>解冻</a>");
+                                   break;
+                           }
+                       }
+
+
+                       echo join(' | ',$optionsArr);
+                       ?>
+                       </td>
                    </tr>
                    <?php
                    }
@@ -207,6 +243,7 @@ class Organize{
                         <th scope="col" class="manage-column column-view_member">查看成员</th>
                         <th scope="col" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" class="manage-column column-audit_time">审核时间</th>
+                        <th scope="col" class="manage-column column-options1">操作</th>
                     </tr>
                 </tfoot>
 
@@ -459,7 +496,7 @@ class Organize{
                     'user_id' => $user_id,
                     'referee_id' => $referee_id,
                     'user_status' => $user_status,
-                    'zone_title' => $zone_title,
+                    'zone_name' => $zone_title,
                 ];
                 $wpdb->startTrans();
                 if($old_user_id>0){
@@ -602,6 +639,42 @@ class Organize{
                                 <option <?=$row['user_status']=='-1'?'selected="selected"':''?> value="-1">正在审核</option>
                                 <option <?=$row['user_status']=='-2'?'selected="selected"':''?> value="-2">未通过</option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">机构地址 </label></th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">营业执照 </label></th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">营业执照照片 </label></th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">法人 </label></th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">开户行 </label></th>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">开户行地址 </label></th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="zone_title">银行卡号 </label></th>
+                        <td>
                         </td>
                     </tr>
                     <tr class="form-field">
