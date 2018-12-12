@@ -5,7 +5,7 @@ class Organize{
     {
         if($is_list === false){
             add_action( 'admin_menu', array($this,'register_organize_menu_page') );
-//        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
         }
     }
     public function register_organize_menu_page(){
@@ -70,6 +70,9 @@ class Organize{
             $joinWhere = " AND (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
+                zm.zone_address,zm.business_licence,zm.business_licence_url,
+                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,
+                zm.chairman_id,zm.secretary_id,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
                 WHEN -1 THEN '正在审核' 
@@ -169,6 +172,11 @@ class Organize{
                         <th scope="col" id="zone_title" class="manage-column column-zone_title column-primary">主体名称</th>
                         <th scope="col" id="real_name" class="manage-column column-real_name">负责人姓名</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
+                        <th scope="col" id="legal_person" class="manage-column column-legal_person">法人</th>
+                        <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
+                        <th scope="col" id="zone_address" class="manage-column column-zone_address">地址</th>
+                        <th scope="col" id="business_licence" class="manage-column column-business_licence">营业执照</th>
+                        <th scope="col" id="bank_card_num" class="manage-column column-bank_card_num">银行卡</th>
                         <th scope="col" id="zone_type" class="manage-column column-zone_type">主体类型</th>
                         <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
                         <th scope="col" id="able_status" class="manage-column column-able_status">冻结状态</th>
@@ -185,8 +193,8 @@ class Organize{
                    foreach ($rows as $row){
                         $usermeta = get_user_meta($row['user_id']);
                         $user_real_name = isset($usermeta['user_real_name']) ? $usermeta['user_real_name'][0] : [];
-
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
+                        $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                    ?>
                    <tr data-uid="<?=$row['user_id']?>">
                        <th scope="row" class="check-column">
@@ -209,6 +217,16 @@ class Organize{
                        </td>
                        <td class="real_name column-real_name" data-colname="负责人姓名"><?=isset($user_real_name['real_name'])?$user_real_name['real_name']:$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
+
+                       <td class="legal_person column-legal_person" data-colname="法人"><?=$row['legal_person']?></td>
+                       <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
+                       <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
+                       <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['user_id']?>">
+                           <?=$row['business_licence']?>
+                           <img src="<?=$row['business_licence_url']?>" style="height: 60px;" alt="">
+                       </td>
+                       <td class="bank_card_num column-bank_card_num" data-colname="银行卡"><?=$row['bank_card_num']?>(<?=$row['opening_bank']?>)</td>
+
                        <td class="zone_type column-zone_type" data-colname="主体类型"><?=$row['zone_type_name']?></td>
                        <td class="zone_status column-zone_status" data-colname="申请状态">
                            <span style="<?=$row['user_status'] == '-1'?'color:#00c415':''?>"><?=$row['user_status_name']?></span>
@@ -251,6 +269,11 @@ class Organize{
                         <th scope="col" class="manage-column column-zone_title column-primary">主体名称</th>
                         <th scope="col" class="manage-column column-real_name">负责人姓名</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
+                        <th scope="col" class="manage-column column-legal_person">法人</th>
+                        <th scope="col" class="manage-column column-chairman_id">主席</th>
+                        <th scope="col" class="manage-column column-zone_address">地址</th>
+                        <th scope="col" class="manage-column column-business_licence">营业执照</th>
+                        <th scope="col" class="manage-column bank_card_num-referee_id">银行卡</th>
                         <th scope="col" class="manage-column column-zone_type">主体类型</th>
                         <th scope="col" class="manage-column column-zone_status">申请状态</th>
                         <th scope="col" class="manage-column column-able_status">冻结状态</th>
@@ -342,6 +365,17 @@ class Organize{
                         postAjax($(this),'','all');
                     });
 
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        var _title = '';
+                        <?php foreach ($rows as $row){ ?>
+                        layer.photos({//图片预览
+                            photos: '#cardImg-<?=$row['user_id']?>',
+                            move : false,
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        })
+                        <?php } ?>
+                    });
                 });
             </script>
         </div>
@@ -560,6 +594,14 @@ class Organize{
             $referee_id = isset($_POST['referee_id']) ? intval($_POST['referee_id']) : 0;
             $user_status = isset($_POST['user_status']) ? intval($_POST['user_status']) : 0;
             $zone_title = isset($_POST['zone_title']) ? trim($_POST['zone_title']) : '';
+            $zone_address = isset($_POST['zone_address']) ? trim($_POST['zone_address']) : '';
+            $business_licence = isset($_POST['business_licence']) ? trim($_POST['business_licence']) : '';
+            $legal_person = isset($_POST['legal_person']) ? trim($_POST['legal_person']) : '';
+            $opening_bank = isset($_POST['opening_bank']) ? trim($_POST['opening_bank']) : '';
+            $opening_bank_address = isset($_POST['opening_bank_address']) ? trim($_POST['opening_bank_address']) : '';
+            $bank_card_num = isset($_POST['bank_card_num']) ? trim($_POST['bank_card_num']) : '';
+            $chairman_id = isset($_POST['chairman_id']) ? intval($_POST['chairman_id']) : 0;
+            $secretary_id = isset($_POST['secretary_id']) ? intval($_POST['secretary_id']) : 0;
             $power = isset($_POST['power']) ? $_POST['power'] : [];
 
             if($user_id < 0) $error_msg = '请选择升级账号';
@@ -567,6 +609,14 @@ class Organize{
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($power)) $error_msg = $error_msg==''?'权限错误':$error_msg.'<br >权限错误';
             if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
+            if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
+            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
+            if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
+            if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
+            if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';
+            if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
+            if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
+
             if($error_msg == ''){
                 $insertData = [
                     'type_id' => $zone_type,
@@ -574,7 +624,26 @@ class Organize{
                     'referee_id' => $referee_id,
                     'user_status' => $user_status,
                     'zone_name' => $zone_title,
+                    'zone_address' => $zone_address,
+                    'business_licence' => $business_licence,
+                    'legal_person' => $legal_person,
+                    'opening_bank' => $opening_bank,
+                    'opening_bank_address' => $opening_bank_address,
+                    'bank_card_num' => $bank_card_num,
+                    'chairman_id' => $chairman_id,
+                    'secretary_id' => $secretary_id,
                 ];
+                //图片
+                if(isset($_FILES['business_licence_url'])){
+                    $upload_dir = wp_upload_dir();
+                    $dir = '/user/'.$user_id.'/';
+                    //print_r($upd);
+                    $file = saveIosFile($_FILES['business_licence_url']['tmp_name'],$upload_dir['basedir'].$dir);
+                    if($file){
+                        $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
+                    }
+
+                }
                 $wpdb->startTrans();
                 if($old_user_id>0){
                     $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['user_id'=>$old_user_id]);
@@ -638,12 +707,16 @@ class Organize{
         $editPowerListArr = [];
         if($old_user_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
-                   um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile 
+                   um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
+                   zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
+                   zm.chairman_id,zm.secretary_id 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name' 
                    LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=zm.referee_id AND um2.meta_key='user_real_name' 
+                   LEFT JOIN {$wpdb->usermeta} AS um3 ON um3.user_id=zm.chairman_id AND um3.meta_key='user_real_name' 
+                   LEFT JOIN {$wpdb->usermeta} AS um4 ON um4.user_id=zm.secretary_id AND um4.meta_key='user_real_name' 
                    WHERE zm.user_id='{$old_user_id}'", ARRAY_A);
 //            leo_dump($row);die;
             //已有权限
@@ -665,9 +738,11 @@ class Organize{
                 <span style="color: #c44e00"><?=$error_msg?></span>
             </div>
 
-            <form method="post" action="" class="validate" novalidate="novalidate">
+            <form method="post" action="" class="validate" novalidate="novalidate" enctype="multipart/form-data">
                 <input name="action" type="hidden" value="createuser">
-                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
+                <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44">
+                <input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php">
+                <table class="form-table">
                     <tbody>
                     <tr class="">
                         <th scope="row"><label for="zone_title">主体名称 </label></th>
@@ -719,39 +794,66 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">机构地址 </label></th>
+                        <th scope="row"><label for="chairman_id">主席 </label></th>
                         <td>
+                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                                <option value="<?=$row['chairman_id']?>" selected="selected">
+                                    <?=isset($row['chairman_real_name']) ? unserialize($row['chairman_real_name'])['real_name'] : ''?>
+                                </option>
+                            </select>
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">营业执照 </label></th>
+                        <th scope="row"><label for="secretary_id">秘书长 </label></th>
                         <td>
+                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                                <option value="<?=$row['secretary_id']?>" selected="selected">
+                                    <?=isset($row['secretary_real_name']) ? unserialize($row['secretary_real_name'])['real_name'] : ''?>
+                                </option>
+                            </select>
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">营业执照照片 </label></th>
+                        <th scope="row"><label for="zone_address">机构地址 </label></th>
                         <td>
+                            <input type="text" name="zone_address" value="<?=$row['zone_address']?>">
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">法人 </label></th>
+                        <th scope="row"><label for="business_licence">营业执照 </label></th>
                         <td>
+                            <input type="text" name="business_licence" value="<?=$row['business_licence']?>">
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">开户行 </label></th>
+                        <th scope="row"><label for="business_licence_url">营业执照照片 </label></th>
                         <td>
-
+                            <img src="<?=$row['business_licence_url']?>" alt="" style="height: 80px;">
+                            <input type="file" name="business_licence_url" id="business_licence_url">
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">开户行地址 </label></th>
+                        <th scope="row"><label for="legal_person">法人 </label></th>
                         <td>
+                            <input type="text" name="legal_person" value="<?=$row['legal_person']?>">
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row"><label for="zone_title">银行卡号 </label></th>
+                        <th scope="row"><label for="opening_bank">开户行 </label></th>
                         <td>
+                            <input type="text" name="opening_bank" value="<?=$row['opening_bank']?>">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="opening_bank_address">开户行地址 </label></th>
+                        <td>
+                            <input type="text" name="opening_bank_address" value="<?=$row['opening_bank_address']?>">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="bank_card_num">银行卡号 </label></th>
+                        <td>
+                            <input type="text" name="bank_card_num" value="<?=$row['bank_card_num']?>">
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -1174,6 +1276,19 @@ class Organize{
             </form>
         </div>
         <?php
+    }
+
+    /**
+     * 引入当前页面css/js
+     */
+    public function register_scripts(){
+
+        switch ($_GET['page']){
+            case 'fission':
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
+                break;
+        }
     }
 }
 new Organize();
