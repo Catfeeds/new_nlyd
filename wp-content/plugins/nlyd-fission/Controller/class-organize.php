@@ -67,14 +67,19 @@ class Organize{
 
         if($searchStr != ''){
             $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
-            $joinWhere = " AND (um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
+            $joinWhere = " AND (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
                 WHEN -1 THEN '正在审核' 
                 WHEN -2 THEN '未通过' 
-                END AS user_status_name 
+                END AS user_status_name,
+                CASE zm.is_able 
+                WHEN 1 THEN '正常' 
+                WHEN 2 THEN '被冻结' 
+                ELSE '-' 
+                END AS able_name 
                 FROM {$wpdb->prefix}zone_meta AS zm 
                 LEFT JOIN `{$wpdb->users}` AS u ON u.ID=zm.user_id 
                 LEFT JOIN `{$wpdb->prefix}zone_type` AS zt ON zt.id=zm.type_id 
@@ -133,7 +138,7 @@ class Organize{
 
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="负责人姓名/手机/用户名" value="<?=$searchStr?>">
+                <input type="search" id="search_val" name="search_val" placeholder="名称/负责人/手机/用户名" value="<?=$searchStr?>">
                 <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission&ctype='.$type.'&stype='.$status_type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
@@ -143,9 +148,12 @@ class Organize{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="delete">删除</option>
+                        <option value="agree">通过申请</option>
+                        <option value="refuse">拒绝申请</option>
+                        <option value="frozen">冻结</option>
+                        <option value="thaw">解冻</option>
                     </select>
-                    <input type="submit" id="doaction" class="button action" value="应用">
+                    <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -162,7 +170,8 @@ class Organize{
                         <th scope="col" id="real_name" class="manage-column column-real_name">负责人姓名</th>
                         <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" id="zone_type" class="manage-column column-zone_type">主体类型</th>
-                        <th scope="col" id="zone_status" class="manage-column column-zone_status">状态</th>
+                        <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
+                        <th scope="col" id="able_status" class="manage-column column-able_status">冻结状态</th>
                         <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" id="audit_time" class="manage-column column-audit_time">审核时间</th>
@@ -201,7 +210,12 @@ class Organize{
                        <td class="real_name column-real_name" data-colname="负责人姓名"><?=isset($user_real_name['real_name'])?$user_real_name['real_name']:$row['user_login']?></td>
                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
                        <td class="zone_type column-zone_type" data-colname="主体类型"><?=$row['zone_type_name']?></td>
-                       <td class="zone_status column-zone_status" data-colname="状态"><?=$row['user_status_name']?></td>
+                       <td class="zone_status column-zone_status" data-colname="申请状态">
+                           <span style="<?=$row['user_status'] == '-1'?'color:#00c415':''?>"><?=$row['user_status_name']?></span>
+                       </td>
+                       <td class="able_status column-able_status" data-colname="冻结状态">
+                           <span style="<?=$row['is_able'] == '2'?'color:#c41800':''?>"><?=$row['able_name']?></span>
+                       </td>
                        <td class="view_member column-view_member" data-colname="查看成员"><a href="<?=admin_url('admin.php?page=fission-organize-coach&user_id='.$row['user_id'])?>">查看成员</a></td>
                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
                        <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
@@ -210,21 +224,19 @@ class Organize{
                        //操作列表
                        $optionsArr = [];
                        if($row['user_status'] == '-1'){
-                           array_push($optionsArr,"<a href='javascript:;' class='edit-agree'>通过</a>");
-                           array_push($optionsArr,"<a href='javascript:;' class='edit-refuse'>拒绝</a>");
+                           array_push($optionsArr,"<a href='javascript:;' data-type='agree' class='edit-agree'>通过</a>");
+                           array_push($optionsArr,"<a href='javascript:;' data-type='refuse' class='edit-refuse'>拒绝</a>");
                        }
                        if($row['user_status'] == '1'){
                            switch ($row['is_able']){
                                case 1:
-                                   array_push($optionsArr,"<a href='javascript:;' class='edit-frozen'>冻结</a>");
+                                   array_push($optionsArr,"<a href='javascript:;' data-type='frozen' class='edit-frozen'>冻结</a>");
                                    break;
                                case 2:
-                                   array_push($optionsArr,"<a href='javascript:;' class='edit-thaw'>解冻</a>");
+                                   array_push($optionsArr,"<a href='javascript:;' data-type='thaw' class='edit-thaw'>解冻</a>");
                                    break;
                            }
                        }
-
-
                        echo join(' | ',$optionsArr);
                        ?>
                        </td>
@@ -232,6 +244,7 @@ class Organize{
                    <?php
                    }
                    ?>
+                </tbody>
                 <tfoot>
                     <tr>
                         <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
@@ -239,7 +252,8 @@ class Organize{
                         <th scope="col" class="manage-column column-real_name">负责人姓名</th>
                         <th scope="col" class="manage-column column-referee_id">推荐人</th>
                         <th scope="col" class="manage-column column-zone_type">主体类型</th>
-                        <th scope="col" class="manage-column column-zone_status">状态</th>
+                        <th scope="col" class="manage-column column-zone_status">申请状态</th>
+                        <th scope="col" class="manage-column column-able_status">冻结状态</th>
                         <th scope="col" class="manage-column column-view_member">查看成员</th>
                         <th scope="col" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" class="manage-column column-audit_time">审核时间</th>
@@ -254,9 +268,12 @@ class Organize{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="delete">删除</option>
+                        <option value="agree">通过申请</option>
+                        <option value="refuse">拒绝申请</option>
+                        <option value="frozen">冻结</option>
+                        <option value="thaw">解冻</option>
                     </select>
-                    <input type="submit" id="doaction2" class="button action" value="应用">
+                    <input type="button" id="doaction2" class="button action all_options" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -267,6 +284,66 @@ class Organize{
             </div>
 
             <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    function postAjax(_this,action,type){
+                        if(type == 'all'){
+                            var _select = _this.prev('select');
+                            var _type = _select.val();
+                            if(_type == false || _type == '' || _type == '-1') return false;
+                            var user_id = [];
+                            $.each($('#the-list').find('tr').find('input[type="checkbox"]:checked'),function (i,v) {
+                                user_id.push($(v).val());
+                            });
+                           if('agree' == _type || 'refuse' == _type){
+                               action = 'editOrganizeApply';
+                           }else if('frozen' == _type || 'thaw' == _type){
+                               action = 'editOrganizeAble';
+                           }else{
+                               return false;
+                           }
+                            user_id = user_id.join(',');
+                            var request_type = _type;
+                        }else{
+                            var user_id = _this.closest('tr').attr('data-uid');
+                            var request_type = _this.attr('data-type');
+                        }
+                        if(user_id == false || user_id == '') return false;
+                        var data = {'action':action,'user_id':user_id,'request_type':request_type}
+                        $.ajax({
+                            url:ajaxurl,
+                            data : data,
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            },error : function () {
+                                alert('请求失败!');
+                            }
+                        });
+                    }
+                    $('.edit-agree').on('click',function () {
+                        postAjax($(this),'editOrganizeApply','');
+                    });
+                    $('.edit-refuse').on('click',function () {
+                        postAjax($(this),'editOrganizeApply','');
+                    });
+                    $('.edit-frozen').on('click',function () {
+                        postAjax($(this),'editOrganizeAble','');
+                    });
+                    $('.edit-thaw').on('click',function () {
+                        postAjax($(this),'editOrganizeAble','');
+                    });
+                    //批量
+                    $('.all_options').on('click',function () {
+                        postAjax($(this),'','all');
+                    });
+
+                });
+            </script>
         </div>
         <?php
     }
@@ -560,7 +637,7 @@ class Organize{
         }
         $editPowerListArr = [];
         if($old_user_id > 0){
-            $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_title,
+            $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
@@ -595,7 +672,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="zone_title">主体名称 </label></th>
                         <td>
-                            <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_title']?>">
+                            <input type="text" name="zone_title" id="zone_title" value="<?=$row['zone_name']?>">
                         </td>
                     </tr>
                     <tr class="form-field form-required">
