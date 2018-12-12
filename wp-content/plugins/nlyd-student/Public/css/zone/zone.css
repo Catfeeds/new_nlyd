@@ -1,0 +1,147 @@
+/* .apply{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    background-color: #fff;
+    border: none;
+    overflow: hidden;
+}
+.apply_list{
+    display: block;
+    padding: 10px 0;
+    border-top: 1px solid rgba(38, 38, 38, 0.1);
+}
+.apply_title{
+    padding: 10px 0;
+}
+.apply_list_line{
+    display: inline-block;
+}
+.apply_list_line.center{
+    margin-left: 21px;
+}
+.apply_list_line.ml{
+    margin-left: 20px;
+}
+.apply_list_line.mr{
+    margin-right: 20px;
+} */
+.zone_user{
+    margin-top: 0;
+    padding-top: 33px;
+    padding-bottom: 33px;
+    background-color: #fff;
+    border: none;
+    overflow: hidden;
+}
+.zone_user_img{
+    width: 85px;
+    height: 85px;
+    border-radius: 5px;
+    border: 1px solid rgba(38, 38, 38, 0.1);
+}
+.zone_user_detail{
+    padding-left: 14px;
+    padding-right: 30px;
+    width: -webkit-calc(100% - 131px);
+    width: calc(100% - 131px);
+    position: relative;
+}
+.qr_code{
+    position: absolute;
+    right: 0;
+    top:0;
+}
+.zone_bg{
+    width: 25px;
+    height: 28px;
+    background-image: url(../image/zone_bg.png);
+    background-size: auto 100%;
+    background-repeat: no-repeat
+}
+.bg_money{
+    background-position: 0 1px;
+}
+.bg_share{
+    background-position: -31px 1px;
+}
+.bg_course{
+    background-position: -64px 1px;
+}
+.bg_coach{
+    background-position: -95px 1px;
+}
+.bg_student{
+    background-position: -126px 1px;
+}
+.bg_match{
+    background-position: -157px 1px;
+}
+.bg_level{
+    background-position: -188px 1px;
+}
+
+
+
+
+.lable_row{
+    padding: 10px 0;
+}
+.input_row input[type=text],
+.input_row input[type="tel"]
+{
+    margin-bottom: 0;
+}
+input[type="text"]:disabled{
+    background-color: rgba(135, 135, 135, 0.1);
+}
+input[type="text"].radius_input_row{
+    width: 100%;
+    border-radius: 6px;
+    height: 45px;
+    padding-left: 20px;
+}
+
+
+
+.load_img{
+    width: 90px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+.input_row .load_img:last-child{
+    margin-right: 0;
+}
+.tips{
+    display: inline-block;
+    vertical-align: middle;
+}
+.img-zoos{
+    padding: 0;
+}
+
+
+.nl-badge{
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    left: 2%;
+    line-height: 20px;
+    text-align: center;
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
+    color: #fff;
+    border-radius: 50%;
+}
+.apply-success{
+    margin-top: 75px;
+    margin-bottom: 31px;
+}
+.success{
+    width: 80%;
+    margin: auto;
+}
