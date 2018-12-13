@@ -26,12 +26,16 @@ class Student_Zone extends Student_Home
      * 机构主页
      */
     public function index(){
+        global $user_info;
         $row = $this->get_zone_row();
         if($row['user_status'] == 1){
             $day = date_i18n('Y年m月d日',strtotime('+1 year',$row['audit_time']));
 
         }
+        $data['row'] = $row;
         print_r($row);
+
+
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
 
@@ -73,6 +77,14 @@ class Student_Zone extends Student_Home
                 where a.user_id = '{$user_info['user_id']}' ";
         //print_r($sql);
         $row = $wpdb->get_row($sql,ARRAY_A);
+        $row['user_head'] = $user_info['user_head'];
+        $row['user_real_name'] = $user_info['user_real_name']['real_name'];
+        $row['user_ID'] = $user_info['user_ID'];
+
+        //获取推荐人
+        $referee_user_real_name = get_user_meta($user_info['referee_id'],'user_real_name')[0];
+        $row['referee_name'] = $referee_user_real_name['real_name'];
+
         return $row;
     }
 
