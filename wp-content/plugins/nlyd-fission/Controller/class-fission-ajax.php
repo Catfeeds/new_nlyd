@@ -120,6 +120,18 @@ class Fission_Ajax
         else wp_send_json_error(['info' => '操作失败!']);
     }
 
+    /**
+     * 删除分成设置
+     */
+    public function delSpreadSet(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        if($id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $sql = "DELETE FROM {$wpdb->prefix}spread_set WHERE id='{$id}' OR parent_id='{$id}'";
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info'=>'删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 }
 
 new Fission_Ajax();
