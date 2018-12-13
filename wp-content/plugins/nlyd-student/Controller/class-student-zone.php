@@ -26,14 +26,19 @@ class Student_Zone extends Student_Home
      * 机构主页
      */
     public function index(){
-        global $user_info;
+        global $wpdb,$user_info;
+
+        //获取所有的机构名
+        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+        $data['list'] = $rows;
+
         $row = $this->get_zone_row();
         if($row['user_status'] == 1){
             $day = date_i18n('Y年m月d日',strtotime('+1 year',$row['audit_time']));
 
         }
         $data['row'] = $row;
-        print_r($row);
+        print_r($rows);
 
 
         $view = student_view_path.CONTROLLER.'/index.php';

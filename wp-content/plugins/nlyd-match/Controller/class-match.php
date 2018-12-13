@@ -911,13 +911,13 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_start_time']))?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_start_time']))?>" name="match[match_start_time]" class="layui-input " readonly  id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_end_time']))?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_end_time']))?>" name="match[match_end_time]" class="layui-input " readonly  id="match_end_time" placeholder="比赛结束时间">
             </div>
         </div>
         <div class="layui-form-item">
@@ -1095,13 +1095,13 @@ class Match
                     <div class="layui-form-item">
                         <label class="layui-form-label">开始时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value=""  name="start_time" class="layui-input "/>
+                            <input type="text" value="" id="start_time" name="start_time" class="layui-input date-picker _start_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">结束时间</label>
                         <div class="layui-input-block">
-                            <input type="text" value=""  name="end_time" class="layui-input "/>
+                            <input type="text" value="" id="end_time" name="end_time" class="layui-input date-picker _end_time"/>
                         </div>
                     </div>
                     <div class="layui-form-item">

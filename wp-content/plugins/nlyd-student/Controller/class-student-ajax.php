@@ -372,7 +372,7 @@ class Student_Ajax
                     }
                 }
                 $my_score = $success_len * 23;
-                if ($success_len == $len){
+                if ($len/$success_len >= 0.8){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
 
@@ -3490,7 +3490,7 @@ class Student_Ajax
                     }
                 }
                 $my_score = $success_len * 23;
-                if ($success_len == $len){
+                if ($len/$success_len >= 0.8 ){
                     $my_score += $_POST['surplus_time'] * 1;
                 }
                 break;
@@ -4325,7 +4325,7 @@ class Student_Ajax
         $upload_dir = wp_upload_dir();
         $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
         if(!empty($spread_qrcode)){
-            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+            wp_send_json_success($upload_dir['baseurl'].$spread_qrcode[0]);
         }else{
 
             include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
@@ -4375,7 +4375,7 @@ class Student_Ajax
             }
             imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
-            wp_send_json_success(array('info'=>$upload_dir['baseurl'].$spread_qrcode[0]));
+            wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
         }
     }
 
