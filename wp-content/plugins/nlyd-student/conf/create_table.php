@@ -50,6 +50,7 @@ function the_table_install () {
           `sponsor_income` decimal(10,2) DEFAULT NULL COMMENT '主办方收益',
           `manager_id` int(20) DEFAULT NULL COMMENT '事业员(主办方上级)',
           `manager_income` int(20) DEFAULT NULL COMMENT '事业员收益',
+          `income_status` tinyint(1) unsigned DEFAULT 1 COMMENT '1待确认,2已确认',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
