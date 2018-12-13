@@ -965,7 +965,7 @@ if(!class_exists('MatchController')){
 
                     $match_meta = $_POST['match'];
 
-                    /*if(empty($match_meta['match_project'])){
+                    if(empty($match_meta['match_project'])){
                         //获取所有比赛项目
                         $args = array(
                             'post_type' => array('project'),
@@ -980,7 +980,7 @@ if(!class_exists('MatchController')){
                         $project_array = array_column($match_meta['match_project'],'match_project_id');
                     }
                     $project_id = arr2str($project_array);
-                    $match_meta['match_project_id'] = $project_id;*/
+                    $match_meta['match_project_id'] = $project_id;
 
 
                     $match_meta['match_id'] = $post_ID;
@@ -988,6 +988,9 @@ if(!class_exists('MatchController')){
                     $match_meta['created_time'] = get_time('mysql');
 
                     unset($match_meta['match_project']);
+
+                    //查询是否发布了比赛信息
+                    //var_dump($match_meta);die;
 
                     //查询是否发布了比赛信息
                     //var_dump($match_meta);die;

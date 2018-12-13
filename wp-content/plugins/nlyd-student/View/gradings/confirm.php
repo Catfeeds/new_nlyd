@@ -83,16 +83,14 @@
                                 </div>
                             </div>
                             <?php endif;?>
+                            <?php if(!empty($coach_real_name)): ?>
                             <div>
                                 <div class="nl-match-label"><?=__('主训教练', 'nlyd-student')?>:</div>
                                 <div class="nl-match-info">
-                                    <?php if(!empty($coach_real_name)){ ?>
-                                        <?=$coach_real_name['real_name']?>
-                                    <?php }else{ ?>
-                                        <a href="<?=home_url('/teams/myCoach/grad_id/'.$_GET['grad_id']).'/category_id/'.$match['category_id'];?>" class="nl-see-link"><?=__('去设置', 'nlyd-student')?></a>
-                                    <?php } ?>
+                                    <?=$coach_real_name['real_name']?>
                                 </div>
                             </div>
+                            <?php endif;?>
                         </li>
                         <?php endif;?>
                         <!-- 选手信息 -->
