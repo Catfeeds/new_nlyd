@@ -840,7 +840,7 @@ function the_table_install () {
         $sql = "CREATE TABLE `{$table_name}` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `profit_name` varchar(255) DEFAULT NULL COMMENT '收益名称',
-          `profit_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '收益金额或百分比',
+          `profit_amount` varchar(32) NULL DEFAULT '0.00' COMMENT '收益金额或百分比',
           `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级id',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
