@@ -139,13 +139,12 @@ class Student_Gradings extends Student_Home
         $data['match'] = $match;
 
         //主训教练
-        $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$match['category_id']} and major = 1");
+        $coach_id = $wpdb->get_var("select coach_id from {$wpdb->prefix}my_coach where user_id = {$current_user->ID} and category_id = {$match['category_id']}");
         if($coach_id > 0){
             $data['coach_real_name'] = get_user_meta($coach_id,'user_real_name')[0];
         }else{
             $data['coach_real_name'] = '';
         }
-
         //实名认证
         $data['user_real_name'] = get_user_meta($current_user->ID,'user_real_name')[0];
 
