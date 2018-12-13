@@ -80,7 +80,7 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `user_id` int(20) DEFAULT NULL COMMENT '主体用户id',
+          `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
           `role_id` varchar(255) DEFAULT NULL COMMENT '权限id合集 以,为分割符',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -111,6 +111,7 @@ function the_table_install () {
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `zone_type_name` varchar(255) DEFAULT NULL COMMENT '机构名字',
           `zone_type_alias` varchar(50) DEFAULT NULL COMMENT '机构别名',
+          `zone_type_class` varchar(50) DEFAULT NULL COMMENT '机构样式',
           `zone_type_status` tinyint(2) DEFAULT NULL COMMENT '状态 1正常 2关闭',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -142,6 +143,7 @@ function the_table_install () {
           `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',
           `created_time` datetime DEFAULT NULL COMMENT '提交时间',
           `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
+          `role_id` varchar(255) DEFAULT NULL COMMENT '用户权限id集合 用,分割',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
