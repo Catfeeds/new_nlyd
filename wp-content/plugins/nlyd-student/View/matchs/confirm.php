@@ -30,20 +30,20 @@
                                 <p class="fs_12 c_black3" style="margin:0"><?=$match['post_content']?></p>
                             </div>
                             <div class="nl-match-body ">
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('开赛日期', 'nlyd-student')?>:</div>
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$match['match_start_time']?></span>
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('开赛地点', 'nlyd-student')?>:</div>
                                     <!-- <span >开赛地点:</span> -->
                                     <div class="nl-match-info">
                                         <span class="c_black"><?=$match['match_address']?></span>
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('报名费用', 'nlyd-student')?>:</div>
                                     <!-- <span >报名费用:</span> -->
                                     <div class="nl-match-info">
@@ -60,7 +60,7 @@
                             </div>
                             <div class="nl-match-body ">
                                 <?php foreach ($match_project as $k => $val ){ ?>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__($val['parent_title'], 'nlyd-student')?>:</div>
                                     <!-- <span ><?=__($val['parent_title'], 'nlyd-student')?>:</span> -->
                                     <div class="nl-match-info">
@@ -94,7 +94,7 @@
                                 <span class="fs_16 c_blue"><?=__('选手信息', 'nlyd-student')?></span>
                             </div>
                             <div class="nl-match-body ">
-                                <div class="nl-match-detail rz">
+                                <div class="nl-match-detail layui-row rz">
                                     <div class="nl-match-label"><?=__('选手姓名', 'nlyd-student')?>:</div>
                                     <!-- <span >选手姓名:</span> -->
                                     <div class="nl-match-info">
@@ -106,7 +106,7 @@
                                         <?php }?>
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('所属战队', 'nlyd-student')?>:</div>
                                     <!-- <span >所属战队:</span> -->
                                     <div class="nl-match-info">
@@ -123,7 +123,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label"><?=__('选手ID', 'nlyd-student')?>:</div>
                                     <!-- <span >选手ID:</span> -->
                                     <div class="nl-match-info">
@@ -141,19 +141,19 @@
                             </div>
                             <div class="nl-match-body ">
                                 <?php if(!empty($address)){ ?>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label">收货人姓名:</div>
                                     <div class="nl-match-info">
                                         <input class="c_black" readonly type="text" name="fullname" value="<?=$address['fullname']?>">
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label">联系电话:</div>
                                     <div class="nl-match-info">
                                         <input class="c_black" readonly type="text" name="telephone" value="<?=$address['telephone']?>">
                                     </div>
                                 </div>
-                                <div class="nl-match-detail">
+                                <div class="nl-match-detail layui-row">
                                     <div class="nl-match-label">收货地址:</div>
                                     <div class="nl-match-info">
                                         <span class="c_black">
