@@ -55,9 +55,9 @@ class Student_Matchs extends Student_Home
             $this->project_alias = get_post_meta($_GET['project_id'],'project_alias')[0];
         }
 
-        $this->redis = new Redis();
+        /*$this->redis = new Redis();
         $this->redis->connect('127.0.0.1',6379,1);
-        $this->redis->auth('leo626');
+        $this->redis->auth('leo626');*/
 
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
@@ -1141,10 +1141,6 @@ class Student_Matchs extends Student_Home
 
         //print_r($match);
 
-
-
-
-
         //update_option('match_project_default',true);
         //$project = $this->get_match_project($_GET['match_id'],$match_project_default);
         //print_r($project);
@@ -1184,6 +1180,7 @@ class Student_Matchs extends Student_Home
             $orderStatus['order_id'] = 0;
         }
         //        print_r($order);
+
         $data = array('match'=>$match,'match_project'=>$project,'player'=>$player,'address'=>$address, 'orderStatus' => $orderStatus);
 
         $view = student_view_path.CONTROLLER.'/confirm.php';
@@ -1421,16 +1418,16 @@ class Student_Matchs extends Student_Home
 
                 if(empty($project[$k]['major_coach']) && empty($project[$k]['coach_id'])){
 
-                    $sql = "select a.coach_id,b.display_name 
-                            from {$wpdb->prefix}my_coach a 
-                            left join {$wpdb->prefix}users b on a.coach_id = b.ID
-                            where user_id = {$current_user->ID} and category_id = $k and major = 1
+                    $sql = "select coach_id 
+                            from {$wpdb->prefix}my_coach
+                            where user_id = {$current_user->ID} and category_id = $k 
                             ";
-                    $row = $wpdb->get_row($sql);
-                    //print_r($row);
-                    if(!empty($row)){
-                        $project[$k]['major_coach'] = preg_replace('/, /','',$row->display_name);
-                        $project[$k]['coach_id'] = $row->coach_id;
+                    $coach_id = $wpdb->get_var($sql);
+                    $user_real_name = get_user_meta($coach_id,'user_real_name')[0];
+
+                    if(!empty($user_real_name)){
+                        $project[$k]['major_coach'] = $user_real_name['real_name'];
+                        $project[$k]['coach_id'] = $coach_id;
                     }
                 }
                 $project_id = isset($val['match_project_id']) ? $val['match_project_id'] : $val['ID'];
