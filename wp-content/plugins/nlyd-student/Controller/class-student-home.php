@@ -81,6 +81,7 @@ class Student_Home
         }
 
         $user_info['user_id'] = $current_user->ID;
+        $user_info['referee_id'] = $current_user->data->referee_id;
         $user_info['user_head'] = isset($user_info['user_head']) ? $user_info['user_head'] : student_css_url.'image/nlyd.png';
         $user_info['user_mobile'] = !empty($current_user->user_mobile) ? $current_user->user_mobile : '';
         $user_info['user_email'] = !empty($current_user->user_email) ? $current_user->user_email : '';

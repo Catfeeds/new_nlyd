@@ -163,7 +163,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的考级', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a" >
+                    <a class="c_black8" href="<?=home_url('zone');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>

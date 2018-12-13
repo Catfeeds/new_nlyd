@@ -17,18 +17,18 @@
                     <form class="layui-form" lay-filter='layform'>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心编号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="name" value="111"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="111"></div>
                         </div>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('训练中心名称', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心营业地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
@@ -44,27 +44,33 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('事业管理员', 'nlyd-student')?>"></div>
+                            <div class="input_row">
+                                <input class="radius_input_row" disabled type="text" name="chairman_id" value="事业管理员">
+                            </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('中心管理员', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('中心管理员', 'nlyd-student')?>"></div>
+                            <div class="input_row">
+                                <input class="radius_input_row" disabled type="text" name="name" value="中心管理员">
+                            </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('管理员电话', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="<?=__('管理员电话', 'nlyd-student')?>"></div>
+                            <div class="input_row">
+                                <input class="radius_input_row" disabled type="text" name="name" value="管理员电话">
+                            </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('管理员证件', 'nlyd-student')?>：</span></div>
@@ -177,16 +183,21 @@ jQuery(function($) {
         // 自定义验证规则
         form.verify($.validationLayui.allRules);
         // 监听提交
-        form.on('submit(certificationFormBtn)', function(data){//实名认证提交
+        form.on('submit(layform)', function(data){//实名认证提交
             
             var fd = new FormData();
-            $.each(imgs, function (i, v) {
-                fd.append('images[]',v);
-            })
-            $.each(imgs1, function (i, v) {
-                fd.append('images_wechat[]',v);
-            })
-            
+            fd.append('action','zone_apply_submit');
+            fd.append('zone_num',data.field['zone_num']);
+            fd.append('type_id',data.field['type_id']);
+            fd.append('zone_name',data.field['zone_name']);
+            fd.append('zone_address',data.field['zone_address']);
+            fd.append('legal_person',data.field['legal_person']);
+            fd.append('opening_bank',data.field['opening_bank']);
+            fd.append('opening_bank_address',data.field['opening_bank_address']);
+            fd.append('bank_card_num',data.field['bank_card_num']);
+            fd.append('chairman_id',data.field['chairman_id']);
+            fd.append('secretary_id',data.field['secretary_id']);
+            fd.append('business_licence',imgs1[0]);
             $.ajax({
                 data: fd,
                 contentType : false,
