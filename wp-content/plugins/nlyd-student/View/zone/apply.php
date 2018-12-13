@@ -166,7 +166,7 @@ jQuery(function($) {
         var _this=$(this);
         var index =_this.parents('.post-img').index();
         _this.parents('.img-zoos').find('.post-img.dash').css('display','block');
-        _this.parents('.post-img').remove()
+        _this.parents('.post-img').remove();
         if(_this.parents('.img-zoos').hasClass('img-zoos0')){
             imgs.splice(index, 1);
         }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){

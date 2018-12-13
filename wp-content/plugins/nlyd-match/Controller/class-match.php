@@ -911,13 +911,13 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">比赛时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_start_time']))?>" name="match[match_start_time]" class="layui-input date-picker" readonly  id="match_start_time" placeholder="比赛时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_start_time']))?>" name="match[match_start_time]" class="layui-input " readonly  id="match_start_time" placeholder="比赛时间">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_end_time']))?>" name="match[match_end_time]" class="layui-input date-picker" readonly  id="match_end_time" placeholder="比赛结束时间">
+                <input type="text" value="<?=date_i18n('Y-m-d H:i',strtotime($this->meta['match_end_time']))?>" name="match[match_end_time]" class="layui-input " readonly  id="match_end_time" placeholder="比赛结束时间">
             </div>
         </div>
         <div class="layui-form-item">
@@ -1071,7 +1071,7 @@ class Match
         }
         //print_r($default_project);
 
-        if (!empty($match_project_id)) { ?>
+        if (!empty($default_project)) { ?>
             <style>
             .show_form{
                 /* width:600px; */
@@ -1172,25 +1172,8 @@ class Match
                 </div>
             <?php }
         }else{ ?>
-            <div style="color: red">比赛发布后方可进行项目生成!!!</div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">比赛时间</label>
-                <div class="layui-input-block">
-                    <input type="text" value="<?=date_i18n('Y-m-d',get_time())?>" name="match_start_time" class="layui-input date-picker y-m-d" readonly  id="found_start_time" placeholder="比赛开始时间">
-                </div>
-            </div>
-            <button type="button" id="found_match_button">一键生成</button>
-            <script>
-
-                $('#found_match_button').click(function () {
-                    $.post(ajaxurl,{action:'found_match','match_id':<?=$_GET['post']?>,'match_start_time':$('#found_start_time').val(),rand:Math.random()},function (data) {
-                        alert(data.data);
-                        if(data.success){
-                            history.go(0);
-                        }
-                    },'json')
-                });
-            </script>
+            <b>暂无项目</b>
+            <a href="post-new.php?post_type=project">去添加</a>
         <?php }
     }
 
