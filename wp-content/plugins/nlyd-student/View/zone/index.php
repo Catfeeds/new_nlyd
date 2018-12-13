@@ -22,6 +22,8 @@
                 <div class="zone_user width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="img-box zone_user_img pull-left">
                         <img src="<?=$row['user_head']?>">
+                        <!-- 赛区展示 -->
+                        <div class="zone_tag c_white fs_12"><div class="scale"><?=__('2019脑力世界杯', 'nlyd-student')?></div></div>
                     </div>    
                     <div class="zone_user_detail pull-left">
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
@@ -67,7 +69,7 @@
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black layui-row">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/profit');?>">
                         <div class="apply_list_line pull-left ">
                             <div class="zone_bg bg_money"></div>
                         </div>
