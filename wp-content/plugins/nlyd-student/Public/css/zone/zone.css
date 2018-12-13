@@ -26,6 +26,12 @@
 .apply_list_line.mr{
     margin-right: 20px;
 } */
+.apply.have_title .apply_list:first-child{
+    border-top: 1px solid rgba(38, 38, 38, 0.1);
+}
+.apply .apply_list:first-child{
+    border-top: none;
+}
 .zone_user{
     margin-top: 0;
     padding-top: 33px;
@@ -80,7 +86,9 @@
 .bg_level{
     background-position: -188px 1px;
 }
-
+.bg_team{
+    background-position: -219px 1px;
+}
 
 
 
