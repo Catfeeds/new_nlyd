@@ -416,7 +416,7 @@ class Organize{
         }
         ?>
         <div class="wrap">
-            <h1 id="add-new-user">添加主体类型</h1>
+            <h1 id="add-new-user">添加/编辑主体类型</h1>
 
             <div id="ajax-response">
                 <span style="color: #2bc422"><?=$success_msg?></span>

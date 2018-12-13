@@ -831,6 +831,19 @@ function the_table_install () {
         ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
     }
+
+    $table_name = $wpdb->prefix . "spread_set";  //收益设置表
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //收益默认金额设置
+        $sql = "CREATE TABLE `{$table_name}` (
+          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `profit_name` varchar(255) DEFAULT NULL COMMENT '收益名称',
+          `profit_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '收益金额或百分比',
+          `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级id',
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
+        dbDelta($sql);
+    }
 }
 
 
