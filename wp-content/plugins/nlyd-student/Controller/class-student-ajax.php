@@ -4385,9 +4385,14 @@ class Student_Ajax
      */
     public function zone_apply_submit(){
         global $wpdb,$current_user;
+
+        $meta_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        if($meta_id){
+            wp_send_json_error(array('info'=>'已有申请记录'));
+        }
         $_POST['type_id'] = 3;
         $_POST['zone_type_alias'] = 3;
-        if(empty($_POST['type_id']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
 
@@ -4426,10 +4431,10 @@ class Student_Ajax
                     'user_status'=>-1,
                     'created_time'=>get_time('mysql'),
         );
-        print_r($insert);die;
+        //print_r($insert);die;
         $result = $wpdb->insert($wpdb->prefix.'zone_meta',$insert);
         if($result){
-            wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('zone/')));
+            wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('/applySuccess/')));
         }
         else{
             wp_send_json_error(array('info'=>'提交失败,请联系管理员'));

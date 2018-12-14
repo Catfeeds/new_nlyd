@@ -51,6 +51,10 @@
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
                         </div>
                         <div>
+                            <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>"></div>
+                        </div>
+                        <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
                         </div>
@@ -175,7 +179,7 @@ jQuery(function($) {
                         }else {
 
                             $.each(res.data,function(i,v){
-                                var item='<div class="select_row choose" data-id="'+v.id+'" data-value="'+v.text+'">' + v.text + '</div>'
+                                var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
                                 dom+=item
                             })
 
@@ -202,12 +206,13 @@ jQuery(function($) {
         var val=_this.attr('data-value');
         var id=_this.attr('data-id');
         _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
+        alert(id)
         _this.parent('.select_box').parent('div').find('.get_id').val(id)
     })
     $('body').click(function(e){
         if($('#select_box').length>0){
             var box=$('#select_box');
-            if(!$(e.target).hasClass('choose')){
+            if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
                 box.parent('div').find('input').val('');
             }
         }
