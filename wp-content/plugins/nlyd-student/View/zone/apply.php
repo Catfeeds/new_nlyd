@@ -205,12 +205,13 @@ jQuery(function($) {
         var val=_this.attr('data-value');
         var id=_this.attr('data-id');
         _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
+        alert(id)
         _this.parent('.select_box').parent('div').find('.get_id').val(id)
     })
     $('body').click(function(e){
         if($('#select_box').length>0){
             var box=$('#select_box');
-            if(!$(e.target).hasClass('choose')){
+            if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
                 box.parent('div').find('input').val('');
             }
         }

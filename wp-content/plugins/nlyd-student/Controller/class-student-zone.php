@@ -183,7 +183,7 @@ class Student_Zone extends Student_Home
         if(!empty($user_real_name)){
             $data['referee_name'] = $user_real_name['real_name'];
         }
-        print_r($user_info);
+        //print_r($user_info);
         //分中心负责人
         if(!empty($user_info['user_real_name'])){
             $data['director'] = $user_info['user_real_name']['real_name'];
