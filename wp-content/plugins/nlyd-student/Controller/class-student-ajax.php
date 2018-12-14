@@ -4386,9 +4386,9 @@ class Student_Ajax
     public function zone_apply_submit(){
         global $wpdb,$current_user;
 
-        $meta_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
-        if($meta_id){
-            wp_send_json_error(array('info'=>'已有申请记录'));
+        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        if($row['user_status']== 1){
+            wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
         }
         $_POST['type_id'] = 3;
         $_POST['zone_type_alias'] = 3;

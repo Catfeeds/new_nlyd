@@ -151,7 +151,7 @@ class Student_Zone extends Student_Home
      */
     public function get_zone_row(){
         global $wpdb,$user_info;
-        $sql = "select a.*,b.zone_type_name,c.user_mobile from {$wpdb->prefix}zone_meta a 
+        $sql = "select a.*,b.zone_type_name,b.zone_type_alias,c.user_mobile from {$wpdb->prefix}zone_meta a 
                 left join {$wpdb->prefix}zone_type b on a.type_id = b.id 
                 left join {$wpdb->prefix}users c on a.user_id = c.ID 
                 where a.user_id = '{$user_info['user_id']}' ";
@@ -174,9 +174,20 @@ class Student_Zone extends Student_Home
     public function apply(){
 
         global $wpdb,$current_user,$user_info;
+        $row = $this->get_zone_row();
+        if(!empty($row)){
 
+        }else{
+            //分中心编号
+            $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
+            if($total < 8){
+                $data['zone_num'] = 8;
+            }else{
+                $data['zone_num'] = $total+1;
+            }
+        }
         //获取所有机构
-        $data['list'] = $wpdb->get_results("select id,zone_type_name,zone_type_alias from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
+        //$data['list'] = $wpdb->get_results("select id,zone_type_name,zone_type_alias from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
 
         //获取事业管理员
         $user_real_name = get_user_meta($current_user->data->referee_id,'user_real_name')[0];
@@ -190,13 +201,7 @@ class Student_Zone extends Student_Home
             $data['contact'] = $user_info['contact'];
             $data['user_ID_Card'] = $user_info['user_ID_Card'];
         }
-        //分中心编号
-        $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
-        if($total < 8){
-            $data['zone_num'] = 8;
-        }else{
-            $data['zone_num'] = $total+1;
-        }
+
 
         $view = student_view_path.CONTROLLER.'/apply.php';
         load_view_template($view,$data);
