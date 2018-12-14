@@ -1,7 +1,5 @@
 /* .apply{
     margin-top: 10px;
-    margin-bottom: 10px;
-    
     background-color: #fff;
     border: none;
     overflow: hidden;
@@ -26,6 +24,9 @@
 .apply_list_line.mr{
     margin-right: 20px;
 } */
+.apply_form>div{
+    position: relative;
+}
 .apply.have_title .apply_list:first-child{
     border-top: 1px solid rgba(38, 38, 38, 0.1);
 }
@@ -45,6 +46,23 @@
     height: 85px;
     border-radius: 5px;
     border: 1px solid rgba(38, 38, 38, 0.1);
+    position: relative;
+}
+.zone_tag{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 0.12rem;
+    padding: 2px 0;
+    background: -webkit-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: linear-gradient(5deg,#68AAFE, #4394F9);
+}
+.scale{
+    transform: scale(0.8);
+    white-space: nowrap;
 }
 .zone_user_detail{
     padding-left: 14px;
@@ -72,22 +90,43 @@
     background-position: -31px 1px;
 }
 .bg_course{
-    background-position: -64px 1px;
+    background-position: -59px 1px;
 }
 .bg_coach{
-    background-position: -95px 1px;
+    background-position: -90px 1px;
 }
 .bg_student{
-    background-position: -126px 1px;
+    background-position: -120px 1px;
 }
 .bg_match{
-    background-position: -157px 1px;
+    background-position: -149px 1px;
 }
 .bg_level{
-    background-position: -188px 1px;
+    background-position: -180px 1px;
 }
 .bg_team{
-    background-position: -219px 1px;
+    background-position: -208px 1px;
+}
+.bg_add{
+    background-position: -239px 1px; 
+}
+.bg_reduce{
+    background-position: -267px 1px;
+}
+.select_box{
+    position: absolute;
+    width: 100%;
+    border: rgba(51,51,51,0.12) solid 1px;
+    border-top: none;
+    background: #fff;
+    z-index: 99;
+    margin-top: -1px;
+    display: none;
+}
+.select_row{
+    padding: 10px 15px;
+    color: #262626;
+    border-top: 1px solid rgba(51,51,51,0.12);
 }
 
 
@@ -138,10 +177,10 @@ input[type="text"].radius_input_row{
     left: 2%;
     line-height: 20px;
     text-align: center;
-    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
-    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
-    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
-    background: linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -webkit-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(5deg,#68AAFE, #4394F9);
+    background: linear-gradient(5deg,#68AAFE, #4394F9);
     color: #fff;
     border-radius: 50%;
 }
@@ -152,4 +191,121 @@ input[type="text"].radius_input_row{
 .success{
     width: 80%;
     margin: auto;
+}
+
+.apply.profit_title{
+    margin-top: 0;
+    padding-top: 20px;
+}
+.tixian{
+    width: 180px;
+    margin: auto;
+    margin-bottom: 16px;
+    height: 37px;
+    border-radius: 18.5px;
+}
+.profit_money_{
+    margin: 15px auto;
+}
+.profit_footer{
+    padding: 20px 0;
+    border-top: 1px solid rgba(38, 38, 38, 0.1);
+}
+.profit-layui-tab .layui-tab-title .layui-this:after{
+    width: 0;
+}
+.profit-layui-tab .layui-tab-title{
+    /* border-bottom:none; */
+    height: auto;
+}
+.profit-layui-tab .layui-tab-title li{
+    padding: 15px 0;
+    width: -webkit-calc(100% / 3);
+    width: calc(100% / 3);
+    float: left;
+    color: #262626;
+}
+.profit-layui-tab .layui-tab-title li div{
+    border-right: 1px solid #707070;
+}
+.profit-layui-tab .layui-tab-title li:last-child div{
+    border-right: none;
+}
+.profit-layui-tab  .layui-tab-content{
+    padding: 0;
+}
+div .layui-row:last-child{
+    border-bottom: none;
+}
+.profit_list{
+    display: block;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.1);
+    font-size: 0;
+}
+.profit_inline{
+    display: inline-block;
+    vertical-align: middle;
+}
+.profit_icon{
+    width: 50px;
+}
+
+.profit_arrow{
+    width: 25px;
+}
+.profit_arrow i{
+    position: relative;
+    top: 3px;
+}
+.profit_money{
+    width: 90px;
+    text-align: right;
+}
+.profit_time{
+    width: -webkit-calc(100% - 165px);
+    width: calc(100% - 165px);
+}
+
+
+
+.getCash_type{
+    padding: 18px 0 0 0;
+    letter-spacing:1px;
+}
+.getCash_type_row{
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(38, 38, 38, 0.1);
+}
+.getCash_type_row .layui-form-radio>i{
+    margin-right:27px;
+}
+.getCash_type_row .layui-form-radio{
+    margin: 0;
+    padding-right:0;
+    color: #262626;
+}
+
+.enter_num{
+    position: relative;
+    margin-top: 20px;
+}
+.enter_num input[type="text"].radius_input_row{
+    height: 61px;
+    padding-left: 44px;
+}
+.enter_num .danwei{
+    position: absolute;
+    height: 61px;
+    width: 43px;
+    line-height: 61px;
+    left: 1px;
+    top: 1px;
+    text-align: center;
+}
+.a-btn.bg_gradient_green{
+    background: -webkit-linear-gradient(22deg,#89D25F,#53B239);
+    background: -o-linear-gradient(22deg,#89D25F,#53B239);
+    background: -moz-linear-gradient(22deg,#89D25F,#53B239);
+    background: linear-gradient(22deg,#89D25F,#53B239);
 }

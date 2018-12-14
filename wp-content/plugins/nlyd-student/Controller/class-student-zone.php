@@ -28,17 +28,31 @@ class Student_Zone extends Student_Home
     public function index(){
         global $wpdb,$user_info;
 
-        //获取所有的机构名
-        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
-        $data['list'] = $rows;
-
         $row = $this->get_zone_row();
+        //print_r($row);
         if($row['user_status'] == 1){
             $day = date_i18n('Y年m月d日',strtotime('+1 year',$row['audit_time']));
 
         }
-        $data['row'] = $row;
-        print_r($rows);
+        if(empty($row['legal_person'])){
+            //获取所有的机构名
+            $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_type where zone_type_status = 1",ARRAY_A);
+            $data['list'] = $rows;
+        }else{
+            //获取机构权限
+            if(empty($row['role_id'])){
+                $sql = "select a.role_id,b.role_name,b.role_back from {$wpdb->prefix}zone_join_role a 
+                    left join {$wpdb->prefix}zone_type_role b on a.role_id = b.id
+                    where a.zone_type_id = {$row['type_id']} 
+                    ";
+            }else{
+                $sql = "select * from {$wpdb->prefix}zone_type_role where id in ({$row['role_id']})";
+            }
+
+            $role_list = $wpdb->get_results($sql,ARRAY_A);
+            $data['role_list'] = $role_list;
+            $data['row'] = $row;
+        }
 
 
         $view = student_view_path.CONTROLLER.'/index.php';
@@ -53,7 +67,22 @@ class Student_Zone extends Student_Home
         load_view_template($view);
 
     }
+    /**
+     * 收益管理
+     */
+     public function profit(){
+        $view = student_view_path.CONTROLLER.'/profit.php';
+        load_view_template($view);
 
+    }
+    /**
+     * 提现页面
+     */
+     public function getCash(){
+        $view = student_view_path.CONTROLLER.'/getCash.php';
+        load_view_template($view);
+
+    }
     /*
      *机构主体信息页面
      */
@@ -108,9 +137,12 @@ class Student_Zone extends Student_Home
         if(!empty($user_real_name)){
             $data['referee_name'] = $user_real_name['real_name'];
         }
+        print_r($user_info);
         //分中心负责人
         if(!empty($user_info['user_real_name'])){
-            $data['director'] = $user_info['real_name'];
+            $data['director'] = $user_info['user_real_name']['real_name'];
+            $data['contact'] = $user_info['contact'];
+            $data['user_ID_Card'] = $user_info['user_ID_Card'];
         }
         //分中心编号
         $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");

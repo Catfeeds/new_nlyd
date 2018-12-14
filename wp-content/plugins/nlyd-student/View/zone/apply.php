@@ -14,21 +14,21 @@
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="width-padding layui-row width-margin-pc">
-                    <form class="layui-form" lay-filter='layform'>
+                    <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心编号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="111"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair($zone_num,4,0)?>"></div>
                         </div>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('训练中心名称', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心营业地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
@@ -44,46 +44,72 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
                         </div>
+                        <?php if($_GET['zone_type_alias'] == 'match'):?>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <input class="get_id" name="chairman_id" style="display:none" value="">
+                                <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
+                                
+                            </div>
+                            <!-- <div class="select_box">
+                                <div class="select_row">111</div>
+                                <div class="select_row">111</div>
+                                <div class="select_row">111</div>
+                            </div> -->
+                        </div>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <input class="get_id" name="secretary_id" style="display:none" value="">
+                                <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>">
+                                
+                            </div>
+                        </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" name="chairman_id" value="事业管理员">
+                                <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('中心管理员', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" name="name" value="中心管理员">
+                                <input class="radius_input_row" disabled type="text" value="<?=$director?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('管理员电话', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row" disabled type="text" name="name" value="管理员电话">
+                                <input class="radius_input_row" disabled type="text" value="<?=$contact?>">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('管理员证件', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos0">
-                                <div class="post-img dash">
-                                    <div class="add-zoo" data-file="img-zoos0">
-                                        <div class="transverse"></div>
-                                        <div class="vertical"></div>
+                                <?php if(!empty(!empty($user_ID_Card))):?>
+                                <?php foreach ($user_ID_Card as $v){ ?>
+                                <div class="post-img no-dash">
+                                    <div class="img-zoo img-box">
+                                        <img src="<?=$v?>"/>
                                     </div>
                                 </div>
+                                <?php } ?>
+                                <?php endif;?>
                             </div>
                         </div>
-                        <div class="a-btn" lay-filter="layform" lay-submit=""><?=__('提交资料', 'nlyd-student')?></div>
+                        <a class="a-btn" lay-filter="layform" lay-submit=""><?=__('提交资料', 'nlyd-student')?></a>
                     </form>
                 </div>
             </div>
@@ -97,6 +123,65 @@ jQuery(function($) {
     $('.img-zoos').on('click','.add-zoo',function(){//上传图片
         var id=$(this).attr('data-file')
         $('#'+id).click()
+    })
+    $('.change_ajax').keyup(function(){
+        var _this=$(this);
+        if(!_this.hasClass('loading')){
+            var keywords = _this.val();
+            if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };
+            var data={
+                action:"admin_get_user_list",
+                value:keywords
+            };
+            _this.parents('div').append('<div class="select_box" id="select_box"></div>')
+            // _this.parents('div').css("position","relative");
+            $.ajax({
+                data:data,
+                type:"get",
+                beforeSend:function(){
+                    _this.next('.select_box').empty().append('<div class="select_row"><?=__('加载中...', 'nlyd-student')?></div>');
+                    _this.addClass('loading')
+                },
+                success:function(res){
+                    console.log(res)
+                    if(res.success){
+                        _this.next('.select_box').empty().show();
+                        var dom="";
+                        $.each(res.data,function(i,v){
+                            var item='<div class="select_row choose" data-id="'+v.id+'" data-value="'+v.text+'">' + v.text + '</div>'
+                            dom+=item
+                        })
+                        _this.next('.select_box').append(dom)
+                    }else{
+                        $.alerts("<?=__('加载失败', 'nlyd-student')?>")
+                    }
+                    _this.removeClass('loading')
+                },
+                error:function(){
+                    _this.next('.select_box').empty().show();
+                    _this.next('.select_box').append('<div class="select_row">网络延迟</div>');
+                    _this.next('.select_box').remove()
+                    _this.removeClass('loading')
+                }
+            })
+        }
+    })
+    $('body').on('click','.choose',function(){
+        var _this=$(this);
+        var val=_this.attr('data-value');
+        var id=_this.attr('data-id');
+        _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
+        _this.parent('.select_box').parent('div').find('.get_id').val(id)
+    })
+    $('body').click(function(e){
+        if($('#select_box').length>0){
+            var box=$('#select_box');
+            if(!$(e.target).hasClass('choose')){
+                box.parent('div').find('input').val('');
+            }
+        }
+        
+        $('.select_box').remove()
     })
     var imgs=[]
     var imgs1=[]
@@ -188,7 +273,8 @@ jQuery(function($) {
             var fd = new FormData();
             fd.append('action','zone_apply_submit');
             fd.append('zone_num',data.field['zone_num']);
-            fd.append('type_id',data.field['type_id']);
+            fd.append('type_id',$.Request('type_id'));
+            fd.append('zone_type_alias',$.Request('zone_type_alias'));
             fd.append('zone_name',data.field['zone_name']);
             fd.append('zone_address',data.field['zone_address']);
             fd.append('legal_person',data.field['legal_person']);
@@ -198,6 +284,7 @@ jQuery(function($) {
             fd.append('chairman_id',data.field['chairman_id']);
             fd.append('secretary_id',data.field['secretary_id']);
             fd.append('business_licence',imgs1[0]);
+            console.log(data.field)
             $.ajax({
                 data: fd,
                 contentType : false,
