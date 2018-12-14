@@ -273,7 +273,8 @@ jQuery(function($) {
             var fd = new FormData();
             fd.append('action','zone_apply_submit');
             fd.append('zone_num',data.field['zone_num']);
-            fd.append('type_id',data.field['type_id']);
+            fd.append('type_id',$.Request('type_id'));
+            fd.append('zone_type_alias',$.Request('zone_type_alias'));
             fd.append('zone_name',data.field['zone_name']);
             fd.append('zone_address',data.field['zone_address']);
             fd.append('legal_person',data.field['legal_person']);
