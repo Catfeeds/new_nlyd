@@ -32,6 +32,9 @@ if(!class_exists('FissionController')){
             //引入收益文件
             require_once fission_path.'Controller/class-spread.php';
 
+            //引入课程文件
+            require_once fission_path.'Controller/class-course.php';
+
             //引入aiax操作文件
             require_once fission_path.'Controller/class-fission-ajax.php';
         }
