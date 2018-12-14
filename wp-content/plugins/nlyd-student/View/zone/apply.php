@@ -109,7 +109,7 @@
                                 <?php endif;?>
                             </div>
                         </div>
-                        <a class="a-btn" lay-filter="layform" lay-submit=""><?=__('提交资料', 'nlyd-student')?></a>
+                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>

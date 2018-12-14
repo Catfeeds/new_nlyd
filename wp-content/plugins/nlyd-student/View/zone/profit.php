@@ -47,7 +47,7 @@
                             <!-- 全部记录 -->
                             <div class="layui-tab-item layui-show">
                                 <div class="layui-row" id="1">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_add"></div>
                                         </div>
@@ -58,7 +58,7 @@
                                         <div class="c_green profit_inline profit_money fs_14">+500.00</div>
                                         <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
                                     </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_reduce"></div>
                                         </div>
@@ -74,7 +74,7 @@
                             <!-- 收益记录 -->
                             <div class="layui-tab-item">
                                 <div class="layui-row" id="2">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_add"></div>
                                         </div>
@@ -85,7 +85,7 @@
                                         <div class="c_green profit_inline profit_money fs_14">+500.00</div>
                                         <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
                                     </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_add"></div>
                                         </div>
@@ -96,7 +96,7 @@
                                         <div class="c_green profit_inline profit_money fs_14">+500.00</div>
                                         <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
                                     </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_add"></div>
                                         </div>
@@ -112,7 +112,7 @@
                             <!-- 提现记录 -->
                             <div class="layui-tab-item">
                                 <div class="layui-row" id="3">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/getCashDetail');?>">
                                         <div class="profit_inline profit_icon">
                                             <div class="zone_bg bg_reduce"></div>
                                         </div>

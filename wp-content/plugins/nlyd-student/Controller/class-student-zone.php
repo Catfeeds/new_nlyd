@@ -65,7 +65,6 @@ class Student_Zone extends Student_Home
      public function introduce(){
         $view = student_view_path.CONTROLLER.'/introduce.php';
         load_view_template($view);
-
     }
     /**
      * 收益管理
@@ -73,7 +72,6 @@ class Student_Zone extends Student_Home
      public function profit(){
         $view = student_view_path.CONTROLLER.'/profit.php';
         load_view_template($view);
-
     }
     /**
      * 提现页面
@@ -81,7 +79,55 @@ class Student_Zone extends Student_Home
      public function getCash(){
         $view = student_view_path.CONTROLLER.'/getCash.php';
         load_view_template($view);
-
+    }
+    /**
+     * 提现成功页面
+     */
+     public function getCashSuccess(){
+        $view = student_view_path.CONTROLLER.'/getCash-success.php';
+        load_view_template($view);
+    }
+    /**
+     * 收益详情页面
+     */
+     public function profitDetail(){
+        $view = student_view_path.CONTROLLER.'/profit-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 提现详情页面
+     */
+     public function getCashDetail(){
+        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛管理列表
+     */
+     public function matchList(){
+        $view = student_view_path.CONTROLLER.'/match-list.php';
+        load_view_template($view);
+    }
+    /**
+     * 发布比赛
+     */
+     public function matchBuild(){
+        $view = student_view_path.CONTROLLER.'/match-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛时间管理
+     */
+     public function getCashDetail(){
+        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛发布成功
+     */
+     public function getCashDetail(){
+        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+        load_view_template($view);
     }
     /*
      *机构主体信息页面

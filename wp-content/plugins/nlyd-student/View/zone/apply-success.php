@@ -21,7 +21,7 @@
                     <div class="c_black">3、<?=__('审核期间，平台将会对机构对公账户进行打款验证，请留意账户信息。', 'nlyd-student')?></div>
                     <div class="c_black">4、<?=__('审核过程中，如有任何疑问，请拨打组委会工作电话：xxx-xxxxx。', 'nlyd-student')?></div>
                 </div>
-                <a class="a-btn" href="<?=home_url('zone');?>"><?=__('返回推广合作中心', 'nlyd-student')?></a>
+                <a class="a-btn a-btn-table" href="<?=home_url('zone');?>"><div><?=__('返回推广合作中心', 'nlyd-student')?></div></a>
             </div>
         </div>            
     </div>
