@@ -820,10 +820,10 @@ function the_table_install () {
           `course_img` varchar(255) DEFAULT NULL,
           `const` decimal(10,2) unsigned NOT NULL,
           `is_enable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1启用,2禁用',
-          `teacher_id` int(10) unsigned NOT NULL,
+          `coach_id` int(10) unsigned NOT NULL,
           `course_start_time` datetime DEFAULT NULL COMMENT '开课时间',
-          `course_end_time` datetime DEFAULT NULL,
-          `created_time` datetime DEFAULT NULL COMMENT '课程结束时间',
+          `course_end_time` datetime DEFAULT NULL COMMENT '课程结束时间',
+          `created_time` datetime DEFAULT NULL COMMENT '创建时间',
           `province` varchar(180) NOT NULL COMMENT '省',
           `city` varchar(180) NOT NULL COMMENT '城市',
           `area` varchar(180) NOT NULL,
@@ -831,6 +831,7 @@ function the_table_install () {
           `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
           `course_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1乐学乐',
+          `zone_user_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '所属主体机构user_id,0平台发布'
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
