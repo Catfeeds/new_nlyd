@@ -24,11 +24,11 @@
                                 <span class="c_black"><?=__('训练中心名称', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心营业地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
@@ -44,19 +44,15 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
-                        </div>
-                        <div>
-                            <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
                         </div>
                         <?php if($_GET['zone_type_alias'] == 'match'):?>
                         <div>
@@ -110,19 +106,7 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
-jQuery(function($) {
-
-    $('.change_ajax').keyup(function () {
-        var data={'action':'admin_get_user_list','term':$(this).val()}
-        $.ajax({
-            data:data,
-            type:'get',
-            success:function () {
-
-            }
-        })
-    })
-
+jQuery(function($) { 
     $('.img-zoos').on('click','.add-zoo',function(){//上传图片
         var id=$(this).attr('data-file')
         $('#'+id).click()
@@ -216,8 +200,6 @@ jQuery(function($) {
             
             var fd = new FormData();
             fd.append('action','zone_apply_submit');
-            fd.append('type_id',$.Request('type_id'));
-            fd.append('zone_type_alias',$.Request('zone_type_alias'));
             fd.append('zone_num',data.field['zone_num']);
             fd.append('type_id',data.field['type_id']);
             fd.append('zone_name',data.field['zone_name']);
@@ -228,7 +210,6 @@ jQuery(function($) {
             fd.append('bank_card_num',data.field['bank_card_num']);
             fd.append('chairman_id',data.field['chairman_id']);
             fd.append('secretary_id',data.field['secretary_id']);
-            fd.append('bank_card_num',data.field['bank_card_num']);
             fd.append('business_licence',imgs1[0]);
             $.ajax({
                 data: fd,

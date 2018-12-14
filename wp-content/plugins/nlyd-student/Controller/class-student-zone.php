@@ -67,7 +67,22 @@ class Student_Zone extends Student_Home
         load_view_template($view);
 
     }
+    /**
+     * 收益管理
+     */
+     public function profit(){
+        $view = student_view_path.CONTROLLER.'/profit.php';
+        load_view_template($view);
 
+    }
+    /**
+     * 提现页面
+     */
+     public function getCash(){
+        $view = student_view_path.CONTROLLER.'/getCash.php';
+        load_view_template($view);
+
+    }
     /*
      *机构主体信息页面
      */
