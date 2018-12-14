@@ -77,14 +77,14 @@ class Student_Zone extends Student_Home
      * 提现页面
      */
      public function getCash(){
-        $view = student_view_path.CONTROLLER.'/getCash.php';
+        $view = student_view_path.CONTROLLER.'/profit-getCash.php';
         load_view_template($view);
     }
     /**
      * 提现成功页面
      */
      public function getCashSuccess(){
-        $view = student_view_path.CONTROLLER.'/getCash-success.php';
+        $view = student_view_path.CONTROLLER.'/profit-getCash-success.php';
         load_view_template($view);
     }
     /**
@@ -98,7 +98,7 @@ class Student_Zone extends Student_Home
      * 提现详情页面
      */
      public function getCashDetail(){
-        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+        $view = student_view_path.CONTROLLER.'/profit-getCash-detail.php';
         load_view_template($view);
     }
     /**
