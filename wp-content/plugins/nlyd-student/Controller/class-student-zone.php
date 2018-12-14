@@ -118,15 +118,15 @@ class Student_Zone extends Student_Home
     /**
      * 比赛时间管理
      */
-     public function getCashDetail(){
-        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+     public function matchTime(){
+        $view = student_view_path.CONTROLLER.'/match-time.php';
         load_view_template($view);
     }
     /**
      * 比赛发布成功
      */
-     public function getCashDetail(){
-        $view = student_view_path.CONTROLLER.'/getCash-detail.php';
+     public function buildSuccess(){
+        $view = student_view_path.CONTROLLER.'/match-buildSuccess.php';
         load_view_template($view);
     }
     /*
