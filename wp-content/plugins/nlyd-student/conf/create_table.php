@@ -144,6 +144,7 @@ function the_table_install () {
           `created_time` datetime DEFAULT NULL COMMENT '提交时间',
           `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
           `role_id` varchar(255) DEFAULT NULL COMMENT '用户权限id集合 用,分割',
+          `parent_id` int(20) unsigned DEFAULT 0 COMMENT '上级主体id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
