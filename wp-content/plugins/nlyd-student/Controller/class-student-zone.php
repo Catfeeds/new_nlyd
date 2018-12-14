@@ -70,6 +70,7 @@ class Student_Zone extends Student_Home
      * 收益管理
      */
      public function profit(){
+
         $view = student_view_path.CONTROLLER.'/profit.php';
         load_view_template($view);
     }
@@ -176,7 +177,12 @@ class Student_Zone extends Student_Home
         global $wpdb,$current_user,$user_info;
         $row = $this->get_zone_row();
         if(!empty($row)){
+            //获取主席
+            $row['chairman_name'] = !empty($row['chairman_id']) ? get_user_meta($row['chairman_id'],'user_real_name')[0]['real_name'] : '';
+            //获取秘书长
+            $row['secretary_name'] = !empty($row['secretary_id']) ? get_user_meta($row['secretary_id'],'user_real_name')[0]['real_name'] : '';
 
+            $data['row'] = $row;
         }else{
             //分中心编号
             $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");

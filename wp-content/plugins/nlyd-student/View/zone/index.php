@@ -45,7 +45,7 @@
                             <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
                             <?php }
                             elseif ($row['user_status'] == -1){ ?>
-                            <a class="pull-right c_blue" href="<?=home_url('zone/apply/')?>"><?=__('修改', 'nlyd-student')?></a>
+                            <a class="pull-right c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                             <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
                         </div>

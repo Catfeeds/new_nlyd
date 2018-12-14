@@ -4386,25 +4386,29 @@ class Student_Ajax
     public function zone_apply_submit(){
         global $wpdb,$current_user;
 
-        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        $row = $wpdb->get_row("select id,user_status from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+        if($row['user_status']== -1){
+            wp_send_json_error(array('info'=>'资料审核中,禁止修改'));
+        }
         if($row['user_status']== 1){
             wp_send_json_error(array('info'=>'审核已通过,资料禁止修改'));
         }
-        $_POST['type_id'] = 3;
-        $_POST['zone_type_alias'] = 3;
         if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
-
-        if(empty($_FILES['business_licence'])){
-            wp_send_json_error(array('info'=>'营业执照必传'));
+        if(!isset($_POST['business_licence_url'])){
+            if(empty($_FILES['business_licence'])){
+                wp_send_json_error(array('info'=>'营业执照必传'));
+            }
+        }else{
+            $business_licence_url = $_POST['business_licence_url'];
         }
         if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
         }
-        else{
+        if(!empty($_FILES['business_licence'])){
             $upload_dir = wp_upload_dir();
             $dir = '/business_licence/'.$current_user->ID.'/';
             $tmp = $_FILES['business_licence']['tmp_name'];
@@ -4413,32 +4417,41 @@ class Student_Ajax
                 $business_licence_url = $upload_dir['baseurl'].$dir.$file;
             }
         }
+        //获取默认权限
+        $role = $wpdb->get_results("select role_id from {$wpdb->prefix}zone_join_role where zone_type_id = {$_POST['type_id']} ",ARRAY_A);
+        $role_id = arr2str(array_column($role,'role_id'));
 
-        $insert = array(
-                    'id'=>$_POST['zone_num'],
-                    'user_id'=>$current_user->ID,
-                    'type_id'=>$_POST['type_id'],
-                    'zone_name'=>$_POST['zone_name'],
-                    'zone_address'=>$_POST['zone_address'],
-                    'business_licence'=>$business_licence_url,
-                    'legal_person'=>$_POST['legal_person'],
-                    'opening_bank'=>$_POST['opening_bank'],
-                    'opening_bank_address'=>$_POST['opening_bank_address'],
-                    'bank_card_num'=>$_POST['bank_card_num'],
-                    'chairman_id'=>!empty($_POST['chairman_id']) ? $_POST['chairman_id'] : '',
-                    'secretary_id'=>!empty($_POST['secretary_id']) ? $_POST['secretary_id'] : '',
-                    'referee_id'=>$current_user->data->referee_id,
-                    'user_status'=>-1,
-                    'created_time'=>get_time('mysql'),
+        $data = array(
+            'id'=>$_POST['zone_num'],
+            'user_id'=>$current_user->ID,
+            'type_id'=>$_POST['type_id'],
+            'zone_name'=>$_POST['zone_name'],
+            'zone_address'=>$_POST['zone_address'],
+            'business_licence'=>$business_licence_url,
+            'legal_person'=>$_POST['legal_person'],
+            'opening_bank'=>$_POST['opening_bank'],
+            'opening_bank_address'=>$_POST['opening_bank_address'],
+            'bank_card_num'=>$_POST['bank_card_num'],
+            'chairman_id'=>!empty($_POST['chairman_id']) ? $_POST['chairman_id'] : '',
+            'secretary_id'=>!empty($_POST['secretary_id']) ? $_POST['secretary_id'] : '',
+            'referee_id'=>$current_user->data->referee_id,
+            'user_status'=>-1,
+            'role_id'=>$role_id,
+            'created_time'=>get_time('mysql'),
         );
-        //print_r($insert);die;
-        $result = $wpdb->insert($wpdb->prefix.'zone_meta',$insert);
+        if(empty($row)){
+            //print_r($insert);die;
+            $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);
+        }else{
+            $result = $wpdb->update($wpdb->prefix.'zone_meta',$data,array('id'=>$row['id'],'user_id'=>$current_user->ID));
+        }
         if($result){
-            wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('/applySuccess/')));
+            wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('/zone/applySuccess/')));
         }
         else{
             wp_send_json_error(array('info'=>'提交失败,请联系管理员'));
         }
+
     }
 
     //根据手机或者真实姓名获取用户
@@ -4484,6 +4497,16 @@ class Student_Ajax
 
     }
 
+
+    /**
+     * 获取用户收益
+     */
+    public function get_user_profit(){
+        global $wpdb,$current_user;
+
+        //获取作为直接推广人的收益
+        $sql = "";
+    }
 
     /*
     *比较字符串不同的字符
