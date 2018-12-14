@@ -303,9 +303,30 @@ div .layui-row:last-child{
     top: 1px;
     text-align: center;
 }
-.a-btn.bg_gradient_green{
+.a-btn.bg_gradient_green,
+.nl-badge.bg_gradient_green{
     background: -webkit-linear-gradient(22deg,#89D25F,#53B239);
     background: -o-linear-gradient(22deg,#89D25F,#53B239);
     background: -moz-linear-gradient(22deg,#89D25F,#53B239);
     background: linear-gradient(22deg,#89D25F,#53B239);
+}
+
+
+.profit_detail_row{
+    margin-top: 15px;
+    font-size: 0;
+}
+.profit_detail_label,
+.profit_detail_info{
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 0.14rem;
+}
+.profit_detail_label{
+    width: 75px;
+}
+.profit_detail_info{
+    width: -webkit-calc(100% - 75px);
+    width: calc(100% - 75px);
 }

@@ -132,6 +132,34 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info'=>'删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);
     }
+
+    /**
+     * 获取机构权限
+     */
+    public function getPowerListByType(){
+        $type_id = isset($_POST['val']) ? intval($_POST['val']) : 0;
+        if($type_id < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $powerList = $wpdb->get_results("SELECT ztr.* FROM {$wpdb->prefix}zone_join_role AS zjr 
+                         LEFT JOIN {$wpdb->prefix}zone_type_role AS ztr ON ztr.id=zjr.zone_type_id 
+                        WHERE zjr.zone_type_id='{$type_id}'", ARRAY_A);
+        wp_send_json_success(['data'=>$powerList]);
+    }
+
+    /**
+     * 搜索主体列表
+     */
+    public function get_base_zone_list(){
+        $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
+        $rows = [];
+        if($searchStr != ''){
+            global $wpdb;
+            $type = isset($_GET['type']) ? trim($_GET['type']) : '';
+            $rows = $wpdb->get_results("SELECT id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%'");
+        }
+        $rows[] = ['id' => 0, 'text' => '无上级'];
+        wp_send_json_success($rows);
+    }
 }
 
 new Fission_Ajax();
