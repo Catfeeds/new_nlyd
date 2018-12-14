@@ -51,6 +51,10 @@
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
                         </div>
                         <div>
+                            <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户银行卡号', 'nlyd-student')?>"></div>
+                        </div>
+                        <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
                         </div>
@@ -60,7 +64,7 @@
                             <div class="input_row">
                                 <input class="get_id" name="chairman_id" style="display:none" value="">
                                 <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
-                                
+                                <!--<select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
                             </div>
                             <!-- <div class="select_box">
                                 <div class="select_row">111</div>
@@ -71,6 +75,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
+                                <!--<select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
                                 <input class="get_id" name="secretary_id" style="display:none" value="">
                                 <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>">
                                 
@@ -109,7 +114,7 @@
                                 <?php endif;?>
                             </div>
                         </div>
-                        <a class="a-btn" lay-filter="layform" lay-submit=""><?=__('提交资料', 'nlyd-student')?></a>
+                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>
@@ -124,37 +129,66 @@ jQuery(function($) {
         var id=$(this).attr('data-file')
         $('#'+id).click()
     })
+
+    /*$('.js-data-select-ajax').each(function () {
+        var _this=$(this)
+        _this.select2({
+            ajax: {
+                url: admin_ajax +'?action='+_this.attr('data-action'),
+                dataType: 'json',
+                delay: 600, //wait 250 milliseconds before triggering the request
+                processResults: function (res) {
+                    // Tranforms the top-level key of the response object from 'items' to 'results'
+                    return {
+                        results: res.data
+                    };
+                }
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+
+        });
+    })*/
+
     $('.change_ajax').keyup(function(){
         var _this=$(this);
-        if(!_this.hasClass('loading')){
-            var keywords = _this.val();
-            if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };
+        _this.next('.select_box').remove()
+        //if(!_this.hasClass('loading')){
+            var keywords = _this.val();/*
+            if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };*/
             var data={
-                action:"admin_get_user_list",
+                action:"get_manage_user",
                 value:keywords
             };
             _this.parents('div').append('<div class="select_box" id="select_box"></div>')
             // _this.parents('div').css("position","relative");
             $.ajax({
                 data:data,
-                type:"get",
+                type:"POST",
                 beforeSend:function(){
-                    _this.next('.select_box').empty().append('<div class="select_row"><?=__('加载中...', 'nlyd-student')?></div>');
+                    _this.next('.select_box').empty().append('<div class="select_row">正在加载...</div>');
                     _this.addClass('loading')
                 },
                 success:function(res){
                     console.log(res)
+                    var dom="";
+                    _this.next('.select_box').empty().show();
                     if(res.success){
-                        _this.next('.select_box').empty().show();
-                        var dom="";
-                        $.each(res.data,function(i,v){
-                            var item='<div class="select_row choose" data-id="'+v.id+'" data-value="'+v.text+'">' + v.text + '</div>'
+                        if(res.data == ''){
+                            var item='<div class="select_row">未搜到该用户</div>'
                             dom+=item
-                        })
-                        _this.next('.select_box').append(dom)
-                    }else{
-                        $.alerts("<?=__('加载失败', 'nlyd-student')?>")
+                        }else {
+                            $.each(res.data,function(i,v){
+                                var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
+                                dom+=item
+                            })
+
+                        }
+
+                    }else {
+                        var item='<div class="select_row">未搜到该用户....</div>'
+                        dom+=item;
                     }
+                    _this.next('.select_box').append(dom)
                     _this.removeClass('loading')
                 },
                 error:function(){
@@ -164,19 +198,20 @@ jQuery(function($) {
                     _this.removeClass('loading')
                 }
             })
-        }
+        //}
     })
     $('body').on('click','.choose',function(){
         var _this=$(this);
         var val=_this.attr('data-value');
         var id=_this.attr('data-id');
         _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
+        alert(id)
         _this.parent('.select_box').parent('div').find('.get_id').val(id)
     })
     $('body').click(function(e){
         if($('#select_box').length>0){
             var box=$('#select_box');
-            if(!$(e.target).hasClass('choose')){
+            if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
                 box.parent('div').find('input').val('');
             }
         }
@@ -281,9 +316,12 @@ jQuery(function($) {
             fd.append('opening_bank',data.field['opening_bank']);
             fd.append('opening_bank_address',data.field['opening_bank_address']);
             fd.append('bank_card_num',data.field['bank_card_num']);
-            fd.append('chairman_id',data.field['chairman_id']);
-            fd.append('secretary_id',data.field['secretary_id']);
+            
             fd.append('business_licence',imgs1[0]);
+            var chairman_id=typeof(data.field['chairman_id'])=='undefined' ? '' : data.field['chairman_id'];
+            var secretary_id=typeof(data.field['secretary_id'])=='undefined' ? '' : data.field['secretary_id'];
+            fd.append('chairman_id',chairman_id);
+            fd.append('secretary_id',secretary_id);
             console.log(data.field)
             $.ajax({
                 data: fd,

@@ -4385,13 +4385,21 @@ class Student_Ajax
      */
     public function zone_apply_submit(){
         global $wpdb,$current_user;
-        if(empty($_POST['type_id']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['business_licence']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
+
+        $meta_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+        if($meta_id){
+            wp_send_json_error(array('info'=>'已有申请记录'));
+        }
+        $_POST['type_id'] = 3;
+        $_POST['zone_type_alias'] = 3;
+        if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
-        if(empty($_FILES['business_licence_image'])){
+
+        if(empty($_FILES['business_licence'])){
             wp_send_json_error(array('info'=>'营业执照必传'));
         }
-        if($_POST['zone_type_alias'] == 'division'){    //赛区
+        if($_POST['type_id'] == 3 && $_POST['zone_type_alias'] == 'match'){    //赛区
             if(empty($_POST['chairman_id']) || empty($_POST['secretary_id'])){
                 wp_send_json_error(array('info'=>'组委会主席或者秘书长为必选项'));
             }
@@ -4399,7 +4407,7 @@ class Student_Ajax
         else{
             $upload_dir = wp_upload_dir();
             $dir = '/business_licence/'.$current_user->ID.'/';
-            $tmp = $_FILES['business_licence_image']['tmp_name'];
+            $tmp = $_FILES['business_licence']['tmp_name'];
             $file = $this->saveIosFile($tmp,$upload_dir['basedir'].$dir);
             if($file){
                 $business_licence_url = $upload_dir['baseurl'].$dir.$file;
@@ -4412,8 +4420,7 @@ class Student_Ajax
                     'type_id'=>$_POST['type_id'],
                     'zone_name'=>$_POST['zone_name'],
                     'zone_address'=>$_POST['zone_address'],
-                    'business_licence'=>$_POST['business_licence'],
-                    'business_licence_url'=>$business_licence_url,
+                    'business_licence'=>$business_licence_url,
                     'legal_person'=>$_POST['legal_person'],
                     'opening_bank'=>$_POST['opening_bank'],
                     'opening_bank_address'=>$_POST['opening_bank_address'],
@@ -4424,14 +4431,57 @@ class Student_Ajax
                     'user_status'=>-1,
                     'created_time'=>get_time('mysql'),
         );
-
+        //print_r($insert);die;
         $result = $wpdb->insert($wpdb->prefix.'zone_meta',$insert);
         if($result){
-            wp_send_json_success(array('info'=>'提交成功,等待管理员审核'));
+            wp_send_json_success(array('info'=>'提交成功,等待管理员审核','url'=>home_url('/applySuccess/')));
         }
         else{
             wp_send_json_error(array('info'=>'提交失败,请联系管理员'));
         }
+    }
+
+    //根据手机或者真实姓名获取用户
+    public function get_manage_user(){
+        if(isset($_POST['value'])){
+            $map[] = " (a.user_login like '%{$_POST['value']}%') ";
+            $map[] = " (a.user_nicename like '%{$_POST['value']}%') ";
+            $map[] = " (a.user_mobile like '%{$_POST['value']}%') ";
+            $map[] = " (a.user_email like '%{$_POST['value']}%') ";
+            $map[] = " (b.meta_value like '%{$_POST['value']}%') ";
+            $where = join( ' or ',$map);
+        }else{
+            $where = " a.id > 0";
+        }
+        global $wpdb;
+        $sql = "select b.user_id, 
+                case 
+                when a.user_login != '' then a.user_login
+                when a.user_mobile != '' then a.user_mobile
+                when a.user_email != '' then a.user_email
+                else a.user_nicename
+                end as text,b.meta_value 
+                from {$wpdb->prefix}users a 
+                left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and meta_key = 'user_real_name'
+                where {$where} 
+                ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+
+            foreach ($rows as $k => $v){
+                if(!empty($v['meta_value'])){
+                    $meta = unserialize($v['meta_value']);
+                    if(!empty($meta)){
+                        $rows[$k]['text'] = $meta['real_name'];
+                    }
+
+                }
+            }
+            wp_send_json_success($rows);
+        }else{
+            wp_send_json_error('');
+        }
+
     }
 
 

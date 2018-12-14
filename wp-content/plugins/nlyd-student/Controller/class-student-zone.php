@@ -3,7 +3,7 @@
 /**
  * 学生-分支机构
  * Created by PhpStorm.
- * User: Administrator
+ * User: zoneistrator
  * Date: 2018/6/29
  * Time: 21:44
  */
@@ -65,7 +65,6 @@ class Student_Zone extends Student_Home
      public function introduce(){
         $view = student_view_path.CONTROLLER.'/introduce.php';
         load_view_template($view);
-
     }
     /**
      * 收益管理
@@ -73,15 +72,62 @@ class Student_Zone extends Student_Home
      public function profit(){
         $view = student_view_path.CONTROLLER.'/profit.php';
         load_view_template($view);
-
     }
     /**
      * 提现页面
      */
      public function getCash(){
-        $view = student_view_path.CONTROLLER.'/getCash.php';
+        $view = student_view_path.CONTROLLER.'/profit-getCash.php';
         load_view_template($view);
-
+    }
+    /**
+     * 提现成功页面
+     */
+     public function getCashSuccess(){
+        $view = student_view_path.CONTROLLER.'/profit-getCash-success.php';
+        load_view_template($view);
+    }
+    /**
+     * 收益详情页面
+     */
+     public function profitDetail(){
+        $view = student_view_path.CONTROLLER.'/profit-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 提现详情页面
+     */
+     public function getCashDetail(){
+        $view = student_view_path.CONTROLLER.'/profit-getCash-detail.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛管理列表
+     */
+     public function matchList(){
+        $view = student_view_path.CONTROLLER.'/match-list.php';
+        load_view_template($view);
+    }
+    /**
+     * 发布比赛
+     */
+     public function matchBuild(){
+        $view = student_view_path.CONTROLLER.'/match-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛时间管理
+     */
+     public function matchTime(){
+        $view = student_view_path.CONTROLLER.'/match-time.php';
+        load_view_template($view);
+    }
+    /**
+     * 比赛发布成功
+     */
+     public function buildSuccess(){
+        $view = student_view_path.CONTROLLER.'/match-buildSuccess.php';
+        load_view_template($view);
     }
     /*
      *机构主体信息页面
@@ -137,7 +183,7 @@ class Student_Zone extends Student_Home
         if(!empty($user_real_name)){
             $data['referee_name'] = $user_real_name['real_name'];
         }
-        print_r($user_info);
+        //print_r($user_info);
         //分中心负责人
         if(!empty($user_info['user_real_name'])){
             $data['director'] = $user_info['user_real_name']['real_name'];
@@ -163,6 +209,12 @@ class Student_Zone extends Student_Home
         load_view_template($view);
 
     }
+
+    public function test(){
+        $view = student_view_path.CONTROLLER.'/test.php';
+        load_view_template($view);
+    }
+
     /**
      * 默认公用js/css引入
      */
@@ -173,6 +225,15 @@ class Student_Zone extends Student_Home
             wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
             wp_enqueue_style( 'my-student-zone' );
         // }
+
+        if(ACTION == 'apply'){
+            wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'zone_select2_js' );
+            wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'zone_select2_i18n_js' );
+            wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
+            wp_enqueue_style( 'zone_select2_css' );
+        }
     }
 
 }

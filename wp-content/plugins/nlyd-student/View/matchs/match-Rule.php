@@ -252,7 +252,7 @@
                                 case 'wzsd':
                                     ?>
                                     <p class="rule-item">1、<span class="nl-dark-blue"><?=__('文章速读', 'nlyd-student')?></span><?=__('即在比赛时选手快速阅读一篇2000字左右的文章，阅读完成，根据记忆信息回答10道选择题，本项目在比赛结束前可返回修改答案。', 'nlyd-student')?></p>
-                                    <p class="rule-item">2、<?=__('正确一题', 'nlyd-student')?><span class="nl-dark-blue">+23<?=__('分', 'nlyd-student')?></span>，<?=__('若选手所回答题目全部正确，剩余1秒多', 'nlyd-student')?><span class="nl-dark-blue">+1<?=__('分', 'nlyd-student')?></span>，<?=__('若复位数字有错误，则时间分不计入成绩。', 'nlyd-student')?></p>
+                                    <p class="rule-item">2、<?=__('正确一题', 'nlyd-student')?><span class="nl-dark-blue">+23<?=__('分', 'nlyd-student')?></span>，<?=__('若选手所回答题目正确率达到80%及以上，剩余1秒多', 'nlyd-student')?><span class="nl-dark-blue">+1<?=__('分', 'nlyd-student')?></span>，<?=__('若复位数字有错误，则时间分不计入成绩。', 'nlyd-student')?></p>
                                     <?php
                                     break;
                                 case 'zxss':
