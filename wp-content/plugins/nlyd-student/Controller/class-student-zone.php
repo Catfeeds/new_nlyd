@@ -3,7 +3,7 @@
 /**
  * 学生-分支机构
  * Created by PhpStorm.
- * User: Administrator
+ * User: zoneistrator
  * Date: 2018/6/29
  * Time: 21:44
  */
@@ -163,6 +163,12 @@ class Student_Zone extends Student_Home
         load_view_template($view);
 
     }
+
+    public function test(){
+        $view = student_view_path.CONTROLLER.'/test.php';
+        load_view_template($view);
+    }
+
     /**
      * 默认公用js/css引入
      */
@@ -173,6 +179,15 @@ class Student_Zone extends Student_Home
             wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
             wp_enqueue_style( 'my-student-zone' );
         // }
+
+        if(ACTION == 'apply'){
+            wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'zone_select2_js' );
+            wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
+            wp_enqueue_script( 'zone_select2_i18n_js' );
+            wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
+            wp_enqueue_style( 'zone_select2_css' );
+        }
     }
 
 }
