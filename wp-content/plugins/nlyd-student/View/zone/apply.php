@@ -332,7 +332,6 @@ jQuery(function($) {
             fd.append('chairman_id',data.field['chairman_id']);
             fd.append('secretary_id',data.field['secretary_id']);
             fd.append('business_licence',imgs1[0]);
-            fd.append('business_licence_url',data.field['business_licence_url']);
             console.log(data.field)
             $.ajax({
                 data: fd,
