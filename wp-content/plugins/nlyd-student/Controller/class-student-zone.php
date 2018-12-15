@@ -29,6 +29,10 @@ class Student_Zone extends Student_Home
         global $wpdb,$user_info;
 
         $row = $this->get_zone_row();
+
+        //获取用户今日收益
+        $sql = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+        $data['stream'] = $wpdb->get_var($sql);
         //print_r($row);
         if($row['user_status'] == 1){
             $day = date_i18n('Y年m月d日',strtotime('+1 year',$row['audit_time']));
@@ -54,7 +58,6 @@ class Student_Zone extends Student_Home
             $data['row'] = $row;
         }
 
-
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
 
@@ -71,8 +74,22 @@ class Student_Zone extends Student_Home
      */
      public function profit(){
 
+        global $wpdb,$user_info;
+         //获取用户今日收益
+         $sql1 = "select sum(user_income) stream from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and date_format(created_time,'%Y-%m-%d') = CURDATE() ";
+         $data['stream'] = $wpdb->get_var($sql1);
+
+         //获取用户今日收益
+         $sql2 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} and user_income > 0 ";
+         $data['stream_total'] = $wpdb->get_var($sql2);
+
+         //获取可提现金额
+         $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} ";
+         $balance = $wpdb->get_var($sql3);
+         $data['balance'] = $balance > 0 ? $balance : number_format(0,2);
+
         $view = student_view_path.CONTROLLER.'/profit.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 提现页面
@@ -128,6 +145,27 @@ class Student_Zone extends Student_Home
      */
      public function buildSuccess(){
         $view = student_view_path.CONTROLLER.'/match-buildSuccess.php';
+        load_view_template($view);
+    }
+    /**
+     * 考级管理列表
+     */
+     public function kaojiList(){
+        $view = student_view_path.CONTROLLER.'/kaoji-list.php';
+        load_view_template($view);
+    }
+    /**
+     * 发布考级
+     */
+     public function kaojiBuild(){
+        $view = student_view_path.CONTROLLER.'/kaoji-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 考级发布成功
+     */
+     public function kaojiBuildSuccess(){
+        $view = student_view_path.CONTROLLER.'/kaoji-buildSuccess.php';
         load_view_template($view);
     }
     /*

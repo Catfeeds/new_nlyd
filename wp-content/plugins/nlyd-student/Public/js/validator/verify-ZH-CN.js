@@ -165,7 +165,7 @@
             var nowDay = date.getDate();//当前日
             var nowMinute = date.getMinutes();//当前分
             var nowHour = date.getHours();//当前小时
-            var showYear=99;//展示最近100年
+            var showYear=2;//展示最近100年
             var year=[];
             var hour=[];
             var minites=[]

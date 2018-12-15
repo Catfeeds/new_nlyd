@@ -65,7 +65,7 @@
                         </div>
                         <div class="apply_list_line center"><?=__('收益管理', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?>0.00</div>
+                        <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?><?=$stream?></div>
                     </a>
                     <a class="apply_list c_black layui-row">
                         <div class="apply_list_line pull-left">

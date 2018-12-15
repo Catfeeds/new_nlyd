@@ -5,14 +5,14 @@
                 require_once leo_student_public_view.'leftMenu.php';
             
         ?>
-        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-bottom">
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('发布比赛', 'nlyd-student')?></div></h1>
-            </header>
-            <div class="layui-row nl-border nl-content">
+            </header> 
+            <div class="layui-row nl-border nl-content have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>

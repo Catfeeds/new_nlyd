@@ -11,34 +11,38 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('比赛管理', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('考级管理', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content match_tabs">
                 <div class="layui-tab layui-tab-brief width-padding width-padding-pc" lay-filter="matchList" style="margin-top:20px">
                     <ul style="margin:0;padding:0" class="layui-tab-title">
                         <li class="layui-this" lay-id="1">
-                            <div><?=__('全部比赛', 'nlyd-student')?></div>
+                            <div><?=__('全部考级', 'nlyd-student')?></div>
                         </li>
                         <li lay-id="2">
-                        <div><?=__('近期比赛', 'nlyd-student')?></div>
+                        <div><?=__('近期考级', 'nlyd-student')?></div>
                         </li>
-                        <li lay-id="3"><div><?=__('往期比赛', 'nlyd-student')?></div></li>
-                        <div class="nl-transform"><div><?=__('近期比赛', 'nlyd-student')?></div></div>
+                        <li lay-id="3"><div><?=__('往期考级', 'nlyd-student')?></div></li>
+                        <div class="nl-transform"><div><?=__('近期考级', 'nlyd-student')?></div></div>
                     </ul>
                     <div class="layui-tab-content">
-                        <!-- 全部比赛 -->
+                        <!-- 全部考级 -->
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="1" style="margin:0">
                                 <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
+                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
                                      <div class="match_body">
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
+                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
                                              <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">报名中</span></div>
                                          </div>
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
+                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
                                              <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">李四</div>
                                          </div>
                                          <div class="match_body_row">
                                              <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
@@ -46,20 +50,24 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                         <a class="clocs_match c_black6 "><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                         <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
+                                         <a class="clocs_match c_black6 "><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
+                                         <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
                                     </div>
                                 </li>    
                                 <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
+                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
                                      <div class="match_body">
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">比赛中</span></div>
+                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">考级中</span></div>
                                          </div>
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
+                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
                                              <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">李四</div>
                                          </div>
                                          <div class="match_body_row">
                                              <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
@@ -67,51 +75,30 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                            <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                            <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
-                                        </div>
-                                </li> 
-                            </ul>
-                        </div>
-                        <!-- 近期比赛 -->
-                        <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="2" style="margin:0">
-                                <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
-                                     <div class="match_body">
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">比赛中</span></div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
-                                         </div>
-                                         <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">18</div>
-                                         </div>
-                                     </div>  
-                                     <div class="match_footer ta_r">
-                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
+                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
+                                        <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
+                                        <a class="end_match c_black6"><span class="c_orange"><i class="iconfont">&#xe6a1;</i></span><span class="ml_10">结束考级</span></a>
                                     </div>
                                 </li> 
                             </ul>
                         </div>
-                        <!-- 往期比赛 -->
+                        <!-- 近期考级 -->
                         <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="3" style="margin:0">
+                            <ul class="flow-default layui-row" id="2" style="margin:0">
                                 <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
+                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
                                      <div class="match_body">
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">已结束</span></div>
+                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">考级中</span></div>
                                          </div>
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
+                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
                                              <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">李四</div>
                                          </div>
                                          <div class="match_body_row">
                                              <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
@@ -119,8 +106,38 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
+                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
+                                        <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
+                                    </div>
+                                </li> 
+                            </ul>
+                        </div>
+                        <!-- 往期考级 -->
+                        <div class="layui-tab-item">
+                            <ul class="flow-default layui-row" id="3" style="margin:0">
+                                <li class="match_row"> 
+                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
+                                     <div class="match_body">
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">已结束</span></div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">李四</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">18</div>
+                                         </div>
+                                     </div>  
+                                     <div class="match_footer ta_r">
+                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
+                                        <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
                                     </div>
                                 </li>    
                             </ul>
@@ -144,12 +161,12 @@
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
-                        <p class="no-info-text"><?=__('无比赛信息', 'nlyd-student')?></p>
+                        <p class="no-info-text"><?=__('无考级信息', 'nlyd-student')?></p>
                     </div>
                 </div>
             </div>
         <?php } ?>  
-        <a class="a-btn" href="<?=home_url('/zone/matchBuild/');?>"><?=__('发布新的比赛', 'nlyd-student')?></a>   
+        <a class="a-btn" href="<?=home_url('/zone/kaojiBuild/');?>"><?=__('发布新的考级', 'nlyd-student')?></a>   
     </div>
 </div>
 <script>
@@ -183,7 +200,7 @@ jQuery(function($) {
     //                 }
     //                 if(parseInt(id)==1){//报名
     //                     postData['match_type']="signUp";
-    //                 }else if(parseInt(id)==2){//比赛
+    //                 }else if(parseInt(id)==2){//考级
     //                     postData['match_type']="matching";
     //                 }else{//往期
     //                     postData['match_type']="history";
@@ -198,12 +215,12 @@ jQuery(function($) {
     //                         if(res.success){
     //                             $.each(res.data.info,function(i,v){
     //                                 // 已结束-3
-    //                                 // 等待开赛-2
+    //                                 // 等待考级-2
     //                                 // 未开始-1
     //                                 // 报名中1
     //                                 // 进行中2
     //                                 var isMe='';//标签
-    //                                 var match_status='c_blue';//比赛中高亮
+    //                                 var match_status='c_blue';//考级中高亮
     //                                 var rightBtn='';  
     //                                 var endTime="";//报名截止
     //                                 var domTime=v.entry_end_time.replace(/-/g,'/');
@@ -215,7 +232,7 @@ jQuery(function($) {
     //                                 if(v.user_id!=null){//我报名参加的赛事
     //                                     isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'
     //                                 }
-    //                                 if(v.match_status==2 || v.match_status==-2){//比赛进行中或等待开赛
+    //                                 if(v.match_status==2 || v.match_status==-2){//考级进行中或等待考级
     //                                     if(v.match_status==2){
     //                                         match_status='c_orange';  
     //                                     }
@@ -275,14 +292,14 @@ jQuery(function($) {
     //                                                 +'</div>'
     //                                                 +'<div class="nl-match-body">'
     //                                                     +'<div class="nl-match-detail layui-row">'
-    //                                                         +'<div class="nl-match-label"><div><?=__('开赛日期', 'nlyd-student')?>:</div></div>'
+    //                                                         +'<div class="nl-match-label"><div><?=__('考级日期', 'nlyd-student')?>:</div></div>'
     //                                                         +'<div class="nl-match-info">'
     //                                                             +'<span class="c_black">'+v.match_start_time+'</span>'
     //                                                             +'<span class="nl-match-type '+match_status+'">'+v.match_status_cn+'</span>'
     //                                                         +'</div>'
     //                                                     +'</div>'
     //                                                     +'<div class="nl-match-detail layui-row">'
-    //                                                         +'<div class="nl-match-label"><div><?=__('比赛地点', 'nlyd-student')?>:</div></div>'
+    //                                                         +'<div class="nl-match-label"><div><?=__('考级地点', 'nlyd-student')?>:</div></div>'
     //                                                         +'<div class="nl-match-info">'
     //                                                             +'<span class="c_black">'+v.match_address+'</span>'
     //                                                         +'</div>'
