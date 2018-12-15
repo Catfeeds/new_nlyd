@@ -6,51 +6,44 @@
         ?>
 
         <?php if(!$row){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('比赛管理', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('考级管理', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content match_tabs have-bottom">
+            <div class="layui-row nl-border nl-content match_tabs">
                 <div class="layui-tab layui-tab-brief width-padding width-padding-pc" lay-filter="matchList" style="margin-top:20px">
                     <ul style="margin:0;padding:0" class="layui-tab-title">
                         <li class="layui-this" lay-id="1">
-                            <div><?=__('全部比赛', 'nlyd-student')?></div>
+                            <div><?=__('全部考级', 'nlyd-student')?></div>
                         </li>
                         <li lay-id="2">
-                        <div><?=__('近期比赛', 'nlyd-student')?></div>
+                        <div><?=__('近期考级', 'nlyd-student')?></div>
                         </li>
-                        <li lay-id="3"><div><?=__('往期比赛', 'nlyd-student')?></div></li>
-                        <div class="nl-transform"><div><?=__('全部比赛', 'nlyd-student')?></div></div>
+                        <li lay-id="3"><div><?=__('往期考级', 'nlyd-student')?></div></li>
+                        <div class="nl-transform"><div><?=__('近期考级', 'nlyd-student')?></div></div>
                     </ul>
                     <div class="layui-tab-content">
-                        <!-- 全部比赛 -->
+                        <!-- 全部考级 -->
                         <div class="layui-tab-item layui-show">
                             <ul class="flow-default layui-row" id="1" style="margin:0">
-                               
-                            </ul>
-                        </div>
-                        <!-- 近期比赛 -->
-                        <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="2" style="margin:0">
-                              
-                            </ul>
-                        </div>
-                        <!-- 往期比赛 -->
-                        <div class="layui-tab-item">
-                            <ul class="flow-default layui-row" id="3" style="margin:0">
+                             
                                 <!-- <li class="match_row"> 
-                                     <div class="bold c_black f_16 mt_10">2018脑力世界杯大爱长青国际脑力战队精英赛</div>
+                                     <div class="bold c_black f_16 mt_10">国际速读水平测试（南京）</div>
                                      <div class="match_body">
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>
-                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">已结束</span></div>
+                                             <div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">2018-08-08 09:32 <span class="c_blue ml_10">考级中</span></div>
                                          </div>
                                          <div class="match_body_row">
-                                             <div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>
+                                             <div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>
                                              <div class="match_body_info c_black">四川省成都市武侯区航空路丰德万瑞25楼</div>
+                                         </div>
+                                         <div class="match_body_row">
+                                             <div class="match_body_label"><?=__('责任人', 'nlyd-student')?></div>
+                                             <div class="match_body_info c_black">李四</div>
                                          </div>
                                          <div class="match_body_row">
                                              <div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>
@@ -58,10 +51,23 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
-                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
+                                        <a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>
+                                        <a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>
+                                        <a class="end_match c_black6"><span class="c_orange"><i class="iconfont">&#xe6a1;</i></span><span class="ml_10">结束考级</span></a>
                                     </div>
-                                </li>     -->
+                                </li>  -->
+                            </ul>
+                        </div>
+                        <!-- 近期考级 -->
+                        <div class="layui-tab-item">
+                            <ul class="flow-default layui-row" id="2" style="margin:0">
+                            
+                            </ul>
+                        </div>
+                        <!-- 往期考级 -->
+                        <div class="layui-tab-item">
+                            <ul class="flow-default layui-row" id="3" style="margin:0">
+                               
                             </ul>
                         </div>
                     </div>
@@ -83,12 +89,12 @@
                         <div class="no-info-img">
                             <img src="<?=student_css_url.'image/noInfo/noMatch1042@2x.png'?>">
                         </div>
-                        <p class="no-info-text"><?=__('无比赛信息', 'nlyd-student')?></p>
+                        <p class="no-info-text"><?=__('无考级信息', 'nlyd-student')?></p>
                     </div>
                 </div>
             </div>
         <?php } ?>  
-        <a class="a-btn" href="<?=home_url('/zone/matchBuild/');?>"><?=__('发布新的比赛', 'nlyd-student')?></a>   
+        <a class="a-btn" href="<?=home_url('/zone/kaojiBuild/');?>"><?=__('发布新的考级', 'nlyd-student')?></a>   
     </div>
 </div>
 <script>
@@ -115,14 +121,13 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_match_list',
-                        _wpnonce:$('#inputMatch').val(),
+                        action:'get_grading_logs',
                         page:match_page,
                         match_type:'',
                     }
-                    if(parseInt(id)==1){//全部报名
+                    if(parseInt(id)==1){//报名
                         postData['match_type']="all";
-                    }else if(parseInt(id)==2){//比赛
+                    }else if(parseInt(id)==2){//考级
                         postData['match_type']="matching";
                     }else{//往期
                         postData['match_type']="history";
@@ -141,16 +146,22 @@ jQuery(function($) {
                                     // 未开始-1
                                     // 报名中1
                                     // 进行中2
+                                    var end_match=v.match_status==2 ? '<a class="end_match c_black6"><span class="c_orange"><i class="iconfont">&#xe6a1;</i></span><span class="ml_10">结束考级</span></a>' : '';
+                                  
                                     var dom='<li class="match_row">'
-                                                +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
+                                                +'<div class="bold c_black f_16 mt_10">'+v.post_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.match_start_time+' <span class="c_blue ml_10">'+v.match_status_cn+'</span></div>'
+                                                        +'<div class="match_body_label"><?=__('考级日期：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_info c_black">'+v.start_time+' <span class="c_blue ml_10">'+v.match_status_cn+'</span></div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
-                                                        +'<div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>'
-                                                        +'<div class="match_body_info c_black">'+v.match_address+'</div>'
+                                                        +'<div class="match_body_label"><?=__('考级地点：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_info c_black">'+v.address+'</div>'
+                                                    +'</div>'
+                                                    +'<div class="match_body_row">'
+                                                        +'<div class="match_body_label"><?=__('责任人', 'nlyd-student')?>：</div>'
+                                                        +'<div class="match_body_info c_black">'+'无字段'+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>'
@@ -158,8 +169,9 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
-                                                    +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>'
-                                                    +'<a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>'
+                                                    +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭考级</span></a>'
+                                                    +'<a href="<?=home_url('/zone/kaojiBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑考级</span></a>'
+                                                    +end_match
                                                 +'</div>'
                                             +'</li>'
                                     lis.push(dom) 
@@ -173,6 +185,21 @@ jQuery(function($) {
                             }else{
                                 next(lis.join(''),false)
                             }
+                        
+                            $('.getTimes'+id).countdown(function(S, d){//倒计
+                                    var D=d.day>0 ? d.day+'<?=__('天', 'nlyd-student')?>' : '';
+                                    var h=d.hour<10 ? '0'+d.hour : d.hour;
+                                    var m=d.minute<10 ? '0'+d.minute : d.minute;
+                                    var s=d.second<10 ? '0'+d.second : d.second;
+                                    var time=D+h+':'+m+':'+s;
+                                    $(this).text(time);
+                                if(S==0){
+                                    $(this).text("<?=__('报名结束', 'nlyd-student')?>");
+                                    setTimeout(function() {
+                                        window.location.reload()  
+                                    }, 1000);
+                                }
+                            });
                         },
                         complete:function(XMLHttpRequest, textStatus){
 							if(textStatus=='timeout'){
@@ -195,16 +222,15 @@ jQuery(function($) {
         pagation($('.layui-this').attr('lay-id'),1)
         var lefts=$('.layui-this').position().left;
         $('.nl-transform').css({
-            'transform':'translate3d('+lefts+'px, 0, 0px)'
+            'transform':'translate3d('+lefts+'px, 0px, 0px)'
         })
         element.on('tab(matchList)', function(){//matchList
             // location.hash = 'matchList='+ $(this).attr('lay-id');
-            var html=$(this).html();
             var left=$(this).position().left+parseInt($(this).css('marginLeft'));
             var id=$(this).attr('lay-id')
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
-            }).html(html)
+            })
             if(!isClick[id]){
                 pagation(id,1)
             }

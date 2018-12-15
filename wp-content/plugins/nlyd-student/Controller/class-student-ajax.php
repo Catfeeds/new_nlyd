@@ -4513,20 +4513,21 @@ class Student_Ajax
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select SQL_CALC_FOUND_ROWS id,match_id,date_format(created_time,'%Y/%m/%d %H:%i'),income_type,
-                if(income_type = 'extract' ? 'bg_reduce', 'bg_add') as income_type_class,
+        $sql = "select SQL_CALC_FOUND_ROWS *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
+                if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
                 case income_type
                 when 'match' then '比赛收益'
                 when 'grading' then '考级收益'
                 when 'extract' then '比赛提现'
                 end income_type_title
-                from {$wpdb->prefix}user_stream_logs where {$where} order created_time desc limit $start,$pageSize ";
+                from {$wpdb->prefix}user_stream_logs where {$where} order by created_time desc limit $start,$pageSize ";
+        //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
         $maxPage = ceil( ($total['total']/$pageSize) );
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
-        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无考记录', 'nlyd-student')));
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
         wp_send_json_success(array('info'=>$rows));
     }
 

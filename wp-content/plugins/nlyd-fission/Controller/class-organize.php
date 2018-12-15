@@ -71,7 +71,7 @@ class Organize{
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
                 zm.zone_address,zm.business_licence,zm.business_licence_url,
-                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,
+                zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,
                 zm.chairman_id,zm.secretary_id,
                 CASE zm.user_status 
                 WHEN 1 THEN '正常' 
@@ -209,7 +209,7 @@ class Organize{
                             <?=$row['zone_name']?>
                            <br>
                            <div class="row-actions">
-                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&user_id='.$row['user_id'])?>">编辑</a></span>
+                               <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&id='.$row['id'])?>">编辑</a></span>
 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
 <!--                               <span class="view"><a href="">资料</a></span>-->
                            </div>
@@ -383,7 +383,7 @@ class Organize{
     }
 
     /**
-     * 新增主体类型
+     * 新增/编辑主体类型
      */
     public function addOrganizeType(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -392,15 +392,18 @@ class Organize{
             $success_msg = '';
             $error_msg = '';
             $zone_type_name = isset($_POST['zone_type_name']) ? trim($_POST['zone_type_name']) : '';
+            $zone_type_alias = isset($_POST['zone_type_alias']) ? trim($_POST['zone_type_alias']) : '';
             $zone_type_status = isset($_POST['zone_type_status']) ? intval($_POST['zone_type_status']) : 0;
             $power = isset($_POST['power']) ? $_POST['power'] : [];
             if($zone_type_name == '') $error_msg = '请填写类型名称';
             if(!is_array($power)) $error_msg = $error_msg==''?'权限错误':$error_msg.'<br >权限错误';
+            if($zone_type_alias == '') $error_msg = $error_msg==''?'请填写类型别名':$error_msg.'<br >请填写类型别名';
             if($zone_type_status != 1 && $zone_type_status != 2) $error_msg = $error_msg==''?'请选择类型状态':$error_msg.'<br >请选择类型状态';
 
             if($error_msg == ''){
                 $insertData = [
                     'zone_type_name' => $zone_type_name,
+                    'zone_type_alias' => $zone_type_alias,
                     'zone_type_status' => $zone_type_status,
                 ];
                 $wpdb->startTrans();
@@ -488,6 +491,12 @@ class Organize{
                             <input name="zone_type_name" type="text" id="zone_type_name" value="<?=isset($row['zone_type_name'])?$row['zone_type_name']:''?>" maxlength="60">
                         </td>
                     </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="zone_type_alias">类型别名 </label></th>
+                        <td>
+                            <input name="zone_type_alias" type="text" id="zone_type_alias" value="<?=isset($row['zone_type_alias'])?$row['zone_type_alias']:''?>" maxlength="60">
+                        </td>
+                    </tr>
 
                     <tr class="">
                         <th scope="row"><label for="zone_type_status">状态 </label></th>
@@ -526,7 +535,7 @@ class Organize{
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS id,zone_type_name,
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS id,zone_type_name,zone_type_alias,
                 CASE zone_type_status 
                 WHEN 1 THEN '<span style=\"color:#2ac40a;\">正常</span>' 
                 WHEN 2 THEN '<span style=\"color:#c44f09;\">关闭</span>' 
@@ -575,6 +584,7 @@ class Organize{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" id="zone_type_alias" class="manage-column column-zone_type_alias">别名</th>
                     <th scope="col" id="status" class="manage-column column-status">状态</th>
                 </tr>
                 </thead>
@@ -603,6 +613,9 @@ class Organize{
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
+                        <td class="zone_type_alias column-zone_type_alias" data-colname="别名">
+                            <?=$row['zone_type_alias']?>
+                        </td>
                         <td class="status column-status" data-colname="状态">
                             <?=$row['zone_type_status_name']?>
                         </td>
@@ -615,6 +628,7 @@ class Organize{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-name column-primary">名称</th>
+                    <th scope="col" class="manage-column column-zone_type_alias">别名</th>
                     <th scope="col" class="manage-column column-status">状态</th>
                 </tr>
                 </tfoot>
@@ -648,7 +662,7 @@ class Organize{
      */
     public function addOrganize(){
         global $wpdb;
-        $old_user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 0;
+        $old_zm_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         if(is_post()){
             $success_msg = '';
             $error_msg = '';
@@ -668,7 +682,7 @@ class Organize{
             $parent_id = isset($_POST['parent_id']) ? intval($_POST['parent_id']) : 0;
             $power = isset($_POST['power']) ? $_POST['power'] : [];
 
-            if($user_id < 0) $error_msg = '请选择升级账号';
+            if($user_id < 0) $error_msg = '请选择负责人';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($power)) $error_msg = $error_msg==''?'权限错误':$error_msg.'<br >权限错误';
@@ -681,7 +695,7 @@ class Organize{
             if($bank_card_num == '') $error_msg = $error_msg==''?'请填写银行卡号':$error_msg.'<br >请填写银行卡号';
             if($chairman_id < 1) $error_msg = $error_msg==''?'请选择组委会主席':$error_msg.'<br >请选择组委会主席';
             if($parent_id > 0){
-                $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE user_id='{$old_user_id}'");
+                $old_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}zone_meta WHERE id='{$old_zm_id}'");
                 if($old_id == $parent_id) $error_msg = $error_msg==''?'上级不能是自身':$error_msg.'<br >上级不能是自身';
             }
 
@@ -703,7 +717,6 @@ class Organize{
                     'role_id' => join(',',$power),
                     'parent_id' => $parent_id,
                 ];
-
                 //图片
                 if(isset($_FILES['business_licence_url'])){
                     $upload_dir = wp_upload_dir();
@@ -714,9 +727,8 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
-                if($old_user_id>0){
-                    $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['user_id'=>$old_user_id]);
-
+                if($old_zm_id>0){
+                    $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
                 }else{
                     $insertData['created_time'] = get_time('mysql');
                     $insertData['audit_time'] = get_time('mysql');
@@ -734,7 +746,7 @@ class Organize{
         //类型列表
         $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
         $editPowerListArr = [];
-        if($old_user_id > 0){
+        if($old_zm_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
@@ -747,8 +759,8 @@ class Organize{
                    LEFT JOIN {$wpdb->usermeta} AS um3 ON um3.user_id=zm.chairman_id AND um3.meta_key='user_real_name' 
                    LEFT JOIN {$wpdb->usermeta} AS um4 ON um4.user_id=zm.secretary_id AND um4.meta_key='user_real_name' 
                    LEFT JOIN {$wpdb->prefix}zone_meta AS zmp ON zmp.id=zm.parent_id  
-                   WHERE zm.user_id='{$old_user_id}'", ARRAY_A);
-//            leo_dump($row);die;
+                   WHERE zm.id='{$old_zm_id}'", ARRAY_A);
+//            leo_dump($wpdb->last_query);die;
             //权限列表
             $role_id = $wpdb->get_var("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$row['type_id']}'");
             //已有权限
@@ -780,10 +792,10 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field form-required">
-                        <th scope="row"><label for="user_id">升级账号 </label></th>
+                        <th scope="row"><label for="user_id">负责人 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
-                                <option value="<?=$old_user_id?>" selected="selected">
+                                <option value="<?=$row['user_id']?>" selected="selected">
                                     <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
                                     <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
                                 </option>

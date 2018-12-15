@@ -19,10 +19,18 @@ class Spread{
 
             $role = 'profit_log';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'profit_user_log';//权限名
+            $wp_roles->add_cap('administrator', $role);
+
+            $role = 'profit_extract_log';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','收益设置','收益设置','profit_set','fission-profit-set',array($this,'profitSet'));
         add_submenu_page('fission','新增收益设置','新增收益设置','add_profit_set','fission-add-profit-set',array($this,'addProfitSet'));
-        add_submenu_page('fission','收益记录','收益记录','profit_log','fission-profit-log',array($this,'profitLog'));
+        add_submenu_page('fission','分成记录','分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
+        add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
+        add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
     }
 
     /**
@@ -257,7 +265,7 @@ class Spread{
     }
 
     /**
-     * 收益记录
+     * 分成记录
      */
     public function profitLog(){
         global $wpdb;
@@ -309,9 +317,6 @@ class Spread{
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤主体列表</h2>
-
-
-
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
@@ -463,6 +468,158 @@ class Spread{
             </script>
         </div>
         <?php
+    }
+
+    /**
+     *用户收益流水
+     */
+    public function profitUserLog(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $where = "";
+        if($searchStr != ''){
+            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%'";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
+                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,
+                um.meta_value AS user_real_name,p.post_title 
+                FROM {$wpdb->prefix}user_stream_logs AS usl 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' 
+                LEFT JOIN {$wpdb->users} AS u ON u.ID=usl.user_id 
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=usl.match_id 
+                {$where} 
+                LIMIT {$start},{$pageSize}",ARRAY_A);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">用户收益流水</h1>
+
+
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤用户收益流水</h2>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+            </p>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                   <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名</th>
+                    <th scope="col" id="income_type" class="manage-column column-income_type">类型</th>
+                    <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>
+                    <th scope="col" id="user_income" class="manage-column column-user_income">数额</th>
+                    <th scope="col" id="created_time" class="manage-column column-created_time">时间</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    if(empty($row['user_real_name'])){
+                        $real_name = $row['user_login'];
+                    }else{
+                        $real_name = unserialize($row['user_real_name'])['real_name'];
+                    }
+                    ?>
+                    <tr data-uid="<?=$row['id']?>">
+
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名">
+                            <?=$real_name?>
+                            <br>
+                            <div class="row-actions">
+                                <!--                                <span class="edit"><a href="">编辑</a></span>-->
+                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <!--                               <span class="view"><a href="">资料</a></span>-->
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="income_type column-income_type" data-colname="类型">
+                            <?php
+                            switch ($row['income_type']){
+                                case 'match':
+                                    echo  '比赛';
+                                    break;
+                                case 'grading':
+                                    echo '考级';
+                                    break;
+                            }
+                            ?>
+                        </td>
+                        <td class="match_id column-match_id" data-colname="项目"><?=$row['post_title']?> </td>
+                        <td class="user_income column-user_income" data-colname="数额">
+                            <span style="<?=$row['user_income'] < 0 ? 'color:#c41d00;': ($row['user_income']>0?'color:#0087c4;':'')?>;"><?=$row['user_income']?></span>
+
+                        </td>
+                        <td class="created_time column-created_time" data-colname="时间"><?=$row['created_time']?> </td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名</th>
+                    <th scope="col" class="manage-column column-income_type">类型</th>
+                    <th scope="col" class="manage-column column-match_id">项目</th>
+                    <th scope="col" class="manage-column column-user_income">数额</th>
+                    <th scope="col" class="manage-column column-created_time">时间</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+
+                });
+            </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 提现记录
+     */
+    public function profitExtractLog(){
+
     }
 
     /**

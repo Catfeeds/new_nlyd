@@ -17,7 +17,7 @@
                 <div class="width-margin width-margin-pc content-border">
                     <div class="width-padding-pc">
                         <ul class="flow-default">
-                        <li class="nl-match">
+                            <li class="nl-match">
                                 <!-- <span class="nl-match-people">28报名</span> -->
                                 <div class="nl-match-header">
                                     <span class="nl-match-name fs_16 <?=$match['match_status'] != -3?'c_blue':' ';?>"><?=$match['post_title']?></span>
@@ -118,7 +118,7 @@
                             </li>
                         </ul>
                         <?php if($match['is_me'] != 'y' && $match['match_status'] == 1): ?>
-                        <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"></div><?=__('报名参赛', 'nlyd-student')?></div></a>
+                            <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/confirm/match_id/'.$_GET['match_id']);?>"><div><?=__('报名参赛', 'nlyd-student')?></div></a>
                         <?php endif; ?>
                         <?php if( ($match['is_me'] == 'y' && $match['match_status'] == 2) && ($match['match_status'] == -3 || $match['match_status'] == 2)){?>
                             <div class="a-btn two get_footer">
@@ -131,10 +131,10 @@
                             </div>              
                         <?php }else { ?>
                             <?php if($match['match_status'] == -3 || $match['match_status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"></div><?=__('查看战绩', 'nlyd-student')?></div></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/record/match_id/'.$_GET['match_id']);?>"><div><?=__('查看战绩', 'nlyd-student')?></div></a>
                             <?php endif;?>
                             <?php if( $match['is_me'] == 'y' && $match['match_status'] == 2):?>
-                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"></div><?=__('进入比赛', 'nlyd-student')?></div></a>
+                                <a class="a-btn a-btn-table get_footer" href="<?=home_url('/matchs/matchWaitting/match_id/'.$_GET['match_id']);?>"><div><?=__('进入比赛', 'nlyd-student')?></div></a>
                             <?php endif;?>
                        <?php }?>
                         
