@@ -155,7 +155,7 @@ class Course{
                             <?=!empty($row['coach_real_name']) ? unserialize($row['coach_real_name'])['real_name'] : ''?>
                         </td>
                         <td class="course_start_time column-course_start_time" data-colname="开课时间"><?=$row['course_start_time']?></td>
-                        <td class="course_end_time column-course_end_time" data-colname="结课时间"><?=$row['course_end_time']?></td>
+                        <td class="course_end_time column-course_end_time" data-colname="结课时间"><?=$row['course_end_time'] == '0000-00-00 00:00:00' ? '待定' : $row['course_end_time']?></td>
                         <td class="address column-address" data-colname="授课地址"><?=$row['province'].$row['city'].$row['area'].$row['address']?></td>
                         <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
                         <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
@@ -287,12 +287,12 @@ class Course{
      * 添加/编辑课程
      */
     public function addCourse(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
         $success_msg = '';
         $error_msg = '';
         $row = [];
         global $wpdb;
         if(is_post()){
-//            leo_dump($_POST);
             $course_title = isset($_POST['course_title']) ? trim($_POST['course_title']) : '';
             $course_details = isset($_POST['course_details']) ? trim($_POST['course_details']) : '';
             $const = isset($_POST['const']) ? floatval($_POST['const']) : 0;
@@ -305,7 +305,7 @@ class Course{
             $address = isset($_POST['address']) ? trim($_POST['address']) : '';
             $open_quota = isset($_POST['open_quota']) ? intval($_POST['open_quota']) : 0;
             $seize_quota = isset($_POST['seize_quota']) ? intval($_POST['seize_quota']) : 0;
-            $zone_user_id = isset($_POST['zone_user_id']) ? intval($_POST['zone_user_id']) : 0;
+            $zone_id = isset($_POST['zone_id']) ? intval($_POST['zone_id']) : 0;
             $course_type = isset($_POST['course_type']) ? intval($_POST['course_type']) : 1;
             $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 2;
             if($course_title == '') $error_msg = '请填写课程名称';
@@ -316,6 +316,7 @@ class Course{
             if($area == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择区县';
             if($address == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请填写详细地址';
             if($open_quota < 0) $error_msg .= ($error_msg == '' ? '':'<br />').'请填写开放名额';
+            if($course_end_time == '0100-01-01 00:00:00') $course_end_time = '';
             if($error_msg == ''){
                 $insertData = [
                     'course_title' => $course_title,
@@ -330,10 +331,11 @@ class Course{
                     'address' => $address,
                     'open_quota' => $open_quota,
                     'seize_quota' => $seize_quota,
-                    'zone_user_id' => $zone_user_id,
+                    'zone_id' => $zone_id,
                     'course_type' => $course_type,
                     'is_enable' => $is_enable,
                 ];
+
                 //图片
                 if(isset($_FILES['course_img'])){
                     $upload_dir = wp_upload_dir();
@@ -342,10 +344,22 @@ class Course{
                     $file = saveIosFile($_FILES['course_img']['tmp_name'],$upload_dir['basedir'].$dir);
                     if($file){
                         $insertData['course_img'] = $upload_dir['baseurl'].$dir.$file;
+                        $old_img = $wpdb->get_var("SELECT course_img FROM {$wpdb->prefix}course WHERE id='{$id}'");
                     }
                 }
-                $insertData['created_time'] = get_time('mysql');
-                $bool = $wpdb->insert($wpdb->prefix.'course',$insertData);
+                if($id > 0){
+                    $bool = $wpdb->update($wpdb->prefix.'course',$insertData,['id'=>$id]);
+                    if($bool && isset($old_img)){
+                        //删除原图片
+                        $old_img = explode('course/',$old_img);
+                        if(isset($old_img[1])){
+                            is_file($upload_dir['basedir'].$dir.$old_img[1]) && unlink($upload_dir['basedir'].$dir.$old_img[1]);
+                        }
+                    }
+                }else{
+                    $insertData['created_time'] = get_time('mysql');
+                    $bool = $wpdb->insert($wpdb->prefix.'course',$insertData);
+                }
                 if($bool){
                     $success_msg = '操作成功!';
                 }else{
@@ -355,7 +369,16 @@ class Course{
             }
 
         }
-
+        if($id > 0){
+            $row = $wpdb->get_row("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
+                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,
+                zm.zone_name,um.meta_value AS coach_real_name  
+                FROM {$wpdb->prefix}course AS cou 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
+                WHERE cou.id='{$id}'", ARRAY_A);
+            }
+//            leo_dump($row);die;
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑课程</h1>
@@ -374,13 +397,13 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="course_title">课程名称 </label></th>
                         <td>
-                            <input type="text" name="course_title" id="course_title" value="<?=isset($row['course_title']) ? $row['course_title'] : ''?>">
+                            <input type="text" style="padding: 3px 5px;" name="course_title" id="course_title" value="<?=isset($row['course_title']) ? $row['course_title'] : ''?>">
                         </td>
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="course_details">课程详情 </label></th>
                         <td>
-                            <?php wp_editor( '', 'course_details', $settings = array() ); ?>
+                            <?php wp_editor( isset($row['course_details']) ? $row['course_details'] : '', 'course_details', $settings = array() ); ?>
                         </td>
                     </tr>
                     <tr class="">
@@ -393,29 +416,29 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="const">课程价格 </label></th>
                         <td>
-                            <input type="text" name="const" id="const" value="<?=isset($row['const']) ? $row['const'] : 3000?>">
+                            <input type="text" style="padding: 3px 5px;" name="const" id="const" value="<?=isset($row['const']) ? $row['const'] : 3000?>">
                         </td>
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="coach_id">授课教练 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="coach_id" style="width: 50%" data-action="get_base_coach_list" data-type="all">
-                                <option value="<?=isset($row['parent_id']) ? $row['parent_id'] : 0?>" selected="selected">
-                                    <?=isset($row['parent_name']) ? $row['parent_name'] : ''?>
+                                <option value="<?=isset($row['coach_id']) ? $row['coach_id'] : 0?>" selected="selected">
+                                    <?=!empty($row['coach_real_name']) ? unserialize($row['coach_real_name'])['real_name'] : ''?>
                                 </option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="">
+                    <tr class="form-field">
                         <th scope="row"><label for="course_start_time">开课时间 </label></th>
                         <td>
-                            <input type="date" name="course_start_time" id="course_start_time" value="<?=isset($row['course_start_time']) ? $row['course_start_time'] : ''?>">
+                            <input type="text" style="max-width: 500px;" value="<?=isset($row['course_start_time']) ? $row['course_start_time'] : get_time('mysql')?>" name="course_start_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="course_start_time" placeholder="开课时间">
                         </td>
                     </tr>
-                    <tr class="">
+                    <tr class="form-field">
                         <th scope="row"><label for="course_end_time">结课时间 </label></th>
                         <td>
-                            <input type="date" name="course_end_time" id="course_end_time" value="<?=isset($row['course_end_time']) ? $row['course_end_time'] : ''?>">
+                            <input type="text" style="max-width: 500px;" value="<?=isset($row['course_end_time'])  ? $row['course_end_time'] : get_time('mysql')?>" name="course_end_time" class="layui-input date-picker y-m-d-h-m-s" readonly  id="course_end_time" placeholder="待定">
                         </td>
                     </tr>
                     <tr class="">
@@ -430,28 +453,28 @@ class Course{
                             <select name="area" id="area">
                                 <option value="">请选择</option>
                             </select>
-                            <input type="text" name="address" value="<?=isset($row['address']) ? $row['address'] : ''?>">
+                            <input type="text" style="padding: 3px 5px;" name="address" value="<?=isset($row['address']) ? $row['address'] : ''?>">
                         </td>
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="open_quota">开放名额 </label></th>
                         <td>
-                            <input type="text" name="open_quota" id="open_quota" value="<?=isset($row['open_quota']) ? $row['open_quota'] : 0?>">
+                            <input type="text" style="padding: 3px 5px;" name="open_quota" id="open_quota" value="<?=isset($row['open_quota']) ? $row['open_quota'] : 0?>">
                         </td>
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="seize_quota">已抢占名额 </label></th>
                         <td>
-                            <input type="text" name="seize_quota" id="seize_quota" value="<?=isset($row['seize_quota']) ? $row['seize_quota'] : 0?>">
+                            <input type="text" style="padding: 3px 5px;" name="seize_quota" id="seize_quota" value="<?=isset($row['seize_quota']) ? $row['seize_quota'] : 0?>">
                         </td>
                     </tr>
 
                     <tr class="">
                         <th scope="row"><label for="zone_user_id">所属主体机构 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="zone_user_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
-                                <option value="<?=isset($row['zone_user_id']) ? $row['zone_user_id'] : 0?>" selected="selected">
-                                    <?=isset($row['zone_user_name']) ? $row['zone_user_name'] : ''?>
+                            <select class="js-data-select-ajax" name="zone_id" style="width: 50%" data-action="get_base_zone_list" data-type="all_base">
+                                <option value="<?=isset($row['zone_id']) ? $row['zone_id'] : 0?>" selected="selected">
+                                    <?=empty($row['zone_name']) ? '平台' :$row['zone_name']?>
                                 </option>
                             </select>
                         </td>
@@ -466,8 +489,8 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="is_enable">状态 </label></th>
                         <td>
-                            <label for="is_enable_1">正常  <input type="radio" checked="checked" id="is_enable_1" name="is_enable" value="1"></label>
-                            <label for="is_enable_2">禁用  <input type="radio" id="is_enable_2" name="is_enable" value="2"></label>
+                            <label for="is_enable_1">正常  <input type="radio" <?=$row['is_enable'] == '1' ? 'checked="checked"':''?> id="is_enable_1" name="is_enable" value="1"></label>
+                            <label for="is_enable_2">禁用  <input type="radio" <?=$row['is_enable'] == '2' ? 'checked="checked"':''?> id="is_enable_2" name="is_enable" value="2"></label>
 
                         </td>
                     </tr>
@@ -488,8 +511,30 @@ class Course{
             <script>
 
                 jQuery(document).ready(function($) {
+                    layui.use(['laydate',], function(){
+                        var laydate = layui.laydate;
+                        //日期时间选择器
+                        $('.date-picker').each(function(){
+                            var id=$(this).attr('id');
+                            var format='yyyy-MM-dd HH:mm';
+                            var type='datetime';
+                            if($(this).hasClass('y-m-d')){
+                                format='yyyy-MM-dd';
+                                type='date'
+                            }else if($(this).hasClass('y-m-d-h-m-s')){
+                                format='yyyy-MM-dd HH:mm:ss';
+                                type='datetime';
+                            }
 
-                    initAddress('where','<?=isset($row['province'])?$row['province']:''?>',
+
+                            laydate.render({
+                                elem: '#'+id
+                                ,type: type
+                                ,format: format
+                            });
+                        })
+                    })
+                    initAddress('<?=isset($row['province'])?$row['province']:''?>',
                         '<?=isset($row['city'])?$row['city']:''?>',
                         '<?=isset($row['area'])?$row['area']:''?>');
                     function initAddress(province,city,area){
@@ -588,6 +633,12 @@ class Course{
             case 'course':
                 wp_register_script('layui-js',match_js_url.'layui/layui.js');
                 wp_enqueue_script( 'layui-js' );
+                break;
+            case 'course-add-course':
+                wp_register_script( 'admin_layui_js',match_js_url.'layui/layui.js',array('jquery'), leo_match_version  );
+                wp_enqueue_script( 'admin_layui_js' );
+                wp_register_style( 'admin_layui_css',match_css_url.'layui.css','', leo_match_version  );
+                wp_enqueue_style( 'admin_layui_css' );
                 break;
         }
     }
