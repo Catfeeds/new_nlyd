@@ -134,6 +134,14 @@
 .lable_row{
     padding: 10px 0;
 }
+.input_row{
+    position: relative;
+}
+.input_row_arrow{
+    position: absolute;
+    right: 10px;
+    top: 8.5px;
+}
 .input_row input[type=text],
 .input_row input[type="tel"]
 {
@@ -421,9 +429,7 @@ div .layui-row:last-child{
     border-radius: 6px;
     border: 1px solid #EEEEEE;
 }
-.match_row_header{
 
-}
 .match_body_row{
     font-size: 0;
 }
@@ -453,4 +459,40 @@ div .layui-row:last-child{
     font-size: 0;
     padding: 10px 0;
     border-top: 1px solid #EEEEEE;
+}
+.add_lun_row>span,
+.add_lun_row>a,
+.add_lun .add_coin,
+.add_lun .add_text,
+.match_xiang_name>span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.add_coin{
+    width: 15px;
+    height: 15px;
+    font-size: 0.12rem;
+    color: #fff;
+    text-align: center;
+    line-height: 13px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.add_lun_row,
+.match_xiang_name{
+    font-size: 0;
+}
+.add_lun_row>span,
+.add_lun_row>a{
+    font-size: 0.14rem;
+}
+.close_coin{
+    width: 15px;
+    height: 15px;
+    font-size: 0.12rem;
+    color: #fff;
+    text-align: center;
+    line-height: 13px;
+    border-radius: 50%; 
+    transform: rotate(45deg)
 }

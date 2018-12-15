@@ -849,7 +849,7 @@ function the_table_install () {
           `open_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '开放名额',
           `seize_quota` varchar(32) NOT NULL DEFAULT '0' COMMENT '已抢占名额',
           `course_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1乐学乐',
-          `zone_user_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '所属主体机构user_id,0平台发布'
+          `zone_id` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '所属主体机构id,0平台发布'
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
