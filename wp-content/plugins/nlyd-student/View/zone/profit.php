@@ -22,16 +22,16 @@
             <div class="layui-row nl-border nl-content">
                 <div class="apply profit_title layui-row layui-bg-white">
                     <div class="ta_c c_black"><?=__('可提现金额(元)', 'nlyd-student')?></div>
-                    <div class="ta_c c_green bold  fs_22 profit_money_">¥ 200.00</div>
+                    <div class="ta_c c_green bold  fs_22 profit_money_">¥ <?=$balance?></div>
                     <a class="bg_gradient_green tixian c_white ta_c dis_table" href="<?=home_url('zone/getCash');?>"><div class="dis_cell"><?=__('提 现', 'nlyd-student')?></div></a>
                     <div class="profit_footer flex-h">
                         <div class="flex1 ta_c">
                             <span class="c_black"><?=__('今日收益', 'nlyd-student')?>：</span>
-                            <span class="c_green">¥ 200.00</span>
+                            <span class="c_green">¥ <?=$stream?></span>
                         </div>
                         <div class="flex1 ta_c">
                             <span class="c_black"><?=__('累计收益', 'nlyd-student')?>：</span>
-                            <span class="c_green">¥ 200.00</span>
+                            <span class="c_green">¥ <?=$stream_total?></span>
                         </div>
                     </div>
                 </div>
