@@ -151,14 +151,56 @@ class Fission_Ajax
      */
     public function get_base_zone_list(){
         $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
+        $type = isset($_GET['type']) ? trim($_GET['type']) : '';
         $rows = [];
         if($searchStr != ''){
             global $wpdb;
-            $type = isset($_GET['type']) ? trim($_GET['type']) : '';
             $rows = $wpdb->get_results("SELECT id,zone_name AS text FROM {$wpdb->prefix}zone_meta WHERE zone_name LIKE '%{$searchStr}%'");
         }
-        $rows[] = ['id' => 0, 'text' => '无上级'];
+        if($type == 'all_base'){
+            $rows[] = ['id' => 0, 'text' => '平台'];
+        }else{
+            $rows[] = ['id' => 0, 'text' => '无上级'];
+        }
         wp_send_json_success($rows);
+    }
+
+    /**
+     * 搜索教练列表
+     */
+    public function get_base_coach_list(){
+        $searchStr = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($searchStr != ''){
+            global $wpdb;
+            $type = isset($_GET['type']) ? trim($_GET['type']) : '';
+            $rows = $wpdb->get_results("SELECT cs.coach_id AS id,um.meta_value AS user_real_name FROM {$wpdb->prefix}coach_skill AS cs 
+                    LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cs.coach_id AND um.meta_key='user_real_name' 
+                    WHERE um.meta_value LIKE '%{$searchStr}%'", ARRAY_A);
+            foreach ($rows as &$row){
+                if(!empty($row['user_real_name'])){
+                    $row['text'] = unserialize($row['user_real_name'])['real_name'];
+                }else{
+                    unset($row);
+                }
+            }
+            wp_send_json_success($rows);
+        }
+    }
+
+    /**
+     * 启用/禁用课程
+     */
+    public function ableCourse(){
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        if($id == '' || ($status !== 1 && $status !== 2)){
+            wp_send_json_error(['info' => '参数错误']);
+        }
+        global $wpdb;
+        $sql = "UPDATE {$wpdb->prefix}course SET is_enable='{$status}' WHERE id IN({$id})";
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info' => '操作成功']);
+        else wp_send_json_error(['info' => '操作失败!']);
     }
 }
 

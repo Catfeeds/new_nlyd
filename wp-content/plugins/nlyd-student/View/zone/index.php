@@ -22,8 +22,10 @@
                 <div class="zone_user width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="img-box zone_user_img pull-left">
                         <img src="<?=$row['user_head']?>">
+                        <?php if($row['zone_type_alias'] == 'match'):?>
                         <!-- 赛区展示 -->
-                        <div class="zone_tag c_white fs_12"><div class="scale"><?=__('2019脑力世界杯', 'nlyd-student')?></div></div>
+                        <div class="zone_tag c_white fs_12"><div class="scale"><?=__(date('Y').'脑力世界杯', 'nlyd-student')?></div></div>
+                        <?php endif;?>
                     </div>    
                     <div class="zone_user_detail pull-left">
                         <span class="qr_code c_orange"><i class="iconfont fs_26">&#xe651;</i></span>
@@ -43,7 +45,7 @@
                             <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
                             <?php }
                             elseif ($row['user_status'] == -1){ ?>
-                            <a class="pull-right c_blue"><?=__('修改', 'nlyd-student')?></a>
+                            <a class="pull-right c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                             <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
                         </div>

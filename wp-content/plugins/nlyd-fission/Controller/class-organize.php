@@ -5,7 +5,7 @@ class Organize{
     {
         if($is_list === false){
             add_action( 'admin_menu', array($this,'register_organize_menu_page') );
-        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+            add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
         }
     }
     public function register_organize_menu_page(){
@@ -725,6 +725,7 @@ class Organize{
                 if(!$bool){
                     $error_msg = '操作失败!';
                 }else{
+                    is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
                     $success_msg = '操作成功';
 
                 }
