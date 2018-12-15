@@ -37,10 +37,10 @@ function the_table_install () {
 
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `user_id` int(20) DEFAULT NULL COMMENT '付款人id',
+          `user_id` int(20) DEFAULT NULL COMMENT '收益人id',
           `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match  grading extract',
           `match_id`    int(20) DEFAULT NULL COMMENT '比赛/考级id',
-          `user_income` int(20) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
+          `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
