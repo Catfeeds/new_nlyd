@@ -3,7 +3,7 @@ class Course{
     public function __construct()
     {
         add_action( 'admin_menu', array($this,'register_organize_menu_page') );
-//        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'register_scripts'));
     }
 
     public function register_organize_menu_page(){
@@ -34,24 +34,20 @@ class Course{
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $where = "WHERE 1=1";
-        $leftJoin = '';
-        $joinWhere = '';
         if($type>0){
-            $where .= " AND zm.type_id='{$type}'";
+            $where .= " AND cou.course_type='{$type}'";
         }
-
         if($searchStr != ''){
-            $leftJoin = " LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=zm.user_id AND um.meta_key='user_real_name'";
-            $joinWhere = " AND (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
+            $where .= " AND (cou.course_title LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
-                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_user_id,
-                zm.zone_name,um.meta_value AS user_real_name  
+                cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.id,
+                zm.zone_name,um.meta_value AS coach_real_name  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
-                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=cou.zone_user_id 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
+                {$where}
                 LIMIT {$start},{$pageSize}",ARRAY_A);
-
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -87,7 +83,7 @@ class Course{
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="课程名称" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=course&stype='.$type.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=course&stype='.$type.'&s=')?>'+document.getElementById('search_val').value" value="搜索课程">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
@@ -96,10 +92,10 @@ class Course{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="frozen">启用</option>
-                        <option value="thaw">禁用</option>
+                        <option value="1">启用</option>
+                        <option value="2">禁用</option>
                     </select>
-                    <input type="button" id="doaction" class="button action all_options" value="应用">
+                    <input type="button" id="doaction" data-type="all_options" class="button action all_options" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -112,20 +108,18 @@ class Course{
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="zone_title" class="manage-column column-zone_title column-primary">主体名称</th>
-                    <th scope="col" id="real_name" class="manage-column column-real_name">负责人姓名</th>
-                    <th scope="col" id="referee_id" class="manage-column column-referee_id">推荐人</th>
-                    <th scope="col" id="legal_person" class="manage-column column-legal_person">法人</th>
-                    <th scope="col" id="chairman_id" class="manage-column column-chairman_id">主席</th>
-                    <th scope="col" id="zone_address" class="manage-column column-zone_address">地址</th>
-                    <th scope="col" id="business_licence" class="manage-column column-business_licence">营业执照</th>
-                    <th scope="col" id="bank_card_num" class="manage-column column-bank_card_num">银行卡</th>
-                    <th scope="col" id="zone_type" class="manage-column column-zone_type">主体类型</th>
-                    <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
-                    <th scope="col" id="able_status" class="manage-column column-able_status">冻结状态</th>
-                    <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
-                    <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
-                    <th scope="col" id="audit_time" class="manage-column column-audit_time">审核时间</th>
+                    <th scope="col" id="course_title" class="manage-column column-course_title column-primary">课程名称</th>
+                    <th scope="col" id="course_img" class="manage-column column-course_img">课程图片</th>
+                    <th scope="col" id="coach_id" class="manage-column column-coach_id">授课教练</th>
+                    <th scope="col" id="course_start_time" class="manage-column column-course_start_time">开课时间</th>
+                    <th scope="col" id="course_end_time" class="manage-column column-course_end_time">结课时间</th>
+                    <th scope="col" id="address" class="manage-column column-address">授课地址</th>
+                    <th scope="col" id="open_quota" class="manage-column column-open_quota">开放名额</th>
+                    <th scope="col" id="seize_quota" class="manage-column column-seize_quota">已抢占名额</th>
+                    <th scope="col" id="zone_user_id" class="manage-column column-zone_user_id">所属机构</th>
+                    <th scope="col" id="course_type" class="manage-column column-course_type">课程类型</th>
+                    <th scope="col" id="is_enable" class="manage-column column-is_enable">状态</th>
+                    <th scope="col" id="created_time" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                 </tr>
                 </thead>
@@ -134,73 +128,46 @@ class Course{
 
                 <?php
                 foreach ($rows as $row){
-                    $usermeta = get_user_meta($row['user_id']);
-                    $user_real_name = isset($usermeta['user_real_name']) ? $usermeta['user_real_name'][0] : [];
-                    $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
-                    $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                     ?>
-                    <tr data-uid="<?=$row['user_id']?>">
+                    <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
-                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_name']?></label>
-                            <input id="cb-select-<?=$row['user_id']?>" type="checkbox" name="post[]" value="<?=$row['user_id']?>">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['course_title']?></label>
+                            <input id="cb-select-<?=$row['course_title']?>" type="checkbox" class="th-check" name="post[]" value="<?=$row['id']?>">
                             <div class="locked-indicator">
                                 <span class="locked-indicator-icon" aria-hidden="true"></span>
-                                <span class="screen-reader-text">“<?=$row['zone_name']?>”已被锁定</span>
+                                <span class="screen-reader-text">“<?=$row['course_title']?>”已被锁定</span>
                             </div>
                         </th>
-                        <td class="zone_title column-zone_title has-row-actions column-primary" data-colname="主体名称">
-                            <?=$row['zone_name']?>
+                        <td class="course_title column-course_title has-row-actions column-primary" data-colname="主体名称">
+                            <?=$row['course_title']?>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize&user_id='.$row['user_id'])?>">编辑</a></span>
+                                <span class="edit"><a href="<?=admin_url('admin.php?page=course-add-course&id='.$row['id'])?>">编辑</a></span>
                                 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
                                 <!--                               <span class="view"><a href="">资料</a></span>-->
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="real_name column-real_name" data-colname="负责人姓名"><?=isset($user_real_name['real_name'])?$user_real_name['real_name']:$row['user_login']?></td>
-                        <td class="referee_id column-referee_id" data-colname="推荐人"><?=isset($referee_real_name['real_name'])?$referee_real_name['real_name']:($row['referee_id']>0?get_user_by('ID',$row['referee_id'])->user_login:'')?></td>
-
-                        <td class="legal_person column-legal_person" data-colname="法人"><?=$row['legal_person']?></td>
-                        <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
-                        <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
-                        <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['user_id']?>">
-                            <?=$row['business_licence']?>
-                            <img src="<?=$row['business_licence_url']?>" style="height: 60px;" alt="">
+                        <td class="course_img column-course_img" data-colname="课程图片" id="course_img_<?=$row['id']?>">
+                            <img src="<?=$row['course_img']?>" alt="" style="height: 60px;">
                         </td>
-                        <td class="bank_card_num column-bank_card_num" data-colname="银行卡"><?=$row['bank_card_num']?>(<?=$row['opening_bank']?>)</td>
-
-                        <td class="zone_type column-zone_type" data-colname="主体类型"><?=$row['zone_type_name']?></td>
-                        <td class="zone_status column-zone_status" data-colname="申请状态">
-                            <span style="<?=$row['user_status'] == '-1'?'color:#00c415':''?>"><?=$row['user_status_name']?></span>
+                        <td class="coach_id column-coach_id" data-colname="授课教练">
+                            <?=!empty($row['coach_real_name']) ? unserialize($row['coach_real_name'])['real_name'] : ''?>
                         </td>
-                        <td class="able_status column-able_status" data-colname="冻结状态">
-                            <span style="<?=$row['is_able'] == '2'?'color:#c41800':''?>"><?=$row['able_name']?></span>
-                        </td>
-                        <td class="view_member column-view_member" data-colname="查看成员"><a href="<?=admin_url('admin.php?page=fission-organize-coach&user_id='.$row['user_id'])?>">查看成员</a></td>
-                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
-                        <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
+                        <td class="course_start_time column-course_start_time" data-colname="开课时间"><?=$row['course_start_time']?></td>
+                        <td class="course_end_time column-course_end_time" data-colname="结课时间"><?=$row['course_end_time']?></td>
+                        <td class="address column-address" data-colname="授课地址"><?=$row['province'].$row['city'].$row['area'].$row['address']?></td>
+                        <td class="open_quota column-open_quota" data-colname="开放名额"><?=$row['open_quota']?></td>
+                        <td class="seize_quota column-seize_quota" data-colname="已抢占名额"><?=$row['seize_quota']?></td>
+                        <td class="zone_user_id column-zone_user_id" data-colname="所属机构"><?=empty($row['zone_name']) ? '平台' :$row['zone_name']?></td>
+                        <td class="course_type column-course_type" data-colname="课程类型"><?=$row['course_type'] == '1' ? '乐学乐' :''?></td>
+                        <td class="is_enable column-is_enable" data-colname="状态"><?=$row['is_enable'] == '2' ? '<span style="color: #c42800;">禁用</span>':'正常'?></td>
+                        <td class="created_time column-created_time" data-colname="创建时间"><?=$row['created_time']?></td>
                         <td class="options1 column-options1" data-colname="操作">
-                            <?php
-                            //操作列表
-                            $optionsArr = [];
-                            if($row['user_status'] == '-1'){
-                                array_push($optionsArr,"<a href='javascript:;' data-type='agree' class='edit-agree'>通过</a>");
-                                array_push($optionsArr,"<a href='javascript:;' data-type='refuse' class='edit-refuse'>拒绝</a>");
-                            }
-                            if($row['user_status'] == '1'){
-                                switch ($row['is_able']){
-                                    case 1:
-                                        array_push($optionsArr,"<a href='javascript:;' data-type='frozen' class='edit-frozen'>冻结</a>");
-                                        break;
-                                    case 2:
-                                        array_push($optionsArr,"<a href='javascript:;' data-type='thaw' class='edit-thaw'>解冻</a>");
-                                        break;
-                                }
-                            }
-                            echo join(' | ',$optionsArr);
-                            ?>
+                            <?=$row['is_enable'] == '2' ? '<a href="javascript:;" class="enable-single">启用</a>':'<a href="javascript:;" class="disable-single">禁用</a>'?>
                         </td>
+
+
                     </tr>
                     <?php
                 }
@@ -209,20 +176,18 @@ class Course{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-zone_title column-primary">主体名称</th>
-                    <th scope="col" class="manage-column column-real_name">负责人姓名</th>
-                    <th scope="col" class="manage-column column-referee_id">推荐人</th>
-                    <th scope="col" class="manage-column column-legal_person">法人</th>
-                    <th scope="col" class="manage-column column-chairman_id">主席</th>
-                    <th scope="col" class="manage-column column-zone_address">地址</th>
-                    <th scope="col" class="manage-column column-business_licence">营业执照</th>
-                    <th scope="col" class="manage-column bank_card_num-referee_id">银行卡</th>
-                    <th scope="col" class="manage-column column-zone_type">主体类型</th>
-                    <th scope="col" class="manage-column column-zone_status">申请状态</th>
-                    <th scope="col" class="manage-column column-able_status">冻结状态</th>
-                    <th scope="col" class="manage-column column-view_member">查看成员</th>
-                    <th scope="col" class="manage-column column-created_time">提交时间</th>
-                    <th scope="col" class="manage-column column-audit_time">审核时间</th>
+                    <th scope="col" class="manage-column column-course_title column-primary">课程名称</th>
+                    <th scope="col" class="manage-column column-course_img">课程图片</th>
+                    <th scope="col" class="manage-column column-coach_id">授课教练</th>
+                    <th scope="col" class="manage-column column-course_start_time">开课时间</th>
+                    <th scope="col" class="manage-column column-course_end_time">结课时间</th>
+                    <th scope="col" class="manage-column column-address">授课地址</th>
+                    <th scope="col" class="manage-column column-open_quota">开放名额</th>
+                    <th scope="col" class="manage-column column-seize_quota">已抢占名额</th>
+                    <th scope="col" class="manage-column column-zone_user_id">所属机构</th>
+                    <th scope="col" class="manage-column column-course_type">课程类型</th>
+                    <th scope="col" class="manage-column column-is_enable">状态</th>
+                    <th scope="col" class="manage-column column-created_time">创建时间</th>
                     <th scope="col" class="manage-column column-options1">操作</th>
                 </tr>
                 </tfoot>
@@ -234,10 +199,10 @@ class Course{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="frozen">启用</option>
-                        <option value="thaw">禁用</option>
+                        <option value="1">启用</option>
+                        <option value="2">禁用</option>
                     </select>
-                    <input type="button" id="doaction2" class="button action all_options" value="应用">
+                    <input type="button" id="doaction2 " class="button action all_options" value="应用">
                 </div>
 
                 <div class="tablenav-pages">
@@ -250,74 +215,69 @@ class Course{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
-                    function postAjax(_this,action,type){
-                        if(type == 'all'){
-                            var _select = _this.prev('select');
-                            var _type = _select.val();
-                            if(_type == false || _type == '' || _type == '-1') return false;
-                            var user_id = [];
-                            $.each($('#the-list').find('tr').find('input[type="checkbox"]:checked'),function (i,v) {
-                                user_id.push($(v).val());
-                            });
-                            if('agree' == _type || 'refuse' == _type){
-                                action = 'editOrganizeApply';
-                            }else if('frozen' == _type || 'thaw' == _type){
-                                action = 'editOrganizeAble';
-                            }else{
-                                return false;
-                            }
-                            user_id = user_id.join(',');
-                            var request_type = _type;
-                        }else{
-                            var user_id = _this.closest('tr').attr('data-uid');
-                            var request_type = _this.attr('data-type');
+                    $('.all_options').on('click', function () {
+                        postAjax($(this),'all_options');
+                    });
+                    $('.enable-single').on('click', function () {
+                        postAjax($(this),'enable-single');
+                    });
+                    $('.disable-single').on('click', function () {
+                        postAjax($(this),'disable-single');
+                    });
+                    function postAjax(_this,type) {
+                        var status = 0;
+                        var _id = '';
+                        switch (type){
+                            case 'disable-single':
+                                status = 2;
+                                _id = _this.closest('tr').attr('data-id');
+                                break;
+                            case 'enable-single':
+                                status = 1;
+                                _id = _this.closest('tr').attr('data-id');
+                                break;
+                            case 'all_options':
+                                status = _this.prev().val();
+                                var idArr = [];
+                                $.each($('#the-list').find('.th-check:checked'),function (i,v) {
+                                    idArr.push($(v).val());
+                                });
+                                _id = idArr.join(',');
+                                break;
+                            default:
+                                return;
                         }
-                        if(user_id == false || user_id == '') return false;
-                        var data = {'action':action,'user_id':user_id,'request_type':request_type}
+                        if((status != '1' && status != '2') || _id == '') return false;
+                        var data = {'action': 'ableCourse', 'status': status, 'id': _id}
                         $.ajax({
-                            url:ajaxurl,
-                            data : data,
-                            dataType : 'json',
-                            type : 'post',
-                            success : function (response) {
+                            url: ajaxurl,
+                            data: data,
+                            dataType: 'json',
+                            type: 'post',
+                            success: function (response) {
                                 alert(response.data.info);
-                                if(response['success']){
+                                if (response['success']) {
                                     window.location.reload();
                                 }
-                            },error : function () {
+                            }, error: function () {
                                 alert('请求失败!');
                             }
                         });
                     }
-                    $('.edit-agree').on('click',function () {
-                        postAjax($(this),'editOrganizeApply','');
-                    });
-                    $('.edit-refuse').on('click',function () {
-                        postAjax($(this),'editOrganizeApply','');
-                    });
-                    $('.edit-frozen').on('click',function () {
-                        postAjax($(this),'editOrganizeAble','');
-                    });
-                    $('.edit-thaw').on('click',function () {
-                        postAjax($(this),'editOrganizeAble','');
-                    });
-                    //批量
-                    $('.all_options').on('click',function () {
-                        postAjax($(this),'','all');
-                    });
 
                     layui.use('layer', function(){
                         var layer = layui.layer;
                         var _title = '';
                         <?php foreach ($rows as $row){ ?>
                         layer.photos({//图片预览
-                            photos: '#cardImg-<?=$row['user_id']?>',
+                            photos: '#course_img_<?=$row['id']?>',
                             move : false,
                             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
                         })
                         <?php } ?>
                     });
                 });
+
             </script>
         </div>
         <?php
@@ -621,6 +581,15 @@ class Course{
             </script>
         </div>
         <?php
+    }
+    public function register_scripts(){
+
+        switch ($_GET['page']){
+            case 'course':
+                wp_register_script('layui-js',match_js_url.'layui/layui.js');
+                wp_enqueue_script( 'layui-js' );
+                break;
+        }
     }
 }
 new Course();

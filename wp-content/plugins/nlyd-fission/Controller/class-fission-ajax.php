@@ -186,6 +186,22 @@ class Fission_Ajax
             wp_send_json_success($rows);
         }
     }
+
+    /**
+     * 启用/禁用课程
+     */
+    public function ableCourse(){
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        if($id == '' || ($status !== 1 && $status !== 2)){
+            wp_send_json_error(['info' => '参数错误']);
+        }
+        global $wpdb;
+        $sql = "UPDATE {$wpdb->prefix}course SET is_enable='{$status}' WHERE id IN({$id})";
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info' => '操作成功']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
 }
 
 new Fission_Ajax();
