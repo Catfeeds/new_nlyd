@@ -46,8 +46,8 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                         <div class="clocs_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></div>
-                                         <div class="edit_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></div>
+                                         <a class="clocs_match c_black6 "><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
+                                         <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
                                     </div>
                                 </li>    
                                 <li class="match_row"> 
@@ -67,8 +67,8 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                            <div class="clocs_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></div>
-                                            <div class="edit_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></div>
+                                            <a class="clocs_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
+                                            <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
                                         </div>
                                 </li> 
                             </ul>
@@ -93,8 +93,8 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                        <div class="clocs_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></div>
-                                        <div class="edit_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></div>
+                                        <a class="clocs_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
+                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
                                     </div>
                                 </li> 
                             </ul>
@@ -119,8 +119,8 @@
                                          </div>
                                      </div>  
                                      <div class="match_footer ta_r">
-                                        <div class="clocs_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></div>
-                                        <div class="edit_match"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></div>
+                                        <a class="clocs_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>
+                                        <a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue bold"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>
                                     </div>
                                 </li>    
                             </ul>
@@ -149,7 +149,7 @@
                 </div>
             </div>
         <?php } ?>  
-        <a class="a-btn"><?=__('发布新的比赛', 'nlyd-student')?></a>   
+        <a class="a-btn" href="<?=home_url('/zone/matchBuild/');?>"><?=__('发布新的比赛', 'nlyd-student')?></a>   
     </div>
 </div>
 <script>
