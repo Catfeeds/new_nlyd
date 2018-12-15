@@ -46,83 +46,20 @@
                         <div class="layui-tab-content">
                             <!-- 全部记录 -->
                             <div class="layui-tab-item layui-show">
-                                <div class="layui-row" id="1">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_add"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('比赛收益', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_green profit_inline profit_money fs_14">+500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_reduce"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('账户提现', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_black3 profit_inline profit_money fs_14">-500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
+                                <div class="layui-row flow-default" id="1">
+                                  
                                 </div>
                             </div>
                             <!-- 收益记录 -->
                             <div class="layui-tab-item">
-                                <div class="layui-row" id="2">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_add"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('比赛收益', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_green profit_inline profit_money fs_14">+500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_add"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('比赛收益', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_green profit_inline profit_money fs_14">+500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_add"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('比赛收益', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_green profit_inline profit_money fs_14">+500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
+                                <div class="layui-row flow-default" id="2">
+                                   
                                 </div>
                             </div>
                             <!-- 提现记录 -->
                             <div class="layui-tab-item">
-                                <div class="layui-row" id="3">
-                                    <a class="profit_list c_black layui-row" href="<?=home_url('zone/getCashDetail');?>">
-                                        <div class="profit_inline profit_icon">
-                                            <div class="zone_bg bg_reduce"></div>
-                                        </div>
-                                        <div class="profit_inline profit_time fs_14">
-                                            <span><?=__('账户提现', 'nlyd-student')?></span><br>
-                                            <span class="c_black3">2018/12/12 13:18</span>
-                                        </div>
-                                        <div class="c_black3 profit_inline profit_money fs_14">-500.00</div>
-                                        <div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>
-                                    </a>
+                                <div class="layui-row flow-default" id="3">
+                                 
                                 </div>
                             </div>
                         </div>
@@ -164,8 +101,18 @@ jQuery(function($) {
                             isClick[id]=true
                             if(res.success){
                                 $.each(res.data.info,function(i,v){
-                                   
-                                    var dom='';
+                                    var color=v.income_type_class=="bg_add" ? "c_green":"c_black3";
+                                    var dom='<a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">'
+                                                +'<div class="profit_inline profit_icon">'
+                                                    +'<div class="zone_bg '+v.income_type_class+'"></div>'
+                                                +'</div>'
+                                                +'<div class="profit_inline profit_time fs_14">'
+                                                    +'<span>'+v.income_type_title+'</span><br>'
+                                                    +'<span class="c_black3">'+v.created_time+'</span>'
+                                                +'</div>'
+                                                +'<div class="'+color+' profit_inline profit_money fs_14">'+v.user_income+'</div>'
+                                                +'<div class="profit_inline profit_arrow"><i class="iconfont fs_20">&#xe727;</i></div>'
+                                            +'</a>'
                                     lis.push(dom) 
                                 })
                                 if (res.data.info.length<50) {
@@ -208,9 +155,9 @@ jQuery(function($) {
             $('.nl-transform').css({
                 'transform':'translate3d('+left+'px, 0px, 0px)'
             })
-            // if(!isClick[id]){
-            //     pagation(id,1)
-            // }
+            if(!isClick[id]){
+                pagation(id,1)
+            }
         });
 
     });
