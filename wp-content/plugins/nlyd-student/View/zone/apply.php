@@ -48,7 +48,10 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input class="radius_input_row nl-foucs" type="text" readonly id="opening_bank" name="opening_bank"  lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>">
+                            </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
@@ -66,11 +69,6 @@
                                 <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
                                 <!--<select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
                             </div>
-                            <!-- <div class="select_box">
-                                <div class="select_row">111</div>
-                                <div class="select_row">111</div>
-                                <div class="select_row">111</div>
-                            </div> -->
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
@@ -125,6 +123,33 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
 jQuery(function($) { 
+
+        var opening_bank_Data=$.validationLayui.back;
+
+        var posiotion_back=[0];//初始化位置，高亮展示
+        if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
+            $.each(opening_bank_Data,function(index,value){
+                if(value['value']==$('#opening_bank').val()){
+                    posiotion_back=[index]
+                    return false;
+                }
+            })
+        }
+        var mobileSelect4 = new MobileSelect({
+            trigger: '#opening_bank',
+            title: '<?=__('开户行', 'nlyd-student')?>',
+            wheels: [
+                {data: opening_bank_Data}
+            ],
+            position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+            transitionEnd:function(indexArr, data){
+                // console.log(data);
+            },
+            callback:function(indexArr, data){
+                $('#opening_bank').val(data[0]['value']);
+               
+            }
+        });
     $('.img-zoos').on('click','.add-zoo',function(){//上传图片
         var id=$(this).attr('data-file')
         $('#'+id).click()
@@ -205,7 +230,6 @@ jQuery(function($) {
         var val=_this.attr('data-value');
         var id=_this.attr('data-id');
         _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
-        alert(id)
         _this.parent('.select_box').parent('div').find('.get_id').val(id)
     })
     $('body').click(function(e){
