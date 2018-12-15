@@ -23,7 +23,7 @@
                         <div><?=__('近期比赛', 'nlyd-student')?></div>
                         </li>
                         <li lay-id="3"><div><?=__('往期比赛', 'nlyd-student')?></div></li>
-                        <div class="nl-transform"><div><?=__('近期比赛', 'nlyd-student')?></div></div>
+                        <div class="nl-transform"><div><?=__('全部比赛', 'nlyd-student')?></div></div>
                     </ul>
                     <div class="layui-tab-content">
                         <!-- 全部比赛 -->

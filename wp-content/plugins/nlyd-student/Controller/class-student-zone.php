@@ -45,7 +45,7 @@ class Student_Zone extends Student_Home
         }else{
             //获取机构权限
             if(empty($row['role_id'])){
-                $sql = "select a.role_id,b.role_name,b.role_back from {$wpdb->prefix}zone_join_role a 
+                $sql = "select a.role_id,b.role_name,role_action,b.role_back from {$wpdb->prefix}zone_join_role a 
                     left join {$wpdb->prefix}zone_type_role b on a.role_id = b.id
                     where a.zone_type_id = {$row['type_id']} 
                     ";
@@ -122,7 +122,7 @@ class Student_Zone extends Student_Home
     /**
      * 比赛管理列表
      */
-     public function matchList(){
+     public function match(){
         $view = student_view_path.CONTROLLER.'/match-list.php';
         load_view_template($view);
     }

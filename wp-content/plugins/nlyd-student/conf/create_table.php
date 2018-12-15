@@ -31,6 +31,21 @@ function the_table_install () {
 
     }*/
 
+    $table_name = $wpdb->prefix . "zone_match_role";  //比赛发布权限表
+
+    if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
+
+        $sql = "CREATE TABLE " . $table_name . " (
+           `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `role_name` varchar(20) DEFAULT NULL COMMENT '权限名',
+          `status`    tinyint(2) DEFAULT NULL COMMENT '状态 1 -1',
+          PRIMARY KEY (`id`)
+          )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+        //print_r($sql);
+        dbDelta($sql);
+
+    }
+
     $table_name = $wpdb->prefix . "user_stream_logs";  //用户流水记录表   存储流水记录
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
