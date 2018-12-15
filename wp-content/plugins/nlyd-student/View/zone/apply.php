@@ -207,9 +207,9 @@ jQuery(function($) {
                 },
                 success:function(res){
                     console.log(res)
+                    var dom="";
+                    _this.next('.select_box').empty().show();
                     if(res.success){
-                        _this.next('.select_box').empty().show();
-                        var dom="";
                         if(res.data == ''){
                             var item='<div class="select_row">未搜到该用户</div>'
                             dom+=item

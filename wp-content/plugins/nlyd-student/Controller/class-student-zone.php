@@ -130,6 +130,27 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/match-buildSuccess.php';
         load_view_template($view);
     }
+    /**
+     * 考级管理列表
+     */
+     public function kaojiList(){
+        $view = student_view_path.CONTROLLER.'/kaoji-list.php';
+        load_view_template($view);
+    }
+    /**
+     * 发布考级
+     */
+     public function kaojiBuild(){
+        $view = student_view_path.CONTROLLER.'/kaoji-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 考级发布成功
+     */
+     public function kaojiBuildSuccess(){
+        $view = student_view_path.CONTROLLER.'/kaoji-buildSuccess.php';
+        load_view_template($view);
+    }
     /*
      *机构主体信息页面
      */
