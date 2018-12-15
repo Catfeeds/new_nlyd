@@ -17,22 +17,34 @@
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心编号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair($zone_num,4,0)?>"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair(!empty($row) ? $row['id'] : $zone_num,4,0)?>"></div>
                         </div>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('训练中心名称', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心营业地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
+                                <?php if(!empty(!empty($row))){?>
+                                    <input type="hidden" name="business_licence_url" value="<?=$row['business_licence']?>">
+                                    <div class="post-img no-dash">
+                                        <div class="img-zoo img-box">
+                                            <img src="<?=$row['business_licence']?>"/>
+                                        </div>
+                                        <div class="del">
+                                            <i class="iconfont">&#xe633;</i>
+                                        </div>
+                                    </div>
+
+                                <?php }?>
                                 <div class="post-img dash">
                                     <div class="add-zoo" data-file="img-zoos1">
                                         <div class="transverse"></div>
@@ -44,26 +56,26 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('法定代表人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('选择对公账户开户行', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户开户行', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('银行卡号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('选择对公账户银行卡号', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="bank_card_num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户银行卡号', 'nlyd-student')?>" value="<?=!empty($row) ? $row['bank_card_num'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开户详细地址', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>"></div>
                         </div>
                         <?php if($_GET['zone_type_alias'] == 'match'):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="get_id" name="chairman_id" style="display:none" value="">
-                                <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
+                                <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>">
+                                <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
                                 <!--<select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
                             </div>
                             <!-- <div class="select_box">
@@ -76,8 +88,8 @@
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <!--<select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
-                                <input class="get_id" name="secretary_id" style="display:none" value="">
-                                <input class="radius_input_row change_ajax" value="" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>">
+                                <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
+                                <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>">
                                 
                             </div>
                         </div>
@@ -170,13 +182,14 @@ jQuery(function($) {
                 },
                 success:function(res){
                     console.log(res)
-                    var dom="";
-                    _this.next('.select_box').empty().show();
                     if(res.success){
+                        _this.next('.select_box').empty().show();
+                        var dom="";
                         if(res.data == ''){
                             var item='<div class="select_row">未搜到该用户</div>'
                             dom+=item
                         }else {
+
                             $.each(res.data,function(i,v){
                                 var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
                                 dom+=item
@@ -186,7 +199,7 @@ jQuery(function($) {
 
                     }else {
                         var item='<div class="select_row">未搜到该用户....</div>'
-                        dom+=item;
+                        dom+=item
                     }
                     _this.next('.select_box').append(dom)
                     _this.removeClass('loading')
@@ -316,12 +329,9 @@ jQuery(function($) {
             fd.append('opening_bank',data.field['opening_bank']);
             fd.append('opening_bank_address',data.field['opening_bank_address']);
             fd.append('bank_card_num',data.field['bank_card_num']);
-            
+            fd.append('chairman_id',data.field['chairman_id']);
+            fd.append('secretary_id',data.field['secretary_id']);
             fd.append('business_licence',imgs1[0]);
-            var chairman_id=typeof(data.field['chairman_id'])=='undefined' ? '' : data.field['chairman_id'];
-            var secretary_id=typeof(data.field['secretary_id'])=='undefined' ? '' : data.field['secretary_id'];
-            fd.append('chairman_id',chairman_id);
-            fd.append('secretary_id',secretary_id);
             console.log(data.field)
             $.ajax({
                 data: fd,
