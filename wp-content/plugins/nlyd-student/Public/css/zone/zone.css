@@ -430,7 +430,9 @@ div .layui-row:last-child{
     border-radius: 6px;
     border: 1px solid #EEEEEE;
 }
-
+.match_header{
+    min-height: 28px;
+}
 .match_body_row{
     font-size: 0;
 }

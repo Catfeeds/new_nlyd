@@ -122,7 +122,7 @@
                     <?php foreach ($role_list as $x){
                             //$thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
                     ?>
-                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row ">
+                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" href="<?=home_url('/zone/'.$x['role_action'])?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg <?=$x['role_back']?>"></div>
                         </div>
