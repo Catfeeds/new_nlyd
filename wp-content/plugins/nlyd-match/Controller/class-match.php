@@ -840,16 +840,23 @@ class Match
         $the_query = new WP_Query( $args );
         global $wpdb;
         $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
+
+        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
+        //print_r($rows);
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">比赛场景</label>
             <div class="layui-input-block">
                 <select name="match[match_scene]" lay-search="">
                     <option value="">请选择</option>
-                    <option value="1" <?=$this->meta['match_scene'] == 1 ? 'selected' : '';?> >正式比赛</option>
-                    <option value="2" <?=$this->meta['match_scene'] == 1 ? 'selected' : '';?> >模拟比赛</option>
+                    <?php if(!empty($rows)){?>
+                    <?php foreach ($rows as $x){ ?>
+                    <option value="<?=$x->id?>" <?=$this->meta['match_scene'] == $x->id ? 'selected' : '';?> ><?=$x->role_name?></option>
+                    <?php } ?>
+                    <?php }else{ ?>
+                        <option value="1" <?=$this->meta['match_scene'] == 1 ? 'selected' : '';?> >正式比赛</option>
+                    <?php } ?>
                 </select>
-                <input placeholder="比赛口号" class="layui-input" value="<?=$this->meta['match_scene'];?>" type="text" name="match[match_scene]">
             </div>
         </div>
         <div class="layui-form-item">
