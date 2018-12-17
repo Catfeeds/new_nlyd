@@ -565,7 +565,7 @@ class Student_Ajax
         }
 
         //开启事务
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $a = $wpdb->insert($wpdb->prefix.'order',$data);
 
         //生成流水号
@@ -574,14 +574,14 @@ class Student_Ajax
 
         //print_r($a.'---'.$b);die;
         if($b && $a ){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             if($data['pay_status'] == 2 || $data['pay_status'] == 4){
                 wp_send_json_success(array('info' => __('报名成功', 'nlyd-student'),'serialnumber'=>$serialnumber, 'is_pay' => 0, 'url' => home_url('payment/success/serialnumber/'.$serialnumber)));
             }
             wp_send_json_success(array('info' => __('请选择支付方式', 'nlyd-student'),'serialnumber'=>$serialnumber,'is_pay' => 1));
         }else{
 
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('提交失败', 'nlyd-student')));
         }
     }
@@ -659,7 +659,7 @@ class Student_Ajax
         //判断是否有战队
         $sql = "select id,team_id,user_id,status from {$wpdb->prefix}match_team where user_id = {$current_user->ID} ";
         //开启事务,发送短信失败回滚
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         if($_POST['handle'] == 'join'){ //加入战队
             $applyTypeName = __('加入战队', 'nlyd-student');
             $sql .= " and status > -2 ";
@@ -676,7 +676,7 @@ class Student_Ajax
                         $info = __('已有战队,暂时不能申请加入战队,请先申请离队', 'nlyd-student');
                         break;
                 }
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(array('info'=>$info));
             }
             $id = $wpdb->get_var("select id from {$wpdb->prefix}match_team where team_id = {$_POST['team_id']} and user_id = {$current_user->ID} and user_type = 1");
@@ -693,7 +693,7 @@ class Student_Ajax
             //print_r($sql);die;
             $row = $wpdb->get_row($sql);
             if(empty($row)){
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(array('info'=>__('你还没有加入任何战队', 'nlyd-student')));
             }
 
@@ -701,7 +701,7 @@ class Student_Ajax
             $msgTemplate = 12;
         }
         if($result){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             /***短信通知战队负责人****/
             $director = $wpdb->get_row('SELECT u.user_mobile,u.display_name,u.ID,u.user_email AS uid FROM '.$wpdb->prefix.'team_meta AS tm 
             LEFT JOIN '.$wpdb->users.' AS u ON u.ID=tm.team_director WHERE tm.team_id='.$_POST['team_id'], ARRAY_A);
@@ -724,7 +724,7 @@ class Student_Ajax
             /***********end************/
             wp_send_json_success(array('info'=>__('操作成功,等待战队受理', 'nlyd-student')));
         }
-        $wpdb->rollback();
+        $wpdb->query('ROLLBACK');
         wp_send_json_error(array('info'=>__('操作失败', 'nlyd-student')));
 
     }
@@ -872,17 +872,17 @@ class Student_Ajax
         $this->get_address(false);
 
         global $wpdb,$current_user;
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $a = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>''),array('user_id'=>$current_user->ID));
 
         $b = $wpdb->update($wpdb->prefix.'my_address',array('is_default'=>1),array('id'=>$_POST['id'],'user_id'=>$current_user->ID));
         if($a && $b){
             //提交事务
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(array('info'=>__('设置成功', 'nlyd-student')));
         }else{
             //事务回滚
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('设置失败', 'nlyd-student')));
         }
     }
@@ -956,7 +956,7 @@ class Student_Ajax
         if(empty($_POST['id'])){
             if($total == 10) wp_send_json_error(array('info'=>__('最多只能添加10个收货地址', 'nlyd-student')));
         }
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
 
         $a = 1;
         if(isset($_POST['is_default']) && $total > 0){
@@ -989,14 +989,14 @@ class Student_Ajax
         }
         //var_dump($a.'---'.$result);die;
         if($a && $result){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             $url = home_url('account/address');
             if(!empty($match_id)) $url .= '/match_id/'.$match_id;
             $data['info'] = __('保存成功', 'nlyd-student');
             $data['url'] = $url;
             wp_send_json_success($data);
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('保存失败', 'nlyd-student')));
         }
 
@@ -2810,32 +2810,32 @@ class Student_Ajax
             $allPrice = 0;//支付金额
             $allBrain = 0;//脑币
 //            $orderGoodsIdStr = '(';// (1,2,3) 后面修改order_goods的order_id使用
-            $wpdb->startTrans();
+            $wpdb->query('START TRANSACTION');
             foreach ($orderGoodsRows as $orderGoodsRow){
                 $goods = $wpdb->get_row('SELECT id,goods_title,shelf,price,stock FROM '.$wpdb->prefix.'goods WHERE id='.$orderGoodsRow['goods_id'], ARRAY_A);
                 //不存在商品
                 if(!$goods){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => __('出错了, 找不到商品', 'nlyd-student')]);
                 }
                 //已下架商品
                 if($goods['shelf'] == 2) {
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => sprintf(__('%s-已下架', 'nlyd-student'), $goods['goods_title'])]);
                 }
                 //库存不足
                 if($goods['stock'] < $orderGoodsRow['goods_num']){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => sprintf(__('%s-库存不足', 'nlyd-student'), $goods['goods_title'])]);
                 }
                 //减少商品库存
                 if(!$wpdb->update($wpdb->prefix.'goods', ['stock' => $goods['stock'] - $orderGoodsRow['goods_num']], ['id' => $goods['id']])){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => __('出错了, 库存更新失败', 'nlyd-student')]);
                 }
                 //更新order_goods 支付价格和支付脑币
                 if(!$wpdb->update($wpdb->prefix.'order_goods', ['pay_price' => $goods['price'], 'pay_brain' => $goods['brain']], ['id' => $goods['id']])){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => __('出错了, 支付价格更新失败', 'nlyd-student')]);
                 }
                 $allPrice += $goods['price'] * $orderGoodsRow['goods_num'];
@@ -2864,21 +2864,21 @@ class Student_Ajax
                 $insertId = $wpdb->insert_id;
                 if($wpdb->update($wpdb->prefix.'order', ['serialnumber' => createNumber($user_id,$wpdb->insert_id)], ['id' => $insertId])){//修改订单号
                     if($wpdb->query('UPDATE '.$wpdb->prefix.'order_goods SET order_id='.$insertId.' WHERE id IN'.$orderGoodsIdStr)){  //修改order_goods的状态
-                        $wpdb->commit();
+                        $wpdb->query('COMMIT');
                         wp_send_json_success(['info' => $insertId]);
                     }else{
                         //修改order_goods的状态失败
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                         wp_send_json_error(['info' => __('提交订单失败', 'nlyd-student')]);
                     }
                 }else{
                     //修改订单号失败
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => __('提交订单失败', 'nlyd-student')]);
                 }
             }else{
                 //插入订单数据失败
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => __('提交订单失败', 'nlyd-student')]);
             }
         }else{
@@ -2953,21 +2953,21 @@ class Student_Ajax
         }
 
         //开启事务
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         //取消原主训教练
         $cancelRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=0 WHERE category_id='.$_POST['category_id'].' AND user_id='.$current_user->ID);
         if(!$cancelRes) {
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('更换主训教练失败', 'nlyd-student')));
         }
         //设着当前教练为主训
         $currentRes = $wpdb->query('UPDATE '.$wpdb->prefix.'my_coach SET major=1 WHERE id='.$row['id']);
         if($currentRes){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => __('主训教练更换成功', 'nlyd-student')]);
 
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>__('更换主训教练失败', 'nlyd-student')));
         }
     }
@@ -4468,7 +4468,7 @@ class Student_Ajax
             $where = " a.id > 0";
         }
         global $wpdb;
-        $sql = "select b.user_id, 
+        $sql = "select b.user_id as id, 
                 case 
                 when a.user_login != '' then a.user_login
                 when a.user_mobile != '' then a.user_mobile
@@ -4530,6 +4530,59 @@ class Student_Ajax
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
         wp_send_json_success(array('info'=>$rows));
+    }
+
+    /**
+     *机构生成比赛
+     */
+    public function zone_create_match(){
+        $_POST['match_cost']= 588;
+        if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_cost']) || empty($_POST['match_start_time']) ){
+            wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
+        }
+        global $wpdb,$current_user;
+        $arr = array(
+            'post_title' => $_POST['post_title'],
+            'post_type'     => 'match',
+            'post_status' => 'publish',
+            'post_author' => $current_user->ID,
+        );
+
+        $wpdb->query('START TRANSACTION');
+        $new_page_id = wp_insert_post($arr);
+
+        //获取所有比赛项目
+        $args = array(
+            'post_type' => array('project'),
+            'post_status' => array('publish'),
+            'orderby' => 'menu_order',
+            'order' => 'asc',
+        );
+        $the_query = new WP_Query($args);
+        $project_array = array_column($the_query->posts,'ID');
+        $project_id = arr2str($project_array);
+
+        $match_meta = array(
+            'match_id'=>$new_page_id,
+            'match_scene'=>$_POST['match_scene'],
+            'match_genre'=>$_POST['match_genre'],
+            'match_address'=>$_POST['match_address'],
+            'match_cost'=>$_POST['match_cost'],
+            'match_start_time'=>$_POST['match_start_time'],
+            'match_project_id'=>$project_id,
+            'created_id'=>$current_user->ID,
+            'created_time'=>get_time('mysql')
+        );
+
+        $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$new_page_id));
+        $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
+
+        if($new_page_id && $a ){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info'=>'比赛发布成功,请生成赛程表','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
+        }else{
+            wp_send_json_error(array('info'=>'比赛发布失败'));
+        }
     }
 
     /*

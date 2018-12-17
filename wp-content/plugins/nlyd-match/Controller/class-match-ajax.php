@@ -106,7 +106,7 @@ class Match_Ajax
                 (`match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `created_id`, `created_time`) 
                 VALUES ".$str;
 
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $result = $wpdb->query($sql);
 
         $update = array(
@@ -118,10 +118,10 @@ class Match_Ajax
 
         $result1 = $wpdb->update($wpdb->prefix.'match_meta_new',$update,array('match_id'=>$_POST['match_id']));
         if($result && $result1){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success('生成成功');
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error('生成失败');
         }
     }
@@ -142,17 +142,17 @@ class Match_Ajax
         if($_POST['new_seat_number'] > $total || $_POST['new_seat_number'] < 1) wp_send_json_error('座位号范围:1~'.$total);
         $old_seat_number = $order->seat_number;
 
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
 
         $b = $wpdb->update($wpdb->prefix.'order',array('seat_number'=>$order->seat_number),array('match_id'=>$order->match_id,'seat_number'=>$_POST['new_seat_number']));
         $a = $wpdb->update($wpdb->prefix.'order',array('seat_number'=>$_POST['new_seat_number']),array('id'=>$_POST['orderid']));
 
         //print_r($a .'&&'. $b);die;
         if($a && $b){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success('换座成功');
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error('换座失败');
         }
 
@@ -263,7 +263,7 @@ class Match_Ajax
 
         $ids = arr2str($_POST['id']);
 
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         switch ($_POST['type']){
             case 'user':
             case 'teacher':
@@ -322,10 +322,10 @@ class Match_Ajax
         $c = $wpdb->query($sql);
         //var_dump($a .'---'.$c);
         if($a && $c ){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success('清除完成');
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error('清除失败');
         }
     }
@@ -694,18 +694,18 @@ class Match_Ajax
 
         if($refundFee > $order['cost']) wp_send_json_error(array('info' => '退款金额不能超过订单金额'));
 
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $refund_no = $order['serialnumber'].date_i18n('dHis',current_time('timestamp')).rand(000,999);
 //        var_dump(['order_id' => $order['id'], 'refund_no' => $refund_no, 'created_time' => date('Y-m-d H:i:s')]);die;
         //更新订单状态
         if(!$wpdb->update($wpdb->prefix.'order', ['pay_status' => -2], ['id' => $order['id']])){
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>'更新订单状态失败'));
         }
 
         //创建退款单
         if(!$wpdb->insert($wpdb->prefix.'order_refund',['order_id' => $order['id'], 'refund_no' => $refund_no, 'refund_cost' => $refundFee,  'created_time' => date_i18n('Y-m-d H:i:s', current_time('timestamp'))])){
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>'生成退款单失败'));
         }
 
@@ -739,7 +739,7 @@ class Match_Ajax
 
                 break;
             default:
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(array('info' => '此订单无支付方式'));
         }
 
@@ -779,15 +779,15 @@ class Match_Ajax
                     }
                 }
 
-                $wpdb->commit();
+                $wpdb->query('COMMIT');
                 wp_send_json_success(array('info'=> '申请退款成功'.$sendMsg));
             }else{
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(array('info' => $result['data']));
             }
 
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info' => '查询失败'));
         }
     }
@@ -1087,18 +1087,18 @@ class Match_Ajax
         $id = intval($_POST['id']);
         if($id < 1) wp_send_json_error(['info' => '参数错误']);
         global $wpdb;
-//        $wpdb->startTrans();
+//        $wpdb->query('START TRANSACTION');
 //        $bool = $wpdb->update($wpdb->prefix.'match_meta', ['match_status' => -3], ['match_id' => $id]);
 //        if(!$bool){
-//            $wpdb->rollback();
+//            $wpdb->query('ROLLBACK');
 //            wp_send_json_error(['info' => '关闭失败']);
 //        }
         //移入回收站
         if(wp_trash_post($id)){
-//            $wpdb->commit();
+//            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '关闭成功']);
         }else{
-//            $wpdb->rollback();
+//            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '关闭失败']);
         }
     }
@@ -1117,10 +1117,10 @@ class Match_Ajax
         $post = get_post($id);
         if($post->post_status == 'trash'){
             global $wpdb;
-            $wpdb->startTrans();
+            $wpdb->query('START TRANSACTION');
             //删除post
             if(!wp_delete_post($id)){
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '比赛删除失败']);
             }
             //删除meta
@@ -1128,7 +1128,7 @@ class Match_Ajax
             if($meta){
                 $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
                 if(!$metaBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '比赛外键删除失败']);
                 }
             }
@@ -1137,7 +1137,7 @@ class Match_Ajax
             if($order){
                 $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id, 'order_type' => 1]);
                 if(!$orderBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '订单删除失败']);
                 }
             }
@@ -1146,11 +1146,11 @@ class Match_Ajax
             if($question){
                 $questionBool = $wpdb->delete($wpdb->prefix.'match_questions', ['match_id' => $id]);
                 if(!$questionBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '答题记录删除失败']);
                 }
             }
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '比赛已删除']);
 
         }else{
@@ -1212,11 +1212,11 @@ class Match_Ajax
 
 
         //开启事务
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $insertRes = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
 
         if(!$insertRes){
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '操作失败']);
             return;
         }
@@ -1224,10 +1224,10 @@ class Match_Ajax
         $serialnumber = createNumber($user_id,$wpdb->insert_id);
         $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
         if($updateRes){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '操作成功']);
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '操作失败']);
         }
     }
@@ -1252,16 +1252,16 @@ class Match_Ajax
         $answerIdStr = '('.substr($answerIdStr, 0, strlen($answerIdStr)-1).')';
 
         //开始删除
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id.' OR post_parent='.$id);
         $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id IN'.$answerIdStr);
         $wpdb->query('DELETE FROM '.$wpdb->prefix.'term_relationships WHERE object_id='.$id);
 
         if(!$questionBool || (!$correctBool && $answerIdStr != '()')){
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '操作失败']);
         }else{
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '题目已删除']);
         }
     }
@@ -1285,20 +1285,20 @@ class Match_Ajax
         }
 
         //开始删除
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $questionBool = $wpdb->query('DELETE FROM '.$wpdb->posts.' WHERE ID='.$id);
         $correctBool = $wpdb->query('DELETE FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id);
         if(!$questionBool || !$correctBool){
             //是否是答案不存在
             if(!$correctBool && $wpdb->get_row('SELECT id FROM '.$wpdb->prefix.'problem_meta WHERE problem_id='.$id)){
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '操作失败']);
             }else{
-                $wpdb->commit();
+                $wpdb->query('COMMIT');
                 wp_send_json_success(['info' => '问题已删除']);
             }
         }else{
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '问题已删除']);
         }
     }
@@ -1469,7 +1469,7 @@ class Match_Ajax
             'created_time'=>get_time('mysql'),
         );
 
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
 
         if(!empty($_POST['more_id'])){  //修改
             $match_more = $wpdb->get_var("select `more` from {$wpdb->prefix}match_project_more where id = {$_POST['more_id']} ");
@@ -1498,10 +1498,10 @@ class Match_Ajax
 
         $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_start_time'=>$start_time,'match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
         if($result){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success($title.'成功');
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error($title.'失败');
         }
         //var_dump($_POST);
@@ -2049,11 +2049,11 @@ class Match_Ajax
 
 
         //开启事务
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $insertRes = $wpdb->insert($wpdb->prefix.'order',$orderInsertData);
 
         if(!$insertRes){
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '加入失败!']);
             return;
         }
@@ -2061,10 +2061,10 @@ class Match_Ajax
         $serialnumber = createNumber($user_id,$wpdb->insert_id);
         $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
         if($updateRes){
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '加入成功!']);
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '加入失败!']);
         }
     }
@@ -2082,10 +2082,10 @@ class Match_Ajax
         $post = get_post($id);
         if($post->post_status == 'trash'){
             global $wpdb;
-            $wpdb->startTrans();
+            $wpdb->query('START TRANSACTION');
             //删除post
             if(!wp_delete_post($id)){
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '考级删除失败']);
             }
             //删除meta
@@ -2093,7 +2093,7 @@ class Match_Ajax
             if($meta){
                 $metaBool = $wpdb->delete($wpdb->prefix.'grading_meta',['grading_id' => $id]);
                 if(!$metaBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '考级外键删除失败']);
                 }
             }
@@ -2102,7 +2102,7 @@ class Match_Ajax
             if($order){
                 $orderBool = $wpdb->update($wpdb->prefix.'order', ['pay_status' => 5], ['match_id' => $id, 'order_type' => 2]);
                 if(!$orderBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '订单删除失败']);
                 }
             }
@@ -2111,11 +2111,11 @@ class Match_Ajax
             if($question){
                 $questionBool = $wpdb->delete($wpdb->prefix.'grading_questions', ['grading_id' => $id]);
                 if(!$questionBool){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '答题记录删除失败']);
                 }
             }
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '考级已删除']);
 
         }else{
@@ -2164,17 +2164,17 @@ class Match_Ajax
         $user_id < 1 && wp_send_json_error(['info' => '参数错误!']);
 
         global $wpdb;
-        $wpdb->startTrans();
+        $wpdb->query('START TRANSACTION');
         $bool = $wpdb->update($wpdb->users,['weChat_openid' => ''],['ID'=>$user_id]);
         if($bool){
             if(!delete_user_meta($user_id,'wechat_nickname') && get_user_meta($user_id,'wechat_nickname')){
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '解绑失败!']);
             };
-            $wpdb->commit();
+            $wpdb->query('COMMIT');
             wp_send_json_success(['info' => '解绑成功!']);
         }else{
-            $wpdb->rollback();
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '解绑失败!']);
         }
     }

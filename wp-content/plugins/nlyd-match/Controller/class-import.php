@@ -133,7 +133,7 @@ class Import {
         if(is_post()){
             $display_name = mb_substr($_POST['display_name'], 0, 1).', '.mb_substr($_POST['display_name'], 1);
             $user_id = wp_create_user($_POST['username'],get_time());
-            $wpdb->startTrans();
+            $wpdb->query('START TRANSACTION');
             if($user_id){
                 $wpdb->update($wpdb->users,['display_name' => $display_name], ['ID' => $user_id]);
                 $bool = update_user_meta($user_id,'user_gender',$_POST['sex']);
@@ -142,18 +142,18 @@ class Import {
                 if($bool){
                     $sql = 'INSERT INTO '.$wpdb->prefix.'directories (user_id,category_name,`level`,`type`,certificate) VALUES ('.$user_id.',"速记类","'.$_POST['level'].'",4,"'.$_POST['dds'].'")';
                     if($wpdb->query($sql)){
-                        $wpdb->commit();
+                        $wpdb->query('COMMIT');
                     }else{
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                         $msg = '创建名录失败';
                     }
                 }else{
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     $msg = '创建用户失败';
                 }
 
             }else{
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
                 $msg = '创建用户失败';
             }
             echo $msg;
@@ -377,7 +377,7 @@ class Import {
 //            $errStr = '';
 //            $errNum = 0;
 //            $successNum = 0;
-//            $wpdb->startTrans();
+//            $wpdb->query('START TRANSACTION');
 //            foreach ($dataArr as $k => $data){
 //                $id = wp_insert_post([
 //                    'post_title' => $data['title'],
@@ -388,7 +388,7 @@ class Import {
 //
 //                if(!$id){
 //                    //题目插入失败
-//                    $wpdb->rollback();
+//                    $wpdb->query('ROLLBACK');
 //                    echo '致命错误: '.$data['title'].'存入数据库失败';
 //                    return false;
 //                }
@@ -396,7 +396,7 @@ class Import {
 //                foreach ($data['problem'] as $problem){
 //                    if(empty($problem['answer'])){
 //                        //问题无答案选项
-//                        $wpdb->rollback();
+//                        $wpdb->query('ROLLBACK');
 //                        echo '致命错误: '.$data['title'].'无选项';
 //                        return false;
 //                    }
@@ -410,7 +410,7 @@ class Import {
 //
 //                    if(!$problemId){
 //                        //问题插入数据库失败
-//                        $wpdb->rollback();
+//                        $wpdb->query('ROLLBACK');
 //                        echo '致命错误: '.$data['title'].'-> '.$problem['title'].'存入数据库失败';
 //                        return false;
 //                    }
@@ -421,7 +421,7 @@ class Import {
 //                        $bool = $wpdb->insert($wpdb->prefix.'problem_meta',['problem_id' => $problemId, 'problem_select' => $answer, 'problem_answer' => $problem_answer]);
 //                        if(!$bool){
 //                            //选项插入数据库失败
-//                            $wpdb->rollback();
+//                            $wpdb->query('ROLLBACK');
 //                            echo '致命错误: '.$data['title'].'-> '.$problem['title'].' -> '.$answer.'存入数据库失败';
 //                            return false;
 //                        }
@@ -429,7 +429,7 @@ class Import {
 //
 //                }
 //            }
-//            $wpdb->commit();
+//            $wpdb->query('COMMIT');
 //            echo '<script>alert("导入成功")</script>';
 //        }
 

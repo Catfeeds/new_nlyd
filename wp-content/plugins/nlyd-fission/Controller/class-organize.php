@@ -410,16 +410,16 @@ class Organize{
                     'zone_type_alias' => $zone_type_alias,
                     'zone_type_status' => $zone_type_status,
                 ];
-                $wpdb->startTrans();
+                $wpdb->query('START TRANSACTION');
                 if($id > 0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_type',$insertData,['id'=>$id]);
                     $powerOne = $wpdb->get_row("SELECT id,match_role_id,course_role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
                     if($powerOne && $powerOne['match_role_id'] == $match_role_ids && $powerOne['course_role_id'] == $course_role_ids){
                        if(!$bool){
-                           $wpdb->rollback();
+                           $wpdb->query('ROLLBACK');
                            $error_msg = '操作失败!';
                        }else{
-                           $wpdb->commit();
+                           $wpdb->query('COMMIT');
                            $success_msg = '操作成功';
                        }
                     }else{
@@ -429,10 +429,10 @@ class Organize{
                             $powerBool = $wpdb->insert($wpdb->prefix.'zone_join_role', ['zone_type_id'=>$id,'match_role_id'=>$match_role_ids,'course_role_id'=>$course_role_ids]);
                         }
                         if($powerBool) {
-                            $wpdb->commit();
+                            $wpdb->query('COMMIT');
                             $success_msg = '操作成功';
                         }else{
-                            $wpdb->rollback();
+                            $wpdb->query('ROLLBACK');
                             $error_msg = '操作失败!';
                         }
                     }
@@ -446,18 +446,18 @@ class Organize{
                             $powerSql = "INSERT INTO {$wpdb->prefix}zone_join_role (`zone_type_id`,`match_role_id`,`course_role_id`) VALUES ('{$zone_type_id}','{$match_role_ids}','{$course_role_ids}')";
                             $powerBool = $wpdb->query($powerSql);
                             if($powerBool) {
-                                $wpdb->commit();
+                                $wpdb->query('COMMIT');
                                 $success_msg = '操作成功';
                             }else{
-                                $wpdb->rollback();
+                                $wpdb->query('ROLLBACK');
                                 $error_msg = '操作失败!';
                             }
                         }else{
-                            $wpdb->commit();
+                            $wpdb->query('COMMIT');
                             $success_msg = '操作成功';
                         }
                     }else{
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                         $error_msg = '操作失败!';
                     }
                 }

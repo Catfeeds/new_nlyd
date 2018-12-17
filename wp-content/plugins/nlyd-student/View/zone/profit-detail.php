@@ -16,11 +16,11 @@
                 <div class="layui-row width-padding width-margin-pc">
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('收益金额', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black">¥ 500.00</div>
+                        <div class="profit_detail_info c_black">¥ <?=$row['user_income']?></div>
                     </div>
                     <div class="profit_detail_row">
-                        <div class="profit_detail_label"><?=__('收益来源', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black"><?=__('比赛收益', 'nlyd-student')?></div>
+                        <div class="profit_detail_label"><?=__($row['income_type'] == 'extract' ? '提现' : '收益来源', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_info c_black"><?=__($row['income_type_title'], 'nlyd-student')?></div>
                     </div>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('比赛类型', 'nlyd-student')?>：</div>

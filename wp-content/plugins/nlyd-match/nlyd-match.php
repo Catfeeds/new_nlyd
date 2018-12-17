@@ -486,7 +486,7 @@ if(!class_exists('MatchController')){
                     $errStr = '';
                     $errNum = 0;
                     $successNum = 0;
-                    $wpdb->startTrans();
+                    $wpdb->query('START TRANSACTION');
                     $indentStyle = $is_indent ? ' style="text-indent: 2em;"':'';
                     foreach ($dataArr as $k => $data){
                         $content = '';
@@ -506,7 +506,7 @@ if(!class_exists('MatchController')){
 
                         if(!$id){
                             //题目插入失败
-                            $wpdb->rollback();
+                            $wpdb->query('ROLLBACK');
                             echo '致命错误: '.$data['title'].'存入数据库失败';
                             return false;
                         }
@@ -514,14 +514,14 @@ if(!class_exists('MatchController')){
                         $termRes = $wpdb->insert($wpdb->prefix.'term_relationships', ['object_id' => $id,'term_taxonomy_id' => $questionTypeId]);
                         if(!$termRes){
                             //问题插入数据库失败
-                            $wpdb->rollback();
+                            $wpdb->query('ROLLBACK');
                             echo '致命错误: '.$data['title'].'-> 存入题目类型失败';
                             return false;
                         }
                         foreach ($data['problem'] as $problem){
                             if(empty($problem['answer'])){
                                 //问题无答案选项
-                                $wpdb->rollback();
+                                $wpdb->query('ROLLBACK');
                                 echo '致命错误: '.$data['title'].'无选项';
                                 return false;
                             }
@@ -535,7 +535,7 @@ if(!class_exists('MatchController')){
 
                             if(!$problemId){
                                 //问题插入数据库失败
-                                $wpdb->rollback();
+                                $wpdb->query('ROLLBACK');
                                 echo '致命错误: '.$data['title'].'-> '.$problem['title'].'存入数据库失败';
                                 return false;
                             }
@@ -557,7 +557,7 @@ if(!class_exists('MatchController')){
                                 $bool = $wpdb->insert($wpdb->prefix.'problem_meta',['problem_id' => $problemId, 'problem_select' => $answer, 'problem_answer' => $problem_answer]);
                                 if(!$bool){
                                     //选项插入数据库失败
-                                    $wpdb->rollback();
+                                    $wpdb->query('ROLLBACK');
                                     echo '致命错误: '.$data['title'].'-> '.$problem['title'].' -> '.$answer.'存入数据库失败';
                                     return false;
                                 }
@@ -565,7 +565,7 @@ if(!class_exists('MatchController')){
 
                         }
                     }
-                    $wpdb->commit();
+                    $wpdb->query('COMMIT');
                     echo "<script type='text/javascript'>alert(\"导入成功 {$titleRepeat}\")</script>";
                 }
             }

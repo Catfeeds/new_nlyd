@@ -109,8 +109,25 @@ class Student_Zone extends Student_Home
      * 收益详情页面
      */
      public function profitDetail(){
-        $view = student_view_path.CONTROLLER.'/profit-detail.php';
-        load_view_template($view);
+
+         global $wpdb,$current_user;
+         $sql = "select *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
+                if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
+                case income_type
+                when 'match' then '比赛收益'
+                when 'grading' then '考级收益'
+                when 'extract' then '比赛提现'
+                end income_type_title
+                from {$wpdb->prefix}user_stream_logs where id = {$_GET['id']} and user_id = {$current_user->ID} ";
+         $row = $wpdb->get_row($sql,ARRAY_A);
+         if(empty($row)){
+             $this->get_404(array('message'=>'数据错误','return_url'=>home_url('/zone/profit/')));
+             return;
+         }
+         //print_r($row);
+         $data['row'] = $row;
+         $view = student_view_path.CONTROLLER.'/profit-detail.php';
+         load_view_template($view,$data);
     }
     /**
      * 提现详情页面
@@ -123,6 +140,14 @@ class Student_Zone extends Student_Home
      * 比赛管理列表
      */
      public function match(){
+         global $wpdb,$current_user;
+         //获取用户发布比赛的权限
+         $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+         if(empty($match_role_id)){
+             $this->get_404(array('info'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
+             return;
+         }
+
         $view = student_view_path.CONTROLLER.'/match-list.php';
         load_view_template($view);
     }
@@ -130,8 +155,40 @@ class Student_Zone extends Student_Home
      * 发布比赛
      */
      public function matchBuild(){
-        $view = student_view_path.CONTROLLER.'/match-build.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         //获取用户发布比赛的权限
+         $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
+         if(empty($match_role_id)){
+             $this->get_404(array('info'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
+             return;
+         }
+         $match_role = $wpdb->get_results("select *,role_name as value from {$wpdb->prefix}zone_match_role where id in($match_role_id) and status = 1",ARRAY_A);
+         //print_r($match_role);
+         //获取比赛类型
+         $match_genre = $wpdb->get_results("select a.ID as id,a.post_title as value,b.meta_value from {$wpdb->prefix}posts a 
+                                  left join {$wpdb->prefix}postmeta b on a.ID = b.post_id and b.meta_key='project_alias'
+                                  where a.post_type = 'genre' and a.post_status = 'publish' and b.meta_value in('mental_world_cup','digital_brain_king','counting_brain_marathon')");
+         $data['scene_list'] = !empty($match_role) ? json_encode($match_role) : '';
+         $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
+
+         if(isset($_GET['match_id'])){
+             //获取比赛信息
+             $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
+                      left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id 
+                      left join {$wpdb->prefix}zone_match_role c on b.match_scene = c.id 
+                      left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
+                      where a.ID = {$_GET['match_id']}
+                      ";
+             $match = $wpdb->get_row($sql,ARRAY_A);
+             if(!empty($match['match_start_time'])){
+                 $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             }
+             $data['match'] = $match;
+             print_r($match);
+         }
+
+         $view = student_view_path.CONTROLLER.'/match-build.php';
+         load_view_template($view,$data);
     }
     /**
      * 比赛时间管理
@@ -279,8 +336,6 @@ class Student_Zone extends Student_Home
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
         // if(ACTION == 'index'){
-            wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
-            wp_enqueue_style( 'my-student-zone' );
         // }
 
         if(ACTION == 'apply'){
@@ -291,6 +346,8 @@ class Student_Zone extends Student_Home
             wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
             wp_enqueue_style( 'zone_select2_css' );
         }
+        wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
+        wp_enqueue_style( 'my-student-zone' );
     }
 
 }

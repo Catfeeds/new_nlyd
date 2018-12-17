@@ -891,7 +891,7 @@ class Student_Gradings extends Student_Home
                     }
                 }
 
-                $wpdb->startTrans();
+                $wpdb->query('START TRANSACTION');
 
                 $id = $wpdb->get_var("select id from {$wpdb->prefix}grading_logs where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']} ");
                 if(empty($id)){
@@ -917,9 +917,9 @@ class Student_Gradings extends Student_Home
                     }
                     //var_dump($c .'---'.$a.'---'.$b);die;
                     if($a && $b){
-                        $wpdb->commit();
+                        $wpdb->query('COMMIT');
                     }else{
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                     }
                 }
 
