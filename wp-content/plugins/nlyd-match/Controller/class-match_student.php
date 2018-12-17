@@ -324,7 +324,7 @@ class Match_student {
         $current_match_more = isset($_GET['more']) ? $_GET['more'] : 1;
 
         //查询成绩
-        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,is_true,
+        $row = $wpdb->get_row('SELECT match_questions,questions_answer,my_answer,surplus_time,my_score,created_time,is_true,answer_status AS answer_status_1,
               CASE answer_status 
               WHEN -1 THEN "记忆完成" 
               WHEN 1 THEN "提交" 
@@ -335,7 +335,7 @@ class Match_student {
         if(!$row){
             $msg =  '本轮比赛无记录';
             $is_view = false;
-        }elseif ($row['answer_status'] != 1){
+        }elseif ($row['answer_status_1'] != 1){
             $msg =  '本轮成绩未提交';
             $is_view = false;
         }

@@ -114,7 +114,8 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
-          `role_id` varchar(255) DEFAULT NULL COMMENT '权限id合集 以,为分割符',
+          `match_role_id` varchar(255) DEFAULT NULL COMMENT '赛事/考级权限id合集 以,为分割符',
+          `course_role_id` varchar(255) DEFAULT NULL COMMENT '课程权限id合集 以,为分割符',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
@@ -177,7 +178,8 @@ function the_table_install () {
           `user_status` tinyint(2) DEFAULT NULL COMMENT '审核状态 1正常 -1正在审核 -2未通过',
           `created_time` datetime DEFAULT NULL COMMENT '提交时间',
           `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
-          `role_id` varchar(255) DEFAULT NULL COMMENT '用户权限id集合 用,分割',
+          `match_role_id` varchar(255) DEFAULT NULL COMMENT '用户赛事/考级权限id集合 用,分割',
+          `course_role_id` varchar(255) DEFAULT NULL COMMENT '用户课程权限id集合 用,分割',
           `parent_id` int(20) unsigned DEFAULT 0 COMMENT '上级主体id',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";

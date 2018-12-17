@@ -549,6 +549,7 @@ class Student_Ajax
             'telephone'=>!empty($_POST['telephone']) ? $_POST['telephone'] : '',
             'address'=>!empty($_POST['address']) ? $_POST['address'] : '',
             'order_type'=>isset($_POST['order_type']) ? $_POST['order_type'] : 1,
+            'sub_centres_id'=>isset($_POST['sub_centres_id']) ? $_POST['sub_centres_id'] : '',
             'pay_status'=>1,
             'created_time'=>get_time('mysql'),
         );
