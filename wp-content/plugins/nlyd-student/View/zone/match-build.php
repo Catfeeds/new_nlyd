@@ -48,8 +48,9 @@
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('开赛日期', 'nlyd-student')?>：</span>
-                                <a class="c_blue"><?=__('生成赛程时间表', 'nlyd-student')?></a>
-                                <a class="c_blue pull-right" href="<?=home_url('/zone/matchTime/');?>"><?=__('查看/修改时间表', 'nlyd-student')?></a>
+                                <?php if(isset($_GET['match_id'])):?>
+                                <a class="c_blue pull-right" href="<?=home_url('/zone/matchTime/match_id/'.$_GET['match_id']);?>"><?=__('查看/修改时间表', 'nlyd-student')?></a>
+                                <?php endif;?>
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
@@ -57,9 +58,10 @@
                             </div>
                         </div>
                         <div class="c_red mt_10">
-                            <?=__('请在发布比赛后再次编辑生成比赛时间，管理员可根据实际情况自定义修改赛程时间', 'nlyd-student')?>
+                            <?=__('比赛发布成功后，管理员可根据实际情况自定义修改赛程时间', 'nlyd-student')?>
                         </div>
                         <input type="hidden" name="action" value="zone_create_match">
+                        <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
                     </form>
                 </div>

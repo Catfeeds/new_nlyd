@@ -184,7 +184,7 @@ class Student_Zone extends Student_Home
                  $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
              }
              $data['match'] = $match;
-             print_r($match);
+             //print_r($match);
          }
 
          $view = student_view_path.CONTROLLER.'/match-build.php';
@@ -194,8 +194,30 @@ class Student_Zone extends Student_Home
      * 比赛时间管理
      */
      public function matchTime(){
-        $view = student_view_path.CONTROLLER.'/match-time.php';
-        load_view_template($view);
+         global $wpdb,$current_user;
+         $sql = "select a.id,a.project_id,b.post_title, date_format(a.start_time,'%Y/%m/%d %H:%i') start_time,date_format(a.end_time,'%Y/%m/%d %H:%i') end_time,a.use_time,a.more
+                  from {$wpdb->prefix}match_project_more a 
+                  left join {$wpdb->prefix}posts b on a.project_id = b.ID
+                  where match_id = {$_GET['match_id']} and created_id = {$current_user->ID} ";
+         $rows = $wpdb->get_results($sql,ARRAY_A);
+         if(empty($rows)){
+             $this->get_404(_('未查询到比赛项目信息'));
+             return;
+         }
+         //print_r($rows);
+         $list = array();
+         foreach ($rows as $val ){
+             $k = &$val['project_id'];
+             $title = &$val['post_title'];
+             $list[$k]['title'] = $title;
+             $list[$k]['use_time'] = $val['use_time'];
+             $list[$k]['child'][] = $val;
+         }
+         //print_r($list);
+         $data['list'] = $list;
+         //print_r($rows);
+         $view = student_view_path.CONTROLLER.'/match-time.php';
+         load_view_template($view,$data);
     }
     /**
      * 比赛发布成功
