@@ -119,18 +119,18 @@ var mobileSelect2 = new MobileSelect({
     }
 });
 //---------------------------考级日期------------------------------
-if($('#match_date').val().length>0 && $('#match_date').val().length>0){
-    var birthdayValue=$('#match_date').val().split('-');
+if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
+    var timeValue=$('#match_date').attr('data-time').split('-');
     $.each($.validationLayui.dates2,function(index,value){
-        if(birthdayValue[0]==value.value){
+        if(timeValue[0]==value.value){
             $.each(value.childs,function(i,v){
-                if(birthdayValue[1]==v.value){
+                if(timeValue[1]==v.value){
                     $.each(v.childs,function(j,val){
-                        if(birthdayValue[2]==val.value){
+                        if(timeValue[2]==val.value){
                             $.each(v.childs,function(k,b){
-                                if(birthdayValue[3]==b.value){
+                                if(timeValue[3]==b.value){
                                     $.each(v.childs,function(l,c){
-                                        if(birthdayValue[4]==c.value){
+                                        if(timeValue[4]==c.value){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }
                                     })

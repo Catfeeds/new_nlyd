@@ -1,0 +1,52 @@
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <?php
+                require_once leo_student_public_view.'leftMenu.php';
+            
+        ?>
+
+
+        <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
+            <header class="mui-bar mui-bar-nav">
+                <a class="mui-pull-left nl-goback nl-goback">
+                    <div><i class="iconfont">&#xe610;</i></div>
+                </a>
+                <h1 class="mui-title"><div><?=__('课程学员', 'nlyd-student')?></div></h1>
+            </header>    
+            <div class="layui-row nl-border nl-content ">
+                <div class="nl-table-wapper have-bottom-footer" style="min-height:145px;">
+                    <div class="c_black width-padding width-padding-pc bold fs_16 student_title"><?=__('高效记忆术·G第2期·12214·12241学员列表', 'nlyd-student')?></div>
+                    <table class="nl-table">
+                        <tbody>
+                            <tr class='table-head'>
+                                <td><?=__('序 号', 'nlyd-student')?></td>
+                                <td><?=__('姓名/编号', 'nlyd-student')?></td>
+                                <td><?=__('年 龄', 'nlyd-student')?></td>
+                                <td><?=__('性 别', 'nlyd-student')?></td>
+                                <td><?=__('推荐用户', 'nlyd-student')?></td>
+                                <td><?=__('课程情况', 'nlyd-student')?></td>
+                            </tr>
+                            <tr>
+                                <td><div class="table_content">1</div></td>
+                                <td><div class="table_content"><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
+                                <td><div class="table_content">18</div></td>
+                                <td><div class="table_content c_black">男</div></td>
+                                <td><div class="table_content c_black">刘亿亿</div></td>
+                                <td><div class="table_content"><span class="c_green">达标</span></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="table_content">1</div></td>
+                                <td><div class="table_content "><span class="c_black">王好学</span><br><span class="ff_num fs_12">10000888</span></div></td>
+                                <td><div class="table_content c_black">18</div></td>
+                                <td><div class="table_content c_black">男</div></td>
+                                <td><div class="table_content">刘亿亿</div></td>
+                                <td><div class="table_content"><span class="c_black6">未达标</span></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>           
+    </div>
+</div>

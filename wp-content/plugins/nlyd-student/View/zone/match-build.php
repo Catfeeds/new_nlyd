@@ -53,7 +53,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="2019-11-11-11-11"  id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="<?=$match['data_time']?>"  id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
                             </div>
                         </div>
                         <div class="c_red mt_10">
@@ -131,12 +131,16 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
     $.each($.validationLayui.dates2,function(index,value){
         if(timeValue[0]==value.value+""){
+            posiotion_match_date=[index,0,0,0,0];
             $.each(value.childs,function(i,v){
                 if(timeValue[1]==v.value+""){
+                    posiotion_match_date=[index,i,0,0,0];
                     $.each(v.childs,function(j,val){
                         if(timeValue[2]==val.value+""){
+                            posiotion_match_date=[index,i,j,0,0];
                             $.each(v.childs,function(k,b){
                                 if(timeValue[3]==b.value+""){
+                                    posiotion_match_date=[index,i,j,k,0];
                                     $.each(v.childs,function(l,c){
                                         if(timeValue[4]==c.value+""){
                                             posiotion_match_date=[index,i,j,k,l];
@@ -162,7 +166,7 @@ var mobileSelect3 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+''+data[3]['value']+':'+data[4]['value'];
+        var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
         var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
         $('#match_date').val(text).attr('data-time',text1);
        
