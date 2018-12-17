@@ -4531,6 +4531,59 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
+    /**
+     *机构生成比赛
+     */
+    public function zone_create_match(){
+        $_POST['match_cost']= 588;
+        if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_cost']) || empty($_POST['match_start_time']) ){
+            wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
+        }
+        global $wpdb,$current_user;
+        $arr = array(
+            'post_title' => $_POST['post_title'],
+            'post_type'     => 'match',
+            'post_status' => 'publish',
+            'post_author' => $current_user->ID,
+        );
+
+        $wpdb->query('START TRANSACTION');
+        $new_page_id = wp_insert_post($arr);
+
+        //获取所有比赛项目
+        $args = array(
+            'post_type' => array('project'),
+            'post_status' => array('publish'),
+            'orderby' => 'menu_order',
+            'order' => 'asc',
+        );
+        $the_query = new WP_Query($args);
+        $project_array = array_column($the_query->posts,'ID');
+        $project_id = arr2str($project_array);
+
+        $match_meta = array(
+            'match_id'=>$new_page_id,
+            'match_scene'=>$_POST['match_scene'],
+            'match_genre'=>$_POST['match_genre'],
+            'match_address'=>$_POST['match_address'],
+            'match_cost'=>$_POST['match_cost'],
+            'match_start_time'=>$_POST['match_start_time'],
+            'match_project_id'=>$project_id,
+            'created_id'=>$current_user->ID,
+            'created_time'=>get_time('mysql')
+        );
+
+        $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$new_page_id));
+        $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
+
+        if($new_page_id && $a ){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info'=>'比赛发布成功,请生成赛程表','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
+        }else{
+            wp_send_json_error(array('info'=>'比赛发布失败'));
+        }
+    }
+
     /*
     *比较字符串不同的字符
     *@参数：$str1:第一个字符串，$str2:第二个字符串
