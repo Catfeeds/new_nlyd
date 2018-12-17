@@ -6,14 +6,14 @@
         ?>
 
         <?php if(!$row){ ?>
-            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper have-footer">
+            <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('考级管理', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content match_tabs">
+            <div class="layui-row nl-border nl-content match_tabs have-bottom">
                 <div class="layui-tab layui-tab-brief width-padding width-padding-pc" lay-filter="matchList" style="margin-top:20px">
                     <ul style="margin:0;padding:0" class="layui-tab-title">
                         <li class="layui-this" lay-id="1">
