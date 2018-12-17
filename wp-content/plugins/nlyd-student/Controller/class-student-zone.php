@@ -279,8 +279,6 @@ class Student_Zone extends Student_Home
         wp_register_style( 'my-student-userCenter', student_css_url.'userCenter.css',array('my-student') );
         wp_enqueue_style( 'my-student-userCenter' );
         // if(ACTION == 'index'){
-            wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
-            wp_enqueue_style( 'my-student-zone' );
         // }
 
         if(ACTION == 'apply'){
@@ -291,6 +289,8 @@ class Student_Zone extends Student_Home
             wp_register_style( 'zone_select2_css',match_js_url.'select2/dist/css/select2.css','', leo_match_version  );
             wp_enqueue_style( 'zone_select2_css' );
         }
+        wp_register_style( 'my-student-zone', student_css_url.'zone/zone.css',array('my-student') );
+        wp_enqueue_style( 'my-student-zone' );
     }
 
 }
