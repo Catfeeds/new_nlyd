@@ -201,7 +201,7 @@ input[type="text"].radius_input_row{
 .input_row .load_img:last-child{
     margin-right: 0;
 }
-.tips{
+._tips{
     display: inline-block;
     vertical-align: middle;
 }

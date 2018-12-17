@@ -64,7 +64,7 @@ a:hover {
 }
 /* 字体大小 */
 .fs_26{
-    font-size: 0.26rem;
+    font-size: 0.26rem!important;
 }
 .fs_22{
     font-size: 0.22rem;
