@@ -4535,7 +4535,8 @@ class Student_Ajax
      *机构生成比赛
      */
     public function zone_create_match(){
-        $_POST['match_cost']= 588;
+
+
         if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_cost']) || empty($_POST['match_start_time']) ){
             wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
         }
@@ -4547,7 +4548,15 @@ class Student_Ajax
             'post_author' => $current_user->ID,
         );
 
+        if(!empty($_POST['match_id'])){
+
+            $wpdb->delete($wpdb->prefix.'posts',array('ID'=>$_POST['match_id']));
+            $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$_POST['match_id']));
+            $wpdb->delete($wpdb->prefix.'match_project_more',array('match_id'=>$_POST['match_id']));
+        }
+
         $wpdb->query('START TRANSACTION');
+
         $new_page_id = wp_insert_post($arr);
 
         //获取所有比赛项目
@@ -4567,18 +4576,44 @@ class Student_Ajax
             'match_genre'=>$_POST['match_genre'],
             'match_address'=>$_POST['match_address'],
             'match_cost'=>$_POST['match_cost'],
+            'entry_end_time'=>date_i18n('Y-m-d H:i:s',strtotime('-10 minute',strtotime($_POST['match_start_time']))),
             'match_start_time'=>$_POST['match_start_time'],
             'match_project_id'=>$project_id,
             'created_id'=>$current_user->ID,
             'created_time'=>get_time('mysql')
         );
-
-        $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$new_page_id));
         $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
 
-        if($new_page_id && $a ){
+        //生成比赛项目
+
+        $match_start_time = strtotime($_POST['match_start_time']);
+        $match_project_use = get_option('match_project_use')['project_use'];
+        $start_time = $match_start_time;
+        $str = '';
+        foreach ($project_array as $k => $v){
+            $project_alias = get_post_meta($v,'project_alias')[0];
+            $use_time = $project_alias == 'zxss' ? array_sum(array_values($match_project_use[$project_alias])) : $match_project_use[$project_alias];
+            //print_r($use_time.'--');
+            for($i=1;$i<4;++$i){
+                $start = date_i18n('Y-m-d H:i:s',$start_time);
+
+                $end_time = strtotime("+$use_time minute",$start_time);
+                $end = date_i18n('Y-m-d H:i:s',$end_time);
+                //print_r($start.'****'.$end.'</br>');
+                $str .= "( '{$new_page_id}', '{$v}', '{$i}', '{$start}', '{$end}', '{$use_time}', '-1', '{$current_user->ID}', NULL, NOW(), NULL),";
+
+                $start_time = strtotime('+3 minute',$end_time);
+            }
+            $start_time = strtotime('+10 minute',$end_time);
+            //print_r($v);
+        }
+        $sql = "INSERT INTO `nlyd`.`{$wpdb->prefix}match_project_more` ( `match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `status`, `created_id`, `revise_id`, `created_time`, `revise_time`) VALUES ".rtrim($str,',');
+        //print_r($sql);die;
+        $b = $wpdb->query($sql);
+
+        if($new_page_id && $a && $b){
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>'比赛发布成功,请生成赛程表','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
+            wp_send_json_success(array('info'=>'比赛发布成功','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
         }else{
             wp_send_json_error(array('info'=>'比赛发布失败'));
         }

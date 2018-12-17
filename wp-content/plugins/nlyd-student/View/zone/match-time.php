@@ -15,26 +15,33 @@
             <div class="layui-row nl-border nl-content  have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
                     <div class="c_red fs_12 mt_10"><?=__('每轮比赛间隔3分钟,每个项目间隔10分钟，管理员可根据实际情况进行修改。', 'nlyd-student')?></div>
+                    <?php if(!empty($list)):?>
+                    <?php foreach ($list as $val){ ?>
                     <div class="match_time_row">
                         <div class="match_xiang_name">
-                            <span class="bold fs_16 c_black mr_10">数字争霸</span>
-                            <span class="fs_12 mr_10">20分钟/每轮</span>
+                            <span class="bold fs_16 c_black mr_10"><?=$val['title']?></span>
+                            <span class="fs_12 mr_10"><?=$val['use_time']?>分钟/每轮</span>
                             <a class="add_lun c_black6 pull-right">
                                 <div class="add_coin bg_gradient_blue">+</div>
                                 <div class="add_text fs_12"><?=__('新增1轮', 'nlyd-student')?></div>
                             </a>
                         </div>
-
+                        <?php if(!empty($val['child'])): ?>
+                        <?php foreach ($val['child'] as $v){
+                            $data_time = preg_replace('/\/|\s|:/',',',$v['start_time']);
+                        ?>
                         <div class="add_lun_row">
                             <span class="close_coin bg_gradient_orange mr_10">+</span>
-                            <span class="mr_10">第1轮</span>
-                            <a class="c_blue match_date" start-time="2019,12,20,09,30">修改开始时间</a>
+                            <span class="mr_10">第<?=$v['more']?>轮</span>
+                            <a class="c_blue match_date" start-time="<?=$data_time?>">修改开始时间</a>
                             <br>
-                            <span class="mr_10 c_black ff_num">2019/12/20 09:30</span>
+                            <span class="mr_10 c_black ff_num"><?=$v['start_time']?></span>
                             <span class="mr_10 c_black">至</span>
-                            <span class="mr_10 c_black ff_num">2018/12/12 17:50</span>
+                            <span class="mr_10 c_black ff_num"><?=$v['end_time']?></span>
                         </div>
-                        <div class="add_lun_row">
+                        <?php } ?>
+                        <?php endif;?>
+                        <!--<div class="add_lun_row">
                             <span class="close_coin bg_gradient_orange mr_10">+</span>
                             <span class="mr_10">第1轮</span>
                             <a class="c_blue match_date" start-time="2019,1,1,09,30">修改开始时间</a>
@@ -42,16 +49,17 @@
                             <span class="mr_10 c_black ff_num">2019/1/2019 09:30</span>
                             <span class="mr_10 c_black">至</span>
                             <span class="mr_10 c_black ff_num">2018/12/12 17:50</span>
-                        </div>
+                        </div>-->
                     </div>
-
-                    <div class="match_time_row">
+                    <?php } ?>
+                    <?php endif;?>
+                    <!--<div class="match_time_row">
                         <div class="match_xiang_name">
                             <span class="bold fs_16 c_black mr_10">数字争霸</span>
                             <span class="fs_12 mr_10">20分钟/每轮</span>
                             <a class="add_lun c_black6 pull-right">
                                 <div class="add_coin bg_gradient_blue">+</div>
-                                <div class="add_text fs_12"><?=__('新增1轮', 'nlyd-student')?></div>
+                                <div class="add_text fs_12"><?/*=__('新增1轮', 'nlyd-student')*/?></div>
                             </a>
                         </div>
 
@@ -73,7 +81,7 @@
                             <span class="mr_10 c_black">至</span>
                             <span class="mr_10 c_black ff_num">2018/12/12 17:50</span>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <a class="a-btn a-btn-table"><div><?=__('保存更新', 'nlyd-student')?></div></a>
