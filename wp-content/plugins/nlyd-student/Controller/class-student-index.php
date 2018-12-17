@@ -32,8 +32,6 @@ class Student_Index
      * 默认公用js/css引入
      */
     public function scripts_default(){
-        wp_register_style( 'my-student-index', student_css_url.'index.css' );
-        wp_enqueue_style( 'my-student-index' );
 
  
     }

@@ -4467,7 +4467,7 @@ class Student_Ajax
             $where = " a.id > 0";
         }
         global $wpdb;
-        $sql = "select b.user_id, 
+        $sql = "select b.user_id as id, 
                 case 
                 when a.user_login != '' then a.user_login
                 when a.user_mobile != '' then a.user_mobile

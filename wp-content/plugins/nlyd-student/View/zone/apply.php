@@ -78,16 +78,16 @@
                             <div class="lable_row"><span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>">
-                                <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>">
-                                <!--<select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
+                                <!-- <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>"> -->
+                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <!--<select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>-->
+                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
                                 <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
-                                <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>">
+                                <!-- <input class="radius_input_row change_ajax" name="secretary_id"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>"> -->
                                 
                             </div>
                         </div>
@@ -166,95 +166,159 @@ jQuery(function($) {
         var id=$(this).attr('data-file')
         $('#'+id).click()
     })
+    // tags: true,                             // 根据搜索框创建option，默认false
+    // maximumSelectionLength: 6,              // 最多能够选择的个数
+    // multiple: true,                         // 多选，默认false
+    // data: initdata,                         // 下拉框绑定的数据
+    // allowClear: true,                       // 清空，默认false
+    // placeholder: '请添加或选择语言'           // 占位提示符
+    // maximumInputLength: 20,                 // 允许搜索长度  
+    // minimumResultsForSearch: 20,            // 至少20个结果的时候显示搜索  
+    // minimumResultsForSearch: Infinity,      // 永久隐藏搜索框  
+    // selectOnClose: true,                    // 结果显示高亮  
+    // closeOnSelect: false,                   // select选中关闭下拉框  
+    // separator: ",",                         // 分隔符  
 
-    /*$('.js-data-select-ajax').each(function () {
-        var _this=$(this)
-        _this.select2({
-            ajax: {
-                url: admin_ajax +'?action='+_this.attr('data-action'),
-                dataType: 'json',
-                delay: 600, //wait 250 milliseconds before triggering the request
-                processResults: function (res) {
-                    // Tranforms the top-level key of the response object from 'items' to 'results'
-                    return {
-                        results: res.data
-                    };
-                }
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-
-        });
-    })*/
-
-    $('.change_ajax').keyup(function(){
-        var _this=$(this);
-        _this.next('.select_box').remove()
-        //if(!_this.hasClass('loading')){
-            var keywords = _this.val();/*
-            if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };*/
-            var data={
-                action:"get_manage_user",
-                value:keywords
-            };
-            _this.parents('div').append('<div class="select_box" id="select_box"></div>')
-            // _this.parents('div').css("position","relative");
-            $.ajax({
-                data:data,
-                type:"POST",
-                beforeSend:function(){
-                    _this.next('.select_box').empty().append('<div class="select_row">正在加载...</div>');
-                    _this.addClass('loading')
-                },
-                success:function(res){
-                    console.log(res)
-                    var dom="";
-                    _this.next('.select_box').empty().show();
-                    if(res.success){
-                        if(res.data == ''){
-                            var item='<div class="select_row">未搜到该用户</div>'
-                            dom+=item
-                        }else {
-
-                            $.each(res.data,function(i,v){
-                                var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
-                                dom+=item
-                            })
-
-                        }
-
-                    }else {
-                        var item='<div class="select_row">未搜到该用户....</div>'
-                        dom+=item
-                    }
-                    _this.next('.select_box').append(dom)
-                    _this.removeClass('loading')
-                },
-                error:function(){
-                    _this.next('.select_box').empty().show();
-                    _this.next('.select_box').append('<div class="select_row">网络延迟</div>');
-                    _this.next('.select_box').remove()
-                    _this.removeClass('loading')
-                }
-            })
-        //}
-    })
-    $('body').on('click','.choose',function(){
-        var _this=$(this);
-        var val=_this.attr('data-value');
-        var id=_this.attr('data-id');
-        _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
-        _this.parent('.select_box').parent('div').find('.get_id').val(id)
-    })
-    $('body').click(function(e){
-        if($('#select_box').length>0){
-            var box=$('#select_box');
-            if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
-                box.parent('div').find('input').val('');
-            }
-        }
         
-        $('.select_box').remove()
-    })
+        $('.js-data-select-ajax').select2({
+            // tags: false,
+            // maximumSelectionLength: 4,
+            // placeholder: '请添加或选择语言',
+            // multiple: false,
+            // closeOnSelect:true,
+            // ajax: {
+            //     url: admin_ajax +'?action=get_manage_user',
+            //     dataType: 'json',
+            //     data:function(params){
+            //         console.log(params)
+            //         return params.term;
+            //     },
+            //     delay: 600, //wait 250 milliseconds before triggering the request
+            //     processResults: function (res) {
+            //         // Tranforms the top-level key of the response object from 'items' to 'results'
+            //         return {
+            //             results: res.data
+            //         };
+            //     }
+            //     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            // },
+            // templateResult:function(repo){//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
+            //     return repo.text;
+            // },
+            // templateSelection: function(repo) {
+            //     // console.log(repo)
+            //     return repo.text;
+            // },//选中项回调function formatRepoSelection(repo){return repo.text}
+            // allowClear: true,    //选中之后，可手动点击删除         
+            // escapeMarkup: function (markup) { return markup; }, // 字符转义处理自定义格式化防止xss注入
+            // language:'zh-CN'
+            ajax: {
+                    url: function(params){
+    return admin_ajax +'?action=get_manage_user'   
+                        // return "https://api.github.com/search/repositories"
+                    },
+                    dataType: 'json',
+                    delay: 250,//在多少毫秒内没有输入时则开始请求服务器
+                    processResults: function (data, params) {
+                    // 此处解析数据，将数据返回给select2
+                    console.log(data.data)
+                    var x=data.data;
+                   
+                     return {
+                        results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
+                    };
+                    },
+                    cache: true
+                },
+                placeholder: '请输入关键字',
+                escapeMarkup: function (markup) { return markup; }, // 字符转义处理
+                templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
+                templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
+                language:'zh-CN'
+
+        })
+          function formatRepo (repo) {//repo对象根据拼接返回结果
+                if (repo.loading) {
+                    return repo.text;
+                }
+                
+                return repo.text;
+                }
+ 
+ 
+                function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
+                // console.log(repo)
+                return  repo.text;
+                }
+    // $('.change_ajax').keyup(function(){
+    //     var _this=$(this);
+    //     _this.next('.select_box').remove()
+    //     //if(!_this.hasClass('loading')){
+    //         var keywords = _this.val();/*
+    //         if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };*/
+    //         var data={
+    //             action:"get_manage_user",
+    //             value:keywords
+    //         };
+    //         _this.parents('div').append('<div class="select_box" id="select_box"></div>')
+    //         // _this.parents('div').css("position","relative");
+    //         $.ajax({
+    //             data:data,
+    //             type:"POST",
+    //             beforeSend:function(){
+    //                 _this.next('.select_box').empty().append('<div class="select_row">正在加载...</div>');
+    //                 _this.addClass('loading')
+    //             },
+    //             success:function(res){
+    //                 console.log(res)
+    //                 var dom="";
+    //                 _this.next('.select_box').empty().show();
+    //                 if(res.success){
+    //                     if(res.data == ''){
+    //                         var item='<div class="select_row">未搜到该用户</div>'
+    //                         dom+=item
+    //                     }else {
+
+    //                         $.each(res.data,function(i,v){
+    //                             var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
+    //                             dom+=item
+    //                         })
+
+    //                     }
+
+    //                 }else {
+    //                     var item='<div class="select_row">未搜到该用户....</div>'
+    //                     dom+=item
+    //                 }
+    //                 _this.next('.select_box').append(dom)
+    //                 _this.removeClass('loading')
+    //             },
+    //             error:function(){
+    //                 _this.next('.select_box').empty().show();
+    //                 _this.next('.select_box').append('<div class="select_row">网络延迟</div>');
+    //                 _this.next('.select_box').remove()
+    //                 _this.removeClass('loading')
+    //             }
+    //         })
+    //     //}
+    // })
+    // $('body').on('click','.choose',function(){
+    //     var _this=$(this);
+    //     var val=_this.attr('data-value');
+    //     var id=_this.attr('data-id');
+    //     _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
+    //     _this.parent('.select_box').parent('div').find('.get_id').val(id)
+    // })
+    // $('body').click(function(e){
+    //     if($('#select_box').length>0){
+    //         var box=$('#select_box');
+    //         if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
+    //             box.parent('div').find('input').val('');
+    //         }
+    //     }
+        
+    //     $('.select_box').remove()
+    // })
     var imgs=[]
     var imgs1=[]
     $('.img-zoos').each(function(){
@@ -379,5 +443,6 @@ jQuery(function($) {
             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
         }) 
     });
+
 })
 </script>
