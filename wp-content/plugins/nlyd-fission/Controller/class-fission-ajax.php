@@ -202,6 +202,20 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '操作成功']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+
+    /**
+     * 修改提现记录发放状态
+     */
+    public function updateExtractStatus(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        if($id < 1 || $status < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb,$current_user;
+
+        $bool = $wpdb->update($wpdb->prefix.'user_extract',['censor_user_id'=>$current_user->ID,'extract_status'=>$status,'censor_time'=>get_time('mysql')],['id'=>$id]);
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
 }
 
 new Fission_Ajax();
