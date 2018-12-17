@@ -630,13 +630,19 @@ class Spread{
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
         $where = "";
+        $join = '';
         if($searchStr != ''){
-            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%'";
+            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%'";
+            $join = " LEFT JOIN {$wpdb->users} AS u ON u.ID=ue.extract_id 
+                      LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'
+                      LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=ue.extract_id";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM {$wpdb->prefix}user_extract
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name FROM {$wpdb->prefix}user_extract AS ue 
+                LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=ue.censor_user_id AND um.meta_key='user_real_name'
+                {$join}
                 {$where} 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
-
+//        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -659,7 +665,7 @@ class Spread{
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-extract-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
@@ -684,7 +690,8 @@ class Spread{
                     <th scope="col" id="apply_time" class="manage-column column-apply_time">申请时间</th>
                     <th scope="col" id="censor_time" class="manage-column column-censor_time">审核时间</th>
                     <th scope="col" id="extract_status" class="manage-column column-extract_status">提现状态</th>
-                    <th scope="col" id="censor_user_id" class="manage-column column-censor_user_id">操作人</th>
+                    <th scope="col" id="censor_user_id" class="manage-column column-censor_user_id">审核人</th>
+                    <th scope="col" id="options1" class="manage-column column-options1">操作</th>
                 </tr>
                 </thead>
 
@@ -706,7 +713,7 @@ class Spread{
                         $real_name = $wpdb->get_var("SELECT zone_name FROM {$wpdb->prefix}zone_meta WHERE id={$row['extract_id']}");
                     }
                     ?>
-                    <tr data-uid="<?=$row['id']?>">
+                    <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
                             <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
@@ -755,7 +762,25 @@ class Spread{
                             }
                         ?>
                         </td>
-                        <td class="censor_user_id column-censor_user_id" data-colname="操作人"> <?=$row['censor_user_id']?></td>
+                        <td class="censor_user_id column-censor_user_id" data-colname="审核人">
+                            <?=$row['censor_real_name'] ? unserialize($row['censor_real_name'])['real_name']:get_user_by('ID','censor_user_id')->user_login?>
+                        </td>
+                        <td class="options1 column-options1" data-colname="操作">
+                            <?php
+                            switch ($row['extract_status']){
+                                case '1':
+                                    echo '<a href="javascript:;" class="option-a" data-status="2">改为已提现</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
+                                    break;
+                                case '2':
+                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="3">改为未通过</a>';
+                                    break;
+                                case '3':
+                                    echo '<a href="javascript:;" class="option-a" data-status="1">改为审核中</a> | <a href="javascript:;" class="option-a" data-status="2">改为已提现</a>';
+                                    break;
+                            }
+                            ?>
+
+                        </td>
 
 
                     </tr>
@@ -774,7 +799,8 @@ class Spread{
                     <th scope="col" class="manage-column column-apply_time">申请时间</th>
                     <th scope="col" class="manage-column column-censor_time">审核时间</th>
                     <th scope="col" class="manage-column column-extract_status">提现状态</th>
-                    <th scope="col" class="manage-column column-censor_user_id">操作人</th>
+                    <th scope="col" class="manage-column column-censor_user_id">审核人</th>
+                    <th scope="col" class="manage-column column-options1">操作</th>
                 </tr>
                 </tfoot>
 
@@ -791,7 +817,28 @@ class Spread{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
-
+                    $('.option-a').on('click', function () {
+                        var _id = $(this).closest('tr').attr('data-id');
+                        var status = $(this).attr('data-status');
+                        if(_id == '' || _id == undefined) return false;
+                        if(status != '2' && status != '3' && status != '1') return false;
+                        if(confirm('是否确定将状态修改发放状态?')){
+                            $.ajax({
+                                url : ajaxurl,
+                                data : {'action':'updateExtractStatus','id':_id,'status':status},
+                                dataType : 'json',
+                                type : 'post',
+                                success : function (response) {
+                                    alert(response.data.info);
+                                    if(response['success']){
+                                        window.location.reload();
+                                    }
+                                },error : function () {
+                                    alert('请求失败!');
+                                }
+                            });
+                        }
+                    });
                 });
             </script>
         </div>

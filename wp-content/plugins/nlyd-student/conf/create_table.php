@@ -114,7 +114,8 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `zone_type_id` int(20) DEFAULT NULL COMMENT '机构类型id',
-          `role_id` varchar(255) DEFAULT NULL COMMENT '权限id合集 以,为分割符',
+          `match_role_id` varchar(255) DEFAULT NULL COMMENT '赛事权限id合集 以,为分割符',
+          `role_id` varchar(255) DEFAULT NULL COMMENT '基础权限id合集 以,为分割符',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);

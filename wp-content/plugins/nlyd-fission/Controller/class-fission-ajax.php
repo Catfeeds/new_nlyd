@@ -140,10 +140,10 @@ class Fission_Ajax
         $type_id = isset($_POST['val']) ? intval($_POST['val']) : 0;
         if($type_id < 1) wp_send_json_error(['info' => '参数错误!']);
         global $wpdb;
-        $powerList = $wpdb->get_results("SELECT ztr.* FROM {$wpdb->prefix}zone_join_role AS zjr 
-                         LEFT JOIN {$wpdb->prefix}zone_type_role AS ztr ON ztr.id=zjr.zone_type_id 
-                        WHERE zjr.zone_type_id='{$type_id}'", ARRAY_A);
-        wp_send_json_success(['data'=>$powerList]);
+        $powerList = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$type_id}'", ARRAY_A);
+        if($powerList) wp_send_json_success(['data'=>$powerList]);
+        else wp_send_json_error(['info' => '获取权限失败!']);
+
     }
 
     /**
@@ -200,6 +200,20 @@ class Fission_Ajax
         $sql = "UPDATE {$wpdb->prefix}course SET is_enable='{$status}' WHERE id IN({$id})";
         $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info' => '操作成功']);
+        else wp_send_json_error(['info' => '操作失败!']);
+    }
+
+    /**
+     * 修改提现记录发放状态
+     */
+    public function updateExtractStatus(){
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        if($id < 1 || $status < 1) wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb,$current_user;
+
+        $bool = $wpdb->update($wpdb->prefix.'user_extract',['censor_user_id'=>$current_user->ID,'extract_status'=>$status,'censor_time'=>get_time('mysql')],['id'=>$id]);
+        if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
 }
