@@ -1,4 +1,23 @@
 jQuery(document).ready(function($) {
+
+    var _style="<style type='text/css' id='_font'>"
+             
+        +"@font-face {font-family: 'iconfont';"
+            +"src: url('"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/font/iconfont.eot');"
+            +"src: url('"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/font/iconfont.eot?#iefix') format('embedded-opentype'),"
+            +"url('"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/font/iconfont.woff') format('woff'),"
+            +"url('"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/font/iconfont.ttf') format('truetype'),"
+            +"url('"+window.home_url+"/wp-content/plugins/nlyd-student/Public/css/font/iconfont.svg#iconfont') format('svg');"
+        +"}"
+        +".iconfont{"
+            +"font-family:'iconfont' !important;"
+            +"font-size:0.16rem;font-style:normal;"
+            +"-webkit-font-smoothing: antialiased;"
+            +"-webkit-text-stroke-width: 0;"
+            +"-moz-osx-font-smoothing: grayscale;"
+        +"}"
+    +"</style>"
+    $("#my-student-css").before(_style)
     if('ontouchstart' in window){
         var dom='<meta name="viewport"  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">'
         $('body').append(dom)
