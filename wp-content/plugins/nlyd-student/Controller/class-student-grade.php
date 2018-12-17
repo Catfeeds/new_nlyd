@@ -777,7 +777,7 @@ class Student_Grade extends Student_Home
 
             );
 
-            $wpdb->startTrans();
+            $wpdb->query('START TRANSACTION');
             $a = $wpdb->update($wpdb->prefix.'user_grade_log_history',$update,array('id'=>$_GET['history_id'],'user_id'=>$current_user->ID));
 
             if(empty($rank_row) && $grading_result == 1){
@@ -791,9 +791,9 @@ class Student_Grade extends Student_Home
             }
             //var_dump($a .'----'. $b);die;
             if($a && $b ){
-                $wpdb->commit();
+                $wpdb->query('COMMIT');
             }else{
-                $wpdb->rollback();
+                $wpdb->query('ROLLBACK');
             }
 
             $sql_1 = "select a.id history_id,b.id questions_id from {$wpdb->prefix}user_grade_log_history a  

@@ -832,13 +832,19 @@ class Match
      * 口号类型设置box
      */
     public function slogan_review_meta_box($post){
-        $args = array(
+
+        global $wpdb;
+        $match_genre = $wpdb->get_results("select a.ID,a.post_title from {$wpdb->prefix}posts a 
+                                  left join {$wpdb->prefix}postmeta b on a.ID = b.post_id and b.meta_key='project_alias'
+                                  where a.post_type = 'genre' and a.post_status = 'publish' and b.meta_value in('mental_world_cup','digital_brain_king','counting_brain_marathon')");
+        //print_r($match_genre);
+        /*$args = array(
             'post_type' => array('genre'),
             'post_status' => array('publish'),
             'order' => 'DESC',
         );
         $the_query = new WP_Query( $args );
-        global $wpdb;
+        global $wpdb;*/
         $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
 
         $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
@@ -868,11 +874,11 @@ class Match
         <div class="layui-form-item">
             <label class="layui-form-label">比赛类型</label>
             <div class="layui-input-block">
-            <?php if(!empty($the_query->post)){ ?>
+            <?php if(!empty($match_genre)){ ?>
                 <select name="match[match_genre]" lay-search="">
                     <option value="">请选择</option>
                     <?php
-                    foreach ($the_query->posts as $v){
+                    foreach ($match_genre as $v){
                         $selected = $v->ID == $this->meta['match_genre'] ? "selected":" ";
                         echo '<option value="'.$v->ID.'" '.$selected.'>'.$v->post_title.'</option>';
                     }
@@ -1198,14 +1204,21 @@ class Match
                 " ;
         $rows = $wpdb->get_results($sql);
 
+        $list = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
+
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">考级场景</label>
             <div class="layui-input-block">
                 <select name="grading[scene]" lay-search="">
                     <option value="">请选择</option>
-                    <option value="1" <?=$this->grading['scene'] == 1 ? 'selected' : '';?> >正式考级</option>
-                    <option value="2" <?=$this->grading['scene'] == 2 ? 'selected' : '';?> >模拟考级</option>
+                    <?php if(!empty($list)){?>
+                        <?php foreach ($list as $x){ ?>
+                            <option value="<?=$x->id?>" <?=$this->grading['scene'] == $x->id ? 'selected' : '';?> ><?=$x->role_name?></option>
+                        <?php } ?>
+                    <?php }else{ ?>
+                        <option value="1" <?=$this->grading['scene'] == 1 ? 'selected' : '';?> >正式比赛</option>
+                    <?php } ?>
                 </select>
             </div>
         </div>

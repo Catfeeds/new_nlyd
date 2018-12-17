@@ -27,11 +27,11 @@
                     <div class="profit_footer flex-h">
                         <div class="flex1 ta_c">
                             <span class="c_black"><?=__('今日收益', 'nlyd-student')?>：</span>
-                            <span class="c_green">¥ <?=$stream?></span>
+                            <span class="c_green">¥ <?=$stream > 0 ? $stream : number_format($stream,2)?></span>
                         </div>
                         <div class="flex1 ta_c">
                             <span class="c_black"><?=__('累计收益', 'nlyd-student')?>：</span>
-                            <span class="c_green">¥ <?=$stream_total?></span>
+                            <span class="c_green">¥ <?=$stream_total > 0 ? $stream_total : number_format($stream_total,2)?></span>
                         </div>
                     </div>
                 </div>
@@ -100,9 +100,10 @@ jQuery(function($) {
                             profit_page++
                             isClick[id]=true
                             if(res.success){
+                                var Detail_url = "<?=home_url('zone/profitDetail/id/');?>";
                                 $.each(res.data.info,function(i,v){
                                     var color=v.income_type_class=="bg_add" ? "c_green":"c_black3";
-                                    var dom='<a class="profit_list c_black layui-row" href="<?=home_url('zone/profitDetail');?>">'
+                                    var dom='<a class="profit_list c_black layui-row" href="'+Detail_url+v.id+'">'
                                                 +'<div class="profit_inline profit_icon">'
                                                     +'<div class="zone_bg '+v.income_type_class+'"></div>'
                                                 +'</div>'

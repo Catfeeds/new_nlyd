@@ -90,7 +90,7 @@ class Course{
                     'course_type'=>$course_type,
                     'created_time'=>get_time('mysql'),
                 ];
-                $wpdb->startTrans();
+                $wpdb->query('START TRANSACTION');
                 $insertRes = $wpdb->insert($wpdb->prefix.'course', $insertData);
                 if($insertRes){
                     $id = $wpdb->insert_id;
@@ -101,15 +101,15 @@ class Course{
                         $bool = $wpdb->update($wpdb->prefix.'course',['course_img'=>$upload_dir['baseurl'].$dir.$file],['id'=>$id]);
                         if($bool){
                             $success = '添加成功';
-                            $wpdb->commit();
+                            $wpdb->query('COMMIT');
                         }else{
                             $msg = '添加失败';
                             if(is_file($upload_dir['basedir'].$dir.$file)) unlink($upload_dir['basedir'].$dir.$file);
-                            $wpdb->rollback();
+                            $wpdb->query('ROLLBACK');
                         }
                     }else{
                         $success = '添加成功';
-                        $wpdb->commit();
+                        $wpdb->query('COMMIT');
                     }
                 }else{
                     $msg = '添加失败';
