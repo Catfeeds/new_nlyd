@@ -170,6 +170,23 @@ class Student_Zone extends Student_Home
                                   where a.post_type = 'genre' and a.post_status = 'publish' and b.meta_value in('mental_world_cup','digital_brain_king','counting_brain_marathon')");
          $data['scene_list'] = !empty($match_role) ? json_encode($match_role) : '';
          $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
+
+         if(isset($_GET['match_id'])){
+             //获取比赛信息
+             $sql = "select a.post_title ,c.role_name as scene_title,d.post_title as genre_title, b.* from {$wpdb->prefix}posts a 
+                      left join {$wpdb->prefix}match_meta_new b on a.ID = b.match_id 
+                      left join {$wpdb->prefix}zone_match_role c on b.match_scene = c.id 
+                      left join {$wpdb->prefix}posts d on b.match_genre = d.ID 
+                      where a.ID = {$_GET['match_id']}
+                      ";
+             $match = $wpdb->get_row($sql,ARRAY_A);
+             if(!empty($match['match_start_time'])){
+                 $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
+             }
+             $data['match'] = $match;
+             print_r($match);
+         }
+
          $view = student_view_path.CONTROLLER.'/match-build.php';
          load_view_template($view,$data);
     }
