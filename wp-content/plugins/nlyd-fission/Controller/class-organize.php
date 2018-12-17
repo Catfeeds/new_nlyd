@@ -397,7 +397,7 @@ class Organize{
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
             $course_power = isset($_POST['course_power']) ? $_POST['course_power'] : [];
             if($zone_type_name == '') $error_msg = '请填写类型名称';
-            if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事/考级权限错误':$error_msg.'<br >赛事/考级权限错误';
+            if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($course_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($zone_type_alias == '') $error_msg = $error_msg==''?'请填写类型别名':$error_msg.'<br >请填写类型别名';
             if($zone_type_status != 1 && $zone_type_status != 2) $error_msg = $error_msg==''?'请选择类型状态':$error_msg.'<br >请选择类型状态';
@@ -413,8 +413,8 @@ class Organize{
                 $wpdb->query('START TRANSACTION');
                 if($id > 0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_type',$insertData,['id'=>$id]);
-                    $powerOne = $wpdb->get_row("SELECT id,match_role_id,course_role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
-                    if($powerOne && $powerOne['match_role_id'] == $match_role_ids && $powerOne['course_role_id'] == $course_role_ids){
+                    $powerOne = $wpdb->get_row("SELECT id,match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
+                    if($powerOne && $powerOne['match_role_id'] == $match_role_ids && $powerOne['role_id'] == $course_role_ids){
                        if(!$bool){
                            $wpdb->query('ROLLBACK');
                            $error_msg = '操作失败!';
@@ -424,9 +424,9 @@ class Organize{
                        }
                     }else{
                         if($powerOne){
-                            $powerBool = $wpdb->update($wpdb->prefix.'zone_join_role', ['match_role_id'=>$match_role_ids,'course_role_id'=>$course_role_ids],['id'=>$powerOne['id']]);
+                            $powerBool = $wpdb->update($wpdb->prefix.'zone_join_role', ['match_role_id'=>$match_role_ids,'role_id'=>$course_role_ids],['id'=>$powerOne['id']]);
                         }else{
-                            $powerBool = $wpdb->insert($wpdb->prefix.'zone_join_role', ['zone_type_id'=>$id,'match_role_id'=>$match_role_ids,'course_role_id'=>$course_role_ids]);
+                            $powerBool = $wpdb->insert($wpdb->prefix.'zone_join_role', ['zone_type_id'=>$id,'match_role_id'=>$match_role_ids,'role_id'=>$course_role_ids]);
                         }
                         if($powerBool) {
                             $wpdb->query('COMMIT');
@@ -443,7 +443,7 @@ class Organize{
                             $zone_type_id = $wpdb->insert_id;
                             $match_role_ids = join(',',$match_power);
                             $course_role_ids = join(',',$course_power);
-                            $powerSql = "INSERT INTO {$wpdb->prefix}zone_join_role (`zone_type_id`,`match_role_id`,`course_role_id`) VALUES ('{$zone_type_id}','{$match_role_ids}','{$course_role_ids}')";
+                            $powerSql = "INSERT INTO {$wpdb->prefix}zone_join_role (`zone_type_id`,`match_role_id`,`role_id`) VALUES ('{$zone_type_id}','{$match_role_ids}','{$course_role_ids}')";
                             $powerBool = $wpdb->query($powerSql);
                             if($powerBool) {
                                 $wpdb->query('COMMIT');
@@ -463,15 +463,17 @@ class Organize{
                 }
             }
         }
-        $matchPowerList = [];   //已有赛事/考级权限
-        $coursePowerList = [];            //已有课程/考级权限
+        $oldMatchPowerList = [];   //已有赛事/考级权限
+        $oldPowerList = [];            //已有课程/考级权限
         if($id > 0){
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}zone_type WHERE id='{$id}'", ARRAY_A);
-            $oldPowerList = $wpdb->get_row("SELECT match_role_id,course_role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
-            $matchPowerList = explode(',', $oldPowerList['match_role_id']);   //已有赛事/考级权限
-            $coursePowerList = explode(',', $oldPowerList['course_role_id']);            //已有课程/考级权限
+
+            $oldPowerLists = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$id}'", ARRAY_A);
+            $oldMatchPowerList = explode(',', $oldPowerLists['match_role_id']);   //已有赛事权限
+            $oldPowerList = explode(',', $oldPowerLists['role_id']);            //已有基础权限
         }
         //权限列表
+        $matchPowerList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_match_role",ARRAY_A);
         $powerList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
         <div class="wrap">
@@ -509,29 +511,25 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row">考级/赛事权限</th>
+                        <th scope="row">比赛权限</th>
                         <td>
                             <?php
-                            foreach ($powerList as $plv){
-                                if($plv['role_type'] == '1'){
+                            foreach ($matchPowerList as $mplv){
                             ?>
-                                <label for="match_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$matchPowerList)?'checked="checked"':''?> id="match_power_<?=$plv['id']?>" type="checkbox" name="match_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                                <label for="match_power_<?=$mplv['id']?>"><input <?=in_array($mplv['id'],$oldMatchPowerList)?'checked="checked"':''?> id="match_power_<?=$mplv['id']?>" type="checkbox" name="match_power[]" value="<?=$mplv['id']?>"><?=$mplv['role_name']?></label>
                             <?php
-                                }
                             }
                             ?>
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row">课程权限</th>
+                        <th scope="row">基础权限</th>
                         <td>
                             <?php
                             foreach ($powerList as $plv){
-                                if($plv['role_type'] == '2'){
                                 ?>
-                                <label for="course_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$coursePowerList)?'checked="checked"':''?> id="course_power_<?=$plv['id']?>" type="checkbox" name="course_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                                <label for="course_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$oldPowerList)?'checked="checked"':''?> id="course_power_<?=$plv['id']?>" type="checkbox" name="course_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
                             <?php
-                                }
                             }
                             ?>
                         </td>
@@ -706,7 +704,7 @@ class Organize{
             if($user_id < 0) $error_msg = '请选择负责人';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
-            if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事/考级权限错误':$error_msg.'<br >赛事/考级权限错误';
+            if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
             if(!is_array($course_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
@@ -737,7 +735,7 @@ class Organize{
                     'chairman_id' => $chairman_id,
                     'secretary_id' => $secretary_id,
                     'match_role_id' => join(',',$match_power),
-                    'course_role_id' => join(',',$course_power),
+                    'role_id' => join(',',$course_power),
                     'parent_id' => $parent_id,
                 ];
                 //图片
@@ -772,7 +770,7 @@ class Organize{
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
                    zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,um3.meta_value AS chairman_real_name,um4.meta_value AS secretary_real_name,
-                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.course_role_id,zmp.zone_name AS parent_name,zm.parent_id 
+                   zm.chairman_id,zm.secretary_id,zm.match_role_id,zm.role_id,zmp.zone_name AS parent_name,zm.parent_id 
                    FROM {$wpdb->prefix}zone_meta AS zm 
                    LEFT JOIN {$wpdb->users} AS u ON u.ID=zm.user_id AND u.ID!='' 
                    LEFT JOIN {$wpdb->users} AS u2 ON u2.ID=zm.referee_id AND u2.ID!='' 
@@ -784,16 +782,18 @@ class Organize{
                    WHERE zm.id='{$old_zm_id}'", ARRAY_A);
 //            leo_dump($wpdb->last_query);die;
             $match_role_id = $row['match_role_id']; //已有赛事权限
-            $course_role_id = $row['course_role_id']; //已有课程权限
+            $role_id = $row['role_id']; //已有课程权限
         }else{
-            $role_id = $wpdb->get_row("SELECT match_role_id,course_role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
+            $role_id = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
             $match_role_id = $role_id['match_role_id'];
-            $course_role_id = $role_id['course_role_id'];
+            $role_id = $role_id['role_id'];
         }
         $match_role_id = explode(',',$match_role_id);
-        $course_role_id = explode(',',$course_role_id);
-        //赛事权限
-        $powerList = $wpdb->get_results("SELECT id,role_name,role_type FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
+        $role_id = explode(',',$role_id);
+        //所有赛事权限
+        $allMatchPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
+        //所有基础权限
+        $allPowerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑主体</h1>
@@ -838,25 +838,25 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row">赛事/考级权限</th>
+                        <th scope="row">赛事权限</th>
                         <td id="match_power_td">
-                            <?php foreach ($powerList as $plv){
-                                if($plv['role_type'] == '1'){
+                            <?php foreach ($allMatchPowerList as $amplv){
                                 ?>
-                                <label for="match_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$match_role_id)?'checked="checked"':''?> id="match_power_<?=$plv['id']?>" type="checkbox" name="match_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
-                            <?php }
-                            } ?>
+                                <label for="match_power_<?=$amplv['id']?>"><input <?=in_array($amplv['id'],$match_role_id)?'checked="checked"':''?> id="match_power_<?=$amplv['id']?>" type="checkbox" name="match_power[]" value="<?=$amplv['id']?>"><?=$amplv['role_name']?></label>
+                            <?php
+                            }
+                            ?>
                         </td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row">课程权限</th>
+                        <th scope="row">基础权限</th>
                         <td id="course_power_td">
-                            <?php foreach ($powerList as $plv){
-                                if($plv['role_type'] == '2'){
+                            <?php foreach ($allPowerList as $plv){
                                 ?>
-                                <label for="course_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$course_role_id)?'checked="checked"':''?> id="course_power_<?=$plv['id']?>" type="checkbox" name="course_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
-                            <?php }
-                            } ?>
+                                <label for="course_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$role_id)?'checked="checked"':''?> id="course_power_<?=$plv['id']?>" type="checkbox" name="course_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                            <?php
+                            }
+                            ?>
                         </td>
                     </tr>
                     <tr class="form-field">
@@ -973,7 +973,7 @@ class Organize{
                             success : function (response) {
                                 if(response['success']){
                                     var m_r_id = response.data.data.match_role_id != null ? response.data.data.match_role_id.split(','):[];
-                                    var c_r_id = response.data.data.course_role_id != null ? response.data.data.course_role_id.split(','):[];
+                                    var c_r_id = response.data.data.role_id != null ? response.data.data.role_id.split(','):[];
                                     $.each($('#match_power_td').find('input'),function (i,v) {
                                         if($.inArray($(v).val(),m_r_id) >= 0) {
                                             $(v).prop('checked','checked');

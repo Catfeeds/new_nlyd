@@ -140,7 +140,7 @@ class Fission_Ajax
         $type_id = isset($_POST['val']) ? intval($_POST['val']) : 0;
         if($type_id < 1) wp_send_json_error(['info' => '参数错误!']);
         global $wpdb;
-        $powerList = $wpdb->get_row("SELECT match_role_id,course_role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$type_id}'", ARRAY_A);
+        $powerList = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$type_id}'", ARRAY_A);
         if($powerList) wp_send_json_success(['data'=>$powerList]);
         else wp_send_json_error(['info' => '获取权限失败!']);
 
