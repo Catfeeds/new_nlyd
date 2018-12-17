@@ -12,7 +12,7 @@
                 </a>
                 <h1 class="mui-title"><div><?=__('发布考级', 'nlyd-student')?></div></h1>
             </header>
-            <div class="layui-row nl-border nl-content  have-bottom">
+            <div class="layui-row nl-border nl-content have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>

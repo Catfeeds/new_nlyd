@@ -508,7 +508,21 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="">
-                        <th scope="row">权限</th>
+                        <th scope="row">考级/赛事权限</th>
+                        <td>
+                            <?php
+                            foreach ($powerList as $plv){
+                                if($plv['role_type'] == '1'){
+                            ?>
+                                <label for="power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$editPowerListArr)?'checked="checked"':''?> id="power_<?=$plv['id']?>" type="checkbox" name="power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row">课程权限</th>
                         <td>
                             <?php foreach ($powerList as $plv){
                                 ?>
@@ -745,7 +759,6 @@ class Organize{
         }
         //类型列表
         $typeList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
-        $editPowerListArr = [];
         if($old_zm_id > 0){
             $row = $wpdb->get_row("SELECT zm.user_id,zm.type_id,zm.referee_id,zm.user_status,u.user_mobile,u.user_login,um.meta_value AS user_real_name,zm.zone_name,
                    um2.meta_value AS referee_real_name,u2.user_login AS referee_login,u2.user_mobile AS referee_mobile,zm.zone_address,zm.business_licence,zm.business_licence_url,
@@ -761,15 +774,13 @@ class Organize{
                    LEFT JOIN {$wpdb->prefix}zone_meta AS zmp ON zmp.id=zm.parent_id  
                    WHERE zm.id='{$old_zm_id}'", ARRAY_A);
 //            leo_dump($wpdb->last_query);die;
-            //权限列表
-            $role_id = $wpdb->get_var("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$row['type_id']}'");
             //已有权限
-            $editPowerListArr = explode(',',$row['role_id']);
+            $role_id = $row['role_id'];
         }else{
-            //权限列表
             $role_id = $wpdb->get_var("SELECT role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'");
         }
-        $powerList = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_type_role WHERE id IN({$role_id})", ARRAY_A);
+        $powerList = $wpdb->get_results("SELECT id,role_name FROM {$wpdb->prefix}zone_type_role", ARRAY_A);
+        $role_id_arr = explode(',',$role_id);
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑主体</h1>
@@ -818,7 +829,7 @@ class Organize{
                         <td id="power_td">
                             <?php foreach ($powerList as $plv){
                                 ?>
-                                <label for="power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$editPowerListArr)?'checked="checked"':''?> id="power_<?=$plv['id']?>" type="checkbox" name="power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                                <label for="power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$role_id_arr)?'checked="checked"':''?> id="power_<?=$plv['id']?>" type="checkbox" name="power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
                             <?php } ?>
                         </td>
                     </tr>
@@ -926,26 +937,7 @@ class Organize{
             </form>
             <script>
                 jQuery(document).ready(function($) {
-                    $('#zone_type').on('change', function () {
-                        var val = $(this).val();
-                        $.ajax({
-                            url : ajaxurl,
-                            data : {'action':'getPowerListByType','val':val},
-                            type : 'post',
-                            dataType : 'json',
-                            success : function (response) {
-                                if(response['success']){
-                                    var _html = '';
-                                    $.each(response.data.data,function (i,v) {
-                                        _html += "<label for='power_"+v['role_name']+"'><input id='power_"+v['role_name']+"' type='checkbox' name='power[]' value='"+v['id']+"'>"+v['role_name']+"</label>";
-                                    })
-                                    $('#power_td').html(_html);
-                                }
-                            },error : function () {
 
-                            }
-                        });
-                    });
                 });
             </script>
         </div>
@@ -962,12 +954,15 @@ class Organize{
             $success_msg = '';
             $error_msg = '';
             $role_name = isset($_POST['role_name']) ? trim($_POST['role_name']) : '';
+            $role_type = isset($_POST['role_type']) ? intval($_POST['role_type']) : 0;
 
             if($role_name == '') $error_msg = '请填写类型名称';
+            if($role_type < 1) $error_msg = $error_msg==''?'权限类型参数错误':$error_msg.'<br >权限类型参数错误';
 
             if($error_msg == ''){
                 $insertData = [
                     'role_name' => $role_name,
+                    'role_type' => $role_type,
                 ];
                 if($id > 0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_type_role',$insertData,['id'=>$id]);
@@ -998,6 +993,16 @@ class Organize{
                         <th scope="row"><label for="role_name">权限名称 </label></th>
                         <td>
                             <input name="role_name" type="text" id="role_name" value="<?=isset($row['role_name'])?$row['role_name']:''?>" maxlength="60">
+                        </td>
+                    </tr>
+
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="role_type">权限类型 </label></th>
+                        <td>
+                            <select name="role_type" id="role_type">
+                                <option value="1" <?=$row['role_type'] == '1'?'checked="checked"':''?>>赛事/考级</option>
+                                <option value="2" <?=$row['role_type'] == '2'?'checked="checked"':''?>>课程权限</option>
+                            </select>
                         </td>
                     </tr>
 

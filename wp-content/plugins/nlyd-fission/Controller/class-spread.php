@@ -570,6 +570,9 @@ class Spread{
                                 case 'grading':
                                     echo '考级';
                                     break;
+                                case 'extract':
+                                    echo '提现';
+                                    break;
                             }
                             ?>
                         </td>
@@ -619,7 +622,180 @@ class Spread{
      * 提现记录
      */
     public function profitExtractLog(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $where = "";
+        if($searchStr != ''){
+            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%'";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM {$wpdb->prefix}user_extract
+                {$where} 
+                LIMIT {$start},{$pageSize}",ARRAY_A);
+
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">提现记录</h1>
+
+
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤提现记录</h2>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+            </p>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/主体</th>
+                    <th scope="col" id="extract_user_type" class="manage-column column-extract_user_type">提现类型</th>
+                    <th scope="col" id="extract_amount" class="manage-column column-extract_amount">提现金额</th>
+                    <th scope="col" id="extract_type" class="manage-column column-extract_type">收款类型</th>
+                    <th scope="col" id="extract_account" class="manage-column column-extract_account">收款账号</th>
+                    <th scope="col" id="apply_time" class="manage-column column-apply_time">申请时间</th>
+                    <th scope="col" id="censor_time" class="manage-column column-censor_time">审核时间</th>
+                    <th scope="col" id="extract_status" class="manage-column column-extract_status">提现状态</th>
+                    <th scope="col" id="censor_user_id" class="manage-column column-censor_user_id">操作人</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    if($row['extract_user_type'] == 1){
+                        $user_real_name = get_user_meta($row['extract_id'], 'user_real_name', true);
+                        if($user_real_name) {
+                            $real_name = $user_real_name['real_name'];
+                        }else{
+                            $real_name = get_user_by('ID',$row['extract_id'])->user_login;
+                        }
+
+                        $extract_type_name = '用户提现';
+                    }else{
+                        $extract_type_name = '主体提现';
+                        $real_name = $wpdb->get_var("SELECT zone_name FROM {$wpdb->prefix}zone_meta WHERE id={$row['extract_id']}");
+                    }
+                    ?>
+                    <tr data-uid="<?=$row['id']?>">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
+                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名">
+                            <?=$real_name?>
+                            <br>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="extract_user_type column-extract_user_type" data-colname="提现金额"><?=$extract_type_name?> </td>
+                        <td class="extract_amount column-extract_amount" data-colname="提现金额"><?=$row['extract_amount']?> </td>
+                        <td class="extract_type column-extract_type" data-colname="收款类型">
+                            <?php
+                                switch ($row['extract_type']){
+                                    case '1':
+                                        echo '微信';
+                                        break;
+                                    case '2':
+                                        echo '支付宝';
+                                        break;
+                                    case '3':
+                                        echo '银行';
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td class="extract_account column-extract_account" data-colname="收款账号"><?=$row['extract_account']?> </td>
+                        <td class="apply_time column-apply_time" data-colname="申请时间"> <?=$row['apply_time']?></td>
+                        <td class="censor_time column-censor_time" data-colname="审核时间"> <?=$row['censor_time']?></td>
+                        <td class="extract_status column-extract_status" data-colname="提现状态">
+                        <?php
+                            switch ($row['extract_status']){
+                                case '1':
+                                    echo '审核中';
+                                    break;
+                                case '2':
+                                    echo '已提现';
+                                    break;
+                                case '3':
+                                    echo '未通过';
+                                    break;
+                            }
+                        ?>
+                        </td>
+                        <td class="censor_user_id column-censor_user_id" data-colname="操作人"> <?=$row['censor_user_id']?></td>
+
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名/主体</th>
+                    <th scope="col" class="manage-column column-extract_user_type">提现类型</th>
+                    <th scope="col" class="manage-column column-extract_amount">提现金额</th>
+                    <th scope="col" class="manage-column column-extract_type">收款类型</th>
+                    <th scope="col" class="manage-column column-extract_account">收款账号</th>
+                    <th scope="col" class="manage-column column-apply_time">申请时间</th>
+                    <th scope="col" class="manage-column column-censor_time">审核时间</th>
+                    <th scope="col" class="manage-column column-extract_status">提现状态</th>
+                    <th scope="col" class="manage-column column-censor_user_id">操作人</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+
+                });
+            </script>
+        </div>
+        <?php
     }
 
     /**

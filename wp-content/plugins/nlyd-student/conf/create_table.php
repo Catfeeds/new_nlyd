@@ -129,6 +129,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `role_name` varchar(255) DEFAULT NULL COMMENT '权限名',
+          `role_type` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT '1比赛和考,2课程',
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
         //print_r($sql);
