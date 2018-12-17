@@ -1198,14 +1198,21 @@ class Match
                 " ;
         $rows = $wpdb->get_results($sql);
 
+        $list = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
+
     ?>
         <div class="layui-form-item">
             <label class="layui-form-label">考级场景</label>
             <div class="layui-input-block">
                 <select name="grading[scene]" lay-search="">
                     <option value="">请选择</option>
-                    <option value="1" <?=$this->grading['scene'] == 1 ? 'selected' : '';?> >正式考级</option>
-                    <option value="2" <?=$this->grading['scene'] == 2 ? 'selected' : '';?> >模拟考级</option>
+                    <?php if(!empty($list)){?>
+                        <?php foreach ($list as $x){ ?>
+                            <option value="<?=$x->id?>" <?=$this->grading['scene'] == $x->id ? 'selected' : '';?> ><?=$x->role_name?></option>
+                        <?php } ?>
+                    <?php }else{ ?>
+                        <option value="1" <?=$this->grading['scene'] == 1 ? 'selected' : '';?> >正式比赛</option>
+                    <?php } ?>
                 </select>
             </div>
         </div>
