@@ -756,7 +756,7 @@ class Teacher
             if(empty($_POST['pass1']) || $_POST['pass1'] != $_POST['pass2']) $errStr = '两次输入的密码不一样';
             if(!preg_match('/1[345678][0-9]{9}/', $_POST['user_mobile'])) $errStr = '手机格式错误';
             if($errStr == '') {
-                $wpdb->startTrans();
+                $wpdb->query('START TRANSACTION');
                 $insertData = [
                     'user_login' => $_POST['user_login'],
                     'user_pass' => $_POST['pass1'],
@@ -767,7 +767,7 @@ class Teacher
                 ];
                 $userId = wp_insert_user($insertData);
                 if(is_object($userId)){
-                    $wpdb->rollback();
+                    $wpdb->query('ROLLBACK');
                     foreach ($userId->errors as $err){
                         foreach ($err as $er){
                             $errStr .= $er.'<br />';
@@ -786,12 +786,12 @@ class Teacher
                     ];
                     $skillRes = $wpdb->insert($wpdb->prefix.'coach_skill', $skillData);
                     if(!$skillRes){
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                         $errStr = '<strong>添加失败</strong>';
                     }
                 }
                 if($errStr == '') {
-                    $wpdb->commit();
+                    $wpdb->query('COMMIT');
                     echo '<script type="text/javascript">window.location.href="'.admin_url('admin.php?page=teacher').'"</script>';
                     exit;
                 }

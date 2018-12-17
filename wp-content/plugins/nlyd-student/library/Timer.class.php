@@ -173,14 +173,14 @@ class Timer
 
                                         $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `income_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`, `indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`, `sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
                                         //print_r($sql);
-                                        $wpdb->startTrans();
+                                        $wpdb->query('START TRANSACTION');
                                         $result = $wpdb->query($sql);
                                         $result_ = $wpdb->query($sql_);
                                         //print_r($result.'-----'.$result_);
                                         if($result && $result_){
-                                            $wpdb->commit();
+                                            $wpdb->query('COMMIT');
                                         }else{
-                                            $wpdb->rollback();
+                                            $wpdb->query('ROLLBACK');
                                         }
 
                                     }
@@ -363,14 +363,14 @@ class Timer
                                     $sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `income_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`,`sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
 
                                     //print_r($sql_);
-                                    $wpdb->startTrans();
+                                    $wpdb->query('START TRANSACTION');
                                     $result = $wpdb->query($sql);
                                     $result_ = $wpdb->query($sql_);
                                     //print_r($result.'-----'.$result_.'****'.$v['grading_id'].'***');die;
                                     if($result && $result_){
-                                        $wpdb->commit();
+                                        $wpdb->query('COMMIT');
                                     }else{
-                                        $wpdb->rollback();
+                                        $wpdb->query('ROLLBACK');
                                     }
                                 }
                             }

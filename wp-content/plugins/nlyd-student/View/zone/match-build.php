@@ -15,6 +15,7 @@
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
+                        <?php if(!empty($scene_list)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('比赛类别', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
@@ -22,6 +23,7 @@
                                 <input class="radius_input_row nl-foucs" type="text" id="match_type1" readonly name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('比赛类别', 'nlyd-student')?>">
                             </div>
                         </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('比赛类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
@@ -64,8 +66,8 @@
 </div>
 <script>
 jQuery(function($) { 
-var match_type1_Data=[{id:1,value:"<?=__('正式比赛', 'nlyd-student')?>"},{id:2,value:"<?=__('模拟赛', 'nlyd-student')?>"}];//比赛类别
-var match_type2_Data=[{id:1,value:"脑力世界杯"},{id:2,value:"国学脑王大赛"}];//比赛类型
+var match_type1_Data=<?=$scene_list?>;//比赛类别
+var match_type2_Data=<?=$match_genre?>;//比赛类型
 var match_date_Data=$.validationLayui.dates2;//开赛日期
 var posiotion_match_type1=[0];//初始化位置，高亮展示
 var posiotion_match_type2=[0];//初始化位置，高亮展示

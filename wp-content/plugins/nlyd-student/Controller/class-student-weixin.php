@@ -197,7 +197,7 @@ class Student_Weixin
                         'weChat_openid'        => $res['openid'],
                         'weChat_union_id'        => $res['unionid'],
                     );
-                    $wpdb->startTrans();
+                    $wpdb->query('START TRANSACTION');
                     if(!$mobileUser){
                         $userMetaType = true;
                         $auth['user_nicename'] = $res['nickname'];
@@ -215,10 +215,10 @@ class Student_Weixin
                     }
                     $bool = $wpdb->update($wpdb->users,$auth,['ID' => $user_id]);
                     if(!$bool) {
-                        $wpdb->rollback();
+                        $wpdb->query('ROLLBACK');
                         return false;
                     }
-                    $wpdb->commit();
+                    $wpdb->query('COMMIT');
                 }else{
                     //已存在的微信用户绑定手机
                     $bool = $wpdb->update($wpdb->users,['user_'.$emailOrMobile => $res['mobile']],['ID' => $user_id]);
