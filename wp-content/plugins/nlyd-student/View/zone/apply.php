@@ -162,59 +162,14 @@ jQuery(function($) {
                
             }
         });
-    $('.img-zoos').on('click','.add-zoo',function(){//上传图片
-        var id=$(this).attr('data-file')
-        $('#'+id).click()
-    })
-    // tags: true,                             // 根据搜索框创建option，默认false
-    // maximumSelectionLength: 6,              // 最多能够选择的个数
-    // multiple: true,                         // 多选，默认false
-    // data: initdata,                         // 下拉框绑定的数据
-    // allowClear: true,                       // 清空，默认false
-    // placeholder: '请添加或选择语言'           // 占位提示符
-    // maximumInputLength: 20,                 // 允许搜索长度  
-    // minimumResultsForSearch: 20,            // 至少20个结果的时候显示搜索  
-    // minimumResultsForSearch: Infinity,      // 永久隐藏搜索框  
-    // selectOnClose: true,                    // 结果显示高亮  
-    // closeOnSelect: false,                   // select选中关闭下拉框  
-    // separator: ",",                         // 分隔符  
-
-        
+        $('.img-zoos').on('click','.add-zoo',function(){//上传图片
+            var id=$(this).attr('data-file')
+            $('#'+id).click()
+        })
         $('.js-data-select-ajax').select2({
-            // tags: false,
-            // maximumSelectionLength: 4,
-            // placeholder: '请添加或选择语言',
-            // multiple: false,
-            // closeOnSelect:true,
-            // ajax: {
-            //     url: admin_ajax +'?action=get_manage_user',
-            //     dataType: 'json',
-            //     data:function(params){
-            //         console.log(params)
-            //         return params.term;
-            //     },
-            //     delay: 600, //wait 250 milliseconds before triggering the request
-            //     processResults: function (res) {
-            //         // Tranforms the top-level key of the response object from 'items' to 'results'
-            //         return {
-            //             results: res.data
-            //         };
-            //     }
-            //     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            // },
-            // templateResult:function(repo){//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-            //     return repo.text;
-            // },
-            // templateSelection: function(repo) {
-            //     // console.log(repo)
-            //     return repo.text;
-            // },//选中项回调function formatRepoSelection(repo){return repo.text}
-            // allowClear: true,    //选中之后，可手动点击删除         
-            // escapeMarkup: function (markup) { return markup; }, // 字符转义处理自定义格式化防止xss注入
-            // language:'zh-CN'
             ajax: {
                     url: function(params){
-    return admin_ajax +'?action=get_manage_user'   
+                    return admin_ajax +'?action=get_manage_user'   
                         // return "https://api.github.com/search/repositories"
                     },
                     dataType: 'json',
@@ -237,19 +192,15 @@ jQuery(function($) {
                 language:'zh-CN'
 
         })
-          function formatRepo (repo) {//repo对象根据拼接返回结果
-                if (repo.loading) {
-                    return repo.text;
-                }
-                
-                return repo.text;
-                }
- 
- 
-                function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
-                // console.log(repo)
-                return  repo.text;
-                }
+        function formatRepo (repo) {//repo对象根据拼接返回结果
+            if (repo.loading) {
+                return repo.text;
+            }
+            return repo.text;
+        }
+        function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
+            return  repo.text;
+        }
     // $('.change_ajax').keyup(function(){
     //     var _this=$(this);
     //     _this.next('.select_box').remove()

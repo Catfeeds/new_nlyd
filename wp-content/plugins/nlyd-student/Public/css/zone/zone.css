@@ -175,15 +175,16 @@
     right: 10px;
     top: 8.5px;
 }
-.input_row input[type=text],
-.input_row input[type="tel"]
+.input_row input[type=text]
 {
     margin-bottom: 0;
 }
 input[type="text"]:disabled{
     background-color: rgba(135, 135, 135, 0.1);
 }
-input[type="text"].radius_input_row{
+input[type="text"].radius_input_row,
+input[type="tel"].radius_input_row
+{
     width: 100%;
     border-radius: 6px;
     height: 45px;
@@ -545,4 +546,10 @@ div .layui-row:last-child{
     line-height: 13px;
     border-radius: 50%; 
     transform: rotate(45deg)
+}
+
+
+.student_title{
+    padding-top: 15px;
+    padding-bottom: 15px;
 }

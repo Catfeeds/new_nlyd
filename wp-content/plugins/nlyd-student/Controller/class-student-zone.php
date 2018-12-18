@@ -247,6 +247,35 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/kaoji-buildSuccess.php';
         load_view_template($view);
     }
+
+    /**
+     * 课程管理列表
+     */
+     public function course(){
+        $view = student_view_path.CONTROLLER.'/course-list.php';
+        load_view_template($view);
+    }
+    /**
+     * 发布课程
+     */
+     public function courseBuild(){
+        $view = student_view_path.CONTROLLER.'/course-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 课程发布成功
+     */
+     public function courseBuildSuccess(){
+        $view = student_view_path.CONTROLLER.'/course-buildSuccess.php';
+        load_view_template($view);
+    }
+    /**
+     * 课程学员
+     */
+     public function courseStudent(){
+        $view = student_view_path.CONTROLLER.'/course-studentList.php';
+        load_view_template($view);
+    }
     /*
      *机构主体信息页面
      */
@@ -360,7 +389,7 @@ class Student_Zone extends Student_Home
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'apply'){
+        if(ACTION == 'apply' || ACTION == 'courseBuild'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
             wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
