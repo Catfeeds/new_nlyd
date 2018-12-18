@@ -40,31 +40,21 @@ class Brainpower
         $types = isset($_GET['types']) ? intval($_GET['types']) : 0;
         $searchStr = isset($_GET['search']) ? trim($_GET['search']) : '';
         $whereStr = '';
-        switch ($types){
-            case 1:
-                $whereStr .= ' AND d.`category_name`="xsl"';
-                break;
-            case 2:
-                $whereStr .= ' AND d.`category_name`="jyl"';
-                break;
-            case 3:
-                $whereStr .= ' AND d.`category_name`="sdl"';
-                break;
-        }
+        if($types > 0)  $whereStr .= ' AND d.`category_id`="'.$types.'"';
         $searchJoinSql = '';
         if($searchStr != ''){
             $searchJoinSql = " LEFT JOIN {$wpdb->usermeta} as um1 ON um1.user_id=u.ID AND um1.meta_key='user_real_name' 
                                LEFT JOIN {$wpdb->usermeta} as um2 ON um2.user_id=u.ID AND um2.meta_key='user_ID'";
             $whereStr .= " AND (u.user_mobile LIKE '%{$searchStr}%' OR u.user_email LIKE '%{$searchStr}%' OR um1.meta_value LIKE '%{$searchStr}%' OR um2.meta_value LIKE '%{$searchStr}%')";
         }
-
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS d.id,d.user_id,d.category_name,d.level,d.is_show,d.range,d.type_name,u.user_mobile,u.user_email FROM {$wpdb->prefix}directories AS d 
-                LEFT JOIN {$wpdb->users} AS u ON u.ID=d.user_id{$searchJoinSql}
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS d.id,d.user_id,p.post_title AS category_name,d.level,d.is_show,d.range,d.type_name,u.user_mobile,u.user_email FROM {$wpdb->prefix}directories AS d 
+                LEFT JOIN {$wpdb->users} AS u ON u.ID=d.user_id
+                LEFT JOIN {$wpdb->posts} AS p ON p.ID=d.category_id
+                {$searchJoinSql}
                 WHERE u.ID!=''{$whereStr} LIMIT {$start},{$pageSize}", ARRAY_A);
-
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -76,6 +66,12 @@ class Brainpower
             'current' => $page,
         ));
 
+        $categoryArr = getCategory();
+//        leo_dump($categoryArr);die;
+        $optionArr = ['<li class="all"><a href="'.admin_url("admin.php?page=brainpower&types=0").'" class="'.($types === 0 ? 'current': '').'">全部<span class="count"></span></a> </li>'];
+        foreach ($categoryArr as $cgav){
+            $optionArr[] = '<li class="all"><a href="'.admin_url("admin.php?page=brainpower&types=".$cgav['ID']).'" class="'.($types == $cgav['ID'] ? 'current': '').'">'.$cgav['post_title'].'<span class="count"></span></a> </li>';
+        }
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">脑力健将</h1>
@@ -83,10 +79,7 @@ class Brainpower
             <hr class="wp-header-end">
 
             <h2 class="screen-reader-text">过滤脑力健将列表</h2><ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=0')?>" class="<?=($types === 0) ? 'current': ''?>">全部<span class="count"></span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=1')?>" class="<?=($types === 1) ? 'current': ''?>">心算类<span class="count"></span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=2')?>" class="<?=($types === 2) ? 'current': ''?>">记忆类<span class="count"></span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=brainpower&types=3')?>" class="<?=($types === 3) ? 'current': ''?>">速读类<span class="count"></span></a> </li>
+                <?=join(' | ',$optionArr)?>
             </ul>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
@@ -339,9 +332,16 @@ class Brainpower
         $projectArr = get_match_end_time($match_id);
 
         //获取比赛大类
+        $categoryArr = [];
         $match_student = new Match_student();
-        $categoryArr = $match_student->getCategoryArr($projectArr);
+        foreach ($projectArr as $catePro){
+            $categoryArr[$catePro['post_parent']]['id'][] = $catePro['match_project_id'];
+            $categoryArr[$catePro['post_parent']]['name'] = get_post($catePro['post_parent'])->post_title;;
+            $categoryArr[$catePro['post_parent']]['alias'] = get_post_meta($catePro['post_parent'],'project_alias',true);;
+            $categoryArr[$catePro['post_parent']]['parent_id'] = $catePro['post_parent'];
+        }
 
+//        leo_dump($categoryArr);die;
         //查询前十
         foreach ($categoryArr as &$cate){
             $cate['data'] = $match_student->getCategoryRankingData($match,join(',', $cate['id']),0,'0,10');
@@ -383,8 +383,8 @@ class Brainpower
                             $bool = $wpdb->query($sql);
                         }
                     }else{
-                        $sql = "INSERT INTO {$wpdb->prefix}directories (`user_id`,`category_name`,`level`,`match`,`range`,`type_name`) 
-                                VALUES ('{$caDataV['user_id']}','{$cav1['alias']}',1,'({$match_id})',{$range},'{$cav1['name']}类脑力健将')";
+                        $sql = "INSERT INTO {$wpdb->prefix}directories (`user_id`,`category_id`,`level`,`match`,`range`,`type_name`) 
+                                VALUES ('{$caDataV['user_id']}','{$cav1['parent_id']}',1,'({$match_id})',{$range},'{$cav1['name']}脑力健将')";
                         $bool = $wpdb->query($sql);
                     }
                     if($bool){
@@ -440,7 +440,7 @@ class Brainpower
                     </div>
 
                     <div id="dra_set_btn">
-                        <?=!$row3?'<input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="生成名录>">':''?>
+                        <?=!$row3?'<input type="button" id="generate_btn" class="button action" style="font-weight: bold" value="生成名录">':''?>
                         <div style="display: inline-block; padding-left: 3em; font-weight: bold;line-height: 28px;"><?=$msg?></div>
                     </div>
                     <script type="text/javascript">
@@ -462,11 +462,9 @@ class Brainpower
 
                     </script>
 
-
                     <br class="clear">
                 </div>
             </form>
-
 
 
             <?php if(!is_mobile()){
@@ -500,7 +498,6 @@ class Brainpower
                     <tbody id="the-list" data-wp-lists="list:user">
                     <?php foreach ($categoryArr as $cav){ ?>
 
-
                         <?php foreach ($cav['data'] as $data){
                             ?>
                             <tr class="data-list">
@@ -509,7 +506,7 @@ class Brainpower
                                     <br>
                                     <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                                 </td>
-                                <td class="cates column-cates line-c" data-colname="类别"><?=$cav['name']?>类</td>
+                                <td class="cates column-cates line-c" data-colname="类别"><?=$cav['name']?></td>
                                 <td class="userID column-userID line-c" data-colname="选手ID"><?=$data['userID']?></td>
                                 <td class="card_num column-card_num line-c" data-colname="证件号码"><?=$data['card']?></td>
                                 <td class="mobile column-mobile line-c" data-colname="电话号码"><?=$data['user_mobile']?></td>

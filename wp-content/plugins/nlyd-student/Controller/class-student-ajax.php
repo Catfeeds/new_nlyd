@@ -3134,34 +3134,23 @@ class Student_Ajax
      */
     public function getDirectories(){
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        $type = intval($_POST['type']);
+        $type = 1;
         if($type < 1)  wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
         global $wpdb;
-//        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,mc.coach_id,d.certificate,
-//        CASE d.range
-//        WHEN 1 THEN "中国"
-//        WHEN 2 THEN "国际"
-//        ELSE "未知"
-//        END AS ranges
-//        FROM '.$wpdb->prefix.'directories AS d
-//        LEFT JOIN '.$wpdb->prefix.'my_coach AS mc ON mc.user_id=d.user_id
-//        WHERE d.type='.$type.' AND d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
-        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.category_name,d.certificate,
+        $res = $wpdb->get_results('SELECT d.user_id,d.level,d.certificate,p.post_title,
         CASE d.range 
         WHEN 1 THEN "中国" 
         WHEN 2 THEN "国际" 
         ELSE "未知" 
         END AS ranges  
         FROM '.$wpdb->prefix.'directories AS d 
-        WHERE d.type='.$type.' AND d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
-
+        LEFT JOIN '.$wpdb->posts.' AS p ON p.ID=d.category_id 
+        WHERE d.is_show=1 ORDER BY d.id DESC LIMIT '.$start.','.$pageSize);
         foreach ($res as &$v){
             $usermeta = get_user_meta($v->user_id,'', true);
-
-            $coachmeta = get_user_meta($v->coach_id,'user_real_name')[0];
             $user_real_name = unserialize($usermeta['user_real_name'][0]);
             if(!$user_real_name){
                 $user_real_name['real_name'] = $usermeta['last_name'][0].$usermeta['first_name'][0];
@@ -3170,7 +3159,6 @@ class Student_Ajax
             $v->userID = $usermeta['user_ID'][0];
             $v->real_name = $user_real_name['real_name'];
             $v->sex = $usermeta['user_gender'][0];
-            $v->coach_name = unserialize($coachmeta)['real_name'];
 
         }
 
