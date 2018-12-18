@@ -179,7 +179,7 @@ jQuery(function($) {
         //     })
         var my_answer=[];
         $('.matching-number-input').each(function(){
-            var answer=$(this).val();
+            var answer=$(this).val().replace(/\s+/g, "");
             my_answer.push(answer)
         })
         var data={
