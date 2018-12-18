@@ -699,10 +699,11 @@ input[type="text"].coach_form_input{
 }
 .team_row{
     padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 15px;
 }
 .team_row_title{
     font-size: 0;
-    margin-bottom: 10px;
 }
 .team_row_title>span,
 .team_row_title>a{
@@ -715,4 +716,9 @@ input[type="text"].coach_form_input{
 .team_row_title>span{
     width: -webkit-calc(100% - 50px);
     width: calc(100% - 50px);
+}
+.team_row_tag{
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
