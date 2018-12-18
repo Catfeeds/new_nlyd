@@ -49,7 +49,7 @@ jQuery(function($) {
     count_down()
     $('body').on('focusout','.answer_q',function(e){
         var _this=$(this);
-        var val=_this.val();
+        var val=_this.val().replace(/\s+/g, "");
         var _len=val.length;
         var parent=_this.parents('.matching-reading')
         var dom_index=parseInt(_this.attr('data-index'))

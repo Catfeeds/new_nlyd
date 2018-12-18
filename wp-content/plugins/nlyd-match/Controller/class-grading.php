@@ -464,7 +464,7 @@ class Grading
                 $arr = [];
                 foreach ($questions_answer['examples'] as $qak => $qav){
                     $arr[$qak] = $qav;
-                    if($questions_answer['examples']['result'] == true){
+                    if($questions_answer['result'][$qak] == 'true'){
                         $my_answer[$qak] = '<span class="correct-color">'.$my_answer[$qak].'</span>';
                     }
                 }

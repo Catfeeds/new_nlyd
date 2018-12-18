@@ -981,7 +981,7 @@ p.share-font{
         position: absolute;
         bottom: 30px;
     }
-    .nl-foot-nav.focus_none
+    .nl-foot-nav.focus_none,
     {
         position: absolute;
         bottom: 0;

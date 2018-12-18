@@ -235,8 +235,8 @@ jQuery(function($) {
         $('.match_zoo .matching-card').each(function(){
             var _this=$(this);
             var picture=_this.attr('data-img');
-            var name=_this.find('.card_name input').val();
-            var phone=_this.find('.card_phone input').val();
+            var name=_this.find('.card_name input').val().replace(/\s+/g, "");
+            var phone=_this.find('.card_phone input').val().replace(/\s+/g, "");
             var item={name:name,picture:picture,phone:phone};
             my_answer.push(item)
         })
