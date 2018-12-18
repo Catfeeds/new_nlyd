@@ -507,7 +507,7 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 	<span class="hide-if-no-sessionstorage"><?php _e( 'We&#8217;re backing up this post in your browser, just in case.' ); ?></span>
 	</p>
 </div>
-<form class="layui-form" name="post" action="post.php" method="post" id="post"<?php
+<form name="post" action="post.php" method="post" id="post"<?php
 /**
  * Fires inside the post editor form tag.
  *

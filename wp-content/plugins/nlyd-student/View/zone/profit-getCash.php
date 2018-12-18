@@ -15,19 +15,26 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <div class="bold c_black getCash_type"><?=__('选择提现方式', 'nlyd-student')?></div>
                     <form class="layui-form ">
+                        <?php if(empty($zone)){ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="getCash_type" value="bank" title="<?=__('提现至银行卡（民生银行 789***9080）', 'nlyd-student')?>" checked>
+                            <input type="radio" name="extract_type" value="weChat" title="<?=__('提现至微信', 'nlyd-student')?>" checked>
                         </div>
+                        <?php }else{ ?>
                         <div class="getCash_type_row">
-                            <input type="radio" name="getCash_type" value="wallet" title="<?=__('提现至平台账户钱包', 'nlyd-student')?>">
+                            <input type="radio" name="extract_type" value="bank" title="<?=__("提现至银行卡（{$zone['opening_bank']} {$bank_card_num}）", 'nlyd-student')?>" checked>
+                        </div>
+                        <?php } ?>
+                        <div class="getCash_type_row">
+                            <input type="radio" name="extract_type" value="wallet" title="<?=__('提现至平台账户钱包', 'nlyd-student')?>">
                         </div>
                         <div class="c_red fs_12">
                             <?=__('*充值进平台的余额只可用于消费，无法再次提现，谨慎操作', 'nlyd-student')?>
                         </div>
                         <div class="enter_num">
                             <div class="danwei bold c_black fs_20">￥</div>
-                            <input class="radius_input_row nl-foucs" type="text" name="num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入金额，最多可提现500.00', 'nlyd-student')?>">
+                            <input class="radius_input_row nl-foucs" type="text" name="num" lay-verify="required" autocomplete="off" placeholder="<?=__('输入金额，最多可提现'.$balance, 'nlyd-student')?>">
                         </div>
+                        <input type="hidden" name="action" value="user_extract_apply"/>
                         <a class="a-btn a-btn-table bg_gradient_green" lay-filter="layform" lay-submit=""><div><?=__('提 现', 'nlyd-student')?></div></a>
                     </form>
                 </div>  
@@ -47,7 +54,12 @@ jQuery(function($) {
             $.ajax({
                 data:data.field,
                 success:function(res){
-                    
+                    $.alerts(res.data.info);
+                    if(res.success){
+                        setTimeout(function () {
+                            window.location.href = res.data.url;
+                        },800)
+                    }
                 },
             })
         })

@@ -4504,17 +4504,34 @@ class Student_Ajax
      */
     public function get_user_profit_logs(){
         global $wpdb,$current_user;
-        if($_POST['map'] == 'all'){ //全部
-            $where = "user_id = {$current_user->ID}";
-        }elseif ($_POST['map'] == 'extract'){ //提现
-            $where = "user_id = {$current_user->ID} and user_income < 0 ";
-        }else{  //收益
-            $where = "user_id = {$current_user->ID} and user_income > 0 ";
-        }
+
         $page = isset($_POST['page']) ? $_POST['page'] : 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
-        $sql = "select SQL_CALC_FOUND_ROWS *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
+
+        //判断用户是否为机构单位
+        $zone_id = $wpdb->get_var("select id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID} ");
+        if($_POST['map'] == 'profit' && empty($zone_id)){
+
+            $sql = "select id,if(referee_id > 0,referee_income,indirect_referee_income) user_income ,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
+                    case income_type
+                    when 'match' then '比赛收益'
+                    when 'grading' then '考级收益'
+                    end income_type_title
+                    from {$wpdb->prefix}income_logs 
+                    where referee_id = {$current_user->ID} or indirect_referee_id = {$current_user->ID}
+                    order by created_time desc limit $start,$pageSize 
+                    ";
+        }else{
+
+            if($_POST['map'] == 'all'){ //全部
+                $where = "user_id = {$current_user->ID}";
+            }elseif ($_POST['map'] == 'extract'){ //提现
+                $where = "user_id = {$current_user->ID} and user_income < 0 ";
+            }else{  //收益
+                $where = "user_id = {$current_user->ID} and user_income > 0 ";
+            }
+            $sql = "select SQL_CALC_FOUND_ROWS *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
                 if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
                 case income_type
                 when 'match' then '比赛收益'
@@ -4522,6 +4539,7 @@ class Student_Ajax
                 when 'extract' then '比赛提现'
                 end income_type_title
                 from {$wpdb->prefix}user_stream_logs where {$where} order by created_time desc limit $start,$pageSize ";
+        }
         //print_r($sql);
         $rows = $wpdb->get_results($sql,ARRAY_A);
         $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
@@ -4529,6 +4547,7 @@ class Student_Ajax
         if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
         //print_r($rows);
         if(empty($rows)) wp_send_json_error(array('info'=>__('暂无记录', 'nlyd-student')));
+
         wp_send_json_success(array('info'=>$rows));
     }
 
@@ -4617,6 +4636,74 @@ class Student_Ajax
             wp_send_json_success(array('info'=>'比赛发布成功','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
         }else{
             wp_send_json_error(array('info'=>'比赛发布失败'));
+        }
+    }
+
+    /**
+     * 用户提现申请
+     */
+    public function user_extract_apply(){
+
+        global $wpdb,$current_user;
+
+        switch ($_POST['extract_type']){
+            case 'weChat':
+                //获取收款二维码
+                $extract_code_img = get_user_meta($current_user->ID,'user_coin_code')[0];
+                print_r($extract_code_img);
+                break;
+            case 'bank':
+                //获取账户信息
+                $row = $wpdb->get_row("select * from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+                if(empty($row)) wp_send_json_error(array(_('账户信息错误')));
+                $opening_bank = $row['opening_bank'];
+                $opening_bank_address = $row['opening_bank_address'];
+                $bank_card_num = $row['bank_card_num'];
+                break;
+            case 'wallet':
+                break;
+            default:
+                wp_send_json_error(array('info'=>_('提现方式错误')));
+                break;
+        }
+        if(empty($_POST['num'])) wp_send_json_error(array('info'=>_('请输入提现金额')));
+
+        //获取可提现金额
+        $stream_total = $wpdb->get_row("select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ");
+        if($stream_total < $_POST['num']){
+            wp_send_json_error(array('info'=>_('余额不足,无法提现')));
+        }
+        $wpdb->query('START TRANSACTION');
+        $insert1 = array(
+            'user_id'=>$current_user->ID,
+            'income_type'=>'extract',
+            'user_income'=>-$_POST['num'],
+            'created_time'=>get_time('mysql'),
+
+        );
+        $a = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insert1);
+        $id = $wpdb->insert_id;
+        $insert2 = array(
+            'stream_log_id'=>$id,
+            'extract_id'=>$current_user->ID,
+            'extract_amount'=>$_POST['num'],
+            'extract_type'=>-$_POST['extract_type'],
+            'bank_name'=>!empty($opening_bank) ? $opening_bank : '' ,
+            'bank_address'=>!empty($opening_bank_address) ? $opening_bank_address : '' ,
+            'extract_account'=>!empty($bank_card_num) ? $bank_card_num : '' ,
+            'extract_code_img'=>!empty($extract_code_img) ? $extract_code_img : '' ,
+            'apply_time'=>get_time('mysql') ,
+
+        );
+
+        $b = $wpdb->insert($wpdb->prefix.'user_extract_logs',$insert2);
+        //print_r($a.'----'.$b);
+        if($a && $b ){
+            $wpdb->query('COMMIT');
+            wp_send_json_success(array('info'=>_('提交成功'),'url'=>home_url('/zone/getCashSuccess/')));
+        }else{
+            $wpdb->query('ROLLBACK');
+            wp_send_json_error(array('info'=>_('提交失败')));
         }
     }
 

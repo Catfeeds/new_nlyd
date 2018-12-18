@@ -591,7 +591,7 @@ class Student_Trains extends Student_Home
                 left join {$wpdb->prefix}user_grade_logs b on a.id = b.grade_log_id
                 where a.user_id = {$current_user->ID} and b.id != ''
                 GROUP BY a.id
-                order by a.time desc,created_time desc limit 0,100";
+                order by time desc,created_time desc limit 0,100";
             //print_r($sql);
             //获取用户考级训练等级
             $data['rank_row'] = $wpdb->get_row("select id,`read`,memory,compute from {$wpdb->prefix}user_skill_rank where user_id = {$current_user->ID} and skill_type = 2",ARRAY_A);
