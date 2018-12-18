@@ -90,7 +90,7 @@ jQuery(function($) {
                     }else if(parseInt(id)==3){//提现
                         postData['map']="extract";
                     }else{//收益
-                        postData['map']="";
+                        postData['map']="profit";
                     }
                     var lis = [];
                     $.ajax({
@@ -100,10 +100,12 @@ jQuery(function($) {
                             profit_page++
                             isClick[id]=true
                             if(res.success){
-                                var Detail_url = "<?=home_url('zone/profitDetail/id/');?>";
+                                var profit_url = "<?=home_url('zone/profitDetail/id/');?>";
+                                var extract_url = "<?=home_url('zone/getCashDetail/id/');?>";
                                 $.each(res.data.info,function(i,v){
                                     var color=v.income_type_class=="bg_add" ? "c_green":"c_black3";
-                                    var dom='<a class="profit_list c_black layui-row" href="'+Detail_url+v.id+'">'
+                                    var Detail_url = v.user_income > 0 ? profit_url+v.id : extract_url+v.id;
+                                    var dom='<a class="profit_list c_black layui-row" href="'+Detail_url+'">'
                                                 +'<div class="profit_inline profit_icon">'
                                                     +'<div class="zone_bg '+v.income_type_class+'"></div>'
                                                 +'</div>'

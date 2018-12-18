@@ -89,6 +89,9 @@ if(!class_exists('MatchController')){
             //加入admin_footer-edit.php执行
             add_action('admin_footer-edit.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
 
+            //footer执行时添加
+            add_action('admin_print_footer_scripts',array($this,'add_footer_scripts'));
+
             //查询语句join
             add_action('posts_join',array($this, 'filter_request_join'));
 
@@ -134,7 +137,7 @@ if(!class_exists('MatchController')){
             include_once(match_controller_path.'class-brainpower.php');
 
             //添加导入数据菜单
-//            include_once(match_controller_path.'class-import.php');
+            //include_once(match_controller_path.'class-import.php');
 
             //添加训练记录菜单
             include_once(match_controller_path.'class-trains.php');
@@ -155,6 +158,14 @@ if(!class_exists('MatchController')){
             //引入ajax操作文件
             include_once(leo_match_path.'Controller/class-match-ajax.php');
         }
+
+        //为后台form表单添加class
+        public function add_footer_scripts(){ ?>
+            <script>
+                document.getElementById('post').classList.add('layui-form');
+                //console.log(document.getElementById('post'));
+            </script>
+        <?php }
 
         public function wpdx_add_custom_status_in_quick_edit(){
             if($this->post_type == 'match'){

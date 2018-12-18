@@ -1011,6 +1011,9 @@ class Student_Gradings extends Student_Home
             }
         }
 
+        //获取是否存在答题记录
+        $wpdb->get_var("select from {$wpdb->prefix}grading_questions ");
+
         $data = array(
             'row'=>$row,
             'rows'=>$rows,

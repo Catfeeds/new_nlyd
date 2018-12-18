@@ -16,7 +16,7 @@
                 <div class="success">
                     <div class="apply-success bold ta_c c_green fs_16"><div class="nl-badge bg_gradient_green"><i class="iconfont">&#xe608;</i></div></div>
                     <div class="c_black ta_c fs_16"><?=__('成功发起提现，等待提现到账。', 'nlyd-student')?></div>
-                    <a class="a-btn a-btn-table bg_gradient_green" href="<?=home_url('zone');?>"><div><?=__('返回收益管理', 'nlyd-student')?></div></a>
+                    <a class="a-btn a-btn-table bg_gradient_green" href="<?=home_url('/zone/profit/');?>"><div><?=__('返回收益管理', 'nlyd-student')?></div></a>
                 </div>
             </div>
         </div>            
