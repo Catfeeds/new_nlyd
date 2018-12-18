@@ -321,6 +321,36 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/coach-detail.php';
         load_view_template($view);
     }
+
+
+    /**
+     * 战队管理
+     */
+     public function team(){
+        $view = student_view_path.CONTROLLER.'/team.php';
+        load_view_template($view);
+    }
+    /**
+     * 填写战队资料
+     */
+     public function teamBuild(){
+        $view = student_view_path.CONTROLLER.'/team-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 添加战队成员
+     */
+     public function teamAddMember(){
+        $view = student_view_path.CONTROLLER.'/team-addMember.php';
+        load_view_template($view);
+    }
+    /**
+     * 战队申请管理
+     */
+     public function teamApply(){
+        $view = student_view_path.CONTROLLER.'/team-apply.php';
+        load_view_template($view);
+    }
     /*
      *机构主体信息页面
      */
