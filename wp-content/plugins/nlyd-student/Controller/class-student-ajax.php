@@ -3181,6 +3181,44 @@ class Student_Ajax
     }
 
     /**
+     * 获取用户考级名录
+     */
+    public function getUserGradingDirectories(){
+        $cate_type = isset($_POST['type_id']) ? intval($_POST['type_id']) : 0;
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        if(!in_array($cate_type,[1,2,3])) wp_send_json_error(['info' => '参数错误!']);
+        switch ($cate_type){
+            case 1:
+                $cate_name = 'read';
+                break;
+            case 2:
+                $cate_name = 'memory';
+                break;
+            case 3:
+                $cate_name = 'compute';
+                break;
+        }
+        $page < 1 && $page = 1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT user_id,`{$cate_name}` AS skill_level FROM {$wpdb->prefix}user_skill_rank LIMIT {$start},{$pageSize}", ARRAY_A);
+        if($rows){
+            foreach ($rows as $k => &$row){
+                $user_meta = get_user_meta($row['user_id']);
+                $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
+                $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'])[0]['real_name'])?unserialize($user_meta['user_real_name'])[0]['real_name']:'') : '';
+                $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
+                $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
+            }
+            wp_send_json_error(['info'=>'获取成功','data'=>$rows]);
+        }else{
+            wp_send_json_error(['info'=>'无数据!']);
+        }
+
+    }
+
+    /**
      * 根据搜索条件获取战队列表
      */
     public function getTeamsBySearch(){
