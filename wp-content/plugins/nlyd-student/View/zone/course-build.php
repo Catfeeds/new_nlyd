@@ -16,10 +16,11 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('教学类型', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?=__('课程类型', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" name="zone_num" value="<?=dispRepair(!empty($row) ? $row['id'] : $zone_num,4,0)?>">
+                                <input type="hidden" name="course_scene"  value="" id="course_scene">
+                                <input class="radius_input_row nl-foucs" readonly id="course_type1" type="text" lay-verify="required" value="乐学乐分享基础应用课" placeholder="<?=__('课程类型', 'nlyd-student')?>">
                             </div>
                         </div>
                         <div>
@@ -28,36 +29,35 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>">
+                                <input type="hidden" name="course_genre"  value="" id="course_genre">
+                                <input class="radius_input_row nl-foucs" readonly id="course_type2" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('记忆课程教学', 'nlyd-student')?>" value="记忆课程教学">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程名称', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的营业地址，与证件保持一致', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="zone_address" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程名称', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_address'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程时长', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('法定代表人姓名', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
+                            <div class="input_row"><input class="radius_input_row nl-foucs" type="text" name="legal_person" lay-verify="required" autocomplete="off" placeholder="<?=__('填写课程时长', 'nlyd-student')?>" value="<?=!empty($row) ? $row['legal_person'] :''?>"></div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('授课教练', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
-                                <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
-                                <!-- <input class="radius_input_row change_ajax" name="secretary_id"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>"> -->
-                                
+                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" lay-verify="required"  data-placeholder="授课教练" ></select>
+                                <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('课程费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" disabled type="text">
+                                <input class="radius_input_row nl-foucs" disabled type="text" value="500.00">
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('开放名额', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="tel" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入对公账户详细开户地址', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>">
+                                <input class="radius_input_row nl-foucs" type="tel" name="opening_bank_address" lay-verify="required" autocomplete="off" placeholder="<?=__('输入开放名额', 'nlyd-student')?>" value="<?=!empty($row) ? $row['opening_bank_address'] :''?>">
                             </div>
                         </div>
                   
@@ -65,95 +65,176 @@
                             <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" readonly type="text" value="<?=$referee_name?>">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="<?=$match['data_time']?>"  id="course_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
                             </div>
                         </div>
                         <div>
-                            <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
+                            <div class="lable_row"><span class="c_black"><?=__('课程简介', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <textarea class="radius_input_row nl-foucs" type="text"></textarea>
+                                <textarea class="radius_input_row nl-foucs" type="text" placeholder="<?=__('课程简介', 'nlyd-student')?>"></textarea>
                             </div>
                         </div>
-                       
-                        
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
+                        <span class="details_btn flex-h">
+                            <div class="details-button flex1">
+                                <button class="save" type="button" class=""><?=__('存草稿', 'nlyd-student')?></button>
+                            </div>
+                            <div class="details-button flex1 last-btn">
+                                <button class="see_button" type="button" lay-filter='layform' lay-submit="" href="<?=home_url('orders/logistics')?>"><?=__('发 布', 'nlyd-student')?></button>
+                            </div>
+                        </span>
                     </form>
+                    
                 </div>
             </div>
         </div>            
     </div>
 </div>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos0" data-this="img-zoos0" value="" accept="image/*"/>
-<input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
 jQuery(function($) { 
+    var course_type1_Data=[{id:1,value:"乐学乐"},{id:2,value:"乐学乐2"}];//课程类型
+    var course_type2_Data=[{id:1,value:"基础应用课"},{id:2,value:"提升应用课"}];//教学类型
+    var course_date_Data=$.validationLayui.dates2;//开赛日期
+    var posiotion_course_type1=[0];//初始化位置，高亮展示
+    var posiotion_course_type2=[0];//初始化位置，高亮展示
+    var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
 
-        var opening_bank_Data=$.validationLayui.back;
-
-        var posiotion_back=[0];//初始化位置，高亮展示
-        if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
-            $.each(opening_bank_Data,function(index,value){
-                if(value['value']==$('#opening_bank').val()){
-                    posiotion_back=[index]
-                    return false;
-                }
-            })
+    //---------------------------比赛类别------------------------------
+    if($('#course_type1').val().length>0 && $('#course_type1').val()){
+        $.each(course_type1_Data,function(index,value){
+            if(value['value']==$('#course_type1').val()){
+                posiotion_course_type1=[index]
+                return false;
+            }
+        })
+    }
+    var mobileSelect1 = new MobileSelect({
+        trigger: '#course_type1',
+        title: '<?=__('比赛场景', 'nlyd-student')?>',
+        wheels: [
+            {data: course_type1_Data}
+        ],
+        position:posiotion_course_type1, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            $('#course_type1').val(data[0]['value']);
+            $('#course_scene').val(data[0]['id']);
+        
         }
-        var mobileSelect4 = new MobileSelect({
-            trigger: '#opening_bank',
-            title: '<?=__('开户行', 'nlyd-student')?>',
-            wheels: [
-                {data: opening_bank_Data}
-            ],
-            position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
-            transitionEnd:function(indexArr, data){
-                // console.log(data);
+    });
+    //---------------------------比赛类型------------------------------
+    if($('#course_type2').val().length>0 && $('#course_type2').val()){
+        $.each(course_type2_Data,function(index,value){
+            if(value['value']==$('#course_type2').val()){
+                posiotion_course_type2=[index]
+                return false;
+            }
+        })
+    }
+    var mobileSelect2 = new MobileSelect({
+        trigger: '#course_type2',
+        title: '<?=__('比赛类型', 'nlyd-student')?>',
+        wheels: [
+            {data: course_type2_Data}
+        ],
+        position:posiotion_course_type2, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            $('#course_type2').val(data[0]['value']);
+            $('#course_genre').val(data[0]['id']);
+        
+        }
+    });
+    //---------------------------开赛日期------------------------------
+    if($('#course_date').length>0 && $('#course_date').attr('data-time').length>0){
+        var timeValue=$('#course_date').attr('data-time').split('-');
+        $.each($.validationLayui.dates2,function(index,value){
+            if(timeValue[0]==value.value+""){
+                posiotion_course_date=[index,0,0,0,0];
+                $.each(value.childs,function(i,v){
+                    if(timeValue[1]==v.value+""){
+                        posiotion_course_date=[index,i,0,0,0];
+                        $.each(v.childs,function(j,val){
+                            if(timeValue[2]==val.value+""){
+                                posiotion_course_date=[index,i,j,0,0];
+                                $.each(v.childs,function(k,b){
+                                    if(timeValue[3]==b.value+""){
+                                        posiotion_course_date=[index,i,j,k,0];
+                                        $.each(v.childs,function(l,c){
+                                            if(timeValue[4]==c.value+""){
+                                                posiotion_course_date=[index,i,j,k,l];
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+    var mobileSelect3 = new MobileSelect({
+        trigger: '#course_date',
+        title: '<?=__('开赛日期', 'nlyd-student')?>',
+        wheels: [
+            {data: course_date_Data}
+        ],
+        position:posiotion_course_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+            var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
+            $('#course_date').val(text).attr('data-time',text1);
+        
+        }
+    });
+    $('.js-data-select-ajax').select2({
+        ajax: {
+            url: function(params){
+                return admin_ajax +'?action=get_manage_user'   
+                // return "https://api.github.com/search/repositories"
             },
-            callback:function(indexArr, data){
-                $('#opening_bank').val(data[0]['value']);
-               
-            }
-        });
-        $('.img-zoos').on('click','.add-zoo',function(){//上传图片
-            var id=$(this).attr('data-file')
-            $('#'+id).click()
-        })
-        $('.js-data-select-ajax').select2({
-            ajax: {
-                    url: function(params){
-                    return admin_ajax +'?action=get_manage_user'   
-                        // return "https://api.github.com/search/repositories"
-                    },
-                    dataType: 'json',
-                    delay: 250,//在多少毫秒内没有输入时则开始请求服务器
-                    processResults: function (data, params) {
-                    // 此处解析数据，将数据返回给select2
-                    console.log(data.data)
-                    var x=data.data;
-                   
-                     return {
-                        results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
-                    };
-                    },
-                    cache: true
-                },
-                placeholder: '请输入关键字',
-                escapeMarkup: function (markup) { return markup; }, // 字符转义处理
-                templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-                templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
-                language:'zh-CN'
+            dataType: 'json',
+            delay: 250,//在多少毫秒内没有输入时则开始请求服务器
+            processResults: function (data, params) {
+                // 此处解析数据，将数据返回给select2
+                console.log(data.data)
+                var x=data.data;
+                return {
+                    results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
+                };
+            },
+            cache: true
+        },
+        placeholder: '请输入关键字',
+        escapeMarkup: function (markup) { return markup; }, // 字符转义处理
+        templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
+        templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
+        language:'zh-CN'
 
-        })
-        function formatRepo (repo) {//repo对象根据拼接返回结果
-            if (repo.loading) {
-                return repo.text;
-            }
+    })
+    function formatRepo (repo) {//repo对象根据拼接返回结果
+        if (repo.loading) {
             return repo.text;
         }
-        function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
-            return  repo.text;
-        }
+        return repo.text;
+    }
+    function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
+        return  repo.text;
+    }
+
+
+    $('.save').click(function(){
+        var data=$(".layui-form").serializeArray();
+        // serialize
+        console.log(data)
+    })
     layui.use(['form'], function(){
         var form = layui.form
         form.render();
@@ -161,27 +242,9 @@ jQuery(function($) {
         form.verify($.validationLayui.allRules);
         // 监听提交
         form.on('submit(layform)', function(data){//实名认证提交
-            
-            var fd = new FormData();
-            fd.append('action','zone_apply_submit');
-            fd.append('zone_num',data.field['zone_num']);
-            fd.append('type_id',$.Request('type_id'));
-            fd.append('zone_type_alias',$.Request('zone_type_alias'));
-            fd.append('zone_name',data.field['zone_name']);
-            fd.append('zone_address',data.field['zone_address']);
-            fd.append('legal_person',data.field['legal_person']);
-            fd.append('opening_bank',data.field['opening_bank']);
-            fd.append('opening_bank_address',data.field['opening_bank_address']);
-            fd.append('bank_card_num',data.field['bank_card_num']);
-            fd.append('chairman_id',data.field['chairman_id']);
-            fd.append('secretary_id',data.field['secretary_id']);
-            fd.append('business_licence',imgs1[0]);
             console.log(data.field)
             $.ajax({
-                data: fd,
-                contentType : false,
-                processData : false,
-                cache : false,
+                data: data.field,
                 success: function(res, textStatus, jqXHR){
                     $.alerts(res.data.info)
                     if(res.data.url){

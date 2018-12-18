@@ -3,6 +3,7 @@
 }
 .select2-container--default .select2-selection--single{
     border: 1px solid rgba(51,51,51,0.12);
+    background-color:#fdfdfd;
     border-radius: 6px;
 }
 .select2-container .select2-selection--single{
@@ -190,7 +191,9 @@ input[type="tel"].radius_input_row
     height: 45px;
     padding-left: 20px;
 }
-
+textarea.radius_input_row{
+    border-radius: 6px;
+}
 
 
 .load_img{
@@ -552,4 +555,45 @@ div .layui-row:last-child{
 .student_title{
     padding-top: 15px;
     padding-bottom: 15px;
+}
+
+.details_btn{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%
+}
+.details_btn.focus_none
+{
+    position: absolute;
+    bottom: 0;
+}
+.details-button{
+    text-align: center;
+    color: #2484FE;
+    cursor: pointer;
+    padding: 10px 0;
+}
+.details-button button{
+    display: block;
+    width: 90%;
+    height: 45px;
+    line-height: normal;
+    text-align: center;
+    margin: auto;
+    border-radius: 22.5px;
+    color: #2484FE;
+    border: 1px solid #2484FE;
+    outline: none;
+    background: #fff;
+    font-weight: normal;
+
+}
+.details_btn .last-btn button {
+    color: #fff;
+    background: -webkit-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -o-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: -moz-linear-gradient(90deg,#68AAFE, #4394F9);
+    background: linear-gradient(90deg,#68AAFE, #4394F9);
+    border: none;
 }

@@ -114,6 +114,7 @@ jQuery(document).ready(function($) {
     $('body').on('focusin','.nl-foucs',function(){
         $('body').find('.a-btn').addClass('focus_none')
         $('body').find('.nl-foot-nav').addClass('focus_none')
+        $('body').find('.details_btn').addClass('focus_none')
     })
     // $('body').on('focus','input[readonly]',function(){
     //     $(this).trigger('blur');
@@ -121,6 +122,7 @@ jQuery(document).ready(function($) {
     $('body').on('focusout','.nl-foucs',function(){
         $('body').find('.a-btn').removeClass('focus_none')
         $('body').find('.nl-foot-nav').removeClass('focus_none')
+        $('body').find('.details_btn').removeClass('focus_none')
     })
     $('body').on('click','.nl-goback',function(){//返回上一页s
         if(!$(this).hasClass('static')){

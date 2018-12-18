@@ -77,7 +77,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会主席', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>">
+                                <!-- <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>"> -->
                                 <!-- <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>"> -->
                                 <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
                             </div>
@@ -86,7 +86,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
-                                <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>">
+                                <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
                                 <!-- <input class="radius_input_row change_ajax" name="secretary_id"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>"> -->
                                 
                             </div>
