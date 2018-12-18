@@ -52,6 +52,9 @@ class Statistics{
                 $link_name = '天';
                 break;
         }
+
+        leo_dump($wpdb->last_query);
+        die;
         $income = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(2,3,4) AND {$dateWhere}");
         $expenses = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(-2) AND {$dateWhere}");
 //        leo_dump($wpdb->last_query);
