@@ -308,6 +308,9 @@ class Course{
             $zone_id = isset($_POST['zone_id']) ? intval($_POST['zone_id']) : 0;
             $course_type = isset($_POST['course_type']) ? intval($_POST['course_type']) : 1;
             $is_enable = isset($_POST['is_enable']) ? intval($_POST['is_enable']) : 2;
+            $course_category_id = isset($_POST['course_category_id']) ? intval($_POST['course_category_id']) : 0;
+            $duration = isset($_POST['duration']) ? intval($_POST['duration']) : 0;
+            $admin_mobile = isset($_POST['admin_mobile']) ? trim($_POST['admin_mobile']) : '';
             if($course_title == '') $error_msg = '请填写课程名称';
             if($coach_id < 1) $error_msg .= ($error_msg == '' ? '':'<br />').'请选择授课教练';
             if($course_start_time == '') $error_msg .= ($error_msg == '' ? '':'<br />').'请选择开课时间';
@@ -334,6 +337,9 @@ class Course{
                     'zone_id' => $zone_id,
                     'course_type' => $course_type,
                     'is_enable' => $is_enable,
+                    'course_category_id' => $course_category_id,
+                    'duration' => $duration,
+                    'admin_mobile' => $admin_mobile,
                 ];
 
                 //图片
@@ -372,13 +378,14 @@ class Course{
         if($id > 0){
             $row = $wpdb->get_row("SELECT cou.course_title,cou.course_img,cou.const,cou.const,cou.is_enable,cou.coach_id,cou.course_start_time,cou.course_end_time,
                 cou.created_time,cou.province,cou.city,cou.area,cou.address,cou.open_quota,cou.seize_quota,cou.course_type,cou.zone_id,cou.course_details,
-                zm.zone_name,um.meta_value AS coach_real_name  
+                zm.zone_name,um.meta_value AS coach_real_name,cou.course_category_id,cou.duration,cou.admin_mobile  
                 FROM {$wpdb->prefix}course AS cou 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=cou.coach_id AND um.meta_key='user_real_name' 
                 LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=cou.zone_id 
                 WHERE cou.id='{$id}'", ARRAY_A);
-            }
-//            leo_dump($row);die;
+        }
+        $categoryArr = getCategory();
+//        leo_dump($categoryArr);die;
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑课程</h1>
@@ -420,6 +427,19 @@ class Course{
                         </td>
                     </tr>
                     <tr class="">
+                        <th scope="row"><label for="course_category_id">教学类别 </label></th>
+                        <td>
+                            <select class="" name="course_category_id"  id="course_category_id">
+                                <?php foreach ($categoryArr as $cgav){ ?>
+                                    <option value="<?=$cgav['ID']?>" <?=isset($row['course_category_id']) && $cgav['ID'] == $row['course_category_id'] ? 'selected="selected"' : ''?>>
+                                        <?=$cgav['post_title']?>
+                                    </option>
+                                <?php } ?>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="">
                         <th scope="row"><label for="coach_id">授课教练 </label></th>
                         <td>
                             <select class="js-data-select-ajax" name="coach_id" style="width: 50%" data-action="get_base_coach_list" data-type="all">
@@ -427,6 +447,18 @@ class Course{
                                     <?=!empty($row['coach_real_name']) ? unserialize($row['coach_real_name'])['real_name'] : ''?>
                                 </option>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="admin_mobile">管理员电话 </label></th>
+                        <td>
+                            <input type="text" style="padding: 3px 5px;" value="<?=isset($row['admin_mobile']) ? $row['admin_mobile'] : ''?>" name="admin_mobile" id="admin_mobile" placeholder="管理员电话">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="duration">课程时长(小时) </label></th>
+                        <td>
+                            <input type="text" style="padding: 3px 5px;" value="<?=isset($row['duration']) ? $row['duration'] : ''?>" name="duration" id="duration" placeholder="课程时长">
                         </td>
                     </tr>
                     <tr class="form-field">
