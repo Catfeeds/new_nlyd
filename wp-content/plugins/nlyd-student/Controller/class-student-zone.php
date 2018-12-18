@@ -84,8 +84,7 @@ class Student_Zone extends Student_Home
          $data['stream_total'] = $wpdb->get_var($sql2);
 
          //获取可提现金额
-         $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$user_info['user_id']} ";
-         $balance = $wpdb->get_var($sql3);
+         $balance = $this->get_stream_total();
          $data['balance'] = $balance > 0 ? $balance : number_format(0,2);
 
         $view = student_view_path.CONTROLLER.'/profit.php';
@@ -95,13 +94,22 @@ class Student_Zone extends Student_Home
      * 提现页面
      */
      public function getCash(){
+
+        //获取机构信息
+        $data['zone'] = $this->get_zone_meta();
+        $data['bank_card_num'] = substr_replace($data['zone']['bank_card_num'],'********',4,8);
+        //获取能提现的最大金额
+        $balance = $this->get_stream_total();
+        $data['balance'] = $balance > 0 ? $balance : number_format(0,2);
+
         $view = student_view_path.CONTROLLER.'/profit-getCash.php';
-        load_view_template($view);
+        load_view_template($view,$data);
     }
     /**
      * 提现成功页面
      */
      public function getCashSuccess(){
+
         $view = student_view_path.CONTROLLER.'/profit-getCash-success.php';
         load_view_template($view);
     }
@@ -133,6 +141,7 @@ class Student_Zone extends Student_Home
      * 提现详情页面
      */
      public function getCashDetail(){
+
         $view = student_view_path.CONTROLLER.'/profit-getCash-detail.php';
         load_view_template($view);
     }
@@ -338,9 +347,22 @@ class Student_Zone extends Student_Home
 
     }
 
-    public function test(){
-        $view = student_view_path.CONTROLLER.'/test.php';
-        load_view_template($view);
+    /**
+     * 获取可提现金额
+     */
+    public function get_stream_total(){
+        global $wpdb,$current_user;
+        $sql3 = "select sum(user_income) stream_total from {$wpdb->prefix}user_stream_logs where user_id = {$current_user->ID} ";
+        return $wpdb->get_var($sql3);
+    }
+
+    /**
+     * 获取机构信息
+     */
+    public function get_zone_meta(){
+        global $wpdb,$current_user;
+        $row = $wpdb->get_row("select * from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}",ARRAY_A);
+        return $row;
     }
 
     /**

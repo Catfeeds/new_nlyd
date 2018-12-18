@@ -56,6 +56,7 @@ function the_table_install () {
           `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match  grading extract',
           `match_id`    int(20) DEFAULT NULL COMMENT '比赛/考级id',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',
+          `extract_type` varchar(20) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
           `created_time` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
           )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -886,22 +887,23 @@ function the_table_install () {
         dbDelta($sql);
     }
 
-    $table_name = $wpdb->prefix . "user_extract";  //用户提现记录表
+    $table_name = $wpdb->prefix . "user_extract_logs";  //用户提现记录表
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //用户提现记录表
         $sql = "CREATE TABLE `{$table_name}` (
-          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `extract_id` int(10) unsigned NOT NULL COMMENT '提现的用户或主体id',
+          `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+          `stream_log_id` int(20) unsigned NOT NULL COMMENT '流水记录id',
+          `extract_id` int(20) unsigned NOT NULL COMMENT '用户id',
           `extract_amount` decimal(10,2) unsigned NOT NULL COMMENT '提现金额',
+          `extract_type` varchar(10) DEFAULT NULL COMMENT '提现类型 bank 银行卡 wallet 钱包 weChat 微信',
+          `bank_name` varchar(255) DEFAULT NULL COMMENT '银行名称',
+          `bank_address` varchar(255) DEFAULT NULL COMMENT '开户行地址',
           `extract_account` varchar(255) NOT NULL COMMENT '收款账号',
           `extract_code_img` varchar(255) DEFAULT NULL COMMENT '收款二维码',
-          `extract_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '(收款账号类型)1微信,2支付宝,3银行',
           `apply_time` datetime NOT NULL COMMENT '申请日期',
           `censor_time` datetime DEFAULT NULL COMMENT '审核时间',
           `extract_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1审核中,2已提现,3未通过',
           `censor_user_id` int(10) unsigned DEFAULT NULL COMMENT '审核人user_id',
-          `bank_name` varchar(255) DEFAULT NULL COMMENT '银行名称',
-          `extract_user_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1用户提现,2主体提现',
           PRIMARY KEY (`id`),
           KEY `index` (`extract_id`,`censor_user_id`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
