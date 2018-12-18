@@ -297,7 +297,11 @@ jQuery(document).ready(function($) {
     var selectData = [{id:'zh_CN',value:'中文'}];
     $.each(_select.find('option'),function (i,v) {
         if($(v).val() != ''){
-            selectData.push({'id':$(v).val(),'value':$(v).text()});
+            if($(v).text() == 'en_US'){
+                selectData.push({'id':$(v).val(),'value':'English'});
+            }else{
+                selectData.push({'id':$(v).val(),'value':$(v).text()});
+            }
         }
     });
     // 模拟手机下拉列表，选择性别
