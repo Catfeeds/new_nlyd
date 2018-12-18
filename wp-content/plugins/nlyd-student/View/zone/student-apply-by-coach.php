@@ -12,16 +12,16 @@
                 <div><i class="iconfont">&#xe610;</i></div>
             </a>
             <h1 class="mui-title">
-            <div><?=__('战队申请管理', 'nlyd-student')?></div>
+            <div><?=__('学员队申请管理', 'nlyd-student')?></div>
             </h1>
         </header>
             <div class="layui-row nl-border nl-content">
                 <div class="teamApply_row width-padding width-padding-pc">
                     <div class="teamApply_row_info fs_14">
                         <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
-                        <span><?=__('申请', 'nlyd-student')?></span>
-                        <span class="c_blue"><?=__('加入', 'nlyd-student')?></span>
-                        <span><?=__('战队', 'nlyd-student')?></span>
+                        <span><?=__('申请你成为她的', 'nlyd-student')?></span>
+                        <span class="c_blue"><?=__('速算', 'nlyd-student')?></span>
+                        <span><?=__('教练', 'nlyd-student')?></span>
                     </div>
                     <div class="teamApply_row_btns fs_14 pull-right">
                         <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
@@ -32,9 +32,9 @@
                 <div class="teamApply_row width-padding width-padding-pc">
                     <div class="teamApply_row_info fs_14">
                         <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
-                        <span><?=__('申请', 'nlyd-student')?></span>
-                        <span class="c_blue"><?=__('退出', 'nlyd-student')?></span>
-                        <span><?=__('战队', 'nlyd-student')?></span>
+                        <span><?=__('申请与你', 'nlyd-student')?></span>
+                        <span class="c_blue"><?=__('解除速读教学', 'nlyd-student')?></span>
+                        <span><?=__('关系', 'nlyd-student')?></span>
                     </div>
                     <div class="teamApply_row_btns fs_14 pull-right">
                         <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>

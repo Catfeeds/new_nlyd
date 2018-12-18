@@ -288,8 +288,22 @@ class Student_Zone extends Student_Home
     /**
      * 分中心学员管理
      */
-     public function student(){
-        $view = student_view_path.CONTROLLER.'/student-list.php';
+     public function studentCenter(){
+        $view = student_view_path.CONTROLLER.'/student-by-center.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练学员管理
+     */
+     public function studentCoach(){
+        $view = student_view_path.CONTROLLER.'/student-by-coach.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练学员申请
+     */
+     public function studentApply(){
+        $view = student_view_path.CONTROLLER.'/student-apply-by-coach.php';
         load_view_template($view);
     }
     /**
