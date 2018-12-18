@@ -203,6 +203,7 @@ input[type="tel"].radius_input_row
 }
 textarea.radius_input_row{
     border-radius: 6px;
+    height: 150px;
 }
 
 
@@ -721,4 +722,18 @@ input[type="text"].coach_form_input{
     margin-top: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.teamApply_row{
+    padding-top: 13px;
+    padding-bottom: 13px;
+    font-size: 0;
+}
+.teamApply_row:nth-child(even){
+    background: rgba(243, 248, 255, 0.68);
+}
+.teamApply_row_info,
+.teamApply_row_btns{
+    display: inline-block;
+    vertical-align: middle;
 }

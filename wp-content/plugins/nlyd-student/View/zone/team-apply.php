@@ -12,20 +12,35 @@
                 <div><i class="iconfont">&#xe610;</i></div>
             </a>
             <h1 class="mui-title">
-            <div><?=__('战队管理', 'nlyd-student')?></div>
+            <div><?=__('战队申请管理', 'nlyd-student')?></div>
             </h1>
         </header>
             <div class="layui-row nl-border nl-content">
-            <?php if($row){?>
-                   
-                <?php }else{ ?>
-                    <div class="no-info-page layui-row">
-                        <div class="no-info-img">
-                            <img src="<?=student_css_url.'image/noInfo/noTeam1094@2x.png'?>">
-                        </div>
-                        <p class="no-info-text"><?=__('暂无任何战队相关', 'nlyd-student')?></p>
+                <div class="teamApply_row width-padding width-padding-pc">
+                    <div class="teamApply_row_info fs_14">
+                        <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
+                        <span><?=__('申请', 'nlyd-student')?></span>
+                        <span class="c_blue"><?=__('加入', 'nlyd-student')?></span>
+                        <span><?=__('战队', 'nlyd-student')?></span>
                     </div>
-                <?php } ?>
+                    <div class="teamApply_row_btns fs_14 pull-right">
+                        <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
+                        <a class="c_black6"><?=__('拒绝', 'nlyd-student')?></a>
+                    </div>
+                </div>
+
+                <div class="teamApply_row width-padding width-padding-pc">
+                    <div class="teamApply_row_info fs_14">
+                        <span class="c_blue"><?=__('詹冬梅', 'nlyd-student')?></span>
+                        <span><?=__('申请', 'nlyd-student')?></span>
+                        <span class="c_blue"><?=__('退出', 'nlyd-student')?></span>
+                        <span><?=__('战队', 'nlyd-student')?></span>
+                    </div>
+                    <div class="teamApply_row_btns fs_14 pull-right">
+                        <a class="c_blue mr_10"><?=__('同意', 'nlyd-student')?></a>
+                        <a class="c_black6"><?=__('拒绝', 'nlyd-student')?></a>
+                    </div>
+                </div>
             </div>
         </div>           
     </div>

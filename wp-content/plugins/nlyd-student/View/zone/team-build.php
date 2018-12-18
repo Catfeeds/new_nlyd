@@ -41,7 +41,7 @@
                         </div>
                         
                     </form>
-                    <a href="" class="a-btn a-btn-table"><div><?=__('确认申请', 'nlyd-student')?></div></a>
+                    <a class="a-btn a-btn-table"><div><?=__('确认申请', 'nlyd-student')?></div></a>
                 </div>
             </div>
         </div>            
