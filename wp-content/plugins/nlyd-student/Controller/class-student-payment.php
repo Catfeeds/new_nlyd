@@ -268,7 +268,7 @@ class Student_Payment {
             //获取订单信息回调,用于验证签名
             global $wpdb;
             $order = $wpdb->get_row(
-                'SELECT serialnumber,match_id,user_id,fullname,telephone,order_type,address,pay_type,cost,pay_status,created_time FROM '
+                'SELECT serialnumber,match_id,user_id,fullname,sub_centres_id,telephone,order_type,address,pay_type,cost,pay_status,created_time FROM '
                 .$wpdb->prefix.'order WHERE serialnumber='.$out_trade_no.' AND pay_status=1', ARRAY_A);
             if($order){
 
@@ -303,6 +303,78 @@ class Student_Payment {
             ];
             $bool = $wpdb->update($wpdb->prefix.'order', $updateData, array('serialnumber' => $serialnumber));
             if($bool){
+                /*****************收益分配start*******************/
+                //准备数据
+                //获取直接/间接收益人
+                $sql = "select a.ID user_id,a.referee_id,b.referee_id as indirect_referee_id from {$wpdb->prefix}users a left join {$wpdb->prefix}users b on a.referee_id = b.ID where a.ID = {$order['user_id']}";
+                $user = $wpdb->get_row($sql,ARRAY_A);
+                //print_r($user);
+                //获取比赛/考级相关信息
+                $order['order_type']= 2;
+                $order['match_id']= 56927;
+                if($order['order_type'] == 1){
+                    $income_type = 'match';
+                    //准备对应的数据
+                    $money1 = 50;     //比赛直接推广人
+                    $money2 = 50;    //比赛间接推广人
+                    $money3 = 100;   //参赛机构
+                    $money4 = 100;   //办赛机构
+
+                    $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
+                    //print_r($created_id);
+                    $insert = array(
+                        'income_type'=>$income_type,
+                        'match_id'=>$order['match_id'],
+                        'user_id'=>$order['user_id'],
+                        'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                        'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                        'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                        'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                        'person_liable_id'=>$order['sub_centres_id'] > 0 ? $order['sub_centres_id'] : '',   //参赛机构
+                        'person_liable_income'=>$order['sub_centres_id'] > 0 ? $money3 : '',  //参赛机构收益
+                        'sponsor_id'=>$created_id > 0 ? $created_id : '',  //办赛机构
+                        'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
+                    );
+                }
+                elseif ($order['order_type'] == 2){
+                    $income_type = 'grading';
+                    //准备对应的数据
+                    $money1 = 5;     //比赛直接推广人
+                    $money2 = 5;    //比赛间接推广人
+                    $money3 = 20;   //责任教练
+                    $money4 = 20;   //办赛机构
+
+                    $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
+
+                    $insert = array(
+                        'income_type'=>$income_type,
+                        'match_id'=>$order['match_id'],
+                        'user_id'=>$order['user_id'],
+                        'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                        'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                        'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                        'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                        'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
+                        'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
+                        'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
+                        'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
+                    );
+                }
+                $insert['created_time'] = get_time('mysql');
+                $id = $wpdb->get_var("select id from {$wpdb->prefix}income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
+                //print_r($id);
+                if(empty($id)){
+                    $res = $wpdb->insert($wpdb->prefix.'income_logs',$insert);
+                    if($res){
+                        $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}ser_stream_logs where user_id = {$insert['sponsor_id']} and match_id = {$order['match_id']}");
+                        if(!empty($stream_id)){
+                            $wpdb->insert($wpdb->prefix.'ser_stream_logs',array('user_id'=>$insert['sponsor_id'],'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                        }
+                    }
+                }
+
+                //print_r($res);die;
+                /*****************收益分配end*******************/
                 echo 'SUCCESS';
             }else{
                 echo 'FALL';
@@ -444,7 +516,7 @@ class Student_Payment {
         $id = intval($_GET['id']);
         global $wpdb,$current_user;
         $order = $wpdb->get_row(
-            'SELECT serialnumber,match_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
+            'SELECT serialnumber,match_id,order_type,sub_centres_id,user_id,fullname,telephone,address,pay_type,cost,pay_status,created_time FROM '
             .$wpdb->prefix.'order WHERE id='.$id.' AND user_id='.$current_user->ID.' AND pay_status=1', ARRAY_A);
         if(!$order){
 //            $this->get_404('参数错误');
@@ -502,7 +574,7 @@ class Student_Payment {
         $data = $_POST;
         $this->payClass ->notify($data, function ($data){
             global $wpdb;
-            $order = $wpdb->get_row('SELECT id,pay_status,cost,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$data['out_trade_no'], ARRAY_A);
+            $order = $wpdb->get_row('SELECT id,order_type,match_id,sub_centres_id,pay_status,cost,order_type FROM '.$wpdb->prefix.'order WHERE serialnumber='.$data['out_trade_no'], ARRAY_A);
             //file_put_contents('aaa.txt', json_decode($order, JSON_UNESCAPED_UNICODE));
             if($order && $order['pay_status'] == 1 && $order['cost'] == $data['total_amount']){
                 //TODO 更新订单支付状态
@@ -522,7 +594,82 @@ class Student_Payment {
                     'pay_type' => 'zfb',
                     'pay_lowdown' => serialize($data)
                 ];
-                return $wpdb->update($wpdb->prefix.'order', $updateData, array('id' => $order['id']));
+                $result = $wpdb->update($wpdb->prefix.'order', $updateData, array('id' => $order['id']));
+                if($result){
+                    /*****************收益分配start*******************/
+                    //准备数据
+                    //获取直接/间接收益人
+                    $sql = "select a.ID user_id,a.referee_id,b.referee_id as indirect_referee_id from {$wpdb->prefix}users a left join {$wpdb->prefix}users b on a.referee_id = b.ID where a.ID = {$order['user_id']}";
+                    $user = $wpdb->get_row($sql,ARRAY_A);
+                    //print_r($user);
+                    //获取比赛/考级相关信息
+                    $order['order_type']= 2;
+                    $order['match_id']= 56927;
+                    if($order['order_type'] == 1){
+                        $income_type = 'match';
+                        //准备对应的数据
+                        $money1 = 50;     //比赛直接推广人
+                        $money2 = 50;    //比赛间接推广人
+                        $money3 = 100;   //参赛机构
+                        $money4 = 100;   //办赛机构
+
+                        $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
+                        //print_r($created_id);
+                        $insert = array(
+                            'income_type'=>$income_type,
+                            'match_id'=>$order['match_id'],
+                            'user_id'=>$order['user_id'],
+                            'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                            'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                            'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                            'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                            'person_liable_id'=>$order['sub_centres_id'] > 0 ? $order['sub_centres_id'] : '',   //参赛机构
+                            'person_liable_income'=>$order['sub_centres_id'] > 0 ? $money3 : '',  //参赛机构收益
+                            'sponsor_id'=>$created_id > 0 ? $created_id : '',  //办赛机构
+                            'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
+                        );
+                    }
+                    elseif ($order['order_type'] == 2){
+                        $income_type = 'grading';
+                        //准备对应的数据
+                        $money1 = 5;     //比赛直接推广人
+                        $money2 = 5;    //比赛间接推广人
+                        $money3 = 20;   //责任教练
+                        $money4 = 20;   //办赛机构
+
+                        $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
+
+                        $insert = array(
+                            'income_type'=>$income_type,
+                            'match_id'=>$order['match_id'],
+                            'user_id'=>$order['user_id'],
+                            'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                            'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                            'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                            'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                            'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
+                            'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
+                            'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
+                            'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
+                        );
+                    }
+                    $insert['created_time'] = get_time('mysql');
+                    $id = $wpdb->get_var("select id from {$wpdb->prefix}income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
+                    //print_r($id);
+                    if(empty($id)){
+                        $res = $wpdb->insert($wpdb->prefix.'income_logs',$insert);
+                        if($res){
+                            $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}ser_stream_logs where user_id = {$insert['sponsor_id']} and match_id = {$order['match_id']}");
+                            if(!empty($stream_id)){
+                                $wpdb->insert($wpdb->prefix.'ser_stream_logs',array('user_id'=>$insert['sponsor_id'],'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                            }
+                        }
+                    }
+
+                    //print_r($res);die;
+                    /*****************收益分配end*******************/
+                    return $result;
+                }
             }else{
                 return false;
             }

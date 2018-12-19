@@ -4351,9 +4351,9 @@ class Student_Ajax
         global $current_user;
         $upload_dir = wp_upload_dir();
         $spread_qrcode = get_user_meta($current_user->ID,'referee_qrcode');
-        if(!empty($spread_qrcode)){
+        /*if(!empty($spread_qrcode)){
             wp_send_json_success($upload_dir['baseurl'].$spread_qrcode[0]);
-        }else{
+        }else{*/
 
             include_once leo_student_path."library/Vendor/phpqrcode/phpqrcode.php"; //引入PHP QR库文件
             $value=home_url('/logins/index/referee_id/'.$current_user->ID);
@@ -4369,9 +4369,10 @@ class Student_Ajax
             $matrixPointSize = "6"; //生成图片大小
             QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
             //生成带logo的二维码
-            $logo = student_css_url.'image\logo1.jpg';
+            $logo = leo_student_path.'Public/css/image/logo1.jpg';
+            //svar_dump(file_exists($logo));die;
             //die;
-            if ($logo !== FALSE) {
+            if (file_exists($logo)) {
                 $QR = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
                 $logo = imagecreatefromstring ( file_get_contents ( $logo ) );
                 $QR_width = imagesx ( $QR );
@@ -4386,8 +4387,8 @@ class Student_Ajax
             }
             imagejpeg ( $QR, $qrcode_path );//带Logo二维码的文件名
             //die;
-            $back = student_css_url.'image\test.jpg';
-            if ($back !== FALSE) {
+            $back = leo_student_path.'Public/css/image/test.jpg';
+            if (file_exists($back)) {
                 $back_ = imagecreatefromstring ( file_get_contents ( $back ) );
                 $qrcode = imagecreatefromstring ( file_get_contents ( $qrcode_path ) );
                 // $back_width = imagesx ( $back_ );
@@ -4403,7 +4404,7 @@ class Student_Ajax
             imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
             wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
-        }
+        //}
     }
 
 

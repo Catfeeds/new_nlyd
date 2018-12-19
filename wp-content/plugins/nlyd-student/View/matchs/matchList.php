@@ -140,11 +140,16 @@ jQuery(function($) {
                                     var match_status='c_blue';//比赛中高亮
                                     var rightBtn='';  
                                     var endTime="";//报名截止
-                                    var domTime=v.entry_end_time.replace(/-/g,'/');
-                                    var end_time = new Date(domTime).getTime();//月份是实际月份-1
-                                    var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
-                                    var sys_second = (end_time-serverTimes)/1000;
-                                    var sys_second_text=sys_second>0 ? '' :  "<?=__('报名结束', 'nlyd-student')?>";
+                                    
+                                    if(v.entry_end_time===null){
+                                        var sys_second_text="-"
+                                    }else{
+                                        var domTime=v.entry_end_time.replace(/-/g,'/');
+                                        var end_time = new Date(domTime).getTime();//月份是实际月份-1
+                                        var serverTimes=new Date(xhr.getResponseHeader('Date')).getTime()
+                                        var sys_second = (end_time-serverTimes)/1000;
+                                        var sys_second_text=sys_second>0 ? '' :  "<?=__('报名结束', 'nlyd-student')?>";
+                                    }
                                     var match_notice_url='';//参赛须知
                                     if(v.user_id!=null){//我报名参加的赛事
                                         isMe='<div class="nl-badge"><i class="iconfont">&#xe608;</i></div>'

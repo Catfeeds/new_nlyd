@@ -11,7 +11,7 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('发布课程', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('推荐管理', 'nlyd-student')?></div></h1>
             </header>
             <div class="layui-row nl-border nl-content">
                 <div class="layui-row layui-bg-white">

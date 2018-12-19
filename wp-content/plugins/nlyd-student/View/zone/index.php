@@ -42,12 +42,14 @@
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
                             <?php if($row['user_status'] == 1){ ?>
-                            <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
+                            <a class=" c_blue"><?=__('更多资料', 'nlyd-student')?></a>
                             <?php }
                             elseif ($row['user_status'] == -1){ ?>
-                            <a class="pull-right c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
-                            <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
+                            <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
+                            <?php if(($row['id'] == 1) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                            <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
+                            <?php endif;?>
                         </div>
 
                         <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
@@ -59,7 +61,7 @@
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
                         <div class="apply_list_line pull-left ">
                             <div class="zone_bg bg_money"></div>
                         </div>
@@ -67,7 +69,7 @@
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?><?=$stream > 0 ? $stream : number_format($stream,2)?></div>
                     </a>
-                    <a class="apply_list c_black layui-row">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/recommend/');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_share"></div>
                         </div>
@@ -82,7 +84,7 @@
                     <?php if(!empty($list)){?>
                         <?php foreach ($list as $v){ ?>
 
-                        <a class="apply_list c_black layui-row" href="<?=home_url('zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
+                        <a class="apply_list c_black layui-row" href="<?=home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
                             <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
                             <div class="apply_list_line center"><?=__('申请设立'.$v['zone_type_name'], 'nlyd-student')?></div>
                             <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>

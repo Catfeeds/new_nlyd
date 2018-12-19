@@ -190,7 +190,9 @@
 {
     margin-bottom: 0;
 }
-input[type="text"]:disabled{
+input[type="text"]:disabled,
+input[type="tel"]:disabled{
+    color: #262626;
     background-color: rgba(135, 135, 135, 0.1);
 }
 input[type="text"].radius_input_row,
