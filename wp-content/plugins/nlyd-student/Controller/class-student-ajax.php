@@ -3199,7 +3199,7 @@ class Student_Ajax
                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
             }
-            wp_send_json_error(['info'=>'获取成功','data'=>$rows]);
+            wp_send_json_success(['info'=>'获取成功','data'=>$rows]);
         }else{
             wp_send_json_error(['info'=>'无数据!']);
         }
