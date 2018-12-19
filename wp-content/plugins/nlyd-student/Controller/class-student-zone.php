@@ -238,7 +238,7 @@ class Student_Zone extends Student_Home
     /**
      * 考级管理列表
      */
-     public function kaojiList(){
+     public function kaoji(){
         $view = student_view_path.CONTROLLER.'/kaoji-list.php';
         load_view_template($view);
     }

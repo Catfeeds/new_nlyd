@@ -51,7 +51,7 @@
                             </div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="zone_name"  id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
+                                <input class="radius_input_row nl-foucs" value="" type="text" readonly name="zone_name" data-time="2019-10-11-11-11" id="match_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择考级日期', 'nlyd-student')?>">
                             </div>
                         </div>
                         <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
@@ -119,7 +119,7 @@ var mobileSelect2 = new MobileSelect({
     }
 });
 //---------------------------考级日期------------------------------
-if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
+if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
     $.each($.validationLayui.dates2,function(index,value){
         if(timeValue[0]==value.value){

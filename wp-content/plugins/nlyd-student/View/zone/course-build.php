@@ -65,7 +65,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="<?=$match['data_time']?>"  id="course_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开赛日期', 'nlyd-student')?>" value="<?=$match['match_start_time']?>">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="2019-11-11-11-11"  id="course_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
                             </div>
                         </div>
                         <div>
@@ -93,12 +93,12 @@
 jQuery(function($) { 
     var course_type1_Data=[{id:1,value:"乐学乐"},{id:2,value:"乐学乐2"}];//课程类型
     var course_type2_Data=[{id:1,value:"基础应用课"},{id:2,value:"提升应用课"}];//教学类型
-    var course_date_Data=$.validationLayui.dates2;//开赛日期
+    var course_date_Data=$.validationLayui.dates2;//开课日期
     var posiotion_course_type1=[0];//初始化位置，高亮展示
     var posiotion_course_type2=[0];//初始化位置，高亮展示
     var posiotion_course_date=[0,0,0,0,0];//初始化位置，高亮展示
 
-    //---------------------------比赛类别------------------------------
+    //---------------------------课程类型------------------------------
     if($('#course_type1').val().length>0 && $('#course_type1').val()){
         $.each(course_type1_Data,function(index,value){
             if(value['value']==$('#course_type1').val()){
@@ -109,7 +109,7 @@ jQuery(function($) {
     }
     var mobileSelect1 = new MobileSelect({
         trigger: '#course_type1',
-        title: '<?=__('比赛场景', 'nlyd-student')?>',
+        title: '<?=__('课程类型', 'nlyd-student')?>',
         wheels: [
             {data: course_type1_Data}
         ],
@@ -123,7 +123,7 @@ jQuery(function($) {
         
         }
     });
-    //---------------------------比赛类型------------------------------
+    //---------------------------教学类型------------------------------
     if($('#course_type2').val().length>0 && $('#course_type2').val()){
         $.each(course_type2_Data,function(index,value){
             if(value['value']==$('#course_type2').val()){
@@ -134,7 +134,7 @@ jQuery(function($) {
     }
     var mobileSelect2 = new MobileSelect({
         trigger: '#course_type2',
-        title: '<?=__('比赛类型', 'nlyd-student')?>',
+        title: '<?=__('教学类型', 'nlyd-student')?>',
         wheels: [
             {data: course_type2_Data}
         ],
@@ -148,8 +148,8 @@ jQuery(function($) {
         
         }
     });
-    //---------------------------开赛日期------------------------------
-    if($('#course_date').length>0 && $('#course_date').attr('data-time').length>0){
+    //---------------------------开课日期------------------------------
+    if($('#course_date').length>0 && $('#course_date').attr('data-time') && $('#course_date').attr('data-time').length>0){
         var timeValue=$('#course_date').attr('data-time').split('-');
         $.each($.validationLayui.dates2,function(index,value){
             if(timeValue[0]==value.value+""){
@@ -179,7 +179,7 @@ jQuery(function($) {
     }
     var mobileSelect3 = new MobileSelect({
         trigger: '#course_date',
-        title: '<?=__('开赛日期', 'nlyd-student')?>',
+        title: '<?=__('开课日期', 'nlyd-student')?>',
         wheels: [
             {data: course_date_Data}
         ],
