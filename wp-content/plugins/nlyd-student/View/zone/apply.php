@@ -17,7 +17,7 @@
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('训练中心编号', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair(!empty($row) ? $row['id'] : $zone_num,4,0)?>"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair(!empty($row['id']) ? $row['id'] : $zone_num,4,0)?>"></div>
                         </div>
                         <div>
                             <div class="lable_row">
@@ -33,7 +33,7 @@
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
-                                <?php if(!empty(!empty($row))){?>
+                                <?php if(!empty(!empty($row['id']))){?>
                                     <input type="hidden" name="business_licence_url" value="<?=$row['business_licence']?>">
                                     <div class="post-img no-dash">
                                         <div class="img-zoo img-box">
@@ -92,12 +92,14 @@
                             </div>
                         </div>
                         <?php endif;?>
+                        <?php if(!empty($referee_name)):?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('事业管理员', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <input class="radius_input_row" disabled type="text" value="<?=$referee_name?>">
                             </div>
                         </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('中心管理员', 'nlyd-student')?>：</span></div>
                             <div class="input_row">

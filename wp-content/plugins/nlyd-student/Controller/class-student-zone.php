@@ -55,8 +55,8 @@ class Student_Zone extends Student_Home
 
             $role_list = $wpdb->get_results($sql,ARRAY_A);
             $data['role_list'] = $role_list;
-            $data['row'] = $row;
         }
+        $data['row'] = $row;
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
@@ -480,14 +480,13 @@ class Student_Zone extends Student_Home
             $row['secretary_name'] = !empty($row['secretary_id']) ? get_user_meta($row['secretary_id'],'user_real_name')[0]['real_name'] : '';
 
             $data['row'] = $row;
+        }
+        //分中心编号
+        $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
+        if($total < 8){
+            $data['zone_num'] = 8;
         }else{
-            //分中心编号
-            $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
-            if($total < 8){
-                $data['zone_num'] = 8;
-            }else{
-                $data['zone_num'] = $total+1;
-            }
+            $data['zone_num'] = $total+1;
         }
         //获取所有机构
         //$data['list'] = $wpdb->get_results("select id,zone_type_name,zone_type_alias from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
