@@ -3134,8 +3134,8 @@ class Student_Ajax
      */
     public function getDirectories(){
         $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        $type = 1;
-        if($type < 1)  wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
+        $type = isset($_POST['type']) ? intval($_POST['type']) : 0;
+//        if($type < 1)  wp_send_json_error(array('info'=>__('参数错误', 'nlyd-student')));
         $page < 1 && $page = 1;
         $pageSize = 50;
         $start = ($page-1)*$pageSize;

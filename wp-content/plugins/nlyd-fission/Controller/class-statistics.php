@@ -27,6 +27,9 @@ class Statistics{
         $all_income = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(2,3,4)");
         //总支出
         $all_expenses = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status=-2");
+        //总收益分成
+        $all_referee_income_arr = $wpdb->get_row("SELECT SUM(referee_income) AS referee_income,SUM(indirect_referee_income) AS indirect_referee_income FROM {$wpdb->prefix}income_logs WHERE income_status=2", ARRAY_A);
+
         //总盈利
         $all_profit = $all_income-$all_expenses;
         $link_name = '';
@@ -52,19 +55,27 @@ class Statistics{
                 $link_name = '天';
                 break;
         }
-
+        //收益分成
+        $referee_income_arr = $wpdb->get_row("SELECT SUM(referee_income) AS referee_income,SUM(indirect_referee_income) AS indirect_referee_income FROM {$wpdb->prefix}income_logs WHERE income_status=2 AND {$dateWhere}", ARRAY_A);
+//        leo_dump($wpdb->last_query);
         $income = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(2,3,4) AND {$dateWhere}");
         $expenses = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(-2) AND {$dateWhere}");
-//        leo_dump($wpdb->last_query);
+
         $rows = [];
         $status_type = 1;
         ?>
-            <div>总收入<?=$all_income?></div>
-            <div>总支出<?=$all_expenses?></div>
-            <div>总利润<?=$all_profit?></div>
-            <div>收入<?=$income?></div>
-            <div>支出<?=$expenses?></div>
-            <div>利润<?=$income-$expenses?></div>
+            <div>订单总收入<?=$all_income?></div>
+            <div>订单总支出<?=$all_expenses?></div>
+            <div>订单总利润<?=$all_profit?></div>
+            <div>订单收入<?=$income?></div>
+            <div>订单支出<?=$expenses?></div>
+            <div>订单利润<?=$income-$expenses?></div>
+            <div>总收益分成<?=$all_referee_income_arr['referee_income']+$all_referee_income_arr['indirect_referee_income']?></div>
+            <div>总一级收益分成<?=$all_referee_income_arr['referee_income']?></div>
+            <div>总二级收益分成<?=$all_referee_income_arr['indirect_referee_income']?></div>
+            <div>收益分成<?=$referee_income_arr['referee_income']+$referee_income_arr['indirect_referee_income']?></div>
+            <div>一级收益分成<?=$referee_income_arr['referee_income']?></div>
+            <div>二级收益分成<?=$referee_income_arr['indirect_referee_income']?></div>
 
         <div class="wrap">
             <h1 class="wp-heading-inline">主体类型列表</h1>
@@ -73,11 +84,11 @@ class Statistics{
 
             <hr class="wp-header-end">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=1')?>" <?=$status_type===1?'class="current"':''?> aria-current="page">按年<span class="count">（<?=$all_income?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=2')?>" <?=$status_type===2?'class="current"':''?> aria-current="page">按季度<span class="count">（<?=$all_expenses?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=3')?>" <?=$status_type===3?'class="current"':''?> aria-current="page">按月<span class="count">（<?=$all_profit?>）</span></a> </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=4')?>" <?=$status_type===4?'class="current"':''?> aria-current="page">按周<span class="count">（<?=$all_profit?>）</span></a> </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=5')?>" <?=$status_type===-5?'class="current"':''?> aria-current="page">按天<span class="count">（<?=$all_profit?>）</span></a> </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=1')?>" <?=$stype===1?'class="current"':''?> aria-current="page">按年<span class="count">（<?=$all_income?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=2')?>" <?=$stype===2?'class="current"':''?> aria-current="page">按季度<span class="count">（<?=$all_expenses?>）</span></a> |</li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=3')?>" <?=$stype===3?'class="current"':''?> aria-current="page">按月<span class="count">（<?=$all_profit?>）</span></a> </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=4')?>" <?=$stype===4?'class="current"':''?> aria-current="page">按周<span class="count">（<?=$all_profit?>）</span></a> </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=5')?>" <?=$stype===5?'class="current"':''?> aria-current="page">按天<span class="count">（<?=$all_profit?>）</span></a> </li>
             </ul>
             <br class="clear">
             <ul class="subsubsub">
