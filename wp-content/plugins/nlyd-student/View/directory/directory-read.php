@@ -32,7 +32,6 @@
                                     <td><?=__('ID', 'nlyd-student')?></td>
                                     <td><?=__('性别', 'nlyd-student')?></td>
                                     <td><?=__('速读级别', 'nlyd-student')?></td>
-                                    <td><?=__('主训教练', 'nlyd-student')?></td>
                                 </tr>
                             </thead>
                             <tbody id="flow-table">
@@ -55,35 +54,34 @@ jQuery(function($) {
             ,isLazyimg: true
             ,done: function(page, next){ //加载下一页
                 var postData={
-                    action:'getDirectories',
+                    action:'getUserGradingDirectories',
                     page:page,
-                    type:2,//1脑力健将,2国际速读水平认证,3国际心算水平认证,4国际记忆水平认证
+                    type_id:1,//1国际速读水平认证,3国际心算水平认证,2国际记忆水平认证
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){
                         console.log(res)
                         if(res.success){
                             $.each(res.data.info,function(index,value){
                                 var real_name=value.real_name ? value.real_name :'-';
                                 var user_id=value.userID ? value.userID :'-';
-                                var sex=value.sex ? value.sex :'-';
+                                var sex=value.user_sex ? value.user_sex :'-';
                                 var category_name=value.category_name ? value.category_name :'-';
-                                var level=value.level ? value.level :'-';
-                                var coach_name=value.coach_name ? value.coach_name :'-';
+                                var skill_level=value.skill_level ? value.skill_level :'-';
                                 var ranges=value.ranges ? value.ranges :'-';
-                                var header_img=value.header_img ? value.header_img :'';
+                                var user_head=value.user_head ? value.user_head :'';
                                 var dom='<tr>'
                                             +'<td>'
                                                 +'<div class="player-img img-box">'
-                                                    +'<img src="'+header_img+'">'
+                                                    +'<img src="'+user_head+'">'
                                                 +'</div>'
                                             +'</td>'
                                             +'<td>'+real_name+'</td>'
                                             +'<td>'+user_id+'</td>'
                                             +'<td>'+sex+'</td>'
-                                            +'<td>'+level+'</td>'
-                                            +'<td>'+coach_name+'</td>'
+                                            +'<td>'+skill_level+'</td>'
                                         +'</tr>';
                                 lis.push(dom)
                             })

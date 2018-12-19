@@ -33,7 +33,6 @@
                                     <td><div class="table_content"><?=__('性 别', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('类&nbsp;&nbsp;&nbsp;&nbsp;别', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('级 别', 'nlyd-student')?></div></td>
-                                    <td><div class="table_content"> <?=__('主训教练', 'nlyd-student')?></div></td>
                                     <td><div class="table_content"><?=__('国 籍', 'nlyd-student')?></div></td>
                                 </tr>
                             </thead>
@@ -69,9 +68,8 @@ jQuery(function($) {
                                 var real_name=value.real_name ? value.real_name :'-';
                                 var userID=value.userID ? value.userID :'-';
                                 var sex=value.sex ? value.sex :'-';
-                                var category_name=value.category_name ? value.category_name :'-';
+                                var post_title=value.post_title ? value.post_title :'-';
                                 var level=value.level ? value.level :'-';
-                                var coach_name=value.coach_name ? value.coach_name :'-';
                                 var ranges=value.ranges ? value.ranges :'-';
                                 var header_img=value.header_img ? value.header_img :'';
                                 var dom='<tr>'
@@ -83,9 +81,8 @@ jQuery(function($) {
                                             +'<td><div class="table_content">'+real_name+'</div></td>'
                                             +'<td><div class="table_content">'+userID+'</div></td>'
                                             +'<td><div class="table_content">'+sex+'</div></td>'
-                                            +'<td><div class="table_content">'+category_name+'</div></td>'
+                                            +'<td><div class="table_content">'+post_title+'</div></td>'
                                             +'<td><div class="table_content">'+level+'</div></td>'
-                                            +'<td><div class="table_content">'+coach_name+'</div></td>'
                                             +'<td><div class="table_content">'+ranges+'</div></td>'
                                         +'</tr>';
                                 lis.push(dom)
