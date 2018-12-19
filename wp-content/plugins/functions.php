@@ -298,7 +298,7 @@ if(!function_exists('get_match_end_time')){
         if(empty($match_project_id)){
             return -1; //error 比赛信息错误
         }
-        $sql = "SELECT p.post_title,pm.meta_value as project_alias,p.ID AS match_project_id FROM {$wpdb->posts} AS p 
+        $sql = "SELECT p.post_title,pm.meta_value as project_alias,p.ID AS match_project_id,p.post_parent FROM {$wpdb->posts} AS p 
             LEFT JOIN {$wpdb->postmeta} AS pm ON p.ID=pm.post_id AND pm.meta_key='project_alias' 
             WHERE p.ID IN ({$match_project_id})";
         $projectArr = $wpdb->get_results($sql, ARRAY_A);

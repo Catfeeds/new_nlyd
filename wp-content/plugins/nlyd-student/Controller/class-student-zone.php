@@ -350,8 +350,22 @@ class Student_Zone extends Student_Home
     /**
      * 分中心学员管理
      */
-     public function student(){
-        $view = student_view_path.CONTROLLER.'/student-list.php';
+     public function studentCenter(){
+        $view = student_view_path.CONTROLLER.'/student-by-center.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练学员管理
+     */
+     public function studentCoach(){
+        $view = student_view_path.CONTROLLER.'/student-by-coach.php';
+        load_view_template($view);
+    }
+    /**
+     * 教练学员申请
+     */
+     public function studentApply(){
+        $view = student_view_path.CONTROLLER.'/student-apply-by-coach.php';
         load_view_template($view);
     }
     /**
@@ -381,6 +395,36 @@ class Student_Zone extends Student_Home
      */
      public function coachDetail(){
         $view = student_view_path.CONTROLLER.'/coach-detail.php';
+        load_view_template($view);
+    }
+
+
+    /**
+     * 战队管理
+     */
+     public function team(){
+        $view = student_view_path.CONTROLLER.'/team.php';
+        load_view_template($view);
+    }
+    /**
+     * 填写战队资料
+     */
+     public function teamBuild(){
+        $view = student_view_path.CONTROLLER.'/team-build.php';
+        load_view_template($view);
+    }
+    /**
+     * 添加战队成员
+     */
+     public function teamAddMember(){
+        $view = student_view_path.CONTROLLER.'/team-addMember.php';
+        load_view_template($view);
+    }
+    /**
+     * 战队申请管理
+     */
+     public function teamApply(){
+        $view = student_view_path.CONTROLLER.'/team-apply.php';
         load_view_template($view);
     }
     /*

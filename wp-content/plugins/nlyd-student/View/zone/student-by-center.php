@@ -1,4 +1,4 @@
-
+<!-- 分中心学员管理 -->
 <div class="layui-fluid">
     <div class="layui-row">
         <?php
@@ -12,7 +12,7 @@
                 <a class="mui-pull-left nl-goback nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('课程学员', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__('分中心学员管理', 'nlyd-student')?></div></h1>
             </header>    
             <div class="layui-row nl-border nl-content ">
                 <div class="nl-table-wapper">
