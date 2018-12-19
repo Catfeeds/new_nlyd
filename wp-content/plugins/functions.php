@@ -388,3 +388,19 @@ if(!function_exists('getCategory')){
     }
 }
 
+/**
+ * 获取收益大类
+ */
+if(!function_exists('getSpreadCategory')){
+    function getSpreadCategory(){
+        return [
+            'match' => '用户比赛',
+            'grading' => '用户考级',
+            'course' => '购买课程',
+            'course_grading' => '课程2级达标',
+            'course_recommend' => '课程推荐满3人',
+            'stock' => '股权出售',
+            'profit_bonus' => '分中心收益分红',
+        ];
+    }
+}
