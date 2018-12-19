@@ -39,26 +39,10 @@ class Student_Directory
         load_view_template($view);
     }
     /**
-     * 认证教练名录
-     */
-     public function directoryCoach(){
-        $view = student_view_path.CONTROLLER.'/directory-coach.php';
-        load_view_template($view);
-
-    }
-    /**
      * 脑力健将名录
      */
      public function directoryPlayer(){
         $view = student_view_path.CONTROLLER.'/directory-player.php';
-        load_view_template($view);
-
-    }
-        /**
-     * 脑力战队名录
-     */
-     public function directoryTeam(){
-        $view = student_view_path.CONTROLLER.'/directory-team.php';
         load_view_template($view);
 
     }
