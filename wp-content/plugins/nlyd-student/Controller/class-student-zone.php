@@ -365,6 +365,13 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/team-apply.php';
         load_view_template($view);
     }
+    /**
+     * 推荐管理
+     */
+     public function recommend(){
+        $view = student_view_path.CONTROLLER.'/recommend-list.php';
+        load_view_template($view);
+    }
     /*
      *机构主体信息页面
      */
