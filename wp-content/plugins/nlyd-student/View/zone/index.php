@@ -45,7 +45,7 @@
                             <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
                             <?php }
                             elseif ($row['user_status'] == -1){ ?>
-                            <a class="pull-right c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
+                            <a class="pull-right c_blue" href="<?=home_url('/zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                             <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
                         </div>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/profit');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/profit/');?>">
                         <div class="apply_list_line pull-left ">
                             <div class="zone_bg bg_money"></div>
                         </div>
@@ -67,7 +67,7 @@
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_black3 mr_10"><?=__('今日收入', 'nlyd-student')?><?=$stream > 0 ? $stream : number_format($stream,2)?></div>
                     </a>
-                    <a class="apply_list c_black layui-row">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/recommend/');?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_share"></div>
                         </div>
@@ -82,7 +82,7 @@
                     <?php if(!empty($list)){?>
                         <?php foreach ($list as $v){ ?>
 
-                        <a class="apply_list c_black layui-row" href="<?=home_url('zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
+                        <a class="apply_list c_black layui-row" href="<?=home_url('/zone/apply/type_id/'.$v['id'].'/zone_type_alias/'.$v['zone_type_alias']);?>">
                             <div class="apply_list_line pull-left <?=$v['zone_type_class']?> ml"><i class="iconfont fs_20">&#xe650;</i></div>
                             <div class="apply_list_line center"><?=__('申请设立'.$v['zone_type_name'], 'nlyd-student')?></div>
                             <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
@@ -102,13 +102,13 @@
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>-->
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
                         <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
                         <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
                         <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
                         <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>

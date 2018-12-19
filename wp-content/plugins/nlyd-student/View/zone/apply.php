@@ -79,13 +79,17 @@
                             <div class="input_row">
                                 <!-- <input class="get_id" name="chairman_id" style="display:none" value="<?=$row['chairman_id']?>"> -->
                                 <!-- <input class="radius_input_row change_ajax" value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会主席', 'nlyd-student')?>"> -->
-                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
+                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择组委会主席" >
+                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                </select>
                             </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('组委会秘书', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
-                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user"  data-placeholder="输入用户名/手机/邮箱/昵称" ></select>
+                                <select class="js-data-select-ajax" name="secretary_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择组委会秘书" >
+                                    <option value="<?=$row['secretary_id']?>" selected><?=$row['secretary_name']?></option>
+                                </select>
                                 <!-- <input class="get_id" name="secretary_id" style="display:none" value="<?=$row['secretary_id']?>"> -->
                                 <!-- <input class="radius_input_row change_ajax" name="secretary_id"  value="<?=$row['secretary_name']?>" type="text" lay-verify="required" autocomplete="off" placeholder="<?=__('选择组委会秘书', 'nlyd-student')?>"> -->
                                 
@@ -136,140 +140,53 @@
 <script>
 jQuery(function($) { 
 
-        var opening_bank_Data=$.validationLayui.back;
+    var opening_bank_Data=$.validationLayui.back;
 
-        var posiotion_back=[0];//初始化位置，高亮展示
-        if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
-            $.each(opening_bank_Data,function(index,value){
-                if(value['value']==$('#opening_bank').val()){
-                    posiotion_back=[index]
-                    return false;
-                }
-            })
+    var posiotion_back=[0];//初始化位置，高亮展示
+    if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
+        $.each(opening_bank_Data,function(index,value){
+            if(value['value']==$('#opening_bank').val()){
+                posiotion_back=[index]
+                return false;
+            }
+        })
+    }
+    var mobileSelect4 = new MobileSelect({
+        trigger: '#opening_bank',
+        title: '<?=__('开户行', 'nlyd-student')?>',
+        wheels: [
+            {data: opening_bank_Data}
+        ],
+        position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            $('#opening_bank').val(data[0]['value']);
+            
         }
-        var mobileSelect4 = new MobileSelect({
-            trigger: '#opening_bank',
-            title: '<?=__('开户行', 'nlyd-student')?>',
-            wheels: [
-                {data: opening_bank_Data}
-            ],
-            position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
-            transitionEnd:function(indexArr, data){
-                // console.log(data);
-            },
-            callback:function(indexArr, data){
-                $('#opening_bank').val(data[0]['value']);
-               
+    });
+    $('.img-zoos').on('click','.add-zoo',function(){//上传图片
+        var id=$(this).attr('data-file')
+        $('#'+id).click()
+    })
+    $('.js-data-select-ajax').each(function () {
+        var _this=$(this);
+        var _placeholder = _this.attr('data-placeholder');
+        _this.select2({
+            placeholder : _placeholder,
+            ajax: {
+                url: admin_ajax +'?action=get_manage_user'  ,
+                dataType: 'json',
+                delay: 600, //wait 250 milliseconds before triggering the request
+                processResults: function (res) {
+                    return {
+                        results: res.data
+                    };
+                }
             }
         });
-        $('.img-zoos').on('click','.add-zoo',function(){//上传图片
-            var id=$(this).attr('data-file')
-            $('#'+id).click()
-        })
-        $('.js-data-select-ajax').select2({
-            ajax: {
-                    url: function(params){
-                    return admin_ajax +'?action=get_manage_user'   
-                        // return "https://api.github.com/search/repositories"
-                    },
-                    dataType: 'json',
-                    delay: 250,//在多少毫秒内没有输入时则开始请求服务器
-                    processResults: function (data, params) {
-                    // 此处解析数据，将数据返回给select2
-                    console.log(data.data)
-                    var x=data.data;
-                   
-                     return {
-                        results:x,// data返回数据（返回最终数据给results，如果我的数据在data.res下，则返回data.res。这个与服务器返回json有关）
-                    };
-                    },
-                    cache: true
-                },
-                placeholder: '请输入关键字',
-                escapeMarkup: function (markup) { return markup; }, // 字符转义处理
-                templateResult: formatRepo,//返回结果回调function formatRepo(repo){return repo.text},这样就可以将返回结果的的text显示到下拉框里，当然你可以return repo.text+"1";等
-                templateSelection: formatRepoSelection,//选中项回调function formatRepoSelection(repo){return repo.text}
-                language:'zh-CN'
-
-        })
-        function formatRepo (repo) {//repo对象根据拼接返回结果
-            if (repo.loading) {
-                return repo.text;
-            }
-            return repo.text;
-        }
-        function formatRepoSelection (repo) {//根据选中的最新返回显示在选择框中的文字
-            return  repo.text;
-        }
-    // $('.change_ajax').keyup(function(){
-    //     var _this=$(this);
-    //     _this.next('.select_box').remove()
-    //     //if(!_this.hasClass('loading')){
-    //         var keywords = _this.val();/*
-    //         if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };*/
-    //         var data={
-    //             action:"get_manage_user",
-    //             value:keywords
-    //         };
-    //         _this.parents('div').append('<div class="select_box" id="select_box"></div>')
-    //         // _this.parents('div').css("position","relative");
-    //         $.ajax({
-    //             data:data,
-    //             type:"POST",
-    //             beforeSend:function(){
-    //                 _this.next('.select_box').empty().append('<div class="select_row">正在加载...</div>');
-    //                 _this.addClass('loading')
-    //             },
-    //             success:function(res){
-    //                 console.log(res)
-    //                 var dom="";
-    //                 _this.next('.select_box').empty().show();
-    //                 if(res.success){
-    //                     if(res.data == ''){
-    //                         var item='<div class="select_row">未搜到该用户</div>'
-    //                         dom+=item
-    //                     }else {
-
-    //                         $.each(res.data,function(i,v){
-    //                             var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
-    //                             dom+=item
-    //                         })
-
-    //                     }
-
-    //                 }else {
-    //                     var item='<div class="select_row">未搜到该用户....</div>'
-    //                     dom+=item
-    //                 }
-    //                 _this.next('.select_box').append(dom)
-    //                 _this.removeClass('loading')
-    //             },
-    //             error:function(){
-    //                 _this.next('.select_box').empty().show();
-    //                 _this.next('.select_box').append('<div class="select_row">网络延迟</div>');
-    //                 _this.next('.select_box').remove()
-    //                 _this.removeClass('loading')
-    //             }
-    //         })
-    //     //}
-    // })
-    // $('body').on('click','.choose',function(){
-    //     var _this=$(this);
-    //     var val=_this.attr('data-value');
-    //     var id=_this.attr('data-id');
-    //     _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
-    //     _this.parent('.select_box').parent('div').find('.get_id').val(id)
-    // })
-    // $('body').click(function(e){
-    //     if($('#select_box').length>0){
-    //         var box=$('#select_box');
-    //         if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
-    //             box.parent('div').find('input').val('');
-    //         }
-    //     }
-        
-    //     $('.select_box').remove()
-    // })
+    })
     var imgs=[]
     var imgs1=[]
     $('.img-zoos').each(function(){
