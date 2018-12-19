@@ -3195,7 +3195,7 @@ class Student_Ajax
             foreach ($rows as $k => &$row){
                 $user_meta = get_user_meta($row['user_id']);
                 $row['userID'] = isset($user_meta['user_ID']) ? $user_meta['user_ID'][0] : '';
-                $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'])[0]['real_name'])?unserialize($user_meta['user_real_name'])[0]['real_name']:'') : '';
+                $row['real_name'] = isset($user_meta['user_real_name']) ? (isset(unserialize($user_meta['user_real_name'][0])['real_name'])?unserialize($user_meta['user_real_name'][0])['real_name']:'') : '';
                 $row['user_head'] = isset($user_meta['user_head']) ? $user_meta['user_head'][0] : '';
                 $row['user_sex'] = isset($user_meta['user_gender']) ? $user_meta['user_gender'][0] : '';
             }
