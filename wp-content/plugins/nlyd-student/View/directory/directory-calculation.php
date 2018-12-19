@@ -60,10 +60,11 @@ jQuery(function($) {
                 }
                 var lis = [];
                 $.ajax({
-                    data:postData,success:function(res,ajaxStatu,xhr){
+                    data:postData,
+                    success:function(res,ajaxStatu,xhr){
                         console.log(res)
                         if(res.success){
-                            $.each(res.data.info,function(index,value){
+                            $.each(res.data.data,function(index,value){
                                 var real_name=value.real_name ? value.real_name :'-';
                                 var user_id=value.userID ? value.userID :'-';
                                 var sex=value.user_sex ? value.user_sex :'-';
@@ -84,13 +85,19 @@ jQuery(function($) {
                                         +'</tr>';
                                 lis.push(dom)
                             })
-                            if (res.data.info.length<50) {
+                            if (res.data.data.length<50) {
                                 next(lis.join(''),false)
                             }else{
                                 next(lis.join(''),true)
                             }
                         }else{
                             next(lis.join(''),false)
+                        }
+                    },
+                    complete:function(XMLHttpRequest, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+                            next(lis.join(''),true)
                         }
                     }
                 })
