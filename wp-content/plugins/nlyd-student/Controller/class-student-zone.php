@@ -300,7 +300,7 @@ class Student_Zone extends Student_Home
     /**
      * 考级管理列表
      */
-     public function kaojiList(){
+     public function kaoji(){
         $view = student_view_path.CONTROLLER.'/kaoji-list.php';
         load_view_template($view);
     }
@@ -425,6 +425,13 @@ class Student_Zone extends Student_Home
      */
      public function teamApply(){
         $view = student_view_path.CONTROLLER.'/team-apply.php';
+        load_view_template($view);
+    }
+    /**
+     * 推荐管理
+     */
+     public function recommend(){
+        $view = student_view_path.CONTROLLER.'/recommend-list.php';
         load_view_template($view);
     }
     /*
