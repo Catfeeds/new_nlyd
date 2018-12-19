@@ -280,6 +280,9 @@ textarea.radius_input_row{
     float: left;
     color: #262626;
 }
+.profit-layui-tab.recommend-5 .layui-tab-title li{
+    width: 50%;
+}
 .profit-layui-tab .layui-tab-title li div{
     border-right: 1px solid #707070;
 }
