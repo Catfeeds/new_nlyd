@@ -799,7 +799,7 @@ function the_table_install () {
         $sql = "CREATE TABLE `{$table_name}` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(10) unsigned NOT NULL,
-          `category_name` varchar(66) DEFAULT NULL COMMENT '类别名称',
+          `category_id` varchar(66) DEFAULT NULL COMMENT '类别ID',
           `level` varchar(33) NOT NULL COMMENT '等级',
           `match` text COMMENT '比赛id记录(1)(2)(3)',
           `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1显示,0显示',
