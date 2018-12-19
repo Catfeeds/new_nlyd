@@ -404,3 +404,83 @@ if(!function_exists('getSpreadCategory')){
         ];
     }
 }
+
+/**
+ * 添加订单时插入收益数据
+ */
+if(!function_exists('insertIncomeLogs')){
+    function insertIncomeLogs($order){
+        global $wpdb;
+
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
+        if(!empty($id)) return true;
+        //准备数据
+        //获取直接/间接收益人
+        $sql = "select a.ID user_id,a.referee_id,b.referee_id as indirect_referee_id from {$wpdb->prefix}users a left join {$wpdb->prefix}users b on a.referee_id = b.ID where a.ID = {$order['user_id']}";
+        $user = $wpdb->get_row($sql,ARRAY_A);
+        //print_r($user);
+        //获取比赛/考级相关信息
+        if($order['order_type'] == 1){
+            $income_type = 'match';
+            //准备对应的数据
+            $money1 = 50;     //比赛直接推广人
+            $money2 = 50;    //比赛间接推广人
+            $money3 = 100;   //参赛机构
+            $money4 = 100;   //办赛机构
+
+            $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
+            //print_r($created_id);
+            $insert = array(
+                'income_type'=>$income_type,
+                'match_id'=>$order['match_id'],
+                'user_id'=>$order['user_id'],
+                'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                'person_liable_id'=>$order['sub_centres_id'] > 0 ? $order['sub_centres_id'] : '',   //参赛机构
+                'person_liable_income'=>$order['sub_centres_id'] > 0 ? $money3 : '',  //参赛机构收益
+                'sponsor_id'=>$created_id > 0 ? $created_id : '',  //办赛机构
+                'sponsor_income'=>$created_id > 0 ? $money4 : '',  //办赛机构收益
+            );
+        }elseif ($order['order_type'] == 2){
+            $income_type = 'grading';
+            //准备对应的数据
+            $money1 = 5;     //比赛直接推广人
+            $money2 = 5;    //比赛间接推广人
+            $money3 = 20;   //责任教练
+            $money4 = 20;   //办赛机构
+            $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
+
+            $insert = array(
+                'income_type'=>$income_type,
+                'match_id'=>$order['match_id'],
+                'user_id'=>$order['user_id'],
+                'referee_id'=>$user['referee_id'] > 0 ? $user['referee_id'] : '',  //直接人
+                'referee_income'=>$user['referee_id'] > 0 ? $money1 : '',  //直接人收益
+                'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
+                'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
+                'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
+                'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
+                'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
+                'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
+            );
+        }
+        $insert['created_time'] = get_time('mysql');
+        //print_r($id);
+        if(empty($id)){
+            $res = $wpdb->insert($wpdb->prefix.'income_logs',$insert);
+            if($res){
+                $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}ser_stream_logs where user_id = {$insert['sponsor_id']} and match_id = {$order['match_id']}");
+                if(!empty($stream_id)){
+                    $bool = $wpdb->insert($wpdb->prefix.'ser_stream_logs',array('user_id'=>$insert['sponsor_id'],'income_type'=>$income_type,'match_id'=>$order['match_id'],'created_time'=>get_time('mysql')));
+                    return $bool;
+                }else{
+                    return true;
+                }
+            }else{
+                return false;
+            }
+        }
+    }
+}

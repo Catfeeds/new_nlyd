@@ -382,10 +382,8 @@ class Spread{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
-                        <option value="frozen">冻结</option>
-                        <option value="thaw">解冻</option>
+                        <option value="2">改为待确认</option>
+                        <option value="1">改为已确认</option>
                     </select>
                     <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
@@ -422,10 +420,10 @@ class Spread{
                         $real_name = unserialize($row['user_real_name'])['real_name'];
                     }
                     ?>
-                    <tr data-uid="<?=$row['id']?>">
+                    <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
-                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <input id="cb-select-<?=$row['id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['id']?>">
                             <div class="locked-indicator">
                                 <span class="locked-indicator-icon" aria-hidden="true"></span>
                                 <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
@@ -469,7 +467,7 @@ class Spread{
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
-
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':'<a href="javascript:;" class="update_status" data-status="1">改为待确认</a>'?>
                         </td>
                     </tr>
                     <?php
@@ -498,10 +496,8 @@ class Spread{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
-                        <option value="frozen">冻结</option>
-                        <option value="thaw">解冻</option>
+                        <option value="2">改为待确认</option>
+                        <option value="1">改为已确认</option>
                     </select>
                     <input type="button" id="doaction2" class="button action all_options" value="应用">
                 </div>
@@ -516,8 +512,42 @@ class Spread{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
+                    //修改确认状态
+                    $('.update_status').on('click',function () {
+                        var status = $(this).attr('data-status');
+                        var _id = $(this).closest('tr').attr('data-id');
+                        postAjax(status,_id);
+                    });
 
+                    $('.all_options').on('click', function () {
+                        var status = $(this).prev().val();
+                        var _id = [];
+                        $.each($('#the-list').find('.check_list:checked'),function (i,v) {
+                            _id.push($(v).val());
+                        });
+                        _id = _id.join(',');
+                        postAjax(status,_id);
+                    });
+                    function postAjax(status,_id) {
+                        if(status != '1' && status != '2') return false;
+                        if(_id == '' || _id == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'updateIncomeLogsStatus', 'status':status,'id':_id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
                 });
+
             </script>
         </div>
         <?php

@@ -1165,9 +1165,11 @@ class Match_Ajax
         if (!wp_verify_nonce($_POST['_wpnonce'], 'student_join_match_code_nonce') ) {
             wp_send_json_error(array('info'=>'非法操作'));
         }
-        $match_id = intval($_POST['mid']);
-        $user_id = intval($_POST['uid']);
+        $match_id = isset($_POST['mid']) ? intval($_POST['mid']):0;
+        $user_id = isset($_POST['uid']) ? intval($_POST['uid']):0;
+        $sub_centres_id = isset($_POST['sub_centres_id']) ? intval($_POST['sub_centres_id']):0;
         if($match_id < 1 || $user_id < 1) wp_send_json_error(array('info'=>'非法操作'));
+        if($sub_centres_id < 1) wp_send_json_error(array('info'=>'请选择参赛机构!'));
         global $wpdb;
         //判断是否已报名该比赛
         $orderRes = $wpdb->get_var('SELECT id FROM '.$wpdb->prefix.'order WHERE user_id='.$user_id.' AND match_id='.$match_id.' AND order_type=1 AND pay_status IN(2,3,4)');
@@ -1205,6 +1207,7 @@ class Match_Ajax
 //            'telephone'=>$addressRes['telephone'],
 //            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
             'order_type'=>1,
+            'sub_centres_id'=>$sub_centres_id,
             'pay_status'=>4,
             'seat_number'=>$num+1,
             'created_time'=>get_time('mysql'),
@@ -1220,12 +1223,18 @@ class Match_Ajax
             wp_send_json_error(['info' => '操作失败']);
             return;
         }
+        $insertId = $wpdb->insert_id;
         //生成流水号
-        $serialnumber = createNumber($user_id,$wpdb->insert_id);
+        $serialnumber = createNumber($user_id,$insertId);
         $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
         if($updateRes){
-            $wpdb->query('COMMIT');
-            wp_send_json_success(['info' => '操作成功']);
+            if(insertIncomeLogs($orderInsertData)){
+                $wpdb->query('COMMIT');
+                wp_send_json_success(['info' => '操作成功']);
+            }else{
+                $wpdb->query('ROLLBACK');
+                wp_send_json_error(['info' => '操作失败']);
+            }
         }else{
             $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '操作失败']);
@@ -2019,6 +2028,8 @@ class Match_Ajax
         $grading_id = isset($_POST['grading_id']) ? intval($_POST['grading_id']) : 0;
         $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
         if($grading_id < 1 || $user_id < 1) wp_send_json_error(['info' => '参数错误!']);
+//        $sub_centres_id = isset($_POST['sub_centres_id']) ? intval($_POST['sub_centres_id']) : 0;
+//        if($sub_centres_id < 1) wp_send_json_error(array('info'=>'请选择考级机构!'));
         global $wpdb;
         //是否已存在订单
         $id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}order WHERE match_id='{$grading_id}' AND user_id='{$user_id}' AND order_type=2 AND pay_status IN(2,3,4)");
@@ -2043,6 +2054,7 @@ class Match_Ajax
 //            'address'=>$addressRes['country'].$addressRes['province'].$addressRes['city'].$addressRes['area'].$addressRes['address'],
             'order_type'=>2,
             'pay_status'=>4,
+//            'sub_centres_id'=>$sub_centres_id,
             'created_time'=>get_time('mysql'),
             'memory_lv' => $memory_lv
         ];
@@ -2061,8 +2073,13 @@ class Match_Ajax
         $serialnumber = createNumber($user_id,$wpdb->insert_id);
         $updateRes = $wpdb->update($wpdb->prefix.'order',array('serialnumber'=>$serialnumber),array('id'=>$wpdb->insert_id));
         if($updateRes){
-            $wpdb->query('COMMIT');
-            wp_send_json_success(['info' => '加入成功!']);
+            if(insertIncomeLogs($orderInsertData)){
+                $wpdb->query('COMMIT');
+                wp_send_json_success(['info' => '加入成功!']);
+            }else{
+                $wpdb->query('ROLLBACK');
+                wp_send_json_error(['info' => '加入失败!']);
+            }
         }else{
             $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '加入失败!']);
@@ -2179,6 +2196,19 @@ class Match_Ajax
         }
     }
 
+    /**
+     * 添加订单时搜索参赛机构
+     */
+    public function getCentresList(){
+        global $wpdb;
+        $s = isset($_GET['term']) ? trim($_GET['term']) : '';
+        if($s != ''){
+            $rows = $wpdb->get_results("SELECT tm.team_id AS id,p.post_title AS text FROM {$wpdb->prefix}team_meta AS tm 
+                    LEFT JOIN {$wpdb->posts} AS p ON p.ID=tm.team_id 
+                    WHERE p.post_title LIKE '%{$s}%'");
+            if($rows) wp_send_json_success($rows);
+        }
+    }
 }
 
 new Match_Ajax();
