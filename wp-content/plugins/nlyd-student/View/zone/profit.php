@@ -100,8 +100,8 @@ jQuery(function($) {
                             profit_page++
                             isClick[id]=true
                             if(res.success){
-                                var profit_url = "<?=home_url('zone/profitDetail/id/');?>";
-                                var extract_url = "<?=home_url('zone/getCashDetail/id/');?>";
+                                var profit_url = "<?=home_url('zone/profitDetail/id/');?>"; //收益
+                                var extract_url = "<?=home_url('zone/getCashDetail/id/');?>";   //提现
                                 $.each(res.data.info,function(i,v){
                                     var color=v.income_type_class=="bg_add" ? "c_green":"c_black3";
                                     var Detail_url = v.user_income > 0 ? profit_url+v.id : extract_url+v.id;

@@ -19,25 +19,29 @@
                         <div class="profit_detail_info c_black">¥ <?=$row['user_income']?></div>
                     </div>
                     <div class="profit_detail_row">
-                        <div class="profit_detail_label"><?=__($row['income_type'] == 'extract' ? '提现' : '收益来源', 'nlyd-student')?>：</div>
+                        <div class="profit_detail_label"><?=__('收益来源', 'nlyd-student')?>：</div>
                         <div class="profit_detail_info c_black"><?=__($row['income_type_title'], 'nlyd-student')?></div>
                     </div>
+                    <?php if(!empty($match)): ?>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('比赛类型', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black"><?=__('战队精英赛', 'nlyd-student')?></div>
+                        <div class="profit_detail_info c_black"><?=__($match['role_name'], 'nlyd-student')?></div>
                     </div>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('比赛详情', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black"><?=__('2018脑力世界杯东方欲晓战队精英赛', 'nlyd-student')?></div>
+                        <div class="profit_detail_info c_black"><?=__($match['match_title'], 'nlyd-student')?></div>
                     </div>
+                    <?php endif;?>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('收益级别', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black"><?=__('1级收益 2级收益', 'nlyd-student')?></div>
+                        <div class="profit_detail_info c_black"><?=__($row['profit_lv'], 'nlyd-student')?></div>
                     </div>
+                    <?php if(!empty($row['channel'])):?>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('收益途径', 'nlyd-student')?>：</div>
-                        <div class="profit_detail_info c_black"><?=__('xxx  XXX（xxx）', 'nlyd-student')?></div>
+                        <div class="profit_detail_info c_black"><?=__($row['channel'], 'nlyd-student')?></div>
                     </div>
+                    <?php endif;?>
                     <div class="profit_detail_row">
                         <div class="profit_detail_label"><?=__('收益状态', 'nlyd-student')?>：</div>
                         <div class="profit_detail_info c_green"><?=__('已到账', 'nlyd-student')?></div>
