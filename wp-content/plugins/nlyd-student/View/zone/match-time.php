@@ -151,11 +151,7 @@ jQuery(function($) {
                                 },
                                 success: function(res, textStatus, jqXHR){
                                     if(res.success){
-                                        if(res.data.url){
-                                            window.location.reload()
-                                        }else{
-                                            $.alerts(res.data.info)
-                                        }
+                                        window.location.reload()
                                     }else{
                                         $.alerts(res.data.info)
                                     }
@@ -213,11 +209,7 @@ jQuery(function($) {
                 },
                 success: function (res, ajaxStatu, xhr) {
                     if(res.success){
-                        if(res.data.url){
-                            window.location.reload()
-                        }else{
-                            $.alerts(res.data.info)
-                        }
+                        window.location.reload()
                     }else{
                         $.alerts(res.data.info)
                     }
