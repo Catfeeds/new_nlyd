@@ -285,9 +285,13 @@ jQuery(function($) {
             fd.append('opening_bank',data.field['opening_bank']);
             fd.append('opening_bank_address',data.field['opening_bank_address']);
             fd.append('bank_card_num',data.field['bank_card_num']);
-            fd.append('chairman_id',data.field['chairman_id']);
-            fd.append('secretary_id',data.field['secretary_id']);
             fd.append('business_licence',imgs1[0]);
+            if(data.field['chairman_id']){
+                fd.append('chairman_id','');
+            }
+            if(data.field['secretary_id']){
+                fd.append('secretary_id','');
+            }
             console.log(data.field)
             $.ajax({
                 data: fd,
