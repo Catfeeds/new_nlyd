@@ -57,7 +57,7 @@ jQuery(function($) {
         // 监听提交
         form.on('submit(layform)', function(data){//提交
             var _this=$(this);
-            if(_this.hasClass('disabled')){
+            if(!_this.hasClass('disabled')){
                 $.ajax({
                     data: data.field,
                     beforeSend:function(XMLHttpRequest){

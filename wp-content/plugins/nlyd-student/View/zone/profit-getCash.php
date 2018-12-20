@@ -52,7 +52,7 @@ jQuery(function($) {
         form.on('submit(layform)', function(data){//实名认证提交
             console.log(data.field)
             var _this=$(this);
-            if(_this.hasClass('disabled')){
+            if(!_this.hasClass('disabled')){
                 $.ajax({
                     data:data.field,
                     beforeSend:function(XMLHttpRequest){
