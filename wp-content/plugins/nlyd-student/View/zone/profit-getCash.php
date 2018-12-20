@@ -51,8 +51,12 @@ jQuery(function($) {
         form.verify($.validationLayui.allRules);
         form.on('submit(layform)', function(data){//实名认证提交
             console.log(data.field)
+            var _this=$(this);
             $.ajax({
                 data:data.field,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
                 success:function(res){
                     $.alerts(res.data.info);
                     if(res.success){
@@ -61,6 +65,12 @@ jQuery(function($) {
                         },800)
                     }
                 },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+            　　　　 }
+                    _this.removeClass('disabled');
+                }
             })
         })
     })

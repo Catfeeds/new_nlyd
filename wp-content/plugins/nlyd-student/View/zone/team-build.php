@@ -39,9 +39,9 @@
                                 <textarea class="radius_input_row nl-foucs" type="text" placeholder="<?=__('填写战队简介', 'nlyd-student')?>"></textarea>
                             </div>
                         </div>
-                        
+                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认申请', 'nlyd-student')?></div></a>
                     </form>
-                    <a class="a-btn a-btn-table"><div><?=__('确认申请', 'nlyd-student')?></div></a>
+                    
                 </div>
             </div>
         </div>            
@@ -55,10 +55,13 @@ jQuery(function($) {
         // 自定义验证规则
         form.verify($.validationLayui.allRules);
         // 监听提交
-        form.on('submit(layform)', function(data){//实名认证提交
-            console.log(data.field)
+        form.on('submit(layform)', function(data){//提交
+            var _this=$(this);
             $.ajax({
                 data: data.field,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
                 success: function(res, textStatus, jqXHR){
                     $.alerts(res.data.info)
                     if(res.data.url){
@@ -67,6 +70,12 @@ jQuery(function($) {
                         }, 300);
 
                     }
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+            　　　　}
+                    _this.removeClass('disabled');
                 }
             })
             return false;
