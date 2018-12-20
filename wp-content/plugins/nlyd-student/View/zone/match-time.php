@@ -16,14 +16,14 @@
                 <div class="width-padding layui-row width-margin-pc">
                     <div class="c_red fs_12 mt_10"><?=__('每轮比赛间隔3分钟,每个项目间隔10分钟，管理员可根据实际情况进行修改。', 'nlyd-student')?></div>
                     <?php if(!empty($list)):?>
-                    <?php foreach ($list as $val){ ?>
+                    <?php foreach ($list as $k => $val){ ?>
                     <div class="match_time_row">
                         <div class="match_xiang_name">
                             <span class="bold fs_16 c_black mr_10"><?=$val['title']?></span>
                             <span class="fs_12 mr_10"><?=$val['use_time']?><?=__('分钟/每轮', 'nlyd-student')?></span>
                             <a class="add_lun c_black6 pull-right">
                                 <div class="add_coin bg_gradient_blue">+</div>
-                                <div class="add_text fs_12"><?=__('新增1轮', 'nlyd-student')?></div>
+                                <div class="add_text fs_12" data-project="<?=$k?>"><?=__('新增1轮', 'nlyd-student')?></div>
                             </a>
                         </div>
                         <?php if(!empty($val['child'])): ?>
@@ -33,7 +33,7 @@
                         <div class="add_lun_row">
                             <span class="close_coin bg_gradient_orange mr_10">+</span>
                             <span class="mr_10"><?=__('第', 'nlyd-student')?><?=$v['more']?><?=__('轮', 'nlyd-student')?></span>
-                            <a class="c_blue match_date" data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
+                            <a class="c_blue match_date" data-id ="<?=$v['id']?>"  data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
                             <br>
                             <span class="mr_10 c_black ff_num"><?=$v['start_time']?></span>
                             <span class="mr_10 c_black"><?=__('至', 'nlyd-student')?></span>

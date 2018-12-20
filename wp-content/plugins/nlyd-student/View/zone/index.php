@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="c_black">
-                            <?php if(!empty($row['legal_person'])):?>
+                            <?php if(!empty($row['referee_name'])):?>
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
                             <?php endif;?>
                             <span class="pull-right">
@@ -50,7 +50,7 @@
                                 elseif ($row['user_status'] == -1){ ?>
                                 <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                                 <?php } ?>
-                                <?php if(($row['id'] == 1) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                                <?php if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
                                 <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                                 <?php endif;?>
                             </span>
@@ -128,7 +128,7 @@
                     <?php foreach ($role_list as $x){
                             //$thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
                     ?>
-                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" <?php if(['user_status'] == 1){ ?>href="<?=home_url('/zone/'.$x['role_action'])?> <?php } ?>">
+                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" <?php if($row['user_status'] == 1){ ?>href="<?=home_url('/zone/'.$x['role_action'])?> <?php } ?>">
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg <?=$x['role_back']?>"></div>
                         </div>

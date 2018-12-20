@@ -229,18 +229,28 @@ class Student_Zone extends Student_Home
          global $wpdb,$current_user;
          //获取用户发布比赛的权限
          $match_role_id = $wpdb->get_var("select match_role_id from {$wpdb->prefix}zone_meta where user_id = {$current_user->ID}");
-         if(empty($match_role_id)){
+         $match_role = $wpdb->get_results("select *,role_name as value from {$wpdb->prefix}zone_match_role where id in($match_role_id) and status = 1",ARRAY_A);
+         if(empty($match_role_id) || empty($match_role)){
              $this->get_404(array('message'=>__('你未拥有该权限,请联系管理员授权', 'nlyd-student'),'return_url'=>home_url('/zone/')));
              return;
          }
-         $match_role = $wpdb->get_results("select *,role_name as value from {$wpdb->prefix}zone_match_role where id in($match_role_id) and status = 1",ARRAY_A);
+         $match_role_list = array();
+         foreach ($match_role as $v){
+             if($v['role_type'] == 'match'){
+                 $match_role_list[] = $v;
+             }
+         }
+         //print_r($match_role);
          //print_r($match_role);
          //获取比赛类型
          $match_genre = $wpdb->get_results("select a.ID as id,a.post_title as value,b.meta_value from {$wpdb->prefix}posts a 
                                   left join {$wpdb->prefix}postmeta b on a.ID = b.post_id and b.meta_key='project_alias'
                                   where a.post_type = 'genre' and a.post_status = 'publish' and b.meta_value in('mental_world_cup','digital_brain_king','counting_brain_marathon')");
-         $data['scene_list'] = !empty($match_role) ? json_encode($match_role) : '';
+         $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
          $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
+
+         //获取默认比赛用
+         $data['match_cost'] = 588;
 
          if(isset($_GET['match_id'])){
              //获取比赛信息
@@ -269,7 +279,9 @@ class Student_Zone extends Student_Home
          $sql = "select a.id,a.project_id,b.post_title, date_format(a.start_time,'%Y/%m/%d %H:%i') start_time,date_format(a.end_time,'%Y/%m/%d %H:%i') end_time,a.use_time,a.more
                   from {$wpdb->prefix}match_project_more a 
                   left join {$wpdb->prefix}posts b on a.project_id = b.ID
-                  where match_id = {$_GET['match_id']} and created_id = {$current_user->ID} ";
+                  where match_id = {$_GET['match_id']} and created_id = {$current_user->ID} 
+                  order by start_time asc 
+                   ";
          $rows = $wpdb->get_results($sql,ARRAY_A);
          if(empty($rows)){
              $this->get_404(_('未查询到比赛项目信息'));
