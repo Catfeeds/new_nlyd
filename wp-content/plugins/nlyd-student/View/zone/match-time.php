@@ -159,13 +159,12 @@ jQuery(function($) {
                                     }else{
                                         $.alerts(res.data.info)
                                     }
-                                    _this.removeClass('disabled');
                                 },
                                 complete: function(jqXHR, textStatus){
                                     if(textStatus=='timeout'){
-                                        _this.removeClass('disabled');
                                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-                            　　　　}
+                            　　　　 }
+                                    _this.removeClass('disabled');
                                 }
                             })
                         }else{
@@ -222,13 +221,12 @@ jQuery(function($) {
                     }else{
                         $.alerts(res.data.info)
                     }
-                    _this.removeClass('disabled')
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
-                        _this.removeClass('disabled');
                         $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
             　　　　}
+                    _this.removeClass('disabled');
                 }
             })
         }
