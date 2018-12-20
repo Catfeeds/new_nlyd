@@ -13,7 +13,7 @@ class Statistics{
             $role = 'statistics';//权限名
             $wp_roles->add_cap('administrator', $role);
         }
-        add_menu_page('财务统计', '财务统计', 'statistics', 'statistics',array($this,'index'),'dashicons-businessman',99);
+        add_menu_page('数据统计', '数据统计', 'statistics', 'statistics',array($this,'index'),'dashicons-businessman',99);
     }
 
     /**
@@ -22,60 +22,62 @@ class Statistics{
     public function index(){
         $stype = isset($_GET['stype']) ? intval($_GET['stype']) : 1;
         $link_num = isset($_GET['link_num']) ? intval($_GET['link_num']) : 0;
-        global $wpdb;
-        //总收入
-        $all_income = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(2,3,4)");
-        //总支出
-        $all_expenses = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status=-2");
-        //总收益分成
-        $all_referee_income_arr = $wpdb->get_row("SELECT SUM(referee_income) AS referee_income,SUM(indirect_referee_income) AS indirect_referee_income FROM {$wpdb->prefix}income_logs WHERE income_status=2", ARRAY_A);
-
-        //总盈利
-        $all_profit = $all_income-$all_expenses;
-        $link_name = '';
-        switch ($stype){
-            case 1://年
-                $dateWhere = "YEAR( created_time ) = YEAR( curdate( ))+{$link_num}";
-                $link_name = '年';
+        $cate = isset($_GET['cate']) ? intval($_GET['cate']) : 1;
+        $where = 'WHERE 1=1';
+        $date_format = '';
+        switch ($cate){
+            case 1://比赛
+                $where .= ' AND order_type=1';
                 break;
-            case 2://季度
-                $dateWhere = "QUARTER( created_time ) = QUARTER( curdate( ))+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
-                $link_name = '季度';
+            case 2://考级
+                $where .= ' AND order_type=2';
                 break;
-            case 3://月
-                $dateWhere = "MONTH(created_time) = MONTH(curdate())+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
-                $link_name = '月';
+            case 3://脑力产品
+                $where .= ' AND order_type=3';
                 break;
-            case 4://周
-                $dateWhere = "WEEK(created_time) = WEEK(curdate())+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
-                $link_name = '周';
+            case 4://课程相关
+                $where .= ' AND order_type=4';
                 break;
-            case 5://日
-                $dateWhere = "DAY(created_time) = DAY(curdate())+{$link_num} AND MONTH(created_time) = MONTH(curdate()) AND YEAR( created_time ) = YEAR( curdate( ))";
-                $link_name = '天';
+            case 5://其它收支
+                $where .= ' AND order_type=1';
                 break;
         }
-        //收益分成
-        $referee_income_arr = $wpdb->get_row("SELECT SUM(referee_income) AS referee_income,SUM(indirect_referee_income) AS indirect_referee_income FROM {$wpdb->prefix}income_logs WHERE income_status=2 AND {$dateWhere}", ARRAY_A);
-//        leo_dump($wpdb->last_query);
-        $income = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(2,3,4) AND {$dateWhere}");
-        $expenses = $wpdb->get_var("SELECT SUM(cost) FROM {$wpdb->prefix}order WHERE pay_status IN(-2) AND {$dateWhere}");
+        global $wpdb;
+        //收入
+        $all_income = $wpdb->get_results("SELECT SUM(cost) AS amount,DATE_FORMAT(created_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}order {$where} AND pay_status IN(2,3,4) GROUP BY YEAR(created_time),MONTH(created_time)", ARRAY_A);
+        //退款
+        $all_income2 = $wpdb->get_results("SELECT SUM(cost) AS amount,DATE_FORMAT(created_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}order {$where} AND pay_status IN(-1) GROUP BY YEAR(created_time),MONTH(created_time)",ARRAY_A);
+        //奖金
+        $all_income3 = $wpdb->get_results("SELECT SUM(all_bonus) AS amount,DATE_FORMAT(send_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}match_bonus WHERE is_send=2 GROUP BY YEAR(send_time),MONTH(send_time)",ARRAY_A);
 
-        $rows = [];
-        $status_type = 1;
+
+
+
+//        switch ($stype){
+//            case 1://年
+//                $dateWhere = "YEAR( created_time ) = YEAR( curdate( ))+{$link_num}";
+//                $link_name = '年';
+//                break;
+//            case 2://季度
+//                $dateWhere = "QUARTER( created_time ) = QUARTER( curdate( ))+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
+//                $link_name = '季度';
+//                break;
+//            case 3://月
+//                $dateWhere = "MONTH(created_time) = MONTH(curdate())+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
+//                $link_name = '月';
+//                break;
+//            case 4://周
+//                $dateWhere = "WEEK(created_time) = WEEK(curdate())+{$link_num} AND YEAR( created_time ) = YEAR( curdate( ))";
+//                $link_name = '周';
+//                break;
+//            case 5://日
+//                $dateWhere = "DAY(created_time) = DAY(curdate())+{$link_num} AND MONTH(created_time) = MONTH(curdate()) AND YEAR( created_time ) = YEAR( curdate( ))";
+//                $link_name = '天';
+//                break;
+//        }
+
+
         ?>
-            <div>订单总收入<?=$all_income?></div>
-            <div>订单总支出<?=$all_expenses?></div>
-            <div>订单总利润<?=$all_profit?></div>
-            <div>订单收入<?=$income?></div>
-            <div>订单支出<?=$expenses?></div>
-            <div>订单利润<?=$income-$expenses?></div>
-            <div>总收益分成<?=$all_referee_income_arr['referee_income']+$all_referee_income_arr['indirect_referee_income']?></div>
-            <div>总一级收益分成<?=$all_referee_income_arr['referee_income']?></div>
-            <div>总二级收益分成<?=$all_referee_income_arr['indirect_referee_income']?></div>
-            <div>收益分成<?=$referee_income_arr['referee_income']+$referee_income_arr['indirect_referee_income']?></div>
-            <div>一级收益分成<?=$referee_income_arr['referee_income']?></div>
-            <div>二级收益分成<?=$referee_income_arr['indirect_referee_income']?></div>
 
         <div class="wrap">
             <h1 class="wp-heading-inline">主体类型列表</h1>
@@ -84,17 +86,14 @@ class Statistics{
 
             <hr class="wp-header-end">
             <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=1')?>" <?=$stype===1?'class="current"':''?> aria-current="page">按年<span class="count">（<?=$all_income?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=2')?>" <?=$stype===2?'class="current"':''?> aria-current="page">按季度<span class="count">（<?=$all_expenses?>）</span></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=3')?>" <?=$stype===3?'class="current"':''?> aria-current="page">按月<span class="count">（<?=$all_profit?>）</span></a> </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=4')?>" <?=$stype===4?'class="current"':''?> aria-current="page">按周<span class="count">（<?=$all_profit?>）</span></a> </li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype=5')?>" <?=$stype===5?'class="current"':''?> aria-current="page">按天<span class="count">（<?=$all_profit?>）</span></a> </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=1')?>" <?=$cate===1?'class="current"':''?> aria-current="page">比赛相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=2')?>" <?=$cate===2?'class="current"':''?> aria-current="page">考级相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=3')?>" <?=$cate===3?'class="current"':''?> aria-current="page">脑力产品</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=4')?>" <?=$cate===4?'class="current"':''?> aria-current="page">课程相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=5')?>" <?=$cate===5?'class="current"':''?> aria-current="page">其它收支</a></li>
             </ul>
             <br class="clear">
-            <ul class="subsubsub">
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype='.$stype.'&link_num='.($link_num-1))?>" <?=$status_type===1?'class="current"':''?> aria-current="page">上一<?=$link_name?></a> |</li>
-                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&stype='.$stype.'&link_num='.($link_num+1))?>" <?=$status_type===2?'class="current"':''?> aria-current="page">下一<?=$link_name?></a> </li>
-             </ul>
+
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 

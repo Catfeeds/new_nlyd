@@ -35,7 +35,7 @@ if(!class_exists('FissionController')){
             //引入课程文件
             require_once fission_path.'Controller/class-course.php';
 
-            //引入财务统计文件
+            //引入数据统计文件
             require_once fission_path.'Controller/class-statistics.php';
 
             //引入aiax操作文件

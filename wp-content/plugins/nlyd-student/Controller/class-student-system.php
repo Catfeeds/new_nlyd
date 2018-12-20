@@ -78,44 +78,6 @@ class Student_System
         $view = student_view_path.CONTROLLER.'/concatUS.php';
         load_view_template($view);
     }
-
-
-
-    /**
-     * 课程首页
-     */
-     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
-    /**
-     * 训练中心课程展示
-     */
-     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
-    /**
-     * 课程详情
-     */
-     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
-    /**
-     * 课程报名
-     */
-     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
-    /**
-     * 课程报名成功
-     */
-     public function concatUs(){
-        $view = student_view_path.CONTROLLER.'/concatUS.php';
-        load_view_template($view);
-    }
     /**
      * 结课成绩
      */
