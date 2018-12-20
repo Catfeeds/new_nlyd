@@ -40,26 +40,28 @@ jQuery(function($) {
         // 监听提交
         form.on('submit(layform)', function(data){//实名认证提交
             var _this=$(this);
-            $.ajax({
-                data: data.field,
-                beforeSend:function(XMLHttpRequest){
-                    _this.addClass('disabled')
-                },
-                success: function(res, textStatus, jqXHR){
-                    $.alerts(res.data.info)
-                    if(res.data.url){
-                        setTimeout(function() {
-                            window.location.href=res.data.url
-                        }, 300);
+            if(_this.hasClass('disabled')){
+                $.ajax({
+                    data: data.field,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        $.alerts(res.data.info)
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                　　　　 }
+                        _this.removeClass('disabled');
                     }
-                },
-                complete: function(jqXHR, textStatus){
-                    if(textStatus=='timeout'){
-                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
-            　　　　 }
-                    _this.removeClass('disabled');
-                }
-            })
+                })
+            }
             return false;
         });
       

@@ -111,13 +111,13 @@ jQuery(function($) {
 
             },
             callback:function(indexArr, data){
-                var start_time=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+                var start_time=data[0]['value']+'/'+data[1]['value']+'/'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
                 if(!_this.hasClass('add_new_lun')){//修改时间
                     var old_start_time=_this.attr('start-time');
-                    if(old_start_time!=start_time.replace(/-/g,'/')){//时间已修改
+                    if(old_start_time!=start_time){//时间已修改
                         _this.parent('.add_lun_row').find('.start_time').text(start_time);
                         var _time=judgFailTime(start_time,use_time);
-                        var end_time=_time.Format("yyyy-MM-dd hh:mm");
+                        var end_time=_time.Format("yyyy/MM/dd hh:mm");
                         _this.parent('.add_lun_row').find('.end_time').text(end_time);
                         _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
                     }else{
@@ -131,7 +131,7 @@ jQuery(function($) {
                             var project_more=_this.parents('.match_time_row').find('.add_lun_row').length;
                             project_more+=1;
                             var _time=judgFailTime(start_time,use_time);
-                            var end_time=_time.Format("yyyy-MM-dd hh:mm"); 
+                            var end_time=_time.Format("yyyy/MM/dd hh:mm"); 
                             var project_id=_this.attr('data-project')
                             var addRow={
                                 action:'add_match_time',
