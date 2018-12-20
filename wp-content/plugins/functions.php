@@ -412,7 +412,7 @@ if(!function_exists('insertIncomeLogs')){
     function insertIncomeLogs($order){
         global $wpdb;
 
-        $id = $wpdb->get_var("select id from {$wpdb->prefix}income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
+        $id = $wpdb->get_var("select id from {$wpdb->prefix}user_income_logs where user_id = {$order['user_id']} and match_id = {$order['match_id']}");
         if(!empty($id)) return true;
         //准备数据
         //获取直接/间接收益人
@@ -423,11 +423,18 @@ if(!function_exists('insertIncomeLogs')){
         if($order['order_type'] == 1){
             $income_type = 'match';
             //准备对应的数据
-            $money1 = 50;     //比赛直接推广人
-            $money2 = 50;    //比赛间接推广人
-            $money3 = 100;   //参赛机构
-            $money4 = 100;   //办赛机构
+            $money1 = 0;     //比赛直接推广人
+            $money2 = 0;    //比赛间接推广人
+            $money3 = 0;   //参赛机构
+            $money4 = 0;   //办赛机构
+            $money_set = getSpreadOption($income_type);
 
+            if($money_set){
+                $money1 = $money_set['direct_superior'];
+                $money2 = $money_set['indirect_superior'];
+                $money3 = $money_set['mechanism'];
+                $money4 = $money_set['sub_center'];
+            }
             $created_id = $wpdb->get_var("select created_id from {$wpdb->prefix}match_meta_new where match_id = {$order['match_id']}");
             //print_r($created_id);
             $insert = array(
@@ -446,10 +453,17 @@ if(!function_exists('insertIncomeLogs')){
         }elseif ($order['order_type'] == 2){
             $income_type = 'grading';
             //准备对应的数据
-            $money1 = 5;     //比赛直接推广人
-            $money2 = 5;    //比赛间接推广人
-            $money3 = 20;   //责任教练
-            $money4 = 20;   //办赛机构
+            $money1 = 0;     //比赛直接推广人
+            $money2 = 0;    //比赛间接推广人
+            $money3 = 0;   //参赛机构
+            $money4 = 0;   //办赛机构
+            $money_set = getSpreadOption($income_type);
+            if($money_set){
+                $money1 = $money_set['direct_superior'];
+                $money2 = $money_set['indirect_superior'];
+                $money3 = $money_set['mechanism'];
+                $money4 = $money_set['sub_center'];
+            }
             $grading = $wpdb->get_row("select person_liable,created_person from {$wpdb->prefix}grading_meta where grading_id = {$order['match_id']}",ARRAY_A);
 
             $insert = array(
@@ -469,7 +483,7 @@ if(!function_exists('insertIncomeLogs')){
         $insert['created_time'] = get_time('mysql');
         //print_r($id);
         if(empty($id)){
-            $res = $wpdb->insert($wpdb->prefix.'income_logs',$insert);
+            $res = $wpdb->insert($wpdb->prefix.'user_income_logs',$insert);
             if($res){
                 $stream_id = $wpdb->get_var("select id from {$wpdb->prefix}ser_stream_logs where user_id = {$insert['sponsor_id']} and match_id = {$order['match_id']}");
                 if(!empty($stream_id)){
@@ -482,5 +496,16 @@ if(!function_exists('insertIncomeLogs')){
                 return false;
             }
         }
+    }
+}
+
+/**
+ * 获取收益设置
+ */
+if(!function_exists('getSpreadOption')){
+    function getSpreadOption($type){
+        global $wpdb;
+        $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_status=1 AND spread_type='{$type}'", ARRAY_A);
+        return $row;
     }
 }
