@@ -127,9 +127,9 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_
                 if(timeValue[1]==v.value){
                     $.each(v.childs,function(j,val){
                         if(timeValue[2]==val.value){
-                            $.each(v.childs,function(k,b){
+                            $.each(val.childs,function(k,b){
                                 if(timeValue[3]==b.value){
-                                    $.each(v.childs,function(l,c){
+                                    $.each(b.childs,function(l,c){
                                         if(timeValue[4]==c.value){
                                             posiotion_match_date=[index,i,j,k,l];
                                         }

@@ -65,7 +65,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('开课日期', 'nlyd-student')?>：</span></div>
                             <div class="input_row">
                                 <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
-                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="2019-11-11-11-11"  id="course_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_start_time" data-time="2019-11-11-11-11"  id="course_start_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="lable_row"><span class="c_black"><?=__('结课日期', 'nlyd-student')?>：</span><a href="" class="c_blue pull-right"><?=__('立即结课', 'nlyd-student')?></a></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input class="radius_input_row nl-foucs" type="text" readonly name="match_end_time" data-time="2019-11-11-11-11"  id="course_end_date" lay-verify="required" autocomplete="off" placeholder="<?=__('选择开课日期', 'nlyd-student')?>" value="2019-11-11 11:11">
                             </div>
                         </div>
                         <div>
@@ -149,8 +156,8 @@ jQuery(function($) {
         }
     });
     //---------------------------开课日期------------------------------
-    if($('#course_date').length>0 && $('#course_date').attr('data-time') && $('#course_date').attr('data-time').length>0){
-        var timeValue=$('#course_date').attr('data-time').split('-');
+    if($('#course_start_date').length>0 && $('#course_start_date').attr('data-time') && $('#course_start_date').attr('data-time').length>0){
+        var timeValue=$('#course_start_date').attr('data-time').split('-');
         $.each($.validationLayui.dates2,function(index,value){
             if(timeValue[0]==value.value+""){
                 posiotion_course_date=[index,0,0,0,0];
@@ -160,10 +167,10 @@ jQuery(function($) {
                         $.each(v.childs,function(j,val){
                             if(timeValue[2]==val.value+""){
                                 posiotion_course_date=[index,i,j,0,0];
-                                $.each(v.childs,function(k,b){
+                                $.each(val.childs,function(k,b){
                                     if(timeValue[3]==b.value+""){
                                         posiotion_course_date=[index,i,j,k,0];
-                                        $.each(v.childs,function(l,c){
+                                        $.each(b.childs,function(l,c){
                                             if(timeValue[4]==c.value+""){
                                                 posiotion_course_date=[index,i,j,k,l];
                                             }
@@ -178,8 +185,8 @@ jQuery(function($) {
         })
     }
     var mobileSelect3 = new MobileSelect({
-        trigger: '#course_date',
-        title: '<?=__('开课日期', 'nlyd-student')?>',
+        trigger: '#course_start_date',
+        title: "<?=__('开课日期', 'nlyd-student')?>",
         wheels: [
             {data: course_date_Data}
         ],
@@ -190,7 +197,55 @@ jQuery(function($) {
         callback:function(indexArr, data){
             var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
             var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
-            $('#course_date').val(text).attr('data-time',text1);
+            $('#course_start_date').val(text).attr('data-time',text1);
+        
+        }
+    });
+
+    var posiotion_course_end_date=[0,0,0,0,0]
+    //---------------------------结课日期------------------------------
+    if($('#course_end_date').length>0 && $('#course_end_date').attr('data-time') && $('#course_end_date').attr('data-time').length>0){
+        var timeValue=$('#course_end_date').attr('data-time').split('-');
+        $.each($.validationLayui.dates2,function(index,value){
+            if(timeValue[0]==value.value+""){
+                posiotion_course_end_date=[index,0,0,0,0];
+                $.each(value.childs,function(i,v){
+                    if(timeValue[1]==v.value+""){
+                        posiotion_course_end_date=[index,i,0,0,0];
+                        $.each(v.childs,function(j,val){
+                            if(timeValue[2]==val.value+""){
+                                posiotion_course_end_date=[index,i,j,0,0];
+                                $.each(val.childs,function(k,b){
+                                    if(timeValue[3]==b.value+""){
+                                        posiotion_course_end_date=[index,i,j,k,0];
+                                        $.each(b.childs,function(l,c){
+                                            if(timeValue[4]==c.value+""){
+                                                posiotion_course_end_date=[index,i,j,k,l];
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
+    var mobileSelect4 = new MobileSelect({
+        trigger: '#course_end_date',
+        title: "<?=__('开课日期', 'nlyd-student')?>",
+        wheels: [
+            {data: course_date_Data}
+        ],
+        position:posiotion_course_end_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+        transitionEnd:function(indexArr, data){
+            // console.log(data);
+        },
+        callback:function(indexArr, data){
+            var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+            var text1=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+'-'+data[3]['value']+'-'+data[4]['value'];
+            $('#course_end_date').val(text).attr('data-time',text1);
         
         }
     });
