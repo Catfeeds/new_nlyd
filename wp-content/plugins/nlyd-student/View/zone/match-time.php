@@ -59,7 +59,6 @@ jQuery(function($) {
     function judgFailTime(startTime,interval) {
         var time = new Date(startTime.replace("-","/"));
         time.setMinutes(time.getMinutes() + interval, time.getSeconds(), 0);
-        console.log(time)
         return time;
     }
     $('.match_date').each(function(_index){
@@ -114,108 +113,125 @@ jQuery(function($) {
             callback:function(indexArr, data){
                 var start_time=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
                 if(!_this.hasClass('add_new_lun')){//修改时间
-                    if(_this.attr('cantChoose')){
-                        $.alerts("<?=__('此项目已经新增轮数,请先保存再修改时间', 'nlyd-student')?>");    
+                    var old_start_time=_this.attr('start-time');
+                    if(old_start_time!=start_time.replace(/-/g,'/')){//时间已修改
+                        _this.parent('.add_lun_row').find('.start_time').text(start_time);
+                        var _time=judgFailTime(start_time,use_time);
+                        var end_time=_time.Format("yyyy-MM-dd hh:mm");
+                        _this.parent('.add_lun_row').find('.end_time').text(end_time);
+                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
                     }else{
-                        var start_time=_this.parent('.add_lun_row').find('.start_time').text();
-                        var old_start_time=_this.attr('start-time');
-                        if(old_start_time!=start_time.replace(/-/g,'/')){
-                            _this.parent('.add_lun_row').find('.start_time').text(start_time);
-                            var _time=judgFailTime(start_time,use_time);
-                            var end_time=_time.Format("yyyy-MM-dd hh:mm");
-                            _this.parent('.add_lun_row').find('.end_time').text(end_time);
-                            _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
-                        }else{
-                            _this.parents('.match_time_row').find('.add_lun_row').removeClass('cantChoose')//提交时判断新增还是编辑
-                        }
+                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',false)//提交时判断新增还是编辑
                     }
                 }else {//新增轮数
                     if(_this.attr('cantChoose')){
                         $.alerts("<?=__('此项目已经新修改时间,请先保存再新增轮数', 'nlyd-student')?>");    
                     }else{
-                        var project_more=_this.parents('.match_time_row').find('.add_lun_row').length;
-                        project_more+=1;
-                        var _time=judgFailTime(start_time,use_time);
-                        var end_time=_time.Format("yyyy-MM-dd hh:mm"); 
-                        var project_id=_this.attr('data-project')
-                        var addRow=[
-                            action:'add_match_time',
-                            project_id:project_id,
-                            start_time:start_time,
-                            end_time:end_time,
-                            match_id:$.Request('match_id'),
-                            project_more:project_more,
-                            use_time:use_time,
-                            match_type:'match'
-                        ]
-                        $.ajax({
-                            data: addRow,
-                            success: function(res, textStatus, jqXHR){
-                                if(res.success){
-                                    if(res.data.url){
-                                        window.location.reload()
+                        if(!_this.hasClass("disabled")){
+                            var project_more=_this.parents('.match_time_row').find('.add_lun_row').length;
+                            project_more+=1;
+                            var _time=judgFailTime(start_time,use_time);
+                            var end_time=_time.Format("yyyy-MM-dd hh:mm"); 
+                            var project_id=_this.attr('data-project')
+                            var addRow={
+                                action:'add_match_time',
+                                project_id:project_id,
+                                start_time:start_time,
+                                end_time:end_time,
+                                match_id:$.Request('match_id'),
+                                project_more:project_more,
+                                use_time:use_time,
+                                match_type:'match'
+                            }
+                            
+                            $.ajax({
+                                data: addRow,
+                                beforeSend:function(XMLHttpRequest){
+                                    _this.addClass('disabled')
+                                },
+                                success: function(res, textStatus, jqXHR){
+                                    if(res.success){
+                                        if(res.data.url){
+                                            window.location.reload()
+                                        }else{
+                                            $.alerts(res.data.info)
+                                        }
                                     }else{
                                         $.alerts(res.data.info)
                                     }
-                                }else{
-                                    $.alerts(res.data.info)
+                                    _this.removeClass('disabled');
+                                },
+                                complete: function(jqXHR, textStatus){
+                                    if(textStatus=='timeout'){
+                                        _this.removeClass('disabled');
+                                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            　　　　}
                                 }
-                            }
-                        })
-                        // return false;
-                        // var dom='<div class="add_lun_row cantChoose">'
-                        //             +'<span class="close_coin bg_gradient_orange mr_10">+</span>'
-                        //             +'<span class="mr_10"><?=__("第", "nlyd-student")?>'+lun+'<?=__("轮", "nlyd-student")?></span>'
-                        //             // +'<a class="c_blue match_date edit_time" data-id ="" start-time=""  data-time=""><?=__("修改开始时间", "nlyd-student")?></a>'
-                        //             +'<br>'
-                        //             +'<span class="start_time mr_10 c_black ff_num">'+text+'</span>'
-                        //             +'<span class="mr_10 c_black"><?=__("至", "nlyd-student")?></span>'
-                        //             +'<span class="end_time mr_10 c_black ff_num">'+new_time+'</span>'
-                        //         +'</div>'
-                        // _this.parents('.match_time_row').append(dom)
-                        // _this.parents('.match_time_row').find('.edit_time').attr('cantChoose',true).addClass('cantChoose')//选中时间后判断是否可选
-                        // _this.parents('.match_time_row').find('.add_lun_row').addClass('cantChoose')//提交时判断新增还是编辑
+                            })
+                        }else{
+                            $.alerts("<?=__('正在新增轮数，请稍后再试', 'nlyd-student')?>")
+                        }
                     }
-                    // _this.text("<?=__('新增一轮', 'nlyd-student')?>");
                 }
             }
         });
     })
     $('.submit').click(function () {
         var data=[];
-        $('.match_date').each(function () {
-            var _this=$(this);
-            if(_this.hasClass('edit_time')){
-                var start_time=_this.parent('.add_lun_row').find('.start_time').text();
-                var end_time=_this.parent('.add_lun_row').find('.end_time').text();
-                var project_title=_this.parents('.match_time_row').attr('data-title');
-                var project_more=_this.parent('.add_lun_row').find('.project_more').text();
-                var id=_this.attr('data-id');
-                // var old_start_time=_this.attr('start-time');
-                var row={
-                    id:id,
-                    start_time:start_time,
-                    end_time:end_time,
-                    project_title:project_title,
-                    project_more:project_more,
-                };
-                // if(old_start_time!=start_time.replace(/-/g,'/')){
-                data.push(row)
+        var _this=$(this);
+        if(!_this.hasClass('disabled')){
+            $('.match_date').each(function () {
+                var __this=$(this);
+                if(__this.hasClass('edit_time')){
+                    var start_time=__this.parent('.add_lun_row').find('.start_time').text();
+                    var end_time=__this.parent('.add_lun_row').find('.end_time').text();
+                    var project_title=__this.parents('.match_time_row').attr('data-title');
+                    var project_more=__this.parent('.add_lun_row').find('.project_more').text();
+                    var id=__this.attr('data-id');
+                    // var old_start_time=_this.attr('start-time');
+                    var row={
+                        id:id,
+                        start_time:start_time,
+                        end_time:end_time,
+                        project_title:project_title,
+                        project_more:project_more,
+                    };
+                    // if(old_start_time!=start_time.replace(/-/g,'/')){
+                    data.push(row)
+                }
+                // }
+            });
+            var postData={
+                action:'update_match_time',
+                data:data,
+                match_id:$.Request('match_id'),
+                match_type:'match'
             }
-            // }
-        });
-        var postData={
-            action:'update_match_time',
-            data:data,
-            match_id:$.Request('match_id'),
-            match_type:'match'
+            $.ajax({
+                data: postData,
+                beforeSend:function(XMLHttpRequest){
+                    _this.addClass('disabled')
+                },
+                success: function (res, ajaxStatu, xhr) {
+                    if(res.success){
+                        if(res.data.url){
+                            window.location.reload()
+                        }else{
+                            $.alerts(res.data.info)
+                        }
+                    }else{
+                        $.alerts(res.data.info)
+                    }
+                    _this.removeClass('disabled')
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        _this.removeClass('disabled');
+                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+            　　　　}
+                }
+            })
         }
-        $.ajax({
-            data: postData,
-            success: function (res, ajaxStatu, xhr) {
-                console.log(res)
-            }
-        })
     })
 })
 </script>
