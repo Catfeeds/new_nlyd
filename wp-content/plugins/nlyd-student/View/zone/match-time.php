@@ -23,7 +23,7 @@
                             <span class="fs_12 mr_10"><?=$val['use_time']?><?=__('分钟/每轮', 'nlyd-student')?></span>
                             <a class="add_lun c_black6 pull-right">
                                 <div class="add_coin bg_gradient_blue">+</div>
-                                <div class="add_text fs_12" data-project="<?=$k?>"><?=__('新增1轮', 'nlyd-student')?></div>
+                                <div class="add_text fs_12 match_date add_new_lun" data-project="<?=$k?>"><?=__('新增1轮', 'nlyd-student')?></div>
                             </a>
                         </div>
                         <?php if(!empty($val['child'])): ?>
@@ -33,11 +33,11 @@
                         <div class="add_lun_row">
                             <span class="close_coin bg_gradient_orange mr_10">+</span>
                             <span class="mr_10"><?=__('第', 'nlyd-student')?><?=$v['more']?><?=__('轮', 'nlyd-student')?></span>
-                            <a class="c_blue match_date" data-id ="<?=$v['id']?>"  data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
+                            <a class="c_blue match_date" data-id ="<?=$v['id']?>" start-time="<?=$v['start_time']?>"  data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
                             <br>
-                            <span class="mr_10 c_black ff_num"><?=$v['start_time']?></span>
+                            <span class="start_time mr_10 c_black ff_num"><?=$v['start_time']?></span>
                             <span class="mr_10 c_black"><?=__('至', 'nlyd-student')?></span>
-                            <span class="mr_10 c_black ff_num"><?=$v['end_time']?></span>
+                            <span class="end_time mr_10 c_black ff_num"><?=$v['end_time']?></span>
                         </div>
                         <?php } ?>
                         <?php endif;?>
@@ -46,7 +46,7 @@
                     <?php endif;?>
                 </div>
             </div>
-            <a class="a-btn a-btn-table"><div><?=__('保存更新', 'nlyd-student')?></div></a>
+            <a class="a-btn a-btn-table submit"><div><?=__('保存更新', 'nlyd-student')?></div></a>
         </div>            
     </div>
 </div>
@@ -57,10 +57,11 @@ jQuery(function($) {
     var mobileSelect={}
     $('.match_date').each(function(_index){
         var _this=$(this);
+        var title='<?=__('开赛日期', 'nlyd-student')?>';
         _this.attr('id','match_date'+_index)
         var data_time=_this.attr('data-time');
         // console.log(data_time)
-        if(data_time && data_time.length>0){
+        if(!_this.hasClass('add_new_lun') && data_time && data_time.length>0){
             var timeValue=data_time.split(',');
             $.each($.validationLayui.dates2,function(index,value){
                 if(timeValue[0]==value.value+""){
@@ -88,6 +89,8 @@ jQuery(function($) {
                     })
                 }
             })
+        }else {
+            title='<?=__('新增轮数', 'nlyd-student')?>';
         }
 
         mobileSelect['match_date'+_index]=new MobileSelect({
@@ -101,6 +104,20 @@ jQuery(function($) {
             },
             callback:function(indexArr, data){
                 var text=data[0]['value']+'-'+data[1]['value']+'-'+data[2]['value']+' '+data[3]['value']+':'+data[4]['value'];
+                if(!_this.hasClass('add_new_lun')){
+                    var start_time=_this.parent('.add_lun_row').find('.start_time').text();
+                    var old_start_time=_this.attr('start-time');
+                    if(old_start_time!=text.replace(/-/g,'/')){
+                        _this.parent('.add_lun_row').find('.start_time').text(text);
+                        _this.parent('.add_lun_row').find('.end_time').text('-');
+
+                    }
+                    _this.text("<?=__('修改开始时间', 'nlyd-student')?>");
+                }else {
+                    _this.text("<?=__('新增一轮', 'nlyd-student')?>");
+                }
+
+
                 // $.ajax({
                 //     data: text,
                 //     success: function(res, textStatus, jqXHR){
@@ -116,6 +133,29 @@ jQuery(function($) {
                 // return false;
             }
         });
+    })
+    $('.submit').click(function () {
+        var data=[];
+        $('.match_date').each(function () {
+            var _this=$(this);
+            var start_time=_this.parent('.add_lun_row').find('.start_time').text();
+            var id=_this.attr('data-id');
+            var old_start_time=_this.attr('start-time');
+            if(old_start_time!=start_time.replace(/-/g,'/')){
+                var row={id:id,start_time:start_time};
+                data.push(row)
+            }
+        });
+        var postData={
+            action:'',
+            data:data
+        }
+        $.ajax({
+            data: postData,
+            success: function (res, ajaxStatu, xhr) {
+                console.log(res)
+            }
+        })
     })
 })
 </script>
