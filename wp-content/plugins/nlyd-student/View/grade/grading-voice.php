@@ -294,81 +294,9 @@ jQuery(function($) {
                     audio.play();
                 }
             })
-            // if (/Safari/.test(u) && !/Chrome/.test(u) && !/MXIOS/.test(u)) {
-            //     $(".voice_title").text("<?=__('点击页面播放语音', 'nlyd-student')?>")
-            //     $('body').one("click",function(){
-            //         $(".voice_title").text("<?=__('正在播放语音中', 'nlyd-student')?>")
-            //         audio.play();
-            //     })
-            // }
-           
-            // $('#audio').attr("src",file_url+questions_answer[_index]+".wav");
-            // audio.loop = false;
-            // audio.addEventListener('ended', function () {
-            //     _index++
-            //     if(_index<=que_len-1){
-            //         $('#audio').attr("src",file_url+questions_answer[_index]+".wav"); 
-            //     }else{
-            //         $('.complete_zoo').hide();
-            //         $('#match_zoo').show()
-            //         $('.matching-sumbit').show();
-            //         _show=2
-            //         sys_second=answer_time
-            //         var endTime=$.GetEndTime(answer_time);//结束时间
-            //         var sessionData={
-            //             genre_id:_genre_id,
-            //             grad_type:_grad_type,
-            //             type:_type,
-            //             endTime:endTime,
-            //             _show:2,
-            //             questions_answer:questions_answer
-            //         }
-            //         $.SetSession('grade_question',sessionData)
-            //         count_down()
-            //     }  
-            // }, false);
-            // var str_que=questions_answer.join(',')
-            // if(!('speechSynthesis' in window)) {
-            //     throw alert("对不起，您的浏览器不支持")
-            // }
-            // $('.voice_title').click(function(){
-            //     play()
-            // })
-            // play()
-            // function play() {
-            //     to_speak = new SpeechSynthesisUtterance(str_que);
-            //     to_speak.rate = 0.545;// 设置播放语速，范围：0.1 - 10之间
-            //     var voices = speechSynthesis.getVoices();
-            //     to_speak.voice = voices[0];
-            //     window.speechSynthesis.speak(to_speak);
-            // }
-            // to_speak.onend = function() { 
-            //     window.speechSynthesis.cancel();
-            //     $('.complete_zoo').hide();
-            //     $('#match_zoo').show()
-            //     $('.matching-sumbit').show();
-            //     _show=2
-            //     sys_second=answer_time
-            //     var endTime=$.GetEndTime(answer_time);//结束时间
-            //     var sessionData={
-            //         genre_id:_genre_id,
-            //         grad_type:_grad_type,
-            //         type:_type,
-            //         endTime:endTime,
-            //         _show:2,
-            //         questions_answer:questions_answer
-            //     }
-            //     $.SetSession('grade_question',sessionData)
-            //     count_down()
-            // }
        }
     }
     function submit(){//提交答案
-        // $('#load').css({
-        //         'display':'block',
-        //         'opacity': '1',
-        //         'visibility': 'visible',
-        //     })
         var my_answer=[];
         $('.match_zoo .matching-number-match').each(function(){
             var answer=$(this).text();
