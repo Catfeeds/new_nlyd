@@ -42,9 +42,9 @@ class Spread{
         $spreadCategoryArr = getSpreadCategory();
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体权限列表</h1>
+            <h1 class="wp-heading-inline">收益设置列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize-power')?>" class="page-title-action">添加主体权限</a>
+            <a href="<?=admin_url('admin.php?page=fission-add-profit-set')?>" class="page-title-action">添加收益设置</a>
 
             <hr class="wp-header-end">
 
@@ -204,9 +204,11 @@ class Spread{
             $sub_center = isset($_POST['sub_center']) ? trim($_POST['sub_center']) : '';
             $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
             $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
+            $pay_amount = isset($_POST['pay_amount']) ? intval($_POST['pay_amount']) : '';
             if($spread_status !== 1 && $spread_status !== 2) $error_msg = '请选择状态!';
             if($error_msg == ''){
                 $insertData = [
+                    'pay_amount' => $pay_amount,
                     'spread_type' => $spread_type,
                     'direct_superior' => $direct_superior,
                     'indirect_superior' => $indirect_superior,
@@ -248,13 +250,19 @@ class Spread{
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
                     <tbody>
                     <tr class="">
-                        <th scope="row"><label for="spread_type">所属大类 </label></th>
+                        <th scope="row"><label for="spread_type">支付类别 </label></th>
                         <td>
                             <select name="spread_type" id="spread_type">
                                 <?php foreach (getSpreadCategory() as $sck => $scv){ ?>
                                     <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck?>"><?=$scv?></option>
                                 <?php } ?>
                             </select>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="pay_amount">支付金额 </label></th>
+                        <td>
+                            <input type="text" id="pay_amount" name="pay_amount" value="<?=isset($row)?$row['pay_amount']:'0.00'?>">
                         </td>
                     </tr>
 

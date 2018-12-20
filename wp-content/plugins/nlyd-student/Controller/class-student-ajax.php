@@ -3960,8 +3960,8 @@ class Student_Ajax
             default:
                 wp_send_json_error(['info' => '未找到数据,请刷新再试!']);
         }
-
-        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}' WHERE match_id='{$match_id}' AND user_id={$user_id}";
+        $send_time = $status === 2 ? get_time('mysql') : '';
+        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}',`send_time`='{$send_time}' WHERE match_id='{$match_id}' AND user_id={$user_id}";
 //        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
         $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info'=>'修改成功']);
@@ -4670,19 +4670,61 @@ class Student_Ajax
      *机构比赛/考级 时间修改/编辑
      */
     public function update_match_time(){
-
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>_('比赛id不能为空')));
+        if(empty($_POST['data'])) wp_send_json_error(array('info'=>_('修改数据不能为空')));
+        global $wpdb,$current_user;
         switch ($_POST['match_type']){
             case 'match':
+                //获取比赛状态
+                //$wpdb->get_var("select from ");
+                foreach ($_POST['data'] as $k => $v){
+                    if($v['id'] > 0){
 
-                print_r($_POST);die;
-
-
+                        $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time']);
+                        if(!empty($result)){
+                            wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'与'.$result['project_title'].'第'.$result['project_more'].'时间冲突')));
+                        }
+                    }
+                    else{
+                        wp_send_json_error(array('info'=>_($v['project_title'].$v['project_more'].'未检测到项目id')));
+                    }
+                    $update = array(
+                        'start_time'=>$v['start_time'],
+                        'end_time'=>$v['end_time'],
+                        'revise_id'=>$current_user->ID,
+                        'revise_time'=>get_time('mysql'),
+                    );
+                    $wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
+                }
                 break;
             case 'grading':
                 break;
             default:
                 wp_send_json_error(array('info'=>_('参数错误')));
                 break;
+        }
+        wp_send_json_success(array('info'=>_('更新成功')));
+    }
+
+    public function add_match_time(){
+        global $wpdb,$current_user;
+        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['project_more']) || empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['use_time'])){
+            wp_send_json_error(array('info'=>_('必传参数不齐全')));
+        }
+
+        //获取已有的比赛列表
+        $sql = "select  from {$wpdb->prefix}match_project_more where match_id = {$_POST['match_id']} and created_id = $current_user->ID";
+        $wpdb->get_results($sql,ARRAY_A);
+    }
+
+    /**
+     * 对比比赛时间
+     */
+    public function contrast_time($data,$start_time,$end_time){
+        foreach ($data as $k =>$v){
+            if(($data['start_time'] < $start_time && $start_time < $data['start_time']) || ($data['end_time'] < $end_time && $end_time < $data['end_time'])){
+                return $v;    //返回冲突时间
+            }
         }
     }
 

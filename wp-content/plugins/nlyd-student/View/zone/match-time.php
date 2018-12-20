@@ -198,7 +198,6 @@ jQuery(function($) {
                     end_time:end_time,
                     project_title:project_title,
                     project_more:project_more,
-                    match_type:'match'
                 };
                 // if(old_start_time!=start_time.replace(/-/g,'/')){
                 data.push(row)
@@ -209,6 +208,7 @@ jQuery(function($) {
             action:'update_match_time',
             data:data,
             match_id:$.Request('match_id'),
+            match_type:'match'
         }
         $.ajax({
             data: postData,
