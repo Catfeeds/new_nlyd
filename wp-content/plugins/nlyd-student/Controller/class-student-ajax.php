@@ -3960,8 +3960,8 @@ class Student_Ajax
             default:
                 wp_send_json_error(['info' => '未找到数据,请刷新再试!']);
         }
-
-        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}' WHERE match_id='{$match_id}' AND user_id={$user_id}";
+        $send_time = $status === 2 ? get_time('mysql') : '';
+        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}',`send_time`='{$send_time}' WHERE match_id='{$match_id}' AND user_id={$user_id}";
 //        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
         $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info'=>'修改成功']);

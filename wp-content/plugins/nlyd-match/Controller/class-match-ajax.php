@@ -1563,9 +1563,9 @@ class Match_Ajax
         $match_id = isset($_POST['match_id']) ? intval($_POST['match_id']) : 0;
         $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
         if($user_id == '' || $match_id < 1 || ($status !=2 && $status != 1)) wp_send_json_error(['info' => '参数错误']);
-
         global $wpdb;
-        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}' WHERE match_id='{$match_id}' AND user_id IN ({$user_id})";
+        $send_time = $status === 2 ? get_time('mysql') : '';
+        $sql = "UPDATE {$wpdb->prefix}match_bonus SET is_send='{$status}',`send_time`='{$send_time}' WHERE match_id='{$match_id}' AND user_id IN ({$user_id})";
 //        $bool = $wpdb->update($wpdb->prefix.'match_bonus', ['is_send' => $status], ['user_id'=>$user_id,'match_id'=>$match_id]);
         $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info'=>'修改成功']);

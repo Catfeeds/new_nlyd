@@ -787,6 +787,7 @@ function the_table_install () {
               `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
               `team` varchar(255) DEFAULT NULL COMMENT '战队名称',
               `is_user_view` tinyint(1) unsigned DEFAULT '2' COMMENT '1允许前台显示,2禁止前台显示',
+              `send_time` datetime DEFAULT NULL COMMENT '发放时间',
               PRIMARY KEY (`id`),
               KEY `index` (`match_id`,`user_id`) USING BTREE
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -882,6 +883,7 @@ function the_table_install () {
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //收益默认金额设置
         $sql = "CREATE TABLE `{$table_name}` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+          `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付金额',
           `spread_type` varchar(64) NOT NULL DEFAULT '' COMMENT 'match(比赛),grading(考级),course(购买课程),course_grading(课程2级达标),course_recommend(课程推荐满3人),stock(股权出售),profit_bonus(分中心收益分红)',
           `direct_superior` varchar(32) DEFAULT NULL COMMENT '直接上级获取收益(元/百分比)',
           `indirect_superior` varchar(32) DEFAULT NULL COMMENT '间接上级收益(元/百分比)',
