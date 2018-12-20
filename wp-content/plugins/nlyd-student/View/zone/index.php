@@ -47,7 +47,7 @@
                             elseif ($row['user_status'] == -1){ ?>
                             <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
-                            <?php if(($row['id'] == 1) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                            <?php if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
                             <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                             <?php endif;?>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg bg_share"></div>
                         </div>
-                        <div class="apply_list_line center"><?=__('下级推广', 'nlyd-student')?></div>
+                        <div class="apply_list_line center"><?=__('我的推荐', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
                 </div>
@@ -124,7 +124,7 @@
                     <?php foreach ($role_list as $x){
                             //$thumbnail_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($v->ID), 'thumbnail');
                     ?>
-                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" href="<?=home_url('/zone/'.$x['role_action'])?>">
+                    <a class="apply_list <?=$row['user_status'] == 1 ? 'c_black' : 'c_black3'?> layui-row" <?php if($row['user_status'] == 1){echo "href=".home_url('/zone/'.$x['role_action']);} ?> >
                         <div class="apply_list_line pull-left">
                             <div class="zone_bg <?=$x['role_back']?>"></div>
                         </div>

@@ -13,17 +13,8 @@ class Student_System
     public $ajaxControll;
     public function __construct($action)
     {
-
         //引入当前页面css/js
         add_action('wp_enqueue_scripts', array($this,'scripts_default'));
-
-        
-//        if(isset($_GET['action'])){
-//            $function = $_GET['action'];
-//        }else {
-//            $function = $_GET['action'] = 'index';
-//        }
-
         $this->ajaxControll = new Student_Ajax();
         $this->action = $action;
         //添加短标签
@@ -87,7 +78,13 @@ class Student_System
         $view = student_view_path.CONTROLLER.'/concatUS.php';
         load_view_template($view);
     }
-
+    /**
+     * 结课成绩
+     */
+     public function concatUs(){
+        $view = student_view_path.CONTROLLER.'/concatUS.php';
+        load_view_template($view);
+    }
     /**
      * 默认公用js/css引入
      */

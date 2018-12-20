@@ -4486,7 +4486,6 @@ class Student_Ajax
     public function get_manage_user(){
         if(isset($_POST['value'])){
             $map[] = " (a.user_login like '%{$_POST['value']}%') ";
-            $map[] = " (a.user_nicename like '%{$_POST['value']}%') ";
             $map[] = " (a.user_mobile like '%{$_POST['value']}%') ";
             $map[] = " (a.user_email like '%{$_POST['value']}%') ";
             $map[] = " (b.meta_value like '%{$_POST['value']}%') ";
@@ -4583,7 +4582,7 @@ class Student_Ajax
      */
     public function zone_create_match(){
 
-
+        $_POST['match_cost'] = 588;
         if(empty($_POST['match_scene']) || empty($_POST['match_genre']) || empty($_POST['match_address']) || empty($_POST['match_cost']) || empty($_POST['match_start_time']) ){
             wp_send_json_error(array('info'=>'比赛场景/类型/名称/地点/费用/时间为必填项'));
         }
@@ -4607,14 +4606,9 @@ class Student_Ajax
         $new_page_id = wp_insert_post($arr);
 
         //获取所有比赛项目
-        $args = array(
-            'post_type' => array('project'),
-            'post_status' => array('publish'),
-            'orderby' => 'menu_order',
-            'order' => 'asc',
-        );
-        $the_query = new WP_Query($args);
-        $project_array = array_column($the_query->posts,'ID');
+        $project_array = $wpdb->get_results("select ID from {$wpdb->prefix}posts where post_type = 'project' and post_status = 'publish' order by menu_order asc",ARRAY_A);
+        $project_array = array_column($project_array,'ID');
+        //print_r($project_array);
         $project_id = arr2str($project_array);
 
         $match_meta = array(
@@ -4632,6 +4626,9 @@ class Student_Ajax
         $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
 
         //生成比赛项目
+        //获取默认每轮间隔时间/每项间隔时间
+        $more_interval_time = 3;
+        $project_interval_time = 10;
 
         $match_start_time = strtotime($_POST['match_start_time']);
         $match_project_use = get_option('match_project_use')['project_use'];
@@ -4649,22 +4646,47 @@ class Student_Ajax
                 //print_r($start.'****'.$end.'</br>');
                 $str .= "( '{$new_page_id}', '{$v}', '{$i}', '{$start}', '{$end}', '{$use_time}', '-1', '{$current_user->ID}', NULL, NOW(), NULL),";
 
-                $start_time = strtotime('+3 minute',$end_time);
+                $start_time = strtotime("+{$more_interval_time} minute",$end_time);
             }
-            $start_time = strtotime('+10 minute',$end_time);
+            $start_time = strtotime("+{$project_interval_time} minute",$end_time);
             //print_r($v);
         }
-        $sql = "INSERT INTO `nlyd`.`{$wpdb->prefix}match_project_more` ( `match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `status`, `created_id`, `revise_id`, `created_time`, `revise_time`) VALUES ".rtrim($str,',');
+        $sql = "INSERT INTO `{$wpdb->prefix}match_project_more` ( `match_id`, `project_id`, `more`, `start_time`, `end_time`, `use_time`, `status`, `created_id`, `revise_id`, `created_time`, `revise_time`) VALUES ".rtrim($str,',');
         //print_r($sql);die;
         $b = $wpdb->query($sql);
-
+        //print_r($new_page_id .'&&'. $a .'&&'. $b);
         if($new_page_id && $a && $b){
+            //设置比赛开关
+            update_post_meta($new_page_id,'default_match_switch','ON');
             $wpdb->query('COMMIT');
-            wp_send_json_success(array('info'=>'比赛发布成功','url'=>home_url('/zone/matchBuild/match_id/'.$new_page_id)));
+            wp_send_json_success(array('info'=>'比赛发布成功','url'=>home_url('/zone/matchTime/match_id/'.$new_page_id)));
         }else{
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(array('info'=>'比赛发布失败'));
         }
     }
+
+    /**
+     *机构比赛/考级 时间修改/编辑
+     */
+    public function update_match_time(){
+
+        switch ($_POST['match_type']){
+            case 'match':
+
+                print_r($_POST);die;
+
+
+                break;
+            case 'grading':
+                break;
+            default:
+                wp_send_json_error(array('info'=>_('参数错误')));
+                break;
+        }
+    }
+
+
 
     /**
      * 用户提现申请

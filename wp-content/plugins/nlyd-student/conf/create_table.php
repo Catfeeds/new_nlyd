@@ -65,13 +65,13 @@ function the_table_install () {
 
     }
 
-    $table_name = $wpdb->prefix . "income_logs";  //收益领取记录表   存储收益分配记录
+    $table_name = $wpdb->prefix . "user_income_logs";  //收益领取记录表   存储收益分配记录
 
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //判断表是否已存在
 
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-          `income_type` tinyint(2) DEFAULT NULL COMMENT '收益类型 比赛 match, 考级 grad....',
+          `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 比赛 match, 考级 grading....',
           `match_id` int(20) DEFAULT NULL COMMENT '同order表match_id',
           `user_id` int(20) DEFAULT NULL COMMENT '付款人id',
           `referee_id` int(20) DEFAULT NULL COMMENT '直接推广人',
