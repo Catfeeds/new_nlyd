@@ -1012,9 +1012,9 @@ class Student_Gradings extends Student_Home
         }
 
         //获取是否存在答题记录
-        $wpdb->get_var("select from {$wpdb->prefix}grading_questions ");
-
+        $log_id = $wpdb->get_var("select id from {$wpdb->prefix}grading_questions where user_id = {$current_user->ID} and grading_id = {$_GET['grad_id']}");
         $data = array(
+            'log_id'=>$log_id,
             'row'=>$row,
             'rows'=>$rows,
         );

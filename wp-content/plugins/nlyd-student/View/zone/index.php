@@ -42,12 +42,14 @@
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
                             <?php if($row['user_status'] == 1){ ?>
-                            <a class="pull-right c_blue"><?=__('更多资料', 'nlyd-student')?></a>
+                            <a class=" c_blue"><?=__('更多资料', 'nlyd-student')?></a>
                             <?php }
                             elseif ($row['user_status'] == -1){ ?>
-                            <a class="pull-right c_blue" href="<?=home_url('/zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
-                            <span class="pull-right c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
+                            <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
+                            <?php if(($row['id'] == 1) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                            <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
+                            <?php endif;?>
                         </div>
 
                         <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
@@ -102,13 +104,13 @@
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>-->
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
                         <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
                         <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                         <div class="apply_list_line pull-right c_orange mr_10"></div>
                     </a>
-                    <a class="apply_list c_black layui-row" href="<?=home_url('/zone/introduce');?>">
+                    <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
                         <div class="apply_list_line pull-left c_red ml"><i class="iconfont fs_20">&#xe650;</i></div>
                         <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>

@@ -55,8 +55,8 @@ class Student_Zone extends Student_Home
 
             $role_list = $wpdb->get_results($sql,ARRAY_A);
             $data['role_list'] = $role_list;
-            $data['row'] = $row;
         }
+        $data['row'] = $row;
 
         $view = student_view_path.CONTROLLER.'/index.php';
         load_view_template($view,$data);
@@ -119,7 +119,21 @@ class Student_Zone extends Student_Home
      public function profitDetail(){
 
          global $wpdb,$current_user;
-         $sql = "select *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
+
+         $zone = $this->get_zone_meta();
+
+         if(!empty($zone)){
+             $sql = " select *,
+                case income_type
+                when 'match' then '比赛收益'
+                when 'grading' then '考级收益'
+                when 'extract' then '比赛提现'
+                end income_type_title 
+                from {$wpdb->prefix}income_logs 
+                where id = {$_GET['id']} and (referee_id = {$current_user->ID} or indirect_referee_id = $current_user->ID) ";
+         }else{
+
+             $sql = "select *,date_format(created_time,'%Y/%m/%d %H:%i') created_time,
                 if(income_type = 'extract','bg_reduce', 'bg_add') as income_type_class,
                 case income_type
                 when 'match' then '比赛收益'
@@ -127,12 +141,55 @@ class Student_Zone extends Student_Home
                 when 'extract' then '比赛提现'
                 end income_type_title
                 from {$wpdb->prefix}user_stream_logs where id = {$_GET['id']} and user_id = {$current_user->ID} ";
+         }
+
          $row = $wpdb->get_row($sql,ARRAY_A);
          if(empty($row)){
              $this->get_404(array('message'=>'数据错误','return_url'=>home_url('/zone/profit/')));
              return;
          }
-         //print_r($row);
+         if(!empty($zone)){
+             if($row['referee_id'] == $current_user->ID){
+                 $row['user_income'] = $row['referee_income'];
+                 $row['profit_lv'] = '1级收益';
+                 $referee_name = get_user_meta($row['user_id'],'user_real_name')[0];
+                 $row['channel'] = $referee_name['real_name'];
+             }
+             elseif ($row['indirect_referee_id'] == $current_user->ID){
+                 $row['user_income'] = $row['indirect_referee_income'];
+                 $row['profit_lv'] = '2级收益';
+                 $indirect_referee = get_user_meta($row['indirect_referee_id'],'user_real_name')[0];
+                 $row['channel'] = $indirect_referee['real_name'];
+             }
+
+         }
+         if(in_array($row['income_type'],array('match','grading'))){
+             switch ($row['income_type']){
+                 case 'match':
+                     $table = $wpdb->prefix.'match_meta_new';
+                     $where = "a.match_id = {$row['match_id']}";
+                     $t = 'match_id';
+                     $scene = "match_scene";
+                     break;
+                 case 'grading':
+                     $table = $wpdb->prefix.'grading_meta';
+                     $where = "a.grading_id = {$row['match_id']}";
+                     $t = 'grading_id';
+                     $scene = "scene";
+                     break;
+             }
+             $sql1 = "select b.post_title as match_title,c.role_name
+                      from {$table} a
+                      left join {$wpdb->prefix}posts b on a.{$t} = b.ID
+                      left join {$wpdb->prefix}zone_match_role c on a.{$scene} = c.id
+                      where {$where}
+                      ";
+             //print_r($sql1);
+             $match = $wpdb->get_row($sql1,ARRAY_A);
+             $data['match'] = $match;
+             //print_r($match);
+         }
+         print_r($row);
          $data['row'] = $row;
          $view = student_view_path.CONTROLLER.'/profit-detail.php';
          load_view_template($view,$data);
@@ -141,6 +198,11 @@ class Student_Zone extends Student_Home
      * 提现详情页面
      */
      public function getCashDetail(){
+
+
+         $zone = $this->get_zone_meta();
+
+         print_r($zone);
 
         $view = student_view_path.CONTROLLER.'/profit-getCash-detail.php';
         load_view_template($view);
@@ -425,14 +487,13 @@ class Student_Zone extends Student_Home
             $row['secretary_name'] = !empty($row['secretary_id']) ? get_user_meta($row['secretary_id'],'user_real_name')[0]['real_name'] : '';
 
             $data['row'] = $row;
+        }
+        //分中心编号
+        $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
+        if($total < 8){
+            $data['zone_num'] = 8;
         }else{
-            //分中心编号
-            $total = $wpdb->get_var("select max(id) total from {$wpdb->prefix}zone_meta ");
-            if($total < 8){
-                $data['zone_num'] = 8;
-            }else{
-                $data['zone_num'] = $total+1;
-            }
+            $data['zone_num'] = $total+1;
         }
         //获取所有机构
         //$data['list'] = $wpdb->get_results("select id,zone_type_name,zone_type_alias from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);

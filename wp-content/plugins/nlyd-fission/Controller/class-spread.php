@@ -38,8 +38,8 @@ class Spread{
      */
     public function profitSet(){
         global $wpdb;
-        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}spread_set WHERE parent_id=0", ARRAY_A);
-
+        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}spread_set", ARRAY_A);
+        $spreadCategoryArr = getSpreadCategory();
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">主体权限列表</h1>
@@ -57,8 +57,15 @@ class Spread{
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
-                    <th scope="col" id="profit_amount" class="manage-column column-profit_amount">金额</th>
+                    <th scope="col" id="spread_type" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" id="direct_superior" class="manage-column column-direct_superior">直接上级</th>
+                    <th scope="col" id="indirect_superior" class="manage-column column-indirect_superior">间接上级</th>
+                    <th scope="col" id="first_cause" class="manage-column column-first_cause">一级事业管理员</th>
+                    <th scope="col" id="second_cause" class="manage-column column-second_cause">二级事业管理员</th>
+                    <th scope="col" id="coach" class="manage-column column-coach">教练</th>
+                    <th scope="col" id="sub_center" class="manage-column column-sub_center">赛区/分中心/考级中心</th>
+                    <th scope="col" id="mechanism" class="manage-column column-mechanism">参赛机构</th>
+                    <th scope="col" id="spread_status" class="manage-column column-spread_status">状态</th>
                     <th scope="col" id="option1" class="manage-column column-option1">操作</th>
                 </tr>
                 </thead>
@@ -68,54 +75,60 @@ class Spread{
                 <?php
                 foreach ($rows as $row){
                     ?>
-                    <tr class="parent_tr" data-id="<?=$row['id']?>" style="background-color: #00c4c4">
-                        <td class="name column-name has-row-actions column-primary" data-colname="名称" colspan="3" style="">
-                            <strong><?=$row['profit_name']?></strong>
-                            <a href="javascript:;" class="hide-or-show" style="cursor: pointer">隐藏</a>
-                            <br>
-
-                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
-                        </td>
-                        <td>
-                            <a href="<?=admin_url('admin.php?page=fission-add-profit-set&id='.$row['id'])?>">编辑</a>
-                            |
-                            <a href="javascript:;" class="remove-set">删除</a>
-                        </td>
-
-                    </tr>
-                    <tbody data-type="show" class="tobdy-<?=$row['id']?>">
-                    <?php
-                    $childRows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}spread_set WHERE parent_id='{$row['id']}'", ARRAY_A);
-                    foreach ($childRows as $cRow){
-                    ?>
-                        <tr data-id="<?=$cRow['id']?>">
+                        <tr data-id="<?=$row['id']?>">
                             <th scope="row" class="check-column">
-                                <label class="screen-reader-text" for="cb-select-407">选择<?=$cRow['profit_name']?></label>
-                                <input id="cb-select-<?=$cRow['id']?>" type="checkbox" name="post[]" value="<?=$cRow['id']?>">
+                                <label class="screen-reader-text" for="cb-select-407">选择<?=$spreadCategoryArr[$row['spread_type']]?></label>
+                                <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                                 <div class="locked-indicator">
                                     <span class="locked-indicator-icon" aria-hidden="true"></span>
-                                    <span class="screen-reader-text">“<?=$cRow['profit_name']?>”已被锁定</span>
+                                    <span class="screen-reader-text">“<?=$spreadCategoryArr[$row['spread_type']]?>”已被锁定</span>
                                 </div>
                             </th>
                             <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                                <?=$cRow['profit_name']?>
+                                <?=$spreadCategoryArr[$row['spread_type']]?>
                                 <br>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                             </td>
-                            <td class="profit_amount column-profit_amount has-row-actions" data-colname="金额">
-                                <?=$cRow['profit_amount']?>
-
+                            <td class="direct_superior column-direct_superior" data-colname="直接上级">
+                                <?=$row['direct_superior']?>
+                            </td>
+                            <td class="indirect_superior column-indirect_superior" data-colname="间接上级">
+                                <?=$row['indirect_superior']?>
+                            </td>
+                            <td class="first_cause column-first_cause" data-colname="一级事业管理员">
+                                <?=$row['first_cause']?>
+                            </td>
+                            <td class="second_cause column-second_cause" data-colname="二级事业管理员">
+                                <?=$row['second_cause']?>
+                            </td>
+                            <td class="coach column-coach" data-colname="教练">
+                                <?=$row['coach']?>
+                            </td>
+                            <td class="sub_center column-sub_center" data-colname="赛区/分中心/考级中心">
+                                <?=$row['sub_center']?>
+                            </td>
+                            <td class="mechanism column-mechanism" data-colname="参赛机构">
+                                <?=$row['mechanism']?>
+                            </td>
+                            <td class="spread_status column-spread_status" data-colname="状态">
+                                <?php
+                                    switch ($row['spread_status']){
+                                        case '1':
+                                            echo '<span style="color: #00c445">正常</span>';
+                                            break;
+                                        case '2':
+                                            echo '<span style="color: #c41c00">禁用</span>';
+                                            break;
+                                    }
+                                ?>
                             </td>
                             <td class="option1 column-option1 has-row-actions" data-colname="操作">
-                                <a href="<?=admin_url('admin.php?page=fission-add-profit-set&id='.$cRow['id'])?>">编辑</a>
+                                <a href="<?=admin_url('admin.php?page=fission-add-profit-set&id='.$row['id'])?>">编辑</a>
                                 |
                                 <a href="javascript:;" class="remove-set">删除</a>
                             </td>
 
                         </tr>
-                    <?php
-                    }
-                    ?>
                     </tbody>
                     <?php
                 }
@@ -123,8 +136,15 @@ class Spread{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-name column-primary">名称</th>
-                    <th scope="col" class="manage-column column-profit_amount">金额</th>
+                    <th scope="col" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" class="manage-column column-direct_superior">直接上级</th>
+                    <th scope="col" class="manage-column column-indirect_superior">间接上级</th>
+                    <th scope="col" class="manage-column column-first_cause">一级事业管理员</th>
+                    <th scope="col" class="manage-column column-second_cause">二级事业管理员</th>
+                    <th scope="col" class="manage-column column-coach">教练</th>
+                    <th scope="col" class="manage-column column-sub_center">赛区/分中心/考级中心</th>
+                    <th scope="col" class="manage-column column-mechanism">参赛机构</th>
+                    <th scope="col" class="manage-column column-spread_status">状态</th>
                     <th scope="col" class="manage-column column-option1">操作</th>
                 </tr>
                 </tfoot>
@@ -139,22 +159,6 @@ class Spread{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
-                    $('.hide-or-show').on('click',function () {
-                        var _tr = $(this).closest('.parent_tr');
-                        var _id = _tr.attr('data-id');
-                        var _tbody = $('.tobdy-'+_id);
-                        var _type = _tbody.attr('data-type');
-                        console.log(_type);
-                        if(_type == 'show'){
-                            _tbody.hide();
-                            _tbody.attr('data-type','hide')
-                            $(this).text('显示');
-                        }else{
-                            _tbody.show();
-                            _tbody.attr('data-type','show')
-                            $(this).text('隐藏');
-                        }
-                    });
                     //删除
                     $('.remove-set').on('click',function () {
                         var _id = $(this).closest('tr').attr('data-id');
@@ -191,20 +195,34 @@ class Spread{
         $error_msg = '';
         $success_msg = '';
         if(is_post()){
-            $profit_name = isset($_POST['profit_name']) ? trim($_POST['profit_name']) : '';
-            $profit_amount = isset($_POST['profit_amount']) ? trim($_POST['profit_amount']) : '';
-            $parent_id = isset($_POST['parent_id']) ? intval($_POST['parent_id']) : '';
-            if($profit_name == '') $error_msg = '请填写名称';
+            $spread_type = isset($_POST['spread_type']) ? trim($_POST['spread_type']) : '';
+            $direct_superior = isset($_POST['direct_superior']) ? trim($_POST['direct_superior']) : '';
+            $indirect_superior = isset($_POST['indirect_superior']) ? trim($_POST['indirect_superior']) : '';
+            $first_cause = isset($_POST['first_cause']) ? trim($_POST['first_cause']) : '';
+            $second_cause = isset($_POST['second_cause']) ? trim($_POST['second_cause']) : '';
+            $coach = isset($_POST['coach']) ? trim($_POST['coach']) : '';
+            $sub_center = isset($_POST['sub_center']) ? trim($_POST['sub_center']) : '';
+            $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
+            $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
+            if($spread_status !== 1 && $spread_status !== 2) $error_msg = '请选择状态!';
             if($error_msg == ''){
-                $inserData = [
-                    'profit_name' => $profit_name,
-                    'profit_amount' => $profit_amount,
-                    'parent_id' => $parent_id,
+                $insertData = [
+                    'spread_type' => $spread_type,
+                    'direct_superior' => $direct_superior,
+                    'indirect_superior' => $indirect_superior,
+                    'first_cause' => $first_cause,
+                    'second_cause' => $second_cause,
+                    'coach' => $coach,
+                    'sub_center' => $sub_center,
+                    'mechanism' => $mechanism,
+                    'spread_status' => $spread_status,
                 ];
                 if($id > 0){
-                    $bool = $wpdb->update($wpdb->prefix.'spread_set',$inserData,['id' => $id]);
+                    $bool = $wpdb->update($wpdb->prefix.'spread_set',$insertData,['id' => $id]);
                 }else{
-                    $bool = $wpdb->insert($wpdb->prefix.'spread_set',$inserData);
+                    //判断是否已经存在此类设置
+
+                    $bool = $wpdb->insert($wpdb->prefix.'spread_set',$insertData);
                 }
                 if($bool){
                     $success_msg = '操作成功!';
@@ -216,7 +234,6 @@ class Spread{
         if($id > 0){
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE id='{$id}'", ARRAY_A);
         }
-        $parentList = $wpdb->get_results("SELECT id,profit_name FROM {$wpdb->prefix}spread_set WHERE parent_id=0", ARRAY_A);
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑分成项</h1>
@@ -230,31 +247,66 @@ class Spread{
                 <input name="action" type="hidden" value="createuser">
                 <input type="hidden" id="_wpnonce_create-user" name="_wpnonce_create-user" value="5f6ea9ff44"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/user-new.php"><table class="form-table">
                     <tbody>
-                    <tr class="form-field form-required">
-                        <th scope="row"><label for="profit_name">收益名称 </label></th>
-                        <td>
-                            <input name="profit_name" type="text" id="profit_name" value="<?=isset($row)?$row['profit_name']:''?>" maxlength="60">
-                        </td>
-                    </tr>
-
-                    <tr class="form-field form-required">
-                        <th scope="row"><label for="profit_amount">收益金额/分成百分比 </label></th>
-                        <td>
-                            <input type="text" name="profit_amount" value="<?=isset($row)?$row['profit_amount']:''?>" id="profit_amount" maxlength="60">
-                        </td>
-                    </tr>
                     <tr class="">
-                        <th scope="row"><label for="parent_id">上级 </label></th>
+                        <th scope="row"><label for="spread_type">所属大类 </label></th>
                         <td>
-                            <select name="parent_id" id="parent_id">
-                                <option value="0">无上级</option>
-                                <?php foreach ($parentList as $plv){ ?>
-                                    <option <?=isset($row) && $row['parent_id'] == $plv['id']?'selected="selected"':''?> value="<?=$plv['id']?>"><?=$plv['profit_name']?></option>
+                            <select name="spread_type" id="spread_type">
+                                <?php foreach (getSpreadCategory() as $sck => $scv){ ?>
+                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck?>"><?=$scv?></option>
                                 <?php } ?>
                             </select>
                         </td>
                     </tr>
 
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="direct_superior">直接上级</label></th>
+                        <td>
+                            <input type="text" name="direct_superior" value="<?=isset($row)?$row['direct_superior']:''?>" id="direct_superior" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="indirect_superior">间接上级</label></th>
+                        <td>
+                            <input type="text" name="indirect_superior" value="<?=isset($row)?$row['indirect_superior']:''?>" id="indirect_superior" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="first_cause">一级事业管理员</label></th>
+                        <td>
+                            <input type="text" name="first_cause" value="<?=isset($row)?$row['first_cause']:''?>" id="first_cause" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="second_cause">二级事业管理员</label></th>
+                        <td>
+                            <input type="text" name="second_cause" value="<?=isset($row)?$row['second_cause']:''?>" id="second_cause" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="coach">教练</label></th>
+                        <td>
+                            <input type="text" name="coach" value="<?=isset($row)?$row['coach']:''?>" id="coach" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="sub_center">赛区/分中心/考级中心</label></th>
+                        <td>
+                            <input type="text" name="sub_center" value="<?=isset($row)?$row['sub_center']:''?>" id="sub_center" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="form-field form-required">
+                        <th scope="row"><label for="mechanism">参赛机构</label></th>
+                        <td>
+                            <input type="text" name="mechanism" value="<?=isset($row)?$row['mechanism']:''?>" id="mechanism" maxlength="60"><span>元/百分比</span>
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope="row"><label for="spread_status">状态</label></th>
+                        <td>
+                            <label for="spread_status_1"><input type="radio" <?=isset($row) && $row['spread_status'] == '1' ? 'checked="checked"': ''?> name="spread_status" id="spread_status_1" value="1">正常</label>
+                            <label for="spread_status_2"><input type="radio" <?=isset($row) && $row['spread_status'] == '2' ? 'checked="checked"': ''?> name="spread_status" id="spread_status_2" value="2">禁用</label>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -280,24 +332,25 @@ class Spread{
             $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                il.order_type,il.match_id,p.post_title,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
+                il.income_type,il.match_id,p.post_title,il.referee_income,il.indirect_referee_income,il.person_liable_income,il.sponsor_income,il.manager_income,
                 il.user_id,il.referee_id,il.indirect_referee_id,il.person_liable_id,il.sponsor_id,il.manager_id,il.income_status,il.id,
                 um.meta_value AS user_real_name,  
                 um2.meta_value AS referee_real_name,  
                 um3.meta_value AS indirect_referee_real_name,  
                 um4.meta_value AS person_liable_real_name,  
-                um5.meta_value AS sponsor_real_name,  
+                zm.zone_name,  
                 um6.meta_value AS manager_real_name 
                 FROM {$wpdb->prefix}income_logs AS il 
                 LEFT JOIN `{$wpdb->usermeta}` AS um ON um.user_id=il.user_id AND um.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->usermeta}` AS um2 ON um2.user_id=il.referee_id AND um2.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->usermeta}` AS um3 ON um3.user_id=il.indirect_referee_id AND um3.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->usermeta}` AS um4 ON um4.user_id=il.person_liable_id AND um4.meta_key='user_real_name' 
-                LEFT JOIN `{$wpdb->usermeta}` AS um5 ON um5.user_id=il.sponsor_id AND um5.meta_key='user_real_name' 
+                LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
                 LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
                 {$where} 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -329,10 +382,8 @@ class Spread{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
-                        <option value="frozen">冻结</option>
-                        <option value="thaw">解冻</option>
+                        <option value="2">改为待确认</option>
+                        <option value="1">改为已确认</option>
                     </select>
                     <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
@@ -363,16 +414,16 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
-                    if(empty($row['user_real_name'])){
+                    if(empty($row['user_id'])){
                         $real_name = get_user_by('ID',$row['user_id'])->user_login;
                     }else{
                         $real_name = unserialize($row['user_real_name'])['real_name'];
                     }
                     ?>
-                    <tr data-uid="<?=$row['id']?>">
+                    <tr data-id="<?=$row['id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$real_name?></label>
-                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <input id="cb-select-<?=$row['id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['id']?>">
                             <div class="locked-indicator">
                                 <span class="locked-indicator-icon" aria-hidden="true"></span>
                                 <span class="screen-reader-text">“<?=$real_name?>”已被锁定</span>
@@ -405,7 +456,7 @@ class Spread{
                             <?=$row['person_liable_income']>0?'('.$row['person_liable_income'].')':''?>
                         </td>
                         <td class="sponsor column-sponsor" data-colname="主办方">
-                            <?=!empty($row['sponsor_name'])?unserialize($row['sponsor_name'])['real_name']:get_user_by('ID',$row['sponsor_id'])->user_login?>
+                            <?=$row['zone_name']?>
                             <?=$row['sponsor_income']>0?'('.$row['sponsor_income'].')':''?>
                         </td>
                         <td class="manager column-manager" data-colname="事业员">
@@ -416,7 +467,7 @@ class Spread{
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
-
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':'<a href="javascript:;" class="update_status" data-status="1">改为待确认</a>'?>
                         </td>
                     </tr>
                     <?php
@@ -445,10 +496,8 @@ class Spread{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="agree">通过申请</option>
-                        <option value="refuse">拒绝申请</option>
-                        <option value="frozen">冻结</option>
-                        <option value="thaw">解冻</option>
+                        <option value="2">改为待确认</option>
+                        <option value="1">改为已确认</option>
                     </select>
                     <input type="button" id="doaction2" class="button action all_options" value="应用">
                 </div>
@@ -463,8 +512,42 @@ class Spread{
             <br class="clear">
             <script>
                 jQuery(document).ready(function($) {
+                    //修改确认状态
+                    $('.update_status').on('click',function () {
+                        var status = $(this).attr('data-status');
+                        var _id = $(this).closest('tr').attr('data-id');
+                        postAjax(status,_id);
+                    });
 
+                    $('.all_options').on('click', function () {
+                        var status = $(this).prev().val();
+                        var _id = [];
+                        $.each($('#the-list').find('.check_list:checked'),function (i,v) {
+                            _id.push($(v).val());
+                        });
+                        _id = _id.join(',');
+                        postAjax(status,_id);
+                    });
+                    function postAjax(status,_id) {
+                        if(status != '1' && status != '2') return false;
+                        if(_id == '' || _id == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'updateIncomeLogsStatus', 'status':status,'id':_id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
                 });
+
             </script>
         </div>
         <?php

@@ -216,6 +216,21 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '操作成功!']);
         else wp_send_json_error(['info' => '操作失败!']);
     }
+
+    /**
+     * 修改收益记录确认状态
+     */
+    public function updateIncomeLogsStatus(){
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if(($status !== 1 && $status !== 2) || $id == '') wp_send_json_error(['info' => '参数错误!']);
+        global $wpdb;
+        $sql = "UPDATE {$wpdb->prefix}income_logs SET income_status='{$status}' WHERE id IN({$id})";
+        $bool = $wpdb->query($sql);
+//        echo $wpdb->last_query;
+        if($bool) wp_send_json_success(['info' => '修改成功!']);
+        else wp_send_json_error(['info' => '修改失败!']);
+    }
 }
 
 new Fission_Ajax();

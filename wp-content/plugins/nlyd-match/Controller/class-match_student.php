@@ -2590,6 +2590,7 @@ class Match_student {
                     <th scope="col" id="real_name" class="manage-column column-real_name">姓名</th>
                     <th scope="col" id="mobile" class="manage-column column-mobile">手机</th>
                     <th scope="col" id="email" class="manage-column column-email">电子邮件</th>
+                    <th scope="col" id="zone" class="manage-column column-zone">参赛机构</th>
                     <th scope="col" id="addS" class="manage-column column-addS">添加到比赛学员</th>
                 </tr>
                 </thead>
@@ -2604,16 +2605,21 @@ class Match_student {
 
                             <input type="checkbox" name="ids[]" class="subscriber" value="">
                         </th>
-                        <td class="role column-user_login column-primary" data-colname="用户名">
+                        <td class="user_login column-user_login column-primary" data-colname="用户名">
                             <?=$row['user_login']?>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
 
-                        <td class="role column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
-                        <td class="role column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
-                        <td class="role column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
-                        <td class="role column-email" data-colname="电子邮件"><?=$row['user_email']?></td>
-                        <td class="role column-addS" data-colname="添加到比赛学员">
+                        <td class="user_ID column-user_ID" data-colname="学员ID"><?=$row['user_ID']?></td>
+                        <td class="real_name column-real_name" data-colname="姓名"><?=unserialize($row['user_real_name'])['real_name']?></td>
+                        <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+                        <td class="email column-email" data-colname="电子邮件"><?=$row['user_email']?></td>
+                        <td class="zone column-zone" data-colname="电子邮件">
+                            <select class="js-data-select-ajax" id="sub_centres_id" name="sub_centres_id" style="width: 50%" data-action="getCentresList" data-type="all">
+
+                            </select>
+                        </td>
+                        <td class="addS column-addS" data-colname="添加到比赛学员">
                             <a href="javascript:;" class="joinMatch" data-id="<?=$post->ID?>" data-uid="<?=$row['uid']?>">加入比赛</a>
                         </td>
                     </tr>
@@ -2633,6 +2639,7 @@ class Match_student {
                     <th scope="col" class="manage-column column-real_name">姓名</th>
                     <th scope="col" class="manage-column column-mobile">手机</th>
                     <th scope="col" class="manage-column column-email">电子邮件</th>
+                    <th scope="col" class="manage-column column-zone">参赛机构</th>
                     <th scope="col" class="manage-column column-addS">添加到比赛学员</th>
                 </tr>
                 </tfoot>

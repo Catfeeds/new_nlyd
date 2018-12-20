@@ -281,6 +281,7 @@ class Grading
                             </td>
                             <td class="ID column-ID" data-colname="ID"><?=isset($usermeta['user_ID']) ? $usermeta['user_ID'][0] : ''?></td>
                             <td class="mobile column-mobile" data-colname="手机"><?=$row['user_mobile']?></td>
+
                             <td class="joinGrading column-joinGrading" data-colname="加入考级">
                                 <?php if($is_memory){ ?>
                                     <input type="text" placeholder="请输入记忆等级">
@@ -318,10 +319,12 @@ class Grading
                     $('#the-list').find('.joinGradingMember').on('click', function () {
                         var grading_id = '<?=$gradingId?>';
                         var user_id = $(this).closest('tr').attr('data-id');
+                        // var sub_centres_id = $(this).closest('tr').find('#sub_centres_id').val();
                         var _data = Object();
                         _data.action = 'joinGradingMember';
                         _data.grading_id = grading_id;
                         _data.user_id = user_id;
+                        // _data.sub_centres_id = sub_centres_id;
                         <?php if($is_memory){ ?>
                         var lv = $(this).prev().val();
                         _data.lv = lv;

@@ -882,11 +882,18 @@ function the_table_install () {
     if($wpdb->get_var("show tables like $table_name") != $table_name) {  //收益默认金额设置
         $sql = "CREATE TABLE `{$table_name}` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-          `profit_name` varchar(255) DEFAULT NULL COMMENT '收益名称',
-          `profit_amount` varchar(32) NULL DEFAULT '0.00' COMMENT '收益金额或百分比',
-          `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级id',
-          PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
+          `spread_type` varchar(64) NOT NULL DEFAULT '' COMMENT 'match(比赛),grading(考级),course(购买课程),course_grading(课程2级达标),course_recommend(课程推荐满3人),stock(股权出售),profit_bonus(分中心收益分红)',
+          `direct_superior` varchar(32) DEFAULT NULL COMMENT '直接上级获取收益(元/百分比)',
+          `indirect_superior` varchar(32) DEFAULT NULL COMMENT '间接上级收益(元/百分比)',
+          `first_cause` varchar(32) DEFAULT NULL COMMENT '一级事业管理员收益(元/百分比)',
+          `second_cause` varchar(32) DEFAULT NULL COMMENT '二级事业管理员收益(元/百分比)',
+          `coach` varchar(32) DEFAULT NULL COMMENT '教练获取收益(元/百分比)',
+          `sub_center` varchar(32) DEFAULT NULL COMMENT '赛区/分中心/考级中心获取收益(元/百分比)',
+          `mechanism` varchar(32) DEFAULT NULL COMMENT '参赛机构获取收益(元/百分比)',
+          `spread_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1正常,2禁用',
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `unique` (`spread_type`) USING BTREE
+        ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;";
         dbDelta($sql);
     }
 

@@ -37,7 +37,7 @@ endif;
                             </tbody>
                         </table>
                     </div>
-                <?php if(!empty($row['grading_log_id'])):?>
+                <?php if(!empty($log_id)):?>
                 <a class="a-btn" id="complete" href="<?=home_url('gradings/myAnswerLog/grad_id/'.$_GET['grad_id'].'/grad_type/'.$_GET['grad_type'])?>"><div><?=__('我的答题记录', 'nlyd-student')?></div></a>
                 <?php endif;?>
             </div>
