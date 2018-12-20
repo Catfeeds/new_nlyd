@@ -720,7 +720,8 @@ class Spread{
                       LEFT JOIN {$wpdb->usermeta} AS um2 ON um2.user_id=ue.extract_id AND um2.meta_key='user_real_name'
                       LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.id=ue.extract_id";
         }
-        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name FROM {$wpdb->prefix}user_extract AS ue 
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS ue.*,um.meta_value AS censor_real_name 
+                FROM {$wpdb->prefix}user_extract_logs AS ue 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=ue.censor_user_id AND um.meta_key='user_real_name'
                 {$join}
                 {$where} 
