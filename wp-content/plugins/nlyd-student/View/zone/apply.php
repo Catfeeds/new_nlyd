@@ -275,41 +275,51 @@ jQuery(function($) {
         form.verify($.validationLayui.allRules);
         // 监听提交
         form.on('submit(layform)', function(data){//实名认证提交
-            
-            var fd = new FormData();
-            fd.append('action','zone_apply_submit');
-            fd.append('zone_num',data.field['zone_num']);
-            fd.append('type_id',$.Request('type_id'));
-            fd.append('zone_type_alias',$.Request('zone_type_alias'));
-            fd.append('zone_name',data.field['zone_name']);
-            fd.append('zone_address',data.field['zone_address']);
-            fd.append('legal_person',data.field['legal_person']);
-            fd.append('opening_bank',data.field['opening_bank']);
-            fd.append('opening_bank_address',data.field['opening_bank_address']);
-            fd.append('bank_card_num',data.field['bank_card_num']);
-            fd.append('business_licence',imgs1[0]);
-            if(data.field['chairman_id']){
-                fd.append('chairman_id','');
-            }
-            if(data.field['secretary_id']){
-                fd.append('secretary_id','');
-            }
-            console.log(data.field)
-            $.ajax({
-                data: fd,
-                contentType : false,
-                processData : false,
-                cache : false,
-                success: function(res, textStatus, jqXHR){
-                    $.alerts(res.data.info)
-                    if(res.data.url){
-                        setTimeout(function() {
-                            window.location.href=res.data.url
-                        }, 300);
-
-                    }
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                var fd = new FormData();
+                fd.append('action','zone_apply_submit');
+                fd.append('zone_num',data.field['zone_num']);
+                fd.append('type_id',$.Request('type_id'));
+                fd.append('zone_type_alias',$.Request('zone_type_alias'));
+                fd.append('zone_name',data.field['zone_name']);
+                fd.append('zone_address',data.field['zone_address']);
+                fd.append('legal_person',data.field['legal_person']);
+                fd.append('opening_bank',data.field['opening_bank']);
+                fd.append('opening_bank_address',data.field['opening_bank_address']);
+                fd.append('bank_card_num',data.field['bank_card_num']);
+                fd.append('business_licence',imgs1[0]);
+                if(data.field['chairman_id']){
+                    fd.append('chairman_id','');
                 }
-            })
+                if(data.field['secretary_id']){
+                    fd.append('secretary_id','');
+                }
+                console.log(data.field)
+                $.ajax({
+                    data: fd,
+                    contentType : false,
+                    processData : false,
+                    cache : false,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success: function(res, textStatus, jqXHR){
+                        $.alerts(res.data.info)
+                        if(res.data.url){
+                            setTimeout(function() {
+                                window.location.href=res.data.url
+                            }, 300);
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                　　　　 }
+                        _this.removeClass('disabled');
+                    }
+                })
+            }
             return false;
         });
         layer.photos({//图片预览
