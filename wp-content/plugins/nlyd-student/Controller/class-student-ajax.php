@@ -4676,12 +4676,13 @@ class Student_Ajax
         global $wpdb,$current_user;
         switch ($_POST['match_type']){
             case 'match':
+                //print_r($_POST);die;
                 //获取比赛状态
                 //$wpdb->get_var("select from ");
                 foreach ($_POST['data'] as $k => $v){
                     if($v['id'] > 0){
 
-                        $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time']);
+                        $result = $this->contrast_time($_POST['data'],$v['id'],$v['start_time'],$v['end_time']);
                         if(!empty($result)){
                             wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
                         }
@@ -4695,7 +4696,7 @@ class Student_Ajax
                         'revise_id'=>$current_user->ID,
                         'revise_time'=>get_time('mysql'),
                     );
-                    $wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
+                    //$wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
                 }
                 break;
             case 'grading':
@@ -4791,10 +4792,14 @@ class Student_Ajax
     /**
      * 对比比赛时间
      */
-    public function contrast_time($data,$start_time,$end_time){
+    public function contrast_time($data,$id,$start_time,$end_time){
+
         foreach ($data as $k =>$v){
-            if(($data['start_time'] < $start_time && $start_time < $data['start_time']) || ($data['end_time'] < $end_time && $end_time < $data['end_time'])){
-                return $v;    //返回冲突时间
+
+            if($id != $v['id'] ){
+                if( ( strtotime($v['start_time']) <= strtotime($start_time) && strtotime($start_time) <= strtotime($v['end_time']) ) || ( strtotime($v['start_time']) <= strtotime($end_time) && strtotime($end_time) <= strtotime($v['end_time']) ) ){
+                    return $v;    //返回冲突时间
+                }
             }
         }
     }
