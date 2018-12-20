@@ -147,7 +147,8 @@ jQuery(function($) {
             }
         });
         var postData={
-            action:'',
+            action:'update_match_time',
+            match_type:'match',
             data:data
         }
         $.ajax({
