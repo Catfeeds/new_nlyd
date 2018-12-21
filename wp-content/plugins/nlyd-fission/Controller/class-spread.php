@@ -58,6 +58,7 @@ class Spread{
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
                     <th scope="col" id="spread_type" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" id="pay_amount" class="manage-column column-pay_amount">支付金额</th>
                     <th scope="col" id="direct_superior" class="manage-column column-direct_superior">直接上级</th>
                     <th scope="col" id="indirect_superior" class="manage-column column-indirect_superior">间接上级</th>
                     <th scope="col" id="first_cause" class="manage-column column-first_cause">一级事业管理员</th>
@@ -91,6 +92,9 @@ class Spread{
                             </td>
                             <td class="direct_superior column-direct_superior" data-colname="直接上级">
                                 <?=$row['direct_superior']?>
+                            </td>
+                            <td class="pay_amount column-pay_amount" data-colname="支付金额">
+                                <?=$row['pay_amount']?>
                             </td>
                             <td class="indirect_superior column-indirect_superior" data-colname="间接上级">
                                 <?=$row['indirect_superior']?>
@@ -137,6 +141,7 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-spread_type column-primary">分成类别</th>
+                    <th scope="col" class="manage-column column-pay_amount">支付金额</th>
                     <th scope="col" class="manage-column column-direct_superior">直接上级</th>
                     <th scope="col" class="manage-column column-indirect_superior">间接上级</th>
                     <th scope="col" class="manage-column column-first_cause">一级事业管理员</th>
