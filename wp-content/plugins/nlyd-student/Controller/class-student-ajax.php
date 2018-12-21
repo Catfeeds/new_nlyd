@@ -4696,10 +4696,13 @@ class Student_Ajax
                         'revise_id'=>$current_user->ID,
                         'revise_time'=>get_time('mysql'),
                     );
-                    //$wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
+                    $wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
                 }
                 break;
             case 'grading':
+
+
+
                 break;
             default:
                 wp_send_json_error(array('info'=>_('参数错误')));
@@ -4716,39 +4719,75 @@ class Student_Ajax
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['project_more']) || empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['use_time'])){
             wp_send_json_error(array('info'=>_('必传参数不齐全')));
         }
-
-        //获取已有的比赛列表
-        $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
+        switch ($_POST['match_type']) {
+            case 'match':
+                //获取已有的比赛列表
+                $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
                 left join {$wpdb->prefix}posts b on a.project_id = b.ID
                 where match_id = {$_POST['match_id']} and created_id = $current_user->ID";
-        //print_r($sql);die;
-        $rows = $wpdb->get_results($sql,ARRAY_A);
-        if(!empty($rows)){
+                //print_r($sql);die;
+                $rows = $wpdb->get_results($sql, ARRAY_A);
+                if (!empty($rows)) {
 
-            $result = $this->contrast_time($rows,$_POST['start_time'],$_POST['end_time']);
-            //print_r($result);
-            if(!empty($result)){
-                wp_send_json_error(array('info'=>_('与'.$result['post_title'].'第'.$result['more'].'轮时间冲突')));
-            }
-            $insert = array(
-                'match_id'=>$_POST['match_id'],
-                'project_id'=>$_POST['project_id'],
-                'start_time'=>$_POST['start_time'],
-                'more'=>$_POST['project_more'],
-                'start_time'=>$_POST['start_time'],
-                'end_time'=>$_POST['end_time'],
-                'use_time'=>$_POST['use_time'],
-                'revise_id'=>$current_user->ID,
-                'created_time'=>get_time('mysql'),
-            );
-            //print_r($insert);
-            $res = $wpdb->insert($wpdb->prefix.'match_project_more',$insert);
-            //print_r($res);die;
-            if($res){
-                wp_send_json_success(array('info'=>_('新增成功')));
-            }
+                    $result = $this->contrast_time($rows, $_POST['start_time'], $_POST['end_time']);
+                    //print_r($result);
+                    if (!empty($result)) {
+                        wp_send_json_error(array('info' => _('与' . $result['post_title'] . '第' . $result['more'] . '轮时间冲突')));
+                    }
+                    $insert = array(
+                        'match_id' => $_POST['match_id'],
+                        'project_id' => $_POST['project_id'],
+                        'start_time' => $_POST['start_time'],
+                        'more' => $_POST['project_more'],
+                        'start_time' => $_POST['start_time'],
+                        'end_time' => $_POST['end_time'],
+                        'use_time' => $_POST['use_time'],
+                        'created_id' => $current_user->ID,
+                        'created_time' => get_time('mysql'),
+                    );
+                    //print_r($insert);
+                    $res = $wpdb->insert($wpdb->prefix . 'match_project_more', $insert);
+                }
+                break;
+            case 'grading':
+
+
+                break;
+            default:
+                wp_send_json_error(array('info' => _('参数错误')));
+                break;
+        }
+        //print_r($res);die;
+        if($res){
+            wp_send_json_success(array('info'=>_('新增成功')));
         }
         wp_send_json_error(array('info'=>_('新增失败')));
+    }
+
+    /**
+     * 删除轮数/考级
+     */
+    public function remove_match_time(){
+        global $wpdb,$current_user;
+        if(empty($_POST['id'])){
+            wp_send_json_error(array('info'=>_('id必传')));
+        }
+        switch ($_POST['match_type']) {
+            case 'match':
+                $res = $wpdb->delete($wpdb->prefix . 'match_project_more', array('id'=>$_POST['id'],'created_id'=>$current_user->ID));
+                break;
+            case 'grading':
+
+
+                break;
+            default:
+                wp_send_json_error(array('info' => _('参数错误')));
+                break;
+        }
+        if($res){
+            wp_send_json_success(array('info'=>_('删除成功')));
+        }
+        wp_send_json_error(array('info'=>_('删除失败')));
     }
 
 
