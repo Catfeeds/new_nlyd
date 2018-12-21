@@ -28,7 +28,14 @@
                         <div class="layui-tab-content width-margin width-margin-pc">
                             <!-- 课程报名中 -->
                             <div class="layui-tab-item layui-show">
-                                <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
+                                <div class="no-info-page" style="top:50px">
+                                    <div class="no-info-img">
+                                        <img src="<?=student_css_url.'image/noInfo/noCourse1043@2x.png'?>">
+                                    </div>
+                                    <p class="no-info-text"><?=__('该中心近期暂无可报名课程', 'nlyd-student')?></p>
+                                    <a class="a-btn a-btn-table" href="<?=home_url('/directory/course');?>"><div><?=__('查看其它中心课程', 'nlyd-student')?></div></a>
+                                </div>
+                                <!-- <ul class="flow-default layui-row layui-col-space20" id="1" style="margin:0">
                                     <li class="match_row">
                                         <div class="match_header bold c_black f_16 mt_10">高效记忆术·G预报班·成都郫县</div>
                                         <div class="match_body">
@@ -154,7 +161,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
                             <!-- 课程进行中 -->
                             <div class="layui-tab-item">
