@@ -115,7 +115,7 @@ jQuery(function($) {
                 ,isLazyimg: true
                 ,done: function(page, next){ //加载下一页
                     var postData={
-                        action:'get_match_list',
+                        action:'get_zone_match_list',
                         _wpnonce:$('#inputMatch').val(),
                         page:match_page,
                         match_type:'',
@@ -176,7 +176,7 @@ jQuery(function($) {
                         },
                         complete:function(XMLHttpRequest, textStatus){
 							if(textStatus=='timeout'){
-								$.alerts('<?=__('网络质量差,请重试', 'nlyd-student')?>')
+								$.alerts("<?=__('网络质量差,请重试', 'nlyd-student')?>")
 								next(lis.join(''),true)
 							}
                         }
