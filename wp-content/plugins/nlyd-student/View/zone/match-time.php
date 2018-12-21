@@ -55,12 +55,73 @@ jQuery(function($) {
     var match_date_Data=$.validationLayui.dates2;//开赛日期
     var  posiotion_match_date={};//初始化位置，高亮展示
     var mobileSelect={}
-
+    var match_id=$.Request('match_id');
     function judgFailTime(startTime,interval) {
         var time = new Date(startTime.replace("-","/"));
         time.setMinutes(time.getMinutes() + interval, time.getSeconds(), 0);
         return time;
     }
+    layui.use('layer', function(){
+        $('body').on('click','.close_coin',function(){
+            var _this=$(this);
+            layer.open({
+                    type: 1
+                    ,maxWidth:300
+                    ,title: "<?=__('提示', 'nlyd-student')?>" //不显示标题栏
+                    ,skin:'nl-box-skin'
+                    ,id: 'certification' //防止重复弹出
+                    ,content: "<div class='box-conent-wrapper'><?=__('是否删除', 'nlyd-student')?>？</div>"
+                    ,btn: [ "<?=__('按错了', 'nlyd-student')?>","<?=__('确认', 'nlyd-student')?>",]
+                    ,success: function(layero, index){
+                    },
+                    cancel: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,yes: function(index, layero){
+                        layer.closeAll();
+                    }
+                    ,btn2: function(index, layero){
+                        if(!_this.hasClass('disabled')){
+                            var id=_this.parent('.add_lun_row').find('.match_date').attr('data-id')
+                            var data={
+                                action:'remove_match_time',
+                                id:id,
+                                match_id:match_id,
+                                match_type:'match'
+                            }
+                            $.ajax({
+                                data: data,
+                                beforeSend:function(XMLHttpRequest){
+                                    _this.addClass('disabled')
+                                },
+                                success: function(res, textStatus, jqXHR){
+                                    if(res.success){
+                                        window.location.reload()
+                                    }else{
+                                        $.alerts(res.data.info,1200)
+                                    }
+                                },
+                                complete: function(jqXHR, textStatus){
+                                    if(textStatus=='timeout'){
+                                        $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                            　　　　 }
+                                    _this.removeClass('disabled');
+                                }
+                            })
+                        }else{
+                            $.alerts("<?=__('正在删除此轮比赛，请稍后再试', 'nlyd-student')?>",1200)
+                        }
+                        layer.closeAll();
+                    }
+                    ,closeBtn:2
+                    ,btnAagn: 'c' //按钮居中
+                    ,shade: 0.3 //遮罩
+                    ,isOutAnim:true//关闭动画
+                });
+        })
+});
+
+
     $('.match_date').each(function(_index){
         var _this=$(this);
         var title="<?=__('开赛日期', 'nlyd-student')?>";
@@ -119,13 +180,15 @@ jQuery(function($) {
                         var _time=judgFailTime(start_time,use_time);
                         var end_time=_time.Format("yyyy/MM/dd hh:mm");
                         _this.parent('.add_lun_row').find('.end_time').text(end_time);
-                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
+                        // _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
+                        $('.add_new_lun').attr('cantChoose',true)
                     }else{
-                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',false)//提交时判断新增还是编辑
+                        $('.add_new_lun').attr('cantChoose',false)
+                        // _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',false)//提交时判断新增还是编辑
                     }
                 }else {//新增轮数
                     if(_this.attr('cantChoose')){
-                        $.alerts("<?=__('此项目已经新修改时间,请先保存再新增轮数', 'nlyd-student')?>");    
+                        $.alerts("<?=__('已存在修改时间项目,请先保存再新增轮数', 'nlyd-student')?>",1200);    
                     }else{
                         if(!_this.hasClass("disabled")){
                             var project_more=_this.parents('.match_time_row').find('.add_lun_row').length;
@@ -138,7 +201,7 @@ jQuery(function($) {
                                 project_id:project_id,
                                 start_time:start_time,
                                 end_time:end_time,
-                                match_id:$.Request('match_id'),
+                                match_id:match_id,
                                 project_more:project_more,
                                 use_time:use_time,
                                 match_type:'match'
@@ -153,7 +216,7 @@ jQuery(function($) {
                                     if(res.success){
                                         window.location.reload()
                                     }else{
-                                        $.alerts(res.data.info)
+                                        $.alerts(res.data.info,1200)
                                     }
                                 },
                                 complete: function(jqXHR, textStatus){
@@ -164,7 +227,7 @@ jQuery(function($) {
                                 }
                             })
                         }else{
-                            $.alerts("<?=__('正在新增轮数，请稍后再试', 'nlyd-student')?>")
+                            $.alerts("<?=__('正在新增轮数，请稍后再试', 'nlyd-student')?>",1200)
                         }
                     }
                 }
@@ -199,7 +262,7 @@ jQuery(function($) {
             var postData={
                 action:'update_match_time',
                 data:data,
-                match_id:$.Request('match_id'),
+                match_id:match_id,
                 match_type:'match'
             }
             $.ajax({
@@ -211,7 +274,7 @@ jQuery(function($) {
                     if(res.success){
                         window.location.reload()
                     }else{
-                        $.alerts(res.data.info)
+                        $.alerts(res.data.info,1200)
                     }
                 },
                 complete: function(jqXHR, textStatus){

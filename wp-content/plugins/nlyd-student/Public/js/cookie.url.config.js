@@ -8,8 +8,9 @@
 $.n('');
 */
 /*$.alerts*/
-function Alert(msg){
-	this.msg=msg
+function Alert(msg,delay){
+	this.msg=msg;
+	this.delay=delay ? delay : 800;
 }
 Alert.prototype={
 	constructor:Alert,
@@ -37,7 +38,7 @@ Alert.prototype={
 		}).html(this.msg)
 			.stop(true)
 			.fadeIn(300)
-			.delay(800)
+			.delay(this.delay)
 			.fadeOut(1300);
 	}
 };
@@ -126,8 +127,8 @@ Alert.prototype={
 // var time1 = new Date().Format("yyyy-MM-dd hh:mm:ss");     
 // var time2 = new Date().Format("yyyy-MM-dd"); 
 	jQuery.extend({
-		alerts:function(msg){
-			var alerts=new Alert(msg);
+		alerts:function(msg,delay){
+			var alerts=new Alert(msg,delay);
 			alerts.alertInfo()
 		},
 		/*设置cookie*/

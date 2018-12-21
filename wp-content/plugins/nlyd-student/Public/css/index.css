@@ -15,6 +15,9 @@
     -webkit-text-stroke-width: 0;
     -moz-osx-font-smoothing: grayscale;
 } */
+.lh_20{
+    line-height: 20px;
+}
 .nl-dark-blue{
     color: #4394F9;
 }

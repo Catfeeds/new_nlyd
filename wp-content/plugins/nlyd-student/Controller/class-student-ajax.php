@@ -4682,7 +4682,7 @@ class Student_Ajax
                 foreach ($_POST['data'] as $k => $v){
                     if($v['id'] > 0){
 
-                        $result = $this->contrast_time($_POST['data'],$v['id'],$v['start_time'],$v['end_time']);
+                        $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time'],$v['id']);
                         if(!empty($result)){
                             wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
                         }
@@ -4708,6 +4708,9 @@ class Student_Ajax
         wp_send_json_success(array('info'=>_('更新成功')));
     }
 
+    /**
+     * 机构比赛轮数新增
+     */
     public function add_match_time(){
         global $wpdb,$current_user;
         if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['project_more']) || empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['use_time'])){
@@ -4718,25 +4721,29 @@ class Student_Ajax
         $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
                 left join {$wpdb->prefix}posts b on a.project_id = b.ID
                 where match_id = {$_POST['match_id']} and created_id = $current_user->ID";
+        //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
 
             $result = $this->contrast_time($rows,$_POST['start_time'],$_POST['end_time']);
+            //print_r($result);
             if(!empty($result)){
-                wp_send_json_error(array('info'=>_('与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
+                wp_send_json_error(array('info'=>_('与'.$result['post_title'].'第'.$result['more'].'轮时间冲突')));
             }
             $insert = array(
                 'match_id'=>$_POST['match_id'],
                 'project_id'=>$_POST['project_id'],
                 'start_time'=>$_POST['start_time'],
-                'more'=>$_POST['more'],
+                'more'=>$_POST['project_more'],
                 'start_time'=>$_POST['start_time'],
                 'end_time'=>$_POST['end_time'],
                 'use_time'=>$_POST['use_time'],
                 'revise_id'=>$current_user->ID,
-                'revise_time'=>get_time('mysql'),
+                'created_time'=>get_time('mysql'),
             );
+            //print_r($insert);
             $res = $wpdb->insert($wpdb->prefix.'match_project_more',$insert);
+            //print_r($res);die;
             if($res){
                 wp_send_json_success(array('info'=>_('新增成功')));
             }
@@ -4789,10 +4796,10 @@ class Student_Ajax
         wp_send_json_success(array('info'=>$rows));
     }
 
-    /**
+    /**add_match_time
      * 对比比赛时间
      */
-    public function contrast_time($data,$id,$start_time,$end_time){
+    public function contrast_time($data,$start_time,$end_time,$id=''){
 
         foreach ($data as $k =>$v){
 
