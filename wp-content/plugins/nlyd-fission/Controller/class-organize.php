@@ -34,6 +34,9 @@ class Organize{
 
             $role = 'add_organize_coach';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'organize_income_log';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','主体详情','主体详情','organize_detail','fission-organize-detail',array($this,'organizeDetails'));
         add_submenu_page('fission','主体类型','主体类型','organize_type','fission-organize-type',array($this,'organizeType'));
@@ -43,6 +46,7 @@ class Organize{
         add_submenu_page('fission','新增主体类型','新增主体类型','add_organize_type','fission-add-organize-type',array($this,'addOrganizeType'));
         add_submenu_page('fission','新增主体权限','新增主体权限','add_organize_power','fission-add-organize-power',array($this,'addOrganizePower'));
         add_submenu_page('fission','新增主体成员','新增主体成员','add_organize_coach','fission-add-organize-coach',array($this,'addOrganizeCoach'));
+        add_submenu_page('fission','主体收益记录','主体收益记录','organize_income_log','fission-organize-income-log',array($this,'organizeIncomeLog'));
     }
 
     /**
@@ -181,6 +185,7 @@ class Organize{
                         <th scope="col" id="zone_status" class="manage-column column-zone_status">申请状态</th>
                         <th scope="col" id="able_status" class="manage-column column-able_status">冻结状态</th>
                         <th scope="col" id="view_member" class="manage-column column-view_member">查看成员</th>
+                        <th scope="col" id="profit" class="manage-column column-profit">收益提现</th>
                         <th scope="col" id="created_time" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" id="audit_time" class="manage-column column-audit_time">审核时间</th>
                         <th scope="col" id="options1" class="manage-column column-options1">操作</th>
@@ -235,8 +240,10 @@ class Organize{
                            <span style="<?=$row['is_able'] == '2'?'color:#c41800':''?>"><?=$row['able_name']?></span>
                        </td>
                        <td class="view_member column-view_member" data-colname="查看成员"><a href="<?=admin_url('admin.php?page=fission-organize-coach&user_id='.$row['user_id'])?>">查看成员</a></td>
+                       <td class="profit column-profit" data-colname="收益提现"><a href="<?=admin_url('admin.php?page=fission-organize-income-log&id='.$row['id'])?>">查看记录</a></td>
                        <td class="created_time column-created_time" data-colname="提交时间"><?=$row['created_time']?></td>
                        <td class="audit_time column-audit_time" data-colname="审核时间"><?=$row['audit_time']?></td>
+
                        <td class="options1 column-options1" data-colname="操作">
                        <?php
                        //操作列表
@@ -278,6 +285,7 @@ class Organize{
                         <th scope="col" class="manage-column column-zone_status">申请状态</th>
                         <th scope="col" class="manage-column column-able_status">冻结状态</th>
                         <th scope="col" class="manage-column column-view_member">查看成员</th>
+                        <th scope="col" class="manage-column column-profit">收益提现</th>
                         <th scope="col" class="manage-column column-created_time">提交时间</th>
                         <th scope="col" class="manage-column column-audit_time">审核时间</th>
                         <th scope="col" class="manage-column column-options1">操作</th>
@@ -748,6 +756,7 @@ class Organize{
                         $insertData['business_licence_url'] = $upload_dir['baseurl'].$dir.$file;
                     }
                 }
+
                 if($old_zm_id>0){
                     $bool = $wpdb->update($wpdb->prefix.'zone_meta',$insertData,['id'=>$old_zm_id]);
                 }else{
@@ -757,8 +766,8 @@ class Organize{
                 }
                 if(!$bool){
                     $error_msg = '操作失败!';
-                }else{
                     is_file($upload_dir['basedir'].$dir.$file) && unlink($upload_dir['basedir'].$dir.$file);
+                }else{
                     $success_msg = '操作成功';
 
                 }
@@ -820,6 +829,7 @@ class Organize{
                         <td>
 
                             <?php if($old_zm_id > 0){?>
+                                <input type="hidden" name="user_id" value="<?=$row['user_id']?>">
                                 <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
                                 <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
                             <?php }else{ ?>
@@ -1447,6 +1457,122 @@ class Organize{
 
                 <p class="submit"><input type="submit" name="createuser" id="createusersub" class="button button-primary" value="提交"></p>
             </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * 主体收益提现记录
+     */
+    public function organizeIncomeLog(){
+        die;
+        global $wpdb;
+        $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_meta AS zm 
+        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id
+        ");
+        $rows = [];
+        ?>
+
+        <div class="wrap">
+            <h1 class="wp-heading-inline">主体收益记录</h1>
+
+            <hr class="wp-header-end">
+            <ul class="subsubsub">
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=1')?>" <?=$cate===1?'class="current"':''?> aria-current="page">比赛相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=2')?>" <?=$cate===2?'class="current"':''?> aria-current="page">考级相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=3')?>" <?=$cate===3?'class="current"':''?> aria-current="page">脑力产品</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=4')?>" <?=$cate===4?'class="current"':''?> aria-current="page">课程相关</a> | </li>
+                <li class="all"><a href="<?=admin_url('admin.php?page=statistics&cate=5')?>" <?=$cate===5?'class="current"':''?> aria-current="page">其它收支</a></li>
+            </ul>
+            <br class="clear">
+
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="dates" class="manage-column column-dates column-primary">日期</th>
+                    <th scope="col" id="order_pay" class="manage-column column-order_pay">订单支付</th>
+                    <th scope="col" id="order_refund" class="manage-column column-order_refund">订单退款</th>
+                    <th scope="col" id="bonus_send" class="manage-column column-bonus_send">奖金发放</th>
+                    <th scope="col" id="status" class="manage-column column-status">状态</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $k =>$row){
+                    ?>
+                    <tr>
+                        <th scope="row" class="check-column">
+                            <input id="cb-select-<?=$k?>" type="checkbox" name="post[]" value="<?=$k?>">
+                        </th>
+                        <td class="dates column-dates has-row-actions column-primary" data-colname="日期">
+                            <?=$row['times']?>
+                            <br>
+                            <div class="row-actions">
+                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <!--                               <span class="view"><a href="">资料</a></span>-->
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="order_pay column-order_pay" data-colname="订单支付"> <?=isset($row['pay_amount']) ? $row['pay_amount'] : 0?> </td>
+                        <td class="order_refund column-order_refund" data-colname="订单退款"><?=isset($row['refund_amount']) ? $row['refund_amount'] : 0?> </td>
+                        <td class="bonus_send column-bonus_send" data-colname="奖金发放"><?=isset($row['bonus_amount']) ? $row['bonus_amount'] : 0?> </td>
+                        <td class="status column-status" data-colname="状态">
+
+                        </td>
+
+                    </tr>
+                    <?php
+                }
+                ?>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-dates column-primary">日期</th>
+                    <th scope="col" class="manage-column column-order_pay">订单支付</th>
+                    <th scope="col" class="manage-column column-order_refund">订单退款</th>
+                    <th scope="col" class="manage-column column-bonus_send">奖金发放</th>
+                    <th scope="col" class="manage-column column-status">状态</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="delete">删除</option>
+                    </select>
+                    <input type="submit" id="doaction2" class="button action" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
         </div>
         <?php
     }
