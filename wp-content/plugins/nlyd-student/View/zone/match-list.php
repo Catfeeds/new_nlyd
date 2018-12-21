@@ -158,8 +158,8 @@ jQuery(function($) {
                                                     +'</div>'
                                                 +'</div>'
                                                 +'<div class="match_footer ta_r">'
-                                                    +'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>'
-                                                    +'<a href="<?=home_url('/zone/matchBuild/');?>" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>'
+                                                    /*+'<a class="clocs_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe652;</i></span><span class="ml_10">关闭比赛</span></a>'*/
+                                                    +'<a href="'+window.home_url+'/zone/matchBuild/match_id/'+v.match_id+'" class="edit_match c_black6"><span class="c_blue"><i class="iconfont fs_20">&#xe654;</i></span><span class="ml_10">编辑比赛</span></a>'
                                                 +'</div>'
                                             +'</li>'
                                     lis.push(dom) 

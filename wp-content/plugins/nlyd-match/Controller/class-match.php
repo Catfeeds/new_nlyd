@@ -847,7 +847,7 @@ class Match
         global $wpdb;*/
         $lists = $wpdb->get_results("SELECT id,bonus_tmp_name FROM {$wpdb->prefix}match_bonus_tmp", ARRAY_A);
 
-        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
+        $rows = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1 and role_type = 'match'");
         //print_r($rows);
     ?>
         <div class="layui-form-item">
@@ -1204,7 +1204,7 @@ class Match
                 " ;
         $rows = $wpdb->get_results($sql);
 
-        $list = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1");
+        $list = $wpdb->get_results("select * from {$wpdb->prefix}zone_match_role where status = 1 and role_type = 'grading' ");
 
     ?>
         <div class="layui-form-item">

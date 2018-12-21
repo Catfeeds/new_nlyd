@@ -7,7 +7,7 @@
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/match/')?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('赛程时间表', 'nlyd-student')?></div></h1>
@@ -27,12 +27,12 @@
                             </a>
                         </div>
                         <?php if(!empty($val['child'])): ?>
-                        <?php foreach ($val['child'] as $v){
+                        <?php foreach ($val['child'] as $x => $v){
                             $data_time = preg_replace('/\/|\s|:/',',',$v['start_time']);
                         ?>
                         <div class="add_lun_row">
                             <span class="close_coin bg_gradient_orange mr_10">+</span>
-                            <span class="mr_10"><?=__('第', 'nlyd-student')?><span class="project_more"><?=$v['more']?></span><?=__('轮', 'nlyd-student')?></span>
+                            <span class="mr_10"><?=__('第', 'nlyd-student')?><span class="project_more"><?=$x+1?></span><?=__('轮', 'nlyd-student')?></span>
                             <a class="c_blue match_date edit_time" data-id ="<?=$v['id']?>" start-time="<?=$v['start_time']?>"  data-time="<?=$data_time?>"><?=__('修改开始时间', 'nlyd-student')?></a>
                             <br>
                             <span class="start_time mr_10 c_black ff_num"><?=$v['start_time']?></span>
