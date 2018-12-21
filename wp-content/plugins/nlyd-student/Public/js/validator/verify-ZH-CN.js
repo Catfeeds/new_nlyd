@@ -165,7 +165,7 @@
             var nowDay = date.getDate();//当前日
             var nowMinute = date.getMinutes();//当前分
             var nowHour = date.getHours();//当前小时
-            var showYear=2;//展示最近100年
+            var showYear=4;//展示最近100年
             var year=[];
             var hour=[];
             var minites=[]
@@ -196,68 +196,69 @@ var day4=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,ch
 {id:11,value:11,childs:hour},{id:12,value:12,childs:hour},{id:13,value:13,childs:hour},{id:14,value:14,childs:hour},{id:15,value:15,childs:hour},{id:16,value:16,childs:hour},{id:17,value:17,childs:hour},{id:18,value:18,childs:hour},{id:19,value:19,childs:hour},{id:20,value:20,childs:hour},{id:21,value:21,childs:hour},
 {id:22,value:22,childs:hour},{id:23,value:23,childs:hour},{id:24,value:24,childs:hour},{id:25,value:25,childs:hour},{id:26,value:26,childs:hour},{id:27,value:27,childs:hour},{id:28,value:28,childs:hour},{id:29,value:29,childs:hour}];
             for(var i=0;i<=showYear;i++){
-                var val=nowYear+i
+                var val=nowYear+i-1;
                 var YearRow={id:i,value:val,childs:[]}
                 var months=12;
-                if(i==0){//当前年份
-                    for(var j=nowMonth;j<=months;j++){
-                        var day=[]
-                        var dayMax=31;
-                        if(j==nowMonth){//当前月份
-                            if(j==2){
-                                if(((val % 4)==0) && ((val % 100)!=0) || ((val % 400)==0)) {//闰年闰月
-                                    dayMax=29
-                                }else{
-                                    dayMax=28
-                                }
-                            }else if(j==1 || j==3 || j==5 || j==7 || j==8 || j==10 || j==12){
-                                dayMax=31
-                            }else{
-                                dayMax=30
-                            }
+                // if(i==0){//当前年份
+                //     for(var j=nowMonth;j<=months;j++){
+                //         var day=[]
+                //         var dayMax=31;
+                //         if(j==nowMonth){//当前月份
+                //             if(j==2){
+                //                 if(((val % 4)==0) && ((val % 100)!=0) || ((val % 400)==0)) {//闰年闰月
+                //                     dayMax=29
+                //                 }else{
+                //                     dayMax=28
+                //                 }
+                //             }else if(j==1 || j==3 || j==5 || j==7 || j==8 || j==10 || j==12){
+                //                 dayMax=31
+                //             }else{
+                //                 dayMax=30
+                //             }
                            
-                            for(var k=nowDay;k<=dayMax;k++){
-                                if(k==nowDay){//当前日
-                                    var _hours=[];
-                                    for(var l=nowHour;l<=24;l++){
-                                        if(l==nowHour){//当前小时
-                                            var _minites=[]
-                                            for(var m=nowMinute;m<=60;m++){
-                                            
-                                                var MinuteRow={id:m,value:m}
-                                                _minites.push(MinuteRow);
-                                            }
-                                            var hourRow={id:l,value:l,childs:_minites}
-                                            _hours.push(hourRow);
-                                        }else{
-                                            var hourRow={id:l,value:l,childs:minites}
-                                            _hours.push(hourRow);
-                                        }
-                                    }
-                                    var DayRow={id:k,value:k,childs:_hours}
-                                    day.push(DayRow);
-                                }else{
-                                    var DayRow={id:k,value:k,childs:hour}
-                                    day.push(DayRow);
-                                }
-                            }
-                        }else{
-                            if(j==2){
-                                if(((val % 4)==0) && ((val % 100)!=0) || ((val % 400)==0)) {//闰年闰月
-                                    day=day3
-                                }else{
-                                    day=day4
-                                }
-                            }else if(j==1 || j==3 || j==5 || j==7 || j==8 || j==10 || j==12){
-                                day=day1
-                            }else{
-                                day=day2
-                            }
-                        }
-                        var MonthRow={id:j,value:j,childs:day};
-                        YearRow.childs.push(MonthRow)
-                    }
-                }else{
+                //             for(var k=nowDay;k<=dayMax;k++){
+                //                 if(k==nowDay){//当前日
+                //                     var _hours=[];
+                //                     for(var l=nowHour;l<=24;l++){
+                //                         if(l==nowHour){//当前小时
+                //                             var _minites=[]
+                //                             for(var m=nowMinute;m<=60;m++){
+                //                                 var z=m<10 ? '0'+m : m;
+
+                //                                 var MinuteRow={id:z,value:z}
+                //                                 _minites.push(MinuteRow);
+                //                             }
+                //                             var hourRow={id:l,value:l,childs:_minites}
+                //                             _hours.push(hourRow);
+                //                         }else{
+                //                             var hourRow={id:l,value:l,childs:minites}
+                //                             _hours.push(hourRow);
+                //                         }
+                //                     }
+                //                     var DayRow={id:k,value:k,childs:_hours}
+                //                     day.push(DayRow);
+                //                 }else{
+                //                     var DayRow={id:k,value:k,childs:hour}
+                //                     day.push(DayRow);
+                //                 }
+                //             }
+                //         }else{
+                //             if(j==2){
+                //                 if(((val % 4)==0) && ((val % 100)!=0) || ((val % 400)==0)) {//闰年闰月
+                //                     day=day3
+                //                 }else{
+                //                     day=day4
+                //                 }
+                //             }else if(j==1 || j==3 || j==5 || j==7 || j==8 || j==10 || j==12){
+                //                 day=day1
+                //             }else{
+                //                 day=day2
+                //             }
+                //         }
+                //         var MonthRow={id:j,value:j,childs:day};
+                //         YearRow.childs.push(MonthRow)
+                //     }
+                // }else{
                     months=12
                     for(var j=1;j<=months;j++){
                         var day=[]
@@ -275,7 +276,7 @@ var day4=[{id:1,value:1,childs:hour},{id:2,value:2,childs:hour},{id:3,value:3,ch
                         var MonthRow={id:j,value:j,childs:day};
                         YearRow.childs.push(MonthRow)
                     }
-                }
+                // }
                 year.push(YearRow)
          }
          $.validationLayui.dates2=year;
