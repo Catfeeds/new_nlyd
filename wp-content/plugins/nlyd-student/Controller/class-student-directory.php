@@ -106,6 +106,13 @@ class Student_Directory
         load_view_template($view);
     }
     /**
+     * 课程报名成功
+     */
+     public function courseEnd(){
+        $view = student_view_path.CONTROLLER.'/course-end.php';
+        load_view_template($view);
+    }
+    /**
      * 默认公用js/css引入
      */
     public function scripts_default(){
