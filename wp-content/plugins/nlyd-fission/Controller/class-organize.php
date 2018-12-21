@@ -818,13 +818,21 @@ class Organize{
                     <tr class="form-field form-required">
                         <th scope="row"><label for="user_id">负责人 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
-                                <option value="<?=$row['user_id']?>" selected="selected">
-                                    <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
-                                    <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
-                                </option>
-                            </select>
 
+                            <?php if($old_zm_id > 0){?>
+                                <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
+                                <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
+                            <?php }else{ ?>
+                                <select class="js-data-select-ajax" name="user_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                                    <option value="<?=$row['user_id']?>" selected="selected">
+                                        <?=isset($row['user_real_name']) ? unserialize($row['user_real_name'])['real_name'] : $row['user_login']?>
+                                        <?=!empty($row['user_mobile'])?'('.$row['user_mobile'].')':''?>
+                                    </option>
+                                </select>
+
+                            <?php
+                           }
+                           ?>
                         </td>
                     </tr>
                     <tr class="form-field form-required">

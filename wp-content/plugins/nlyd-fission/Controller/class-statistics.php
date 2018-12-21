@@ -43,15 +43,31 @@ class Statistics{
                 break;
         }
         global $wpdb;
+        $rows = [];
         //收入
-        $all_income = $wpdb->get_results("SELECT SUM(cost) AS amount,DATE_FORMAT(created_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}order {$where} AND pay_status IN(2,3,4) GROUP BY YEAR(created_time),MONTH(created_time)", ARRAY_A);
+        $all_income = $wpdb->get_results("SELECT SUM(cost) AS pay_amount,DATE_FORMAT(created_time,'%Y-%m') AS times FROM {$wpdb->prefix}order {$where} AND pay_status IN(2,3,4) GROUP BY YEAR(created_time),MONTH(created_time) ORDER BY created_time DESC", ARRAY_A);
+        foreach ($all_income as $key => $info) {
+            $rows[$info['times']] = isset($rows[$info['times']]) ? array_merge($rows[$info['times']],$info) : $info;
+        }
+
         //退款
-        $all_income2 = $wpdb->get_results("SELECT SUM(cost) AS amount,DATE_FORMAT(created_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}order {$where} AND pay_status IN(-1) GROUP BY YEAR(created_time),MONTH(created_time)",ARRAY_A);
-        //奖金
-        $all_income3 = $wpdb->get_results("SELECT SUM(all_bonus) AS amount,DATE_FORMAT(send_time,'%Y-%m') AS month_time FROM {$wpdb->prefix}match_bonus WHERE is_send=2 GROUP BY YEAR(send_time),MONTH(send_time)",ARRAY_A);
+        $all_income2 = $wpdb->get_results("SELECT SUM(ord.refund_cost) AS refund_amount,DATE_FORMAT(ord.created_time,'%Y-%m') AS times FROM {$wpdb->prefix}order_refund AS ord 
+                      LEFT JOIN {$wpdb->prefix}order AS o ON o.id=ord.order_id
+                      WHERE o.order_type='{$cate}' 
+                      GROUP BY YEAR(ord.created_time),MONTH(ord.created_time) ORDER BY ord.created_time DESC",ARRAY_A);
 
+        foreach ($all_income2 as $key => $info) {
+            $rows[$info['times']] = isset($rows[$info['times']]) ? array_merge($rows[$info['times']],$info) : $info;
+        }
+        if($cate === 1){
+            //奖金
+            $all_income3 = $wpdb->get_results("SELECT SUM(all_bonus) AS bonus_amount,DATE_FORMAT(send_time,'%Y-%m') AS times FROM {$wpdb->prefix}match_bonus WHERE is_send=2 GROUP BY YEAR(send_time),MONTH(send_time) ORDER BY send_time DESC",ARRAY_A);
+            foreach ($all_income3 as $key => $info) {
+                $rows[$info['times']] = isset($rows[$info['times']]) ? array_merge($rows[$info['times']],$info) : $info;
+            }
+        }
 
-
+//        leo_dump($rows);die;
 
 //        switch ($stype){
 //            case 1://年
@@ -115,8 +131,10 @@ class Statistics{
                 <thead>
                 <tr>
                     <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
-                    <th scope="col" id="name" class="manage-column column-name column-primary">名称</th>
-                    <th scope="col" id="zone_type_alias" class="manage-column column-zone_type_alias">别名</th>
+                    <th scope="col" id="dates" class="manage-column column-dates column-primary">日期</th>
+                    <th scope="col" id="order_pay" class="manage-column column-order_pay">订单支付</th>
+                    <th scope="col" id="order_refund" class="manage-column column-order_refund">订单退款</th>
+                    <th scope="col" id="bonus_send" class="manage-column column-bonus_send">奖金发放</th>
                     <th scope="col" id="status" class="manage-column column-status">状态</th>
                 </tr>
                 </thead>
@@ -124,32 +142,26 @@ class Statistics{
                 <tbody id="the-list" data-wp-lists="list:user">
 
                 <?php
-                foreach ($rows as $row){
+                foreach ($rows as $k =>$row){
                     ?>
                     <tr>
                         <th scope="row" class="check-column">
-                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['zone_type_name']?></label>
-                            <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
-                            <div class="locked-indicator">
-                                <span class="locked-indicator-icon" aria-hidden="true"></span>
-                                <span class="screen-reader-text">“<?=$row['zone_type_name']?>”已被锁定</span>
-                            </div>
+                            <input id="cb-select-<?=$k?>" type="checkbox" name="post[]" value="<?=$k?>">
                         </th>
-                        <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                            <?=$row['zone_type_name']?>
+                        <td class="dates column-dates has-row-actions column-primary" data-colname="日期">
+                            <?=$row['times']?>
                             <br>
                             <div class="row-actions">
-                                <span class="edit"><a href="<?=admin_url('admin.php?page=fission-add-organize-type&id='.$row['id'])?>">编辑</a> </span>
                                 <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
                                 <!--                               <span class="view"><a href="">资料</a></span>-->
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                         </td>
-                        <td class="zone_type_alias column-zone_type_alias" data-colname="别名">
-                            <?=$row['zone_type_alias']?>
-                        </td>
+                        <td class="order_pay column-order_pay" data-colname="订单支付"> <?=isset($row['pay_amount']) ? $row['pay_amount'] : 0?> </td>
+                        <td class="order_refund column-order_refund" data-colname="订单退款"><?=isset($row['refund_amount']) ? $row['refund_amount'] : 0?> </td>
+                        <td class="bonus_send column-bonus_send" data-colname="奖金发放"><?=isset($row['bonus_amount']) ? $row['bonus_amount'] : 0?> </td>
                         <td class="status column-status" data-colname="状态">
-                            <?=$row['zone_type_status_name']?>
+
                         </td>
 
                     </tr>
@@ -159,8 +171,10 @@ class Statistics{
                 <tfoot>
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
-                    <th scope="col" class="manage-column column-name column-primary">名称</th>
-                    <th scope="col" class="manage-column column-zone_type_alias">别名</th>
+                    <th scope="col" class="manage-column column-dates column-primary">日期</th>
+                    <th scope="col" class="manage-column column-order_pay">订单支付</th>
+                    <th scope="col" class="manage-column column-order_refund">订单退款</th>
+                    <th scope="col" class="manage-column column-bonus_send">奖金发放</th>
                     <th scope="col" class="manage-column column-status">状态</th>
                 </tr>
                 </tfoot>
