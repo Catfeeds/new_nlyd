@@ -1496,6 +1496,7 @@ class Student_Ajax
             $match_type = 'recent';
             $order = ' b.match_start_time asc ';
         }
+
         //获取最新比赛倒计时
         $sql1 = "select match_start_time from {$wpdb->prefix}match_meta_new where match_status = -2 order by match_start_time desc ";
 
@@ -4670,19 +4671,136 @@ class Student_Ajax
      *机构比赛/考级 时间修改/编辑
      */
     public function update_match_time(){
-
+        if(empty($_POST['match_id'])) wp_send_json_error(array('info'=>_('比赛id不能为空')));
+        if(empty($_POST['data'])) wp_send_json_error(array('info'=>_('修改数据不能为空')));
+        global $wpdb,$current_user;
         switch ($_POST['match_type']){
             case 'match':
+                //print_r($_POST);die;
+                //获取比赛状态
+                //$wpdb->get_var("select from ");
+                foreach ($_POST['data'] as $k => $v){
+                    if($v['id'] > 0){
 
-                print_r($_POST);die;
-
-
+                        $result = $this->contrast_time($_POST['data'],$v['id'],$v['start_time'],$v['end_time']);
+                        if(!empty($result)){
+                            wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
+                        }
+                    }
+                    else{
+                        wp_send_json_error(array('info'=>_($v['project_title'].$v['project_more'].'未检测到项目id')));
+                    }
+                    $update = array(
+                        'start_time'=>$v['start_time'],
+                        'end_time'=>$v['end_time'],
+                        'revise_id'=>$current_user->ID,
+                        'revise_time'=>get_time('mysql'),
+                    );
+                    //$wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
+                }
                 break;
             case 'grading':
                 break;
             default:
                 wp_send_json_error(array('info'=>_('参数错误')));
                 break;
+        }
+        wp_send_json_success(array('info'=>_('更新成功')));
+    }
+
+    public function add_match_time(){
+        global $wpdb,$current_user;
+        if(empty($_POST['match_id']) || empty($_POST['project_id']) || empty($_POST['project_more']) || empty($_POST['start_time']) || empty($_POST['end_time']) || empty($_POST['use_time'])){
+            wp_send_json_error(array('info'=>_('必传参数不齐全')));
+        }
+
+        //获取已有的比赛列表
+        $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
+                left join {$wpdb->prefix}posts b on a.project_id = b.ID
+                where match_id = {$_POST['match_id']} and created_id = $current_user->ID";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($rows)){
+
+            $result = $this->contrast_time($rows,$_POST['start_time'],$_POST['end_time']);
+            if(!empty($result)){
+                wp_send_json_error(array('info'=>_('与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
+            }
+            $insert = array(
+                'match_id'=>$_POST['match_id'],
+                'project_id'=>$_POST['project_id'],
+                'start_time'=>$_POST['start_time'],
+                'more'=>$_POST['more'],
+                'start_time'=>$_POST['start_time'],
+                'end_time'=>$_POST['end_time'],
+                'use_time'=>$_POST['use_time'],
+                'revise_id'=>$current_user->ID,
+                'revise_time'=>get_time('mysql'),
+            );
+            $res = $wpdb->insert($wpdb->prefix.'match_project_more',$insert);
+            if($res){
+                wp_send_json_success(array('info'=>_('新增成功')));
+            }
+        }
+        wp_send_json_error(array('info'=>_('新增失败')));
+    }
+
+
+    /**
+     * 获取机构发布的比赛
+     */
+    public function get_zone_match_list(){
+        global $wpdb,$current_user;
+
+        $map[] = " a.created_id = {$current_user->ID} ";
+        $map[] = " c.pay_status in (2,3,4) ";
+        if($_POST['match_type'] == 'history'){
+            $map[] = " a.match_status = -3 ";
+        }elseif ($_POST['match_type'] == 'matching'){
+            $map[] = " a.match_status != -3 ";
+        }
+        $where = join("and",$map);
+
+        //判断是否有分页
+        $page = isset($_POST['page'])?$_POST['page']:1;
+        $pageSize = 50;
+        $start = ($page-1)*$pageSize;
+
+        $sql = "select b.post_title as match_title,a.match_status,a.match_start_time,a.match_address,count (c.id) total,
+                case a.match_status
+                when '-3' then '已结束'
+                when '-2' then '等待开赛'
+                when '1' then '报名中'
+                when '2' then '进行中'
+                end match_status_cn
+                from {$wpdb->prefix}match_meta_new a 
+                left join {$wpdb->prefix}posts b on a.match_id = b.ID
+                left join {$wpdb->prefix}posts c on a.match_id = c.match_id
+                where {$where} 
+                order by a.match_start_time desc ,a.match_status desc
+                group by a.match_id limit $start,$pageSize
+               ";
+        $rows = $wpdb->get_results($sql,ARRAY_A);
+
+        $total = $wpdb->get_row('select FOUND_ROWS() total',ARRAY_A);
+        $maxPage = ceil( ($total['total']/$pageSize) );
+        if($_POST['page'] > $maxPage && $total['total'] != 0) wp_send_json_error(array('info'=>__('已经到底了', 'nlyd-student')));
+        //print_r($rows);
+        if(empty($rows)) wp_send_json_error(array('info'=>__('暂无比赛', 'nlyd-student')));
+        wp_send_json_success(array('info'=>$rows));
+    }
+
+    /**
+     * 对比比赛时间
+     */
+    public function contrast_time($data,$id,$start_time,$end_time){
+
+        foreach ($data as $k =>$v){
+
+            if($id != $v['id'] ){
+                if( ( strtotime($v['start_time']) <= strtotime($start_time) && strtotime($start_time) <= strtotime($v['end_time']) ) || ( strtotime($v['start_time']) <= strtotime($end_time) && strtotime($end_time) <= strtotime($v['end_time']) ) ){
+                    return $v;    //返回冲突时间
+                }
+            }
         }
     }
 

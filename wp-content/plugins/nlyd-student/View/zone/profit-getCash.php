@@ -51,17 +51,29 @@ jQuery(function($) {
         form.verify($.validationLayui.allRules);
         form.on('submit(layform)', function(data){//实名认证提交
             console.log(data.field)
-            $.ajax({
-                data:data.field,
-                success:function(res){
-                    $.alerts(res.data.info);
-                    if(res.success){
-                        setTimeout(function () {
-                            window.location.href = res.data.url;
-                        },800)
+            var _this=$(this);
+            if(!_this.hasClass('disabled')){
+                $.ajax({
+                    data:data.field,
+                    beforeSend:function(XMLHttpRequest){
+                        _this.addClass('disabled')
+                    },
+                    success:function(res){
+                        $.alerts(res.data.info);
+                        if(res.success){
+                            setTimeout(function () {
+                                window.location.href = res.data.url;
+                            },800)
+                        }
+                    },
+                    complete: function(jqXHR, textStatus){
+                        if(textStatus=='timeout'){
+                            $.alerts("<?=__('网络质量差', 'nlyd-student')?>")
+                　　　　 }
+                        _this.removeClass('disabled');
                     }
-                },
-            })
+                })
+            }
         })
     })
 })
