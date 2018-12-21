@@ -119,13 +119,15 @@ jQuery(function($) {
                         var _time=judgFailTime(start_time,use_time);
                         var end_time=_time.Format("yyyy/MM/dd hh:mm");
                         _this.parent('.add_lun_row').find('.end_time').text(end_time);
-                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
+                        // _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',true);//选中时间后判断是否可选
+                        $('.add_new_lun').attr('cantChoose',true)
                     }else{
-                        _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',false)//提交时判断新增还是编辑
+                        $('.add_new_lun').attr('cantChoose',false)
+                        // _this.parents('.match_time_row').find('.add_new_lun').attr('cantChoose',false)//提交时判断新增还是编辑
                     }
                 }else {//新增轮数
                     if(_this.attr('cantChoose')){
-                        $.alerts("<?=__('此项目已经新修改时间,请先保存再新增轮数', 'nlyd-student')?>");    
+                        $.alerts("<?=__('已存在修改时间项目,请先保存再新增轮数', 'nlyd-student')?>",1200);    
                     }else{
                         if(!_this.hasClass("disabled")){
                             var project_more=_this.parents('.match_time_row').find('.add_lun_row').length;
@@ -153,7 +155,7 @@ jQuery(function($) {
                                     if(res.success){
                                         window.location.reload()
                                     }else{
-                                        $.alerts(res.data.info)
+                                        $.alerts(res.data.info,1200)
                                     }
                                 },
                                 complete: function(jqXHR, textStatus){
@@ -164,7 +166,7 @@ jQuery(function($) {
                                 }
                             })
                         }else{
-                            $.alerts("<?=__('正在新增轮数，请稍后再试', 'nlyd-student')?>")
+                            $.alerts("<?=__('正在新增轮数，请稍后再试', 'nlyd-student')?>",1200)
                         }
                     }
                 }
@@ -211,7 +213,7 @@ jQuery(function($) {
                     if(res.success){
                         window.location.reload()
                     }else{
-                        $.alerts(res.data.info)
+                        $.alerts(res.data.info,1200)
                     }
                 },
                 complete: function(jqXHR, textStatus){
