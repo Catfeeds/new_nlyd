@@ -4434,7 +4434,7 @@ class Student_Ajax
         if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
-        if(!isset($_POST['business_licence_url'])){
+        if(empty($_POST['business_licence_url'])){
             if(empty($_FILES['business_licence'])){
                 wp_send_json_error(array('info'=>'营业执照必传'));
             }
