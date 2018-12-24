@@ -34,7 +34,7 @@
                             <div class="lable_row"><span class="c_black"><?=__('上传营业执照', 'nlyd-student')?>：</span></div>
                             <div class="input_row img-zoos img-zoos1">
                                 <?php if(!empty(!empty($row['id']))){?>
-                                    <input type="hidden" name="business_licence_url" value="<?=$row['business_licence']?>">
+                                    <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence']?>">
                                     <div class="post-img no-dash">
                                         <div class="img-zoo img-box">
                                             <img src="<?=$row['business_licence']?>"/>
@@ -254,16 +254,18 @@ jQuery(function($) {
     $("#img-zoos1").change(function(e) {
         changes(e,$("#img-zoos1"),imgs1)
     });
-    $('.img-zoos').on('click','.del',function(){//删除图片
+    $('body').on('click','.del',function(){//删除图片
         var _this=$(this);
         var index =_this.parents('.post-img').index();
         _this.parents('.img-zoos').find('.post-img.dash').css('display','block');
-        _this.parents('.post-img').remove();
+        
         if(_this.parents('.img-zoos').hasClass('img-zoos0')){
             imgs.splice(index, 1);
         }else if(_this.parents('.img-zoos').hasClass('img-zoos1')){
             imgs1.splice(index, 1);
+            $('.business_licence_url').val('')
         }
+        _this.parents('.post-img').remove();
         layer.photos({//图片预览
                 photos: '.img-zoos',
                 anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
@@ -287,21 +289,41 @@ jQuery(function($) {
                 fd.append('opening_bank',data.field['opening_bank']);
                 fd.append('opening_bank_address',data.field['opening_bank_address']);
                 fd.append('bank_card_num',data.field['bank_card_num']);
-                fd.append('business_licence',imgs1[0]);
+                if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){
+                    if(imgs1[0]){
+                        fd.append('business_licence',imgs1[0]);
+                    }else{
+                        fd.append('business_licence','');
+                    }
+                }else{
+                   
+                    if(data.field['business_licence_url']){
+                        fd.append('business_licence_url',data.field['business_licence_url']);
+                    }else{
+                        fd.append('business_licence_url','');
+                    }
+                    
+                }
                 if(type_id){
                     fd.append('type_id',type_id);
+                }else{
+                    fd.append('type_id','');
                 }
                 if(zone_type_alias){
                     fd.append('zone_type_alias',zone_type_alias);
+                }else{
+                    fd.append('zone_type_alias','');
                 }
                 
                 if(data.field['chairman_id']){
-                    fd.append('chairman_id','');
+                    fd.append('chairman_id',data.field['chairman_id']);
                 }
                 if(data.field['secretary_id']){
-                    fd.append('secretary_id','');
+                    fd.append('secretary_id',data.field['secretary_id']);
                 }
-                console.log(data.field)
+                // console.log(type_id,zone_type_alias,imgs1)
+                // console.log(data.field)
+                // return false;
                 $.ajax({
                     data: fd,
                     contentType : false,
@@ -314,7 +336,7 @@ jQuery(function($) {
                         $.alerts(res.data.info)
                         if(res.data.url){
                             setTimeout(function() {
-                                window.location.href=res.data.url
+                                // window.location.href=res.data.url
                             }, 300);
                         }
                     },
