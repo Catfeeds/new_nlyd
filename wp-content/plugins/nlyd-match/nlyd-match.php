@@ -89,7 +89,7 @@ if(!class_exists('MatchController')){
             //加入admin_footer-edit.php执行
             add_action('admin_footer-edit.php',array($this,'wpdx_add_custom_status_in_quick_edit'));
 
-            //footer执行时添加
+            //footer执行时添加js
             add_action('admin_print_footer_scripts',array($this,'add_footer_scripts'));
 
             //查询语句join
