@@ -290,8 +290,13 @@ jQuery(function($) {
                 fd.append('opening_bank_address',data.field['opening_bank_address']);
                 fd.append('bank_card_num',data.field['bank_card_num']);
                 if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){
-                    fd.append('business_licence',imgs1[0]);
+                    if(imgs1[0]){
+                        fd.append('business_licence',imgs1[0]);
+                    }else{
+                        fd.append('business_licence','');
+                    }
                 }else{
+                   
                     if(data.field['business_licence_url']){
                         fd.append('business_licence_url',data.field['business_licence_url']);
                     }else{
