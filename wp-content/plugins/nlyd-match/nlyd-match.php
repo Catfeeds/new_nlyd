@@ -1771,7 +1771,7 @@ if(!class_exists('MatchController')){
                     admin_url('admin.php?page=fission-organize-detail'),
                     admin_url('admin.php?page=fission-organize-coach'),
                     admin_url('admin.php?page=fission-add-organize-coach'),
-                    admin_url('admin.php?page=fission-organize-income-log'),
+                    admin_url('admin.php?page=statistics-match-log'),
                 ],
             ]);
         }

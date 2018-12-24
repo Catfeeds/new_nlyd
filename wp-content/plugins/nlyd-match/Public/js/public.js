@@ -10,6 +10,7 @@ jQuery(document).ready(function($) {
         $('#menu-posts-grading'),
         $('#menu-users'),
         $('#toplevel_page_fission'),
+        $('#toplevel_page_statistics'),
     ];
     $.each(parentArray,function (pi,pv) {
         $.each($(pv).find('a'), function (i,v) {
