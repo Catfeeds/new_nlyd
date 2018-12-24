@@ -41,23 +41,18 @@
 
                         <div class="c_black">
                             <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
-                            <?php if($row['user_status'] == 1){ ?>
-                            <a class=" c_blue"><?=__('更多资料', 'nlyd-student')?></a>
-                            <?php }
-                            elseif ($row['user_status'] == -1){ ?>
-                            <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
-                            <?php } ?>
-                            <?php if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
-                            <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
-                            <?php endif;?>
+                            <span class="pull-right">
+                                <?php if($row['user_status'] == 1){ ?>
+                                    <a class=" c_blue"><?=__('更多资料', 'nlyd-student')?></a>
+                                    <?php }
+                                    elseif ($row['user_status'] == -1){ ?>
+                                    <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
+                                    <?php } ?>
+                                    <?php if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                                    <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
+                                <?php endif;?>
+                            </span>
                         </div>
-
-                        <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
-                        <div class="c_black">
-                            <span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span>
-                            <a class="pull-right c_blue"><?/*=__('修改', 'nlyd-student')*/?></a>
-                            <span class="pull-right c_red mr_10"><?/*=__('资料审核中', 'nlyd-student')*/?></span>
-                        </div>-->
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
