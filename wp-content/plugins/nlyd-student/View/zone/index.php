@@ -40,9 +40,7 @@
                         </div>
 
                         <div class="c_black">
-                            <?php if(!empty($row['referee_name'])): ?>
-                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=$row['referee_name']?></span>
-                            <?php endif;?>
+                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_name'])? '无' : $row['referee_name'];?></span>
                             <span class="pull-right">
                                 <?php if($row['user_status'] == 1){ ?>
                                     <a class=" c_blue"><?=__('更多资料', 'nlyd-student')?></a>

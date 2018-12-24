@@ -45,6 +45,7 @@ class Timer
         }
     }
 
+    //比赛自动更改状态
     public function wpjam_daily_function() {
         global $wpdb;
         $map = array();
@@ -266,115 +267,128 @@ class Timer
                         //已结束
                         $save['status'] = -3;
 
-                        //如果是正式考级根据规则进行费用发布
-                        if(in_array($v['scene'],array(1,2,3)) && $v['cost'] > 0){
+                        if($v['grading_id'] = 56987){
+
+
 
                             //获取当前考级是否已经进行了收益分配
-                            $total = $wpdb->get_var("select count(id) total from {$wpdb->prefix}income_logs where match_id = {$v['grading_id']} and order_type = 'grading' ");
-
-                            if($total < 1){
+                            $sql1 = "select a.grading_id,a.scene,c.user_id,c.user_income
+                                from {$wpdb->prefix}grading_meta a 
+                                left join {$wpdb->prefix}user_stream_logs c on a.created_person = c.user_id and user_type = 1
+                                where c.match_id = {$v['grading_id']} ";
+                            $row_ = $wpdb->get_row($sql1,ARRAY_A);
+                            //print_r($row_);die;
+                            if(empty($row_['user_income'])){
                                 //获取本次考级所有考级学员以及2级推广人
-                                $sql = "select a.user_id,a.order_type,a.match_id,b.referee_id,c.referee_id as indirect_referee_id 
+                                $sql2 = "select a.user_id,a.order_type,a.match_id,b.referee_id,c.referee_id as indirect_referee_id 
                                     from {$wpdb->prefix}order a 
                                     left join {$wpdb->prefix}users b on a.user_id = b.ID
                                     left join {$wpdb->prefix}users c on b.referee_id = c.ID
                                     where a.match_id = {$v['grading_id']} and a.order_type = 2 and pay_status in (2,3,4) ";
-                                $rows_ = $wpdb->get_results($sql,ARRAY_A);
-
+                                $rows_ = $wpdb->get_results($sql2,ARRAY_A);
+                                //print_r($rows_);die;
                                 if(!empty($rows_)){
+                                    //获取当前考级收益列表
+                                    $total = $wpdb->get_var("select * from {$wpdb->prefix}user_income_logs where match_id = {$v['grading_id']} and order_type = 'grading' ");
 
-                                    $str = '';
-                                    $user_stream = array();  //用户收益数组
+                                    //print_r($row__);die;
+                                    if(!empty($row__)){
+                                        $str = '';
+                                        $user_stream = array();  //用户收益数组
 
-                                    //准备对应的数据
-                                    $money1 = 5;    //考级直接推广人
-                                    $money2 = 5;    //考级间接推广人
-                                    $money3 = 20;    //考级负责人
-                                    $money4 = 20;    //考级中心
-                                    foreach ($rows_ as $i) {
-                                        //if($v['grading_id'] == 897){
+                                        //准备对应的数据
+                                        $money1 = 5;    //考级直接推广人
+                                        $money2 = 5;    //考级间接推广人
+                                        $money3 = 20;    //考级负责人
+                                        $money4 = 20;    //考级中心
+                                        foreach ($rows_ as $i) {
+                                            //if($v['grading_id'] == 897){
 
-                                        //考级负责人
-                                        if($v['person_liable'] > 1){    //如果有负责人
-                                            $person_liable_id = $v['person_liable'];
-                                        }
-                                        else{  //否则发布人就是负责人
-                                            $person_liable_id = $v['created_person'];
-                                        }
-                                        //考级中心
-                                        $sponsor_id = $v['created_person'];
-
-                                        $str .= "( 'grading', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', NOW()),";
-                                        //}
-
-                                        //处理每个考试用户流水
-
-                                        //直接收益
-                                        if($money1 > 0 && !empty($i['referee_id'])){
-
-                                            $key1 = $i['referee_id'];
-                                            if(isset($user_stream[$key1])){
-                                                //referee_income
-                                                $user_stream[$key1] += $money1;
-                                            }else{
-                                                $user_stream[$key1] = $money1;
+                                            //考级负责人
+                                            if($v['person_liable'] > 1){    //如果有负责人
+                                                $person_liable_id = $v['person_liable'];
                                             }
-                                        }
-
-                                        //间接收益
-                                        if($money2 > 0 && !empty($i['indirect_referee_id']) ){
-
-                                            $key2 = $i['indirect_referee_id'];
-                                            if(isset($user_stream[$key2])){
-                                                //referee_income
-                                                $user_stream[$key2] += $money2;
-                                            }else{
-                                                $user_stream[$key2] = $money2;
+                                            else{  //否则发布人就是负责人
+                                                $person_liable_id = $v['created_person'];
                                             }
+                                            //考级中心
+                                            $sponsor_id = $v['created_person'];
+
+                                            $str .= "( 'grading', '{$i['match_id']}', '{$i['user_id']}', '{$i['referee_id']}', '{$money1}', '{$i['indirect_referee_id']}', '$money2', '{$person_liable_id}', '{$money3}', '{$sponsor_id}', '{$money4}', NOW()),";
+                                            //}
+
+                                            //处理每个考试用户流水
+
+                                            //直接收益
+                                            if($money1 > 0 && !empty($i['referee_id'])){
+
+                                                $key1 = $i['referee_id'];
+                                                if(isset($user_stream[$key1])){
+                                                    //referee_income
+                                                    $user_stream[$key1] += $money1;
+                                                }else{
+                                                    $user_stream[$key1] = $money1;
+                                                }
+                                            }
+
+                                            //间接收益
+                                            if($money2 > 0 && !empty($i['indirect_referee_id']) ){
+
+                                                $key2 = $i['indirect_referee_id'];
+                                                if(isset($user_stream[$key2])){
+                                                    //referee_income
+                                                    $user_stream[$key2] += $money2;
+                                                }else{
+                                                    $user_stream[$key2] = $money2;
+                                                }
+                                            }
+
                                         }
 
-                                    }
-
-                                    //责任人
-                                    $person_liable_income = count($rows_) * $money3;
-                                    if(isset($user_stream[$person_liable_id])){
-                                        $user_stream[$person_liable_id] += $person_liable_income;
-                                    }else{
-                                        $user_stream[$person_liable_id] = $person_liable_income;
-                                    }
-
-                                    //比赛中心
-                                    $sponsor_stream = count($rows_) * $money4;
-                                    if(isset($user_stream[$sponsor_id])){
-                                        $user_stream[$sponsor_id] += $sponsor_stream;
-                                    }else{
-                                        $user_stream[$sponsor_id] = $sponsor_stream;
-                                    }
-                                    if(!empty($user_stream)){
-                                        $str1 = '';
-                                        foreach ($user_stream as $k => $t){
-                                            $str1 .= "({$k}, 'grading',{$v['grading_id']}, {$t}, NOW()),";
+                                        //责任人
+                                        $person_liable_income = count($rows_) * $money3;
+                                        if(isset($user_stream[$person_liable_id])){
+                                            $user_stream[$person_liable_id] += $person_liable_income;
+                                        }else{
+                                            $user_stream[$person_liable_id] = $person_liable_income;
                                         }
-                                        $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
+
+                                        //比赛中心
+                                        $sponsor_stream = count($rows_) * $money4;
+                                        if(isset($user_stream[$sponsor_id])){
+                                            $user_stream[$sponsor_id] += $sponsor_stream;
+                                        }else{
+                                            $user_stream[$sponsor_id] = $sponsor_stream;
+                                        }
+                                        if(!empty($user_stream)){
+                                            $str1 = '';
+                                            foreach ($user_stream as $k => $t){
+                                                $str1 .= "({$k}, 'grading',{$v['grading_id']}, {$t}, NOW()),";
+                                            }
+                                            $sql_ = "INSERT INTO `{$wpdb->prefix}user_stream_logs` ( `user_id`, `income_type`, `match_id`, `user_income`, `created_time`) VALUES ".rtrim($str1, ',');
+                                        }
+
+
+                                        //print_r($str);
+                                        //$sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `income_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`,`sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
+
+                                        //print_r($sql_);
+                                        //$wpdb->query('START TRANSACTION');
+                                        //$result = $wpdb->query($sql);
+                                        $result_ = $wpdb->query($sql_);
+                                        //print_r($result.'-----'.$result_.'****'.$v['grading_id'].'***');die;
+                                        /*if($result && $result_){
+                                            $wpdb->query('COMMIT');
+                                        }else{
+                                            $wpdb->query('ROLLBACK');
+                                        }*/
+
                                     }
-
-
-                                    //print_r($str);
-                                    //$sql = "INSERT INTO `{$wpdb->prefix}income_logs`( `income_type`, `match_id`, `user_id`, `referee_id`, `referee_income`, `indirect_referee_id`,`indirect_referee_income`, `person_liable_id`, `person_liable_income`, `sponsor_id`,`sponsor_income`, `created_time`) VALUES ".rtrim($str, ',');
-
-                                    //print_r($sql_);
-                                    //$wpdb->query('START TRANSACTION');
-                                    //$result = $wpdb->query($sql);
-                                    $result_ = $wpdb->query($sql_);
-                                    //print_r($result.'-----'.$result_.'****'.$v['grading_id'].'***');die;
-                                    /*if($result && $result_){
-                                        $wpdb->query('COMMIT');
-                                    }else{
-                                        $wpdb->query('ROLLBACK');
-                                    }*/
                                 }
                             }
                         }
+
+
                     }
 
                     //var_dump($v['match_id']);
