@@ -141,7 +141,8 @@
 <input style="display:none;" type="file" name="meta_val" id="img-zoos1" data-this="img-zoos1" value="" accept="image/*"/>
 <script>
 jQuery(function($) { 
-
+    var zone_type_alias=$.Request('zone_type_alias')
+    var type_id=$.Request('type_id')
     var opening_bank_Data=$.validationLayui.back;
 
     var posiotion_back=[0];//初始化位置，高亮展示
@@ -280,8 +281,6 @@ jQuery(function($) {
                 var fd = new FormData();
                 fd.append('action','zone_apply_submit');
                 fd.append('zone_num',data.field['zone_num']);
-                fd.append('type_id',$.Request('type_id'));
-                fd.append('zone_type_alias',$.Request('zone_type_alias'));
                 fd.append('zone_name',data.field['zone_name']);
                 fd.append('zone_address',data.field['zone_address']);
                 fd.append('legal_person',data.field['legal_person']);
@@ -289,6 +288,13 @@ jQuery(function($) {
                 fd.append('opening_bank_address',data.field['opening_bank_address']);
                 fd.append('bank_card_num',data.field['bank_card_num']);
                 fd.append('business_licence',imgs1[0]);
+                if(type_id){
+                    fd.append('type_id',type_id);
+                }
+                if(zone_type_alias){
+                    fd.append('zone_type_alias',zone_type_alias);
+                }
+                
                 if(data.field['chairman_id']){
                     fd.append('chairman_id','');
                 }
