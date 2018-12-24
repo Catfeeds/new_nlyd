@@ -234,7 +234,7 @@ class Student_Grade extends Student_Home
                 //print_r($sql1);
                 $post_str = $wpdb->get_var($sql1);
                 if(!empty($post_str)){
-                    $where = " and b.object_id not in({$post_str}) ";
+                    $where_ = " and b.object_id not in({$post_str}) ";
                 }
                 //判断语言
                 $language = get_user_meta($current_user->ID,'locale')[0];
@@ -243,7 +243,7 @@ class Student_Grade extends Student_Home
                 $sql = "select b.object_id,b.term_taxonomy_id from {$wpdb->prefix}terms a 
                         left join {$wpdb->prefix}term_relationships b on a.term_id = b.term_taxonomy_id 
                         left join {$wpdb->prefix}posts c on b.object_id = c.ID
-                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where} ";
+                        where a.slug = '{$locale}-test-question' and c.post_status = 'publish' {$where_} ";
                 //print_r($sql);
 
                 $rows = $wpdb->get_results($sql,ARRAY_A);

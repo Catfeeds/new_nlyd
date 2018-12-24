@@ -53,6 +53,7 @@ function the_table_install () {
         $sql = "CREATE TABLE " . $table_name . " (
            `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
           `user_id` int(20) DEFAULT NULL COMMENT '收益人id',
+          `user_type` tinyint(20) DEFAULT NULL COMMENT '收益人类型 1 机构 2 个人',
           `income_type` varchar(20) DEFAULT NULL COMMENT '收益类型 match  grading extract',
           `match_id`    int(20) DEFAULT NULL COMMENT '比赛/考级id',
           `user_income` decimal(10,2) DEFAULT NULL COMMENT '收益+ 收益- 两情况',

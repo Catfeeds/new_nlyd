@@ -460,7 +460,17 @@ class Match_Ajax
                 limit 0,10";
         //print_r($sql);die;
         $rows = $wpdb->get_results($sql,ARRAY_A);
-        wp_send_json_success($rows);
+        if(!empty($rows)){
+            foreach ($rows as $k => $v){
+                $user_real_name = get_user_meta($v['id'],'user_real_name')[0];
+                if(!empty($user_real_name)){
+                    $rows[$k]['text'] = $user_real_name['real_name'];
+                }
+            }
+            wp_send_json_success($rows);
+        }else{
+            wp_send_json_error('');
+        }
     }
 
 

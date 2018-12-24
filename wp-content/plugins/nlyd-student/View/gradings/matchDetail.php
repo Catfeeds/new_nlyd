@@ -95,7 +95,7 @@
                                                     <div class="table_content"><?= __('年 龄', 'nlyd-student') ?></div>
                                                 </td>
                                                 <td>
-                                                    <div class="table_content"><?= __('报名时间', 'nlyd-student') ?></div>
+                                                    <div class="table_content"><?= __('国家&地区', 'nlyd-student') ?></div>
                                                 </td>
                                             </tr>
                                             </thead>
@@ -182,6 +182,7 @@ jQuery(function($) {
                 $.ajax({
                     data:postData,
                     success:function(res,ajaxStatu,xhr){
+                        console.log(res)
                         match_page++
                         var domTime=$('#time_count').attr('data-end').replace(/-/g,'/');
                         var end_time = new Date(domTime).getTime();//月份是实际月份-1
