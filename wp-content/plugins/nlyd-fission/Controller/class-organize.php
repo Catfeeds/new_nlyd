@@ -1468,7 +1468,7 @@ class Organize{
         die;
         global $wpdb;
         $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_meta AS zm 
-        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id
+        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id AND usl.user_type=1
         ");
         $rows = [];
         ?>

@@ -915,7 +915,7 @@ if(!class_exists('MatchController')){
                     break;
                 case 'grading_type':
                     //考级类别
-                    echo $gradingRow['category_id'];
+                    echo get_post($gradingRow['category_id'])->post_title;
                     break;
                 case 'grading_date':
                     //考级创建日期
