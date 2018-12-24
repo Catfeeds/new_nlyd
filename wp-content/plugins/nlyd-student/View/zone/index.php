@@ -47,7 +47,9 @@
                             elseif ($row['user_status'] == -1){ ?>
                             <span class=" c_red mr_10"><?=__('资料审核中', 'nlyd-student')?></span>
                             <?php } ?>
-                            <?php if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):?>
+                            <?php if(!empty($row['id'])):
+                            //if((empty($row['id'])) && ($row['user_status'] == -2 || empty($row['user_status']))):
+                            ?>
                             <a class=" c_blue" href="<?=home_url('zone/apply/type_id/'.$row['type_id'].'/zone_type_alias/'.$row['zone_type_alias'])?>"><?=__('修改', 'nlyd-student')?></a>
                             <?php endif;?>
                         </div>

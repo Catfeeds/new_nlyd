@@ -2172,9 +2172,12 @@ class Student_Ajax
             if($_POST['login_type'] == 'mobile'){
 
                 if(!reg_match($_POST['user_login'],'m')) wp_send_json_error(array('info'=>__('手机格式不正确', 'nlyd-student')));
-                $result = wp_create_user($_POST['user_login'],$_POST['password'],'',$_POST['user_login']);
+                $result = wp_create_user($_POST['user_login'],$_POST['password']);
                 //print_r($result);die;
                 if($result){
+                    //$meta['user_ID'] = 10000000+$user_id;
+                    $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_login']),array('ID'=>$result));
+                    update_user_meta($result,'user_ID',10000000+$result);
                     unset($_SESSION['sms']);
                     $this->setUserCookie($result);
 
@@ -2223,7 +2226,7 @@ class Student_Ajax
         if(reg_match($_POST['user_login'],'m')){
 
             $this->get_sms_code($_POST['user_login'],17,true,$_POST['verify_code']);
-            $result = wp_create_user($_POST['user_login'],$_POST['password'],'',$_POST['user_login']);
+            $result = wp_create_user($_POST['user_login'],$_POST['password']);
         }elseif (reg_match($_POST['user_login'],'e')){
 
             $this->get_smtp_code($_POST['user_login'],17,true,$_POST['verify_code']);
@@ -2231,6 +2234,12 @@ class Student_Ajax
         }
 
         if($result){
+            if(reg_match($_POST['user_login'],'m')){
+
+                $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_login']),array('ID'=>$result));
+                update_user_meta($result,'user_ID',10000000+$result);
+            }
+
             unset($_SESSION['sms']);
             unset($_SESSION['smtp']);
             $this->setUserCookie($result);

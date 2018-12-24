@@ -1739,7 +1739,7 @@ function wp_insert_user( $userdata ) {
 	$meta = apply_filters( 'insert_user_meta', $meta, $user, $update );
 
 	// Update user meta.
-    $meta['user_ID'] = 10000000+$user_id;
+    //$meta['user_ID'] = 10000000+$user_id;
 	foreach ( $meta as $key => $value ) {
 		update_user_meta( $user_id, $key, $value );
 	}
