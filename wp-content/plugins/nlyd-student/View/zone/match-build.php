@@ -10,7 +10,7 @@
                 <a class="mui-pull-left nl-goback">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
-                <h1 class="mui-title"><div><?=__('发布比赛', 'nlyd-student')?></div></h1>
+                <h1 class="mui-title"><div><?=__(isset($_GET['match_id']) ? '编辑比赛' : '发布比赛', 'nlyd-student')?></div></h1>
             </header> 
             <div class="layui-row nl-border nl-content have-bottom">
                 <div class="width-padding layui-row width-margin-pc">
@@ -62,7 +62,7 @@
                         </div>
                         <input type="hidden" name="action" value="zone_create_match">
                         <input type="hidden" name="match_id" value="<?=$_GET['match_id']?>">
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('确认发布/保存更新', 'nlyd-student')?></div></a>
+                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__(isset($_GET['match_id']) ? '保存更新' : '确认发布', 'nlyd-student')?></div></a>
                     </form>
                 </div>
             </div>

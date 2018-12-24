@@ -389,6 +389,7 @@ class Student_Matchs extends Student_Home
         //print_r($project_more);
         $sql = " select from {$wpdb->prefix}match_questions where match_id = {$project_more['match_id']} and project_id = {$project_more['project_id']} and match_more = {$project_more['more']}";
         $row = $wpdb->get_row($sql);
+        //print_r($sql);
         if(!empty($row)){
             $this->get_404(array('message'=>__('答题记录已存在', 'nlyd-student'),'waiting_url'=>home_url(CONTROLLER.'/matchWaitting/match_id/'.$_GET['match_id'])));
         }
@@ -925,7 +926,7 @@ class Student_Matchs extends Student_Home
 
         //请求接下来的比赛项目
         $next_project_more = $this->get_match_project_more($_GET['match_id']);
-
+        //print_r($next_project_more);
         /*print_r($next_project_more);
         print_r($match_more);*/
         $ranking = '';
