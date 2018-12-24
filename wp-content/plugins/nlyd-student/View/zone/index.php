@@ -53,6 +53,13 @@
                                 <?php endif;?>
                             </span>
                         </div>
+
+                        <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
+                        <div class="c_black">
+                            <span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span>
+                            <a class="pull-right c_blue"><?/*=__('修改', 'nlyd-student')*/?></a>
+                            <span class="pull-right c_red mr_10"><?/*=__('资料审核中', 'nlyd-student')*/?></span>
+                        </div>-->
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
