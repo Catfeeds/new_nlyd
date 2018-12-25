@@ -25,10 +25,14 @@ class Spread{
 
             $role = 'profit_extract_log';//权限名
             $wp_roles->add_cap('administrator', $role);
+
+            $role = 'profit_match_log';//权限名
+            $wp_roles->add_cap('administrator', $role);
         }
         add_submenu_page('fission','收益设置','收益设置','profit_set','fission-profit-set',array($this,'profitSet'));
         add_submenu_page('fission','新增收益设置','新增收益设置','add_profit_set','fission-add-profit-set',array($this,'addProfitSet'));
-        add_submenu_page('fission','分成记录','分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
+        add_submenu_page('fission','用户分成记录','用户分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
+        add_submenu_page('fission','赛事分成记录','赛事分成记录','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
         add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
         add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
     }
@@ -330,7 +334,7 @@ class Spread{
     }
 
     /**
-     * 分成记录
+     * 用户分成记录
      */
     public function profitLog(){
         global $wpdb;
@@ -361,7 +365,7 @@ class Spread{
                 LEFT JOIN `{$wpdb->prefix}zone_meta` AS zm ON zm.user_id=il.sponsor_id  
                 LEFT JOIN `{$wpdb->usermeta}` AS um6 ON um6.user_id=il.manager_id AND um6.meta_key='user_real_name' 
                 LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
-                {$where} 
+                {$where} AND il.income_type NOT IN('match','grading')
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
@@ -376,13 +380,12 @@ class Spread{
         ));
         ?>
         <div class="wrap">
-            <h1 class="wp-heading-inline">主体列表</h1>
+            <h1 class="wp-heading-inline">用户分成列表</h1>
 
-            <a href="<?=admin_url('admin.php?page=fission-add-organize')?>" class="page-title-action">添加主体</a>
 
             <hr class="wp-header-end">
 
-            <h2 class="screen-reader-text">过滤主体列表</h2>
+            <h2 class="screen-reader-text">过滤用户分成列表</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
                 <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
@@ -395,8 +398,7 @@ class Spread{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="2">改为待确认</option>
-                        <option value="1">改为已确认</option>
+                        <option value="2">改为已确认</option>
                     </select>
                     <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
@@ -480,7 +482,7 @@ class Spread{
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
-                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':'<a href="javascript:;" class="update_status" data-status="1">改为待确认</a>'?>
+                            <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':''?>
                         </td>
                     </tr>
                     <?php
@@ -491,6 +493,229 @@ class Spread{
                 <tr>
                     <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
                     <th scope="col" class="manage-column column-real_name column-primary">付款人</th>
+                    <th scope="col" class="manage-column column-project">付款项目</th>
+                    <th scope="col" class="manage-column column-referee">直接推广</th>
+                    <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
+                    <th scope="col" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" class="manage-column column-sponsor">主办方</th>
+                    <th scope="col" class="manage-column column-manager">事业员</th>
+                    <th scope="col" class="manage-column column-income_status">状态</th>
+                    <th scope="col" class="manage-column column-options1">操作</th>
+                </tr>
+                </tfoot>
+
+            </table>
+            <div class="tablenav bottom">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
+                    <select name="action2" id="bulk-action-selector-bottom">
+                        <option value="-1">批量操作</option>
+                        <option value="2">改为已确认</option>
+                    </select>
+                    <input type="button" id="doaction2" class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+
+            <br class="clear">
+            <script>
+                jQuery(document).ready(function($) {
+                    //修改确认状态
+                    $('.update_status').on('click',function () {
+                        var status = $(this).attr('data-status');
+                        var _id = $(this).closest('tr').attr('data-id');
+                        postAjax(status,_id);
+                    });
+
+                    $('.all_options').on('click', function () {
+                        var status = $(this).prev().val();
+                        var _id = [];
+                        $.each($('#the-list').find('.check_list:checked'),function (i,v) {
+                            _id.push($(v).val());
+                        });
+                        _id = _id.join(',');
+                        postAjax(status,_id);
+                    });
+                    function postAjax(status,_id) {
+                        if(status != '1' && status != '2') return false;
+                        if(_id == '' || _id == undefined) return false;
+                        $.ajax({
+                            url : ajaxurl,
+                            data : {'action':'updateIncomeLogsStatus', 'status':status,'id':_id},
+                            dataType : 'json',
+                            type : 'post',
+                            success : function (response) {
+                                alert(response.data.info);
+                                if(response['success']){
+                                    window.location.reload();
+                                }
+                            }, error : function () {
+                                alert('请求失败');
+                            }
+                        });
+                    }
+                });
+
+            </script>
+        </div>
+        <?php
+    }
+
+    /**
+     * 赛事/考级分成记录
+     */
+    public function profitMatchLog(){
+        global $wpdb;
+        $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
+
+        $page < 1 && $page = 1;
+        $pageSize = 20;
+        $start = ($page-1)*$pageSize;
+        $where = "WHERE 1=1";
+        if($searchStr != ''){
+            $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
+        }
+        $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
+                SUM(il.referee_income) AS referee_income,SUM(il.indirect_referee_income) AS indirect_referee_income,
+                SUM(il.person_liable_income) AS person_liable_income,SUM(il.sponsor_income) AS sponsor_income,SUM(il.manager_income) AS manager_income,
+                il.income_status,p.post_title
+                FROM {$wpdb->prefix}user_income_logs AS il 
+                LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
+                {$where} AND il.income_type IN('match','grading')
+                GROUP BY p.ID
+                LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($rows);
+        $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
+        $pageAll = ceil($count['count']/$pageSize);
+        $pageHtml = paginate_links( array(
+            'base' => add_query_arg( 'cpage', '%#%' ),
+            'format' => '',
+            'prev_text' => __('&laquo;'),
+            'next_text' => __('&raquo;'),
+            'total' => $pageAll,
+            'current' => $page
+        ));
+        ?>
+        <div class="wrap">
+            <h1 class="wp-heading-inline">赛事/考级分成列表</h1>
+
+
+            <hr class="wp-header-end">
+
+            <h2 class="screen-reader-text">过滤列表</h2>
+            <p class="search-box">
+                <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
+                <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+            </p>
+            <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
+            <div class="tablenav top">
+
+                <div class="alignleft actions bulkactions">
+                    <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
+                    <select name="action" id="bulk-action-selector-top">
+                        <option value="-1">批量操作</option>
+                        <option value="2">改为待确认</option>
+                        <option value="1">改为已确认</option>
+                    </select>
+                    <input type="button" id="doaction" class="button action all_options" value="应用">
+                </div>
+
+                <div class="tablenav-pages">
+                    <span class="displaying-num"><?=$count['count']?>个项目</span>
+                    <?=$pageHtml?>
+                </div>
+                <br class="clear">
+            </div>
+            <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
+                <thead>
+                <tr>
+                    <td id="cb" class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-1">全选</label><input id="cb-select-all-1" type="checkbox"></td>
+                    <th scope="col" id="real_name" class="manage-column column-real_name column-primary">赛事考级名称</th>
+                    <th scope="col" id="project" class="manage-column column-project">付款项目</th>
+                    <th scope="col" id="referee" class="manage-column column-referee">直接推广</th>
+                    <th scope="col" id="indirect_referee" class="manage-column column-indirect_referee">间接推广</th>
+                    <th scope="col" id="person_liable" class="manage-column column-person_liable">负责人</th>
+                    <th scope="col" id="sponsor" class="manage-column column-sponsor">主办方</th>
+                    <th scope="col" id="manager" class="manage-column column-manager">事业员</th>
+                    <th scope="col" id="income_status" class="manage-column column-income_status">状态</th>
+                    <th scope="col" id="options1" class="manage-column column-options1">操作</th>
+                </tr>
+                </thead>
+
+                <tbody id="the-list" data-wp-lists="list:user">
+
+                <?php
+                foreach ($rows as $row){
+                    ?>
+                    <tr data-id="<?=$row['id']?>">
+                        <th scope="row" class="check-column">
+                            <label class="screen-reader-text" for="cb-select-407">选择<?=$row['post_title']?></label>
+                            <input id="cb-select-<?=$row['id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <div class="locked-indicator">
+                                <span class="locked-indicator-icon" aria-hidden="true"></span>
+                                <span class="screen-reader-text">“<?=$row['post_title']?>”已被锁定</span>
+                            </div>
+                        </th>
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="付款人">
+                            <?=$row['post_title']?>
+                            <br>
+                            <div class="row-actions">
+                                <!--                                <span class="edit"><a href="">编辑</a></span>-->
+                                <!--                               <span class="delete"><a class="submitdelete" href="">删除</a> | </span>-->
+                                <!--                               <span class="view"><a href="">资料</a></span>-->
+                            </div>
+                            <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="project column-project" data-colname="直接推广">
+                            <?=$row['post_title']?>
+
+                        </td>
+                        <td class="referee column-referee" data-colname="直接推广">
+                            <?=!empty($row['referee_real_name'])?unserialize($row['referee_real_name'])['real_name']:get_user_by('ID',$row['referee_id'])->user_login?>
+                            (<?=$row['referee_income']?>)
+                        </td>
+                        <td class="indirect_referee column-indirect_referee" data-colname="间接推广">
+                            <?=!empty($row['indirect_referee_name'])?unserialize($row['indirect_referee_name'])['real_name']:get_user_by('ID',$row['indirect_referee_id'])->user_login?>
+                            <?=$row['indirect_referee_income']>0?'('.$row['indirect_referee_income'].')':''?>
+                        </td>
+                        <td class="person_liable column-person_liable" data-colname="负责人">
+                            <?=!empty($row['person_liable_name'])?unserialize($row['person_liable_name'])['real_name']:get_user_by('ID',$row['person_liable_id'])->user_login?>
+                            <?=$row['person_liable_income']>0?'('.$row['person_liable_income'].')':''?>
+                        </td>
+                        <td class="sponsor column-sponsor" data-colname="主办方">
+                            <?=$row['zone_name']?>
+                            <?=$row['sponsor_income']>0?'('.$row['sponsor_income'].')':''?>
+                        </td>
+                        <td class="manager column-manager" data-colname="事业员">
+                            <?=!empty($row['manager_name'])?unserialize($row['manager_name'])['real_name']:get_user_by('ID',$row['manager_id'])->user_login?>
+                            <?=$row['manager_income']>0?'('.$row['manager_income'].')':''?>
+                        </td>
+                        <td class="income_status column-income_status" data-colname="状态" id="cardImg-<?=$row['user_id']?>">
+                            <?=$row['income_status'] == '1'?'待确认':'已确认'?>
+                        </td>
+                        <td class="options1 column-options1" data-colname="操作">
+                            <?php if(1==2){ ?>
+                                <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':'<a href="javascript:;" class="update_status" data-status="1">改为待确认</a>'?>
+
+                            <?php } ?>
+                       </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="manage-column column-cb check-column"><label class="screen-reader-text" for="cb-select-all-2">全选</label><input id="cb-select-all-2" type="checkbox"></td>
+                    <th scope="col" class="manage-column column-real_name column-primary">赛事考级名称</th>
                     <th scope="col" class="manage-column column-project">付款项目</th>
                     <th scope="col" class="manage-column column-referee">直接推广</th>
                     <th scope="col" class="manage-column column-indirect_referee">间接推广</th>
