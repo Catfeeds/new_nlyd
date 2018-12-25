@@ -654,7 +654,7 @@ class Student_Payment {
                             'indirect_referee_id'=>$user['indirect_referee_id'] > 0 ? $user['indirect_referee_id'] : '',    //间接人
                             'indirect_referee_income'=>$user['indirect_referee_id'] > 0 ? $money2 : '',  //间接人收益
                             'person_liable_id'=>$grading['person_liable'] > 0 ? $grading['person_liable'] : '',   //责任教练
-                            'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //参赛机构收益
+                            'person_liable_income'=>$grading['person_liable'] > 0 ? $money3 : '',  //责任教练收益
                             'sponsor_id'=>$grading['created_person'] > 0 ? $grading['created_person'] : '',  //办赛机构
                             'sponsor_income'=>$grading['created_person'] > 0 ? $money4 : '',  //办赛机构收益
                         );

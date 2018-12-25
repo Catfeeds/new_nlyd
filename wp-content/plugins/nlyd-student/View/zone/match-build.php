@@ -7,7 +7,7 @@
         ?>
         <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/match/')?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__(isset($_GET['match_id']) ? '编辑比赛' : '发布比赛', 'nlyd-student')?></div></h1>
@@ -45,6 +45,14 @@
                             <div class="lable_row"><span class="c_black"><?=__('比赛费用', 'nlyd-student')?>：</span></div>
                             <div class="input_row"><input class="radius_input_row" disabled type="text" name="match_cost" value="<?=$match['match_cost'] > 0 ? $match['match_cost'] : $match_cost?>"></div>
                         </div>
+                        <?php if(!empty($match['entry_end_time'])):?>
+                            <div>
+                                <div class="lable_row"><span class="c_black"><?=__('报名截止', 'nlyd-student')?>：</span></div>
+                                <div class="input_row">
+                                    <input class="radius_input_row" disabled type="text" name="match_cost" value="<?=$match['entry_end_time']?>">
+                                </div>
+                            </div>
+                        <?php endif;?>
                         <div>
                             <div class="lable_row">
                                 <span class="c_black"><?=__('开赛日期', 'nlyd-student')?>：</span>

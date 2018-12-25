@@ -2237,8 +2237,8 @@ class Student_Ajax
             if(reg_match($_POST['user_login'],'m')){
 
                 $wpdb->update($wpdb->prefix.'users',array('user_mobile'=>$_POST['user_login']),array('ID'=>$result));
-                update_user_meta($result,'user_ID',10000000+$result);
             }
+            update_user_meta($result,'user_ID',10000000+$result);
 
             unset($_SESSION['sms']);
             unset($_SESSION['smtp']);
@@ -4465,7 +4465,7 @@ class Student_Ajax
             'type_id'=>$_POST['type_id'],
             'zone_name'=>$_POST['zone_name'],
             'zone_address'=>$_POST['zone_address'],
-            'business_licence'=>$business_licence_url,
+            'business_licence_url'=>$business_licence_url,
             'legal_person'=>$_POST['legal_person'],
             'opening_bank'=>$_POST['opening_bank'],
             'opening_bank_address'=>$_POST['opening_bank_address'],
@@ -4502,7 +4502,7 @@ class Student_Ajax
             $map[] = " (b.meta_value like '%{$_POST['value']}%') ";
             $where = join( ' or ',$map);
         }else{
-            $where = " a.id > 0";
+            $where = " a.ID > 0 and b.meta_value != '' ";
         }
         global $wpdb;
         $sql = "select b.user_id as id, 
@@ -4515,6 +4515,7 @@ class Student_Ajax
                 from {$wpdb->prefix}users a 
                 left join {$wpdb->prefix}usermeta b on a.ID = b.user_id and meta_key = 'user_real_name'
                 where {$where} 
+                limit 20
                 ";
         $rows = $wpdb->get_results($sql,ARRAY_A);
         if(!empty($rows)){
@@ -4748,6 +4749,12 @@ class Student_Ajax
         }
         switch ($_POST['match_type']) {
             case 'match':
+
+                //获取报名截止时间
+                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_match_meta_new where match_id = {$_POST['match_id']}");
+                if($entry_end_time > $_POST['start_time']){
+                    wp_send_json_error(array('info'=>_('项目开始时间不能小于报名截止时间')));
+                }
                 //获取已有的比赛列表
                 $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
                 left join {$wpdb->prefix}posts b on a.project_id = b.ID
@@ -4837,7 +4844,7 @@ class Student_Ajax
         $pageSize = 50;
         $start = ($page-1)*$pageSize;
 
-        $sql = "select a.match_id,b.post_title,a.match_status,a.match_start_time,a.match_address,count(c.id) entry_total,
+        $sql = "select a.match_id,b.post_title,a.match_status,entry_end_time,a.match_start_time,match_cost,a.match_address,count(c.id) entry_total,
                 case a.match_status
                 when '-3' then '已结束'
                 when '-2' then '等待开赛'

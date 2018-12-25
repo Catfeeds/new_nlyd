@@ -252,7 +252,7 @@ class Student_Zone extends Student_Home
          //获取默认比赛用
          $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = 'official-match' ";
          $match_cost = $wpdb->get_var($set_sql);
-         $data['match_cost'] = !empty($match_cost)? $match_cost :number_format(588);
+         $data['match_cost'] = !empty($match_cost)? $match_cost :number_format(0);
 
          if(isset($_GET['match_id'])){
              //获取比赛信息
@@ -263,6 +263,7 @@ class Student_Zone extends Student_Home
                       where a.ID = {$_GET['match_id']}
                       ";
              $match = $wpdb->get_row($sql,ARRAY_A);
+             //print_r($match);
              if(!empty($match['match_start_time'])){
                  $match['data_time'] = preg_replace('/\s|:/','-',$match['match_start_time']);
              }
@@ -278,10 +279,24 @@ class Student_Zone extends Student_Home
      */
      public function matchTime(){
          global $wpdb,$current_user;
+
+         //获取所有项目
+         $sql = "select ID,post_title from {$wpdb->prefix}posts where post_type = 'project' and post_status = 'publish' order by menu_order asc ";
+         $match_project = $wpdb->get_results($sql,ARRAY_A);
+         $default_project = array_column($match_project,'post_title','ID');
+         $list = array();
+         $match_project_use = get_option('match_project_use')['project_use'];
+         foreach ($default_project as $k => $y){
+             $project_alias = get_post_meta($k,'project_alias')[0];
+             $use_time = $project_alias == 'zxss' ? array_sum(array_values($match_project_use[$project_alias])) : $match_project_use[$project_alias];
+             $list[$k]['title'] = $y;
+             $list[$k]['use_time'] = $use_time;
+         }
+
          $sql = "select a.id,a.project_id,b.post_title, date_format(a.start_time,'%Y/%m/%d %H:%i') start_time,date_format(a.end_time,'%Y/%m/%d %H:%i') end_time,a.use_time,a.more
                   from {$wpdb->prefix}match_project_more a 
                   left join {$wpdb->prefix}posts b on a.project_id = b.ID
-                  where match_id = {$_GET['match_id']} and created_id = {$current_user->ID} 
+                  where match_id = {$_GET['match_id']}  
                   order by start_time asc 
                    ";
          $rows = $wpdb->get_results($sql,ARRAY_A);
@@ -289,13 +304,8 @@ class Student_Zone extends Student_Home
              $this->get_404(_('未查询到比赛项目信息'));
              return;
          }
-         //print_r($rows);
-         $list = array();
          foreach ($rows as $val ){
              $k = &$val['project_id'];
-             $title = &$val['post_title'];
-             $list[$k]['title'] = $title;
-             $list[$k]['use_time'] = $val['use_time'];
              $list[$k]['child'][] = $val;
          }
          //print_r($list);
@@ -314,7 +324,7 @@ class Student_Zone extends Student_Home
     /**
      * 考级管理列表
      */
-     public function kaoji(){
+     public function grading(){
         $view = student_view_path.CONTROLLER.'/kaoji-list.php';
         load_view_template($view);
     }
@@ -361,6 +371,17 @@ class Student_Zone extends Student_Home
         $view = student_view_path.CONTROLLER.'/course-studentList.php';
         load_view_template($view);
     }
+
+    /**
+     * 学员管理
+     */
+    public function student(){
+
+        $view = student_view_path.CONTROLLER.'/student-by-center.php';
+        load_view_template($view);
+
+    }
+
     /**
      * 分中心学员管理
      */
@@ -573,7 +594,7 @@ class Student_Zone extends Student_Home
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'apply' || ACTION == 'courseBuild'){
+        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
             wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );
