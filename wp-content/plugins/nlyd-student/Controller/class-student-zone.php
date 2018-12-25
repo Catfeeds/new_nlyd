@@ -314,7 +314,7 @@ class Student_Zone extends Student_Home
     /**
      * 考级管理列表
      */
-     public function kaoji(){
+     public function grading(){
         $view = student_view_path.CONTROLLER.'/kaoji-list.php';
         load_view_template($view);
     }
@@ -573,7 +573,7 @@ class Student_Zone extends Student_Home
         // if(ACTION == 'index'){
         // }
 
-        if(ACTION == 'apply' || ACTION == 'courseBuild'){
+        if(ACTION == 'apply' || ACTION == 'courseBuild' || ACTION == 'kaojiBuild'){
             wp_register_script( 'zone_select2_js',match_js_url.'select2/dist/js/select2.js',array('jquery'), leo_match_version  );
             wp_enqueue_script( 'zone_select2_js' );
             wp_register_script( 'zone_select2_i18n_js',match_js_url.'select2/dist/js/i18n/zh-CN.js',array('jquery'), leo_match_version  );

@@ -51,7 +51,7 @@
                                         <div class="vertical"></div>
                                     </div>
                                 </div>
-                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过2m大小', 'nlyd-student')?></span>
+                                <span class="fs_12 c_black3 _tips"><?=__('原件影印件或盖有鲜章的复印件，文件不超过10m大小', 'nlyd-student')?></span>
                             </div>
                         </div>
                         <div>
@@ -208,7 +208,7 @@ jQuery(function($) {
     function changes(e,_this,array) {
         var file=e.target.files[0];
         var fileSize=file.size;
-        var fSize=2;
+        var fSize=10;
         if(fileSize > 1024*1024*fSize){
             alert("<?=__('图片大小不能大于', 'nlyd-student')?>"+fSize+"M");
             return false;
@@ -289,7 +289,7 @@ jQuery(function($) {
                 fd.append('opening_bank',data.field['opening_bank']);
                 fd.append('opening_bank_address',data.field['opening_bank_address']);
                 fd.append('bank_card_num',data.field['bank_card_num']);
-                if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){
+                if($('.business_licence_url').val()=='' || !$('.business_licence_url').val()){//修改具有初始图片
                     if(imgs1[0]){
                         fd.append('business_licence',imgs1[0]);
                     }else{
@@ -302,7 +302,6 @@ jQuery(function($) {
                     }else{
                         fd.append('business_licence_url','');
                     }
-                    
                 }
                 if(type_id){
                     fd.append('type_id',type_id);
@@ -321,9 +320,6 @@ jQuery(function($) {
                 if(data.field['secretary_id']){
                     fd.append('secretary_id',data.field['secretary_id']);
                 }
-                // console.log(type_id,zone_type_alias,imgs1)
-                // console.log(data.field)
-                // return false;
                 $.ajax({
                     data: fd,
                     contentType : false,
@@ -336,7 +332,7 @@ jQuery(function($) {
                         $.alerts(res.data.info)
                         if(res.data.url){
                             setTimeout(function() {
-                                // window.location.href=res.data.url
+                                window.location.href=res.data.url
                             }, 300);
                         }
                     },

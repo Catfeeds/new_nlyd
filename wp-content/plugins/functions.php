@@ -404,6 +404,11 @@ if(!function_exists('getSpreadCategory')){
                 'course_recommend' => '课程推荐满3人',
                 'stock' => '股权出售',
                 'profit_bonus' => '分中心收益分红',
+                'apply_center' => '成为分中心',
+                'apply_match' => '成为赛区',
+                'apply_zone' => '成为机构',
+                'apply_trains' => '成为脑力训练中心',
+                'apply_test' => '成为脑力水平测评中心',
             );
         if(!empty($key)){
             return $arr[$key];

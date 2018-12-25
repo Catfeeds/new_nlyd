@@ -1121,7 +1121,6 @@ class Match_Ajax
         //删除订单 meta 分数
 
 
-
         if($id < 1) wp_send_json_error(['info' => '参数错误']);
         //判断是否是已关闭的比赛(回收站中的)
         $post = get_post($id);
@@ -1129,14 +1128,14 @@ class Match_Ajax
             global $wpdb;
             $wpdb->query('START TRANSACTION');
             //删除post
-            if(!wp_delete_post($id)){
+            if(!$wpdb->delete($wpdb->prefix.'posts',['ID'=>$id])){
                 $wpdb->query('ROLLBACK');
                 wp_send_json_error(['info' => '比赛删除失败']);
             }
             //删除meta
             $meta = $wpdb->get_row("SELECT match_id FROM {$wpdb->prefix}match_meta_new WHERE match_id={$id}");
             if($meta){
-                $metaBool = $wpdb->delete($wpdb->prefix.'match_meta',['match_id' => $id]);
+                $metaBool = $wpdb->delete($wpdb->prefix.'match_meta_new',['match_id' => $id]);
                 if(!$metaBool){
                     $wpdb->query('ROLLBACK');
                     wp_send_json_error(['info' => '比赛外键删除失败']);

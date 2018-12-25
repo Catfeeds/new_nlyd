@@ -67,28 +67,28 @@ a:hover {
     font-size: 0.26rem!important;
 }
 .fs_22{
-    font-size: 0.22rem;
+    font-size: 0.22rem!important;
 }
 .fs_20{
-    font-size: 0.20rem;
+    font-size: 0.20rem!important;
 }
 .fs_18{
-    font-size: 0.18rem;
+    font-size: 0.18rem!important;
 }
 .fs_16{
-    font-size: 0.16rem;
+    font-size: 0.16rem!important;
 }
 .fs_15{
-    font-size: 0.15rem;
+    font-size: 0.15rem!important;
 }
 .fs_14{
-    font-size: 0.14rem;
+    font-size: 0.14rem!important;
 }
 .fs_13{
-    font-size: 0.13rem;
+    font-size: 0.13rem!important;
 }
 .fs_12{
-    font-size: 0.12rem;
+    font-size: 0.12rem!important;
 }
 /* 字体颜色 */
 .c_white,a.c_white{
