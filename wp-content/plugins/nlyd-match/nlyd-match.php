@@ -1001,14 +1001,16 @@ if(!class_exists('MatchController')){
                     unset($match_meta['match_project']);
 
                     //查询是否发布了比赛信息
-                    //var_dump($match_meta);die;
-
-                    //查询是否发布了比赛信息
-                    //var_dump($match_meta);die;
-                    $wpdb->delete($wpdb->prefix.'match_meta_new',array('match_id'=>$post_ID));
-                    $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
-
-                    //var_dump($a);die;
+                    $result_ = $wpdb->get_var("select id from {$wpdb->prefix}match_meta_new where match_id = {$post_ID} ");
+                    if($result_){
+                        $match_meta['revise_id'] = $current_user->ID;
+                        $match_meta['revise_time'] = get_time('mysql');
+                        $a = $wpdb->update($wpdb->prefix.'match_meta_new',$match_meta,array('match_id'=>$post_ID));
+                    }else{
+                        $match_meta['created_id'] = $current_user->ID;
+                        $match_meta['created_time'] = get_time('mysql');
+                        $a = $wpdb->insert($wpdb->prefix.'match_meta_new',$match_meta);
+                    }
                 }
             }
             elseif ($post_data->post_type == 'team'){
@@ -1041,9 +1043,22 @@ if(!class_exists('MatchController')){
                     $insert['grading_id'] = $post_ID;
                     $insert['created_person'] = $current_user->ID;
                     $insert['created_time'] = get_time('mysql');
-                    $wpdb->delete($wpdb->prefix.'grading_meta',array('grading_id'=>$post_ID));
+                    //查询是否发布了考级信息
+                    $result_ = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$post_ID} ");
+                    //var_dump($result_);die;
+                    if($result_){
+                        $insert['revise_id'] = $current_user->ID;
+                        $insert['revise_time'] = get_time('mysql');
+                        $a = $wpdb->update($wpdb->prefix.'grading_meta',$insert,array('grading_id'=>$post_ID));
+                    }else{
+
+                        $insert['created_person'] = $current_user->ID;
+                        $insert['created_time'] = get_time('mysql');
+                        $a = $wpdb->insert($wpdb->prefix.'grading_meta',$insert);
+                    }
+                    //$wpdb->delete($wpdb->prefix.'grading_meta',array('grading_id'=>$post_ID));
                     //print_r($insert);die;
-                    $a = $wpdb->insert($wpdb->prefix.'grading_meta',$insert);
+                    //$a = $wpdb->insert($wpdb->prefix.'grading_meta',$insert);
                     //var_dump($a);die;
                 }
             }

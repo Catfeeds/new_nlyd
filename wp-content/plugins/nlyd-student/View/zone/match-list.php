@@ -8,7 +8,7 @@
         <?php if(!$row){ ?>
             <div class="nl-right-content layui-col-sm12 layui-col-xs12 layui-col-md12 detail-content-wrapper">
             <header class="mui-bar mui-bar-nav">
-                <a class="mui-pull-left nl-goback">
+                <a class="mui-pull-left nl-goback static" href="<?=home_url('/zone/')?>">
                     <div><i class="iconfont">&#xe610;</i></div>
                 </a>
                 <h1 class="mui-title"><div><?=__('比赛管理', 'nlyd-student')?></div></h1>
@@ -145,12 +145,20 @@ jQuery(function($) {
                                                 +'<div class="match_header bold c_black f_16 mt_10">'+v.post_title+'</div>'
                                                 +'<div class="match_body">'
                                                     +'<div class="match_body_row">'
+                                                        +'<div class="match_body_label"><?=__('报名截止：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_info c_black">'+v.entry_end_time+'</div>'
+                                                    +'</div>'
+                                                    +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开赛日期：', 'nlyd-student')?></div>'
                                                         +'<div class="match_body_info c_black">'+v.match_start_time+' <span class="c_blue ml_10">'+v.match_status_cn+'</span></div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('开赛地点：', 'nlyd-student')?></div>'
                                                         +'<div class="match_body_info c_black">'+v.match_address+'</div>'
+                                                    +'</div>'
+                                                    +'<div class="match_body_row">'
+                                                        +'<div class="match_body_label"><?=__('比赛费用：', 'nlyd-student')?></div>'
+                                                        +'<div class="match_body_info c_black">'+v.match_cost+'</div>'
                                                     +'</div>'
                                                     +'<div class="match_body_row">'
                                                         +'<div class="match_body_label"><?=__('已报选手：', 'nlyd-student')?></div>'

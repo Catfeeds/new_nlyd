@@ -37,7 +37,7 @@
                                     <input type="hidden" name="business_licence_url" class="business_licence_url" value="<?=$row['business_licence']?>">
                                     <div class="post-img no-dash">
                                         <div class="img-zoo img-box">
-                                            <img src="<?=$row['business_licence']?>"/>
+                                            <img src="<?=$row['business_licence_url']?>"/>
                                         </div>
                                         <div class="del">
                                             <i class="iconfont">&#xe633;</i>
@@ -130,7 +130,9 @@
                                 <?php endif;?>
                             </div>
                         </div>
-                        <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
+                        <?php if($row['user_status'] != 1):?>
+                            <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
+                        <?php endif;?>
                     </form>
                 </div>
             </div>

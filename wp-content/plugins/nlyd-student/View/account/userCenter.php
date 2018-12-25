@@ -359,7 +359,7 @@ layui.use('layer', function(){ //独立版的layer无需执行这一句
                 //按钮【按钮二】的回调
 
                 //return false 开启该代码可禁止点击该按钮关闭
-                window.location.href="<?=home_url('account/certification');?>"
+                window.location.href="<?=home_url('account/info');?>"
             }
             ,closeBtn:2
             ,btnAagn: 'c' //按钮居中
