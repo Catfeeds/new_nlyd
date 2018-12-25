@@ -572,24 +572,30 @@ class Spread{
     public function profitUserLog(){
         global $wpdb;
         $page = isset($_GET['cpage']) ? intval($_GET['cpage']) : 1;
+        $type_id = isset($_GET['type_id']) ? intval($_GET['type_id']) : 0;
         $searchStr = isset($_GET['s']) ? trim($_GET['s']) : '';
 
         $page < 1 && $page = 1;
         $pageSize = 20;
         $start = ($page-1)*$pageSize;
-        $where = "";
+        $where = "WHERE 1=1";
         if($searchStr != ''){
-            $where = " WHERE u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%'";
+            $where .= "  AND (u.user_login LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR zm.zone_name LIKE '%{$searchStr}%')";
+        }
+        if(in_array($type_id,[1,2])){
+            $where .= " AND usl.user_type='{$type_id}'";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
-                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,
+                usl.user_id,usl.income_type,usl.income_type,usl.match_id,usl.user_income,usl.created_time,usl.id,u.user_login,zm.zone_name,usl.user_type,
                 um.meta_value AS user_real_name,p.post_title 
                 FROM {$wpdb->prefix}user_stream_logs AS usl 
+                LEFT JOIN {$wpdb->prefix}zone_meta AS zm ON zm.user_id=usl.user_id 
                 LEFT JOIN {$wpdb->usermeta} AS um ON um.user_id=usl.user_id AND um.meta_key='user_real_name' 
                 LEFT JOIN {$wpdb->users} AS u ON u.ID=usl.user_id 
                 LEFT JOIN {$wpdb->posts} AS p ON p.ID=usl.match_id 
                 {$where} 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -610,13 +616,18 @@ class Spread{
             <h2 class="screen-reader-text">过滤用户收益流水</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="search" id="search_val" name="search_val" placeholder="姓名/用户名/主体名" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-user-log&type_id='.$type_id.'&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
 
+                <ul class="subsubsub">
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=0')?>" <?=$type_id===0?'class="current"':''?> aria-current="page">全部<span class="count"></span></a> |</li>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=1')?>" <?=$type_id===1?'class="current"':''?> aria-current="page">主体流水<span class="count"></span></a> |</li>
+                    <li class="all"><a href="<?=admin_url('admin.php?page=fission-profit-user-log&type_id=2')?>" <?=$type_id===2?'class="current"':''?> aria-current="page">用户流水<span class="count"></span></a> |</li>
 
+                </ul>
 
                 <div class="tablenav-pages">
                     <span class="displaying-num"><?=$count['count']?>个项目</span>
@@ -627,7 +638,8 @@ class Spread{
             <h2 class="screen-reader-text">主体列表</h2><table class="wp-list-table widefat fixed striped users">
                 <thead>
                 <tr>
-                   <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名</th>
+                   <th scope="col" id="real_name" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
+                    <th scope="col" id="role" class="manage-column column-role">角色</th>
                     <th scope="col" id="income_type" class="manage-column column-income_type">类型</th>
                     <th scope="col" id="match_id" class="manage-column column-match_id">项目</th>
                     <th scope="col" id="user_income" class="manage-column column-user_income">数额</th>
@@ -639,15 +651,18 @@ class Spread{
 
                 <?php
                 foreach ($rows as $row){
+
                     if(empty($row['user_real_name'])){
                         $real_name = $row['user_login'];
                     }else{
                         $real_name = unserialize($row['user_real_name'])['real_name'];
                     }
+                    if(!empty($row['zone_name'])) $real_name .= "({$row['zone_name']})";
+
                     ?>
                     <tr data-uid="<?=$row['id']?>">
 
-                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名">
+                        <td class="real_name column-real_name has-row-actions column-primary" data-colname="姓名/用户名(主体名称)">
                             <?=$real_name?>
                             <br>
                             <div class="row-actions">
@@ -656,6 +671,10 @@ class Spread{
                                 <!--                               <span class="view"><a href="">资料</a></span>-->
                             </div>
                             <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
+                        </td>
+                        <td class="role column-role" data-colname="角色">
+                            <?=$row['user_type'] == '1' ? '主体': '用户'?>
+
                         </td>
                         <td class="income_type column-income_type" data-colname="类型">
                             <?php
@@ -686,7 +705,8 @@ class Spread{
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名</th>
+                    <th scope="col" class="manage-column column-real_name column-primary">姓名/用户名(主体名称)</th>
+                    <th scope="col" class="manage-column column-role">角色</th>
                     <th scope="col" class="manage-column column-income_type">类型</th>
                     <th scope="col" class="manage-column column-match_id">项目</th>
                     <th scope="col" class="manage-column column-user_income">数额</th>

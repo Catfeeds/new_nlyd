@@ -457,6 +457,7 @@ class Organize{
                                 $wpdb->query('COMMIT');
                                 $success_msg = '操作成功';
                             }else{
+//                                leo_dump($wpdb->last_query);die;
                                 $wpdb->query('ROLLBACK');
                                 $error_msg = '操作失败!';
                             }
@@ -703,7 +704,7 @@ class Organize{
             $opening_bank = isset($_POST['opening_bank']) ? trim($_POST['opening_bank']) : '';
             $opening_bank_address = isset($_POST['opening_bank_address']) ? trim($_POST['opening_bank_address']) : '';
             $bank_card_num = isset($_POST['bank_card_num']) ? trim($_POST['bank_card_num']) : '';
-            $chairman_id = isset($_POST['chairman_id']) ? intval($_POST['chairman_id']) : 0;
+            $chairman_id = isset($_POST['chairman_id']) ? intval($_POST['chairman_id']) : $user_id;
             $secretary_id = isset($_POST['secretary_id']) ? intval($_POST['secretary_id']) : 0;
             $parent_id = isset($_POST['parent_id']) ? intval($_POST['parent_id']) : 0;
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
@@ -791,6 +792,7 @@ class Organize{
                    WHERE zm.id='{$old_zm_id}'", ARRAY_A);
 //            leo_dump($wpdb->last_query);die;
             $match_role_id = $row['match_role_id']; //已有赛事权限
+//            var_dump($row);die;
             $role_id = $row['role_id']; //已有课程权限
         }else{
             $role_id = $wpdb->get_row("SELECT match_role_id,role_id FROM {$wpdb->prefix}zone_join_role WHERE zone_type_id='{$typeList[0]['id']}'",ARRAY_A);
@@ -1106,6 +1108,7 @@ class Organize{
                 FROM {$wpdb->prefix}zone_type_role 
                 {$where} 
                 LIMIT {$start},{$pageSize}",ARRAY_A);
+//        leo_dump($wpdb->last_query);die;
         $count = $total = $wpdb->get_row('select FOUND_ROWS() count',ARRAY_A);
         $pageAll = ceil($count['count']/$pageSize);
         $pageHtml = paginate_links( array(
@@ -1186,7 +1189,7 @@ class Organize{
                             <?php
                             switch ($row['role_type']){
                                 case '1':
-                                    echo '赛斯/考级';
+                                    echo '赛事/考级';
                                     break;
                                 case '2':
                                     echo '课程权限';
@@ -1468,7 +1471,7 @@ class Organize{
         die;
         global $wpdb;
         $wpdb->get_results("SELECT * FROM {$wpdb->prefix}zone_meta AS zm 
-        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id
+        LEFT JOIN {$wpdb->prefix}user_stream_logs AS usl ON zm.user_id=usl.user_id AND usl.user_type=1
         ");
         $rows = [];
         ?>

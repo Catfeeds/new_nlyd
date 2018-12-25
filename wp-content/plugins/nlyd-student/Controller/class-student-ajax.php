@@ -1388,7 +1388,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}grading_meta b on c.match_id = b.grading_id 
-                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 2 and b.start_time != ''
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 2 and b.start_time != '' and a.ID > 0
                   order by b.status desc,b.start_time desc limit $start,$pageSize
                   ";
         }else{
@@ -1405,7 +1405,7 @@ class Student_Ajax
                   from {$wpdb->prefix}order c 
                   left join {$wpdb->prefix}posts a on c.match_id = a.ID 
                   left join {$wpdb->prefix}match_meta_new b on c.match_id = b.match_id 
-                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 1 and b.match_start_time != ''
+                  where user_id = {$current_user->ID} and (pay_status=2 or pay_status=3 or pay_status=4) and c.order_type = 1 and b.match_start_time != '' and a.ID > 0
                   order by b.match_status desc limit $start,$pageSize
                   ";
         }
@@ -4434,7 +4434,7 @@ class Student_Ajax
         if(empty($_POST['type_id']) || empty($_POST['zone_type_alias']) || empty($_POST['zone_name']) || empty($_POST['zone_address']) || empty($_POST['legal_person']) || empty($_POST['legal_person']) || empty($_POST['opening_bank']) || empty($_POST['opening_bank_address']) || empty($_POST['bank_card_num'])){
             wp_send_json_error(array('info'=>'相关资料不能有空值'));
         }
-        if(!isset($_POST['business_licence_url'])){
+        if(empty($_POST['business_licence_url'])){
             if(empty($_FILES['business_licence'])){
                 wp_send_json_error(array('info'=>'营业执照必传'));
             }
@@ -4477,6 +4477,7 @@ class Student_Ajax
             'role_id'=>$role_id,
             'created_time'=>get_time('mysql'),
         );
+        //print_r($data);die;
         if(empty($row)){
             //print_r($insert);die;
             $result = $wpdb->insert($wpdb->prefix.'zone_meta',$data);

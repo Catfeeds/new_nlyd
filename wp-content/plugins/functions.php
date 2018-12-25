@@ -392,16 +392,30 @@ if(!function_exists('getCategory')){
  * 获取收益大类
  */
 if(!function_exists('getSpreadCategory')){
-    function getSpreadCategory(){
-        return [
-            'match' => '用户比赛',
-            'grading' => '用户考级',
-            'course' => '购买课程',
-            'course_grading' => '课程2级达标',
-            'course_recommend' => '课程推荐满3人',
-            'stock' => '股权出售',
-            'profit_bonus' => '分中心收益分红',
-        ];
+    function getSpreadCategory($key=''){
+
+        $arr = array(
+                'official-match' => '正式比赛',
+                'official-grading' => '正式考级',
+                'tram-match' => '战队精英赛',
+                'city-match' => '城市精英赛',
+                'course' => '购买课程',
+                'course_grading' => '课程2级达标',
+                'course_recommend' => '课程推荐满3人',
+                'stock' => '股权出售',
+                'profit_bonus' => '分中心收益分红',
+                'apply_center' => '成为分中心',
+                'apply_match' => '成为赛区',
+                'apply_zone' => '成为机构',
+                'apply_trains' => '成为脑力训练中心',
+                'apply_test' => '成为脑力水平测评中心',
+            );
+        if(!empty($key)){
+            return $arr[$key];
+        }else{
+            return $arr;
+        }
+
     }
 }
 
