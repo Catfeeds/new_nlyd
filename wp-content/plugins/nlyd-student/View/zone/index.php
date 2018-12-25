@@ -53,13 +53,6 @@
                                 <?php endif;?>
                             </span>
                         </div>
-
-                        <!--<div class="c_black"><span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span><a class="pull-right c_blue"><?/*=__('更多资料', 'nlyd-student')*/?></a></div>
-                        <div class="c_black">
-                            <span><?/*=__('管理员', 'nlyd-student')*/?>：王二</span>
-                            <a class="pull-right c_blue"><?/*=__('修改', 'nlyd-student')*/?></a>
-                            <span class="pull-right c_red mr_10"><?/*=__('资料审核中', 'nlyd-student')*/?></span>
-                        </div>-->
                     </div>
                 </div>
                 <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
@@ -94,18 +87,6 @@
                         </a>
                             <?php } ?>
                     <?php } ?>
-                    <!--<a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_green ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请设立脑力水平测评中心', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row" href="<?/*=home_url('zone/introduce');*/?>">
-                        <div class="apply_list_line pull-left c_orange ml"><i class="iconfont fs_20">&#xe650;</i></div>
-                        <div class="apply_list_line center"><?/*=__('申请承办赛事', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
                     <a class="apply_list c_black layui-row" href="<?=home_url('zone/introduce');?>">
                         <div class="apply_list_line pull-left c_yellow ml"><i class="iconfont fs_20">&#xe650;</i></div>
                         <div class="apply_list_line center"><?=__('赞助脑力比赛', 'nlyd-student')?></div>
@@ -136,104 +117,6 @@
                     </a>
                     <?php } ?>
                     <?php endif;?>
-                    <!--<a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_coach"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('教练管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_student"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('学员管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_match"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('比赛管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_level"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('考级管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>-->
-                </div>
-                    <!-- 赛事中心(控制台) -->
-                <!--<div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_match"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('比赛管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_team"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('战队管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10">1<?/*=__('个新申请', 'nlyd-student')*/?></div>
-                    </a>
-                </div>-->
-                <!-- 测评(控制台) -->
-                <!--<div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_level"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('考级管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                </div>-->
-                <!-- 教练(控制台) -->
-                <!--<div class="apply width-padding layui-row layui-bg-white width-margin-pc">
-                    <a class="apply_list c_black3 layui-row ">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_course"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('课程管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_student"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('学员管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10">1<?/*=__('个新申请', 'nlyd-student')*/?></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left">
-                            <div class="zone_bg bg_match"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('比赛管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                    <a class="apply_list c_black layui-row">
-                        <div class="apply_list_line pull-left ">
-                            <div class="zone_bg bg_level"></div>
-                        </div>
-                        <div class="apply_list_line center"><?/*=__('考级管理', 'nlyd-student')*/?></div>
-                        <div class="apply_list_line pull-right"><i class="iconfont fs_20">&#xe727;</i></div>
-                        <div class="apply_list_line pull-right c_orange mr_10"></div>
-                    </a>
-                </div>-->
             </div>
         </div>            
     </div>

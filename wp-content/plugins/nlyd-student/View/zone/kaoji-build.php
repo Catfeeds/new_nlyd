@@ -17,7 +17,12 @@
                     <form class="layui-form apply_form" lay-filter='layform'>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级责任人', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row change_ajax" type="text" name="zone_num" value=""></div>
+                            <div class="input_row">
+                            <!-- <input class="radius_input_row" type="text" name="zone_num" value=""> -->
+                                <select class="js-data-select-ajax" name="chairman_id" style="width: 100%" data-action="get_manage_user" data-placeholder="选择考级责任人" >
+                                    <option value="<?=$row['chairman_id']?>" selected><?=$row['chairman_name']?></option>
+                                </select>
+                            </div>
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('考级类别', 'nlyd-student')?>：</span></div>
@@ -159,74 +164,24 @@ var mobileSelect3 = new MobileSelect({
        
     }
 });
-
-    $('.change_ajax').keyup(function(){
+    $('.js-data-select-ajax').each(function () {
         var _this=$(this);
-        _this.next('.select_box').remove()
-        //if(!_this.hasClass('loading')){
-            var keywords = _this.val();/*
-            if (keywords=='') { _this.next('.select_box').remove();_this.removeClass('loading'); return };*/
-            var data={
-                action:"get_manage_user",
-                value:keywords
-            };
-            _this.parents('div').append('<div class="select_box" id="select_box"></div>')
-            // _this.parents('div').css("position","relative");
-            $.ajax({
-                data:data,
-                type:"POST",
-                beforeSend:function(){
-                    _this.next('.select_box').empty().append('<div class="select_row">正在加载...</div>');
-                    _this.addClass('loading')
-                },
-                success:function(res){
-                    var dom="";
-                    _this.next('.select_box').empty().show();
-                    if(res.success){
-                        if(res.data == ''){
-                            var item='<div class="select_row">未搜到该用户</div>'
-                            dom+=item
-                        }else {
-
-                            $.each(res.data,function(i,v){
-                                var item='<div class="select_row choose" data-id="'+v.user_id+'" data-value="'+v.text+'">' + v.text + '</div>'
-                                dom+=item
-                            })
-
-                        }
-                    }else {
-                        var item='<div class="select_row">未搜到该用户....</div>'
-                        dom+=item
-                    }
-                    _this.next('.select_box').append(dom)
-                    _this.removeClass('loading')
-                },
-                error:function(){
-                    _this.next('.select_box').empty().show();
-                    _this.next('.select_box').append('<div class="select_row">网络延迟</div>');
-                    _this.next('.select_box').remove()
-                    _this.removeClass('loading')
+        var _placeholder = _this.attr('data-placeholder');
+        _this.select2({
+            placeholder : _placeholder,
+            ajax: {
+                url: admin_ajax +'?action=get_manage_user'  ,
+                dataType: 'json',
+                delay: 600, //wait 250 milliseconds before triggering the request
+                processResults: function (res) {
+                    return {
+                        results: res.data
+                    };
                 }
-            })
-        //}
-    })
-    $('body').on('click','.choose',function(){
-        var _this=$(this);
-        var val=_this.attr('data-value');
-        var id=_this.attr('data-id');
-        _this.parent('.select_box').parent('div').find('.change_ajax').val(val);
-        _this.parent('.select_box').parent('div').find('.get_id').val(id)
-    })
-    $('body').click(function(e){
-        if($('#select_box').length>0){
-            var box=$('#select_box');
-            if(!$(e.target).hasClass('choose') && !$(e.target).hasClass('change_ajax')){
-                box.parent('div').find('input').val('');
             }
-        }
-        
-        $('.select_box').remove()
+        });
     })
+   
     layui.use(['form'], function(){
         var form = layui.form
         form.render();
