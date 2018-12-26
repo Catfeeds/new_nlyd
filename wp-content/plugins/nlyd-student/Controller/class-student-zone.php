@@ -240,13 +240,14 @@ class Student_Zone extends Student_Home
                  $match_role_list[] = $v;
              }
          }
+         $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
          //print_r($match_role);
          //print_r($match_role);
          //获取比赛类型
          $match_genre = $wpdb->get_results("select a.ID as id,a.post_title as value,b.meta_value from {$wpdb->prefix}posts a 
                                   left join {$wpdb->prefix}postmeta b on a.ID = b.post_id and b.meta_key='project_alias'
                                   where a.post_type = 'genre' and a.post_status = 'publish' and b.meta_value in('mental_world_cup','digital_brain_king','counting_brain_marathon')");
-         $data['scene_list'] = !empty($match_role_list) ? json_encode($match_role_list) : '';
+
          $data['match_genre'] = !empty($match_genre) ? json_encode($match_genre) : '';
 
          //获取默认比赛用
