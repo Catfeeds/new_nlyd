@@ -717,7 +717,7 @@ class Organize{
             if(!is_array($course_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
-            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
+            //if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
             if($legal_person == '') $error_msg = $error_msg==''?'请填写法人':$error_msg.'<br >请填写法人';
             if($opening_bank == '') $error_msg = $error_msg==''?'请填写开户行':$error_msg.'<br >请填写开户行';
             if($opening_bank_address == '') $error_msg = $error_msg==''?'请填写开户行地址':$error_msg.'<br >请填写开户行地址';

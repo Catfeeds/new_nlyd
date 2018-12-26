@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="c_black">
-                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_name'])? '无' : $row['referee_name'];?></span>
+                            <span><?=__(!empty($row['legal_person'])?'管理员':'推荐人', 'nlyd-student')?>：<?=empty($row['referee_user_ID'])? '无' : $row['referee_user_ID'];?></span>
                             <span class="pull-right">
                                 <?php if($row['user_status'] == 1){ ?>
                                     <a class=" c_blue" href="<?=home_url('zone/apply')?>"><?=__('更多资料', 'nlyd-student')?></a>
