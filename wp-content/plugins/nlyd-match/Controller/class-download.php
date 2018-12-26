@@ -77,7 +77,7 @@ class Download
         IFNULL(o.address,"-") AS address,
         IFNULL(o.express_number,"-") AS express_number,
         IFNULL(o.express_company,"-") AS express_company,
-        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "商品订单" ELSE "-" END AS order_type,
+        CASE o.order_type WHEN 1 THEN "比赛订单" WHEN 2 THEN "考级订单" WHEN 3 THEN "课程订单" ELSE "-" END AS order_type,
         CASE o.pay_type WHEN "zfb" THEN "支付宝" WHEN "wx" THEN "微信" WHEN "ylk" THEN "银联卡" ELSE o.pay_type END AS pay_type,
         CASE o.pay_status WHEN 1 THEN "待支付" WHEN -1 THEN "待退款" WHEN -2 THEN "已退款" WHEN 2 THEN "已支付" WHEN 3 THEN "待收货" WHEN 4 THEN "已完成" WHEN 5 THEN "已失效" ELSE "-" END AS pay_title,
         u.user_login,

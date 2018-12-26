@@ -197,7 +197,7 @@ class Organize{
                    <?php
                    foreach ($rows as $row){
                         $usermeta = get_user_meta($row['user_id']);
-                        $user_real_name = isset($usermeta['user_real_name']) ? $usermeta['user_real_name'][0] : [];
+                        $user_real_name = isset($usermeta['user_real_name']) ? unserialize($usermeta['user_real_name'][0]) : [];
                         $referee_real_name = get_user_meta($row['referee_id'],'user_real_name',true);
                         $chairman_real_name = get_user_meta($row['chairman_id'],'user_real_name',true);
                    ?>
@@ -944,7 +944,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="chairman_id">主席 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                            <select class="js-data-select-ajax" name="chairman_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['chairman_id']?>" selected="selected">
                                     <?=isset($row['chairman_real_name']) ? unserialize($row['chairman_real_name'])['real_name'] : ''?>
                                 </option>
@@ -954,7 +954,7 @@ class Organize{
                     <tr class="">
                         <th scope="row"><label for="secretary_id">秘书长 </label></th>
                         <td>
-                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="base">
+                            <select class="js-data-select-ajax" name="secretary_id" style="width: 50%" data-action="get_base_user_list" data-type="select">
                                 <option value="<?=$row['secretary_id']?>" selected="selected">
                                     <?=isset($row['secretary_real_name']) ? unserialize($row['secretary_real_name'])['real_name'] : ''?>
                                 </option>
