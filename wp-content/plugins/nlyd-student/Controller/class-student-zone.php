@@ -502,8 +502,17 @@ class Student_Zone extends Student_Home
         $row['user_ID'] = $user_info['user_ID'];
 
         //获取推荐人
-        $referee_user_real_name = get_user_meta($user_info['referee_id'],'user_real_name')[0];
-        $row['referee_name'] = $referee_user_real_name['real_name'];
+        //获取推荐人
+        $sql = "select meta_key,meta_value from {$wpdb->prefix}usermeta where user_id = {$user_info['referee_id']} and meta_key in ('user_real_name','user_ID') ";
+        $meta_value = $wpdb->get_results($sql,ARRAY_A);
+        if(!empty($meta_value)){
+            $meta = array_column($meta_value,'meta_value','meta_key');
+            if(!empty($meta['user_real_name'])){
+                $referee_user_real_name = unserialize($meta['user_real_name']);
+                $row['referee_name'] = $referee_user_real_name['real_name'];
+            }
+            $row['referee_user_ID'] = $meta['user_ID'];
+        }
 
         return $row;
     }
@@ -530,8 +539,9 @@ class Student_Zone extends Student_Home
         }else{
             $data['zone_num'] = $total+1;
         }
-        //获取所有机构
-        //$data['list'] = $wpdb->get_results("select id,zone_type_name,zone_type_alias from {$wpdb->prefix}zone_type where zone_type_status = 1 order by zone_sort asc",ARRAY_A);
+
+        //获取机构类型
+        $data['zone_type_name'] = $wpdb->get_var("select zone_type_name from {$wpdb->prefix}zone_type where id = '{$_GET['type_id']}' ");
 
         //获取事业管理员
         $user_real_name = get_user_meta($current_user->data->referee_id,'user_real_name')[0];

@@ -2159,7 +2159,7 @@ class Student_Ajax
 
             //添加推广人
             if($_POST['referee_id'] > 0){
-                if(empty($user->referee_id)){
+                if(empty($user->referee_id) && $_POST['referee_id'] != $user->ID){
                     $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$user->ID));
                 }
             }
@@ -2189,7 +2189,7 @@ class Student_Ajax
                     }
 
                     //添加推广人
-                    if($_POST['referee_id'] > 0){
+                    if($_POST['referee_id'] > 0 ){
                         $wpdb->update($wpdb->prefix.'users',array('referee_id'=>$_POST['referee_id']),array('ID'=>$result));
                     }
 
@@ -4379,7 +4379,7 @@ class Student_Ajax
             $matrixPointSize = "6"; //生成图片大小
             QRcode::png($value, $qrcode_path, $errorCorrectionLevel, $matrixPointSize, 2);
             //生成带logo的二维码
-            $logo = leo_student_path.'Public/css/image/logo1.jpg';
+            /*$logo = leo_student_path.'Public/css/image/logo1.jpg';
             //svar_dump(file_exists($logo));die;
             //die;
             if (file_exists($logo)) {
@@ -4405,13 +4405,13 @@ class Student_Ajax
                 //$back_height = imagesy ( $back_ );
                 $qrcode_width = imagesx ( $qrcode );
                 $qrcode_height = imagesy ( $qrcode );
-                /*$logo_qr_width = $QR_width / 5;
+                $logo_qr_width = $QR_width / 5;
                 $scale = $logo_width / $logo_qr_width;
                 $logo_qr_height = $logo_height / $scale;
-                $from_width = ($QR_width - $logo_qr_width) / 2;*/
+                $from_width = ($QR_width - $logo_qr_width) / 2;
                 imagecopyresampled ( $back_, $qrcode, 95, 195, 0, 0, $qrcode_width, $qrcode_height, $qrcode_width, $qrcode_height );
             }
-            imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名
+            imagejpeg ( $back_, $qrcode_path );//带Logo二维码的文件名*/
             update_user_meta($current_user->ID,'referee_qrcode',$dir.$filename);
             wp_send_json_success($upload_dir['baseurl'].$dir.$filename);
         //}
@@ -4495,11 +4495,11 @@ class Student_Ajax
 
     //根据手机或者真实姓名获取用户
     public function get_manage_user(){
-        if(isset($_POST['value'])){
-            $map[] = " (a.user_login like '%{$_POST['value']}%') ";
-            $map[] = " (a.user_mobile like '%{$_POST['value']}%') ";
-            $map[] = " (a.user_email like '%{$_POST['value']}%') ";
-            $map[] = " (b.meta_value like '%{$_POST['value']}%') ";
+        if(isset($_GET['term'])){
+            $map[] = " (a.user_login like '%{$_GET['term']}%') ";
+            $map[] = " (a.user_mobile like '%{$_GET['term']}%') ";
+            $map[] = " (a.user_email like '%{$_GET['term']}%') ";
+            $map[] = " (b.meta_value like '%{$_GET['term']}%') ";
             $where = join( ' or ',$map);
         }else{
             $where = " a.ID > 0 and b.meta_value != '' ";
