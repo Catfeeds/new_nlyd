@@ -74,7 +74,7 @@ class Organize{
             $joinWhere = " AND (zm.zone_name LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%' OR u.user_mobile LIKE '%{$searchStr}%' OR u.user_login LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS u.user_login,u.user_mobile,zm.user_id,zm.type_id,zm.referee_id,zm.created_time,zm.audit_time,zm.user_status,zt.zone_type_name,zm.zone_name,zm.is_able,
-                zm.zone_address,zm.business_licence,zm.business_licence_url,
+                zm.zone_address,zm.business_licence_url,
                 zm.legal_person,zm.opening_bank,zm.opening_bank_address,zm.bank_card_num,zm.id,
                 zm.chairman_id,zm.secretary_id,
                 CASE zm.user_status 
@@ -227,7 +227,6 @@ class Organize{
                        <td class="chairman_id column-chairman_id" data-colname="主席"><?=isset($chairman_real_name['real_name'])?$chairman_real_name['real_name']:($row['chairman_id']>0?get_user_by('ID',$row['chairman_id'])->user_login:'')?></td>
                        <td class="zone_address column-zone_address" data-colname="地址"><?=$row['zone_address']?></td>
                        <td class="business_licence column-business_licence" data-colname="营业执照" id="cardImg-<?=$row['user_id']?>">
-                           <?=$row['business_licence']?>
                            <img src="<?=$row['business_licence_url']?>" style="height: 60px;" alt="">
                        </td>
                        <td class="bank_card_num column-bank_card_num" data-colname="银行卡"><?=$row['bank_card_num']?>(<?=$row['opening_bank']?>)</td>
@@ -692,13 +691,13 @@ class Organize{
             $secretary_id = isset($_POST['secretary_id']) ? intval($_POST['secretary_id']) : 0;
             $parent_id = isset($_POST['parent_id']) ? intval($_POST['parent_id']) : 0;
             $match_power = isset($_POST['match_power']) ? $_POST['match_power'] : [];
-            $course_power = isset($_POST['course_power']) ? $_POST['course_power'] : [];
+            $admin_power = isset($_POST['admin_power']) ? $_POST['admin_power'] : [];
 
             if($user_id < 0) $error_msg = '请选择负责人';
             if($zone_type === 0) $error_msg = $error_msg==''?'请选择主体类型':$error_msg.'<br >请选择主体类型';
             if($user_id == $referee_id) $error_msg = $error_msg==''?'推荐人不能为主体账号':$error_msg.'<br >推荐人不能为主体账号';
             if(!is_array($match_power)) $error_msg = $error_msg==''?'赛事权限错误':$error_msg.'<br >赛事权限错误';
-            if(!is_array($course_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
+            if(!is_array($admin_power)) $error_msg = $error_msg==''?'课程权限错误':$error_msg.'<br >课程权限错误';
             if($zone_title == '') $error_msg = $error_msg==''?'请填写主体名称':$error_msg.'<br >请填写主体名称';
             if($zone_address == '') $error_msg = $error_msg==''?'请填写机构地址':$error_msg.'<br >请填写机构地址';
 //            if($business_licence == '') $error_msg = $error_msg==''?'请填写营业执照':$error_msg.'<br >请填写营业执照';
@@ -728,7 +727,7 @@ class Organize{
                     'chairman_id' => $chairman_id,
                     'secretary_id' => $secretary_id,
                     'match_role_id' => join(',',$match_power),
-                    'role_id' => join(',',$course_power),
+                    'role_id' => join(',',$admin_power),
                     'parent_id' => $parent_id,
                 ];
                 //图片
@@ -853,11 +852,11 @@ class Organize{
                         </td>
                     </tr>
                     <tr class="form-field">
-                        <th scope="row">基础权限</th>
-                        <td id="course_power_td">
+                        <th scope="row">管理权限</th>
+                        <td id="admin_power_td">
                             <?php foreach ($allPowerList as $plv){
                                 ?>
-                                <label for="course_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$role_id)?'checked="checked"':''?> id="course_power_<?=$plv['id']?>" type="checkbox" name="course_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
+                                <label for="admin_power_<?=$plv['id']?>"><input <?=in_array($plv['id'],$role_id)?'checked="checked"':''?> id="admin_power_<?=$plv['id']?>" type="checkbox" name="admin_power[]" value="<?=$plv['id']?>"><?=$plv['role_name']?></label>
                             <?php
                             }
                             ?>

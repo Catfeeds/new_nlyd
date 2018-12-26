@@ -88,7 +88,6 @@ class Fission_Ajax
         if(!$zone_meta) wp_send_json_error(['info' => '未找到申请记录!']);
         if($type == 'agree'){//同意申请
             $user_status = 1;
-
             foreach ($zone_meta as $zmv){
                 //主体类型
                 $orgType = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'");
@@ -155,11 +154,9 @@ class Fission_Ajax
         }elseif ($type == 'refuse'){//拒绝申请
             $user_status = -2;
         }else{
+            $wpdb->query('ROLLBACK');
             wp_send_json_error(['info' => '参数错误!']);
         }
-
-
-//        leo_dump($referee_id1);die;
 
 
         //审核时间
