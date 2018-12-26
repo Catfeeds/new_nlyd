@@ -320,30 +320,68 @@ class Fission_Ajax
         //添加收益记录
         foreach ($rows as $row){
             $insertData3 = [
-                'income_type' => 'subject',
-                'user_id' => $row['user_id'],
+                'income_type' => $row['income_type'],
+                'match_id' => $row['match_id'],
                 'created_time' => get_time('mysql'),
             ];
             //直接上级
-
+            if($row['referee_id'] > 0 && $row['referee_income'] != null && $row['referee_income'] != 0){
+                $insertData3['user_income'] = $row['referee_income'];
+                $insertData3['user_id'] = $row['referee_id'];
+                $insertData3['user_type'] = 2;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '直接上级收益添加失败!']);
+                }
+            }
             //间接上级
-
+            if($row['indirect_referee_id'] > 0 && $row['indirect_referee_income'] != null && $row['indirect_referee_income'] != 0){
+                $insertData3['user_income'] = $row['indirect_referee_income'];
+                $insertData3['user_id'] = $row['indirect_referee_id'];
+                $insertData3['user_type'] = 2;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '间接上级收益添加失败!']);
+                }
+            }
             //负责人收益
-
+            if($row['person_liable_id'] > 0 && $row['person_liable_income'] != null && $row['person_liable_income'] != 0){
+                $insertData3['user_income'] = $row['person_liable_income'];
+                $insertData3['user_id'] = $row['person_liable_id'];
+                $insertData3['user_type'] = 2;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '负责人收益添加失败!']);
+                }
+            }
             //主办方收益
-
+            if($row['sponsor_id'] > 0 && $row['sponsor_income'] != null && $row['sponsor_income'] != 0){
+                $insertData3['user_income'] = $row['sponsor_income'];
+                $insertData3['user_id'] = $row['sponsor_id'];
+                $insertData3['user_type'] = 1;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '主办方收益添加失败!']);
+                }
+            }
             //事业员收益
-
-            //添加分成记录
-
-            $bool = $wpdb->insert($wpdb->prefix.'user_income_logs',$insertData3);
-            if(!$bool) {
-                $wpdb->query('ROLLBACK');
-                wp_send_json_error(['info' => '添加收益领取记录失败!']);
+            if($row['manager_id'] > 0 && $row['manager_income'] != null && $row['manager_income'] != 0){
+                $insertData3['user_income'] = $row['manager_income'];
+                $insertData3['user_id'] = $row['manager_id'];
+                $insertData3['user_type'] = 2;
+                $stream_logs_bool = $wpdb->insert($wpdb->prefix.'user_stream_logs',$insertData3);
+                if(!$stream_logs_bool){
+                    $wpdb->query('ROLLBACK');
+                    wp_send_json_error(['info' => '事业员收益添加失败!']);
+                }
             }
         }
-        if($bool) wp_send_json_success(['info' => '修改成功!']);
-        else wp_send_json_error(['info' => '修改失败!']);
+        $wpdb->query('COMMIT');
+        wp_send_json_success(['info' => '修改成功!']);
     }
 }
 

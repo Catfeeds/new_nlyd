@@ -407,8 +407,6 @@ if(!function_exists('getSpreadCategory')){
                 'apply_center' => '成为分中心',
                 'apply_match' => '成为赛区',
                 'apply_zone' => '成为机构',
-                'apply_trains' => '成为脑力训练中心',
-                'apply_test' => '成为脑力水平测评中心',
             );
         if(!empty($key)){
             return $arr[$key];
