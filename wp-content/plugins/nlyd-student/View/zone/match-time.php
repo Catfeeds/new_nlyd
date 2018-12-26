@@ -58,7 +58,8 @@ jQuery(function($) {
     var match_id=$.Request('match_id');
     function judgFailTime(startTime,interval) {
         var time = new Date(startTime.replace("-","/"));
-        time.setMinutes(time.getMinutes() + interval, time.getSeconds(), 0);
+        var _Minutes=parseInt(time.getMinutes()) + parseInt(interval);
+        time.setMinutes(_Minutes,0, 0);
         return time;
     }
     layui.use('layer', function(){
