@@ -36,7 +36,7 @@
 			var _this = this;
 			_this.keyMap = config.keyMap ? config.keyMap : {id:'id', value:'value', childs:'childs'};
 			_this.checkDataType();
-			_this.renderWheels(_this.wheelsData, config.cancelBtnText, config.ensureBtnText);
+			_this.renderWheels(_this.wheelsData, config.cancelBtnText, config.ensureBtnText,config.new_title);
 			_this.trigger = document.querySelector(config.trigger);
 			if(!_this.trigger){
 				console.error('mobileSelect has been successfully installed, but no trigger found on your page.');
@@ -64,7 +64,7 @@
 			_this.checkIsPC();
 			_this.checkCascade();
 			_this.addListenerAll();
-
+			_this.new_title=config.new_title || [];
 			if (_this.cascade) {
 				_this.initCascade();
 			}
@@ -182,12 +182,26 @@
 			}
 	    },
 
-		renderWheels: function(wheelsData, cancelBtnText, ensureBtnText){
+		renderWheels: function(wheelsData, cancelBtnText, ensureBtnText,newTitle){
 			var _this = this;
 			var cancelText = cancelBtnText ? cancelBtnText : _mobileSelect.cancel;
 			var ensureText = ensureBtnText ? ensureBtnText : _mobileSelect.sure;
 			_this.mobileSelect = document.createElement("div");
 			_this.mobileSelect.className = "mobileSelect";
+			var newTitleDom="";
+			var _title="";
+			// console.log(newTitle)
+			if(newTitle && newTitle.length>0){
+				for(var x=0;x<newTitle.length;x++){
+					var item='<div class="flex1 ta_c c_blue">'+newTitle[x]+'</div>'
+					newTitleDom+=item;
+				}
+				_title='<div class="flex-h fixWidth" style="z-index:1;background:#fff">'+
+						newTitleDom+
+						'</div>'
+				
+			}
+			
 			_this.mobileSelect.innerHTML =
 		    	'<div class="grayLayer"></div>'+
 		        '<div class="content">'+
@@ -196,7 +210,7 @@
 		                    '<div class="cancel">'+ cancelText +'</div>'+
 		                    '<div class="title"></div>'+
 		                    '<div class="ensure">'+ ensureText +'</div>'+
-		                '</div>'+
+						'</div>'+_title+
 		            '</div>'+
 		            '<div class="panel">'+
 		                '<div class="fixWidth">'+
@@ -210,7 +224,6 @@
 		    document.body.appendChild(_this.mobileSelect);
 
 			//根据数据长度来渲染
-
 			var tempHTML='';
 			for(var i=0; i<wheelsData.length; i++){
 			//列

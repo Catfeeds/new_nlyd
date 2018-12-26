@@ -149,4 +149,9 @@
   .mobileSelect-show .content {
     bottom: 0;
   }
+  .mobile_new_title{
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
   

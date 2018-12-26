@@ -122,7 +122,6 @@ jQuery(function($) {
         })
 });
 
-
     $('.match_date').each(function(_index){
         var _this=$(this);
         var title="<?=__('开赛日期', 'nlyd-student')?>";
@@ -133,20 +132,19 @@ jQuery(function($) {
         if(!_this.hasClass('add_new_lun') && data_time && data_time.length>0){
             var timeValue=data_time.split(',');
             $.each($.validationLayui.dates2,function(index,value){
-                if(timeValue[0]==value.value+""){
+                if(parseInt(timeValue[0])==parseInt(value.value)){
                     posiotion_match_date[_index]=[index,0,0,0,0];
                     $.each(value.childs,function(i,v){
-                        if(timeValue[1]==v.value+""){
+                        if(parseInt(timeValue[1])==parseInt(v.value)){
                             posiotion_match_date[_index]=[index,i,0,0,0];
                             $.each(v.childs,function(j,val){
-                                if(timeValue[2]==val.value+""){
+                                if(parseInt(timeValue[2])==parseInt(val.value)){
                                     posiotion_match_date[_index]=[index,i,j,0,0];
-                                    
                                     $.each(val.childs,function(k,b){
-                                        if(timeValue[3]==b.value+""){
+                                        if(parseInt(timeValue[3])==parseInt(b.value)){
                                             posiotion_match_date[_index]=[index,i,j,k,0];
                                             $.each(b.childs,function(l,c){
-                                                if(timeValue[4]==c.value+""){
+                                                if(parseInt(timeValue[4])==parseInt(c.value)){
                                                     posiotion_match_date[_index]=[index,i,j,k,l];
                                                 }
                                             })
@@ -168,6 +166,7 @@ jQuery(function($) {
                 {data: match_date_Data}
             ],
             triggerDisplayData:false,
+            new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
             position: posiotion_match_date[_index], //初始化定位 打开时默认选中的哪个 如果不填默认为0
             transitionEnd:function(indexArr, data){
 
