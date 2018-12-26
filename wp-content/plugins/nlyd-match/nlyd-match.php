@@ -162,7 +162,9 @@ if(!class_exists('MatchController')){
         //为后台form表单添加class
         public function add_footer_scripts(){ ?>
             <script>
-                document.getElementById('post').classList.add('layui-form');
+                if(document.getElementById('post')){
+                    document.getElementById('post').classList.add('layui-form');
+                }
                 //console.log(document.getElementById('post'));
             </script>
         <?php }

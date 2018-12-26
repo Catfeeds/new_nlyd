@@ -397,6 +397,26 @@ class Fission_Ajax
         if($bool) wp_send_json_success(['info' => '确认成功']);
         else wp_send_json_error(['info' => '确认失败']);
     }
+
+    /**
+     * 删除主体类型
+     */
+    public function delZoneType(){
+        $ids = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if($ids == '') wp_send_json_error(['info' => '参数错误!']);
+        //查询需要修改的数据
+        global $wpdb;
+        $rows = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_type WHERE id IN({$ids})", ARRAY_A);
+        if(!$rows) wp_send_json_error(['info' => '无可删除数据']);
+        //是否有主体,有主体的类型不可删除
+        $organize = $wpdb->get_row("SELECT id FROM {$wpdb->prefix}zone_meta WHERE type_id IN({$ids})");
+        if($organize) wp_send_json_error(['info' => '当前选择的类型中已有主体存在! 不可删除']);
+
+        //删除
+        $bool = $wpdb->query("DELETE FROM {$wpdb->prefix}zone_type WHERE id IN({$ids})");
+        if($bool) wp_send_json_success(['info' => '删除成功!']);
+        else wp_send_json_error(['info' => '删除失败!']);
+    }
 }
 
 new Fission_Ajax();

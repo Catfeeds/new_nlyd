@@ -23,8 +23,8 @@ class Spread{
             $role = 'profit_user_log';//权限名
             $wp_roles->add_cap('administrator', $role);
 
-            $role = 'profit_extract_log';//权限名
-            $wp_roles->add_cap('administrator', $role);
+//            $role = 'profit_extract_log';//权限名
+//            $wp_roles->add_cap('administrator', $role);
 
             $role = 'profit_match_log';//权限名
             $wp_roles->add_cap('administrator', $role);
@@ -34,7 +34,7 @@ class Spread{
         add_submenu_page('fission','用户分成记录','用户分成记录','profit_log','fission-profit-log',array($this,'profitLog'));
         add_submenu_page('fission','赛事分成记录','赛事分成记录','profit_match_log','fission-profit-match-log',array($this,'profitMatchLog'));
         add_submenu_page('fission','用户收益流水','用户收益流水','profit_user_log','fission-profit-user-log',array($this,'profitUserLog'));
-        add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
+//        add_submenu_page('fission','提现记录','提现记录','profit_extract_log','fission-profit-extract-log',array($this,'profitExtractLog'));
     }
 
     /**
@@ -601,7 +601,7 @@ class Spread{
         $start = ($page-1)*$pageSize;
         $where = "WHERE 1=1";
         if($searchStr != ''){
-            $where .= " AND (p.post_title LIKE '%{$searchStr}%' OR um.meta_value LIKE '%{$searchStr}%')";
+            $where .= " AND (p.post_title LIKE '%{$searchStr}%')";
         }
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 SUM(il.referee_income) AS referee_income,SUM(il.indirect_referee_income) AS indirect_referee_income,
@@ -635,8 +635,8 @@ class Spread{
             <h2 class="screen-reader-text">过滤列表</h2>
             <p class="search-box">
                 <label class="screen-reader-text" for="user-search-input">搜索用户:</label>
-                <input type="search" id="search_val" name="search_val" placeholder="付款人/项目" value="<?=$searchStr?>">
-                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
+                <input type="search" id="search_val" name="search_val" placeholder="赛事/考级名称" value="<?=$searchStr?>">
+                <input type="button" id="" class="button" onclick="window.location.href='<?=admin_url('admin.php?page=fission-profit-match-log&s=')?>'+document.getElementById('search_val').value" value="搜索用户">
             </p>
             <input type="hidden" id="_wpnonce" name="_wpnonce" value="e7103a7740"><input type="hidden" name="_wp_http_referer" value="/nlyd/wp-admin/users.php">
             <div class="tablenav top">
