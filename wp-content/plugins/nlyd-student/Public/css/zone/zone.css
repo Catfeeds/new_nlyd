@@ -40,6 +40,9 @@
 ._relative{
     position: relative;
 }
+.dis_none{
+    display: none;
+}
 /* .apply{
     margin-top: 10px;
     background-color: #fff;
@@ -154,6 +157,9 @@
 }
 .bg_reduce{
     background-position: -267px 1px;
+}
+.bg_data{
+    background-position: -295px 1px;
 }
 .select_box{
     position: absolute;
@@ -741,4 +747,54 @@ input[type="text"].coach_form_input{
 .teamApply_row_btns{
     display: inline-block;
     vertical-align: middle;
+}
+
+.data_item{
+    padding: 22px 0;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(178, 178, 178, 0.8);
+    width: -webkit-calc(50% - 5px);
+    float: left;
+    margin-bottom: 15px;
+    background: #fff;
+    position: relative;
+}
+.active.data_item{
+    background: -webkit-linear-gradient(9deg,#89D25F,#53B239);
+    background: -o-linear-gradient(9deg,#89D25F,#53B239);
+    background: -moz-linear-gradient(9deg,#89D25F,#53B239);
+    background: linear-gradient(9deg,#89D25F,#53B239);
+}
+.active.data_item .data_num,
+.active.data_item .data_detail{
+    color: #fff;
+}
+
+.data_item_wrapper .data_item:nth-child(odd){
+    margin-right: 10px;
+}
+.data_num{
+    margin-bottom: 10px;
+    color: #262626;
+    text-align: center;
+}
+.data_detail{
+    text-align: center;
+    color: #2484FE;
+}
+.data_tag{
+    position: absolute;
+    top: 0;
+    right: 15px;
+    background: -webkit-linear-gradient(90deg,#89D25F,#53B239);
+    background: -o-linear-gradient(90deg,#89D25F,#53B239);
+    background: -moz-linear-gradient(90deg,#89D25F,#53B239);
+    background: linear-gradient(90deg,#89D25F,#53B239);
+}
+.kailong{
+    width: 0;
+    height: 0;
+    border-right: 16px solid transparent;
+    border-left: 16px solid transparent;
+    border-bottom: 3px solid white;
 }

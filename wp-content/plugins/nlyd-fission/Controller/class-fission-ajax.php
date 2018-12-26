@@ -303,11 +303,10 @@ class Fission_Ajax
 
         global $wpdb;
         //获取数据
-        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type NOT IN ('match','grading') AND id IN({$id})", ARRAY_A);
-
+        $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1", ARRAY_A);
         if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
         $wpdb->query('START TRANSACTION');
-        $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status='{$status}' WHERE income_type NOT IN ('match','grading') AND id IN({$id})";
+        $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status='{$status}' WHERE income_type NOT IN ('match','grading') AND id IN({$id}) AND income_status=1";
         $bool = $wpdb->query($sql);
 //        echo $wpdb->last_query;
         if(!$bool) {
@@ -379,6 +378,24 @@ class Fission_Ajax
         }
         $wpdb->query('COMMIT');
         wp_send_json_success(['info' => '修改成功!']);
+    }
+
+    /**
+     * 修改赛事考级收益记录确认状态
+     */
+    public function updateMatchIncomeLogsStatus(){
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        $match_id = isset($_POST['id']) ? trim($_POST['id']) : '';
+        if($status !== 2 || $match_id == '') wp_send_json_error(['info' => '参数错误!']);
+
+        global $wpdb;
+        //获取数据
+        $rows = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}user_income_logs WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1 LIMIT 1", ARRAY_A);
+        if(!$rows) wp_send_json_error(['info' => '无待确认数据!']);
+        $sql = "UPDATE {$wpdb->prefix}user_income_logs SET income_status=2 WHERE income_type IN ('match','grading') AND match_id IN({$match_id}) AND income_status=1";
+        $bool = $wpdb->query($sql);
+        if($bool) wp_send_json_success(['info' => '确认成功']);
+        else wp_send_json_error(['info' => '确认失败']);
     }
 }
 
