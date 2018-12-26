@@ -97,7 +97,7 @@ if($('#match_type1').val().length>0 && $('#match_type1').val()){
 }
 var mobileSelect1 = new MobileSelect({
     trigger: '#match_type1',
-    title: '<?=__('比赛场景', 'nlyd-student')?>',
+    title: "<?=__('比赛场景', 'nlyd-student')?>",
     wheels: [
         {data: match_type1_Data}
     ],
@@ -106,8 +106,26 @@ var mobileSelect1 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
+       
         $('#match_type1').val(data[0]['value']);
         $('#match_scene').val(data[0]['id']);
+        var post_data={
+            action:'get_match_cost',
+            type:data[0]['role_alias']
+        }
+        console.log(post_data)
+        $.ajax({
+            data: post_data,
+            success: function(res, textStatus, jqXHR){
+               console.log(res)
+             
+            },
+            complete: function(jqXHR, textStatus){
+                if(textStatus=='timeout'){
+                    $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
+        　　　　 }
+            }
+        })
        
     }
 });
@@ -122,7 +140,7 @@ if($('#match_type2').val().length>0 && $('#match_type2').val()){
 }
 var mobileSelect2 = new MobileSelect({
     trigger: '#match_type2',
-    title: '<?=__('比赛类型', 'nlyd-student')?>',
+    title: "<?=__('比赛类型', 'nlyd-student')?>",
     wheels: [
         {data: match_type2_Data}
     ],
@@ -133,7 +151,6 @@ var mobileSelect2 = new MobileSelect({
     callback:function(indexArr, data){
         $('#match_type2').val(data[0]['value']);
         $('#match_genre').val(data[0]['id']);
-       
     }
 });
 //---------------------------开赛日期------------------------------
@@ -167,7 +184,7 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time').length>0){
 }
 var mobileSelect3 = new MobileSelect({
     trigger: '#match_date',
-    title: '<?=__('开赛日期', 'nlyd-student')?>',
+    title: "<?=__('开赛日期', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
