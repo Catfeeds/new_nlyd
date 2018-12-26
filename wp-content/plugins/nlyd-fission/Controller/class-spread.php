@@ -585,10 +585,12 @@ class Spread{
         $rows = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS 
                 SUM(il.referee_income) AS referee_income,SUM(il.indirect_referee_income) AS indirect_referee_income,
                 SUM(il.person_liable_income) AS person_liable_income,SUM(il.sponsor_income) AS sponsor_income,SUM(il.manager_income) AS manager_income,
-                il.income_status,p.post_title
+                il.income_status,p.post_title,il.match_id,gm.grading_id 
                 FROM {$wpdb->prefix}user_income_logs AS il 
                 LEFT JOIN `{$wpdb->posts}` AS p ON p.ID=il.match_id 
-                {$where} AND il.income_type IN('match','grading')
+                LEFT JOIN `{$wpdb->prefix}match_meta_new` AS mmn ON il.match_id=mmn.match_id 
+                LEFT JOIN `{$wpdb->prefix}grading_meta` AS gm ON il.match_id=gm.grading_id 
+                {$where} AND il.income_type IN('match','grading') AND (mmn.match_status=-3 OR gm.status=-3)
                 GROUP BY p.ID
                 LIMIT {$start},{$pageSize}",ARRAY_A);
 //        leo_dump($rows);
@@ -622,8 +624,7 @@ class Spread{
                     <label for="bulk-action-selector-top" class="screen-reader-text">选择批量操作</label>
                     <select name="action" id="bulk-action-selector-top">
                         <option value="-1">批量操作</option>
-                        <option value="2">改为待确认</option>
-                        <option value="1">改为已确认</option>
+                        <option value="2">改为已确认</option>
                     </select>
                     <input type="button" id="doaction" class="button action all_options" value="应用">
                 </div>
@@ -655,10 +656,10 @@ class Spread{
                 <?php
                 foreach ($rows as $row){
                     ?>
-                    <tr data-id="<?=$row['id']?>">
+                    <tr data-id="<?=$row['match_id']?>">
                         <th scope="row" class="check-column">
                             <label class="screen-reader-text" for="cb-select-407">选择<?=$row['post_title']?></label>
-                            <input id="cb-select-<?=$row['id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['id']?>">
+                            <input id="cb-select-<?=$row['match_id']?>" class="check_list" type="checkbox" name="post[]" value="<?=$row['match_id']?>">
                             <div class="locked-indicator">
                                 <span class="locked-indicator-icon" aria-hidden="true"></span>
                                 <span class="screen-reader-text">“<?=$row['post_title']?>”已被锁定</span>
@@ -702,10 +703,9 @@ class Spread{
                             <?=$row['income_status'] == '1'?'待确认':'已确认'?>
                         </td>
                         <td class="options1 column-options1" data-colname="操作">
-                            <?php if(1==2){ ?>
-                                <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':'<a href="javascript:;" class="update_status" data-status="1">改为待确认</a>'?>
 
-                            <?php } ?>
+                                <?=$row['income_status'] == '1'?'<a href="javascript:;" class="update_status" data-status="2">改为已确认</a>':''?>
+
                        </td>
                     </tr>
                     <?php
@@ -734,8 +734,7 @@ class Spread{
                     <label for="bulk-action-selector-bottom" class="screen-reader-text">选择批量操作</label>
                     <select name="action2" id="bulk-action-selector-bottom">
                         <option value="-1">批量操作</option>
-                        <option value="2">改为待确认</option>
-                        <option value="1">改为已确认</option>
+                        <option value="2">改为已确认</option>
                     </select>
                     <input type="button" id="doaction2" class="button action all_options" value="应用">
                 </div>
@@ -767,11 +766,11 @@ class Spread{
                         postAjax(status,_id);
                     });
                     function postAjax(status,_id) {
-                        if(status != '1' && status != '2') return false;
+                        if(status != '2') return false;
                         if(_id == '' || _id == undefined) return false;
                         $.ajax({
                             url : ajaxurl,
-                            data : {'action':'updateIncomeLogsStatus', 'status':status,'id':_id},
+                            data : {'action':'updateMatchIncomeLogsStatus', 'status':status,'id':_id},
                             dataType : 'json',
                             type : 'post',
                             success : function (response) {
