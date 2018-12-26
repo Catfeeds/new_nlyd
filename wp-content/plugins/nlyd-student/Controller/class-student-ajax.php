@@ -4705,7 +4705,7 @@ class Student_Ajax
         $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
         $match_cost = $wpdb->get_var($set_sql);
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
-        return $match_cost;
+        wp_send_json_success($match_cost);
     }
 
     /**
@@ -4718,11 +4718,15 @@ class Student_Ajax
         switch ($_POST['match_type']){
             case 'match':
                 //print_r($_POST);die;
-                //获取比赛状态
-                //$wpdb->get_var("select from ");
+                //获取报名截止时间
+                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ");
+
                 foreach ($_POST['data'] as $k => $v){
                     if($v['id'] > 0){
-
+                        //print_r($entry_end_time.'===='.$v['start_time']);
+                        if( strtotime($entry_end_time) >= strtotime($v['start_time']) ){
+                            wp_send_json_error(array('info'=>_('每轮项目开赛时间必须大于报名截止时间')));
+                        }
                         $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time'],$v['id']);
                         if(!empty($result)){
                             wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
@@ -4738,6 +4742,12 @@ class Student_Ajax
                         'revise_time'=>get_time('mysql'),
                     );
                     $wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
+                }
+                if(!empty($_POST['project_id'])){
+                    foreach ($_POST['project_id'] as $y ){
+                        //重新排序
+                        $this->project_sort($_POST['match_id'],$y);
+                    }
                 }
                 break;
             case 'grading':
@@ -4764,9 +4774,10 @@ class Student_Ajax
             case 'match':
 
                 //获取报名截止时间
-                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_match_meta_new where match_id = {$_POST['match_id']}");
-                if($entry_end_time > $_POST['start_time']){
-                    wp_send_json_error(array('info'=>_('项目开始时间不能小于报名截止时间')));
+                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']}");
+                //print_r($entry_end_time);die;
+                if( strtotime($entry_end_time) >= strtotime($_POST['start_time']) ){
+                    wp_send_json_error(array('info'=>_('每轮项目开赛时间必须大于报名截止时间')));
                 }
                 //获取已有的比赛列表
                 $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
@@ -4794,6 +4805,8 @@ class Student_Ajax
                     );
                     //print_r($insert);
                     $res = $wpdb->insert($wpdb->prefix . 'match_project_more', $insert);
+                    //对当前项目进行重新排序
+                    $this->project_sort($_POST['match_id'],$_POST['project_id']);
                 }
                 break;
             case 'grading':
@@ -4821,7 +4834,13 @@ class Student_Ajax
         }
         switch ($_POST['match_type']) {
             case 'match':
-                $res = $wpdb->delete($wpdb->prefix . 'match_project_more', array('id'=>$_POST['id'],'created_id'=>$current_user->ID));
+                $row = $wpdb->get_row("select * from {$wpdb->prefix}match_project_more where id={$_POST['id']} ",ARRAY_A);
+                //print_r($row);die;
+
+                $res = $wpdb->delete($wpdb->prefix . 'match_project_more', array('id'=>$_POST['id']));
+
+                //对当前项目进行重新排序
+                $this->project_sort($row['match_id'],$row['project_id']);
                 break;
             case 'grading':
 
@@ -4837,6 +4856,20 @@ class Student_Ajax
         wp_send_json_error(array('info'=>_('删除失败')));
     }
 
+    /**
+    * 轮数重新排序
+    */
+    public function project_sort($match_id,$project_id){
+        global $wpdb;
+        $projects = $wpdb->get_results("select * from {$wpdb->prefix}match_project_more where match_id = {$match_id} and project_id = {$project_id} order by start_time asc",ARRAY_A);
+        if(!empty($projects)){
+            foreach ($projects as $k => $v){
+                ///print_r($v);
+                $wpdb->update($wpdb->prefix.'match_project_more',array('more'=>$k+1),array('id'=>$v['id']));
+            }
+        }
+        //print_r($projects);die;
+    }
 
     /**
      * 获取机构发布的比赛
