@@ -91,7 +91,7 @@ class Fission_Ajax
             foreach ($zone_meta as $zmv){
                 //主体类型
                 $orgType = $wpdb->get_var("SELECT zone_type_alias FROM {$wpdb->prefix}zone_type WHERE id='{$zmv['type_id']}'");
-                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='apply_{$orgType}' AND spread_status=1", ARRAY_A);
+                $spread_set = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE spread_type='{$orgType}' AND spread_status=1", ARRAY_A);
                 if($spread_set){
                     //添加上级收益
                     //获取一级上级
@@ -201,7 +201,7 @@ class Fission_Ajax
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         if($id < 1) wp_send_json_error(['info' => '参数错误!']);
         global $wpdb;
-        $sql = "DELETE FROM {$wpdb->prefix}spread_set WHERE id='{$id}' OR parent_id='{$id}'";
+        $sql = "DELETE FROM {$wpdb->prefix}spread_set WHERE id='{$id}'";
         $bool = $wpdb->query($sql);
         if($bool) wp_send_json_success(['info'=>'删除成功!']);
         else wp_send_json_error(['info' => '删除失败!']);

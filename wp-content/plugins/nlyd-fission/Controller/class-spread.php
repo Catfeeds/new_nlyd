@@ -43,7 +43,7 @@ class Spread{
     public function profitSet(){
         global $wpdb;
         $rows = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}spread_set", ARRAY_A);
-        $spreadCategoryArr = getSpreadCategory();
+
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline">收益设置列表</h1>
@@ -82,23 +82,23 @@ class Spread{
                     ?>
                         <tr data-id="<?=$row['id']?>">
                             <th scope="row" class="check-column">
-                                <label class="screen-reader-text" for="cb-select-407">选择<?=$spreadCategoryArr[$row['spread_type']]?></label>
+                                <label class="screen-reader-text" for="cb-select-407">选择<?=$row['spread_name']?></label>
                                 <input id="cb-select-<?=$row['id']?>" type="checkbox" name="post[]" value="<?=$row['id']?>">
                                 <div class="locked-indicator">
                                     <span class="locked-indicator-icon" aria-hidden="true"></span>
-                                    <span class="screen-reader-text">“<?=$spreadCategoryArr[$row['spread_type']]?>”已被锁定</span>
+                                    <span class="screen-reader-text">“<?=$row['spread_name']?>”已被锁定</span>
                                 </div>
                             </th>
                             <td class="name column-name has-row-actions column-primary" data-colname="名称">
-                                <?=$spreadCategoryArr[$row['spread_type']]?>
+                                <?=$row['spread_name']?>
                                 <br>
                                 <button type="button" class="toggle-row"><span class="screen-reader-text">显示详情</span></button>
                             </td>
                             <td class="direct_superior column-direct_superior" data-colname="直接上级">
-                                <?=$row['direct_superior']?>
+                                <?=$row['pay_amount']?>
                             </td>
                             <td class="pay_amount column-pay_amount" data-colname="支付金额">
-                                <?=$row['pay_amount']?>
+                                <?=$row['direct_superior']?>
                             </td>
                             <td class="indirect_superior column-indirect_superior" data-colname="间接上级">
                                 <?=$row['indirect_superior']?>
@@ -214,10 +214,14 @@ class Spread{
             $mechanism = isset($_POST['mechanism']) ? trim($_POST['mechanism']) : '';
             $spread_status = isset($_POST['spread_status']) ? intval($_POST['spread_status']) : '';
             $pay_amount = isset($_POST['pay_amount']) ? intval($_POST['pay_amount']) : '';
+            $spread_arr = explode('_',$spread_type);
+            $spread_type = $spread_arr[0];
+            $spread_name = $spread_arr[1];
             if($spread_status !== 1 && $spread_status !== 2) $error_msg = '请选择状态!';
             if($error_msg == ''){
                 $insertData = [
                     'pay_amount' => $pay_amount,
+                    'spread_name' => $spread_name,
                     'spread_type' => $spread_type,
                     'direct_superior' => $direct_superior,
                     'indirect_superior' => $indirect_superior,
@@ -245,6 +249,23 @@ class Spread{
         if($id > 0){
             $row = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}spread_set WHERE id='{$id}'", ARRAY_A);
         }
+        //获取主体类型
+        $organizeList = $wpdb->get_results("SELECT zone_type_name,zone_type_alias FROM {$wpdb->prefix}zone_type WHERE zone_type_status=1", ARRAY_A);
+        //获取比赛权限类型
+        $zoneMatchRoleList = $wpdb->get_results("SELECT role_name,role_alias FROM {$wpdb->prefix}zone_match_role", ARRAY_A);
+        $spreadCategory = getSpreadCategory();
+        foreach ($organizeList as $olv){
+            $spreadCategory[$olv['zone_type_alias']] = '升级'.$olv['zone_type_name'];
+        }
+        foreach ($zoneMatchRoleList as $zmrlv){
+            $spreadCategory[$zmrlv['role_alias']] = $zmrlv['role_name'];
+        }
+        //=..去除已有类型
+        $oldList = $wpdb->get_results("SELECT spread_type FROM {$wpdb->prefix}spread_set", ARRAY_A);
+        foreach ($oldList as $oldv){
+            if(isset($spreadCategory[$oldv['spread_type']])) unset($spreadCategory[$oldv['spread_type']]);
+        }
+//        leo_dump($spreadCategory);die;
         ?>
         <div class="wrap">
             <h1 id="add-new-user">添加/编辑分成项</h1>
@@ -262,8 +283,8 @@ class Spread{
                         <th scope="row"><label for="spread_type">支付类别 </label></th>
                         <td>
                             <select name="spread_type" id="spread_type">
-                                <?php foreach (getSpreadCategory() as $sck => $scv){ ?>
-                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck?>"><?=$scv?></option>
+                                <?php foreach ($spreadCategory as $sck => $scv){ ?>
+                                    <option <?=isset($row) && $row['spread_type'] == $sck?'selected="selected"':''?> value="<?=$sck.'_'.$scv?>"><?=$scv?></option>
                                 <?php } ?>
                             </select>
                         </td>
@@ -320,7 +341,7 @@ class Spread{
                     <tr class="">
                         <th scope="row"><label for="spread_status">状态</label></th>
                         <td>
-                            <label for="spread_status_1"><input type="radio" <?=isset($row) && $row['spread_status'] == '1' ? 'checked="checked"': ''?> name="spread_status" id="spread_status_1" value="1">正常</label>
+                            <label for="spread_status_1"><input type="radio" <?=!isset($row) || $row['spread_status'] == '1' ? 'checked="checked"': ''?> name="spread_status" id="spread_status_1" value="1">正常</label>
                             <label for="spread_status_2"><input type="radio" <?=isset($row) && $row['spread_status'] == '2' ? 'checked="checked"': ''?> name="spread_status" id="spread_status_2" value="2">禁用</label>
                         </td>
                     </tr>
