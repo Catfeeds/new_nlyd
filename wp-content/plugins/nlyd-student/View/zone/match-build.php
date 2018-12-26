@@ -43,7 +43,7 @@
                         </div>
                         <div>
                             <div class="lable_row"><span class="c_black"><?=__('比赛费用', 'nlyd-student')?>：</span></div>
-                            <div class="input_row"><input class="radius_input_row" disabled type="text" name="match_cost" value="<?=$match['match_cost'] > 0 ? $match['match_cost'] : $match_cost?>"></div>
+                            <div class="input_row"><input class="radius_input_row" disabled type="text" id="match_cost" name="match_cost" value="<?=$match['match_cost'] > 0 ? $match['match_cost'] : $match_cost?>"></div>
                         </div>
                         <?php if(!empty($match['entry_end_time'])):?>
                             <div>
@@ -118,8 +118,9 @@ var mobileSelect1 = new MobileSelect({
             $.ajax({
                 data: post_data,
                 success: function(res, textStatus, jqXHR){//获取比赛费用
-                console.log(res)
-                
+                    if(res.data){
+                        $('#match_cost').val(res.data)
+                    }
                 },
                 complete: function(jqXHR, textStatus){
                     if(textStatus=='timeout'){
