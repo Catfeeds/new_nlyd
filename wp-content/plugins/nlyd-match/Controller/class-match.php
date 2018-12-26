@@ -1144,7 +1144,7 @@ class Match
                         when 2 then '进行中'
                         end status_cn,
                         date_format(start_time, '%Y-%m-%d %H:%i') start_time_format,date_format(end_time, '%Y-%m-%d %H:%i') end_time_format 
-                        from {$wpdb->prefix}match_project_more where match_id = {$posts->ID} and project_id = {$k}";
+                        from {$wpdb->prefix}match_project_more where match_id = {$posts->ID} and project_id = {$k} order by start_time asc";
                 $rows = $wpdb->get_results($sql,ARRAY_A);
                 $total = count($rows);
                 //print_r($rows);
