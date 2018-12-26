@@ -126,7 +126,7 @@ var mobileSelect2 = new MobileSelect({
 //---------------------------考级日期------------------------------
 if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_date').attr('data-time').length>0){
     var timeValue=$('#match_date').attr('data-time').split('-');
-    $.each($.validationLayui.dates2,function(index,value){
+    $.each(match_date_Data,function(index,value){
         if(timeValue[0]==value.value){
             $.each(value.childs,function(i,v){
                 if(timeValue[1]==v.value){
@@ -150,10 +150,11 @@ if($('#match_date').length>0 && $('#match_date').attr('data-time') && $('#match_
 }
 var mobileSelect3 = new MobileSelect({
     trigger: '#match_date',
-    title: '<?=__('考级日期', 'nlyd-student')?>',
+    title: "<?=__('考级日期', 'nlyd-student')?>",
     wheels: [
         {data: match_date_Data}
     ],
+    new_title:['年','月','日','时','分'],
     position:posiotion_match_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
     transitionEnd:function(indexArr, data){
         // console.log(data);

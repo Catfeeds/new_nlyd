@@ -1,4 +1,10 @@
-
+<style>
+@media screen and (max-width: 1199px){
+    .detail-content-wrapper{
+        background: #fff;
+    }
+}
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <?php

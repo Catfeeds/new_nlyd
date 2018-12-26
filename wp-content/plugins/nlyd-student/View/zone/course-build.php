@@ -116,7 +116,7 @@ jQuery(function($) {
     }
     var mobileSelect1 = new MobileSelect({
         trigger: '#course_type1',
-        title: '<?=__('课程类型', 'nlyd-student')?>',
+        title: "<?=__('课程类型', 'nlyd-student')?>",
         wheels: [
             {data: course_type1_Data}
         ],
@@ -141,7 +141,7 @@ jQuery(function($) {
     }
     var mobileSelect2 = new MobileSelect({
         trigger: '#course_type2',
-        title: '<?=__('教学类型', 'nlyd-student')?>',
+        title: "<?=__('教学类型', 'nlyd-student')?>",
         wheels: [
             {data: course_type2_Data}
         ],
@@ -158,7 +158,7 @@ jQuery(function($) {
     //---------------------------开课日期------------------------------
     if($('#course_start_date').length>0 && $('#course_start_date').attr('data-time') && $('#course_start_date').attr('data-time').length>0){
         var timeValue=$('#course_start_date').attr('data-time').split('-');
-        $.each($.validationLayui.dates2,function(index,value){
+        $.each(course_date_Data,function(index,value){
             if(timeValue[0]==value.value+""){
                 posiotion_course_date=[index,0,0,0,0];
                 $.each(value.childs,function(i,v){
@@ -190,6 +190,7 @@ jQuery(function($) {
         wheels: [
             {data: course_date_Data}
         ],
+        new_title:['年','月','日','时','分'],
         position:posiotion_course_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
         transitionEnd:function(indexArr, data){
             // console.log(data);
@@ -206,7 +207,7 @@ jQuery(function($) {
     //---------------------------结课日期------------------------------
     if($('#course_end_date').length>0 && $('#course_end_date').attr('data-time') && $('#course_end_date').attr('data-time').length>0){
         var timeValue=$('#course_end_date').attr('data-time').split('-');
-        $.each($.validationLayui.dates2,function(index,value){
+        $.each(course_date_Data,function(index,value){
             if(timeValue[0]==value.value+""){
                 posiotion_course_end_date=[index,0,0,0,0];
                 $.each(value.childs,function(i,v){
@@ -238,6 +239,7 @@ jQuery(function($) {
         wheels: [
             {data: course_date_Data}
         ],
+        new_title:['年','月','日','时','分'],
         position:posiotion_course_end_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
         transitionEnd:function(indexArr, data){
             // console.log(data);

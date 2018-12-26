@@ -164,25 +164,6 @@
 <input type="hidden" name="_wpnonce" id="inputImg" value="<?=wp_create_nonce('student_saveInfo_code_nonce');?>">
 <script>
 jQuery(document).ready(function($) {
-        // sendloginAjax=function(formData){
-        //     $.ajax({
-        //         data: formData,
-        //         success: function(data, textStatus, jqXHR){
-        //             $.alerts(data.data.info)
-        //             return false;
-        //         }
-        //     });
-        // }
-        // layui.use(['form'], function(){
-        //     var form = layui.form
-        //     form.render();
-        //     // 自定义验证规则
-        //     form.verify($.validationLayui.allRules);
-        //     form.on('submit(nicenameFormBtn)', function(data){//昵称
-        //         sendloginAjax(data.field)
-        //         return false;
-        //     });
-        // });
         $("input[name='meta_val[real_ID]']").keyup(function(){//身份证号码输入框失焦事件
             var _this=$(this)
             var value=_this.val();
@@ -212,11 +193,11 @@ jQuery(document).ready(function($) {
         // })
         //模拟手机下拉列表，选择证件类型
         var certificationSelectData= [
-            {key:'sf',value:'<?=__('身份证', 'nlyd-student')?>'},
-            {key:'jg',value:'<?=__('军官证', 'nlyd-student')?>'},
-            {key:'hz',value:'<?=__('护照', 'nlyd-student')?>'},
-            {key:'tb',value:'<?=__('台胞证', 'nlyd-student')?>'},
-            {key:'ga',value:'<?=__('港澳证', 'nlyd-student')?>'},
+            {key:'sf',value:"<?=__('身份证', 'nlyd-student')?>"},
+            {key:'jg',value:"<?=__('军官证', 'nlyd-student')?>"},
+            {key:'hz',value:"<?=__('护照', 'nlyd-student')?>"},
+            {key:'tb',value:"<?=__('台胞证', 'nlyd-student')?>"},
+            {key:'ga',value:"<?=__('港澳证', 'nlyd-student')?>"},
         ];
         var posiotionCertification=[0]
         if(typeof($('#trigger1').val())!='undefined'){
@@ -231,7 +212,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect1 = new MobileSelect({
             trigger: '#trigger1',
-            title: '<?=__('证件类型', 'nlyd-student')?>',
+            title: "<?=__('证件类型', 'nlyd-student')?>",
             wheels: [
                 {data: certificationSelectData}
             ],
@@ -257,7 +238,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect2 = new MobileSelect({
             trigger: '#trigger3',
-            title: '<?=__('性别', 'nlyd-student')?>',
+            title: "<?=__('性别', 'nlyd-student')?>",
             wheels: [
                 {data: sexSelectData}
             ],
@@ -293,7 +274,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect3 = new MobileSelect({
             trigger: '#areaSelect',
-            title: '<?=__('地址', 'nlyd-student')?>',
+            title: "<?=__('地址', 'nlyd-student')?>",
             wheels: [
                 {data: $.validationLayui.allArea.area},
             ],
@@ -331,10 +312,11 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect5 = new MobileSelect({
             trigger: '#birthdaySelect',
-            title: '<?=__('生日', 'nlyd-student')?>',
+            title: "<?=__('生日', 'nlyd-student')?>",
             wheels: [
                 {data:  $.validationLayui.dates},
             ],
+            new_title:['年','月','日','时','分'],
             position:posiotionBirthday, //初始化定位 打开时默认选中的哪个 如果不填默认为0
             transitionEnd:function(indexArr, data){
 
@@ -365,7 +347,7 @@ jQuery(document).ready(function($) {
         }
         var mobileSelect4 = new MobileSelect({
             trigger: '#trigger4',
-            title: '<?=__('国家&地区', 'nlyd-student')?>',
+            title: "<?=__('国家&地区', 'nlyd-student')?>",
             wheels: [
                 {data: contrySelectData}
             ],
