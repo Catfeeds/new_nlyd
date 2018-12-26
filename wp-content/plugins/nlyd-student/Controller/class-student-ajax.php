@@ -4696,6 +4696,19 @@ class Student_Ajax
     }
 
     /**
+     * 获取比赛费用
+     * @return [type] [description]
+     */
+    public function get_match_cost(){
+        global $wpdb;
+        if(empty($_POST['type'])) wp_send_json_error(array('info'=>_('参数错误')));
+        $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
+        $match_cost = $wpdb->get_var($set_sql);
+        $match_cost = !empty($match_cost)? $match_cost :number_format(0);
+        return $match_cost;
+    }
+
+    /**
      *机构比赛/考级 时间修改/编辑
      */
     public function update_match_time(){
