@@ -21,14 +21,19 @@
                         </div>
                         <div>
                             <div class="lable_row">
-                                <span class="c_black"><?=__($zone_type_name.'名称', 'nlyd-student')?>：</span>
+                                <span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span>
+                            </div>
+                            <select name="zone_match_type">
+                                <option value="1">战队赛</option>
+                                <option value="2">城市赛</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="lable_row">
+                                <span class="c_black"><?=__($zone_type_name.'字号', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <select name="zone_match_type">
-                                    <option value="1">战队赛</option>
-                                    <option value="2">精英赛</option>
-                                </select>
                                 <input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>">
                             </div>
                         </div>
