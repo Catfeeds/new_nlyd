@@ -4705,7 +4705,7 @@ class Student_Ajax
         $set_sql = "select pay_amount match_cost from {$wpdb->prefix}spread_set where spread_type = '{$_POST['type']}' ";
         $match_cost = $wpdb->get_var($set_sql);
         $match_cost = !empty($match_cost)? $match_cost :number_format(0);
-        return $match_cost;
+        wp_send_json_success($match_cost);
     }
 
     /**
@@ -4718,11 +4718,15 @@ class Student_Ajax
         switch ($_POST['match_type']){
             case 'match':
                 //print_r($_POST);die;
-                //获取比赛状态
-                //$wpdb->get_var("select from ");
+                //获取报名截止时间
+                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']} ");
+
                 foreach ($_POST['data'] as $k => $v){
                     if($v['id'] > 0){
-
+                        //print_r($entry_end_time.'===='.$v['start_time']);
+                        if( strtotime($entry_end_time) >= strtotime($v['start_time']) ){
+                            wp_send_json_error(array('info'=>_('每轮项目开赛时间必须大于报名截止时间')));
+                        }
                         $result = $this->contrast_time($_POST['data'],$v['start_time'],$v['end_time'],$v['id']);
                         if(!empty($result)){
                             wp_send_json_error(array('info'=>_($v['project_title'].'第'.$v['project_more'].'轮与'.$result['project_title'].'第'.$result['project_more'].'轮时间冲突')));
@@ -4770,9 +4774,10 @@ class Student_Ajax
             case 'match':
 
                 //获取报名截止时间
-                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_match_meta_new where match_id = {$_POST['match_id']}");
-                if($entry_end_time > $_POST['start_time']){
-                    wp_send_json_error(array('info'=>_('项目开始时间不能小于报名截止时间')));
+                $entry_end_time = $wpdb->get_var("select entry_end_time from {$wpdb->prefix}match_meta_new where match_id = {$_POST['match_id']}");
+                //print_r($entry_end_time);die;
+                if( strtotime($entry_end_time) >= strtotime($_POST['start_time']) ){
+                    wp_send_json_error(array('info'=>_('每轮项目开赛时间必须大于报名截止时间')));
                 }
                 //获取已有的比赛列表
                 $sql = "select a.*,b.post_title from {$wpdb->prefix}match_project_more a 
