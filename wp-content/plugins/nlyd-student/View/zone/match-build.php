@@ -106,27 +106,28 @@ var mobileSelect1 = new MobileSelect({
         // console.log(data);
     },
     callback:function(indexArr, data){
-       
-        $('#match_type1').val(data[0]['value']);
-        $('#match_scene').val(data[0]['id']);
-        var post_data={
-            action:'get_match_cost',
-            type:data[0]['role_alias']
-        }
-        console.log(post_data)
-        $.ajax({
-            data: post_data,
-            success: function(res, textStatus, jqXHR){
-               console.log(res)
-             
-            },
-            complete: function(jqXHR, textStatus){
-                if(textStatus=='timeout'){
-                    $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
-        　　　　 }
+       var old_val=$('#match_type1').val();
+       var new_val=data[0]['value'];
+       if(new_val!==old_val){
+            $('#match_type1').val(data[0]['value']);
+            $('#match_scene').val(data[0]['id']);
+            var post_data={
+                action:'get_match_cost',
+                type:data[0]['role_alias']
             }
-        })
-       
+            $.ajax({
+                data: post_data,
+                success: function(res, textStatus, jqXHR){//获取比赛费用
+                console.log(res)
+                
+                },
+                complete: function(jqXHR, textStatus){
+                    if(textStatus=='timeout'){
+                        $.alerts("<?=__('获取比赛费用失败', 'nlyd-student')?>")
+            　　　　 }
+                }
+            })
+       }
     }
 });
 //---------------------------比赛类型------------------------------
