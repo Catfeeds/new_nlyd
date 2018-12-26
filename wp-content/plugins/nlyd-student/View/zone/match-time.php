@@ -239,6 +239,7 @@ jQuery(function($) {
         var data=[];
         var _this=$(this);
         if(!_this.hasClass('disabled')){
+            var _project_arr=[]
             $('.match_date').each(function () {
                 var __this=$(this);
                 if(__this.hasClass('edit_time')){
@@ -258,13 +259,18 @@ jQuery(function($) {
                     // if(old_start_time!=start_time.replace(/-/g,'/')){
                     data.push(row)
                 }
+                if(__this.hasClass('add_new_lun')){
+                    var project_id=__this.attr('data-project')
+                    _project_arr.push(project_id)
+                }
                 // }
             });
             var postData={
                 action:'update_match_time',
                 data:data,
                 match_id:match_id,
-                match_type:'match'
+                match_type:'match',
+                project_id:_project_arr
             }
             $.ajax({
                 data: postData,

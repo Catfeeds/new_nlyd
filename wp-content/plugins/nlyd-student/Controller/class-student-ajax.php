@@ -4739,6 +4739,12 @@ class Student_Ajax
                     );
                     $wpdb->update($wpdb->prefix.'match_project_more',$update,array('id'=>$v['id']));
                 }
+                if(!empty($_POST['project_id'])){
+                    foreach ($_POST['project_id'] as $y ){
+                        //重新排序
+                        $this->project_sort($_POST['match_id'],$y);
+                    }
+                }
                 break;
             case 'grading':
 
@@ -4794,6 +4800,8 @@ class Student_Ajax
                     );
                     //print_r($insert);
                     $res = $wpdb->insert($wpdb->prefix . 'match_project_more', $insert);
+                    //对当前项目进行重新排序
+                    $this->project_sort($_POST['match_id'],$_POST['project_id']);
                 }
                 break;
             case 'grading':
@@ -4821,7 +4829,13 @@ class Student_Ajax
         }
         switch ($_POST['match_type']) {
             case 'match':
-                $res = $wpdb->delete($wpdb->prefix . 'match_project_more', array('id'=>$_POST['id'],'created_id'=>$current_user->ID));
+                $row = $wpdb->get_row("select * from {$wpdb->prefix}match_project_more where id={$_POST['id']} ",ARRAY_A);
+                //print_r($row);die;
+
+                $res = $wpdb->delete($wpdb->prefix . 'match_project_more', array('id'=>$_POST['id']));
+
+                //对当前项目进行重新排序
+                $this->project_sort($row['match_id'],$row['project_id']);
                 break;
             case 'grading':
 
@@ -4837,6 +4851,20 @@ class Student_Ajax
         wp_send_json_error(array('info'=>_('删除失败')));
     }
 
+    /**
+    * 轮数重新排序
+    */
+    public function project_sort($match_id,$project_id){
+        global $wpdb;
+        $projects = $wpdb->get_results("select * from {$wpdb->prefix}match_project_more where match_id = {$match_id} and project_id = {$project_id} order by start_time asc",ARRAY_A);
+        if(!empty($projects)){
+            foreach ($projects as $k => $v){
+                ///print_r($v);
+                $wpdb->update($wpdb->prefix.'match_project_more',array('more'=>$k+1),array('id'=>$v['id']));
+            }
+        }
+        //print_r($projects);die;
+    }
 
     /**
      * 获取机构发布的比赛
