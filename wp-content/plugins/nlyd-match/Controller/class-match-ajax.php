@@ -1478,22 +1478,18 @@ class Match_Ajax
         $array = array(
             'match_id'=>$_POST['post_id'],
             'project_id'=>$_POST['project_id'],
-            'more'=>$total+1,
             'start_time'=>$_POST['start_time'],
             'end_time'=>$end_time,
             'use_time'=>$use_time,
             'status'=>empty($_POST['status']) ? 1 : $_POST['status'],
-            'created_id'=>$current_user->ID,
-            'created_time'=>get_time('mysql'),
+
         );
 
-        $wpdb->query('START TRANSACTION');
+        //$wpdb->query('START TRANSACTION');
 
         if(!empty($_POST['more_id'])){  //修改
             $match_more = $wpdb->get_var("select `more` from {$wpdb->prefix}match_project_more where id = {$_POST['more_id']} ");
             unset($array['more']);
-            unset($array['created_time']);
-            unset($array['created_time']);
             $array['more'] = $match_more;
             $array['revise_id'] = $current_user->ID;
             $array['revise_time'] = get_time('mysql');
@@ -1502,13 +1498,19 @@ class Match_Ajax
             $title = '编辑';
         }
         else{   //新增
+            $array['created_id'] = $current_user->ID;
+            $array['more'] = $total+1;
+            $array['created_time'] = get_time('mysql');
             $result = $wpdb->insert($wpdb->prefix.'match_project_more',$array);
             $title = '新增';
         }
 
+        //对当前项目进行重新排序
+        $this->project_more_sort($_POST['post_id'],$_POST['project_id']);
+
         $sql = "select id,start_time,end_time from {$wpdb->prefix}match_project_more where match_id = {$_POST['post_id']} order by end_time asc";
         $results = $wpdb->get_results($sql,ARRAY_A);
-
+        //print_r($results);die;
         if(!empty($results)){
             $start_time = $results[0]['start_time'];
             $end_time =  end($results)['end_time'];
@@ -1516,10 +1518,10 @@ class Match_Ajax
 
         $a = $wpdb->update($wpdb->prefix.'match_meta_new',array('match_start_time'=>$start_time,'match_end_time'=>$end_time),array('match_id'=>$_POST['post_id']));
         if($result){
-            $wpdb->query('COMMIT');
+            //$wpdb->query('COMMIT');
             wp_send_json_success($title.'成功');
         }else{
-            $wpdb->query('ROLLBACK');
+            //$wpdb->query('ROLLBACK');
             wp_send_json_error($title.'失败');
         }
         //var_dump($_POST);
@@ -1527,20 +1529,42 @@ class Match_Ajax
     }
 
     /**
+     * 对比赛轮数进行重新排序
+     */
+    public function project_more_sort($match_id,$project_id){
+        global $wpdb;
+        $projects = $wpdb->get_results("select * from {$wpdb->prefix}match_project_more where match_id = {$match_id} and project_id = {$project_id} order by start_time asc",ARRAY_A);
+        if(!empty($projects)){
+            foreach ($projects as $k => $v){
+                ///print_r($v);
+                $wpdb->update($wpdb->prefix.'match_project_more',array('more'=>$k+1),array('id'=>$v['id']));
+            }
+        }
+        //print_r($projects);die;
+    }
+
+
+    /**
      * 删除
      */
     public function remove_match_more(){
         if(empty($_POST['id'])) wp_send_json_error('请选择需要删除的数据');
+        global $wpdb;
         if(is_array($_POST['id'])){
             $id = arr2str($_POST['id']);
         }else{
             $id = $_POST['id'];
+            $row = $wpdb->get_row("select * from {$wpdb->prefix}match_project_more where id={$id} ",ARRAY_A);
+            //print_r($row);die;
         }
-        global $wpdb;
+
         $sql = "DELETE FROM `{$wpdb->prefix}match_project_more` WHERE id in({$id}) ";
         //print_r($sql);
         $result = $wpdb->query($sql);
         if($result){
+            //对当前项目进行重新排序
+            $this->project_more_sort($row['match_id'],$row['project_id']);
+
             wp_send_json_success('删除成功');
         }else{
             wp_send_json_error('删除失败');
