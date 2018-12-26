@@ -995,8 +995,8 @@ if(!class_exists('MatchController')){
 
 
                     $match_meta['match_id'] = $post_ID;
-                    $match_meta['created_id'] = $current_user->ID;
-                    $match_meta['created_time'] = get_time('mysql');
+                    /*$match_meta['created_id'] = $current_user->ID;
+                    $match_meta['created_time'] = get_time('mysql');*/
 
                     unset($match_meta['match_project']);
 
@@ -1041,8 +1041,8 @@ if(!class_exists('MatchController')){
                     }
                     $insert = $_POST['grading'];
                     $insert['grading_id'] = $post_ID;
-                    $insert['created_person'] = $current_user->ID;
-                    $insert['created_time'] = get_time('mysql');
+                    /*$insert['created_person'] = $current_user->ID;
+                    $insert['created_time'] = get_time('mysql');*/
                     //查询是否发布了考级信息
                     $result_ = $wpdb->get_var("select id from {$wpdb->prefix}grading_meta where grading_id = {$post_ID} ");
                     //var_dump($result_);die;

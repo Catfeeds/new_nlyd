@@ -40,6 +40,9 @@
 ._relative{
     position: relative;
 }
+.dis_none{
+    display: none;
+}
 /* .apply{
     margin-top: 10px;
     background-color: #fff;

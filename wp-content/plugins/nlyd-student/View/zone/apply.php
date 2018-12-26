@@ -20,21 +20,28 @@
                             <div class="input_row"><input class="radius_input_row" disabled type="text" name="zone_num" value="<?=dispRepair(!empty($row['id']) ? $row['id'] : $zone_num,4,0)?>"></div>
                         </div>
                         <div>
-                            <div class="lable_row">
-                                <span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span>
+                            <div class="lable_row"><span class="c_black"><?=__($zone_type_name.'类型', 'nlyd-student')?>：</span></div>
+                            <div class="input_row">
+                                <span class="input_row_arrow"><i class="iconfont">&#xe656;</i></span>
+                                <input type="hidden" id="zone_match_type" name="zone_match_type">
+                                <input 
+                                 class="radius_input_row nl-foucs"
+                                 type="text" 
+                                 readonly 
+                                 id="zone_match_type_val" 
+                                 lay-verify="required" 
+                                 autocomplete="off" 
+                                 placeholder="<?=__('选择承办赛事类型', 'nlyd-student')?>" 
+                                 value="">
                             </div>
-                            <select name="zone_match_type">
-                                <option value="1">战队赛</option>
-                                <option value="2">城市赛</option>
-                            </select>
                         </div>
-                        <div>
+                        <div class="name_row dis_none">
                             <div class="lable_row">
                                 <span class="c_black"><?=__($zone_type_name.'字号', 'nlyd-student')?>：</span>
                                 <span class="c_black3"><?=__('规则：IISC+“名字”+国际脑力训练中心+城市', 'nlyd-student')?></span>
                             </div>
                             <div class="input_row">
-                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的分中心名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>">
+                                <input class="radius_input_row nl-foucs" type="text" name="zone_name" lay-verify="required" autocomplete="off" placeholder="<?=__('输入您的'.$zone_type_name.'名字', 'nlyd-student')?>" value="<?=!empty($row) ? $row['zone_name'] :''?>">
                             </div>
                         </div>
                         <div>
@@ -144,6 +151,7 @@
                         <?php if($row['user_status'] != 1):?>
                             <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a>
                         <?php endif;?>
+                        <!-- <a class="a-btn a-btn-table" lay-filter="layform" lay-submit=""><div><?=__('提交资料', 'nlyd-student')?></div></a> -->
                     </form>
                 </div>
             </div>
@@ -159,29 +167,68 @@
         var opening_bank_Data=$.validationLayui.back;
 
         var posiotion_back=[0];//初始化位置，高亮展示
-        if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
-            $.each(opening_bank_Data,function(index,value){
-                if(value['value']==$('#opening_bank').val()){
-                    posiotion_back=[index]
-                    return false;
-                }
-            })
-        }
-        var mobileSelect4 = new MobileSelect({
-            trigger: '#opening_bank',
-            title: '<?=__('开户行', 'nlyd-student')?>',
-            wheels: [
-                {data: opening_bank_Data}
-            ],
-            position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
-            transitionEnd:function(indexArr, data){
-                // console.log(data);
-            },
-            callback:function(indexArr, data){
-                $('#opening_bank').val(data[0]['value']);
-
+        if($('#opening_bank').length>0){
+            if($('#opening_bank').val().length>0 && $('#opening_bank').val()){
+                $.each(opening_bank_Data,function(index,value){
+                    if(value['value']==$('#opening_bank').val()){
+                        posiotion_back=[index]
+                        return false;
+                    }
+                })
             }
-        });
+            var mobileSelect4 = new MobileSelect({
+                trigger: '#opening_bank',
+                title: "<?=__('开户行', 'nlyd-student')?>",
+                wheels: [
+                    {data: opening_bank_Data}
+                ],
+                position:posiotion_back, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
+                    // console.log(data);
+                },
+                callback:function(indexArr, data){
+                    $('#opening_bank').val(data[0]['value']);
+
+                }
+            });
+        }
+        function nameRowIsShow() {
+            var id=$('#zone_match_type').val();
+            if(id==1){
+                $('.name_row').removeClass('dis_none')
+            }else{
+                $('.name_row').addClass('dis_none')
+            }
+        }
+        nameRowIsShow()
+        var match_type_data=[{id:1,value:"<?=__('战队赛', 'nlyd-student')?>"},{id:2,value:"<?=__('城市赛', 'nlyd-student')?>"}]
+        var posiotion_match_type=[0];//初始化位置，高亮展示
+        if($('#zone_match_type_val').length>0){
+            if($('#zone_match_type_val').val() && $('#zone_match_type_val').val().length>0){
+                $.each(match_type_data,function(index,value){
+                    if(value['value']==$('#zone_match_type_val').val()){
+                        posiotion_match_type=[index]
+                        return false;
+                    }
+                })
+            }
+            var mobileSelect4 = new MobileSelect({
+                trigger: '#zone_match_type_val',
+                title: "<?=__('承办赛事类型', 'nlyd-student')?>",
+                wheels: [
+                    {data: match_type_data}
+                ],
+                position:posiotion_match_type, //初始化定位 打开时默认选中的哪个 如果不填默认为0
+                transitionEnd:function(indexArr, data){
+                    // console.log(data);
+                },
+                callback:function(indexArr, data){
+                    $('#zone_match_type_val').val(data[0]['value']);
+                    $('#zone_match_type').val(data[0]['id']);
+                    nameRowIsShow()
+                }
+            });
+        }
         $('.img-zoos').on('click','.add-zoo',function(){//上传图片
             var id=$(this).attr('data-file')
             $('#'+id).click()
@@ -203,6 +250,7 @@
                 }
             });
         })
+
         var imgs=[]
         var imgs1=[]
         $('.img-zoos').each(function(){
@@ -296,7 +344,6 @@
                     var fd = new FormData();
                     fd.append('action','zone_apply_submit');
                     fd.append('zone_num',data.field['zone_num']);
-                    fd.append('zone_name',data.field['zone_name']);
                     fd.append('zone_address',data.field['zone_address']);
                     fd.append('legal_person',data.field['legal_person']);
                     fd.append('opening_bank',data.field['opening_bank']);
@@ -326,12 +373,15 @@
                     }else{
                         fd.append('zone_type_alias','');
                     }
-
                     if(data.field['chairman_id']){
                         fd.append('chairman_id',data.field['chairman_id']);
                     }
                     if(data.field['secretary_id']){
                         fd.append('secretary_id',data.field['secretary_id']);
+                    }
+                    fd.append('zone_match_type',data.field['zone_match_type']);
+                    if(data.field['zone_match_type']==1){//战队赛
+                        fd.append('zone_name',data.field['zone_name']);
                     }
                     $.ajax({
                         data: fd,
@@ -345,7 +395,7 @@
                             $.alerts(res.data.info)
                             if(res.data.url){
                                 setTimeout(function() {
-                                    window.location.href=res.data.url
+                                    // window.location.href=res.data.url
                                 }, 300);
                             }
                         },
