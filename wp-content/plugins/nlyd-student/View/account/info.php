@@ -316,7 +316,7 @@ jQuery(document).ready(function($) {
             wheels: [
                 {data:  $.validationLayui.dates},
             ],
-            new_title:['年','月','日','时','分'],
+            new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>"],
             position:posiotionBirthday, //初始化定位 打开时默认选中的哪个 如果不填默认为0
             transitionEnd:function(indexArr, data){
 

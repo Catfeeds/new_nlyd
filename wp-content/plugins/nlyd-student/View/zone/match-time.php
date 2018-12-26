@@ -122,7 +122,6 @@ jQuery(function($) {
         })
 });
 
-console.log($.validationLayui.dates2)
     $('.match_date').each(function(_index){
         var _this=$(this);
         var title="<?=__('开赛日期', 'nlyd-student')?>";
@@ -167,7 +166,7 @@ console.log($.validationLayui.dates2)
                 {data: match_date_Data}
             ],
             triggerDisplayData:false,
-            new_title:['年','月','日','时','分'],
+            new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
             position: posiotion_match_date[_index], //初始化定位 打开时默认选中的哪个 如果不填默认为0
             transitionEnd:function(indexArr, data){
 

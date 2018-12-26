@@ -190,7 +190,7 @@ jQuery(function($) {
         wheels: [
             {data: course_date_Data}
         ],
-        new_title:['年','月','日','时','分'],
+        new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
         position:posiotion_course_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
         transitionEnd:function(indexArr, data){
             // console.log(data);
@@ -239,7 +239,7 @@ jQuery(function($) {
         wheels: [
             {data: course_date_Data}
         ],
-        new_title:['年','月','日','时','分'],
+        new_title:["<?=__('年', 'nlyd-student')?>","<?=__('月', 'nlyd-student')?>","<?=__('日', 'nlyd-student')?>","<?=__('时', 'nlyd-student')?>","<?=__('分', 'nlyd-student')?>"],
         position:posiotion_course_end_date, //初始化定位 打开时默认选中的哪个 如果不填默认为0
         transitionEnd:function(indexArr, data){
             // console.log(data);
