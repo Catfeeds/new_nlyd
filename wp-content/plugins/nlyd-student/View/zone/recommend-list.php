@@ -17,8 +17,8 @@
                 <div class="layui-row layui-bg-white">
                     <div class="profit-layui-tab recommend-5 layui-tab layui-tab-brief" lay-filter="profit" style="margin:0">
                         <ul style="margin:0;padding:0" class="layui-tab-title layui-row">
-                            <li class="layui-this dis_table" lay-id="1"><div class="dis_cell"><?=__('个人用户（2）', 'nlyd-student')?></div></li>
-                            <li class="dis_table" lay-id="2"><div class="dis_cell"><?=__('机构用户（3）', 'nlyd-student')?></div></li>
+                            <li class="layui-this dis_table" lay-id="1"><div class="dis_cell"><?=__('个人用户（'.$user_total.'）', 'nlyd-student')?></div></li>
+                            <li class="dis_table" lay-id="2"><div class="dis_cell"><?=__('机构用户（'.$zone_total.'）', 'nlyd-student')?></div></li>
                         </ul>
                         <div class="layui-tab-content">
                             <!-- 全部记录 -->
