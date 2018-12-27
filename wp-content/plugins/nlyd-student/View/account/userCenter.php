@@ -135,7 +135,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('训练记录', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/course');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/account/course/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-course">
                             </div>
@@ -149,7 +149,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的教练', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('orders');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/orders/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-order">
                             </div>
@@ -163,7 +163,7 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的考级', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8" href="<?=home_url('zone');?>">
+                    <a class="c_black8" href="<?=home_url('/zone/indexUser');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-tuiguang">
                             </div>
@@ -177,21 +177,21 @@
                         </div>
                         <div class="userCenter-detail-foot"><?=__('安全中心', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8" href="<?=home_url('/safety/setting');?>">
+                    <a class="c_black8" href="<?=home_url('/safety/setting/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-setting">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('其他设置', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams');?>">
+                    <a class="c_black8 disabled_a"  href="<?=home_url('/teams/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper my-wallet">
                             </div>
                         </div>
                         <div class="userCenter-detail-foot"><?=__('我的钱包', 'nlyd-student')?></div>
                     </a>
-                    <a class="c_black8"  href="<?=home_url('account/info');?>">
+                    <a class="c_black8"  href="<?=home_url('/account/info/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper edit-info">
                             </div>
@@ -199,7 +199,7 @@
                         <div class="userCenter-detail-foot"><?=__('基本信息', 'nlyd-student')?></div>
                     </a>
                     <?php if(in_array($user_info['user_roles'],array('supervisor','administrator'))):?>
-                    <a class="c_black8"  href="<?=home_url('supervisor/logs');?>">
+                    <a class="c_black8"  href="<?=home_url('/supervisor/logs/');?>">
                         <div class="userCenter-detail-head">
                             <div class="menuImg-wrapper jiansai-center">
                             </div>
@@ -207,8 +207,15 @@
                         <div class="userCenter-detail-foot"><?=__('监赛中心', 'nlyd-student')?></div>
                     </a>
                     <?php endif;?>
+                    <a class="c_black8"  href="<?=home_url('/zone/');?>">
+                        <div class="userCenter-detail-head">
+                            <div class="menuImg-wrapper my-console">
+                            </div>
+                        </div>
+                        <div class="userCenter-detail-foot"><?=__('控制台', 'nlyd-student')?></div>
+                    </a>
                 </div>
-                <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
+                <!-- <div class="apply width-padding layui-row layui-bg-white width-margin-pc">
                     <div class="bold ta_c c_black apply_title"><?=__('合作申请', 'nlyd-student')?></div>
                     <a class="apply_list c_black layui-row disabled_a">
                         <div class="apply_list_line pull-left c_blue ml"><i class="iconfont fs_20">&#xe650;</i></div>
@@ -235,7 +242,7 @@
                         <div class="apply_list_line center"><?=__('申请代理赛事赞助', 'nlyd-student')?></div>
                         <div class="apply_list_line pull-right mr"><i class="iconfont fs_20">&#xe727;</i></div>
                     </a>
-                </div>
+                </div> -->
             </div>
 
             <?php

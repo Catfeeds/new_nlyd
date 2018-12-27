@@ -106,7 +106,7 @@
     background: linear-gradient(5deg,#68AAFE, #4394F9);
 }
 .scale{
-    transform: scale(0.8);
+    transform: scale(0.7 ,0.8);
     white-space: nowrap;
 }
 .zone_user_detail{
@@ -797,4 +797,17 @@ input[type="text"].coach_form_input{
     border-right: 16px solid transparent;
     border-left: 16px solid transparent;
     border-bottom: 3px solid white;
+}
+.zone_pass{
+    display: inline-block;
+    width: 56px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+.qr_code_img{
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 7px;
 }
