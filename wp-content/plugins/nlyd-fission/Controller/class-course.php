@@ -514,14 +514,14 @@ class Course{
                     <tr class="">
                         <th scope="row"><label for="course_type">课程类型 </label></th>
                         <td>
-                            <label for="course_type_1">乐学乐  <input type="radio" checked="checked" id="course_type_1" name="course_type" value="1"></label>
+                            <label for="course_type_1">乐学乐分享  <input type="radio" checked="checked" id="course_type_1" name="course_type" value="1"></label>
 
                         </td>
                     </tr>
                     <tr class="">
                         <th scope="row"><label for="is_enable">状态 </label></th>
                         <td>
-                            <label for="is_enable_1">正常  <input type="radio" <?=$row['is_enable'] == '1' ? 'checked="checked"':''?> id="is_enable_1" name="is_enable" value="1"></label>
+                            <label for="is_enable_1">正常  <input type="radio" <?=$row['is_enable'] == '1' || !isset($row['is_enable']) ? 'checked="checked"':''?> id="is_enable_1" name="is_enable" value="1"></label>
                             <label for="is_enable_2">禁用  <input type="radio" <?=$row['is_enable'] == '2' ? 'checked="checked"':''?> id="is_enable_2" name="is_enable" value="2"></label>
 
                         </td>
